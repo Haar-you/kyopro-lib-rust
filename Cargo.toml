@@ -1,0 +1,8 @@
+[package]
+name = "haar_kyopro_lib_rust"
+version = "0.1.0"
+authors = ["Haar"]
+edition = "2018"
+
+[dependencies]
+rand = { version = "=0.7.3" }
