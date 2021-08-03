@@ -26,13 +26,15 @@ impl<T: std::clone::Clone> Graph<T> {
         }
     }
 
-    pub fn add_directed(&mut self, from: usize, to: usize, cost: T) {
+    pub fn add_directed(&mut self, from: usize, to: usize, cost: T) -> &mut Self {
         self.edges[from].push(Edge::new(from, to, cost));
+        self
     }
 
-    pub fn add_undirected(&mut self, from: usize, to: usize, cost: T) {
+    pub fn add_undirected(&mut self, from: usize, to: usize, cost: T) -> &mut Self {
         self.add_directed(from, to, cost.clone());
         self.add_directed(to, from, cost);
+        self
     }
 
     pub fn len(&self) -> usize {
