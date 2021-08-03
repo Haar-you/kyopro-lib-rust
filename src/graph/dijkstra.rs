@@ -5,7 +5,7 @@ use crate::graph::template::*;
 
 impl<T> Graph<T>
 where
-    T: std::ops::Add<Output = T> + Clone + Ord + From<i32>
+    T: std::ops::Add<Output = T> + Copy + Clone + Ord + From<i32>
 {
     pub fn dijkstra(&self, src: &[usize]) -> Vec<Option<T>> {
         let zero = T::from(0);
@@ -15,8 +15,8 @@ where
         let mut check = vec![false; n];
 
         for &u in src {
-            ret[u] = Some(zero.clone());
-            heap.push(Reverse((zero.clone(), u)));
+            ret[u] = Some(zero);
+            heap.push(Reverse((zero, u)));
         }
 
         while let Some(Reverse((d, u))) = heap.pop() {
@@ -25,19 +25,19 @@ where
             }
             check[u] = true;
 
-            for &Edge {from: _, to, ref cost} in &self.edges[u] {
+            for &Edge { from: _, to, cost } in &self.edges[u] {
                 if let Some(ref d2) = ret[to] {
-                    if *d2 > d.clone() + cost.clone() {
-                        let d = d.clone() + cost.clone();
-                        ret[to] = Some(d.clone());
+                    if *d2 > d + cost {
+                        let d = d + cost;
+                        ret[to] = Some(d);
                         if !check[to] {
                             heap.push(Reverse((d, to)));
                         }
                     }
                 }
                 else {
-                    let d = d.clone() + cost.clone();
-                    ret[to] = Some(d.clone());
+                    let d = d + cost;
+                    ret[to] = Some(d);
                     heap.push(Reverse((d, to)));
                 }
             }
