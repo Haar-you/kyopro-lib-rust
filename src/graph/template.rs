@@ -1,4 +1,3 @@
-
 #[derive(Debug, Clone)]
 pub struct Edge<T> {
     pub from: usize,
@@ -36,7 +35,9 @@ impl<T: std::clone::Clone> Graph<T> {
         self.add_directed(to, from, cost);
         self
     }
+}
 
+impl<T> Graph<T> {
     pub fn len(&self) -> usize {
         self.edges.len()
     }
