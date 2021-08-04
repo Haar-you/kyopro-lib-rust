@@ -4,6 +4,7 @@ impl<T> Graph<T>
 where
     T: std::ops::Add<Output = T> + Copy + Clone + Ord + From<i32>
 {
+    /// Time complexity O(n ^ 3)
     pub fn warshall_floyd(&self) -> Option<Vec<Vec<Option<T>>>> {
         let zero = T::from(0);
         let n = self.len();
