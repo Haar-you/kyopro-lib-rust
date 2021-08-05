@@ -1,56 +1,114 @@
+use crate::algebra::traits::*;
+use crate::misc::traits::{ Foldable };
 
 #[derive(Debug, Clone)]
-pub struct CumulativeSum1D<T> {
-    data: Vec<T>
+pub struct CumulativeSum1D<T, G> {
+    data: Vec<T>,
+    group: G
 }
 
-pub struct CumulativeSum1DBuilder<T> {
+pub struct CumulativeSum1DBuilder<T, G> {
     n: usize,
     data: Vec<T>,
-    zero: T
+    group: G
 }
 
-impl<T> CumulativeSum1D<T>
-where
-    T: std::ops::Add<Output = T> + std::ops::Sub<Output = T> + Clone
-{
-    pub fn fold(&self, l: usize, r: usize) -> T {
-        self.data[r].clone() - self.data[l].clone()
+impl<T, G> CumulativeSum1D<T, G> {
+    /// Time complexity O(1)
+    pub fn len(&self) -> usize {
+        self.data.len()
     }
 }
 
-impl<T> CumulativeSum1DBuilder<T>
+impl<T, G> Foldable<T> for CumulativeSum1D<T, G>
 where
-    T: std::ops::Add<Output = T> + std::ops::Sub<Output = T> + Clone
+    T: Clone,
+    G: BinaryOp<T> + Inverse<T> + Identity<T>
+
 {
-    pub fn new(n: usize, zero: T) -> Self {
+    /// Time complexity O(1)
+    fn fold(&self, l: usize, r: usize) -> T {
+        self.group.op(self.data[r].clone(), self.group.inv(self.data[l].clone()))
+    }
+}
+
+impl<T, G> std::ops::Index<usize> for CumulativeSum1D<T, G> {
+    type Output = T;
+
+    fn index(&self, i: usize) -> &Self::Output {
+        &self.data[i]
+    }
+}
+
+
+impl<T, G> CumulativeSum1DBuilder<T, G>
+where
+    T: Clone,
+    G: BinaryOp<T> + Inverse<T> + Identity<T> + Clone
+{
+    pub fn new(n: usize, group: G) -> Self {
         CumulativeSum1DBuilder {
             n: n,
-            data: vec![zero.clone(); n],
-            zero: zero
+            data: vec![group.id(); n],
+            group: group
         }
     }
 
     pub fn update(&mut self, i: usize, value: T) -> &Self {
-        self.data[i] = value;
+        self.data[i] = self.group.op(self.data[i].clone(), value);
         self
     }
 
-    pub fn build(&self) -> CumulativeSum1D<T> {
-        let mut data = vec![self.zero.clone(); self.n + 1];
+    pub fn build(&self) -> CumulativeSum1D<T, G> {
+        let mut data = vec![self.group.id(); self.n + 1];
         for i in 0 .. self.n {
-            data[i + 1] = data[i].clone() + self.data[i].clone();
+            data[i + 1] = self.group.op(data[i].clone(), self.data[i].clone());
         }
 
         CumulativeSum1D {
-            data: data
+            data: data,
+            group: self.group.clone()
         }
     }
 }
 
+
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+    use rand::Rng;
+    use crate::algebra::sum::*;
+
     #[test]
     fn test() {
+        let mut rng = rand::thread_rng();
+
+        let n = 20;
+        let mut csb = CumulativeSum1DBuilder::<i32, _>::new(n, Sum::<i32>::new());
+
+        let mut other = vec![0; n];
+
+        for _ in 0 .. 1000 {
+            let i = rng.gen::<usize>() % n;
+            let x = rng.gen::<i32>() % 1000;
+
+            csb.update(i, x);
+            other[i] += x;
+        }
+
+        let cs = csb.build();
+
+        for _ in 0 .. 100 {
+            let l = rng.gen::<usize>() % n;
+            let r = l + rng.gen::<usize>() % (n - l) + 1;
+
+            let mut ans = 0;
+            for i in l .. r {
+                ans += other[i];
+            }
+
+            assert_eq!(cs.fold(l, r), ans);
+        }
     }
 }
