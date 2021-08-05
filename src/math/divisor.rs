@@ -1,3 +1,4 @@
+/// Time complexity O(sqrt n)
 pub fn count_divisors(n: u64) -> u64 {
     let mut ret = 0;
 
@@ -16,6 +17,7 @@ pub fn count_divisors(n: u64) -> u64 {
     ret
 }
 
+/// Time complexity O(sqrt n)
 pub fn enumerate_divisors(n: u64) -> Vec<u64> {
     let mut ret = vec![];
     let mut temp = vec![];
