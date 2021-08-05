@@ -5,3 +5,4 @@ pub mod kruskal;
 pub mod prim;
 pub mod scc;
 pub mod topological_sort;
+pub mod bipartite;
