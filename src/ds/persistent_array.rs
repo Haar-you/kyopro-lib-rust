@@ -70,27 +70,6 @@ where
         }
     }
 
-    fn _get(node: Rc<Node<T>>, i: usize) -> Rc<Node<T>> {
-        match *node {
-            Node::<T>::Terminal { .. } => node,
-            Node::<T>::Internal { ref l_ch, ref r_ch, .. } => {
-                let k = get_size(l_ch.clone());
-                if i < k {
-                    Self::_get(Rc::clone(l_ch.as_ref().unwrap()), i)
-                }
-                else {
-                    Self::_get(Rc::clone(r_ch.as_ref().unwrap()), i - k)
-                }
-            }
-        }
-    }
-
-    pub fn get(&self, i: usize) -> T {
-        match *Self::_get(Rc::clone(self.root.as_ref().unwrap()), i) {
-            Node::<T>::Terminal { ref value } => value.clone(),
-            _ => { unreachable!(); }
-        }
-    }
 
     fn _traverse(node: Option<Rc<Node<T>>>, ret: &mut Vec<T>) {
         if node.is_none() {
@@ -109,12 +88,6 @@ where
                 Self::_traverse(r_ch.clone(), ret);
             }
         }
-    }
-
-    pub fn to_vec(&self) -> Vec<T> {
-        let mut ret = vec![];
-        Self::_traverse(self.root.clone(), &mut ret);
-        ret
     }
 
     fn _set(prev: Rc<Node<T>>, i: usize, value: T) -> Rc<Node<T>> {
@@ -154,7 +127,46 @@ where
             root: Some(Self::_set(self.root.clone().unwrap(), i, value.clone()))
         }
     }
+
+
+    pub fn get(&self, i: usize) -> T {
+        fn _get<T>(node: Rc<Node<T>>, i: usize) -> Rc<Node<T>> {
+            match *node {
+                Node::<T>::Terminal { .. } => node,
+                Node::<T>::Internal { ref l_ch, ref r_ch, .. } => {
+                    let k = get_size(l_ch.clone());
+                    if i < k {
+                        _get(Rc::clone(l_ch.as_ref().unwrap()), i)
+                    }
+                    else {
+                        _get(Rc::clone(r_ch.as_ref().unwrap()), i - k)
+                    }
+                }
+            }
+        }
+
+        match *_get(Rc::clone(self.root.as_ref().unwrap()), i) {
+            Node::<T>::Terminal { ref value } => value.clone(),
+            _ => { unreachable!(); }
+        }
+    }
 }
+
+
+impl<T: Clone> From<&PersistentArray<T>> for Vec<T> {
+    fn from(from: &PersistentArray<T>) -> Vec<T> {
+        let mut ret = vec![];
+        PersistentArray::<T>::_traverse(from.root.clone(), &mut ret);
+        ret
+    }
+}
+
+
+
+
+
+
+
 
 
 #[cfg(test)]
@@ -164,20 +176,20 @@ mod tests {
     #[test]
     fn test() {
         let a = PersistentArray::<i32>::new(5, 0);
-        assert_eq!(a.to_vec(), [0, 0, 0, 0, 0]);
+        assert_eq!(Vec::<i32>::from(&a), [0, 0, 0, 0, 0]);
 
         let b = a.set(0, 4);
-        assert_eq!(b.to_vec(), [4, 0, 0, 0, 0]);
+        assert_eq!(Vec::<i32>::from(&b), [4, 0, 0, 0, 0]);
 
         let c = b.set(2, 6);
-        assert_eq!(c.to_vec(), [4, 0, 6, 0, 0]);
+        assert_eq!(Vec::<i32>::from(&c), [4, 0, 6, 0, 0]);
 
         let d = b.set(2, 9);
-        assert_eq!(d.to_vec(), [4, 0, 9, 0, 0]);
+        assert_eq!(Vec::<i32>::from(&d), [4, 0, 9, 0, 0]);
 
-        assert_eq!(a.to_vec(), [0, 0, 0, 0, 0]);
-        assert_eq!(b.to_vec(), [4, 0, 0, 0, 0]);
-        assert_eq!(c.to_vec(), [4, 0, 6, 0, 0]);
-        assert_eq!(d.to_vec(), [4, 0, 9, 0, 0]);
+        assert_eq!(Vec::<i32>::from(&a), [0, 0, 0, 0, 0]);
+        assert_eq!(Vec::<i32>::from(&b), [4, 0, 0, 0, 0]);
+        assert_eq!(Vec::<i32>::from(&c), [4, 0, 6, 0, 0]);
+        assert_eq!(Vec::<i32>::from(&d), [4, 0, 9, 0, 0]);
     }
 }
