@@ -23,7 +23,7 @@ where
             pos.push(i);
         }
         else {
-            let k = lower_bound(&dp, x);
+            let k = lower_bound(&dp, &x);
             dp[k] = x;
             if k > 0 {
                 prev[i] = Some(pos[k - 1]);

@@ -15,7 +15,7 @@ where
     T: Clone + Ord + Eq
 {
     pub fn index(&self, value: T) -> usize {
-        lower_bound(&self.data, value)
+        lower_bound(&self.data, &value)
     }
 
     pub fn get(&self, i: usize) -> T {
