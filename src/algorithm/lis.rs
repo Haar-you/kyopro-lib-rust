@@ -1,4 +1,4 @@
-use crate::utils::lower_bound::*;
+use crate::algorithm::bsearch::lower_bound;
 
 /// 数列の最長増加部分列を求める。
 ///

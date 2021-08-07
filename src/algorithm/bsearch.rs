@@ -1,4 +1,4 @@
-pub fn lower_bound<T: Clone + Ord + PartialEq>(a: &Vec<T>, value: T) -> usize {
+pub fn lower_bound<T: Clone + Ord + PartialEq>(a: &[T], value: T) -> usize {
     let n = a.len();
     let mut lb = 0;
     let mut len = n;
@@ -24,7 +24,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test() {
+    fn test_lower_bound() {
         let a = vec![1, 2, 3, 5, 6];
         assert_eq!(lower_bound(&a, 2), 1);
         assert_eq!(lower_bound(&a, 0), 0);
