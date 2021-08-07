@@ -1,9 +1,6 @@
 use crate::math::ext_gcd::ext_gcd;
 
-pub fn crt(param1: (i64, u64), param2: (i64, u64)) -> Option<(i64, u64)> {
-    let (b1, m1) = param1;
-    let (b2, m2) = param2;
-
+pub fn crt((b1, m1): (i64, u64), (b2, m2): (i64, u64)) -> Option<(i64, u64)> {
     let (d, p, _) = ext_gcd(m1, m2);
 
     let m1 = m1 as i64;
