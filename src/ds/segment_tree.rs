@@ -1,8 +1,10 @@
-use crate::math::algebra::*;
+use crate::algebra::traits::{ BinaryOp, Identity };
+use crate::ds::traits::{ Foldable, Updatable, Assignable };
 
 #[derive(Clone)]
 pub struct SegmentTree<T, M> {
-    n: usize,
+    original_size: usize,
+    size: usize,
     data: Vec<T>,
     monoid: M,
 }
@@ -15,22 +17,29 @@ where
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
         SegmentTree {
-            n: size,
+            original_size: n,
+            size: size,
             data: vec![monoid.id(); size],
             monoid: monoid
         }
     }
 
     pub fn len(&self) -> usize {
-        self.n / 2
+        self.size / 2
     }
+}
 
-    pub fn fold(&self, l: usize, r: usize) -> T {
+impl<T, M> Foldable<T> for SegmentTree<T, M>
+where
+    T: Clone,
+    M: BinaryOp<T> + Identity<T>
+{
+    fn fold(&self, l: usize, r: usize) -> T {
         let mut ret_l = self.monoid.id();
         let mut ret_r = self.monoid.id();
 
-        let mut l = l + self.n / 2;
-        let mut r = r + self.n / 2;
+        let mut l = l + self.size / 2;
+        let mut r = r + self.size / 2;
 
         while l < r {
             if r & 1 == 1 {
@@ -47,17 +56,15 @@ where
 
         self.monoid.op(ret_l, ret_r)
     }
+}
 
-    pub fn to_vec(&self) -> Vec<T> {
-        return self.data[self.n / 2 ..].to_vec();
-    }
-
-    pub fn update(&mut self, i: usize, value: T) {
-        self.set(i, self.monoid.op(self.data[i + self.n / 2].clone(), value));
-    }
-
-    pub fn set(&mut self, i: usize, value: T) {
-        let mut i = i + self.n / 2;
+impl<T, M> Assignable<T> for SegmentTree<T, M>
+where
+    T: Clone,
+    M: BinaryOp<T> + Identity<T>
+{
+    fn assign(&mut self, i: usize, value: T) {
+        let mut i = i + self.size / 2;
         self.data[i] = value;
 
         while i > 1 {
@@ -67,6 +74,32 @@ where
     }
 }
 
+impl<T, M> Updatable<T> for SegmentTree<T, M>
+where
+    T: Clone,
+    M: BinaryOp<T> + Identity<T>
+{
+    fn update(&mut self, i: usize, value: T) {
+        self.assign(i, self.monoid.op(self.data[i + self.size / 2].clone(), value));
+    }
+}
+
+impl<T, M> From<SegmentTree<T, M>> for Vec<T>
+where
+    T: Clone
+{
+    fn from(from: SegmentTree<T, M>) -> Vec<T> {
+        from.data[from.size / 2 .. from.size / 2 + from.original_size].to_vec()
+    }
+}
+
+impl<T, M> std::ops::Index<usize> for SegmentTree<T, M> {
+    type Output = T;
+
+    fn index(&self, i: usize) -> &Self::Output {
+        &self.data[self.size / 2 + i]
+    }
+}
 
 
 
@@ -109,13 +142,22 @@ mod tests {
 
                 assert_eq!(s.fold(l, r), temp);
             }
+
+            let i = rng.gen::<usize>() % size;
+            assert_eq!(s[i], other[i]);
         }
 
+        assert_eq!(Vec::<T>::from(s), other);
     }
+
+    use crate::algebra::sum::Sum;
+    use crate::algebra::bitxor::BitXor;
 
     #[test]
     fn test() {
         let mut rng = rand::thread_rng();
-        random_test_helper(10, Monoid::<i32>::new(0, |x, y| x + y), || rng.gen::<i32>() % 10000);
+
+        random_test_helper(10, Sum::<i32>::new(), || rng.gen::<i32>() % 10000);
+        random_test_helper(10, BitXor::<u32>::new(), || rng.gen::<u32>() % 10000);
     }
 }
