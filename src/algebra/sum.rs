@@ -11,8 +11,8 @@ macro_rules! signed_int_sum_impl {
     ( $($t:ty),* ) => {
         unsigned_int_sum_impl!($($t),*);
         $(
-            impl Inverse<$t> for Sum<$t> {
-                fn inv(&self, a: $t) -> $t { -a }
+            impl Inverse for Sum<$t> {
+                fn inv(&self, a: Self::Output) -> Self::Output { -a }
             }
         )*
     }
@@ -21,11 +21,15 @@ macro_rules! signed_int_sum_impl {
 macro_rules! unsigned_int_sum_impl {
     ( $($t:ty),* ) => {
         $(
-            impl BinaryOp<$t> for Sum<$t> {
-                fn op(&self, a: $t, b: $t) -> $t { a + b }
+            impl AlgeStruct for Sum<$t> {
+                type Output = $t;
             }
-            impl Identity<$t> for Sum<$t> {
-                fn id(&self) -> $t { 0 }
+
+            impl BinaryOp for Sum<$t> {
+                fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output { a + b }
+            }
+            impl Identity for Sum<$t> {
+                fn id(&self) -> Self::Output { 0 }
             }
         )*
     }

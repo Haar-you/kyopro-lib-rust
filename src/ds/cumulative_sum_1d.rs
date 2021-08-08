@@ -1,4 +1,4 @@
-use crate::algebra::traits::*;
+use crate::algebra::traits::Group;
 use crate::ds::traits::{ Foldable };
 
 #[derive(Debug, Clone)]
@@ -23,7 +23,7 @@ impl<T, G> CumulativeSum1D<T, G> {
 impl<T, G> Foldable<T> for CumulativeSum1D<T, G>
 where
     T: Clone,
-    G: BinaryOp<T> + Inverse<T> + Identity<T>
+    G: Group<Output = T>
 
 {
     /// Time complexity O(1)
@@ -44,7 +44,7 @@ impl<T, G> std::ops::Index<usize> for CumulativeSum1D<T, G> {
 impl<T, G> CumulativeSum1DBuilder<T, G>
 where
     T: Clone,
-    G: BinaryOp<T> + Inverse<T> + Identity<T> + Clone
+    G: Group<Output = T> + Clone
 {
     pub fn new(n: usize, group: G) -> Self {
         CumulativeSum1DBuilder {

@@ -1,15 +1,24 @@
-pub trait BinaryOp<T> {
-    fn op(&self, _: T, _: T) -> T;
+pub trait AlgeStruct {
+    type Output;
 }
 
-pub trait Identity<T> {
-    fn id(&self) -> T;
+pub trait BinaryOp: AlgeStruct {
+    fn op(&self, _: Self::Output, _: Self::Output) -> Self::Output;
 }
 
-pub trait Inverse<T> {
-    fn inv(&self, _: T) -> T;
+pub trait Identity: AlgeStruct {
+    fn id(&self) -> Self::Output;
 }
 
-pub trait Semigroup<T>: BinaryOp<T> {}
-pub trait Monoid<T>: BinaryOp<T> + Identity<T> {}
-pub trait Group<T>: BinaryOp<T> + Identity<T> + Inverse<T> {}
+pub trait Inverse: AlgeStruct {
+    fn inv(&self, _: Self::Output) -> Self::Output;
+}
+
+pub trait Semigroup: BinaryOp {}
+impl<T: BinaryOp> Semigroup for T {}
+
+pub trait Monoid: Semigroup + Identity {}
+impl<T: Semigroup + Identity> Monoid for T {}
+
+pub trait Group: Monoid + Inverse {}
+impl<T: Monoid + Inverse> Group for T {}

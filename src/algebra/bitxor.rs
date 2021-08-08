@@ -10,14 +10,17 @@ impl<T> BitXor<T> {
 macro_rules! int_bitxor_impl {
     ( $($t:ty),* ) => {
         $(
-            impl Inverse<$t> for BitXor<$t> {
-                fn inv(&self, a: $t) -> $t { a }
+            impl AlgeStruct for BitXor<$t> {
+                type Output = $t;
             }
-            impl BinaryOp<$t> for BitXor<$t> {
-                fn op(&self, a: $t, b: $t) -> $t { a ^ b }
+            impl Inverse for BitXor<$t> {
+                fn inv(&self, a: Self::Output) -> Self::Output { a }
             }
-            impl Identity<$t> for BitXor<$t> {
-                fn id(&self) -> $t { 0 }
+            impl BinaryOp for BitXor<$t> {
+                fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output { a ^ b }
+            }
+            impl Identity for BitXor<$t> {
+                fn id(&self) -> Self::Output { 0 }
             }
         )*
     }

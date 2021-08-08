@@ -1,4 +1,4 @@
-use crate::algebra::traits::{ BinaryOp, Identity };
+use crate::algebra::traits::Monoid;
 use crate::ds::traits::{ Foldable, Updatable, Assignable };
 
 #[derive(Clone)]
@@ -12,7 +12,7 @@ pub struct SegmentTree<T, M> {
 impl<T, M> SegmentTree<T, M>
 where
     T: Clone,
-    M: BinaryOp<T> + Identity<T>
+    M: Monoid<Output = T>
 {
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
@@ -32,7 +32,7 @@ where
 impl<T, M> Foldable<T> for SegmentTree<T, M>
 where
     T: Clone,
-    M: BinaryOp<T> + Identity<T>
+    M: Monoid<Output = T>
 {
     fn fold(&self, l: usize, r: usize) -> T {
         let mut ret_l = self.monoid.id();
@@ -61,7 +61,7 @@ where
 impl<T, M> Assignable<T> for SegmentTree<T, M>
 where
     T: Clone,
-    M: BinaryOp<T> + Identity<T>
+    M: Monoid<Output = T>
 {
     fn assign(&mut self, i: usize, value: T) {
         let mut i = i + self.size / 2;
@@ -77,7 +77,7 @@ where
 impl<T, M> Updatable<T> for SegmentTree<T, M>
 where
     T: Clone,
-    M: BinaryOp<T> + Identity<T>
+    M: Monoid<Output = T>
 {
     fn update(&mut self, i: usize, value: T) {
         self.assign(i, self.monoid.op(self.data[i + self.size / 2].clone(), value));
@@ -113,7 +113,7 @@ mod tests {
     fn random_test_helper<T, M, F>(size: usize, m: M, mut gen_value: F)
     where
         T: Clone + Eq + std::fmt::Debug,
-        M: BinaryOp<T> + Identity<T> + Clone,
+        M: Monoid<Output = T> + Clone,
         F: FnMut() -> T
     {
         let mut rng = rand::thread_rng();
