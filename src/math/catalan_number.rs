@@ -1,10 +1,11 @@
-use std::ops::{ Mul, Div, Sub };
-use crate::math::factorial::{ FactorialTable };
+use crate::{
+    math::{
+        factorial::FactorialTable,
+        modint::FF
+    }
+};
 
-impl<T> FactorialTable<T>
-where
-    T: Copy + Mul<Output = T> + Div<Output = T> + Sub<Output = T> + From<usize>
-{
+impl<T: FF + From<usize>> FactorialTable<T> {
     pub fn catalan_number(&self, n: usize) -> T {
         if n == 0 {
             T::from(1)

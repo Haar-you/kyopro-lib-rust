@@ -1,4 +1,4 @@
-use std::ops::{ Mul, Div };
+use crate::math::modint::FF;
 
 #[derive(Clone, Debug)]
 pub struct FactorialTable<T> {
@@ -6,10 +6,7 @@ pub struct FactorialTable<T> {
     invs: Vec<T>
 }
 
-impl<T> FactorialTable<T>
-where
-    T: Copy + Mul<Output = T> + Div<Output = T> + From<usize>
-{
+impl<T: FF + From<usize>> FactorialTable<T> {
     /// Time complexity O(n)
     ///
     /// Space complexity O(n)

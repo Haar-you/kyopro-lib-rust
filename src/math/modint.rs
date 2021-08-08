@@ -2,18 +2,62 @@ use std::marker::PhantomData;
 
 use crate::misc::generics_int::{ GenericsInt };
 
+
+pub trait Pow {
+    type Output;
+    fn pow(self, p: u64) -> Self::Output;
+}
+
+pub trait Inv {
+    type Output;
+    fn inv(self) -> Self::Output;
+}
+
+pub trait Frac {
+    type Output;
+    fn frac(_: i64, _: i64) -> Self::Output;
+}
+
+pub trait FF: Pow<Output = Self> + Inv<Output = Self> + Frac<Output = Self> +
+    std::ops::Add<Output = Self> + std::ops::AddAssign +
+    std::ops::Sub<Output = Self> + std::ops::SubAssign +
+    std::ops::Mul<Output = Self> + std::ops::MulAssign +
+    std::ops::Div<Output = Self> + std::ops::DivAssign +
+    std::ops::Neg<Output = Self> +
+    Copy + Clone + PartialEq +
+    Sized {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #[derive(Copy, Clone, PartialEq)]
 pub struct ModInt<G> {
     value: u64,
     phantom: PhantomData<G>
 }
 
+impl<G: GenericsInt<Output = u64> + Copy + PartialEq> FF for ModInt<G> {}
+
 impl<G: GenericsInt<Output = u64>> ModInt<G> {
     pub fn new() -> Self {
         ModInt { value: 0, phantom: PhantomData }
     }
+}
 
-    pub fn pow(self, mut p: u64) -> Self {
+impl<G: GenericsInt<Output = u64>> Pow for ModInt<G> {
+    type Output = Self;
+
+    fn pow(self, mut p: u64) -> Self {
         let mut ret = 1;
         let mut a = self.value;
 
@@ -31,12 +75,20 @@ impl<G: GenericsInt<Output = u64>> ModInt<G> {
 
         Self { value: ret, phantom: PhantomData }
     }
+}
 
-    pub fn inv(self) -> Self {
+impl<G: GenericsInt<Output = u64>> Inv for ModInt<G> {
+    type Output = Self;
+
+    fn inv(self) -> Self {
         self.pow(G::value() - 2)
     }
+}
 
-    pub fn frac(numerator: i64, denominator: i64) -> Self {
+impl<G: GenericsInt<Output = u64>> Frac for ModInt<G> {
+    type Output = Self;
+
+    fn frac(numerator: i64, denominator: i64) -> Self {
         Self::from(numerator) * Self::from(denominator).inv()
     }
 }
