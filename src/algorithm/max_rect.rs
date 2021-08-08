@@ -1,3 +1,5 @@
+use crate::chmax;
+
 /// ヒストグラム中の最大面積長方形の面積を計算する。
 ///
 /// Time complexity O(|h|)
@@ -19,7 +21,7 @@ where
                     if y3 <= y1 {
                         break;
                     }
-                    ret = std::cmp::max(ret, y3 * T::from(i - k));
+                    chmax!(ret, y3 * T::from(i - k));
                     j = k;
                     st.pop();
                 }
@@ -32,7 +34,7 @@ where
     }
 
     while let Some((y, i)) = st.pop() {
-        ret = std::cmp::max(ret, y * T::from(h.len() - i));
+        chmax!(ret, y * T::from(h.len() - i));
     }
 
     ret

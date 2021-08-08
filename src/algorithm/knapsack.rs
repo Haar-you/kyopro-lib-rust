@@ -1,3 +1,5 @@
+use crate::{ chmin, chmax };
+
 /// 容量が小さいナップサック問題
 ///
 /// Time complexity O(n cap)
@@ -13,9 +15,9 @@ where
         let next = (i + 1) & 1;
         let cur = i & 1;
         for j in 0 ..= cap {
-            dp[next][j] = std::cmp::max(dp[next][j], dp[cur][j]);
+            chmax!(dp[next][j], dp[cur][j]);
             if j + ws[i] <= cap {
-                dp[next][j + ws[i]] = std::cmp::max(dp[next][j + ws[i]], dp[cur][j] + vs[i]);
+                chmax!(dp[next][j + ws[i]], dp[cur][j] + vs[i]);
             }
         }
     }
@@ -38,9 +40,9 @@ pub fn knapsack_small_value(n: usize, cap: usize, ws: &[usize], vs: &[usize]) ->
         let next = (i + 1) & 1;
         let cur = i & 1;
         for j in 0 ..= max_v {
-            dp[next][j] = std::cmp::min(dp[next][j], dp[cur][j]);
+            chmin!(dp[next][j], dp[cur][j]);
             if j + vs[i] <= max_v && dp[cur][j] < usize::MAX {
-                dp[next][j + vs[i]] = std::cmp::min(dp[next][j + vs[i]], dp[cur][j] + ws[i]);
+                chmin!(dp[next][j + vs[i]], dp[cur][j] + ws[i]);
             }
         }
     }
@@ -67,7 +69,7 @@ where
 
             for j in (0 ..= cap).rev() {
                 if j >= k * ws[i] {
-                    dp[j] = std::cmp::max(dp[j], dp[j - k * ws[i]] + T::from(k) * vs[i]);
+                    chmax!(dp[j], dp[j - k * ws[i]] + T::from(k) * vs[i]);
                 }
             }
 
@@ -147,11 +149,11 @@ where
     }
 
     for i in 1 .. a.len() {
-        a[i].1 = std::cmp::max(a[i].1, a[i - 1].1);
+        chmax!(a[i].1, a[i - 1].1);
     }
 
     for i in 1 .. b.len() {
-        b[i].1 = std::cmp::max(b[i].1, b[i - 1].1);
+        chmax!(b[i].1, b[i - 1].1);
     }
 
     let mut ret = zero_v;
@@ -167,7 +169,7 @@ where
         if j >= b.len() {
             break;
         }
-        ret = std::cmp::max(ret, a[i].1 + b[j].1);
+        chmax!(ret, a[i].1 + b[j].1);
         i += 1;
     }
 
