@@ -49,14 +49,9 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_C
-        let ans = Graph::<i32>::new(4)
-            .add_directed(0, 1, 1)
-            .add_directed(0, 2, 5)
-            .add_directed(1, 2, 2)
-            .add_directed(1, 3, 4)
-            .add_directed(2, 3, 1)
-            .add_directed(3, 2, 7)
-            .warshall_floyd();
+        let mut g = Graph::<i32>::new(4);
+        g.from_tuples(&[(0, 1, 1), (0, 2, 5), (1, 2, 2), (1, 3, 4), (2, 3, 1), (3, 2, 7)]);
+        let ans = g.warshall_floyd();
 
         assert_eq!(ans,
                    Some(vec![
@@ -66,14 +61,9 @@ mod tests {
                        vec![None, None, Some(7), Some(0)]
                    ]));
 
-        let ans = Graph::<i32>::new(4)
-            .add_directed(0, 1, 1)
-            .add_directed(0, 2, -5)
-            .add_directed(1, 2, 2)
-            .add_directed(1, 3, 4)
-            .add_directed(2, 3, 1)
-            .add_directed(3, 2, 7)
-            .warshall_floyd();
+        let mut g = Graph::<i32>::new(4);
+        g.from_tuples(&[(0, 1, 1), (0, 2, -5), (1, 2, 2), (1, 3, 4), (2, 3, 1), (3, 2, 7)]);
+        let ans = g.warshall_floyd();
 
         assert_eq!(ans,
                    Some(vec![
@@ -83,14 +73,9 @@ mod tests {
                        vec![None, None, Some(7), Some(0)]
                    ]));
 
-        let ans = Graph::<i32>::new(4)
-            .add_directed(0, 1, 1)
-            .add_directed(0, 2, 5)
-            .add_directed(1, 2, 2)
-            .add_directed(1, 3, 4)
-            .add_directed(2, 3, 1)
-            .add_directed(3, 2, -7)
-            .warshall_floyd();
+        let mut g = Graph::<i32>::new(4);
+        g.from_tuples(&[(0, 1, 1), (0, 2, 5), (1, 2, 2), (1, 3, 4), (2, 3, 1), (3, 2, -7)]);
+        let ans = g.warshall_floyd();
 
         assert_eq!(ans, None);
     }

@@ -5,7 +5,7 @@ use crate::graph::template::*;
 
 impl<T> Graph<T>
 where
-    T: std::ops::Add<Output = T> + Copy + Clone + Ord + From<i32>
+    T: std::ops::Add<Output = T> + Copy + Ord + From<i32>
 {
     /// Time complexity O((E + V) log V)
     pub fn dijkstra(&self, src: &[usize]) -> Vec<Option<T>> {
@@ -58,26 +58,15 @@ mod tests {
 
         // sample 1
         let mut graph = Graph::<i32>::new(4);
-        let ans = graph
-            .add_directed(0, 1, 1)
-            .add_directed(0, 2, 4)
-            .add_directed(1, 2, 2)
-            .add_directed(2, 3, 1)
-            .add_directed(1, 3, 5)
-            .dijkstra(&[0]);
+        graph.from_tuples(&[(0, 1, 1), (0, 2, 4), (1, 2, 2), (2, 3, 1), (1, 3, 5)]);
+        let ans = graph.dijkstra(&[0]);
 
         assert_eq!(ans, [Some(0), Some(1), Some(3), Some(4)]);
 
         // sample 2
         let mut graph = Graph::<i32>::new(4);
-        let ans = graph
-            .add_directed(0, 1, 1)
-            .add_directed(0, 2, 4)
-            .add_directed(2, 0, 1)
-            .add_directed(1, 2, 2)
-            .add_directed(3, 1, 1)
-            .add_directed(3, 2, 5)
-            .dijkstra(&[1]);
+        graph.from_tuples(&[(0, 1, 1), (0, 2, 4), (2, 0, 1), (1, 2, 2), (3, 1, 1), (3, 2, 5)]);
+        let ans = graph.dijkstra(&[1]);
 
         assert_eq!(ans, [Some(3), Some(0), Some(2), None]);
     }

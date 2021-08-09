@@ -67,15 +67,9 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_C
-        let scc = Graph::<i32>::new(5)
-            .add_directed(0, 1, 1)
-            .add_directed(1, 0, 1)
-            .add_directed(1, 2, 1)
-            .add_directed(2, 4, 1)
-            .add_directed(4, 3, 1)
-            .add_directed(3, 2, 1)
-            .scc()
-            .0;
+        let mut g = Graph::<i32>::new(5);
+        g.from_tuples(&[(0, 1, 1), (1, 0, 1), (1, 2, 1), (2, 4, 1), (4, 3, 1), (3, 2, 1)]);
+        let scc = g.scc().0;
 
         assert_eq!(scc[0], scc[1]);
         assert_ne!(scc[0], scc[3]);

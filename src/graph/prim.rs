@@ -44,17 +44,10 @@ mod tests {
 
     #[test]
     fn test() {
-        let ans = Graph::<i32>::new(6)
-            .add_undirected(0, 1, 1)
-            .add_undirected(0, 2, 3)
-            .add_undirected(1, 2, 1)
-            .add_undirected(1, 3, 7)
-            .add_undirected(2, 4, 1)
-            .add_undirected(1, 4, 3)
-            .add_undirected(3, 4, 1)
-            .add_undirected(3, 5, 1)
-            .add_undirected(4, 5, 6)
-            .prim()
+        let mut g = Graph::<i32>::new(6);
+        g.from_tuples_undirected(&[(0, 1, 1), (0, 2, 3), (1, 2, 1), (1, 3, 7), (2, 4, 1), (1, 4, 3), (3, 4, 1), (3, 5, 1), (4, 5, 6)]);
+
+        let ans = g.prim()
             .iter()
             .map(|(_, _, x)| x)
             .sum::<i32>();
