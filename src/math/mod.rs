@@ -10,3 +10,4 @@ pub mod factorial;
 pub mod catalan_number;
 pub mod rational;
 pub mod totient;
+pub mod convolution;
