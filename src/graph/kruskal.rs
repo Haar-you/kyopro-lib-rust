@@ -37,8 +37,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut g = Graph::<i32>::new(6);
-        g.from_tuples_undirected(&[(0, 1, 1), (0, 2, 3), (1, 2, 1), (1, 3, 7), (2, 4, 1), (1, 4, 3), (3, 4, 1), (3, 5, 1), (4, 5, 6)]);
+        let g = Graph::<i32>::from_tuples_undirected(6, &[(0, 1, 1), (0, 2, 3), (1, 2, 1), (1, 3, 7), (2, 4, 1), (1, 4, 3), (3, 4, 1), (3, 5, 1), (4, 5, 6)]);
 
         let ans = g.kruskal()
             .iter()

@@ -7,9 +7,7 @@ pub struct Edge<T> {
 
 impl<T> Edge<T> {
     fn new(from: usize, to: usize, cost: T) -> Self {
-        Edge {
-            from: from, to: to, cost: cost
-        }
+        Edge { from, to, cost }
     }
 }
 
@@ -20,9 +18,7 @@ pub struct Graph<T> {
 
 impl<T: Copy> Graph<T> {
     pub fn new(size: usize) -> Self {
-        Graph {
-            edges: vec![vec![]; size]
-        }
+        Graph { edges: vec![vec![]; size] }
     }
 
     pub fn add_directed(&mut self, from: usize, to: usize, cost: T) {
@@ -34,18 +30,21 @@ impl<T: Copy> Graph<T> {
         self.add_directed(to, from, cost);
     }
 
-    pub fn from_tuples(&mut self, edges: &[(usize, usize, T)]) {
+    pub fn from_tuples(n: usize, edges: &[(usize, usize, T)]) -> Self {
+        let mut ret = Graph::<T>::new(n);
         for &(u, v, c) in edges {
-            self.add_directed(u, v, c);
+            ret.add_directed(u, v, c);
         }
+        ret
     }
 
-    pub fn from_tuples_undirected(&mut self, edges: &[(usize, usize, T)]) {
+    pub fn from_tuples_undirected(n: usize, edges: &[(usize, usize, T)]) -> Self {
+        let mut ret = Graph::<T>::new(n);
         for &(u, v, c) in edges {
-            self.add_undirected(u, v, c);
+            ret.add_undirected(u, v, c);
         }
+        ret
     }
-
 }
 
 impl<T> Graph<T> {

@@ -133,17 +133,14 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_A
-        let mut g = Graph::<u32>::new(4);
-        g.from_tuples_undirected(&[(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
+        let g = Graph::<u32>::from_tuples_undirected(4, &[(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
         assert_eq!(g.tree_diameter().0, 5);
 
-        let mut g = Graph::<u32>::new(4);
-        g.from_tuples_undirected(&[(0, 1, 1), (1, 2, 2), (2, 3, 4)]);
+        let g = Graph::<u32>::from_tuples_undirected(4, &[(0, 1, 1), (1, 2, 2), (2, 3, 4)]);
         assert_eq!(g.tree_diameter().0, 7);
 
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_B
-        let mut g = Graph::<u32>::new(4);
-        g.from_tuples_undirected(&[(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
+        let g = Graph::<u32>::from_tuples_undirected(4, &[(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
         assert_eq!(g.tree_height(), [5, 3, 4, 5]);
     }
 }
