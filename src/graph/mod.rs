@@ -7,5 +7,6 @@ pub mod scc;
 pub mod topological_sort;
 pub mod bipartite;
 pub mod tree_utils;
+pub mod lca;
 pub mod articulation_points;
 
