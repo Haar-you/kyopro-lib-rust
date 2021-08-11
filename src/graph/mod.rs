@@ -9,4 +9,4 @@ pub mod bipartite;
 pub mod tree_utils;
 pub mod lca;
 pub mod articulation_points;
-
+pub mod bridges;
