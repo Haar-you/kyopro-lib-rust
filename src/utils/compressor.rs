@@ -31,32 +31,23 @@ where
     }
 }
 
-impl<T> CompressorBuilder<T>
-where
-    T: Clone + Ord + Eq
-{
+impl<T: Clone + Ord + Eq> CompressorBuilder<T> {
     pub fn new() -> Self {
-        CompressorBuilder {
-            data: vec![]
-        }
+        CompressorBuilder { data: vec![] }
     }
 
-    pub fn add(&mut self, value: T) -> &mut Self{
+    pub fn add(&mut self, value: T) {
         self.data.push(value);
-        self
     }
 
-    pub fn add_vec(&mut self, values: Vec<T>) -> &mut Self {
+    pub fn add_vec(&mut self, values: Vec<T>) {
         self.data.extend(values);
-        self
     }
 
-    pub fn build(&mut self) -> Compressor<T> {
+    pub fn build(mut self) -> Compressor<T> {
         self.data.sort();
         self.data.dedup();
-        Compressor {
-            data: self.data.clone()
-        }
+        Compressor { data: self.data }
     }
 }
 
