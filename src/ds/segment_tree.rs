@@ -152,6 +152,7 @@ mod tests {
 
     use crate::algebra::sum::Sum;
     use crate::algebra::bitxor::BitXor;
+    use crate::algebra::min::Min;
 
     #[test]
     fn test() {
@@ -159,5 +160,6 @@ mod tests {
 
         random_test_helper(10, Sum::<i32>::new(), || rng.gen::<i32>() % 10000);
         random_test_helper(10, BitXor::<u32>::new(), || rng.gen::<u32>() % 10000);
+        random_test_helper(10, Min::<i32>::new(), || Some(rng.gen::<i32>() % 10000));
     }
 }
