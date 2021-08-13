@@ -6,3 +6,4 @@ pub mod min;
 pub mod dihedral;
 pub mod update;
 pub mod dual;
+pub mod affine;
