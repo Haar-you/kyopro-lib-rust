@@ -7,9 +7,9 @@ use crate::{ chmin, chmax };
 /// Space complexity O(cap)
 pub fn knapsack_small_weight<T>(n: usize, cap: usize, ws: &[usize], vs: &[T]) -> T
 where
-    T: From<usize> + Copy + Ord + std::ops::Add<Output = T>
+    T: Default + Copy + Ord + std::ops::Add<Output = T>
 {
-    let mut dp = vec![vec![T::from(0); cap + 1]; 2];
+    let mut dp = vec![vec![T::default(); cap + 1]; 2];
 
     for i in 0 .. n {
         let next = (i + 1) & 1;
@@ -57,9 +57,9 @@ pub fn knapsack_small_value(n: usize, cap: usize, ws: &[usize], vs: &[usize]) ->
 /// Space complexity O(cap)
 pub fn knapsack_limited<T>(n: usize, cap: usize, ws: &[usize], vs: &[T], ms: &[usize]) -> T
 where
-    T: From<usize> + Copy + Ord + std::ops::Add<Output = T> + std::ops::Mul<Output = T>
+    T: Default + From<usize> + Copy + Ord + std::ops::Add<Output = T> + std::ops::Mul<Output = T>
 {
-    let mut dp = vec![T::from(0); cap + 1];
+    let mut dp = vec![T::default(); cap + 1];
 
     for i in 0 .. n {
         let mut a = 1;
@@ -89,9 +89,9 @@ where
 /// Space complexity O(cap)
 pub fn knapsack_unlimited<T>(n: usize, cap: usize, ws: &[usize], vs: &[T]) -> T
 where
-    T: From<usize> + Copy + Ord + std::ops::Add<Output = T>
+    T: Default + Copy + Ord + std::ops::Add<Output = T>
 {
-    let mut dp = vec![vec![T::from(0); cap + 1]; 2];
+    let mut dp = vec![vec![T::default(); cap + 1]; 2];
 
     for i in 0 .. n {
         let next = (i + 1) & 1;
@@ -113,18 +113,18 @@ use crate::utils::merge::inplace_merge;
 
 /// 要素数が小さいナップサック問題
 ///
-/// Time complexity O(2 ^ (n / 2))
+/// Time complexity O(n * 2 ^ (n / 2))
 ///
 /// Space complexity O(2 ^ (n / 2))
 pub fn knapsack_small_quantity<W, V>(n: usize, cap: W, ws: &[W], vs: &[V]) -> V
 where
-    W: From<usize> + Copy + std::ops::Add<Output = W> + Ord,
-    V: From<usize> + Copy + std::ops::Add<Output = V> + Ord
+    W: Default + Copy + std::ops::Add<Output = W> + Ord,
+    V: Default + Copy + std::ops::Add<Output = V> + Ord
 {
     let p = n / 2;
 
-    let zero_w = W::from(0);
-    let zero_v = V::from(0);
+    let zero_w = W::default();
+    let zero_v = V::default();
 
     let mut a: Vec<(W, V)> = Vec::new();
     let mut b: Vec<(W, V)> = Vec::new();
