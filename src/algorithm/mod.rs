@@ -5,3 +5,4 @@ pub mod knapsack;
 pub mod max_rect;
 pub mod lis;
 pub mod bsearch;
+pub mod mo;
