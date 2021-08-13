@@ -24,6 +24,7 @@ pub trait FF: Pow<Output = Self> + Inv<Output = Self> + Frac<Output = Self> +
     std::ops::Mul<Output = Self> + std::ops::MulAssign +
     std::ops::Div<Output = Self> + std::ops::DivAssign +
     std::ops::Neg<Output = Self> +
+    std::iter::Sum +
     Copy + Clone + PartialEq +
     Sized {}
 
@@ -194,12 +195,20 @@ impl<G: GenericsInt<Output = u64>> std::ops::Neg for ModInt<G> {
     }
 }
 
+impl<G: GenericsInt<Output = u64>> std::str::FromStr for ModInt<G> {
+    type Err = std::num::ParseIntError;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let x = s.parse::<u64>()?;
+        Ok(Self::from(x))
+    }
+}
 
-    #[test]
-    fn test() {
+impl<G: GenericsInt<Output = u64>> std::iter::Sum for ModInt<G> {
+    fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
+        iter.fold(
+            Self::from(0),
+            |a, b| a + b
+        )
     }
 }

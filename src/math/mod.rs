@@ -6,8 +6,11 @@ pub mod divisor;
 pub mod ext_gcd;
 pub mod crt;
 pub mod modint;
+
 pub mod factorial;
 pub mod catalan_number;
+pub mod bell_number;
+
 pub mod rational;
 pub mod totient;
 pub mod convolution;
