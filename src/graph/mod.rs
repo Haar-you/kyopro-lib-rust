@@ -11,3 +11,4 @@ pub mod lca;
 pub mod articulation_points;
 pub mod bridges;
 pub mod tsp;
+pub mod chinese_postman;
