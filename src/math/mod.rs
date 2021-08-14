@@ -7,6 +7,7 @@ pub mod ext_gcd;
 pub mod crt;
 pub mod modint;
 
+pub mod binomial_coefficient;
 pub mod factorial;
 pub mod catalan_number;
 pub mod bell_number;
