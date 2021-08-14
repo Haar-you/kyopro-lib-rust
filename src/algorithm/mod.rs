@@ -6,3 +6,4 @@ pub mod max_rect;
 pub mod lis;
 pub mod bsearch;
 pub mod mo;
+pub mod interval_scheduling;
