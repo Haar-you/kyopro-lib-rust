@@ -1,7 +1,7 @@
 #[derive(Clone, Debug)]
 pub struct KMP {
     pat: Vec<u8>,
-    table: Vec<isize>
+    table: Vec<isize>,
 }
 
 impl KMP {
@@ -20,11 +20,9 @@ impl KMP {
                 table[i] = (j + 1) as isize;
                 i += 1;
                 j += 1;
-            }
-            else if j > 0 {
+            } else if j > 0 {
                 j = table[j] as usize;
-            }
-            else {
+            } else {
                 table[i] = 0;
                 i += 1;
             }
@@ -51,14 +49,12 @@ impl KMP {
                         i = self.table[i] as usize;
                     }
                 }
-            }
-            else {
+            } else {
                 m += (i as isize - self.table[i]) as usize;
                 if i > 0 {
                     i = self.table[i] as usize;
                 }
             }
-
         }
 
         ret

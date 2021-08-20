@@ -1,11 +1,11 @@
-use std::collections::BinaryHeap;
 use std::cmp::Reverse;
+use std::collections::BinaryHeap;
 
 use crate::graph::template::*;
 
 impl<T> Graph<T>
 where
-    T: Ord + Copy
+    T: Ord + Copy,
 {
     pub fn prim(&self) -> Vec<(usize, usize, T)> {
         let n = self.len();
@@ -24,7 +24,12 @@ where
             }
 
             let i = if visit[from] { to } else { from };
-            for &Edge { from: u, to: v, cost: c } in &self.edges[i] {
+            for &Edge {
+                from: u,
+                to: v,
+                cost: c,
+            } in &self.edges[i]
+            {
                 heap.push(Reverse((c, u, v)));
             }
 
@@ -37,19 +42,28 @@ where
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test() {
-        let g = Graph::<i32>::from_tuples_undirected(6, &[(0, 1, 1), (0, 2, 3), (1, 2, 1), (1, 3, 7), (2, 4, 1), (1, 4, 3), (3, 4, 1), (3, 5, 1), (4, 5, 6)]);
+        let g = Graph::<i32>::from_tuples_undirected(
+            6,
+            &[
+                (0, 1, 1),
+                (0, 2, 3),
+                (1, 2, 1),
+                (1, 3, 7),
+                (2, 4, 1),
+                (1, 4, 3),
+                (3, 4, 1),
+                (3, 5, 1),
+                (4, 5, 6),
+            ],
+        );
 
-        let ans = g.prim()
-            .iter()
-            .map(|(_, _, x)| x)
-            .sum::<i32>();
+        let ans = g.prim().iter().map(|(_, _, x)| x).sum::<i32>();
 
         assert_eq!(ans, 5);
     }

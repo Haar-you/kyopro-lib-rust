@@ -11,10 +11,12 @@ impl<T> Graph<T> {
         let mut check = vec![false; n];
         let mut k = 0;
 
-        for i in 0 .. n {
+        for i in 0..n {
             if ord[i] == -1 {
                 let mut t = 0;
-                self.scc_(i, &mut ret, &mut low, &mut ord, &mut s, &mut check, &mut t, &mut k);
+                self.scc_(
+                    i, &mut ret, &mut low, &mut ord, &mut s, &mut check, &mut t, &mut k,
+                );
             }
         }
 
@@ -25,8 +27,16 @@ impl<T> Graph<T> {
         (ret, k)
     }
 
-    fn scc_(&self, cur: usize, ret: &mut Vec<usize>, low: &mut Vec<isize>, ord: &mut Vec<isize>,
-            s: &mut Vec<usize>, check: &mut Vec<bool>, t: &mut usize, k: &mut usize
+    fn scc_(
+        &self,
+        cur: usize,
+        ret: &mut Vec<usize>,
+        low: &mut Vec<isize>,
+        ord: &mut Vec<isize>,
+        s: &mut Vec<usize>,
+        check: &mut Vec<bool>,
+        t: &mut usize,
+        k: &mut usize,
     ) {
         *t += 1;
         low[cur] = *t as isize;
@@ -35,12 +45,16 @@ impl<T> Graph<T> {
         s.push(cur);
         check[cur] = true;
 
-        for &Edge { from: _, to, cost: _ } in &self.edges[cur] {
+        for &Edge {
+            from: _,
+            to,
+            cost: _,
+        } in &self.edges[cur]
+        {
             if ord[to] == -1 {
                 self.scc_(to, ret, low, ord, s, check, t, k);
                 low[cur] = std::cmp::min(low[cur], low[to]);
-            }
-            else if check[to] {
+            } else if check[to] {
                 low[cur] = std::cmp::min(low[cur], low[to]);
             }
         }
@@ -59,7 +73,6 @@ impl<T> Graph<T> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -67,7 +80,17 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_C
-        let g = Graph::<i32>::from_tuples(5, &[(0, 1, 1), (1, 0, 1), (1, 2, 1), (2, 4, 1), (4, 3, 1), (3, 2, 1)]);
+        let g = Graph::<i32>::from_tuples(
+            5,
+            &[
+                (0, 1, 1),
+                (1, 0, 1),
+                (1, 2, 1),
+                (2, 4, 1),
+                (4, 3, 1),
+                (3, 2, 1),
+            ],
+        );
         let scc = g.scc().0;
 
         assert_eq!(scc[0], scc[1]);

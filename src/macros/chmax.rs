@@ -4,9 +4,8 @@ macro_rules! chmax {
         if $a < $b {
             $a = $b;
             true
-        }
-        else {
+        } else {
             false
         }
-    }
+    };
 }

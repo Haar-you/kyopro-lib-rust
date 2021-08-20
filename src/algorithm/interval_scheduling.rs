@@ -4,7 +4,7 @@
 pub fn interval_scheduling<T: Ord + Copy>(intervals: &[(T, T)]) -> Vec<usize> {
     let n = intervals.len();
     let mut ret = vec![];
-    let mut ord = (0 .. n).collect::<Vec<_>>();
+    let mut ord = (0..n).collect::<Vec<_>>();
     ord.sort_by(|&i, &j| intervals[i].1.cmp(&intervals[j].1));
 
     let mut r = None;

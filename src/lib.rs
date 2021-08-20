@@ -1,8 +1,9 @@
+pub mod algebra;
 pub mod algorithm;
-pub mod graph;
 pub mod ds;
-pub mod utils;
+pub mod graph;
+pub mod macros;
 pub mod math;
 pub mod misc;
 pub mod seq;
-pub mod algebra;
+pub mod utils;

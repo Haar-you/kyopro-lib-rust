@@ -1,10 +1,12 @@
-use std::marker::PhantomData;
 use crate::algebra::traits::*;
+use std::marker::PhantomData;
 
 #[derive(Clone)]
 pub struct BitXor<T>(PhantomData<T>);
 impl<T> BitXor<T> {
-    pub fn new() -> Self { Self (PhantomData) }
+    pub fn new() -> Self {
+        Self(PhantomData)
+    }
 }
 
 macro_rules! int_bitxor_impl {

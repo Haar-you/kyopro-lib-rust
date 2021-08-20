@@ -1,9 +1,9 @@
-use crate::ds::traits::{ Foldable, RangeUpdatable };
+use crate::ds::traits::{Foldable, RangeUpdatable};
 
 #[derive(Copy, Clone)]
 pub enum StarrySkyTreeMode {
     Max,
-    Min
+    Min,
 }
 
 /// 区間加算・区間Max(Min)を処理できるデータ構造
@@ -11,12 +11,12 @@ pub struct StarrySkyTree<T> {
     size: usize,
     data: Vec<T>,
     zero: T,
-    mode: StarrySkyTreeMode
+    mode: StarrySkyTreeMode,
 }
 
 impl<T> StarrySkyTree<T>
 where
-     T: From<i32> + Copy
+    T: From<i32> + Copy,
 {
     pub fn new(n: usize, mode: StarrySkyTreeMode) -> Self {
         let size = n.next_power_of_two() * 2;
@@ -25,19 +25,28 @@ where
             size: size,
             data: vec![zero; size],
             zero: zero,
-            mode: mode
+            mode: mode,
         }
     }
 }
 
 impl<T> Foldable<T> for StarrySkyTree<T>
 where
-    T: std::ops::Add<Output = T> + Ord + Copy
+    T: std::ops::Add<Output = T> + Ord + Copy,
 {
     fn fold(&self, l: usize, r: usize) -> T {
-        fn rec<T>(data: &[T], i: usize, l: usize, r: usize, s: usize, t: usize, value: T, mode: StarrySkyTreeMode) -> Option<T>
+        fn rec<T>(
+            data: &[T],
+            i: usize,
+            l: usize,
+            r: usize,
+            s: usize,
+            t: usize,
+            value: T,
+            mode: StarrySkyTreeMode,
+        ) -> Option<T>
         where
-            T: std::ops::Add<Output = T> + Ord + Copy
+            T: std::ops::Add<Output = T> + Ord + Copy,
         {
             if r <= s || t <= l {
                 return None;
@@ -46,8 +55,26 @@ where
                 return Some(value + data[i]);
             }
 
-            let a = rec(data, i << 1 | 0, l, (l + r) / 2, s, t, value + data[i], mode);
-            let b = rec(data, i << 1 | 1, (l + r) / 2, r, s, t, value + data[i], mode);
+            let a = rec(
+                data,
+                i << 1 | 0,
+                l,
+                (l + r) / 2,
+                s,
+                t,
+                value + data[i],
+                mode,
+            );
+            let b = rec(
+                data,
+                i << 1 | 1,
+                (l + r) / 2,
+                r,
+                s,
+                t,
+                value + data[i],
+                mode,
+            );
 
             if a.is_none() {
                 return b;
@@ -58,7 +85,7 @@ where
 
             Some(match mode {
                 StarrySkyTreeMode::Max => std::cmp::max(a.unwrap(), b.unwrap()),
-                StarrySkyTreeMode::Min => std::cmp::min(a.unwrap(), b.unwrap())
+                StarrySkyTreeMode::Min => std::cmp::min(a.unwrap(), b.unwrap()),
             })
         }
 
@@ -68,7 +95,7 @@ where
 
 impl<T> RangeUpdatable<T> for StarrySkyTree<T>
 where
-    T: std::ops::Add<Output = T> + std::ops::AddAssign + std::ops::SubAssign + Ord + Copy
+    T: std::ops::Add<Output = T> + std::ops::AddAssign + std::ops::SubAssign + Ord + Copy,
 {
     fn range_update(&mut self, l: usize, r: usize, value: T) {
         let hsize = self.size / 2;
@@ -96,8 +123,12 @@ where
             while i >= 1 {
                 if i < self.size / 2 {
                     let d = match self.mode {
-                        StarrySkyTreeMode::Max => std::cmp::max(self.data[i << 1 | 0], self.data[i << 1 | 1]),
-                        StarrySkyTreeMode::Min => std::cmp::min(self.data[i << 1 | 0], self.data[i << 1 | 1])
+                        StarrySkyTreeMode::Max => {
+                            std::cmp::max(self.data[i << 1 | 0], self.data[i << 1 | 1])
+                        }
+                        StarrySkyTreeMode::Min => {
+                            std::cmp::min(self.data[i << 1 | 0], self.data[i << 1 | 1])
+                        }
                     };
 
                     self.data[i << 1 | 0] -= d;
@@ -114,8 +145,6 @@ where
     }
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -129,7 +158,7 @@ mod tests {
         let mut other = vec![0; size];
         let mut s = StarrySkyTree::<i32>::new(size, StarrySkyTreeMode::Max);
 
-        for _ in 0 .. 1000 {
+        for _ in 0..1000 {
             let ty = rng.gen::<usize>() % 2;
             let l = rng.gen::<usize>() % size;
             let r = l + rng.gen::<usize>() % (size - l) + 1;
@@ -138,12 +167,11 @@ mod tests {
                 let x = rng.gen::<i32>() % 1000;
 
                 s.range_update(l, r, x);
-                for i in l .. r {
+                for i in l..r {
                     other[i] += x;
                 }
-            }
-            else {
-                let ans = (l .. r).map(|i| other[i]).max().unwrap();
+            } else {
+                let ans = (l..r).map(|i| other[i]).max().unwrap();
 
                 assert_eq!(s.fold(l, r), ans);
             }
@@ -158,7 +186,7 @@ mod tests {
         let mut other = vec![0; size];
         let mut s = StarrySkyTree::<i32>::new(size, StarrySkyTreeMode::Min);
 
-        for _ in 0 .. 1000 {
+        for _ in 0..1000 {
             let ty = rng.gen::<usize>() % 2;
             let l = rng.gen::<usize>() % size;
             let r = l + rng.gen::<usize>() % (size - l) + 1;
@@ -167,16 +195,14 @@ mod tests {
                 let x = rng.gen::<i32>() % 1000;
 
                 s.range_update(l, r, x);
-                for i in l .. r {
+                for i in l..r {
                     other[i] += x;
                 }
-            }
-            else {
-                let ans = (l .. r).map(|i| other[i]).min().unwrap();
+            } else {
+                let ans = (l..r).map(|i| other[i]).min().unwrap();
 
                 assert_eq!(s.fold(l, r), ans);
             }
         }
     }
-
 }

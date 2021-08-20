@@ -4,7 +4,7 @@ use crate::utils::merge::merge;
 pub struct RangeSearchTree {
     size: usize,
     cxs: Vec<i64>,
-    data: Vec<Vec<(i64, usize)>>
+    data: Vec<Vec<(i64, usize)>>,
 }
 
 impl RangeSearchTree {
@@ -49,7 +49,6 @@ impl RangeSearchTree {
     }
 }
 
-
 pub struct RangeSearchTreeBuilder {
     size: usize,
     xs: Vec<i64>,
@@ -58,7 +57,11 @@ pub struct RangeSearchTreeBuilder {
 
 impl RangeSearchTreeBuilder {
     pub fn new() -> Self {
-        Self { size: 0, xs: vec![], ys: vec![] }
+        Self {
+            size: 0,
+            xs: vec![],
+            ys: vec![],
+        }
     }
 
     pub fn add(&mut self, x: i64, y: i64) {
@@ -77,16 +80,16 @@ impl RangeSearchTreeBuilder {
 
         let mut data: Vec<Vec<(i64, usize)>> = vec![vec![]; size];
 
-        for i in 0 .. self.size {
+        for i in 0..self.size {
             let j = lower_bound(&cxs, &self.xs[i]);
             data[size / 2 + j].push((self.ys[i], j));
         }
 
-        for i in size / 2 .. size {
+        for i in size / 2..size {
             data[i].sort();
         }
 
-        for i in (1 .. size / 2).rev() {
+        for i in (1..size / 2).rev() {
             data[i] = merge(&data[i << 1 | 0], &data[i << 1 | 1]);
         }
 

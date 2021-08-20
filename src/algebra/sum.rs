@@ -1,10 +1,12 @@
-use std::marker::PhantomData;
 use crate::algebra::traits::*;
+use std::marker::PhantomData;
 
 #[derive(Clone)]
 pub struct Sum<T>(PhantomData<T>);
 impl<T> Sum<T> {
-    pub fn new() -> Self { Self (PhantomData) }
+    pub fn new() -> Self {
+        Self(PhantomData)
+    }
 }
 
 macro_rules! signed_int_sum_impl {

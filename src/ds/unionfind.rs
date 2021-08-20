@@ -3,7 +3,7 @@ pub struct UnionFind {
     count: usize,
     parent: Vec<usize>,
     depth: Vec<usize>,
-    size: Vec<usize>
+    size: Vec<usize>,
 }
 
 impl UnionFind {
@@ -11,9 +11,9 @@ impl UnionFind {
         UnionFind {
             n: n,
             count: n,
-            parent: (0 .. n).collect(),
+            parent: (0..n).collect(),
             depth: vec![1; n],
-            size: vec![1; n]
+            size: vec![1; n],
         }
     }
 
@@ -43,8 +43,7 @@ impl UnionFind {
             self.parent[i] = j;
             self.size[j] += self.size[i];
             return j;
-        }
-        else {
+        } else {
             self.parent[j] = i;
             self.size[i] += self.size[j];
             if self.depth[i] == self.depth[j] {
@@ -66,7 +65,7 @@ impl UnionFind {
     pub fn get_groups(&mut self) -> Vec<Vec<usize>> {
         let mut ret = vec![vec![]; self.n];
 
-        for i in 0 .. self.n {
+        for i in 0..self.n {
             ret[self.root_of(i)].push(i);
         }
 
@@ -74,8 +73,5 @@ impl UnionFind {
     }
 }
 
-
 #[cfg(test)]
-mod tests {
-    
-}
+mod tests {}

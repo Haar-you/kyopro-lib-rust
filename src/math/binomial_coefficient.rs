@@ -1,6 +1,6 @@
 use crate::math::{
     crt::crt_vec,
-    mod_ops::{ mod_inv, mod_pow }
+    mod_ops::{mod_inv, mod_pow},
 };
 
 #[derive(Clone)]
@@ -9,7 +9,7 @@ pub struct ExtLucas {
     inv: Vec<u64>,
     p: u64,
     q: u64,
-    m: u64
+    m: u64,
 }
 
 impl ExtLucas {
@@ -19,12 +19,12 @@ impl ExtLucas {
         let mut prod: Vec<u64> = vec![1; m as usize];
         let mut inv: Vec<u64> = vec![1; m as usize];
 
-        for i in 1 .. m as usize {
+        for i in 1..m as usize {
             prod[i] = prod[i - 1] * (if i as u64 % p == 0 { 1 } else { i as u64 }) % m;
         }
 
         inv[m as usize - 1] = mod_inv(prod[m as usize - 1], m).unwrap();
-        for i in (1 .. m as usize).rev() {
+        for i in (1..m as usize).rev() {
             inv[i - 1] = inv[i] * (if i as u64 % p == 0 { 1 } else { i as u64 }) % m;
         }
 
@@ -41,7 +41,9 @@ impl ExtLucas {
 
         let mut i = 0;
         loop {
-            if n == 0 { break; }
+            if n == 0 {
+                break;
+            }
 
             ret *= self.prod[(n % self.m) as usize];
             ret %= self.m;
@@ -80,7 +82,7 @@ impl ExtLucas {
 #[derive(Clone)]
 pub struct BinomialCoefficient {
     lu: Vec<ExtLucas>,
-    ms: Vec<u64>
+    ms: Vec<u64>,
 }
 
 impl BinomialCoefficient {
@@ -120,15 +122,16 @@ impl BinomialCoefficient {
     pub fn get(&self, n: u64, k: u64) -> u64 {
         if n < k {
             0
-        }
-        else {
+        } else {
             let bs = self.lu.iter().map(|lu| lu.get(n, k));
-            let a = bs.zip(self.ms.iter()).map(|(a, &b)| (a as i64, b)).collect::<Vec<_>>();
+            let a = bs
+                .zip(self.ms.iter())
+                .map(|(a, &b)| (a as i64, b))
+                .collect::<Vec<_>>();
             crt_vec(&a).unwrap().0 as u64
         }
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -143,7 +146,7 @@ mod tests {
 
         let c = BinomialCoefficient::new(60);
         assert_eq!(
-            (0 ..= 10).map(|i| c.get(20, i)).collect::<Vec<_>>(),
+            (0..=10).map(|i| c.get(20, i)).collect::<Vec<_>>(),
             [1, 20, 10, 0, 45, 24, 0, 0, 30, 20, 16]
         );
     }

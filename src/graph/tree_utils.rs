@@ -13,11 +13,15 @@ impl<T> Graph<T> {
             check[cur] = true;
 
             let mut index = 0;
-            while let Some(&Edge { from: _, to, cost: _ }) = self.edges[cur].get(index) {
+            while let Some(&Edge {
+                from: _,
+                to,
+                cost: _,
+            }) = self.edges[cur].get(index)
+            {
                 if to as isize == par {
                     self.edges[cur].remove(index);
-                }
-                else {
+                } else {
                     index += 1;
                     stack.push((to, cur as isize));
                 }
@@ -28,11 +32,9 @@ impl<T> Graph<T> {
     }
 }
 
-
-
 impl<T> Graph<T>
 where
-    T: std::ops::Add<Output = T> + Copy + From<u32> + Ord
+    T: std::ops::Add<Output = T> + Copy + From<u32> + Ord,
 {
     /// rootを根としたときの根から各頂点への距離を列挙する。
     ///
@@ -65,10 +67,18 @@ where
     /// Time complexity O(n)
     pub fn tree_diameter(&self) -> (T, usize, usize) {
         let a = self.tree_distance(0);
-        let (u, _) = a.iter().enumerate().max_by(|(_, x), (_, y)| x.cmp(y)).unwrap();
+        let (u, _) = a
+            .iter()
+            .enumerate()
+            .max_by(|(_, x), (_, y)| x.cmp(y))
+            .unwrap();
 
         let b = self.tree_distance(u);
-        let (v, &d) = b.iter().enumerate().max_by(|(_, x), (_, y)| x.cmp(y)).unwrap();
+        let (v, &d) = b
+            .iter()
+            .enumerate()
+            .max_by(|(_, x), (_, y)| x.cmp(y))
+            .unwrap();
 
         (d, u, v)
     }
@@ -78,12 +88,23 @@ where
     /// Time complexity O(n)
     pub fn tree_height(&self) -> Vec<T> {
         let d = self.tree_distance(0);
-        let (u, _) = d.iter().enumerate().max_by(|(_, x), (_, y)| x.cmp(y)).unwrap();
+        let (u, _) = d
+            .iter()
+            .enumerate()
+            .max_by(|(_, x), (_, y)| x.cmp(y))
+            .unwrap();
         let d1 = self.tree_distance(u);
-        let (v, _) = d1.iter().enumerate().max_by(|(_, x), (_, y)| x.cmp(y)).unwrap();
+        let (v, _) = d1
+            .iter()
+            .enumerate()
+            .max_by(|(_, x), (_, y)| x.cmp(y))
+            .unwrap();
         let d2 = self.tree_distance(v);
 
-        d1.into_iter().zip(d2.into_iter()).map(|(x, y)| std::cmp::max(x, y)).collect()
+        d1.into_iter()
+            .zip(d2.into_iter())
+            .map(|(x, y)| std::cmp::max(x, y))
+            .collect()
     }
 
     /// 木上の2頂点を結ぶパス上の頂点列を求める。
@@ -100,8 +121,7 @@ where
         while let Some((i, st)) = stack.pop() {
             if st == 1 {
                 ret.pop();
-            }
-            else {
+            } else {
                 stack.push((i, 1));
                 ret.push(i);
 
@@ -111,7 +131,12 @@ where
 
                 check[i] = true;
 
-                for &Edge { from: _, to, cost: _ } in &self.edges[i] {
+                for &Edge {
+                    from: _,
+                    to,
+                    cost: _,
+                } in &self.edges[i]
+                {
                     if !check[to] {
                         stack.push((to, 0));
                     }
@@ -122,9 +147,6 @@ where
         ret
     }
 }
-
-
-
 
 #[cfg(test)]
 mod tests {
@@ -144,5 +166,3 @@ mod tests {
         assert_eq!(g.tree_height(), [5, 3, 4, 5]);
     }
 }
-
-

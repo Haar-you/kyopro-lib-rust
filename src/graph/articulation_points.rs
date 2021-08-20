@@ -8,7 +8,7 @@ impl<T> Graph<T> {
         let mut ret = vec![];
         let mut v = 0;
 
-        for i in 0 .. n {
+        for i in 0..n {
             if visit[i].is_none() {
                 self.articulation_points_(i, i, &mut visit, &mut low, &mut ret, &mut v);
             }
@@ -17,11 +17,14 @@ impl<T> Graph<T> {
         ret
     }
 
-    fn articulation_points_(&self, root: usize, cur: usize,
-                           visit: &mut Vec<Option<usize>>,
-                           low: &mut Vec<usize>,
-                           ret: &mut Vec<usize>,
-                           v: &mut usize
+    fn articulation_points_(
+        &self,
+        root: usize,
+        cur: usize,
+        visit: &mut Vec<Option<usize>>,
+        low: &mut Vec<usize>,
+        ret: &mut Vec<usize>,
+        v: &mut usize,
     ) -> usize {
         if let Some(x) = visit[cur] {
             return x;
@@ -33,7 +36,12 @@ impl<T> Graph<T> {
         let mut children = vec![];
         *v += 1;
 
-        for &Edge { from: _, to, cost: _ } in &self.edges[cur] {
+        for &Edge {
+            from: _,
+            to,
+            cost: _,
+        } in &self.edges[cur]
+        {
             if visit[to].is_none() {
                 children.push(to);
             }
@@ -56,7 +64,6 @@ impl<T> Graph<T> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -64,12 +71,14 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_A
-        let g = Graph::<u32>::from_tuples_undirected(4, &[(0, 1, 1), (0, 2, 1), (1, 2, 1), (2, 3, 1)]);
+        let g =
+            Graph::<u32>::from_tuples_undirected(4, &[(0, 1, 1), (0, 2, 1), (1, 2, 1), (2, 3, 1)]);
         let mut ans = g.articulation_points();
         ans.sort();
         assert_eq!(ans, [2]);
 
-        let g = Graph::<u32>::from_tuples_undirected(5, &[(0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1)]);
+        let g =
+            Graph::<u32>::from_tuples_undirected(5, &[(0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1)]);
         let mut ans = g.articulation_points();
         ans.sort();
         assert_eq!(ans, [1, 2, 3]);

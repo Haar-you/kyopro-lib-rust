@@ -5,60 +5,108 @@ pub struct Dice<T> {
     pub front: T,
     pub back: T,
     pub right: T,
-    pub left: T
+    pub left: T,
 }
 
 impl<T> Dice<T>
 where
-    T: Clone
+    T: Clone,
 {
     pub fn new(top: T, bottom: T, front: T, back: T, right: T, left: T) -> Self {
-        Dice { top, bottom, front, back, right, left }
+        Dice {
+            top,
+            bottom,
+            front,
+            back,
+            right,
+            left,
+        }
     }
 
     pub fn rot_left(&self) -> Self {
-        let Dice { top, bottom, front, back, right, left } = self.clone();
+        let Dice {
+            top,
+            bottom,
+            front,
+            back,
+            right,
+            left,
+        } = self.clone();
         Dice::new(right, left, front, back, bottom, top)
     }
 
     pub fn rot_right(&self) -> Self {
-        let Dice { top, bottom, front, back, right, left } = self.clone();
+        let Dice {
+            top,
+            bottom,
+            front,
+            back,
+            right,
+            left,
+        } = self.clone();
         Dice::new(left, right, front, back, top, bottom)
     }
 
     pub fn rot_front(&self) -> Self {
-        let Dice { top, bottom, front, back, right, left } = self.clone();
+        let Dice {
+            top,
+            bottom,
+            front,
+            back,
+            right,
+            left,
+        } = self.clone();
         Dice::new(back, front, top, bottom, right, left)
     }
 
     pub fn rot_back(&self) -> Self {
-        let Dice { top, bottom, front, back, right, left } = self.clone();
+        let Dice {
+            top,
+            bottom,
+            front,
+            back,
+            right,
+            left,
+        } = self.clone();
         Dice::new(front, back, bottom, top, right, left)
     }
 
     pub fn rot_clockwise(&self) -> Self {
-        let Dice { top, bottom, front, back, right, left } = self.clone();
+        let Dice {
+            top,
+            bottom,
+            front,
+            back,
+            right,
+            left,
+        } = self.clone();
         Dice::new(top, bottom, right, left, back, front)
     }
 
     pub fn rot_counterclockwise(&self) -> Self {
-        let Dice { top, bottom, front, back, right, left } = self.clone();
+        let Dice {
+            top,
+            bottom,
+            front,
+            back,
+            right,
+            left,
+        } = self.clone();
         Dice::new(top, bottom, left, right, front, back)
     }
 }
 
 impl<T> PartialEq for Dice<T>
 where
-    T: PartialEq
+    T: PartialEq,
 {
     fn eq(&self, other: &Self) -> bool {
-        return
-            self.top == other.top &&
-            self.bottom == other.bottom &&
-            self.front == other.front &&
-            self.back == other.back &&
-            self.right == other.right &&
-            self.left == other.left;
+        return self.top == other.top
+            && self.bottom == other.bottom
+            && self.front == other.front
+            && self.back == other.back
+            && self.right == other.right
+            && self.left == other.left;
     }
 }
 
@@ -74,6 +122,11 @@ mod tests {
 
         assert_eq!(dice.rot_right(), dice.rot_left().rot_left().rot_left());
         assert_eq!(dice.rot_front(), dice.rot_back().rot_back().rot_back());
-        assert_eq!(dice.rot_clockwise(), dice.rot_counterclockwise().rot_counterclockwise().rot_counterclockwise())
+        assert_eq!(
+            dice.rot_clockwise(),
+            dice.rot_counterclockwise()
+                .rot_counterclockwise()
+                .rot_counterclockwise()
+        )
     }
 }

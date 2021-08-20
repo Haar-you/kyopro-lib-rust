@@ -1,11 +1,11 @@
-use std::collections::BinaryHeap;
 use std::cmp::Reverse;
+use std::collections::BinaryHeap;
 
 use crate::graph::template::*;
 
 impl<T> Graph<T>
 where
-    T: std::ops::Add<Output = T> + Copy + Ord + From<i32>
+    T: std::ops::Add<Output = T> + Copy + Ord + From<i32>,
 {
     /// Time complexity O((E + V) log V)
     pub fn dijkstra(&self, src: &[usize]) -> Vec<Option<T>> {
@@ -35,8 +35,7 @@ where
                             heap.push(Reverse((d, to)));
                         }
                     }
-                }
-                else {
+                } else {
                     let d = d + cost;
                     ret[to] = Some(d);
                     heap.push(Reverse((d, to)));
@@ -57,13 +56,24 @@ mod tests {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_A
 
         // sample 1
-        let graph = Graph::<i32>::from_tuples(4, &[(0, 1, 1), (0, 2, 4), (1, 2, 2), (2, 3, 1), (1, 3, 5)]);
+        let graph =
+            Graph::<i32>::from_tuples(4, &[(0, 1, 1), (0, 2, 4), (1, 2, 2), (2, 3, 1), (1, 3, 5)]);
         let ans = graph.dijkstra(&[0]);
 
         assert_eq!(ans, [Some(0), Some(1), Some(3), Some(4)]);
 
         // sample 2
-        let graph = Graph::<i32>::from_tuples(4, &[(0, 1, 1), (0, 2, 4), (2, 0, 1), (1, 2, 2), (3, 1, 1), (3, 2, 5)]);
+        let graph = Graph::<i32>::from_tuples(
+            4,
+            &[
+                (0, 1, 1),
+                (0, 2, 4),
+                (2, 0, 1),
+                (1, 2, 2),
+                (3, 1, 1),
+                (3, 2, 5),
+            ],
+        );
         let ans = graph.dijkstra(&[1]);
 
         assert_eq!(ans, [Some(3), Some(0), Some(2), None]);

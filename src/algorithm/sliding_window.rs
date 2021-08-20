@@ -9,14 +9,14 @@ pub fn sliding_minimum<T: Ord + Clone>(a: &[T], k: usize) -> Vec<T> {
     let mut dq = VecDeque::new();
     let mut ret = Vec::new();
 
-    for i in 0 .. k {
+    for i in 0..k {
         while !dq.is_empty() && a[*dq.back().unwrap()] >= a[i] {
             dq.pop_back();
         }
         dq.push_back(i);
     }
 
-    for i in 0 .. n - k + 1 {
+    for i in 0..n - k + 1 {
         while *dq.front().unwrap() < i {
             dq.pop_front();
         }

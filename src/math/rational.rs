@@ -1,9 +1,9 @@
-use crate::math::gcd_lcm::{ GcdLcm };
+use crate::math::gcd_lcm::GcdLcm;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Rational {
     numerator: i64,
-    denominator: i64
+    denominator: i64,
 }
 
 impl Rational {
@@ -20,7 +20,10 @@ impl Rational {
         numerator /= g;
         denominator /= g;
 
-        Self { numerator, denominator }
+        Self {
+            numerator,
+            denominator,
+        }
     }
 }
 
@@ -38,17 +41,22 @@ impl From<Rational> for f64 {
 
 impl From<i64> for Rational {
     fn from(from: i64) -> Self {
-        Self { numerator: from, denominator: 1 }
+        Self {
+            numerator: from,
+            denominator: 1,
+        }
     }
 }
-
 
 impl std::ops::Add for Rational {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
         let l = self.denominator.lcm(other.denominator);
-        Self::new(l / self.denominator * self.numerator + l / other.denominator * other.numerator, l)
+        Self::new(
+            l / self.denominator * self.numerator + l / other.denominator * other.numerator,
+            l,
+        )
     }
 }
 
@@ -63,7 +71,10 @@ impl std::ops::Sub for Rational {
 
     fn sub(self, other: Self) -> Self {
         let l = self.denominator.lcm(other.denominator);
-        Self::new(l / self.denominator * self.numerator - l / other.denominator * other.numerator, l)
+        Self::new(
+            l / self.denominator * self.numerator - l / other.denominator * other.numerator,
+            l,
+        )
     }
 }
 
@@ -77,7 +88,10 @@ impl std::ops::Mul for Rational {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self {
-        Self::new(self.numerator * other.numerator, self.denominator * other.denominator)
+        Self::new(
+            self.numerator * other.numerator,
+            self.denominator * other.denominator,
+        )
     }
 }
 
@@ -90,7 +104,10 @@ impl std::ops::MulAssign for Rational {
 impl std::ops::Div for Rational {
     type Output = Self;
     fn div(self, other: Self) -> Self {
-        Self::new(self.numerator * other.denominator, self.denominator * other.numerator)
+        Self::new(
+            self.numerator * other.denominator,
+            self.denominator * other.numerator,
+        )
     }
 }
 
@@ -114,13 +131,10 @@ impl PartialOrd for Rational {
     }
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test() {
-    }
+    fn test() {}
 }

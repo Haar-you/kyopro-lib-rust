@@ -3,7 +3,7 @@ use crate::math::modint::FF;
 #[derive(Clone, Debug)]
 pub struct FactorialTable<T> {
     factorial: Vec<T>,
-    invs: Vec<T>
+    invs: Vec<T>,
 }
 
 impl<T: FF + From<usize>> FactorialTable<T> {
@@ -14,13 +14,13 @@ impl<T: FF + From<usize>> FactorialTable<T> {
         let mut factorial = vec![T::from(1); n + 1];
         let mut invs = vec![T::from(1); n + 1];
 
-        for i in 1 ..= n {
+        for i in 1..=n {
             factorial[i] = factorial[i - 1] * T::from(i);
         }
 
         invs[n] = T::from(1) / factorial[n];
 
-        for i in (0 .. n).rev() {
+        for i in (0..n).rev() {
             invs[i] = invs[i + 1] * T::from(i + 1);
         }
 
@@ -47,8 +47,7 @@ impl<T: FF + From<usize>> FactorialTable<T> {
     pub fn perm(&self, n: usize, k: usize) -> T {
         if n < k {
             T::from(0)
-        }
-        else {
+        } else {
             self.factorial[n] * self.invs[n - k]
         }
     }
@@ -59,20 +58,18 @@ impl<T: FF + From<usize>> FactorialTable<T> {
     pub fn comb(&self, n: usize, k: usize) -> T {
         if n < k {
             T::from(0)
-        }
-        else {
+        } else {
             self.perm(n, k) * self.invs[k]
         }
     }
 }
 
-
 #[cfg(test)]
-mod tests{
+mod tests {
     use super::*;
-    use crate::math::modint::{ ModInt };
-    use crate::misc::generics_int::{ GenericsInt };
     use crate::generics_int;
+    use crate::math::modint::ModInt;
+    use crate::misc::generics_int::GenericsInt;
 
     generics_int!(G1000000007, 1000000007);
     type Mint = ModInt<G1000000007>;

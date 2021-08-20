@@ -42,8 +42,6 @@ pub fn enumerate_divisors(n: u64) -> Vec<u64> {
     ret
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -51,6 +49,9 @@ mod tests {
     #[test]
     fn test() {
         let n = 24;
-        assert_eq!(enumerate_divisors(n), (1 ..= n).filter(|i| n % i == 0).collect::<Vec<_>>());
+        assert_eq!(
+            enumerate_divisors(n),
+            (1..=n).filter(|i| n % i == 0).collect::<Vec<_>>()
+        );
     }
 }

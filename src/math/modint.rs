@@ -1,7 +1,6 @@
 use std::marker::PhantomData;
 
-use crate::misc::generics_int::{ GenericsInt };
-
+use crate::misc::generics_int::GenericsInt;
 
 pub trait Pow {
     type Output;
@@ -18,40 +17,41 @@ pub trait Frac {
     fn frac(_: i64, _: i64) -> Self::Output;
 }
 
-pub trait FF: Pow<Output = Self> + Inv<Output = Self> + Frac<Output = Self> +
-    std::ops::Add<Output = Self> + std::ops::AddAssign +
-    std::ops::Sub<Output = Self> + std::ops::SubAssign +
-    std::ops::Mul<Output = Self> + std::ops::MulAssign +
-    std::ops::Div<Output = Self> + std::ops::DivAssign +
-    std::ops::Neg<Output = Self> +
-    std::iter::Sum +
-    Copy + Clone + PartialEq +
-    Sized {}
-
-
-
-
-
-
-
-
-
-
-
-
-
+pub trait FF:
+    Pow<Output = Self>
+    + Inv<Output = Self>
+    + Frac<Output = Self>
+    + std::ops::Add<Output = Self>
+    + std::ops::AddAssign
+    + std::ops::Sub<Output = Self>
+    + std::ops::SubAssign
+    + std::ops::Mul<Output = Self>
+    + std::ops::MulAssign
+    + std::ops::Div<Output = Self>
+    + std::ops::DivAssign
+    + std::ops::Neg<Output = Self>
+    + std::iter::Sum
+    + Copy
+    + Clone
+    + PartialEq
+    + Sized
+{
+}
 
 #[derive(Copy, Clone, PartialEq)]
 pub struct ModInt<G> {
     value: u64,
-    phantom: PhantomData<G>
+    phantom: PhantomData<G>,
 }
 
 impl<G: GenericsInt<Output = u64> + Copy + PartialEq> FF for ModInt<G> {}
 
 impl<G: GenericsInt<Output = u64>> ModInt<G> {
     pub fn new() -> Self {
-        ModInt { value: 0, phantom: PhantomData }
+        ModInt {
+            value: 0,
+            phantom: PhantomData,
+        }
     }
 }
 
@@ -74,7 +74,10 @@ impl<G: GenericsInt<Output = u64>> Pow for ModInt<G> {
             p >>= 1;
         }
 
-        Self { value: ret, phantom: PhantomData }
+        Self {
+            value: ret,
+            phantom: PhantomData,
+        }
     }
 }
 
@@ -135,7 +138,10 @@ impl<G: GenericsInt<Output = u64>> std::ops::Add for ModInt<G> {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
-        Self { value: (u64::from(self) + u64::from(other)) % G::value(), phantom: PhantomData }
+        Self {
+            value: (u64::from(self) + u64::from(other)) % G::value(),
+            phantom: PhantomData,
+        }
     }
 }
 
@@ -149,7 +155,10 @@ impl<G: GenericsInt<Output = u64>> std::ops::Sub for ModInt<G> {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {
-        Self { value: (u64::from(self) + (G::value() - u64::from(other))) % G::value(), phantom: PhantomData }
+        Self {
+            value: (u64::from(self) + (G::value() - u64::from(other))) % G::value(),
+            phantom: PhantomData,
+        }
     }
 }
 
@@ -163,7 +172,10 @@ impl<G: GenericsInt<Output = u64>> std::ops::Mul for ModInt<G> {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self {
-        Self { value: (u64::from(self) * u64::from(other)) % G::value(), phantom: PhantomData }
+        Self {
+            value: (u64::from(self) * u64::from(other)) % G::value(),
+            phantom: PhantomData,
+        }
     }
 }
 
@@ -191,7 +203,10 @@ impl<G: GenericsInt<Output = u64>> std::ops::Neg for ModInt<G> {
     type Output = Self;
 
     fn neg(self) -> Self {
-        Self { value: G::value() - u64::from(self), phantom: PhantomData }
+        Self {
+            value: G::value() - u64::from(self),
+            phantom: PhantomData,
+        }
     }
 }
 
@@ -206,9 +221,6 @@ impl<G: GenericsInt<Output = u64>> std::str::FromStr for ModInt<G> {
 
 impl<G: GenericsInt<Output = u64>> std::iter::Sum for ModInt<G> {
     fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
-        iter.fold(
-            Self::from(0),
-            |a, b| a + b
-        )
+        iter.fold(Self::from(0), |a, b| a + b)
     }
 }

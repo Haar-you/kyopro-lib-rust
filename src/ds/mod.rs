@@ -2,8 +2,8 @@ pub mod traits;
 
 pub mod unionfind;
 
-pub mod segment_tree;
 pub mod dual_segment_tree;
+pub mod segment_tree;
 pub mod starry_sky_tree;
 
 pub mod cumulative_sum_1d;

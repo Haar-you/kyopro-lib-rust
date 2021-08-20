@@ -1,16 +1,16 @@
 use crate::algebra::traits::Group;
-use crate::ds::traits::{ Foldable };
+use crate::ds::traits::Foldable;
 
 #[derive(Debug, Clone)]
 pub struct CumulativeSum1D<T, G> {
     data: Vec<T>,
-    group: G
+    group: G,
 }
 
 pub struct CumulativeSum1DBuilder<T, G> {
     n: usize,
     data: Vec<T>,
-    group: G
+    group: G,
 }
 
 impl<T, G> CumulativeSum1D<T, G> {
@@ -23,12 +23,12 @@ impl<T, G> CumulativeSum1D<T, G> {
 impl<T, G> Foldable<T> for CumulativeSum1D<T, G>
 where
     T: Clone,
-    G: Group<Output = T>
-
+    G: Group<Output = T>,
 {
     /// Time complexity O(1)
     fn fold(&self, l: usize, r: usize) -> T {
-        self.group.op(self.data[r].clone(), self.group.inv(self.data[l].clone()))
+        self.group
+            .op(self.data[r].clone(), self.group.inv(self.data[l].clone()))
     }
 }
 
@@ -40,17 +40,16 @@ impl<T, G> std::ops::Index<usize> for CumulativeSum1D<T, G> {
     }
 }
 
-
 impl<T, G> CumulativeSum1DBuilder<T, G>
 where
     T: Clone,
-    G: Group<Output = T> + Clone
+    G: Group<Output = T> + Clone,
 {
     pub fn new(n: usize, group: G) -> Self {
         CumulativeSum1DBuilder {
             n: n,
             data: vec![group.id(); n],
-            group: group
+            group: group,
         }
     }
 
@@ -61,24 +60,22 @@ where
 
     pub fn build(&self) -> CumulativeSum1D<T, G> {
         let mut data = vec![self.group.id(); self.n + 1];
-        for i in 0 .. self.n {
+        for i in 0..self.n {
             data[i + 1] = self.group.op(data[i].clone(), self.data[i].clone());
         }
 
         CumulativeSum1D {
             data: data,
-            group: self.group.clone()
+            group: self.group.clone(),
         }
     }
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand::Rng;
     use crate::algebra::sum::*;
+    use rand::Rng;
 
     #[test]
     fn test() {
@@ -89,7 +86,7 @@ mod tests {
 
         let mut other = vec![0; n];
 
-        for _ in 0 .. 1000 {
+        for _ in 0..1000 {
             let i = rng.gen::<usize>() % n;
             let x = rng.gen::<i32>() % 1000;
 
@@ -99,12 +96,12 @@ mod tests {
 
         let cs = csb.build();
 
-        for _ in 0 .. 100 {
+        for _ in 0..100 {
             let l = rng.gen::<usize>() % n;
             let r = l + rng.gen::<usize>() % (n - l) + 1;
 
             let mut ans = 0;
-            for i in l .. r {
+            for i in l..r {
                 ans += other[i];
             }
 

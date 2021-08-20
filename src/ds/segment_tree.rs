@@ -1,5 +1,5 @@
 use crate::algebra::traits::Monoid;
-use crate::ds::traits::{ Foldable, Updatable, Assignable };
+use crate::ds::traits::{Assignable, Foldable, Updatable};
 
 #[derive(Clone)]
 pub struct SegmentTree<T, M> {
@@ -12,7 +12,7 @@ pub struct SegmentTree<T, M> {
 impl<T, M> SegmentTree<T, M>
 where
     T: Clone,
-    M: Monoid<Output = T>
+    M: Monoid<Output = T>,
 {
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
@@ -20,7 +20,7 @@ where
             original_size: n,
             size: size,
             data: vec![monoid.id(); size],
-            monoid: monoid
+            monoid: monoid,
         }
     }
 
@@ -32,7 +32,7 @@ where
 impl<T, M> Foldable<T> for SegmentTree<T, M>
 where
     T: Clone,
-    M: Monoid<Output = T>
+    M: Monoid<Output = T>,
 {
     fn fold(&self, l: usize, r: usize) -> T {
         let mut ret_l = self.monoid.id();
@@ -61,7 +61,7 @@ where
 impl<T, M> Assignable<T> for SegmentTree<T, M>
 where
     T: Clone,
-    M: Monoid<Output = T>
+    M: Monoid<Output = T>,
 {
     fn assign(&mut self, i: usize, value: T) {
         let mut i = i + self.size / 2;
@@ -69,7 +69,9 @@ where
 
         while i > 1 {
             i >>= 1;
-            self.data[i] = self.monoid.op(self.data[i << 1 | 0].clone(), self.data[i << 1 | 1].clone());
+            self.data[i] = self
+                .monoid
+                .op(self.data[i << 1 | 0].clone(), self.data[i << 1 | 1].clone());
         }
     }
 }
@@ -77,19 +79,22 @@ where
 impl<T, M> Updatable<T> for SegmentTree<T, M>
 where
     T: Clone,
-    M: Monoid<Output = T>
+    M: Monoid<Output = T>,
 {
     fn update(&mut self, i: usize, value: T) {
-        self.assign(i, self.monoid.op(self.data[i + self.size / 2].clone(), value));
+        self.assign(
+            i,
+            self.monoid.op(self.data[i + self.size / 2].clone(), value),
+        );
     }
 }
 
-impl<T, M> From<SegmentTree<T, M>> for Vec<T>
+impl<T, M> From<&SegmentTree<T, M>> for Vec<T>
 where
-    T: Clone
+    T: Clone,
 {
-    fn from(from: SegmentTree<T, M>) -> Vec<T> {
-        from.data[from.size / 2 .. from.size / 2 + from.original_size].to_vec()
+    fn from(from: &SegmentTree<T, M>) -> Vec<T> {
+        from.data[from.size / 2..from.size / 2 + from.original_size].to_vec()
     }
 }
 
@@ -101,10 +106,6 @@ impl<T, M> std::ops::Index<usize> for SegmentTree<T, M> {
     }
 }
 
-
-
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -114,14 +115,14 @@ mod tests {
     where
         T: Clone + Eq + std::fmt::Debug,
         M: Monoid<Output = T> + Clone,
-        F: FnMut() -> T
+        F: FnMut() -> T,
     {
         let mut rng = rand::thread_rng();
 
         let mut other = vec![m.id().clone(); size];
         let mut s = SegmentTree::<T, _>::new(size, m.clone());
 
-        for _ in 0 .. 1000 {
+        for _ in 0..1000 {
             let ty = rng.gen::<usize>() % 2;
 
             if ty == 0 {
@@ -130,13 +131,12 @@ mod tests {
 
                 other[i] = m.op(other[i].clone(), x.clone());
                 s.update(i, x);
-            }
-            else {
+            } else {
                 let l = rng.gen::<usize>() % size;
                 let r = l + rng.gen::<usize>() % (size - l) + 1;
 
                 let mut temp = m.id().clone();
-                for i in l .. r {
+                for i in l..r {
                     temp = m.op(temp.clone(), other[i].clone());
                 }
 
@@ -147,12 +147,12 @@ mod tests {
             assert_eq!(s[i], other[i]);
         }
 
-        assert_eq!(Vec::<T>::from(s), other);
+        assert_eq!(Vec::<T>::from(&s), other);
     }
 
-    use crate::algebra::sum::Sum;
     use crate::algebra::bitxor::BitXor;
     use crate::algebra::min::Min;
+    use crate::algebra::sum::Sum;
 
     #[test]
     fn test() {

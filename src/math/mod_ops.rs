@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use rand::Rng;
+use std::collections::HashMap;
 
 use crate::math::gcd_lcm::GcdLcm;
 
@@ -21,7 +21,7 @@ pub fn mod_pow(mut x: u64, mut p: u64, m: u64) -> u64 {
 
 pub fn mod_inv(mut a: u64, m: u64) -> Option<u64> {
     if a.gcd(m) != 1 {
-        return None
+        return None;
     }
 
     let mut b = m;
@@ -37,8 +37,7 @@ pub fn mod_inv(mut a: u64, m: u64) -> Option<u64> {
         if u < t * v {
             u += m - (t * v) % m;
             u %= m;
-        }
-        else {
+        } else {
             u -= t * v;
         }
         std::mem::swap(&mut u, &mut v);
@@ -70,8 +69,7 @@ pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
             if b == 1 {
                 return Some(d);
             }
-        }
-        else {
+        } else {
             break;
         }
     }
@@ -82,7 +80,7 @@ pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
 
     let mut t = 1 % m;
 
-    for i in 0 .. sq {
+    for i in 0..sq {
         if !mp.contains_key(&t) {
             mp.insert(t, i);
         }
@@ -93,7 +91,7 @@ pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
     let x = mod_pow(mod_inv(a, m).unwrap(), sq, m);
     let mut t = b % m;
 
-    for i in 0 .. sq {
+    for i in 0..sq {
         if let Some(k) = mp.get(&t) {
             return Some(i * sq + k + d);
         }
@@ -104,7 +102,6 @@ pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
 
     None
 }
-
 
 pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
     if p == 2 {
@@ -117,7 +114,7 @@ pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
     let b = mod_pow(a, (p - 1) / 2, p);
 
     if b == p - 1 {
-        return None
+        return None;
     }
     if p % 4 == 3 {
         return Some(mod_pow(a, (p + 1) / 4, p));
@@ -185,19 +182,12 @@ pub fn enumerate_mod_inv(n: usize, p: u64) -> Vec<u64> {
 
     ret[1] = 1;
 
-    for i in 2 ..= n {
+    for i in 2..=n {
         ret[i] = (p / i as u64) * (p - ret[(p % i as u64) as usize]) % p;
     }
 
     ret
 }
-
-
-
-
-
-
-
 
 #[cfg(test)]
 mod tests {
@@ -207,16 +197,16 @@ mod tests {
     fn test_mod_pow() {
         fn straight_forward(x: u64, p: u64, m: u64) -> u64 {
             let mut ret = 1;
-            for _ in 0 .. p {
+            for _ in 0..p {
                 ret = ret * x;
                 ret = ret % m;
             }
             ret
         }
 
-        for x in 1 .. 10 {
-            for p in 0 .. 10 {
-                for m in 1 .. 10 {
+        for x in 1..10 {
+            for p in 0..10 {
+                for m in 1..10 {
                     assert_eq!(mod_pow(x, p, m), straight_forward(x, p, m));
                 }
             }
@@ -227,7 +217,7 @@ mod tests {
     fn test_mod_inv() {
         let m = 19;
 
-        for x in 1 .. m {
+        for x in 1..m {
             assert_eq!(mod_inv(x, m).unwrap() * x % m, 1);
         }
 
@@ -257,7 +247,7 @@ mod tests {
         assert_eq!(mod_sqrt(4, 5).unwrap().pow(2) % 5, 4);
 
         let m = 1000000007;
-        for x in 0 .. 100 {
+        for x in 0..100 {
             if let Some(s) = mod_sqrt(x, m) {
                 assert_eq!(s * s % m, x);
             }
@@ -270,7 +260,7 @@ mod tests {
         let n = 100;
 
         let s = enumerate_mod_inv(n, m);
-        for i in 1 ..= n {
+        for i in 1..=n {
             assert_eq!(i as u64 * s[i] % m, 1);
         }
     }

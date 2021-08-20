@@ -2,7 +2,7 @@
 pub struct Edge<T> {
     pub from: usize,
     pub to: usize,
-    pub cost: T
+    pub cost: T,
 }
 
 impl<T> Edge<T> {
@@ -13,12 +13,14 @@ impl<T> Edge<T> {
 
 #[derive(Debug, Clone)]
 pub struct Graph<T> {
-    pub edges: Vec<Vec<Edge<T>>>
+    pub edges: Vec<Vec<Edge<T>>>,
 }
 
 impl<T: Copy> Graph<T> {
     pub fn new(size: usize) -> Self {
-        Graph { edges: vec![vec![]; size] }
+        Graph {
+            edges: vec![vec![]; size],
+        }
     }
 
     pub fn add_directed(&mut self, from: usize, to: usize, cost: T) {

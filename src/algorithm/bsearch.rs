@@ -10,8 +10,7 @@ pub fn lower_bound<T: Ord>(a: &[T], value: &T) -> usize {
         if &a[mid] < value {
             len -= half + 1;
             lb = mid + 1;
-        }
-        else {
+        } else {
             len = half;
         }
     }
@@ -31,8 +30,7 @@ pub fn upper_bound<T: Ord>(a: &[T], value: &T) -> usize {
         if &a[mid] <= value {
             len -= half + 1;
             ub = mid + 1;
-        }
-        else {
+        } else {
             len = half;
         }
     }
@@ -43,8 +41,6 @@ pub fn upper_bound<T: Ord>(a: &[T], value: &T) -> usize {
 pub fn equal_range<T: Ord>(a: &[T], value: &T) -> (usize, usize) {
     (lower_bound(a, value), upper_bound(a, value))
 }
-
-
 
 #[cfg(test)]
 mod tests {

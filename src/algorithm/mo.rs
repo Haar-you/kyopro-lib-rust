@@ -9,7 +9,7 @@ pub struct Mo<'a> {
     width: usize,
     left: Vec<usize>,
     right: Vec<usize>,
-    ord: Vec<usize>
+    ord: Vec<usize>,
 }
 
 impl<'a> Mo<'a> {
@@ -20,19 +20,27 @@ impl<'a> Mo<'a> {
         append_left: Box<F2>,
         remove_right: Box<F3>,
         remove_left: Box<F4>,
-        query: Box<F5>
+        query: Box<F5>,
     ) -> Self
     where
         F1: 'a + Fn(usize),
         F2: 'a + Fn(usize),
         F3: 'a + Fn(usize),
         F4: 'a + Fn(usize),
-        F5: 'a + Fn(usize)
-   {
+        F5: 'a + Fn(usize),
+    {
         Self {
-            append_right, append_left, remove_right, remove_left, query,
-            q, index: 0, width: (n as f64).sqrt() as usize,
-            left: vec![0; q], right: vec![0; q], ord: vec![0; q]
+            append_right,
+            append_left,
+            remove_right,
+            remove_left,
+            query,
+            q,
+            index: 0,
+            width: (n as f64).sqrt() as usize,
+            left: vec![0; q],
+            right: vec![0; q],
+            ord: vec![0; q],
         }
     }
 
@@ -55,12 +63,10 @@ impl<'a> Mo<'a> {
             if a == b {
                 if a % 2 == 1 {
                     right[i].cmp(&right[j])
-                }
-                else {
+                } else {
                     right[j].cmp(&right[i])
                 }
-            }
-            else {
+            } else {
                 a.cmp(&b)
             }
         });
@@ -69,15 +75,27 @@ impl<'a> Mo<'a> {
         let mut l = left[self.ord[0]];
         let mut r = left[self.ord[0]];
 
-        for _ in 0 .. self.q {
+        for _ in 0..self.q {
             let id = self.ord[q];
             q += 1;
 
             while l != left[id] || r != right[id] {
-                if l > left[id] { l -= 1; (self.append_left)(l); }
-                if l < left[id] { (self.remove_left)(l); l += 1; }
-                if r < right[id] { (self.append_right)(r); r += 1; }
-                if r > right[id] { r -= 1; (self.remove_right)(r); }
+                if l > left[id] {
+                    l -= 1;
+                    (self.append_left)(l);
+                }
+                if l < left[id] {
+                    (self.remove_left)(l);
+                    l += 1;
+                }
+                if r < right[id] {
+                    (self.append_right)(r);
+                    r += 1;
+                }
+                if r > right[id] {
+                    r -= 1;
+                    (self.remove_right)(r);
+                }
             }
 
             (self.query)(id);

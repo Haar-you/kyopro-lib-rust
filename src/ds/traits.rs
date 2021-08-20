@@ -15,4 +15,3 @@ pub trait Updatable<T>: Assignable<T> {
 pub trait RangeUpdatable<T> {
     fn range_update(&mut self, l: usize, r: usize, value: T);
 }
-

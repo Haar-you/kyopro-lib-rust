@@ -1,9 +1,9 @@
-use crate::graph::template::{ Graph, Edge };
+use crate::graph::template::{Edge, Graph};
 
 pub struct DoublingLCA {
     log2n: usize,
     parent: Vec<Vec<Option<usize>>>,
-    depth: Vec<usize>
+    depth: Vec<usize>,
 }
 
 impl DoublingLCA {
@@ -13,15 +13,15 @@ impl DoublingLCA {
         let mut ret = Self {
             log2n: log2n,
             parent: vec![vec![None; log2n]; n],
-            depth: vec![0; n]
+            depth: vec![0; n],
         };
 
         ret.dfs(tree, root, None, 0);
-        for k in 0 .. log2n - 1 {
-            for v in 0 .. n {
+        for k in 0..log2n - 1 {
+            for v in 0..n {
                 match ret.parent[v][k] {
                     Some(p) => ret.parent[v][k + 1] = ret.parent[p][k],
-                    None => ret.parent[v][k + 1] = None
+                    None => ret.parent[v][k + 1] = None,
                 }
             }
         }
@@ -33,7 +33,12 @@ impl DoublingLCA {
         self.parent[cur][0] = par;
         self.depth[cur] = d;
 
-        for &Edge { from: _, to, cost: _ } in &tree.edges[cur] {
+        for &Edge {
+            from: _,
+            to,
+            cost: _,
+        } in &tree.edges[cur]
+        {
             if Some(to) != par {
                 self.dfs(tree, to, Some(cur), d + 1);
             }
@@ -44,7 +49,7 @@ impl DoublingLCA {
         if self.depth[a] >= self.depth[b] {
             std::mem::swap(&mut a, &mut b);
         }
-        for k in 0 .. self.log2n {
+        for k in 0..self.log2n {
             if ((self.depth[b] - self.depth[a]) >> k & 1) != 0 {
                 b = self.parent[b][k].unwrap();
             }
@@ -53,7 +58,7 @@ impl DoublingLCA {
             return a;
         }
 
-        for k in (0 .. self.log2n).rev() {
+        for k in (0..self.log2n).rev() {
             if self.parent[a][k] != self.parent[b][k] {
                 a = self.parent[a][k].unwrap();
                 b = self.parent[b][k].unwrap();

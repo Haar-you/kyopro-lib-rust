@@ -5,7 +5,7 @@
 /// Space complexity O(k)
 pub fn subset_sum<T>(n: usize, k: usize, a: &[usize]) -> Vec<T>
 where
-    T: Copy + Clone + From<usize> + std::ops::Add<Output = T>
+    T: Copy + Clone + From<usize> + std::ops::Add<Output = T>,
 {
     assert!(a.len() == n);
 
@@ -13,12 +13,11 @@ where
 
     dp[0][0] = T::from(1);
 
-    for i in 0 .. n {
-        for j in 0 ..= k {
+    for i in 0..n {
+        for j in 0..=k {
             if j >= a[i] {
                 dp[(i + 1) & 1][j] = dp[i & 1][j - a[i]] + dp[i & 1][j];
-            }
-            else {
+            } else {
                 dp[(i + 1) & 1][j] = dp[i & 1][j];
             }
         }
@@ -46,15 +45,13 @@ pub fn subset_sum_limited(n: usize, k: usize, a: &[usize], m: &[usize]) -> Vec<b
     let mut dp: Vec<isize> = vec![-1; k + 1];
 
     dp[0] = 0;
-    for i in 0 .. n {
-        for j in 0 ..= k {
+    for i in 0..n {
+        for j in 0..=k {
             if dp[j] >= 0 {
                 dp[j] = m[i] as isize;
-            }
-            else if j < a[i] || dp[j - a[i]] <= 0 {
+            } else if j < a[i] || dp[j - a[i]] <= 0 {
                 dp[j] = -1;
-            }
-            else {
+            } else {
                 dp[j] = dp[j - a[i]] - 1;
             }
         }

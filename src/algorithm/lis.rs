@@ -5,7 +5,7 @@ use crate::algorithm::bsearch::lower_bound;
 /// Time complexity O(n log(n))
 pub fn lis<T>(a: &[T]) -> Vec<usize>
 where
-    T: Ord + Copy
+    T: Ord + Copy,
 {
     let n = a.len();
     let mut dp = Vec::new();
@@ -13,7 +13,7 @@ where
     let mut prev = vec![None; n];
     let mut ret = Vec::new();
 
-    for i in 0 .. n {
+    for i in 0..n {
         let x = a[i];
         if dp.is_empty() || dp.last().unwrap() < &x {
             dp.push(x);
@@ -21,8 +21,7 @@ where
                 prev[i] = Some(*pos.last().unwrap());
             }
             pos.push(i);
-        }
-        else {
+        } else {
             let k = lower_bound(&dp, &x);
             dp[k] = x;
             if k > 0 {
@@ -42,7 +41,5 @@ where
     ret
 }
 
-
 #[cfg(test)]
-mod tests {
-}
+mod tests {}

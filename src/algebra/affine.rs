@@ -1,11 +1,13 @@
-use std::marker::PhantomData;
 use crate::algebra::traits::*;
+use std::marker::PhantomData;
 
 #[derive(Clone)]
 pub struct Affine<T>(T, T, PhantomData<T>);
 
 impl<T> Affine<T> {
-    pub fn new(zero: T, one: T) -> Self { Self (zero, one, PhantomData) }
+    pub fn new(zero: T, one: T) -> Self {
+        Self(zero, one, PhantomData)
+    }
 }
 
 impl<T> AlgeStruct for Affine<T> {

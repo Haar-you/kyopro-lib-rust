@@ -6,7 +6,6 @@ pub fn ext_gcd(a: u64, b: u64) -> (i64, i64, i64) {
     (d, p, q - (a / b) as i64 * p)
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -14,7 +13,7 @@ mod tests {
 
     #[test]
     fn test() {
-        for _ in 0 .. 100 {
+        for _ in 0..100 {
             let mut rng = rand::thread_rng();
             let n = rng.gen::<u64>() % 1000;
             let m = rng.gen::<u64>() % 1000;

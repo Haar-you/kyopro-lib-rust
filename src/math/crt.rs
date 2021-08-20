@@ -25,20 +25,17 @@ pub fn crt_vec(params: &[(i64, u64)]) -> Option<(i64, u64)> {
     let mut _r = 0;
     let mut _m = 1;
 
-    for i in 0 .. n {
+    for i in 0..n {
         if let Some((r, m)) = crt((_r, _m), (bs[i], ms[i])) {
             _r = r;
             _m = m;
-        }
-        else {
+        } else {
             return None;
         }
     }
 
     Some((_r, _m))
 }
-
-
 
 #[cfg(test)]
 mod tests {

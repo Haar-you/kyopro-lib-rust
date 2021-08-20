@@ -2,17 +2,17 @@ use crate::algorithm::bsearch::lower_bound;
 
 #[derive(Clone)]
 pub struct Compressor<T> {
-    data: Vec<T>
+    data: Vec<T>,
 }
 
 #[derive(Clone)]
 pub struct CompressorBuilder<T> {
-    data: Vec<T>
+    data: Vec<T>,
 }
 
 impl<T> Compressor<T>
 where
-    T: Clone + Ord + Eq
+    T: Clone + Ord + Eq,
 {
     pub fn index(&self, value: T) -> usize {
         lower_bound(&self.data, &value)
@@ -50,7 +50,6 @@ impl<T: Clone + Ord + Eq> CompressorBuilder<T> {
         Compressor { data: self.data }
     }
 }
-
 
 #[cfg(test)]
 mod tests {

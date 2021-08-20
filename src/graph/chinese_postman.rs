@@ -7,27 +7,27 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
 
         let mut dist = vec![vec![None; n]; n];
 
-        for i in 0 .. n {
+        for i in 0..n {
             dist[i][i] = Some(T::default());
         }
 
-        for i in 0 .. n {
+        for i in 0..n {
             for &Edge { from, to, cost } in &self.edges[i] {
                 dist[from][to] = match dist[from][to] {
                     None => Some(cost),
-                    Some(x) => Some(std::cmp::min(x, cost))
+                    Some(x) => Some(std::cmp::min(x, cost)),
                 };
             }
         }
 
-        for k in 0 .. n {
-            for i in 0 .. n {
-                for j in 0 .. n {
+        for k in 0..n {
+            for i in 0..n {
+                for j in 0..n {
                     if let Some(x) = dist[i][k] {
                         if let Some(y) = dist[k][j] {
                             dist[i][j] = match dist[i][j] {
                                 None => Some(x + y),
-                                Some(z) => Some(std::cmp::min(z, x + y))
+                                Some(z) => Some(std::cmp::min(z, x + y)),
                             };
                         }
                     }
@@ -36,7 +36,7 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
         }
 
         let mut odd = vec![];
-        for i in 0 ..n {
+        for i in 0..n {
             if self.edges[i].len() % 2 == 1 {
                 odd.push(i);
             }
@@ -47,9 +47,9 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
         let mut dp = vec![None; 1 << m];
         dp[0] = Some(T::default());
 
-        for i in 0 .. 1 << m {
-            for j in 0 .. m {
-                for k in 0 .. j {
+        for i in 0..1 << m {
+            for j in 0..m {
+                for k in 0..j {
                     if (i & (1 << j)) == 0 || (i & (1 << k)) == 0 {
                         continue;
                     }
@@ -58,7 +58,7 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
                         let d = d + dist[odd[j]][odd[k]].unwrap();
                         dp[i] = match dp[i] {
                             None => Some(d),
-                            Some(x) => Some(std::cmp::min(x, d))
+                            Some(x) => Some(std::cmp::min(x, d)),
                         };
                     }
                 }
@@ -67,7 +67,7 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
 
         let mut ret = T::default();
 
-        for i in 0 .. n {
+        for i in 0..n {
             for &Edge { from, to, cost } in &self.edges[i] {
                 if from <= to {
                     ret = ret + cost;
@@ -79,7 +79,6 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -90,7 +89,10 @@ mod tests {
         let g = Graph::from_tuples_undirected(4, &[(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4)]);
         assert_eq!(g.chinese_postman_problem(), 10);
 
-        let g = Graph::from_tuples_undirected(4, &[(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4), (1, 2, 5)]);
+        let g = Graph::from_tuples_undirected(
+            4,
+            &[(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4), (1, 2, 5)],
+        );
         assert_eq!(g.chinese_postman_problem(), 18);
 
         let g = Graph::from_tuples_undirected(2, &[(0, 1, 1), (0, 1, 2), (0, 1, 3)]);

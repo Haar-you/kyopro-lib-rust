@@ -10,7 +10,9 @@ macro_rules! generics_int {
         struct $t {}
         impl GenericsInt for $t {
             type Output = u64;
-            fn value() -> u64 { $s }
+            fn value() -> u64 {
+                $s
+            }
         }
-    }
+    };
 }

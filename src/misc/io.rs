@@ -1,5 +1,4 @@
-use std::io::{ Read, Write };
-
+use std::io::{Read, Write};
 
 #[allow(unused_macros)]
 macro_rules! get {
@@ -42,14 +41,15 @@ macro_rules! input {
     }
 }
 
-
 pub trait JoinStr {
     fn join_str(&self, _: &str) -> String;
 }
 
 impl<T: std::fmt::Display> JoinStr for Vec<T> {
     fn join_str(&self, s: &str) -> String {
-        (&self.iter().map(|x| format!("{}", x)).collect::<Vec<_>>()).join(s).to_string()
+        (&self.iter().map(|x| format!("{}", x)).collect::<Vec<_>>())
+            .join(s)
+            .to_string()
     }
 }
 
@@ -92,5 +92,5 @@ macro_rules! io {
 
         let $out = std::io::stdout();
         let mut $out = std::io::BufWriter::new($out.lock());
-    }
+    };
 }

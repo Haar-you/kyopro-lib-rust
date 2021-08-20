@@ -1,14 +1,19 @@
-use std::marker::PhantomData;
 use crate::algebra::traits::*;
+use std::marker::PhantomData;
 
 #[derive(Clone)]
 pub struct Dual<T, S> {
     s: S,
-    phantom: PhantomData<T>
+    phantom: PhantomData<T>,
 }
 
 impl<T, S: AlgeStruct<Output = T>> Dual<T, S> {
-    pub fn new(s: S) -> Self { Self { s, phantom: PhantomData } }
+    pub fn new(s: S) -> Self {
+        Self {
+            s,
+            phantom: PhantomData,
+        }
+    }
 }
 
 impl<T, S: AlgeStruct> AlgeStruct for Dual<T, S> {

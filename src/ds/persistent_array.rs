@@ -2,30 +2,26 @@ use std::rc::Rc;
 
 enum Node<T> {
     Terminal {
-        value: T
+        value: T,
     },
     Internal {
         size: usize,
         l_ch: Option<Rc<Node<T>>>,
-        r_ch: Option<Rc<Node<T>>>
-    }
+        r_ch: Option<Rc<Node<T>>>,
+    },
 }
 
 pub struct PersistentArray<T> {
     size: usize,
-    root: Option<Rc<Node<T>>>
+    root: Option<Rc<Node<T>>>,
 }
 
 fn get_size<T>(node: Option<Rc<Node<T>>>) -> usize {
     if let Some(node) = node {
         return match *node {
-            Node::<T>::Terminal { .. } => {
-                1
-            },
-            Node::<T>::Internal { size, .. } => {
-                size
-            }
-        }
+            Node::<T>::Terminal { .. } => 1,
+            Node::<T>::Internal { size, .. } => size,
+        };
     }
 
     return 0;
@@ -33,7 +29,7 @@ fn get_size<T>(node: Option<Rc<Node<T>>>) -> usize {
 
 impl<T> PersistentArray<T>
 where
-    T: Clone
+    T: Clone,
 {
     pub fn new(size: usize, value: T) -> Self {
         let depth = {
@@ -49,14 +45,15 @@ where
         Self { size, root }
     }
 
-    fn init(s: usize, value: T, d: usize, depth: usize) -> Option<Rc<Node<T>>>{
+    fn init(s: usize, value: T, d: usize, depth: usize) -> Option<Rc<Node<T>>> {
         if s == 0 {
             return None;
         }
         if d == depth {
-            return Some(Rc::new(Node::<T>::Terminal {value: value.clone()}));
-        }
-        else {
+            return Some(Rc::new(Node::<T>::Terminal {
+                value: value.clone(),
+            }));
+        } else {
             let l = Self::init(s / 2, value.clone(), d + 1, depth);
             let r = Self::init(s - s / 2, value.clone(), d + 1, depth);
 
@@ -70,7 +67,6 @@ where
         }
     }
 
-
     fn _traverse(node: Option<Rc<Node<T>>>, ret: &mut Vec<T>) {
         if node.is_none() {
             return;
@@ -82,8 +78,10 @@ where
             Node::<T>::Terminal { ref value } => {
                 ret.push(value.clone());
                 return;
-            },
-            Node::<T>::Internal { ref l_ch, ref r_ch, .. } => {
+            }
+            Node::<T>::Internal {
+                ref l_ch, ref r_ch, ..
+            } => {
                 Self::_traverse(l_ch.clone(), ret);
                 Self::_traverse(r_ch.clone(), ret);
             }
@@ -92,22 +90,31 @@ where
 
     fn _set(prev: Rc<Node<T>>, i: usize, value: T) -> Rc<Node<T>> {
         match *prev {
-            Node::<T>::Terminal { .. } => {
-                Rc::new(Node::<T>::Terminal { value: value.clone() })
-            },
-            Node::<T>::Internal { ref l_ch, ref r_ch, .. } => {
+            Node::<T>::Terminal { .. } => Rc::new(Node::<T>::Terminal {
+                value: value.clone(),
+            }),
+            Node::<T>::Internal {
+                ref l_ch, ref r_ch, ..
+            } => {
                 let k = get_size(l_ch.clone());
                 let (l, r) = {
                     if i < k {
                         (
-                            Some(Self::_set(Rc::clone(l_ch.as_ref().unwrap()), i, value.clone())),
-                            r_ch.clone()
+                            Some(Self::_set(
+                                Rc::clone(l_ch.as_ref().unwrap()),
+                                i,
+                                value.clone(),
+                            )),
+                            r_ch.clone(),
                         )
-                    }
-                    else {
+                    } else {
                         (
                             l_ch.clone(),
-                            Some(Self::_set(Rc::clone(r_ch.as_ref().unwrap()), i - k, value.clone()))
+                            Some(Self::_set(
+                                Rc::clone(r_ch.as_ref().unwrap()),
+                                i - k,
+                                value.clone(),
+                            )),
                         )
                     }
                 };
@@ -115,7 +122,7 @@ where
                 Rc::new(Node::<T>::Internal {
                     size: get_size(l.clone()) + get_size(r.clone()),
                     l_ch: l,
-                    r_ch: r
+                    r_ch: r,
                 })
             }
         }
@@ -124,21 +131,21 @@ where
     pub fn set(&self, i: usize, value: T) -> Self {
         Self {
             size: self.size,
-            root: Some(Self::_set(self.root.clone().unwrap(), i, value.clone()))
+            root: Some(Self::_set(self.root.clone().unwrap(), i, value.clone())),
         }
     }
-
 
     pub fn get(&self, i: usize) -> T {
         fn _get<T>(node: Rc<Node<T>>, i: usize) -> Rc<Node<T>> {
             match *node {
                 Node::<T>::Terminal { .. } => node,
-                Node::<T>::Internal { ref l_ch, ref r_ch, .. } => {
+                Node::<T>::Internal {
+                    ref l_ch, ref r_ch, ..
+                } => {
                     let k = get_size(l_ch.clone());
                     if i < k {
                         _get(Rc::clone(l_ch.as_ref().unwrap()), i)
-                    }
-                    else {
+                    } else {
                         _get(Rc::clone(r_ch.as_ref().unwrap()), i - k)
                     }
                 }
@@ -147,11 +154,12 @@ where
 
         match *_get(Rc::clone(self.root.as_ref().unwrap()), i) {
             Node::<T>::Terminal { ref value } => value.clone(),
-            _ => { unreachable!(); }
+            _ => {
+                unreachable!();
+            }
         }
     }
 }
-
 
 impl<T: Clone> From<&PersistentArray<T>> for Vec<T> {
     fn from(from: &PersistentArray<T>) -> Vec<T> {
@@ -160,14 +168,6 @@ impl<T: Clone> From<&PersistentArray<T>> for Vec<T> {
         ret
     }
 }
-
-
-
-
-
-
-
-
 
 #[cfg(test)]
 mod tests {

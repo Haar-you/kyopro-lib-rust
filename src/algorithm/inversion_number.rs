@@ -10,8 +10,8 @@ pub fn inversion_number<T: Clone + PartialOrd + Copy>(a: &mut [T]) -> u64 {
 
     let mut ret = 0;
 
-    let mut b = &mut a[0 .. n / 2].to_vec();
-    let mut c = &mut a[n / 2 .. n].to_vec();
+    let mut b = &mut a[0..n / 2].to_vec();
+    let mut c = &mut a[n / 2..n].to_vec();
 
     ret += inversion_number(&mut b);
     ret += inversion_number(&mut c);
@@ -24,8 +24,7 @@ pub fn inversion_number<T: Clone + PartialOrd + Copy>(a: &mut [T]) -> u64 {
         if bi < b.len() && (ci == c.len() || !(b[bi] > c[ci])) {
             a[ai] = b[bi];
             bi += 1;
-        }
-        else {
+        } else {
             ret += (n / 2 - bi) as u64;
             a[ai] = c[ci];
             ci += 1;

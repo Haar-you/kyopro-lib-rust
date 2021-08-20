@@ -1,14 +1,14 @@
+use crate::ds::unionfind::UnionFind;
 use crate::graph::template::*;
-use crate::ds::unionfind::{ UnionFind };
 
 impl<T> Graph<T>
 where
-    T: Ord + Copy
+    T: Ord + Copy,
 {
     pub fn kruskal(&self) -> Vec<(usize, usize, T)> {
         let n = self.len();
         let mut edges = vec![];
-        for i in 0 .. n {
+        for i in 0..n {
             for &Edge { from, to, cost } in &self.edges[i] {
                 edges.push((from, to, cost));
             }
@@ -30,19 +30,28 @@ where
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test() {
-        let g = Graph::<i32>::from_tuples_undirected(6, &[(0, 1, 1), (0, 2, 3), (1, 2, 1), (1, 3, 7), (2, 4, 1), (1, 4, 3), (3, 4, 1), (3, 5, 1), (4, 5, 6)]);
+        let g = Graph::<i32>::from_tuples_undirected(
+            6,
+            &[
+                (0, 1, 1),
+                (0, 2, 3),
+                (1, 2, 1),
+                (1, 3, 7),
+                (2, 4, 1),
+                (1, 4, 3),
+                (3, 4, 1),
+                (3, 5, 1),
+                (4, 5, 6),
+            ],
+        );
 
-        let ans = g.kruskal()
-            .iter()
-            .map(|(_, _, x)| x)
-            .sum::<i32>();
+        let ans = g.kruskal().iter().map(|(_, _, x)| x).sum::<i32>();
 
         assert_eq!(ans, 5);
     }

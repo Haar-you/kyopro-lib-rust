@@ -7,7 +7,7 @@ impl<T> Graph<T> {
         let mut check = vec![-1; n];
         let mut visit = vec![false; n];
 
-        for i in 0 .. n {
+        for i in 0..n {
             if visit[i] {
                 continue;
             }
@@ -28,7 +28,12 @@ impl<T> Graph<T> {
                     }
                     visit[cur] = true;
 
-                    for &Edge { from: _, to, cost: _ } in &self.edges[cur] {
+                    for &Edge {
+                        from: _,
+                        to,
+                        cost: _,
+                    } in &self.edges[cur]
+                    {
                         if check[to] == check[cur] {
                             return false;
                         }
@@ -36,8 +41,7 @@ impl<T> Graph<T> {
                             if check[cur] == 0 {
                                 check[to] = 1;
                                 b.push(to);
-                            }
-                            else {
+                            } else {
                                 check[to] = 0;
                                 a.push(to);
                             }

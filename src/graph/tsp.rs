@@ -8,12 +8,12 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
         for &Edge { from: _, to, cost } in &self.edges[src] {
             dp[to][1 << to] = match dp[to][1 << to] {
                 None => Some(cost),
-                Some(x) => Some(std::cmp::min(x, cost))
+                Some(x) => Some(std::cmp::min(x, cost)),
             };
         }
 
-        for s in 1 .. 1 << n {
-            for i in 0 .. n {
+        for s in 1..1 << n {
+            for i in 0..n {
                 if (s & (1 << i)) == 0 {
                     continue;
                 }
@@ -26,7 +26,7 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
                     if let Some(x) = dp[i][s] {
                         dp[to][s | (1 << to)] = match dp[to][s | (1 << to)] {
                             None => Some(x + cost),
-                            Some(y) => Some(std::cmp::min(y, x + cost))
+                            Some(y) => Some(std::cmp::min(y, x + cost)),
                         };
                     }
                 }
@@ -37,8 +37,6 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
     }
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -47,7 +45,17 @@ mod tests {
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/2/DPL_2_A
 
-        let g = Graph::<u64>::from_tuples(4, &[(0, 1, 2), (1, 2, 3), (1, 3, 9), (2, 0, 1), (2, 3, 6), (3, 2, 4)]);
+        let g = Graph::<u64>::from_tuples(
+            4,
+            &[
+                (0, 1, 2),
+                (1, 2, 3),
+                (1, 3, 9),
+                (2, 0, 1),
+                (2, 3, 6),
+                (3, 2, 4),
+            ],
+        );
         assert_eq!(g.tsp(0), Some(16));
 
         let g = Graph::<u64>::from_tuples(3, &[(0, 1, 1), (1, 2, 1), (0, 2, 1)]);
