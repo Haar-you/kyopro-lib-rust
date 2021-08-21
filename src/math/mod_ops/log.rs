@@ -1,8 +1,8 @@
-use std::collections::HashMap;
 use crate::math::{
+    gcd_lcm::GcdLcm,
     mod_ops::{inv::*, pow::*},
-    gcd_lcm::GcdLcm
 };
+use std::collections::HashMap;
 
 pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
     if b == 1 {

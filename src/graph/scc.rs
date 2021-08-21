@@ -1,4 +1,5 @@
 use crate::graph::template::*;
+use std::cmp::min;
 
 impl<T> Graph<T> {
     pub fn scc(&self) -> (Vec<usize>, usize) {
@@ -53,9 +54,9 @@ impl<T> Graph<T> {
         {
             if ord[to] == -1 {
                 self.scc_(to, ret, low, ord, s, check, t, k);
-                low[cur] = std::cmp::min(low[cur], low[to]);
+                low[cur] = min(low[cur], low[to]);
             } else if check[to] {
-                low[cur] = std::cmp::min(low[cur], low[to]);
+                low[cur] = min(low[cur], low[to]);
             }
         }
 

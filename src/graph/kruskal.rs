@@ -1,5 +1,4 @@
-use crate::ds::unionfind::UnionFind;
-use crate::graph::template::*;
+use crate::{ds::unionfind::UnionFind, graph::template::*};
 
 impl<T> Graph<T>
 where

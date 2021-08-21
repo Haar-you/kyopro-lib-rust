@@ -1,4 +1,10 @@
 use crate::math::gcd_lcm::GcdLcm;
+use std::{
+    cmp::Ordering,
+    fmt,
+    fmt::{Debug, Formatter},
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
+};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Rational {
@@ -27,8 +33,8 @@ impl Rational {
     }
 }
 
-impl std::fmt::Debug for Rational {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl Debug for Rational {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "{} / {}", self.numerator, self.denominator)
     }
 }
@@ -48,7 +54,7 @@ impl From<i64> for Rational {
     }
 }
 
-impl std::ops::Add for Rational {
+impl Add for Rational {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
@@ -60,13 +66,13 @@ impl std::ops::Add for Rational {
     }
 }
 
-impl std::ops::AddAssign for Rational {
+impl AddAssign for Rational {
     fn add_assign(&mut self, other: Rational) {
         *self = *self + other;
     }
 }
 
-impl std::ops::Sub for Rational {
+impl Sub for Rational {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {
@@ -78,13 +84,13 @@ impl std::ops::Sub for Rational {
     }
 }
 
-impl std::ops::SubAssign for Rational {
+impl SubAssign for Rational {
     fn sub_assign(&mut self, other: Rational) {
         *self = *self - other;
     }
 }
 
-impl std::ops::Mul for Rational {
+impl Mul for Rational {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self {
@@ -95,13 +101,13 @@ impl std::ops::Mul for Rational {
     }
 }
 
-impl std::ops::MulAssign for Rational {
+impl MulAssign for Rational {
     fn mul_assign(&mut self, other: Self) {
         *self = *self * other
     }
 }
 
-impl std::ops::Div for Rational {
+impl Div for Rational {
     type Output = Self;
     fn div(self, other: Self) -> Self {
         Self::new(
@@ -111,13 +117,13 @@ impl std::ops::Div for Rational {
     }
 }
 
-impl std::ops::DivAssign for Rational {
+impl DivAssign for Rational {
     fn div_assign(&mut self, other: Self) {
         *self = *self / other;
     }
 }
 
-impl std::ops::Neg for Rational {
+impl Neg for Rational {
     type Output = Self;
 
     fn neg(self) -> Self {
@@ -126,15 +132,13 @@ impl std::ops::Neg for Rational {
 }
 
 impl PartialOrd for Rational {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some((self.numerator * other.denominator).cmp(&(other.numerator * self.denominator)))
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn test() {}
 }

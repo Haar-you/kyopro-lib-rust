@@ -1,12 +1,13 @@
 use crate::graph::template::*;
+use std::{cmp::min, ops::Add};
 
 impl<T> Graph<T>
 where
-    T: std::ops::Add<Output = T> + Copy + Clone + Ord + From<i32>,
+    T: Add<Output = T> + Copy + Clone + Ord + Default,
 {
     /// Time complexity O(n ^ 3)
     pub fn warshall_floyd(&self) -> Option<Vec<Vec<Option<T>>>> {
-        let zero = T::from(0);
+        let zero = T::default();
         let n = self.len();
         let mut dist = vec![vec![None; n]; n];
 
@@ -23,7 +24,7 @@ where
                     if dist[i][k].is_some() && dist[k][j].is_some() {
                         let s = dist[i][k].unwrap() + dist[k][j].unwrap();
                         dist[i][j] = match dist[i][j] {
-                            Some(x) => Some(std::cmp::min(x, s)),
+                            Some(x) => Some(min(x, s)),
                             _ => Some(s),
                         };
                     }

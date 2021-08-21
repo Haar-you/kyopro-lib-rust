@@ -1,11 +1,11 @@
-use crate::chmax;
+use std::{cmp::max, ops::Mul};
 
 /// ヒストグラム中の最大面積長方形の面積を計算する。
 ///
 /// Time complexity O(|h|)
 pub fn max_rect_in_histogram<T>(h: &[T]) -> T
 where
-    T: From<usize> + std::ops::Mul<Output = T> + Ord + Copy,
+    T: From<usize> + Mul<Output = T> + Ord + Copy,
 {
     let mut st: Vec<(T, usize)> = Vec::new();
     let mut ret = T::from(0);
@@ -20,7 +20,7 @@ where
                     if y3 <= y1 {
                         break;
                     }
-                    chmax!(ret, y3 * T::from(i - k));
+                    ret = max(ret, y3 * T::from(i - k));
                     j = k;
                     st.pop();
                 }
@@ -32,7 +32,7 @@ where
     }
 
     while let Some((y, i)) = st.pop() {
-        chmax!(ret, y * T::from(h.len() - i));
+        ret = max(ret, y * T::from(h.len() - i));
     }
 
     ret

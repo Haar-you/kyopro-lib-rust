@@ -1,6 +1,7 @@
 use crate::graph::template::*;
+use std::{cmp::min, ops::Add};
 
-impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
+impl<T: Default + Copy + Ord + Add<Output = T>> Graph<T> {
     /// Time complexity O(V ^ 2 * 2 ^ V)
     pub fn chinese_postman_problem(&self) -> T {
         let n = self.len();
@@ -15,7 +16,7 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
             for &Edge { from, to, cost } in &self.edges[i] {
                 dist[from][to] = match dist[from][to] {
                     None => Some(cost),
-                    Some(x) => Some(std::cmp::min(x, cost)),
+                    Some(x) => Some(min(x, cost)),
                 };
             }
         }
@@ -27,7 +28,7 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
                         if let Some(y) = dist[k][j] {
                             dist[i][j] = match dist[i][j] {
                                 None => Some(x + y),
-                                Some(z) => Some(std::cmp::min(z, x + y)),
+                                Some(z) => Some(min(z, x + y)),
                             };
                         }
                     }
@@ -58,7 +59,7 @@ impl<T: Default + Copy + Ord + std::ops::Add<Output = T>> Graph<T> {
                         let d = d + dist[odd[j]][odd[k]].unwrap();
                         dp[i] = match dp[i] {
                             None => Some(d),
-                            Some(x) => Some(std::cmp::min(x, d)),
+                            Some(x) => Some(min(x, d)),
                         };
                     }
                 }

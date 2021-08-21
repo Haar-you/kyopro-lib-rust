@@ -1,4 +1,5 @@
-use crate::chmax;
+use crate::utils::merge::inplace_merge;
+use std::{cmp::max, ops::Add};
 
 /// 要素数が小さいナップサック問題
 ///
@@ -7,11 +8,9 @@ use crate::chmax;
 /// Space complexity O(2 ^ (n / 2))
 pub fn knapsack_small_quantity<W, V>(n: usize, cap: W, ws: &[W], vs: &[V]) -> V
 where
-    W: Default + Copy + std::ops::Add<Output = W> + Ord,
-    V: Default + Copy + std::ops::Add<Output = V> + Ord,
+    W: Default + Copy + Add<Output = W> + Ord,
+    V: Default + Copy + Add<Output = V> + Ord,
 {
-    use crate::utils::merge::inplace_merge;
-
     let p = n / 2;
 
     let zero_w = W::default();
@@ -46,11 +45,11 @@ where
     }
 
     for i in 1..a.len() {
-        chmax!(a[i].1, a[i - 1].1);
+        a[i].1 = max(a[i].1, a[i - 1].1);
     }
 
     for i in 1..b.len() {
-        chmax!(b[i].1, b[i - 1].1);
+        b[i].1 = max(b[i].1, b[i - 1].1);
     }
 
     let mut ret = zero_v;
@@ -66,7 +65,7 @@ where
         if j >= b.len() {
             break;
         }
-        chmax!(ret, a[i].1 + b[j].1);
+        ret = max(ret, a[i].1 + b[j].1);
         i += 1;
     }
 

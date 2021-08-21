@@ -1,4 +1,5 @@
 use crate::graph::template::*;
+use std::{cmp::min, mem::swap};
 
 impl<T> Graph<T> {
     /// 橋の列挙
@@ -48,10 +49,10 @@ impl<T> Graph<T> {
                 continue;
             }
             let t = self.bridges_(to, Some(cur), visit, low, ret, v);
-            temp = std::cmp::min(temp, t);
+            temp = min(temp, t);
             if low[to] > visit[cur].unwrap() {
                 if from > to {
-                    std::mem::swap(&mut from, &mut to);
+                    swap(&mut from, &mut to);
                 }
                 ret.push((from, to));
             }

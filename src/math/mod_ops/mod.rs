@@ -1,18 +1,12 @@
-pub mod inv;
-pub mod pow;
-pub mod log;
-pub mod sqrt;
 pub mod enum_inv;
+pub mod inv;
+pub mod log;
+pub mod pow;
+pub mod sqrt;
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        inv::*,
-        pow::*,
-        log::*,
-        sqrt::*,
-        enum_inv::*,
-    };
+    use super::{enum_inv::*, inv::*, log::*, pow::*, sqrt::*};
 
     #[test]
     fn test_mod_pow() {

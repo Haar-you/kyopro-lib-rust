@@ -21,7 +21,7 @@ pub fn totient(mut n: u64) -> u64 {
 }
 
 pub fn totient_table(n: usize) -> Vec<usize> {
-    let mut ret = (0..=n).collect::<Vec<usize>>();
+    let mut ret = (0..=n).collect::<Vec<_>>();
 
     for i in 2..=n {
         if ret[i] == i {

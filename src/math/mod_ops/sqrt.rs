@@ -1,5 +1,5 @@
-use rand::Rng;
 use crate::math::mod_ops::pow::*;
+use rand::Rng;
 
 pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
     if p == 2 {

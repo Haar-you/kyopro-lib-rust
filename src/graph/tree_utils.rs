@@ -1,52 +1,21 @@
 use crate::graph::template::*;
-
-impl<T> Graph<T> {
-    pub fn rooting(&mut self, root: usize) -> Result<&mut Self, &str> {
-        let n = self.len();
-        let mut stack = vec![(root, -1)];
-        let mut check = vec![false; n];
-
-        while let Some((cur, par)) = stack.pop() {
-            if check[cur] {
-                return Err("loop detected");
-            }
-            check[cur] = true;
-
-            let mut index = 0;
-            while let Some(&Edge {
-                from: _,
-                to,
-                cost: _,
-            }) = self.edges[cur].get(index)
-            {
-                if to as isize == par {
-                    self.edges[cur].remove(index);
-                } else {
-                    index += 1;
-                    stack.push((to, cur as isize));
-                }
-            }
-        }
-
-        Ok(self)
-    }
-}
+use std::ops::Add;
 
 impl<T> Graph<T>
 where
-    T: std::ops::Add<Output = T> + Copy + From<u32> + Ord,
+    T: Add<Output = T> + Copy + Default + Ord,
 {
     /// rootを根としたときの根から各頂点への距離を列挙する。
     ///
     /// Time complexity O(n)
     pub fn tree_distance(&self, root: usize) -> Vec<T> {
         let n = self.len();
-        let mut ret = vec![T::from(0); n];
+        let mut ret = vec![T::default(); n];
         let mut check = vec![false; n];
 
         let mut stack = vec![];
         stack.push(root);
-        ret[root] = T::from(0);
+        ret[root] = T::default();
 
         while let Some(cur) = stack.pop() {
             check[cur] = true;

@@ -1,11 +1,12 @@
 use crate::math::{factorial::FactorialTable, modint::FF};
+use std::cmp::min;
 
 impl<T: FF + From<usize>> FactorialTable<T> {
     pub fn bell_number(&self, n: usize, k: usize) -> T {
         match n {
             0 => T::from(1),
             _ => {
-                let k = std::cmp::min(n, k);
+                let k = min(n, k);
                 let mut t = vec![T::from(1); k];
 
                 for i in 1..k {

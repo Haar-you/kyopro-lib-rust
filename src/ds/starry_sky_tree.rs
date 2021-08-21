@@ -1,4 +1,8 @@
-use crate::ds::traits::{Foldable, RangeUpdatable};
+pub use crate::ds::traits::{Foldable, RangeUpdatable};
+use std::{
+    cmp::{max, min},
+    ops::{Add, AddAssign, SubAssign},
+};
 
 #[derive(Copy, Clone)]
 pub enum StarrySkyTreeMode {
@@ -32,7 +36,7 @@ where
 
 impl<T> Foldable<T> for StarrySkyTree<T>
 where
-    T: std::ops::Add<Output = T> + Ord + Copy,
+    T: Add<Output = T> + Ord + Copy,
 {
     fn fold(&self, l: usize, r: usize) -> T {
         fn rec<T>(
@@ -46,7 +50,7 @@ where
             mode: StarrySkyTreeMode,
         ) -> Option<T>
         where
-            T: std::ops::Add<Output = T> + Ord + Copy,
+            T: Add<Output = T> + Ord + Copy,
         {
             if r <= s || t <= l {
                 return None;
@@ -84,8 +88,8 @@ where
             }
 
             Some(match mode {
-                StarrySkyTreeMode::Max => std::cmp::max(a.unwrap(), b.unwrap()),
-                StarrySkyTreeMode::Min => std::cmp::min(a.unwrap(), b.unwrap()),
+                StarrySkyTreeMode::Max => max(a.unwrap(), b.unwrap()),
+                StarrySkyTreeMode::Min => min(a.unwrap(), b.unwrap()),
             })
         }
 
@@ -95,7 +99,7 @@ where
 
 impl<T> RangeUpdatable<T> for StarrySkyTree<T>
 where
-    T: std::ops::Add<Output = T> + std::ops::AddAssign + std::ops::SubAssign + Ord + Copy,
+    T: Add<Output = T> + AddAssign + SubAssign + Ord + Copy,
 {
     fn range_update(&mut self, l: usize, r: usize, value: T) {
         let hsize = self.size / 2;
@@ -123,12 +127,8 @@ where
             while i >= 1 {
                 if i < self.size / 2 {
                     let d = match self.mode {
-                        StarrySkyTreeMode::Max => {
-                            std::cmp::max(self.data[i << 1 | 0], self.data[i << 1 | 1])
-                        }
-                        StarrySkyTreeMode::Min => {
-                            std::cmp::min(self.data[i << 1 | 0], self.data[i << 1 | 1])
-                        }
+                        StarrySkyTreeMode::Max => max(self.data[i << 1 | 0], self.data[i << 1 | 1]),
+                        StarrySkyTreeMode::Min => min(self.data[i << 1 | 0], self.data[i << 1 | 1]),
                     };
 
                     self.data[i << 1 | 0] -= d;

@@ -1,5 +1,6 @@
-use crate::algebra::traits::Monoid;
-use crate::ds::traits::{Assignable, Foldable, Updatable};
+pub use crate::algebra::traits::Monoid;
+pub use crate::ds::traits::{Assignable, Foldable, Updatable};
+use std::ops::Index;
 
 #[derive(Clone)]
 pub struct SegmentTree<T, M> {
@@ -98,7 +99,7 @@ where
     }
 }
 
-impl<T, M> std::ops::Index<usize> for SegmentTree<T, M> {
+impl<T, M> Index<usize> for SegmentTree<T, M> {
     type Output = T;
 
     fn index(&self, i: usize) -> &Self::Output {

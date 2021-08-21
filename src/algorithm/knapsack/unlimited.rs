@@ -1,3 +1,5 @@
+use std::{cmp::max, ops::Add};
+
 /// 個数制限無しナップサック問題
 ///
 /// Time complexity O(n cap)
@@ -5,7 +7,7 @@
 /// Space complexity O(cap)
 pub fn knapsack_unlimited<T>(n: usize, cap: usize, ws: &[usize], vs: &[T]) -> T
 where
-    T: Default + Copy + Ord + std::ops::Add<Output = T>,
+    T: Default + Copy + Ord + Add<Output = T>,
 {
     let mut dp = vec![vec![T::default(); cap + 1]; 2];
 
@@ -16,7 +18,7 @@ where
             if j < ws[i] {
                 dp[next][j] = dp[cur][j];
             } else {
-                dp[next][j] = std::cmp::max(dp[cur][j], dp[next][j - ws[i]] + vs[i]);
+                dp[next][j] = max(dp[cur][j], dp[next][j - ws[i]] + vs[i]);
             }
         }
     }

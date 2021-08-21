@@ -1,11 +1,10 @@
-use std::cmp::Reverse;
-use std::collections::BinaryHeap;
+use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
 use crate::graph::template::*;
 
 impl<T> Graph<T>
 where
-    T: std::ops::Add<Output = T> + Copy + Ord + From<i32>,
+    T: Add<Output = T> + Copy + Ord + From<i32>,
 {
     /// Time complexity O((E + V) log V)
     pub fn dijkstra(&self, src: &[usize]) -> Vec<Option<T>> {

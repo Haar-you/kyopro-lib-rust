@@ -1,4 +1,4 @@
-use crate::algebra::traits::*;
+pub use crate::algebra::traits::*;
 
 #[derive(Clone, Debug, Copy)]
 pub enum DihedralValue {

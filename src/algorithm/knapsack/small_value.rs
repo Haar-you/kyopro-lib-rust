@@ -1,4 +1,4 @@
-use crate::chmin;
+use std::cmp::min;
 
 /// 価値の総和が小さいナップサック問題
 ///
@@ -15,9 +15,9 @@ pub fn knapsack_small_value(n: usize, cap: usize, ws: &[usize], vs: &[usize]) ->
         let next = (i + 1) & 1;
         let cur = i & 1;
         for j in 0..=max_v {
-            chmin!(dp[next][j], dp[cur][j]);
+            dp[next][j] = min(dp[next][j], dp[cur][j]);
             if j + vs[i] <= max_v && dp[cur][j] < usize::MAX {
-                chmin!(dp[next][j + vs[i]], dp[cur][j] + ws[i]);
+                dp[next][j + vs[i]] = min(dp[next][j + vs[i]], dp[cur][j] + ws[i]);
             }
         }
     }

@@ -1,6 +1,13 @@
-use std::marker::PhantomData;
-
 use crate::misc::generics_int::GenericsInt;
+use std::{
+    fmt,
+    fmt::{Debug, Display, Formatter},
+    iter::Sum,
+    marker::PhantomData,
+    num::ParseIntError,
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
+    str::FromStr,
+};
 
 pub trait Pow {
     type Output;
@@ -21,16 +28,16 @@ pub trait FF:
     Pow<Output = Self>
     + Inv<Output = Self>
     + Frac<Output = Self>
-    + std::ops::Add<Output = Self>
-    + std::ops::AddAssign
-    + std::ops::Sub<Output = Self>
-    + std::ops::SubAssign
-    + std::ops::Mul<Output = Self>
-    + std::ops::MulAssign
-    + std::ops::Div<Output = Self>
-    + std::ops::DivAssign
-    + std::ops::Neg<Output = Self>
-    + std::iter::Sum
+    + Add<Output = Self>
+    + AddAssign
+    + Sub<Output = Self>
+    + SubAssign
+    + Mul<Output = Self>
+    + MulAssign
+    + Div<Output = Self>
+    + DivAssign
+    + Neg<Output = Self>
+    + Sum
     + Copy
     + Clone
     + PartialEq
@@ -97,14 +104,14 @@ impl<G: GenericsInt<Output = u64>> Frac for ModInt<G> {
     }
 }
 
-impl<G> std::fmt::Display for ModInt<G> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl<G> Display for ModInt<G> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.value)
     }
 }
 
-impl<G: GenericsInt<Output = u64>> std::fmt::Debug for ModInt<G> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl<G: GenericsInt<Output = u64>> Debug for ModInt<G> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "{} (mod {})", self.value, G::value())
     }
 }
@@ -134,7 +141,7 @@ impl<G> From<ModInt<G>> for u64 {
     }
 }
 
-impl<G: GenericsInt<Output = u64>> std::ops::Add for ModInt<G> {
+impl<G: GenericsInt<Output = u64>> Add for ModInt<G> {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
@@ -145,13 +152,13 @@ impl<G: GenericsInt<Output = u64>> std::ops::Add for ModInt<G> {
     }
 }
 
-impl<G: GenericsInt<Output = u64> + Copy> std::ops::AddAssign for ModInt<G> {
+impl<G: GenericsInt<Output = u64> + Copy> AddAssign for ModInt<G> {
     fn add_assign(&mut self, other: Self) {
         *self = *self + other;
     }
 }
 
-impl<G: GenericsInt<Output = u64>> std::ops::Sub for ModInt<G> {
+impl<G: GenericsInt<Output = u64>> Sub for ModInt<G> {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {
@@ -162,13 +169,13 @@ impl<G: GenericsInt<Output = u64>> std::ops::Sub for ModInt<G> {
     }
 }
 
-impl<G: GenericsInt<Output = u64> + Copy> std::ops::SubAssign for ModInt<G> {
+impl<G: GenericsInt<Output = u64> + Copy> SubAssign for ModInt<G> {
     fn sub_assign(&mut self, other: Self) {
         *self = *self - other;
     }
 }
 
-impl<G: GenericsInt<Output = u64>> std::ops::Mul for ModInt<G> {
+impl<G: GenericsInt<Output = u64>> Mul for ModInt<G> {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self {
@@ -179,13 +186,13 @@ impl<G: GenericsInt<Output = u64>> std::ops::Mul for ModInt<G> {
     }
 }
 
-impl<G: GenericsInt<Output = u64> + Copy> std::ops::MulAssign for ModInt<G> {
+impl<G: GenericsInt<Output = u64> + Copy> MulAssign for ModInt<G> {
     fn mul_assign(&mut self, other: Self) {
         *self = *self * other;
     }
 }
 
-impl<G: GenericsInt<Output = u64>> std::ops::Div for ModInt<G> {
+impl<G: GenericsInt<Output = u64>> Div for ModInt<G> {
     type Output = Self;
 
     fn div(self, other: Self) -> Self {
@@ -193,13 +200,13 @@ impl<G: GenericsInt<Output = u64>> std::ops::Div for ModInt<G> {
     }
 }
 
-impl<G: GenericsInt<Output = u64> + Copy> std::ops::DivAssign for ModInt<G> {
+impl<G: GenericsInt<Output = u64> + Copy> DivAssign for ModInt<G> {
     fn div_assign(&mut self, other: Self) {
         *self = *self / other;
     }
 }
 
-impl<G: GenericsInt<Output = u64>> std::ops::Neg for ModInt<G> {
+impl<G: GenericsInt<Output = u64>> Neg for ModInt<G> {
     type Output = Self;
 
     fn neg(self) -> Self {
@@ -210,8 +217,8 @@ impl<G: GenericsInt<Output = u64>> std::ops::Neg for ModInt<G> {
     }
 }
 
-impl<G: GenericsInt<Output = u64>> std::str::FromStr for ModInt<G> {
-    type Err = std::num::ParseIntError;
+impl<G: GenericsInt<Output = u64>> FromStr for ModInt<G> {
+    type Err = ParseIntError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let x = s.parse::<u64>()?;
@@ -219,7 +226,7 @@ impl<G: GenericsInt<Output = u64>> std::str::FromStr for ModInt<G> {
     }
 }
 
-impl<G: GenericsInt<Output = u64>> std::iter::Sum for ModInt<G> {
+impl<G: GenericsInt<Output = u64>> Sum for ModInt<G> {
     fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
         iter.fold(Self::from(0), |a, b| a + b)
     }

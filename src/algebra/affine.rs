@@ -1,5 +1,8 @@
-use crate::algebra::traits::*;
-use std::marker::PhantomData;
+pub use crate::algebra::traits::*;
+use std::{
+    marker::PhantomData,
+    ops::{Add, Mul},
+};
 
 #[derive(Clone)]
 pub struct Affine<T>(T, T, PhantomData<T>);
@@ -14,7 +17,7 @@ impl<T> AlgeStruct for Affine<T> {
     type Output = (T, T);
 }
 
-impl<T: std::ops::Add<Output = T> + std::ops::Mul<Output = T> + Copy> BinaryOp for Affine<T> {
+impl<T: Add<Output = T> + Mul<Output = T> + Copy> BinaryOp for Affine<T> {
     fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output {
         (a.0 * b.0, a.0 * b.1 + a.1)
     }

@@ -1,3 +1,5 @@
+use std::mem::swap;
+
 pub trait GcdLcm {
     type Output;
 
@@ -15,7 +17,7 @@ macro_rules! gcd_lcm_impl_all {
                     let mut a = *self;
 
                     if a < b {
-                        std::mem::swap(&mut a, &mut b);
+                        swap(&mut a, &mut b);
                     }
 
                     if b == 0 {

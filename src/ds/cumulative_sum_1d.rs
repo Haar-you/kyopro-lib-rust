@@ -1,5 +1,5 @@
-use crate::algebra::traits::Group;
-use crate::ds::traits::Foldable;
+pub use crate::algebra::traits::Group;
+pub use crate::ds::traits::Foldable;
 
 #[derive(Debug, Clone)]
 pub struct CumulativeSum1D<T, G> {

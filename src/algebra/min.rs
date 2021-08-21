@@ -1,5 +1,5 @@
-use crate::algebra::traits::*;
-use std::marker::PhantomData;
+pub use crate::algebra::traits::*;
+use std::{cmp::min, marker::PhantomData};
 
 #[derive(Clone)]
 pub struct Min<T>(PhantomData<T>);
@@ -18,7 +18,7 @@ impl<T: Ord + Copy> BinaryOp for Min<T> {
         match (a, b) {
             (None, _) => b,
             (_, None) => a,
-            (Some(x), Some(y)) => Some(std::cmp::min(x, y)),
+            (Some(x), Some(y)) => Some(min(x, y)),
         }
     }
 }

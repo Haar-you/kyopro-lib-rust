@@ -1,4 +1,4 @@
-use crate::chmin;
+use std::cmp::min;
 
 pub fn edit_distance<T: PartialEq>(a: &[T], b: &[T]) -> usize {
     let n = a.len();
@@ -14,12 +14,12 @@ pub fn edit_distance<T: PartialEq>(a: &[T], b: &[T]) -> usize {
 
     for i in 0..n {
         for j in 0..m {
-            dp[i + 1][j + 1] = std::cmp::min(dp[i][j + 1] + 1, dp[i + 1][j] + 1);
+            dp[i + 1][j + 1] = min(dp[i][j + 1] + 1, dp[i + 1][j] + 1);
 
             if a[i] == b[j] {
-                chmin!(dp[i + 1][j + 1], dp[i][j]);
+                dp[i + 1][j + 1] = min(dp[i + 1][j + 1], dp[i][j]);
             } else {
-                chmin!(dp[i + 1][j + 1], dp[i][j] + 1);
+                dp[i + 1][j + 1] = min(dp[i + 1][j + 1], dp[i][j] + 1);
             }
         }
     }

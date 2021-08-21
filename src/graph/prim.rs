@@ -1,7 +1,5 @@
-use std::cmp::Reverse;
-use std::collections::BinaryHeap;
-
 use crate::graph::template::*;
+use std::{cmp::Reverse, collections::BinaryHeap};
 
 impl<T> Graph<T>
 where

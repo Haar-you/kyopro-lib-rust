@@ -1,5 +1,5 @@
-use std::collections::VecDeque;
 use std::cmp::Reverse;
+use std::collections::VecDeque;
 
 /// 配列のすべての長さkの連続部分列について、その最小値を列挙する。
 ///
@@ -38,7 +38,6 @@ pub fn sliding_maximum<T: Ord + Clone>(a: &[T], k: usize) -> Vec<T> {
     let s = a.iter().map(|x| Reverse(x.clone())).collect::<Vec<_>>();
     sliding_minimum(&s, k).into_iter().map(|x| x.0).collect()
 }
-
 
 #[cfg(test)]
 mod tests {

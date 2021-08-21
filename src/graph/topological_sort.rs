@@ -1,6 +1,5 @@
-use std::collections::VecDeque;
-
 use crate::graph::template::*;
+use std::collections::VecDeque;
 
 impl<T> Graph<T> {
     pub fn topological_sort(&self) -> Option<Vec<usize>> {

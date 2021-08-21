@@ -1,4 +1,4 @@
-use crate::algebra::traits::*;
+pub use crate::algebra::traits::*;
 use std::marker::PhantomData;
 
 #[derive(Clone)]

@@ -1,18 +1,12 @@
-pub mod small_weight;
-pub mod small_value;
 pub mod limited;
-pub mod unlimited;
 pub mod small_quantity;
+pub mod small_value;
+pub mod small_weight;
+pub mod unlimited;
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        small_weight::*,
-        small_value::*,
-        limited::*,
-        unlimited::*,
-        small_quantity::*,
-    };
+    use super::{limited::*, small_quantity::*, small_value::*, small_weight::*, unlimited::*};
 
     #[test]
     fn test() {

@@ -1,8 +1,8 @@
-use crate::algebra::traits::Monoid;
-use crate::ds::traits::RangeUpdatable;
+pub use crate::algebra::traits::Monoid;
+pub use crate::ds::traits::RangeUpdatable;
 
 pub struct DualSegmentTree<T, M> {
-    original_size: usize,
+    _original_size: usize,
     size: usize,
     data: Vec<T>,
     monoid: M,
@@ -16,7 +16,7 @@ where
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
         DualSegmentTree {
-            original_size: n,
+            _original_size: n,
             size: size,
             data: vec![monoid.id(); size],
             monoid: monoid,

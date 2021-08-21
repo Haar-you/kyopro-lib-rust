@@ -1,4 +1,5 @@
 use crate::graph::template::*;
+use std::cmp::min;
 
 impl<T> Graph<T> {
     pub fn articulation_points(&self) -> Vec<usize> {
@@ -46,7 +47,7 @@ impl<T> Graph<T> {
                 children.push(to);
             }
             let t = self.articulation_points_(root, to, visit, low, ret, v);
-            temp = std::cmp::min(temp, t);
+            temp = min(temp, t);
         }
 
         low[cur] = temp;

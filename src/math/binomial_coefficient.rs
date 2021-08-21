@@ -1,6 +1,6 @@
 use crate::math::{
     crt::crt_vec,
-    mod_ops::{mod_inv, mod_pow},
+    mod_ops::{inv::*, pow::*},
 };
 
 #[derive(Clone)]

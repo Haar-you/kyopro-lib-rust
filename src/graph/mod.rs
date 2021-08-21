@@ -9,6 +9,7 @@ pub mod prim;
 pub mod scc;
 pub mod template;
 pub mod topological_sort;
+pub mod tree_rooting;
 pub mod tree_utils;
 pub mod tsp;
 pub mod warshall_floyd;

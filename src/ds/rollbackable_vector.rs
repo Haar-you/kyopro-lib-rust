@@ -102,8 +102,6 @@ impl<T> From<Vec<T>> for RollbackableVec<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn test() {}
 }
