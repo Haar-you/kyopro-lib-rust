@@ -1,4 +1,5 @@
 use std::collections::VecDeque;
+use std::cmp::Reverse;
 
 /// 配列のすべての長さkの連続部分列について、その最小値を列挙する。
 ///
@@ -33,6 +34,12 @@ pub fn sliding_minimum<T: Ord + Clone>(a: &[T], k: usize) -> Vec<T> {
     ret
 }
 
+pub fn sliding_maximum<T: Ord + Clone>(a: &[T], k: usize) -> Vec<T> {
+    let s = a.iter().map(|x| Reverse(x.clone())).collect::<Vec<_>>();
+    sliding_minimum(&s, k).into_iter().map(|x| x.0).collect()
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -40,5 +47,6 @@ mod tests {
     #[test]
     fn test() {
         assert_eq!(sliding_minimum(&[1, 7, 7, 4, 8, 1, 6], 3), [1, 4, 4, 1, 1]);
+        assert_eq!(sliding_maximum(&[1, 7, 7, 4, 8, 1, 6], 3), [7, 7, 8, 8, 8]);
     }
 }
