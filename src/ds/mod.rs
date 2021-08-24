@@ -12,3 +12,5 @@ pub mod persistent_array;
 pub mod rollbackable_vector;
 
 pub mod range_search_tree;
+
+pub mod swag;
