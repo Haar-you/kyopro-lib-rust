@@ -7,12 +7,7 @@ impl<T> Graph<T> {
         let mut indeg = vec![0; n];
 
         for i in 0..n {
-            for &Edge {
-                from: _,
-                to,
-                cost: _,
-            } in &self.edges[i]
-            {
+            for &Edge { to, .. } in &self.edges[i] {
                 indeg[to] += 1;
             }
         }
@@ -29,12 +24,7 @@ impl<T> Graph<T> {
 
         while let Some(cur) = q.pop_front() {
             ret.push(cur);
-            for &Edge {
-                from: _,
-                to,
-                cost: _,
-            } in &self.edges[cur]
-            {
+            for &Edge { to, .. } in &self.edges[cur] {
                 indeg[to] -= 1;
                 if indeg[to] == 0 {
                     q.push_back(to);

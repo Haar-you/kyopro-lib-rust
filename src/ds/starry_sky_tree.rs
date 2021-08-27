@@ -26,10 +26,10 @@ where
         let size = n.next_power_of_two() * 2;
         let zero = T::from(0);
         StarrySkyTree {
-            size: size,
+            size,
             data: vec![zero; size],
-            zero: zero,
-            mode: mode,
+            zero,
+            mode,
         }
     }
 }

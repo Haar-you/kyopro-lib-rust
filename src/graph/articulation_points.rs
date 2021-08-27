@@ -37,12 +37,7 @@ impl<T> Graph<T> {
         let mut children = vec![];
         *v += 1;
 
-        for &Edge {
-            from: _,
-            to,
-            cost: _,
-        } in &self.edges[cur]
-        {
+        for &Edge { to, .. } in &self.edges[cur] {
             if visit[to].is_none() {
                 children.push(to);
             }

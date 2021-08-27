@@ -1,12 +1,12 @@
 pub mod crt;
 pub mod divisor;
 pub mod ext_gcd;
+pub mod factorize;
 pub mod gcd_lcm;
 pub mod mod_ops;
 pub mod modint;
 pub mod nim_product;
 pub mod prime;
-pub mod factorize;
 
 pub mod bell_number;
 pub mod binomial_coefficient;

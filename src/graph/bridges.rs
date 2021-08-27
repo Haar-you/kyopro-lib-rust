@@ -40,9 +40,7 @@ impl<T> Graph<T> {
         *v += 1;
 
         for &Edge {
-            mut from,
-            mut to,
-            cost: _,
+            mut from, mut to, ..
         } in &self.edges[cur]
         {
             if Some(to) == par {

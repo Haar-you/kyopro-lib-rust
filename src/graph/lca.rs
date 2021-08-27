@@ -11,7 +11,7 @@ impl DoublingLCA {
         let n = tree.len();
         let log2n = ((n as f64).log2().ceil() + 1.0) as usize;
         let mut ret = Self {
-            log2n: log2n,
+            log2n,
             parent: vec![vec![None; log2n]; n],
             depth: vec![0; n],
         };
@@ -33,12 +33,7 @@ impl DoublingLCA {
         self.parent[cur][0] = par;
         self.depth[cur] = d;
 
-        for &Edge {
-            from: _,
-            to,
-            cost: _,
-        } in &tree.edges[cur]
-        {
+        for &Edge { to, .. } in &tree.edges[cur] {
             if Some(to) != par {
                 self.dfs(tree, to, Some(cur), d + 1);
             }

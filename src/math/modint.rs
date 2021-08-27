@@ -41,17 +41,18 @@ pub trait FF:
     + Copy
     + Clone
     + PartialEq
+    + Default
     + Sized
 {
 }
 
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, PartialEq, Default)]
 pub struct ModInt<G> {
     value: u64,
     phantom: PhantomData<G>,
 }
 
-impl<G: GenericsInt<Output = u64> + Copy + PartialEq> FF for ModInt<G> {}
+impl<G: GenericsInt<Output = u64> + Copy + PartialEq + Default> FF for ModInt<G> {}
 
 impl<G: GenericsInt<Output = u64>> ModInt<G> {
     pub fn new() -> Self {
@@ -126,7 +127,7 @@ macro_rules! modint_from_int {
                         value -= G::value();
                     }
 
-                    ModInt { value: value, phantom: PhantomData }
+                    ModInt { value, phantom: PhantomData }
                 }
             }
         )*
@@ -211,7 +212,7 @@ impl<G: GenericsInt<Output = u64>> Neg for ModInt<G> {
 
     fn neg(self) -> Self {
         Self {
-            value: G::value() - u64::from(self),
+            value: (G::value() - u64::from(self)) % G::value(),
             phantom: PhantomData,
         }
     }

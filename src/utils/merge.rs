@@ -14,19 +14,12 @@ pub fn inplace_merge<T: Ord + Copy>(a: &mut [T], k: usize) {
                 a[k] = snd[j];
                 j += 1;
             }
+        } else if j >= snd.len() || fst[i] < snd[j] {
+            a[k] = fst[i];
+            i += 1;
         } else {
-            if j >= snd.len() {
-                a[k] = fst[i];
-                i += 1;
-            } else {
-                if fst[i] < snd[j] {
-                    a[k] = fst[i];
-                    i += 1;
-                } else {
-                    a[k] = snd[j];
-                    j += 1;
-                }
-            }
+            a[k] = snd[j];
+            j += 1;
         }
         k += 1;
     }

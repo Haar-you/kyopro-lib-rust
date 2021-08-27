@@ -1,3 +1,9 @@
+use std::{
+    fmt,
+    fmt::{Debug, Formatter},
+    ops::Index,
+};
+
 #[derive(Clone)]
 enum RollbackableVecHistoryType<T> {
     Update(T, usize),
@@ -5,7 +11,7 @@ enum RollbackableVecHistoryType<T> {
     Pop(T),
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct RollbackableVec<T> {
     data: Vec<T>,
     history: Vec<RollbackableVecHistoryType<T>>,
@@ -28,7 +34,7 @@ where
     }
 
     pub fn pop(&mut self) -> Option<T> {
-        if self.data.len() == 0 {
+        if self.data.is_empty() {
             None
         } else {
             let x = self.data.pop();
@@ -47,7 +53,7 @@ where
     }
 
     pub fn rollback(&mut self) -> bool {
-        if self.history.len() == 0 {
+        if self.history.is_empty() {
             false
         } else {
             match self.history.pop().unwrap() {
@@ -69,9 +75,13 @@ where
     pub fn len(&self) -> usize {
         self.data.len()
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.data.is_empty()
+    }
 }
 
-impl<T> std::ops::Index<usize> for RollbackableVec<T> {
+impl<T> Index<usize> for RollbackableVec<T> {
     type Output = T;
 
     fn index(&self, i: usize) -> &Self::Output {
@@ -79,8 +89,8 @@ impl<T> std::ops::Index<usize> for RollbackableVec<T> {
     }
 }
 
-impl<T: std::fmt::Debug> std::fmt::Debug for RollbackableVec<T> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl<T: Debug> Debug for RollbackableVec<T> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "{:?}", self.data)
     }
 }

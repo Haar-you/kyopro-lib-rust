@@ -17,7 +17,7 @@ where
         let x = a[i];
         if dp.is_empty() || dp.last().unwrap() < &x {
             dp.push(x);
-            if pos.len() > 0 {
+            if !pos.is_empty() {
                 prev[i] = Some(*pos.last().unwrap());
             }
             pos.push(i);

@@ -101,12 +101,12 @@ where
     T: PartialEq,
 {
     fn eq(&self, other: &Self) -> bool {
-        return self.top == other.top
+        self.top == other.top
             && self.bottom == other.bottom
             && self.front == other.front
             && self.back == other.back
             && self.right == other.right
-            && self.left == other.left;
+            && self.left == other.left
     }
 }
 

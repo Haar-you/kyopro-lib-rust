@@ -29,14 +29,12 @@ impl<T: Ord + Clone> Iterator for Permutation<T> {
     type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if !self.first {
-            if !next_permutation(&mut self.data) {
-                return None;
-            }
+        if !self.first && !next_permutation(&mut self.data) {
+            None
+        } else {
+            self.first = false;
+            Some(self.data.clone())
         }
-        self.first = false;
-
-        Some(self.data.clone())
     }
 }
 

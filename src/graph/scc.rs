@@ -1,6 +1,16 @@
 use crate::graph::template::*;
 use std::cmp::min;
 
+struct SccRecParams<'a> {
+    ret: &'a mut Vec<usize>,
+    low: &'a mut Vec<isize>,
+    ord: &'a mut Vec<isize>,
+    s: &'a mut Vec<usize>,
+    check: &'a mut Vec<bool>,
+    t: &'a mut usize,
+    k: &'a mut usize,
+}
+
 impl<T> Graph<T> {
     pub fn scc(&self) -> (Vec<usize>, usize) {
         let n = self.len();
@@ -15,61 +25,53 @@ impl<T> Graph<T> {
         for i in 0..n {
             if ord[i] == -1 {
                 let mut t = 0;
-                self.scc_(
-                    i, &mut ret, &mut low, &mut ord, &mut s, &mut check, &mut t, &mut k,
-                );
+
+                let mut params = SccRecParams {
+                    ret: &mut ret,
+                    low: &mut low,
+                    ord: &mut ord,
+                    s: &mut s,
+                    check: &mut check,
+                    t: &mut t,
+                    k: &mut k,
+                };
+
+                self.scc_(i, &mut params);
             }
         }
 
-        for x in &mut ret {
-            *x = k - 1 - *x;
-        }
+        ret.iter_mut().for_each(|x| *x = k - 1 - *x);
 
         (ret, k)
     }
 
-    fn scc_(
-        &self,
-        cur: usize,
-        ret: &mut Vec<usize>,
-        low: &mut Vec<isize>,
-        ord: &mut Vec<isize>,
-        s: &mut Vec<usize>,
-        check: &mut Vec<bool>,
-        t: &mut usize,
-        k: &mut usize,
-    ) {
-        *t += 1;
-        low[cur] = *t as isize;
-        ord[cur] = *t as isize;
+    fn scc_(&self, cur: usize, params: &mut SccRecParams) {
+        *params.t += 1;
+        params.low[cur] = *params.t as isize;
+        params.ord[cur] = *params.t as isize;
 
-        s.push(cur);
-        check[cur] = true;
+        params.s.push(cur);
+        params.check[cur] = true;
 
-        for &Edge {
-            from: _,
-            to,
-            cost: _,
-        } in &self.edges[cur]
-        {
-            if ord[to] == -1 {
-                self.scc_(to, ret, low, ord, s, check, t, k);
-                low[cur] = min(low[cur], low[to]);
-            } else if check[to] {
-                low[cur] = min(low[cur], low[to]);
+        for &Edge { to, .. } in &self.edges[cur] {
+            if params.ord[to] == -1 {
+                self.scc_(to, params);
+                params.low[cur] = min(params.low[cur], params.low[to]);
+            } else if params.check[to] {
+                params.low[cur] = min(params.low[cur], params.low[to]);
             }
         }
 
-        if low[cur] == ord[cur] {
+        if params.low[cur] == params.ord[cur] {
             loop {
-                let u = s.pop().unwrap();
-                check[u] = false;
-                ret[u] = *k;
+                let u = params.s.pop().unwrap();
+                params.check[u] = false;
+                params.ret[u] = *params.k;
                 if cur == u {
                     break;
                 }
             }
-            *k += 1;
+            *params.k += 1;
         }
     }
 }

@@ -41,7 +41,8 @@ pub fn bell_number_table<T: FF + From<usize>>(n: usize) -> Vec<Vec<T>> {
 
     for i in 0..=n {
         for j in 1..=n {
-            ret[i][j] = ret[i][j] + ret[i][j - 1];
+            let t = ret[i][j - 1];
+            ret[i][j] += t;
         }
     }
 

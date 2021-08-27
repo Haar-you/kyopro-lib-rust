@@ -4,7 +4,7 @@ use std::collections::VecDeque;
 /// 配列のすべての長さkの連続部分列について、その最小値を列挙する。
 ///
 /// Time complexity O(n)
-pub fn sliding_minimum<T: Ord + Clone>(a: &[T], k: usize) -> Vec<T> {
+pub fn sliding_minimum<T: Ord + Copy>(a: &[T], k: usize) -> Vec<T> {
     let n = a.len();
 
     let mut dq = VecDeque::new();
@@ -22,7 +22,7 @@ pub fn sliding_minimum<T: Ord + Clone>(a: &[T], k: usize) -> Vec<T> {
             dq.pop_front();
         }
 
-        ret.push(a[*dq.front().unwrap()].clone());
+        ret.push(a[*dq.front().unwrap()]);
 
         while !dq.is_empty() && i + k < n && a[*dq.back().unwrap()] >= a[i + k] {
             dq.pop_back();
@@ -34,8 +34,8 @@ pub fn sliding_minimum<T: Ord + Clone>(a: &[T], k: usize) -> Vec<T> {
     ret
 }
 
-pub fn sliding_maximum<T: Ord + Clone>(a: &[T], k: usize) -> Vec<T> {
-    let s = a.iter().map(|x| Reverse(x.clone())).collect::<Vec<_>>();
+pub fn sliding_maximum<T: Ord + Copy>(a: &[T], k: usize) -> Vec<T> {
+    let s = a.iter().map(|&x| Reverse(x)).collect::<Vec<_>>();
     sliding_minimum(&s, k).into_iter().map(|x| x.0).collect()
 }
 

@@ -5,7 +5,7 @@ pub struct Compressor<T> {
     data: Vec<T>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct CompressorBuilder<T> {
     data: Vec<T>,
 }
@@ -27,7 +27,7 @@ where
     }
 
     pub fn decompress(&self, indices: &[usize]) -> Vec<T> {
-        indices.into_iter().map(|&i| self.get(i)).collect()
+        indices.iter().map(|&i| self.get(i)).collect()
     }
 }
 

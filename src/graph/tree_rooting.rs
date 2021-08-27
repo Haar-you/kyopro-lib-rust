@@ -13,12 +13,7 @@ impl<T> Graph<T> {
             check[cur] = true;
 
             let mut index = 0;
-            while let Some(&Edge {
-                from: _,
-                to,
-                cost: _,
-            }) = self.edges[cur].get(index)
-            {
+            while let Some(&Edge { to, .. }) = self.edges[cur].get(index) {
                 if to as isize == par {
                     self.edges[cur].remove(index);
                 } else {

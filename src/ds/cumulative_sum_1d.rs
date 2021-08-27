@@ -1,5 +1,6 @@
 pub use crate::algebra::traits::Group;
 pub use crate::ds::traits::Foldable;
+use std::ops::Index;
 
 #[derive(Debug, Clone)]
 pub struct CumulativeSum1D<T, G> {
@@ -8,7 +9,6 @@ pub struct CumulativeSum1D<T, G> {
 }
 
 pub struct CumulativeSum1DBuilder<T, G> {
-    n: usize,
     data: Vec<T>,
     group: G,
 }
@@ -22,7 +22,7 @@ impl<T, G> CumulativeSum1D<T, G> {
 
 impl<T, G> Foldable<T> for CumulativeSum1D<T, G>
 where
-    T: Clone,
+    T: Copy,
     G: Group<Output = T>,
 {
     /// Time complexity O(1)
@@ -32,7 +32,7 @@ where
     }
 }
 
-impl<T, G> std::ops::Index<usize> for CumulativeSum1D<T, G> {
+impl<T, G> Index<usize> for CumulativeSum1D<T, G> {
     type Output = T;
 
     fn index(&self, i: usize) -> &Self::Output {
@@ -42,31 +42,33 @@ impl<T, G> std::ops::Index<usize> for CumulativeSum1D<T, G> {
 
 impl<T, G> CumulativeSum1DBuilder<T, G>
 where
-    T: Clone,
+    T: Copy + std::fmt::Debug,
     G: Group<Output = T> + Clone,
 {
     pub fn new(n: usize, group: G) -> Self {
         CumulativeSum1DBuilder {
-            n: n,
-            data: vec![group.id(); n],
-            group: group,
+            data: vec![group.id(); n + 1],
+            group,
         }
     }
 
     pub fn update(&mut self, i: usize, value: T) -> &Self {
-        self.data[i] = self.group.op(self.data[i].clone(), value);
+        self.data[i + 1] = self.group.op(self.data[i + 1], value);
         self
     }
 
-    pub fn build(&self) -> CumulativeSum1D<T, G> {
-        let mut data = vec![self.group.id(); self.n + 1];
-        for i in 0..self.n {
-            data[i + 1] = self.group.op(data[i].clone(), self.data[i].clone());
-        }
+    pub fn build(self) -> CumulativeSum1D<T, G> {
+        let data = self.data
+            .iter()
+            .scan(self.group.id(), |st, &x| {
+                *st = self.group.op(*st, x);
+                Some(*st)
+            })
+            .collect::<Vec<_>>();
 
         CumulativeSum1D {
-            data: data,
-            group: self.group.clone(),
+            data,
+            group: self.group,
         }
     }
 }

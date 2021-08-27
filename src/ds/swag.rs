@@ -28,7 +28,7 @@ where
             (Some(a), Some(b)) => Some(self.semigroup.op(a, b)),
             (x @ Some(_), _) => x,
             (_, x @ Some(_)) => x,
-            (_, _) => None
+            (_, _) => None,
         }
     }
 

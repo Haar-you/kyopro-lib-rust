@@ -1,4 +1,6 @@
-const NIM_PRODUCT_TABLE_8: [[u8; 16]; 16] = [
+use std::cell::RefCell;
+
+const NIM_PRODUCT_TABLE_16: [[u8; 16]; 16] = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
     [0, 2, 3, 1, 8, 10, 11, 9, 12, 14, 15, 13, 4, 6, 7, 5],
@@ -17,13 +19,9 @@ const NIM_PRODUCT_TABLE_8: [[u8; 16]; 16] = [
     [0, 15, 5, 10, 1, 14, 4, 11, 2, 13, 7, 8, 3, 12, 6, 9],
 ];
 
-pub struct NimProduct {
-    table_large: Vec<Vec<u8>>,
-}
-
-impl NimProduct {
-    pub fn new() -> Self {
-        let mut table_large = vec![vec![0; 256]; 256];
+thread_local! {
+    static NIM_PRODUCT_TABLE_256: RefCell<[[u8; 256]; 256]> = {
+        let mut ret = [[0; 256]; 256];
 
         let mask: u8 = 0xf;
 
@@ -34,67 +32,52 @@ impl NimProduct {
                 let bu = (b >> 4) as usize;
                 let bl = (b & mask) as usize;
 
-                table_large[a as usize][b as usize] = ((NIM_PRODUCT_TABLE_8[au][bu]
-                    ^ NIM_PRODUCT_TABLE_8[al][bu]
-                    ^ NIM_PRODUCT_TABLE_8[au][bl])
-                    << 4)
-                    ^ (NIM_PRODUCT_TABLE_8[au][NIM_PRODUCT_TABLE_8[bu][1 << 3] as usize]
-                        ^ NIM_PRODUCT_TABLE_8[al][bl]);
+                let au_bu = NIM_PRODUCT_TABLE_16[au][bu];
+                let al_bu = NIM_PRODUCT_TABLE_16[al][bu];
+                let au_bl = NIM_PRODUCT_TABLE_16[au][bl];
+                let al_bl = NIM_PRODUCT_TABLE_16[al][bl];
+
+                ret[a as usize][b as usize] = ((au_bu ^ al_bu ^ au_bl) << 4)
+                    ^ NIM_PRODUCT_TABLE_16[au][NIM_PRODUCT_TABLE_16[bu][1 << 3] as usize]
+                    ^ al_bl;
             }
         }
 
-        NimProduct { table_large }
-    }
-
-    pub fn nim_product_8(&self, a: u8, b: u8) -> u8 {
-        self.table_large[a as usize][b as usize]
-    }
-
-    pub fn nim_product_16(&self, a: u16, b: u16) -> u16 {
-        let mask = 0xff;
-
-        let au = (a >> 8) as u8;
-        let al = (a & mask) as u8;
-        let bu = (b >> 8) as u8;
-        let bl = (b & mask) as u8;
-
-        (((self.nim_product_8(au, bu) ^ self.nim_product_8(al, bu) ^ self.nim_product_8(au, bl))
-            as u16)
-            << 8)
-            ^ (self.nim_product_8(au, self.nim_product_8(bu, 1 << 7)) ^ self.nim_product_8(al, bl))
-                as u16
-    }
-
-    pub fn nim_product_32(&self, a: u32, b: u32) -> u32 {
-        let mask = 0xffff;
-
-        let au = (a >> 16) as u16;
-        let al = (a & mask) as u16;
-        let bu = (b >> 16) as u16;
-        let bl = (b & mask) as u16;
-
-        (((self.nim_product_16(au, bu) ^ self.nim_product_16(al, bu) ^ self.nim_product_16(au, bl))
-            as u32)
-            << 16)
-            ^ (self.nim_product_16(au, self.nim_product_16(bu, 1 << 15))
-                ^ self.nim_product_16(al, bl)) as u32
-    }
-
-    pub fn nim_product_64(&self, a: u64, b: u64) -> u64 {
-        let mask = 0xffffffff;
-
-        let au = (a >> 32) as u32;
-        let al = (a & mask) as u32;
-        let bu = (b >> 32) as u32;
-        let bl = (b & mask) as u32;
-
-        (((self.nim_product_32(au, bu) ^ self.nim_product_32(al, bu) ^ self.nim_product_32(au, bl))
-            as u64)
-            << 32)
-            ^ (self.nim_product_32(au, self.nim_product_32(bu, 1 << 31))
-                ^ self.nim_product_32(al, bl)) as u64
-    }
+        RefCell::new(ret)
+    };
 }
+
+pub fn nim_product_8(a: u8, b: u8) -> u8 {
+    NIM_PRODUCT_TABLE_256.with(|t| t.borrow()[a as usize][b as usize])
+}
+
+macro_rules! impl_nim_product {
+    ( $uint:ty, $np:ident, $uint_h:ty, $np_h:ident, $bits:expr ) => {
+        pub fn $np(a: $uint, b: $uint) -> $uint {
+            let bits = $bits;
+
+            let mask = (1 << bits) - 1;
+
+            let au = (a >> bits) as $uint_h;
+            let al = (a & mask) as $uint_h;
+            let bu = (b >> bits) as $uint_h;
+            let bl = (b & mask) as $uint_h;
+
+            let au_bu = $np_h(au, bu) as $uint;
+            let al_bu = $np_h(al, bu) as $uint;
+            let au_bl = $np_h(au, bl) as $uint;
+            let al_bl = $np_h(al, bl) as $uint;
+
+            ((au_bu ^ al_bu ^ au_bl) << bits)
+                ^ $np_h(au, $np_h(bu, 1 << (bits - 1))) as $uint
+                ^ al_bl
+        }
+    };
+}
+
+impl_nim_product!(u64, nim_product_64, u32, nim_product_32, 32);
+impl_nim_product!(u32, nim_product_32, u16, nim_product_16, 16);
+impl_nim_product!(u16, nim_product_16, u8, nim_product_8, 8);
 
 #[cfg(test)]
 mod tests {
@@ -102,10 +85,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let np = NimProduct::new();
-
         assert_eq!(
-            np.nim_product_64(18446744073709551615, 18446744073709551615),
+            nim_product_64(18446744073709551615, 18446744073709551615),
             11290409524105353207
         );
     }

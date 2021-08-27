@@ -1,4 +1,7 @@
-use std::{cmp::max, ops::Mul};
+use std::{
+    cmp::{max, Ordering},
+    ops::Mul,
+};
 
 /// ヒストグラム中の最大面積長方形の面積を計算する。
 ///
@@ -12,20 +15,24 @@ where
 
     for (i, &y1) in h.iter().enumerate() {
         if let Some(&(y2, _)) = st.last() {
-            if y2 < y1 {
-                st.push((y1, i));
-            } else if y2 > y1 {
-                let mut j = i;
-                while let Some(&(y3, k)) = st.last() {
-                    if y3 <= y1 {
-                        break;
-                    }
-                    ret = max(ret, y3 * T::from(i - k));
-                    j = k;
-                    st.pop();
+            match y2.cmp(&y1) {
+                Ordering::Less => {
+                    st.push((y1, i));
                 }
-                st.push((y1, j));
-            }
+                Ordering::Greater => {
+                    let mut j = i;
+                    while let Some(&(y3, k)) = st.last() {
+                        if y3 <= y1 {
+                            break;
+                        }
+                        ret = max(ret, y3 * T::from(i - k));
+                        j = k;
+                        st.pop();
+                    }
+                    st.push((y1, j));
+                }
+                _ => {}
+            };
         } else {
             st.push((y1, i));
         }

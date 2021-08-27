@@ -24,7 +24,7 @@ fn get_size<T>(node: Option<Rc<Node<T>>>) -> usize {
         };
     }
 
-    return 0;
+    0
 }
 
 impl<T> PersistentArray<T>
@@ -50,12 +50,10 @@ where
             return None;
         }
         if d == depth {
-            return Some(Rc::new(Node::<T>::Terminal {
-                value: value.clone(),
-            }));
+            Some(Rc::new(Node::<T>::Terminal { value }))
         } else {
             let l = Self::init(s / 2, value.clone(), d + 1, depth);
-            let r = Self::init(s - s / 2, value.clone(), d + 1, depth);
+            let r = Self::init(s - s / 2, value, d + 1, depth);
 
             let t = Node::<T>::Internal {
                 size: get_size(l.clone()) + get_size(r.clone()),
@@ -63,7 +61,7 @@ where
                 r_ch: r,
             };
 
-            return Some(Rc::new(t));
+            Some(Rc::new(t))
         }
     }
 
@@ -77,7 +75,6 @@ where
         match *node {
             Node::<T>::Terminal { ref value } => {
                 ret.push(value.clone());
-                return;
             }
             Node::<T>::Internal {
                 ref l_ch, ref r_ch, ..
@@ -90,9 +87,7 @@ where
 
     fn _set(prev: Rc<Node<T>>, i: usize, value: T) -> Rc<Node<T>> {
         match *prev {
-            Node::<T>::Terminal { .. } => Rc::new(Node::<T>::Terminal {
-                value: value.clone(),
-            }),
+            Node::<T>::Terminal { .. } => Rc::new(Node::<T>::Terminal { value }),
             Node::<T>::Internal {
                 ref l_ch, ref r_ch, ..
             } => {
@@ -100,21 +95,13 @@ where
                 let (l, r) = {
                     if i < k {
                         (
-                            Some(Self::_set(
-                                Rc::clone(l_ch.as_ref().unwrap()),
-                                i,
-                                value.clone(),
-                            )),
+                            Some(Self::_set(Rc::clone(l_ch.as_ref().unwrap()), i, value)),
                             r_ch.clone(),
                         )
                     } else {
                         (
                             l_ch.clone(),
-                            Some(Self::_set(
-                                Rc::clone(r_ch.as_ref().unwrap()),
-                                i - k,
-                                value.clone(),
-                            )),
+                            Some(Self::_set(Rc::clone(r_ch.as_ref().unwrap()), i - k, value)),
                         )
                     }
                 };
@@ -131,7 +118,7 @@ where
     pub fn set(&self, i: usize, value: T) -> Self {
         Self {
             size: self.size,
-            root: Some(Self::_set(self.root.clone().unwrap(), i, value.clone())),
+            root: Some(Self::_set(self.root.clone().unwrap(), i, value)),
         }
     }
 

@@ -17,9 +17,9 @@ where
         let size = n.next_power_of_two() * 2;
         DualSegmentTree {
             _original_size: n,
-            size: size,
+            size,
             data: vec![monoid.id(); size],
-            monoid: monoid,
+            monoid,
         }
     }
 
@@ -58,8 +58,8 @@ where
 
     pub fn from_vec(&mut self, a: &[T]) {
         self.data = vec![self.monoid.id(); self.size];
-        for i in 0..a.len() {
-            self.data[i + self.size / 2] = a[i].clone();
+        for (i, e) in a.iter().enumerate() {
+            self.data[i + self.size / 2] = e.clone();
         }
     }
 }

@@ -26,11 +26,14 @@ pub fn crt_vec(params: &[(i64, u64)]) -> Option<(i64, u64)> {
     let mut _m = 1;
 
     for i in 0..n {
-        if let Some((r, m)) = crt((_r, _m), (bs[i], ms[i])) {
-            _r = r;
-            _m = m;
-        } else {
-            return None;
+        match crt((_r, _m), (bs[i], ms[i])) {
+            Some((r, m)) => {
+                _r = r;
+                _m = m;
+            }
+            _ => {
+                return None;
+            }
         }
     }
 

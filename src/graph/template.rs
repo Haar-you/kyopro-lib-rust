@@ -28,7 +28,7 @@ impl<T: Copy> Graph<T> {
     }
 
     pub fn add_undirected(&mut self, from: usize, to: usize, cost: T) {
-        self.add_directed(from, to, cost.clone());
+        self.add_directed(from, to, cost);
         self.add_directed(to, from, cost);
     }
 
@@ -52,5 +52,9 @@ impl<T: Copy> Graph<T> {
 impl<T> Graph<T> {
     pub fn len(&self) -> usize {
         self.edges.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.edges.is_empty()
     }
 }

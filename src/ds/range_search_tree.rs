@@ -49,6 +49,7 @@ impl RangeSearchTree {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct RangeSearchTreeBuilder {
     size: usize,
     xs: Vec<i64>,
@@ -72,7 +73,7 @@ impl RangeSearchTreeBuilder {
 
     pub fn build(self) -> RangeSearchTree {
         let mut cxs = self.xs.clone();
-        cxs.sort();
+        cxs.sort_unstable();
         cxs.dedup();
 
         let m = cxs.len();
@@ -85,8 +86,8 @@ impl RangeSearchTreeBuilder {
             data[size / 2 + j].push((self.ys[i], j));
         }
 
-        for i in size / 2..size {
-            data[i].sort();
+        for item in data.iter_mut().take(size).skip(size / 2) {
+            item.sort_unstable();
         }
 
         for i in (1..size / 2).rev() {

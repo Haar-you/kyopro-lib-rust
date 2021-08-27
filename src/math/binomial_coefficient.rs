@@ -116,7 +116,7 @@ impl BinomialCoefficient {
             lu.push(ExtLucas::new(p, q));
         }
 
-        Self { ms, lu }
+        Self { lu, ms }
     }
 
     pub fn get(&self, n: u64, k: u64) -> u64 {

@@ -9,7 +9,7 @@ pub struct UnionFind {
 impl UnionFind {
     pub fn new(n: usize) -> Self {
         UnionFind {
-            n: n,
+            n,
             count: n,
             parent: (0..n).collect(),
             depth: vec![1; n],
@@ -22,7 +22,7 @@ impl UnionFind {
             return i;
         }
         self.parent[i] = self.root_of(self.parent[i]);
-        return self.parent[i];
+        self.parent[i]
     }
 
     pub fn is_same(&mut self, i: usize, j: usize) -> bool {
@@ -42,14 +42,14 @@ impl UnionFind {
         if self.depth[i] < self.depth[j] {
             self.parent[i] = j;
             self.size[j] += self.size[i];
-            return j;
+            j
         } else {
             self.parent[j] = i;
             self.size[i] += self.size[j];
             if self.depth[i] == self.depth[j] {
                 self.depth[i] += 1;
             }
-            return i;
+            i
         }
     }
 

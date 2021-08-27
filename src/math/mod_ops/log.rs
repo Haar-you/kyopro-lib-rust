@@ -39,9 +39,7 @@ pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
     let mut t = 1 % m;
 
     for i in 0..sq {
-        if !mp.contains_key(&t) {
-            mp.insert(t, i);
-        }
+        mp.entry(t).or_insert(i);
         t *= a;
         t %= m;
     }

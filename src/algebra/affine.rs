@@ -4,12 +4,12 @@ use std::{
     ops::{Add, Mul},
 };
 
-#[derive(Clone)]
-pub struct Affine<T>(T, T, PhantomData<T>);
+#[derive(Clone, Default)]
+pub struct Affine<T>(PhantomData<T>);
 
 impl<T> Affine<T> {
-    pub fn new(zero: T, one: T) -> Self {
-        Self(zero, one, PhantomData)
+    pub fn new() -> Self {
+        Self(PhantomData)
     }
 }
 
@@ -23,8 +23,8 @@ impl<T: Add<Output = T> + Mul<Output = T> + Copy> BinaryOp for Affine<T> {
     }
 }
 
-impl<T: Copy> Identity for Affine<T> {
+impl<T: One<Output = T> + Zero<Output = T> + Copy> Identity for Affine<T> {
     fn id(&self) -> Self::Output {
-        (self.1, self.0)
+        (T::one(), T::zero())
     }
 }

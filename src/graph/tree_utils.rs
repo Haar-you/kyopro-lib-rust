@@ -13,14 +13,13 @@ where
         let mut ret = vec![T::default(); n];
         let mut check = vec![false; n];
 
-        let mut stack = vec![];
-        stack.push(root);
+        let mut stack = vec![root];
         ret[root] = T::default();
 
         while let Some(cur) = stack.pop() {
             check[cur] = true;
 
-            for &Edge { from: _, to, cost } in &self.edges[cur] {
+            for &Edge { to, cost, .. } in &self.edges[cur] {
                 if !check[to] {
                     ret[to] = ret[cur] + cost;
                     stack.push(to);
@@ -100,12 +99,7 @@ where
 
                 check[i] = true;
 
-                for &Edge {
-                    from: _,
-                    to,
-                    cost: _,
-                } in &self.edges[i]
-                {
+                for &Edge { to, .. } in &self.edges[i] {
                     if !check[to] {
                         stack.push((to, 0));
                     }

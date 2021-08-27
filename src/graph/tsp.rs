@@ -6,7 +6,7 @@ impl<T: Default + Copy + Ord + Add<Output = T>> Graph<T> {
         let n = self.len();
         let mut dp = vec![vec![None; 1 << n]; n];
 
-        for &Edge { from: _, to, cost } in &self.edges[src] {
+        for &Edge { to, cost, .. } in &self.edges[src] {
             dp[to][1 << to] = match dp[to][1 << to] {
                 None => Some(cost),
                 Some(x) => Some(min(x, cost)),
@@ -19,7 +19,7 @@ impl<T: Default + Copy + Ord + Add<Output = T>> Graph<T> {
                     continue;
                 }
 
-                for &Edge { from: _, to, cost } in &self.edges[i] {
+                for &Edge { to, cost, .. } in &self.edges[i] {
                     if s & (1 << to) != 0 {
                         continue;
                     }

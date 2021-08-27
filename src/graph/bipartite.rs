@@ -16,9 +16,7 @@ impl<T> Graph<T> {
             let mut b = Vec::new();
 
             let res = (|| {
-                let mut stack = Vec::new();
-
-                stack.push(i);
+                let mut stack = vec![i];
                 check[i] = 0;
                 a.push(i);
 
@@ -28,12 +26,7 @@ impl<T> Graph<T> {
                     }
                     visit[cur] = true;
 
-                    for &Edge {
-                        from: _,
-                        to,
-                        cost: _,
-                    } in &self.edges[cur]
-                    {
+                    for &Edge { to, .. } in &self.edges[cur] {
                         if check[to] == check[cur] {
                             return false;
                         }
@@ -51,7 +44,7 @@ impl<T> Graph<T> {
                     }
                 }
 
-                return true;
+                true
             })();
 
             ret.push(if res { Some((a, b)) } else { None });

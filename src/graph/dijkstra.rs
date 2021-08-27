@@ -25,7 +25,7 @@ where
             }
             check[u] = true;
 
-            for &Edge { from: _, to, cost } in &self.edges[u] {
+            for &Edge { to, cost, .. } in &self.edges[u] {
                 if let Some(ref d2) = ret[to] {
                     if *d2 > d + cost {
                         let d = d + cost;

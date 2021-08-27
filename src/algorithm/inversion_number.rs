@@ -21,7 +21,7 @@ pub fn inversion_number<T: Clone + PartialOrd + Copy>(a: &mut [T]) -> u64 {
     let mut ci = 0;
 
     while ai < n {
-        if bi < b.len() && (ci == c.len() || !(b[bi] > c[ci])) {
+        if bi < b.len() && (ci == c.len() || b[bi] <= c[ci]) {
             a[ai] = b[bi];
             bi += 1;
         } else {

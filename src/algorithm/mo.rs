@@ -71,13 +71,11 @@ impl<'a> Mo<'a> {
             }
         });
 
-        let mut q = 0;
         let mut l = left[self.ord[0]];
         let mut r = left[self.ord[0]];
 
-        for _ in 0..self.q {
+        for q in 0..self.q {
             let id = self.ord[q];
-            q += 1;
 
             while l != left[id] || r != right[id] {
                 if l > left[id] {

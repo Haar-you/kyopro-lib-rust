@@ -1,5 +1,5 @@
 pub struct FactorizeSieve {
-    p: Vec<usize>
+    p: Vec<usize>,
 }
 
 impl FactorizeSieve {

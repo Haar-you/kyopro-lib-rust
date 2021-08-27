@@ -1,29 +1,29 @@
 pub use crate::algebra::traits::*;
-use std::{cmp::min, marker::PhantomData};
+use std::{cmp::max, marker::PhantomData};
 
 #[derive(Clone, Default)]
-pub struct Min<T>(PhantomData<T>);
-impl<T> Min<T> {
+pub struct Max<T>(PhantomData<T>);
+impl<T> Max<T> {
     pub fn new() -> Self {
         Self(PhantomData)
     }
 }
 
-impl<T> AlgeStruct for Min<T> {
+impl<T> AlgeStruct for Max<T> {
     type Output = Option<T>;
 }
 
-impl<T: Ord + Copy> BinaryOp for Min<T> {
+impl<T: Ord + Copy> BinaryOp for Max<T> {
     fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output {
         match (a, b) {
             (None, _) => b,
             (_, None) => a,
-            (Some(x), Some(y)) => Some(min(x, y)),
+            (Some(x), Some(y)) => Some(max(x, y)),
         }
     }
 }
 
-impl<T> Identity for Min<T> {
+impl<T> Identity for Max<T> {
     fn id(&self) -> Self::Output {
         None
     }

@@ -19,9 +19,9 @@ where
         let size = n.next_power_of_two() * 2;
         SegmentTree {
             original_size: n,
-            size: size,
+            size,
             data: vec![monoid.id(); size],
-            monoid: monoid,
+            monoid,
         }
     }
 
@@ -152,6 +152,7 @@ mod tests {
     }
 
     use crate::algebra::bitxor::BitXor;
+    use crate::algebra::max::Max;
     use crate::algebra::min::Min;
     use crate::algebra::sum::Sum;
 
@@ -162,5 +163,6 @@ mod tests {
         random_test_helper(10, Sum::<i32>::new(), || rng.gen::<i32>() % 10000);
         random_test_helper(10, BitXor::<u32>::new(), || rng.gen::<u32>() % 10000);
         random_test_helper(10, Min::<i32>::new(), || Some(rng.gen::<i32>() % 10000));
+        random_test_helper(10, Max::<i32>::new(), || Some(rng.gen::<i32>() % 10000));
     }
 }

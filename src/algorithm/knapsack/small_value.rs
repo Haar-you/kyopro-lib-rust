@@ -7,7 +7,7 @@ use std::cmp::min;
 /// Space complexity O(sum(vs))
 pub fn knapsack_small_value(n: usize, cap: usize, ws: &[usize], vs: &[usize]) -> usize {
     let max_v = vs.iter().sum::<usize>();
-    let mut dp = vec![vec![usize::MAX; max_v + 1]; 2];
+    let mut dp = vec![vec![std::usize::MAX; max_v + 1]; 2];
 
     dp[0][0] = 0;
 
@@ -16,7 +16,7 @@ pub fn knapsack_small_value(n: usize, cap: usize, ws: &[usize], vs: &[usize]) ->
         let cur = i & 1;
         for j in 0..=max_v {
             dp[next][j] = min(dp[next][j], dp[cur][j]);
-            if j + vs[i] <= max_v && dp[cur][j] < usize::MAX {
+            if j + vs[i] <= max_v && dp[cur][j] < std::usize::MAX {
                 dp[next][j + vs[i]] = min(dp[next][j + vs[i]], dp[cur][j] + ws[i]);
             }
         }
