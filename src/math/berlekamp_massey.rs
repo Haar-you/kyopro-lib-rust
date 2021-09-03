@@ -1,3 +1,5 @@
+#![allow(clippy::many_single_char_names)]
+
 use std::ops::{Add, AddAssign, Div, Mul, Neg, SubAssign};
 
 pub fn berlekamp_massey<T>(s: Vec<T>) -> Vec<T>

@@ -23,10 +23,7 @@ where
                 for j in 0..n {
                     if dist[i][k].is_some() && dist[k][j].is_some() {
                         let s = dist[i][k].unwrap() + dist[k][j].unwrap();
-                        dist[i][j] = match dist[i][j] {
-                            Some(x) => Some(min(x, s)),
-                            _ => Some(s),
-                        };
+                        dist[i][j] = Some(dist[i][j].map_or(s, |x| min(x, s)));
                     }
                 }
             }

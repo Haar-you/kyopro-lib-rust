@@ -1,3 +1,5 @@
+#![allow(clippy::many_single_char_names)]
+
 pub use crate::ds::traits::{Foldable, RangeUpdatable};
 use std::{
     cmp::{max, min},
@@ -20,11 +22,11 @@ pub struct StarrySkyTree<T> {
 
 impl<T> StarrySkyTree<T>
 where
-    T: From<i32> + Copy,
+    T: Default + Copy,
 {
     pub fn new(n: usize, mode: StarrySkyTreeMode) -> Self {
         let size = n.next_power_of_two() * 2;
-        let zero = T::from(0);
+        let zero = T::default();
         StarrySkyTree {
             size,
             data: vec![zero; size],
@@ -80,17 +82,14 @@ where
                 mode,
             );
 
-            if a.is_none() {
-                return b;
+            match (a, b) {
+                (None, _) => b,
+                (_, None) => a,
+                (Some(a), Some(b)) => Some(match mode {
+                    StarrySkyTreeMode::Max => max(a, b),
+                    StarrySkyTreeMode::Min => min(a, b),
+                }),
             }
-            if b.is_none() {
-                return a;
-            }
-
-            Some(match mode {
-                StarrySkyTreeMode::Max => max(a.unwrap(), b.unwrap()),
-                StarrySkyTreeMode::Min => min(a.unwrap(), b.unwrap()),
-            })
         }
 
         rec(&self.data, 1, 0, self.size / 2, l, r, self.zero, self.mode).unwrap()

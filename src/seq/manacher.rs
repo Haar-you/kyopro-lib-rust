@@ -1,7 +1,6 @@
 pub fn manacher<T: PartialEq>(s: &[T]) -> Vec<usize> {
     let n = s.len();
     let mut ret = vec![0; n];
-
     let mut center = 0;
 
     for cur in 0..n {

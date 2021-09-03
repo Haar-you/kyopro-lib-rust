@@ -1,5 +1,7 @@
+#![allow(clippy::many_single_char_names)]
+
 use crate::graph::template::*;
-use std::ops::Add;
+use std::{cmp::max, ops::Add};
 
 impl<T> Graph<T>
 where
@@ -12,9 +14,7 @@ where
         let n = self.len();
         let mut ret = vec![T::default(); n];
         let mut check = vec![false; n];
-
         let mut stack = vec![root];
-        ret[root] = T::default();
 
         while let Some(cur) = stack.pop() {
             check[cur] = true;
@@ -71,7 +71,7 @@ where
 
         d1.into_iter()
             .zip(d2.into_iter())
-            .map(|(x, y)| std::cmp::max(x, y))
+            .map(|(x, y)| max(x, y))
             .collect()
     }
 

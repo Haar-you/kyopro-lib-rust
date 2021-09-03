@@ -4,7 +4,7 @@ impl<T: FF + From<usize>> FactorialTable<T> {
     pub fn catalan_number(&self, n: usize) -> T {
         match n {
             0 => T::from(1),
-            _ => self.comb(2 * n, n) - self.comb(2 * n, n - 1)
+            _ => self.comb(2 * n, n) - self.comb(2 * n, n - 1),
         }
     }
 }

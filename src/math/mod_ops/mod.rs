@@ -55,11 +55,11 @@ mod tests {
     #[test]
     fn test_mod_sqrt() {
         // https://judge.yosupo.jp/problem/sqrt_mod
-        assert_eq!(mod_sqrt(0, 5).unwrap().pow(2) % 5, 0);
-        assert_eq!(mod_sqrt(1, 5).unwrap().pow(2) % 5, 1);
-        assert_eq!(mod_sqrt(2, 5), None);
-        assert_eq!(mod_sqrt(3, 5), None);
-        assert_eq!(mod_sqrt(4, 5).unwrap().pow(2) % 5, 4);
+        assert_eq!(mod_sqrt(0, 5).map(|x| x.pow(2) % 5), Some(0));
+        assert_eq!(mod_sqrt(1, 5).map(|x| x.pow(2) % 5), Some(1));
+        assert_eq!(mod_sqrt(2, 5).map(|x| x.pow(2) % 5), None);
+        assert_eq!(mod_sqrt(3, 5).map(|x| x.pow(2) % 5), None);
+        assert_eq!(mod_sqrt(4, 5).map(|x| x.pow(2) % 5), Some(4));
 
         let m = 1000000007;
         for x in 0..100 {

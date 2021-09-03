@@ -5,10 +5,9 @@ where
     let mut ret: Vec<(T, usize)> = vec![];
 
     for x in a {
-        if !ret.is_empty() && ret.last().unwrap().0 == x.clone() {
-            ret.last_mut().unwrap().1 += 1;
-        } else {
-            ret.push((x.clone(), 1));
+        match ret.last_mut() {
+            Some((y, c)) if y == x => *c += 1,
+            _ => ret.push((x.clone(), 1)),
         }
     }
 

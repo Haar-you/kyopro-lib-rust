@@ -1,6 +1,6 @@
 use std::ops::{Add, Mul, Sub};
 
-pub fn fast_mobius_superset<T>(f: &mut Vec<T>)
+pub fn fast_mobius_superset<T>(f: &mut [T])
 where
     T: Copy + Sub<Output = T>,
 {
@@ -18,7 +18,7 @@ where
     }
 }
 
-pub fn fast_zeta_superset<T>(f: &mut Vec<T>)
+pub fn fast_zeta_superset<T>(f: &mut [T])
 where
     T: Copy + Add<Output = T>,
 {

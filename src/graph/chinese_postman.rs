@@ -14,23 +14,15 @@ impl<T: Default + Copy + Ord + Add<Output = T>> Graph<T> {
 
         for i in 0..n {
             for &Edge { from, to, cost } in &self.edges[i] {
-                dist[from][to] = match dist[from][to] {
-                    None => Some(cost),
-                    Some(x) => Some(min(x, cost)),
-                };
+                dist[from][to] = Some(dist[from][to].map_or(cost, |x| min(x, cost)));
             }
         }
 
         for k in 0..n {
             for i in 0..n {
                 for j in 0..n {
-                    if let Some(x) = dist[i][k] {
-                        if let Some(y) = dist[k][j] {
-                            dist[i][j] = match dist[i][j] {
-                                None => Some(x + y),
-                                Some(z) => Some(min(z, x + y)),
-                            };
-                        }
+                    if let (Some(x), Some(y)) = (dist[i][k], dist[k][j]) {
+                        dist[i][j] = Some(dist[i][j].map_or(x + y, |z| min(z, x + y)));
                     }
                 }
             }
@@ -57,10 +49,7 @@ impl<T: Default + Copy + Ord + Add<Output = T>> Graph<T> {
 
                     if let Some(d) = dp[i ^ (1 << j) ^ (1 << k)] {
                         let d = d + dist[odd[j]][odd[k]].unwrap();
-                        dp[i] = match dp[i] {
-                            None => Some(d),
-                            Some(x) => Some(min(x, d)),
-                        };
+                        dp[i] = Some(dp[i].map_or(d, |x| min(x, d)));
                     }
                 }
             }

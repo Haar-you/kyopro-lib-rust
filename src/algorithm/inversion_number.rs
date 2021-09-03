@@ -16,11 +16,10 @@ pub fn inversion_number<T: Clone + PartialOrd + Copy>(a: &mut [T]) -> u64 {
     ret += inversion_number(&mut b);
     ret += inversion_number(&mut c);
 
-    let mut ai = 0;
     let mut bi = 0;
     let mut ci = 0;
 
-    while ai < n {
+    for ai in 0..n {
         if bi < b.len() && (ci == c.len() || b[bi] <= c[ci]) {
             a[ai] = b[bi];
             bi += 1;
@@ -29,8 +28,18 @@ pub fn inversion_number<T: Clone + PartialOrd + Copy>(a: &mut [T]) -> u64 {
             a[ai] = c[ci];
             ci += 1;
         }
-        ai += 1;
     }
 
     ret
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        assert_eq!(inversion_number(&mut [3, 5, 2, 1, 4]), 6);
+        assert_eq!(inversion_number(&mut [3, 1, 2]), 2);
+    }
 }

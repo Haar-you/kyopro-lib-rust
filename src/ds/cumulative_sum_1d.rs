@@ -58,7 +58,8 @@ where
     }
 
     pub fn build(self) -> CumulativeSum1D<T, G> {
-        let data = self.data
+        let data = self
+            .data
             .iter()
             .scan(self.group.id(), |st, &x| {
                 *st = self.group.op(*st, x);

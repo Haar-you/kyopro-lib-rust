@@ -14,8 +14,8 @@ impl<T> Compressor<T>
 where
     T: Clone + Ord + Eq,
 {
-    pub fn index(&self, value: T) -> usize {
-        lower_bound(&self.data, &value)
+    pub fn index(&self, value: &T) -> usize {
+        lower_bound(&self.data, value)
     }
 
     pub fn get(&self, i: usize) -> T {
@@ -23,7 +23,7 @@ where
     }
 
     pub fn compress(&self, values: &[T]) -> Vec<usize> {
-        values.iter().map(|x| self.index(x.clone())).collect()
+        values.iter().map(|x| self.index(x)).collect()
     }
 
     pub fn decompress(&self, indices: &[usize]) -> Vec<T> {

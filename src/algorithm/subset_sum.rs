@@ -16,11 +16,13 @@ where
     dp[0][0] = T::from(1);
 
     for i in 0..n {
+        let cur = i & 1;
+        let next = (i + 1) & 1;
         for j in 0..=k {
             if j >= a[i] {
-                dp[(i + 1) & 1][j] = dp[i & 1][j - a[i]] + dp[i & 1][j];
+                dp[next][j] = dp[cur][j - a[i]] + dp[cur][j];
             } else {
-                dp[(i + 1) & 1][j] = dp[i & 1][j];
+                dp[next][j] = dp[cur][j];
             }
         }
     }

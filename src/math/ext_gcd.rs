@@ -1,3 +1,5 @@
+#![allow(clippy::many_single_char_names)]
+
 pub fn ext_gcd(a: u64, b: u64) -> (i64, i64, i64) {
     if b == 0 {
         return (a as i64, 1, 0);
