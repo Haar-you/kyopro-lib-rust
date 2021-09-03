@@ -1,4 +1,7 @@
-use crate::math::modint::FF;
+pub mod bell;
+pub mod catalan;
+
+use crate::math::ff_traits::FF;
 
 #[derive(Clone, Debug)]
 pub struct FactorialTable<T> {

@@ -1,11 +1,10 @@
-use crate::math::{factorial::FactorialTable, modint::FF};
+use crate::math::{factorial::FactorialTable, ff_traits::FF};
 
 impl<T: FF + From<usize>> FactorialTable<T> {
     pub fn catalan_number(&self, n: usize) -> T {
-        if n == 0 {
-            T::from(1)
-        } else {
-            self.comb(2 * n, n) - self.comb(2 * n, n - 1)
+        match n {
+            0 => T::from(1),
+            _ => self.comb(2 * n, n) - self.comb(2 * n, n - 1)
         }
     }
 }
