@@ -14,3 +14,5 @@ pub mod rollbackable_vector;
 pub mod range_search_tree;
 
 pub mod swag;
+
+pub mod sparse_table;
