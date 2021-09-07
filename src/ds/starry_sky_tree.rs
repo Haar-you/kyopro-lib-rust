@@ -1,9 +1,9 @@
 #![allow(clippy::many_single_char_names)]
 
-pub use crate::ds::traits::{Foldable, RangeUpdatable};
+pub use crate::ds::traits::{Foldable, Updatable};
 use std::{
     cmp::{max, min},
-    ops::{Add, AddAssign, SubAssign},
+    ops::{Add, AddAssign, Range, SubAssign},
 };
 
 #[derive(Copy, Clone)]
@@ -36,10 +36,12 @@ where
     }
 }
 
-impl<T> Foldable<T> for StarrySkyTree<T>
+impl<T> Foldable<usize> for StarrySkyTree<T>
 where
     T: Add<Output = T> + Ord + Copy,
 {
+    type Value = T;
+
     fn fold(&self, l: usize, r: usize) -> T {
         fn rec<T>(
             data: &[T],
@@ -96,11 +98,13 @@ where
     }
 }
 
-impl<T> RangeUpdatable<T> for StarrySkyTree<T>
+impl<T> Updatable<Range<usize>> for StarrySkyTree<T>
 where
     T: Add<Output = T> + AddAssign + SubAssign + Ord + Copy,
 {
-    fn range_update(&mut self, l: usize, r: usize, value: T) {
+    type Value = T;
+
+    fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
         let hsize = self.size / 2;
         let mut ll = l + self.size / 2;
         let mut rr = r + self.size / 2;
@@ -165,7 +169,7 @@ mod tests {
             if ty == 0 {
                 let x = rng.gen::<i32>() % 1000;
 
-                s.range_update(l, r, x);
+                s.update(l..r, x);
                 for i in l..r {
                     other[i] += x;
                 }
@@ -193,7 +197,7 @@ mod tests {
             if ty == 0 {
                 let x = rng.gen::<i32>() % 1000;
 
-                s.range_update(l, r, x);
+                s.update(l..r, x);
                 for i in l..r {
                     other[i] += x;
                 }

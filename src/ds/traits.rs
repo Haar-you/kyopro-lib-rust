@@ -1,17 +1,14 @@
-pub trait Foldable<T> {
-    fn fold(&self, l: usize, r: usize) -> T;
+pub trait Foldable<Idx> {
+    type Value;
+    fn fold(&self, l: Idx, r: Idx) -> Self::Value;
 }
 
-/// 列上の一点に値を代入
-pub trait Assignable<T> {
-    fn assign(&mut self, i: usize, value: T);
+pub trait Assignable<Idx> {
+    type Value;
+    fn assign(&mut self, i: Idx, value: Self::Value);
 }
 
-/// 列上の一点に演算を適用した値を代入
-pub trait Updatable<T>: Assignable<T> {
-    fn update(&mut self, i: usize, value: T);
-}
-
-pub trait RangeUpdatable<T> {
-    fn range_update(&mut self, l: usize, r: usize, value: T);
+pub trait Updatable<Idx> {
+    type Value;
+    fn update(&mut self, i: Idx, value: Self::Value);
 }

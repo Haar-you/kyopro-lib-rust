@@ -30,12 +30,14 @@ where
     }
 }
 
-impl<T, M> Foldable<T> for SegmentTree<T, M>
+impl<T, M> Foldable<usize> for SegmentTree<T, M>
 where
     T: Clone,
     M: Monoid<Output = T>,
 {
-    fn fold(&self, l: usize, r: usize) -> T {
+    type Value = T;
+
+    fn fold(&self, l: usize, r: usize) -> Self::Value {
         let mut ret_l = self.monoid.id();
         let mut ret_r = self.monoid.id();
 
@@ -59,11 +61,13 @@ where
     }
 }
 
-impl<T, M> Assignable<T> for SegmentTree<T, M>
+impl<T, M> Assignable<usize> for SegmentTree<T, M>
 where
     T: Clone,
     M: Monoid<Output = T>,
 {
+    type Value = T;
+
     fn assign(&mut self, i: usize, value: T) {
         let mut i = i + self.size / 2;
         self.data[i] = value;
@@ -77,11 +81,13 @@ where
     }
 }
 
-impl<T, M> Updatable<T> for SegmentTree<T, M>
+impl<T, M> Updatable<usize> for SegmentTree<T, M>
 where
     T: Clone,
     M: Monoid<Output = T>,
 {
+    type Value = T;
+
     fn update(&mut self, i: usize, value: T) {
         self.assign(
             i,

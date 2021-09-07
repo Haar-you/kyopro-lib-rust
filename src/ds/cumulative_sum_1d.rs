@@ -20,13 +20,15 @@ impl<T, G> CumulativeSum1D<T, G> {
     }
 }
 
-impl<T, G> Foldable<T> for CumulativeSum1D<T, G>
+impl<T, G> Foldable<usize> for CumulativeSum1D<T, G>
 where
     T: Copy,
     G: Group<Output = T>,
 {
+    type Value = T;
+
     /// Time complexity O(1)
-    fn fold(&self, l: usize, r: usize) -> T {
+    fn fold(&self, l: usize, r: usize) -> Self::Value {
         self.group
             .op(self.data[r].clone(), self.group.inv(self.data[l].clone()))
     }

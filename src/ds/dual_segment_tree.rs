@@ -1,8 +1,9 @@
 pub use crate::algebra::traits::Monoid;
-pub use crate::ds::traits::RangeUpdatable;
+pub use crate::ds::traits::Updatable;
+use std::ops::Range;
 
 pub struct DualSegmentTree<T, M> {
-    _original_size: usize,
+    original_size: usize,
     size: usize,
     data: Vec<T>,
     monoid: M,
@@ -16,7 +17,7 @@ where
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
         DualSegmentTree {
-            _original_size: n,
+            original_size: n,
             size,
             data: vec![monoid.id(); size],
             monoid,
@@ -62,14 +63,24 @@ where
             self.data[i + self.size / 2] = e.clone();
         }
     }
+
+    pub fn to_vec(&mut self) -> Vec<T> {
+        for i in 1..self.size {
+            self.propagate(i);
+        }
+
+        self.data[self.size / 2..self.size / 2 + self.original_size].to_vec()
+    }
 }
 
-impl<T, M> RangeUpdatable<T> for DualSegmentTree<T, M>
+impl<T, M> Updatable<Range<usize>> for DualSegmentTree<T, M>
 where
     T: Clone,
     M: Monoid<Output = T>,
 {
-    fn range_update(&mut self, l: usize, r: usize, value: T) {
+    type Value = T;
+
+    fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: Self::Value) {
         let mut l = l + self.size / 2;
         let mut r = r + self.size / 2;
 
@@ -87,6 +98,35 @@ where
             }
             l >>= 1;
             r >>= 1;
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::algebra::sum::*;
+    use rand::Rng;
+
+    #[test]
+    fn test() {
+        let n = 100;
+        let m = Sum::<u32>::new();
+
+        let mut a = vec![m.id(); n];
+        let mut seg = DualSegmentTree::new(n, m.clone());
+
+        let mut rng = rand::thread_rng();
+
+        for _ in 0..100 {
+            let l = rng.gen::<usize>() % n;
+            let r = l + rng.gen::<usize>() % (n - l) + 1;
+            let x = rng.gen::<u32>() % 10000;
+
+            seg.update(l..r, x);
+            a[l..r].iter_mut().for_each(|e| *e += x);
+
+            assert_eq!(a, seg.to_vec());
         }
     }
 }
