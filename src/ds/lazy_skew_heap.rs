@@ -10,7 +10,12 @@ struct Node<T> {
 
 impl<T: Ord + Default + Copy + AddAssign> Node<T> {
     pub fn new(value: T) -> Self {
-        Self { value, lazy: T::default(), left: None, right: None }
+        Self {
+            value,
+            lazy: T::default(),
+            left: None,
+            right: None,
+        }
     }
 
     fn propagate(&mut self) {
@@ -35,7 +40,7 @@ impl<T: Ord + Default + Copy + AddAssign> Node<T> {
 
             match self.right.as_mut() {
                 Some(right) => right.meld(Some(other)),
-                None => self.right = Some(other)
+                None => self.right = Some(other),
             }
 
             swap(&mut self.left, &mut self.right);
@@ -46,19 +51,22 @@ impl<T: Ord + Default + Copy + AddAssign> Node<T> {
 #[derive(Debug, Clone)]
 pub struct LazySkewHeap<T> {
     root: Option<Box<Node<T>>>,
-    size: usize
+    size: usize,
 }
 
 impl<T: Ord + Default + Copy + AddAssign> LazySkewHeap<T> {
     pub fn new() -> Self {
-        Self { root: None, size: 0 }
+        Self {
+            root: None,
+            size: 0,
+        }
     }
 
     pub fn meld(&mut self, other: LazySkewHeap<T>) {
         self.size += other.size;
         match self.root.as_mut() {
             None => self.root = other.root,
-            Some(root) => root.meld(other.root)
+            Some(root) => root.meld(other.root),
         }
     }
 
@@ -67,7 +75,7 @@ impl<T: Ord + Default + Copy + AddAssign> LazySkewHeap<T> {
         let t = Some(Box::new(Node::new(value)));
         match self.root.as_mut() {
             None => self.root = t,
-            Some(root) => root.meld(t)
+            Some(root) => root.meld(t),
         }
     }
 
@@ -81,7 +89,12 @@ impl<T: Ord + Default + Copy + AddAssign> LazySkewHeap<T> {
             Some(root) => {
                 self.size -= 1;
 
-                let Node { value: x, left, right, .. } = *root;
+                let Node {
+                    value: x,
+                    left,
+                    right,
+                    ..
+                } = *root;
                 match left {
                     None => self.root = right,
                     Some(mut left) => {
@@ -111,12 +124,11 @@ impl<T: Ord + Default + Copy + AddAssign> LazySkewHeap<T> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::collections::BinaryHeap;
     use rand::Rng;
+    use std::collections::BinaryHeap;
 
     #[test]
     fn test() {
