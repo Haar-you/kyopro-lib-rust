@@ -16,3 +16,6 @@ pub mod range_search_tree;
 pub mod swag;
 
 pub mod sparse_table;
+
+pub mod skew_heap;
+pub mod lazy_skew_heap;
