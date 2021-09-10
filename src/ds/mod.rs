@@ -19,3 +19,5 @@ pub mod sparse_table;
 
 pub mod lazy_skew_heap;
 pub mod skew_heap;
+
+pub mod persistent_stack;
