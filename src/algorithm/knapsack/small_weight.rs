@@ -1,4 +1,5 @@
-use std::{cmp::max, ops::Add};
+use crate::chmax;
+use std::ops::Add;
 
 /// 容量が小さいナップサック問題
 ///
@@ -15,9 +16,9 @@ where
         let next = (i + 1) & 1;
         let cur = i & 1;
         for j in 0..=cap {
-            dp[next][j] = max(dp[next][j], dp[cur][j]);
+            chmax!(dp[next][j], dp[cur][j]);
             if j + ws[i] <= cap {
-                dp[next][j + ws[i]] = max(dp[next][j + ws[i]], dp[cur][j] + vs[i]);
+                chmax!(dp[next][j + ws[i]], dp[cur][j] + vs[i]);
             }
         }
     }

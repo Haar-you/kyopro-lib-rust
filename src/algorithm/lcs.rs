@@ -1,4 +1,4 @@
-use std::cmp::max;
+use crate::chmax;
 
 pub fn lcs<T: Copy + PartialEq>(a: &[T], b: &[T]) -> Vec<T> {
     let n = a.len();
@@ -9,10 +9,10 @@ pub fn lcs<T: Copy + PartialEq>(a: &[T], b: &[T]) -> Vec<T> {
     for i in 1..=n {
         for j in 1..=m {
             if a[i - 1] == b[j - 1] {
-                dp[i][j] = max(dp[i][j], dp[i - 1][j - 1] + 1);
+                chmax!(dp[i][j], dp[i - 1][j - 1] + 1);
             } else {
-                dp[i][j] = max(dp[i][j], dp[i - 1][j]);
-                dp[i][j] = max(dp[i][j], dp[i][j - 1]);
+                chmax!(dp[i][j], dp[i - 1][j]);
+                chmax!(dp[i][j], dp[i][j - 1]);
             }
         }
     }

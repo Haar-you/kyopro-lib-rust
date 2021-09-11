@@ -1,5 +1,6 @@
+use crate::chmax;
 use std::{
-    cmp::{max, min},
+    cmp::min,
     ops::{Add, Mul},
 };
 
@@ -22,7 +23,7 @@ where
 
             for j in (0..=cap).rev() {
                 if j >= k * ws[i] {
-                    dp[j] = max(dp[j], dp[j - k * ws[i]] + T::from(k) * vs[i]);
+                    chmax!(dp[j], dp[j - k * ws[i]] + T::from(k) * vs[i]);
                 }
             }
 

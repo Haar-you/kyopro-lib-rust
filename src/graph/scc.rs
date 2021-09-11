@@ -1,5 +1,4 @@
-use crate::graph::template::*;
-use std::cmp::min;
+use crate::{chmin, graph::template::*};
 
 struct SccRecParams<'a> {
     ret: &'a mut Vec<usize>,
@@ -56,9 +55,9 @@ impl<T> Graph<T> {
         for &Edge { to, .. } in &self.edges[cur] {
             if params.ord[to] == -1 {
                 self.scc_(to, params);
-                params.low[cur] = min(params.low[cur], params.low[to]);
+                chmin!(params.low[cur], params.low[to]);
             } else if params.check[to] {
-                params.low[cur] = min(params.low[cur], params.low[to]);
+                chmin!(params.low[cur], params.low[to]);
             }
         }
 

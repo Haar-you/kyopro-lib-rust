@@ -1,13 +1,13 @@
-use std::cmp::min;
+use crate::chmin;
 
 /// 価値の総和が小さいナップサック問題
 ///
 /// Time complexity O(n sum(vs))
 ///
 /// Space complexity O(sum(vs))
-pub fn knapsack_small_value(n: usize, cap: usize, ws: &[usize], vs: &[usize]) -> usize {
+pub fn knapsack_small_value(n: usize, cap: u64, ws: &[u64], vs: &[usize]) -> usize {
     let max_v = vs.iter().sum::<usize>();
-    let mut dp = vec![vec![std::usize::MAX; max_v + 1]; 2];
+    let mut dp = vec![vec![std::u64::MAX; max_v + 1]; 2];
 
     dp[0][0] = 0;
 
@@ -15,9 +15,9 @@ pub fn knapsack_small_value(n: usize, cap: usize, ws: &[usize], vs: &[usize]) ->
         let next = (i + 1) & 1;
         let cur = i & 1;
         for j in 0..=max_v {
-            dp[next][j] = min(dp[next][j], dp[cur][j]);
-            if j + vs[i] <= max_v && dp[cur][j] < std::usize::MAX {
-                dp[next][j + vs[i]] = min(dp[next][j + vs[i]], dp[cur][j] + ws[i]);
+            chmin!(dp[next][j], dp[cur][j]);
+            if j + vs[i] <= max_v && dp[cur][j] < std::u64::MAX {
+                chmin!(dp[next][j + vs[i]], dp[cur][j] + ws[i]);
             }
         }
     }

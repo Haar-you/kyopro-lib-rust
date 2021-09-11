@@ -1,7 +1,5 @@
-use std::{
-    cmp::{max, Ordering},
-    ops::Mul,
-};
+use crate::chmax;
+use std::{cmp::Ordering, ops::Mul};
 
 /// ヒストグラム中の最大面積長方形の面積を計算する。
 ///
@@ -25,7 +23,7 @@ where
                         if y3 <= y1 {
                             break;
                         }
-                        ret = max(ret, y3 * T::from(i - k));
+                        chmax!(ret, y3 * T::from(i - k));
                         j = k;
                         st.pop();
                     }
@@ -39,7 +37,7 @@ where
     }
 
     while let Some((y, i)) = st.pop() {
-        ret = max(ret, y * T::from(h.len() - i));
+        chmax!(ret, y * T::from(h.len() - i));
     }
 
     ret

@@ -1,5 +1,7 @@
-use crate::utils::merge::inplace_merge;
-use std::{cmp::max, ops::Add};
+#![allow(clippy::many_single_char_names)]
+
+use crate::{chmax, utils::merge::inplace_merge};
+use std::ops::Add;
 
 /// 要素数が小さいナップサック問題
 ///
@@ -16,11 +18,8 @@ where
     let zero_w = W::default();
     let zero_v = V::default();
 
-    let mut a: Vec<(W, V)> = Vec::new();
-    let mut b: Vec<(W, V)> = Vec::new();
-
-    a.push((zero_w, zero_v));
-    b.push((zero_w, zero_v));
+    let mut a: Vec<(W, V)> = vec![(zero_w, zero_v)];
+    let mut b: Vec<(W, V)> = vec![(zero_w, zero_v)];
 
     for i in 0..p {
         let k = a.len();
@@ -45,28 +44,25 @@ where
     }
 
     for i in 1..a.len() {
-        a[i].1 = max(a[i].1, a[i - 1].1);
+        chmax!(a[i].1, a[i - 1].1);
     }
 
     for i in 1..b.len() {
-        b[i].1 = max(b[i].1, b[i - 1].1);
+        chmax!(b[i].1, b[i - 1].1);
     }
-
-    let mut ret = zero_v;
 
     b.reverse();
 
-    let mut i = 0;
+    let mut ret = zero_v;
     let mut j = 0;
-    while i < a.len() {
+    for i in 0..a.len() {
         while j < b.len() && a[i].0 + b[j].0 > cap {
             j += 1;
         }
         if j >= b.len() {
             break;
         }
-        ret = max(ret, a[i].1 + b[j].1);
-        i += 1;
+        chmax!(ret, a[i].1 + b[j].1);
     }
 
     ret
