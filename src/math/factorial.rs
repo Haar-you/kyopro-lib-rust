@@ -1,9 +1,10 @@
 pub mod bell;
+pub mod bernoulli;
 pub mod catalan;
 
 use crate::math::ff_traits::FF;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct FactorialTable<T> {
     factorial: Vec<T>,
     invs: Vec<T>,
