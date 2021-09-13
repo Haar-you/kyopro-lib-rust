@@ -19,13 +19,13 @@ pub fn inversion_number<T: Clone + PartialOrd + Copy>(a: &mut [T]) -> u64 {
     let mut bi = 0;
     let mut ci = 0;
 
-    for ai in 0..n {
+    for ai in a.iter_mut() {
         if bi < b.len() && (ci == c.len() || b[bi] <= c[ci]) {
-            a[ai] = b[bi];
+            *ai = b[bi];
             bi += 1;
         } else {
             ret += (n / 2 - bi) as u64;
-            a[ai] = c[ci];
+            *ai = c[ci];
             ci += 1;
         }
     }
