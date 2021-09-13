@@ -19,14 +19,10 @@ pub struct PersistentArray<T> {
 }
 
 fn get_size<T>(node: Option<Rc<Node<T>>>) -> usize {
-    if let Some(node) = node {
-        return match *node {
-            Node::<T>::Terminal { .. } => 1,
-            Node::<T>::Internal { size, .. } => size,
-        };
-    }
-
-    0
+    node.map_or(0, |node| match *node {
+        Node::<T>::Terminal { .. } => 1,
+        Node::<T>::Internal { size, .. } => size,
+    })
 }
 
 impl<T> PersistentArray<T>
@@ -68,21 +64,17 @@ where
     }
 
     fn _traverse(node: Option<Rc<Node<T>>>, ret: &mut Vec<T>) {
-        if node.is_none() {
-            return;
-        }
-
-        let node = node.unwrap();
-
-        match *node {
-            Node::<T>::Terminal { ref value } => {
-                ret.push(value.clone());
-            }
-            Node::<T>::Internal {
-                ref l_ch, ref r_ch, ..
-            } => {
-                Self::_traverse(l_ch.clone(), ret);
-                Self::_traverse(r_ch.clone(), ret);
+        if let Some(node) = node {
+            match *node {
+                Node::<T>::Terminal { ref value } => {
+                    ret.push(value.clone());
+                }
+                Node::<T>::Internal {
+                    ref l_ch, ref r_ch, ..
+                } => {
+                    Self::_traverse(l_ch.clone(), ret);
+                    Self::_traverse(r_ch.clone(), ret);
+                }
             }
         }
     }
