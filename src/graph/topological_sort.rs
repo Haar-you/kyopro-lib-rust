@@ -1,41 +1,39 @@
 use crate::graph::template::*;
 use std::collections::VecDeque;
 
-impl<T> Graph<T> {
-    pub fn topological_sort(&self) -> Option<Vec<usize>> {
-        let n = self.len();
-        let mut indeg = vec![0; n];
+pub fn topological_sort<T>(g: &Graph<T>) -> Option<Vec<usize>> {
+    let n = g.len();
+    let mut indeg = vec![0; n];
 
-        for i in 0..n {
-            for &Edge { to, .. } in &self.edges[i] {
-                indeg[to] += 1;
+    for i in 0..n {
+        for &Edge { to, .. } in &g.edges[i] {
+            indeg[to] += 1;
+        }
+    }
+
+    let mut q = VecDeque::new();
+
+    for i in 0..n {
+        if indeg[i] == 0 {
+            q.push_back(i);
+        }
+    }
+
+    let mut ret = vec![];
+
+    while let Some(cur) = q.pop_front() {
+        ret.push(cur);
+        for &Edge { to, .. } in &g.edges[cur] {
+            indeg[to] -= 1;
+            if indeg[to] == 0 {
+                q.push_back(to);
             }
         }
+    }
 
-        let mut q = VecDeque::new();
-
-        for i in 0..n {
-            if indeg[i] == 0 {
-                q.push_back(i);
-            }
-        }
-
-        let mut ret = vec![];
-
-        while let Some(cur) = q.pop_front() {
-            ret.push(cur);
-            for &Edge { to, .. } in &self.edges[cur] {
-                indeg[to] -= 1;
-                if indeg[to] == 0 {
-                    q.push_back(to);
-                }
-            }
-        }
-
-        if ret.len() == n {
-            Some(ret)
-        } else {
-            None
-        }
+    if ret.len() == n {
+        Some(ret)
+    } else {
+        None
     }
 }

@@ -1,32 +1,27 @@
 use crate::{ds::unionfind::UnionFind, graph::template::*};
 
-impl<T> Graph<T>
-where
-    T: Ord + Copy,
-{
-    pub fn kruskal(&self) -> Vec<(usize, usize, T)> {
-        let n = self.len();
-        let mut edges = vec![];
-        for i in 0..n {
-            for &Edge { from, to, cost } in &self.edges[i] {
-                edges.push((from, to, cost));
-            }
+pub fn kruskal<T: Copy + Ord>(g: &Graph<T>) -> Vec<(usize, usize, T)> {
+    let n = g.len();
+    let mut edges = vec![];
+    for i in 0..n {
+        for &Edge { from, to, cost } in &g.edges[i] {
+            edges.push((from, to, cost));
         }
-
-        edges.sort_by(|a, b| a.2.cmp(&b.2));
-
-        let mut uf = UnionFind::new(n);
-        let mut ret = vec![];
-
-        for (u, v, c) in edges {
-            if !uf.is_same(u, v) {
-                uf.merge(u, v);
-                ret.push((u, v, c));
-            }
-        }
-
-        ret
     }
+
+    edges.sort_by(|a, b| a.2.cmp(&b.2));
+
+    let mut uf = UnionFind::new(n);
+    let mut ret = vec![];
+
+    for (u, v, c) in edges {
+        if !uf.is_same(u, v) {
+            uf.merge(u, v);
+            ret.push((u, v, c));
+        }
+    }
+
+    ret
 }
 
 #[cfg(test)]
@@ -50,7 +45,7 @@ mod tests {
             ],
         );
 
-        let ans = g.kruskal().iter().map(|(_, _, x)| x).sum::<i32>();
+        let ans = kruskal(&g).iter().map(|(_, _, x)| x).sum::<i32>();
 
         assert_eq!(ans, 5);
     }
