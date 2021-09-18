@@ -91,7 +91,7 @@ impl RangeSearchTreeBuilder {
         }
 
         for i in (1..size / 2).rev() {
-            data[i] = merge(&data[i << 1 | 0], &data[i << 1 | 1]);
+            data[i] = merge(&data[i << 1], &data[i << 1 | 1]);
         }
 
         RangeSearchTree { size, cxs, data }

@@ -1,3 +1,5 @@
+#![allow(clippy::suspicious_arithmetic_impl)]
+
 pub use crate::{
     math::ff_traits::{Frac, Inv, Pow, FF},
     misc::generics_int::GenericsInt,

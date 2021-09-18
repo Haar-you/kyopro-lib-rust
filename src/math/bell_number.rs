@@ -1,3 +1,5 @@
+#![allow(clippy::needless_range_loop)]
+
 use crate::math::ff_traits::FF;
 
 pub fn bell_number_table<T: FF + From<usize>>(n: usize) -> Vec<Vec<T>> {

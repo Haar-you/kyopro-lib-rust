@@ -63,16 +63,7 @@ where
                 return Some(value + data[i]);
             }
 
-            let a = rec(
-                data,
-                i << 1 | 0,
-                l,
-                (l + r) / 2,
-                s,
-                t,
-                value + data[i],
-                mode,
-            );
+            let a = rec(data, i << 1, l, (l + r) / 2, s, t, value + data[i], mode);
             let b = rec(
                 data,
                 i << 1 | 1,
@@ -130,11 +121,11 @@ where
             while i >= 1 {
                 if i < self.size / 2 {
                     let d = match self.mode {
-                        StarrySkyTreeMode::Max => max(self.data[i << 1 | 0], self.data[i << 1 | 1]),
-                        StarrySkyTreeMode::Min => min(self.data[i << 1 | 0], self.data[i << 1 | 1]),
+                        StarrySkyTreeMode::Max => max(self.data[i << 1], self.data[i << 1 | 1]),
+                        StarrySkyTreeMode::Min => min(self.data[i << 1], self.data[i << 1 | 1]),
                     };
 
-                    self.data[i << 1 | 0] -= d;
+                    self.data[i << 1] -= d;
                     self.data[i << 1 | 1] -= d;
                     self.data[i] += d;
                 }

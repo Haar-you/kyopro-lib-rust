@@ -1,3 +1,5 @@
+#![allow(clippy::needless_range_loop)]
+
 use crate::graph::template::*;
 use std::{cmp::min, ops::Add};
 

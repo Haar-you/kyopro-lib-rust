@@ -1,3 +1,5 @@
+#![allow(clippy::wrong_self_convention)]
+
 pub use crate::algebra::traits::Monoid;
 pub use crate::ds::traits::Updatable;
 use std::ops::Range;
@@ -24,15 +26,11 @@ where
         }
     }
 
-    pub fn len(&self) -> usize {
-        self.size / 2
-    }
-
     fn propagate(&mut self, i: usize) {
         if i < self.size / 2 {
-            self.data[i << 1 | 0] = self
+            self.data[i << 1] = self
                 .monoid
-                .op(self.data[i].clone(), self.data[i << 1 | 0].clone());
+                .op(self.data[i].clone(), self.data[i << 1].clone());
             self.data[i << 1 | 1] = self
                 .monoid
                 .op(self.data[i].clone(), self.data[i << 1 | 1].clone());

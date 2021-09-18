@@ -32,7 +32,7 @@ impl<T: Ord> Node<T> {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct SkewHeap<T> {
     root: Option<Box<Node<T>>>,
     size: usize,

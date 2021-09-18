@@ -13,8 +13,8 @@ pub fn topological_sort<T>(g: &Graph<T>) -> Option<Vec<usize>> {
 
     let mut q = VecDeque::new();
 
-    for i in 0..n {
-        if indeg[i] == 0 {
+    for (i, &x) in indeg.iter().enumerate() {
+        if x == 0 {
             q.push_back(i);
         }
     }

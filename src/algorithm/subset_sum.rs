@@ -15,12 +15,12 @@ where
 
     dp[0][0] = T::from(1);
 
-    for i in 0..n {
+    for (i, &x) in a.iter().enumerate() {
         let cur = i & 1;
         let next = (i + 1) & 1;
         for j in 0..=k {
-            if j >= a[i] {
-                dp[next][j] = dp[cur][j - a[i]] + dp[cur][j];
+            if j >= x {
+                dp[next][j] = dp[cur][j - x] + dp[cur][j];
             } else {
                 dp[next][j] = dp[cur][j];
             }

@@ -55,14 +55,15 @@ where
 
     let mut ret = zero_v;
     let mut j = 0;
-    for i in 0..a.len() {
-        while j < b.len() && a[i].0 + b[j].0 > cap {
+
+    for (w, v) in a {
+        while j < b.len() && w + b[j].0 > cap {
             j += 1;
         }
         if j >= b.len() {
             break;
         }
-        chmax!(ret, a[i].1 + b[j].1);
+        chmax!(ret, v + b[j].1);
     }
 
     ret

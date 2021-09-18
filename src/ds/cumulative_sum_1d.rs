@@ -13,13 +13,6 @@ pub struct CumulativeSum1DBuilder<T, G> {
     group: G,
 }
 
-impl<T, G> CumulativeSum1D<T, G> {
-    /// Time complexity O(1)
-    pub fn len(&self) -> usize {
-        self.data.len()
-    }
-}
-
 impl<T, G> Foldable<usize> for CumulativeSum1D<T, G>
 where
     T: Copy,

@@ -48,7 +48,7 @@ impl<T: Ord + Default + Copy + AddAssign> Node<T> {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct LazySkewHeap<T> {
     root: Option<Box<Node<T>>>,
     size: usize,

@@ -24,10 +24,6 @@ where
             monoid,
         }
     }
-
-    pub fn len(&self) -> usize {
-        self.size / 2
-    }
 }
 
 impl<T, M> Foldable<usize> for SegmentTree<T, M>
@@ -76,7 +72,7 @@ where
             i >>= 1;
             self.data[i] = self
                 .monoid
-                .op(self.data[i << 1 | 0].clone(), self.data[i << 1 | 1].clone());
+                .op(self.data[i << 1].clone(), self.data[i << 1 | 1].clone());
         }
     }
 }

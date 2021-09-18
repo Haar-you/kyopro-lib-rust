@@ -35,8 +35,8 @@ pub fn sliding_minimum<T: Ord + Copy>(a: &[T], k: usize) -> Vec<T> {
 }
 
 pub fn sliding_maximum<T: Ord + Copy>(a: &[T], k: usize) -> Vec<T> {
-    let s = a.iter().map(|&x| Reverse(x)).collect::<Vec<_>>();
-    sliding_minimum(&s, k).into_iter().map(|x| x.0).collect()
+    let s = a.iter().map(Reverse).collect::<Vec<_>>();
+    sliding_minimum(&s, k).into_iter().map(|x| *x.0).collect()
 }
 
 #[cfg(test)]
