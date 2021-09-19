@@ -1,15 +1,25 @@
 #![allow(clippy::many_single_char_names)]
 
 pub use crate::ds::traits::{Foldable, Updatable};
+use crate::rec;
 use std::{
     cmp::{max, min},
     ops::{Add, AddAssign, Range, SubAssign},
 };
 
 #[derive(Copy, Clone)]
-pub enum StarrySkyTreeMode {
+pub enum Mode {
     Max,
     Min,
+}
+
+impl Mode {
+    fn op<T: Ord + Copy>(self, a: T, b: T) -> T {
+        match self {
+            Mode::Max => max(a, b),
+            Mode::Min => min(a, b),
+        }
+    }
 }
 
 /// 区間加算・区間Max(Min)を処理できるデータ構造
@@ -17,14 +27,14 @@ pub struct StarrySkyTree<T> {
     size: usize,
     data: Vec<T>,
     zero: T,
-    mode: StarrySkyTreeMode,
+    mode: Mode,
 }
 
 impl<T> StarrySkyTree<T>
 where
     T: Default + Copy,
 {
-    pub fn new(n: usize, mode: StarrySkyTreeMode) -> Self {
+    pub fn new(n: usize, mode: Mode) -> Self {
         let size = n.next_power_of_two() * 2;
         let zero = T::default();
         StarrySkyTree {
@@ -43,49 +53,30 @@ where
     type Value = T;
 
     fn fold(&self, l: usize, r: usize) -> T {
-        fn rec<T>(
-            data: &[T],
-            i: usize,
-            l: usize,
-            r: usize,
-            s: usize,
-            t: usize,
-            value: T,
-            mode: StarrySkyTreeMode,
-        ) -> Option<T>
-        where
-            T: Add<Output = T> + Ord + Copy,
-        {
-            if r <= s || t <= l {
-                return None;
-            }
-            if s <= l && r <= t {
-                return Some(value + data[i]);
-            }
+        let s = l;
+        let t = r;
 
-            let a = rec(data, i << 1, l, (l + r) / 2, s, t, value + data[i], mode);
-            let b = rec(
-                data,
-                i << 1 | 1,
-                (l + r) / 2,
-                r,
-                s,
-                t,
-                value + data[i],
-                mode,
-            );
+        let rec = rec!(
+            |rec, (i, l, r, value): (usize, usize, usize, T)| -> Option<T> {
+                if r <= s || t <= l {
+                    return None;
+                }
+                if s <= l && r <= t {
+                    return Some(value + self.data[i]);
+                }
 
-            match (a, b) {
-                (None, _) => b,
-                (_, None) => a,
-                (Some(a), Some(b)) => Some(match mode {
-                    StarrySkyTreeMode::Max => max(a, b),
-                    StarrySkyTreeMode::Min => min(a, b),
-                }),
+                let a = rec((i << 1, l, (l + r) / 2, value + self.data[i]));
+                let b = rec((i << 1 | 1, (l + r) / 2, r, value + self.data[i]));
+
+                match (a, b) {
+                    (None, _) => b,
+                    (_, None) => a,
+                    (Some(a), Some(b)) => Some(self.mode.op(a, b)),
+                }
             }
-        }
+        );
 
-        rec(&self.data, 1, 0, self.size / 2, l, r, self.zero, self.mode).unwrap()
+        rec((1, 0, self.size / 2, self.zero)).unwrap()
     }
 }
 
@@ -120,10 +111,7 @@ where
 
             while i >= 1 {
                 if i < self.size / 2 {
-                    let d = match self.mode {
-                        StarrySkyTreeMode::Max => max(self.data[i << 1], self.data[i << 1 | 1]),
-                        StarrySkyTreeMode::Min => min(self.data[i << 1], self.data[i << 1 | 1]),
-                    };
+                    let d = self.mode.op(self.data[i << 1], self.data[i << 1 | 1]);
 
                     self.data[i << 1] -= d;
                     self.data[i << 1 | 1] -= d;
@@ -150,7 +138,7 @@ mod tests {
 
         let size = 100;
         let mut other = vec![0; size];
-        let mut s = StarrySkyTree::<i32>::new(size, StarrySkyTreeMode::Max);
+        let mut s = StarrySkyTree::<i32>::new(size, Mode::Max);
 
         for _ in 0..1000 {
             let ty = rng.gen::<usize>() % 2;
@@ -178,7 +166,7 @@ mod tests {
 
         let size = 100;
         let mut other = vec![0; size];
-        let mut s = StarrySkyTree::<i32>::new(size, StarrySkyTreeMode::Min);
+        let mut s = StarrySkyTree::<i32>::new(size, Mode::Min);
 
         for _ in 0..1000 {
             let ty = rng.gen::<usize>() % 2;
