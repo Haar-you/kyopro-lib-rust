@@ -23,3 +23,4 @@ pub mod skew_heap;
 pub mod persistent_stack;
 
 pub mod cht;
+pub mod li_chao;
