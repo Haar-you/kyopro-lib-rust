@@ -1,25 +1,14 @@
-pub struct SupersetAsc {
-    a: u32,
-    t: u32,
-    n: u32,
-}
+use std::iter::successors;
 
-impl Iterator for SupersetAsc {
-    type Item = u32;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.t >= (1 << self.n) {
+pub fn super_asc(a: u32, n: u32) -> impl Iterator<Item = u32> {
+    successors(Some(a), move |&t| {
+        let t = (t + 1) | a;
+        if t >= 1 << n {
             None
         } else {
-            let ret = self.t;
-            self.t = (self.t + 1) | self.a;
-            Some(ret)
+            Some(t)
         }
-    }
-}
-
-pub fn super_asc(a: u32, n: u32) -> SupersetAsc {
-    SupersetAsc { a, t: a, n }
+    })
 }
 
 #[cfg(test)]

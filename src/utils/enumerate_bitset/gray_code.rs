@@ -1,5 +1,5 @@
-pub fn gray_code(n: u32) -> Box<dyn Iterator<Item = u32>> {
-    Box::new((0..1 << n).map(|i| i ^ (i >> 1)))
+pub fn gray_code(n: u32) -> impl Iterator<Item = u32> {
+    (0..1 << n).map(|i| i ^ (i >> 1))
 }
 
 #[cfg(test)]

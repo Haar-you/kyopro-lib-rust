@@ -1,38 +1,20 @@
-pub struct SupersetDesc {
-    a: u32,
-    t: u32,
-    y: u32,
-    end: bool,
-}
+use std::iter::successors;
 
-impl Iterator for SupersetDesc {
-    type Item = u32;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.end {
-            None
-        } else {
-            let ret = self.t | self.a;
-            if self.t == 0 {
-                self.end = true;
-            } else {
-                self.t = (self.t - 1) & self.y;
-            }
-
-            Some(ret)
-        }
-    }
-}
-
-pub fn superset_desc(a: u32, n: u32) -> SupersetDesc {
+pub fn superset_desc(a: u32, n: u32) -> impl Iterator<Item = u32> {
     let x = (1 << n) - 1;
     let y = x ^ (a & x);
-    SupersetDesc {
-        a,
-        t: y,
-        y,
-        end: false,
-    }
+
+    successors(
+        Some(y),
+        move |&t| {
+            if t == 0 {
+                None
+            } else {
+                Some((t - 1) & y)
+            }
+        },
+    )
+    .map(move |t| t | a)
 }
 
 #[cfg(test)]

@@ -1,35 +1,16 @@
-pub struct SubsetDesc {
-    a: u32,
-    t: u32,
-    end: bool,
-}
+use std::iter::successors;
 
-impl Iterator for SubsetDesc {
-    type Item = u32;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.end {
-            None
-        } else {
-            let ret = self.t;
-
-            if self.t == 0 {
-                self.end = true;
+pub fn subset_desc(a: u32) -> impl Iterator<Item = u32> {
+    successors(
+        Some(a),
+        move |&t| {
+            if t == 0 {
+                None
             } else {
-                self.t = (self.t - 1) & self.a;
+                Some((t - 1) & a)
             }
-
-            Some(ret)
-        }
-    }
-}
-
-pub fn subset_desc(a: u32) -> SubsetDesc {
-    SubsetDesc {
-        a,
-        t: a,
-        end: false,
-    }
+        },
+    )
 }
 
 #[cfg(test)]

@@ -1,37 +1,16 @@
-pub struct SubsetBetween {
-    a: u32,
-    t: u32,
-    x: u32,
-    end: bool,
-}
+use std::iter::successors;
 
-impl Iterator for SubsetBetween {
-    type Item = u32;
+pub fn subset_between(a: u32, b: u32) -> impl Iterator<Item = u32> {
+    let x = b ^ (a & b);
 
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.end {
+    successors(if a & !b != 0 { None } else { Some(0) }, move |&t| {
+        if t == 0 {
             None
         } else {
-            let ret = self.t | self.a;
-
-            if self.t == 0 {
-                self.end = true;
-            } else {
-                self.t = (self.t - 1) & self.x;
-            }
-
-            Some(ret)
+            Some((t - 1) % x)
         }
-    }
-}
-
-pub fn subset_between(a: u32, b: u32) -> SubsetBetween {
-    SubsetBetween {
-        a,
-        t: 0,
-        x: b ^ (a & b),
-        end: a & !b != 0,
-    }
+    })
+    .map(move |t| t | a)
 }
 
 #[cfg(test)]
