@@ -8,3 +8,7 @@ pub mod max_rect;
 pub mod mo;
 pub mod sliding_window;
 pub mod subset_sum;
+pub mod compressor;
+pub mod enumerate_bitset;
+pub mod merge;
+pub mod permutation;
