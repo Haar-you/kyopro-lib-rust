@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::{iter::from_fn, rc::Rc};
 
 #[derive(Debug, Default, Clone)]
 struct Node<T> {
@@ -35,26 +35,16 @@ impl<T> PersistentStack<T> {
         })
     }
 
-    pub fn iter(&self) -> Iter<'_, T> {
-        Iter { root: &self.root }
-    }
-}
+    pub fn iter(&self) -> impl Iterator<Item = &T> {
+        let mut root = &self.root;
 
-pub struct Iter<'a, T> {
-    root: &'a Option<Rc<Node<T>>>,
-}
-
-impl<'a, T> Iterator for Iter<'a, T> {
-    type Item = &'a T;
-
-    fn next(&mut self) -> Option<&'a T> {
-        match self.root {
+        from_fn(move || match root {
             None => None,
-            Some(root) => {
-                self.root = &root.next;
-                Some(&root.value)
+            Some(r) => {
+                root = &r.next;
+                Some(&r.value)
             }
-        }
+        })
     }
 }
 
