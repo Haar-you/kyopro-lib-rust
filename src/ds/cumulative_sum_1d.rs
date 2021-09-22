@@ -1,6 +1,6 @@
 pub use crate::algebra::traits::Group;
 pub use crate::ds::traits::Foldable;
-use std::ops::Index;
+use std::ops::{Index, Range};
 
 #[derive(Debug, Clone)]
 pub struct CumulativeSum1D<T, G> {
@@ -13,7 +13,7 @@ pub struct CumulativeSum1DBuilder<T, G> {
     group: G,
 }
 
-impl<T, G> Foldable<usize> for CumulativeSum1D<T, G>
+impl<T, G> Foldable<Range<usize>> for CumulativeSum1D<T, G>
 where
     T: Copy,
     G: Group<Output = T>,
@@ -21,7 +21,7 @@ where
     type Value = T;
 
     /// Time complexity O(1)
-    fn fold(&self, l: usize, r: usize) -> Self::Value {
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Value {
         self.group
             .op(self.data[r].clone(), self.group.inv(self.data[l].clone()))
     }
@@ -103,7 +103,7 @@ mod tests {
                 ans += other[i];
             }
 
-            assert_eq!(cs.fold(l, r), ans);
+            assert_eq!(cs.fold(l..r), ans);
         }
     }
 }

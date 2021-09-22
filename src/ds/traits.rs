@@ -1,6 +1,6 @@
 pub trait Foldable<Idx> {
     type Value;
-    fn fold(&self, l: Idx, r: Idx) -> Self::Value;
+    fn fold(&self, range: Idx) -> Self::Value;
 }
 
 pub trait Assignable<Idx> {

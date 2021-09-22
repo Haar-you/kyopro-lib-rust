@@ -1,5 +1,5 @@
 use crate::{algebra::traits::*, ds::traits::Foldable};
-use std::cmp::min;
+use std::{cmp::min, ops::Range};
 
 pub struct SparseTable<T, A> {
     data: Vec<Vec<T>>,
@@ -42,14 +42,14 @@ where
     }
 }
 
-impl<T, A> Foldable<usize> for SparseTable<T, A>
+impl<T, A> Foldable<Range<usize>> for SparseTable<T, A>
 where
     T: Clone + Default,
     A: BinaryOp<Output = T>,
 {
     type Value = Option<T>;
 
-    fn fold(&self, l: usize, r: usize) -> Option<T> {
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Option<T> {
         if l >= r {
             None
         } else {

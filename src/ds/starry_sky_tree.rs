@@ -46,13 +46,13 @@ where
     }
 }
 
-impl<T> Foldable<usize> for StarrySkyTree<T>
+impl<T> Foldable<Range<usize>> for StarrySkyTree<T>
 where
     T: Add<Output = T> + Ord + Copy,
 {
     type Value = T;
 
-    fn fold(&self, l: usize, r: usize) -> T {
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> T {
         let s = l;
         let t = r;
 
@@ -155,7 +155,7 @@ mod tests {
             } else {
                 let ans = (l..r).map(|i| other[i]).max().unwrap();
 
-                assert_eq!(s.fold(l, r), ans);
+                assert_eq!(s.fold(l..r), ans);
             }
         }
     }
@@ -183,7 +183,7 @@ mod tests {
             } else {
                 let ans = (l..r).map(|i| other[i]).min().unwrap();
 
-                assert_eq!(s.fold(l, r), ans);
+                assert_eq!(s.fold(l..r), ans);
             }
         }
     }

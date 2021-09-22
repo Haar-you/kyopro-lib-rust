@@ -1,6 +1,6 @@
 pub use crate::algebra::traits::Monoid;
 pub use crate::ds::traits::{Assignable, Foldable, Updatable};
-use std::ops::Index;
+use std::ops::{Index, Range};
 
 #[derive(Clone)]
 pub struct SegmentTree<T, M> {
@@ -26,14 +26,14 @@ where
     }
 }
 
-impl<T, M> Foldable<usize> for SegmentTree<T, M>
+impl<T, M> Foldable<Range<usize>> for SegmentTree<T, M>
 where
     T: Clone,
     M: Monoid<Output = T>,
 {
     type Value = T;
 
-    fn fold(&self, l: usize, r: usize) -> Self::Value {
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Value {
         let mut ret_l = self.monoid.id();
         let mut ret_r = self.monoid.id();
 
@@ -143,7 +143,7 @@ mod tests {
                     temp = m.op(temp.clone(), other[i].clone());
                 }
 
-                assert_eq!(s.fold(l, r), temp);
+                assert_eq!(s.fold(l..r), temp);
             }
 
             let i = rng.gen::<usize>() % size;
