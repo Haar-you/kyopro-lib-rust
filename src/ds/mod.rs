@@ -13,6 +13,7 @@ pub mod rollbackable_vector;
 
 pub mod range_search_tree;
 
+pub mod persistent_queue;
 pub mod swag;
 
 pub mod sparse_table;
