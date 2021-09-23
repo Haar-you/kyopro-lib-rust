@@ -5,6 +5,8 @@ pub mod factorize;
 pub mod gcd_lcm;
 pub mod mod_ops;
 pub mod nim_product;
+
+pub mod miller_rabin;
 pub mod prime;
 pub mod primitive_root;
 
