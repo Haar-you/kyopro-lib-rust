@@ -14,3 +14,5 @@ pub mod tree_utils;
 pub mod tsort;
 pub mod tsp;
 pub mod warshall_floyd;
+
+pub mod hopcroft_karp;
