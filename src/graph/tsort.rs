@@ -1,7 +1,11 @@
 use crate::graph::template::*;
 use std::collections::VecDeque;
 
-pub fn topological_sort<T>(g: &Graph<T>) -> Option<Vec<usize>> {
+/// Time complexity O(N)
+///
+/// gがDAGのとき、トポロジカルソートした結果をSomeに包んで返す。
+/// そうでなければ、Noneを返す。
+pub fn tsort<T>(g: &Graph<T>) -> Option<Vec<usize>> {
     let n = g.len();
     let mut indeg = vec![0; n];
 
