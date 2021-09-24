@@ -6,6 +6,7 @@ pub mod chinese_postman;
 pub mod dijkstra;
 pub mod kruskal;
 pub mod lca;
+pub mod max_independent_set;
 pub mod prim;
 pub mod scc;
 pub mod template;
