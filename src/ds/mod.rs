@@ -26,3 +26,5 @@ pub mod persistent_stack;
 
 pub mod cht;
 pub mod li_chao;
+
+pub mod binary_trie;
