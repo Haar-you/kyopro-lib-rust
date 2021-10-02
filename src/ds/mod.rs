@@ -4,6 +4,7 @@ pub mod unionfind;
 
 pub mod dual_segment_tree;
 pub mod fenwick;
+pub mod seg_linear_add;
 pub mod segment_tree;
 pub mod starry_sky_tree;
 
