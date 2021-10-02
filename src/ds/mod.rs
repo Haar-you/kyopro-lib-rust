@@ -18,6 +18,7 @@ pub mod range_search_tree;
 pub mod persistent_queue;
 pub mod swag;
 
+pub mod disjoint_sparse_table;
 pub mod sparse_table;
 
 pub mod lazy_skew_heap;
