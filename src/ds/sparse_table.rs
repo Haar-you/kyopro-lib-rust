@@ -47,9 +47,9 @@ where
     T: Clone + Default,
     A: BinaryOp<Output = T>,
 {
-    type Value = Option<T>;
+    type Output = Option<T>;
 
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Option<T> {
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
         if l >= r {
             None
         } else {

@@ -50,9 +50,9 @@ impl<T> Foldable<Range<usize>> for StarrySkyTree<T>
 where
     T: Add<Output = T> + Ord + Copy,
 {
-    type Value = T;
+    type Output = T;
 
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> T {
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
         let s = l;
         let t = r;
 

@@ -70,9 +70,9 @@ impl<T: Clone, S: Semigroup<Output = T>> DisjointSparseTable<T, S> {
 impl<T: Clone + Default, S: Semigroup<Output = T>> Foldable<Range<usize>>
     for DisjointSparseTable<T, S>
 {
-    type Value = Option<T>;
+    type Output = Option<T>;
 
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Value {
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
         if l == r {
             None
         } else {

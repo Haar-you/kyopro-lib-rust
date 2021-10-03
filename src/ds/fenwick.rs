@@ -31,9 +31,9 @@ impl<T: Clone, G: Group<Output = T>> Updatable<usize> for FenwickTree<T, G> {
 }
 
 impl<T: Clone, G: Group<Output = T>> Foldable<RangeTo<usize>> for FenwickTree<T, G> {
-    type Value = T;
+    type Output = T;
 
-    fn fold(&self, RangeTo { end: mut i }: RangeTo<usize>) -> Self::Value {
+    fn fold(&self, RangeTo { end: mut i }: RangeTo<usize>) -> Self::Output {
         let mut ret = self.group.id();
 
         while i > 0 {
@@ -46,9 +46,10 @@ impl<T: Clone, G: Group<Output = T>> Foldable<RangeTo<usize>> for FenwickTree<T,
 }
 
 impl<T: Clone, G: Group<Output = T>> Foldable<Range<usize>> for FenwickTree<T, G> {
-    type Value = T;
+    type Output = T;
 
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Value {
-        self.group.op(self.fold(..r), self.group.inv(self.fold(..l)))
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
+        self.group
+            .op(self.fold(..r), self.group.inv(self.fold(..l)))
     }
 }

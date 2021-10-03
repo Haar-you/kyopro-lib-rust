@@ -31,9 +31,9 @@ where
     T: Clone,
     M: Monoid<Output = T>,
 {
-    type Value = T;
+    type Output = T;
 
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Value {
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
         let mut ret_l = self.monoid.id();
         let mut ret_r = self.monoid.id();
 

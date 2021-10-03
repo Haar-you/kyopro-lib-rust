@@ -18,10 +18,10 @@ where
     T: Copy,
     G: Group<Output = T>,
 {
-    type Value = T;
+    type Output = T;
 
     /// Time complexity O(1)
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Value {
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
         self.group
             .op(self.data[r].clone(), self.group.inv(self.data[l].clone()))
     }
