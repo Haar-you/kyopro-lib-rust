@@ -3,6 +3,7 @@
 pub use crate::{
     math::ff_traits::{Frac, Inv, Pow, FF},
     misc::generics_int::GenericsInt,
+    algebra::one_zero::{Zero, One},
 };
 use std::{
     fmt,
@@ -199,4 +200,14 @@ impl<G: GenericsInt<Output = u64>> Sum for ModInt<G> {
     fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
         iter.fold(Self::from(0), |a, b| a + b)
     }
+}
+
+impl<G: GenericsInt<Output = u64>> Zero for ModInt<G> {
+    type Output = Self;
+    fn zero() -> Self::Output { Self::from(0) }
+}
+
+impl<G: GenericsInt<Output = u64>> One for ModInt<G> {
+    type Output = Self;
+    fn one() -> Self::Output { Self::from(1) }
 }
