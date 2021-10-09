@@ -2,7 +2,6 @@
 
 pub use crate::{
     math::ff_traits::{Frac, Inv, Pow, FF},
-    misc::generics_int::GenericsInt,
     algebra::one_zero::{Zero, One},
 };
 use std::{
@@ -15,15 +14,19 @@ use std::{
     str::FromStr,
 };
 
-#[derive(Copy, Clone, PartialEq, Default)]
-pub struct ModInt<G> {
-    value: u64,
-    phantom: PhantomData<G>,
+pub trait Modulo {
+    fn value() -> u64;
 }
 
-impl<G: GenericsInt<Output = u64> + Copy + PartialEq + Default> FF for ModInt<G> {}
+#[derive(Copy, Clone, PartialEq, Default)]
+pub struct ModInt<M> {
+    value: u64,
+    phantom: PhantomData<M>,
+}
 
-impl<G: GenericsInt<Output = u64>> ModInt<G> {
+impl<M: Modulo + Copy + PartialEq + Default> FF for ModInt<M> {}
+
+impl<M: Modulo> ModInt<M> {
     pub fn new() -> Self {
         ModInt {
             value: 0,
@@ -32,7 +35,7 @@ impl<G: GenericsInt<Output = u64>> ModInt<G> {
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Pow for ModInt<G> {
+impl<M: Modulo> Pow for ModInt<M> {
     type Output = Self;
 
     fn pow(self, mut p: u64) -> Self {
@@ -42,11 +45,11 @@ impl<G: GenericsInt<Output = u64>> Pow for ModInt<G> {
         while p > 0 {
             if (p & 1) != 0 {
                 ret *= a;
-                ret %= G::value();
+                ret %= M::value();
             }
 
             a *= a;
-            a %= G::value();
+            a %= M::value();
 
             p >>= 1;
         }
@@ -58,15 +61,15 @@ impl<G: GenericsInt<Output = u64>> Pow for ModInt<G> {
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Inv for ModInt<G> {
+impl<M: Modulo> Inv for ModInt<M> {
     type Output = Self;
 
     fn inv(self) -> Self {
-        self.pow(G::value() - 2)
+        self.pow(M::value() - 2)
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Frac for ModInt<G> {
+impl<M: Modulo> Frac for ModInt<M> {
     type Output = Self;
 
     fn frac(numerator: i64, denominator: i64) -> Self {
@@ -74,26 +77,26 @@ impl<G: GenericsInt<Output = u64>> Frac for ModInt<G> {
     }
 }
 
-impl<G> Display for ModInt<G> {
+impl<M: Modulo> Display for ModInt<M> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.value)
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Debug for ModInt<G> {
+impl<M: Modulo> Debug for ModInt<M> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{} (mod {})", self.value, G::value())
+        write!(f, "{} (mod {})", self.value, M::value())
     }
 }
 
 macro_rules! modint_from_int {
     ( $($t:ty),* ) => {
         $(
-            impl<G: GenericsInt<Output = u64>> From<$t> for ModInt<G> {
+            impl<M: Modulo> From<$t> for ModInt<M> {
                 fn from(from: $t) -> Self {
-                    let mut value = ((from % G::value() as $t) + G::value() as $t) as u64;
-                    if value >= G::value() {
-                        value -= G::value();
+                    let mut value = ((from % M::value() as $t) + M::value() as $t) as u64;
+                    if value >= M::value() {
+                        value -= M::value();
                     }
 
                     ModInt { value, phantom: PhantomData }
@@ -105,64 +108,64 @@ macro_rules! modint_from_int {
 
 modint_from_int!(i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize);
 
-impl<G> From<ModInt<G>> for u64 {
-    fn from(from: ModInt<G>) -> Self {
+impl<M> From<ModInt<M>> for u64 {
+    fn from(from: ModInt<M>) -> Self {
         from.value
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Add for ModInt<G> {
+impl<M: Modulo> Add for ModInt<M> {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
         Self {
-            value: (u64::from(self) + u64::from(other)) % G::value(),
+            value: (u64::from(self) + u64::from(other)) % M::value(),
             phantom: PhantomData,
         }
     }
 }
 
-impl<G: GenericsInt<Output = u64> + Copy> AddAssign for ModInt<G> {
+impl<M: Modulo + Copy> AddAssign for ModInt<M> {
     fn add_assign(&mut self, other: Self) {
         *self = *self + other;
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Sub for ModInt<G> {
+impl<M: Modulo> Sub for ModInt<M> {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {
         Self {
-            value: (u64::from(self) + (G::value() - u64::from(other))) % G::value(),
+            value: (u64::from(self) + (M::value() - u64::from(other))) % M::value(),
             phantom: PhantomData,
         }
     }
 }
 
-impl<G: GenericsInt<Output = u64> + Copy> SubAssign for ModInt<G> {
+impl<M: Modulo + Copy> SubAssign for ModInt<M> {
     fn sub_assign(&mut self, other: Self) {
         *self = *self - other;
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Mul for ModInt<G> {
+impl<M: Modulo> Mul for ModInt<M> {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self {
         Self {
-            value: (u64::from(self) * u64::from(other)) % G::value(),
+            value: (u64::from(self) * u64::from(other)) % M::value(),
             phantom: PhantomData,
         }
     }
 }
 
-impl<G: GenericsInt<Output = u64> + Copy> MulAssign for ModInt<G> {
+impl<M: Modulo + Copy> MulAssign for ModInt<M> {
     fn mul_assign(&mut self, other: Self) {
         *self = *self * other;
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Div for ModInt<G> {
+impl<M: Modulo> Div for ModInt<M> {
     type Output = Self;
 
     fn div(self, other: Self) -> Self {
@@ -170,24 +173,24 @@ impl<G: GenericsInt<Output = u64>> Div for ModInt<G> {
     }
 }
 
-impl<G: GenericsInt<Output = u64> + Copy> DivAssign for ModInt<G> {
+impl<M: Modulo + Copy> DivAssign for ModInt<M> {
     fn div_assign(&mut self, other: Self) {
         *self = *self / other;
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Neg for ModInt<G> {
+impl<M: Modulo> Neg for ModInt<M> {
     type Output = Self;
 
     fn neg(self) -> Self {
         Self {
-            value: (G::value() - u64::from(self)) % G::value(),
+            value: (M::value() - u64::from(self)) % M::value(),
             phantom: PhantomData,
         }
     }
 }
 
-impl<G: GenericsInt<Output = u64>> FromStr for ModInt<G> {
+impl<M: Modulo> FromStr for ModInt<M> {
     type Err = ParseIntError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -196,18 +199,18 @@ impl<G: GenericsInt<Output = u64>> FromStr for ModInt<G> {
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Sum for ModInt<G> {
+impl<M: Modulo> Sum for ModInt<M> {
     fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
         iter.fold(Self::from(0), |a, b| a + b)
     }
 }
 
-impl<G: GenericsInt<Output = u64>> Zero for ModInt<G> {
+impl<M: Modulo> Zero for ModInt<M> {
     type Output = Self;
     fn zero() -> Self::Output { Self::from(0) }
 }
 
-impl<G: GenericsInt<Output = u64>> One for ModInt<G> {
+impl<M: Modulo> One for ModInt<M> {
     type Output = Self;
     fn one() -> Self::Output { Self::from(1) }
 }

@@ -71,12 +71,11 @@ impl<T: FF + From<usize>> FactorialTable<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::generics_int;
-    use crate::math::modint::ModInt;
-    use crate::misc::generics_int::GenericsInt;
+    use crate::modulo;
+    use crate::math::modint::*;
 
-    generics_int!(G1000000007, 1000000007);
-    type Mint = ModInt<G1000000007>;
+    modulo!(M, 1000000007);
+    type Mint = ModInt<M>;
 
     #[test]
     fn test() {
