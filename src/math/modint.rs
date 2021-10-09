@@ -1,5 +1,3 @@
-#![allow(clippy::suspicious_arithmetic_impl)]
-
 pub use crate::{
     math::ff_traits::{Frac, Inv, Pow, FF},
     algebra::one_zero::{Zero, One},
@@ -33,12 +31,43 @@ impl<M: Modulo> ModInt<M> {
             phantom: PhantomData,
         }
     }
-}
 
-impl<M: Modulo> Pow for ModInt<M> {
-    type Output = Self;
+    #[inline]
+    fn add_internal(self, other: Self) -> Self {
+        Self {
+            value: (self.value + other.value) % M::value(),
+            phantom: PhantomData,
+        }
+    }
 
-    fn pow(self, mut p: u64) -> Self {
+    #[inline]
+    fn sub_internal(self, other: Self) -> Self {
+        Self {
+            value: (self.value + (M::value() - other.value)) % M::value(),
+            phantom: PhantomData,
+        }
+    }
+
+    #[inline]
+    fn mul_internal(self, other: Self) -> Self {
+        Self {
+            value: (self.value * other.value) % M::value(),
+            phantom: PhantomData,
+        }
+    }
+
+    #[inline]
+    fn div_internal(self, other: Self) -> Self {
+        self * other.inv_internal()
+    }
+
+    #[inline]
+    fn inv_internal(self) -> Self {
+        self.pow_internal(M::value() - 2)
+    }
+
+    #[inline]
+    fn pow_internal(self, mut p: u64) -> Self {
         let mut ret = 1;
         let mut a = self.value;
 
@@ -61,11 +90,19 @@ impl<M: Modulo> Pow for ModInt<M> {
     }
 }
 
+impl<M: Modulo> Pow for ModInt<M> {
+    type Output = Self;
+
+    fn pow(self, p: u64) -> Self {
+        self.pow_internal(p)
+    }
+}
+
 impl<M: Modulo> Inv for ModInt<M> {
     type Output = Self;
 
     fn inv(self) -> Self {
-        self.pow(M::value() - 2)
+        self.inv_internal()
     }
 }
 
@@ -114,77 +151,34 @@ impl<M> From<ModInt<M>> for u64 {
     }
 }
 
-impl<M: Modulo> Add for ModInt<M> {
-    type Output = Self;
+macro_rules! impl_modint_arith {
+    ($tr:ident, $f:ident, $fi:ident, $tr_a:ident, $f_a:ident, $op:tt) => {
+        impl<M: Modulo> $tr for ModInt<M> {
+            type Output = Self;
+            fn $f(self, other: Self) -> Self {
+                self.$fi(other)
+            }
+        }
 
-    fn add(self, other: Self) -> Self {
-        Self {
-            value: (u64::from(self) + u64::from(other)) % M::value(),
-            phantom: PhantomData,
+        impl<M: Modulo + Copy> $tr_a for ModInt<M> {
+            fn $f_a(&mut self, other: Self) {
+                *self = *self $op other;
+            }
         }
     }
 }
 
-impl<M: Modulo + Copy> AddAssign for ModInt<M> {
-    fn add_assign(&mut self, other: Self) {
-        *self = *self + other;
-    }
-}
-
-impl<M: Modulo> Sub for ModInt<M> {
-    type Output = Self;
-
-    fn sub(self, other: Self) -> Self {
-        Self {
-            value: (u64::from(self) + (M::value() - u64::from(other))) % M::value(),
-            phantom: PhantomData,
-        }
-    }
-}
-
-impl<M: Modulo + Copy> SubAssign for ModInt<M> {
-    fn sub_assign(&mut self, other: Self) {
-        *self = *self - other;
-    }
-}
-
-impl<M: Modulo> Mul for ModInt<M> {
-    type Output = Self;
-
-    fn mul(self, other: Self) -> Self {
-        Self {
-            value: (u64::from(self) * u64::from(other)) % M::value(),
-            phantom: PhantomData,
-        }
-    }
-}
-
-impl<M: Modulo + Copy> MulAssign for ModInt<M> {
-    fn mul_assign(&mut self, other: Self) {
-        *self = *self * other;
-    }
-}
-
-impl<M: Modulo> Div for ModInt<M> {
-    type Output = Self;
-
-    fn div(self, other: Self) -> Self {
-        self * other.inv()
-    }
-}
-
-impl<M: Modulo + Copy> DivAssign for ModInt<M> {
-    fn div_assign(&mut self, other: Self) {
-        *self = *self / other;
-    }
-}
+impl_modint_arith!(Add, add, add_internal, AddAssign, add_assign, +);
+impl_modint_arith!(Sub, sub, sub_internal, SubAssign, sub_assign, -);
+impl_modint_arith!(Mul, mul, mul_internal, MulAssign, mul_assign, *);
+impl_modint_arith!(Div, div, div_internal, DivAssign, div_assign, /);
 
 impl<M: Modulo> Neg for ModInt<M> {
     type Output = Self;
 
     fn neg(self) -> Self {
         Self {
-            value: (M::value() - u64::from(self)) % M::value(),
+            value: (M::value() - self.value) % M::value(),
             phantom: PhantomData,
         }
     }
