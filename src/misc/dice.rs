@@ -1,4 +1,4 @@
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Dice<T> {
     pub top: T,
     pub bottom: T,
@@ -95,22 +95,6 @@ where
         Dice::new(top, bottom, left, right, front, back)
     }
 }
-
-impl<T> PartialEq for Dice<T>
-where
-    T: PartialEq,
-{
-    fn eq(&self, other: &Self) -> bool {
-        self.top == other.top
-            && self.bottom == other.bottom
-            && self.front == other.front
-            && self.back == other.back
-            && self.right == other.right
-            && self.left == other.left
-    }
-}
-
-impl<T: Eq> Eq for Dice<T> {}
 
 #[cfg(test)]
 mod tests {
