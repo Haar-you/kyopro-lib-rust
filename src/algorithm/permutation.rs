@@ -1,3 +1,5 @@
+use std::iter::{from_fn, once};
+
 pub fn next_permutation<T: Ord>(a: &mut [T]) -> bool {
     let n = a.len();
 
@@ -20,29 +22,14 @@ pub fn next_permutation<T: Ord>(a: &mut [T]) -> bool {
     }
 }
 
-pub struct Permutation<T> {
-    data: Vec<T>,
-    first: bool,
-}
-
-impl<T: Ord + Clone> Iterator for Permutation<T> {
-    type Item = Vec<T>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if !self.first && !next_permutation(&mut self.data) {
-            None
+pub fn permutations<T: Ord + Clone>(mut a: Vec<T>) -> impl Iterator<Item = Vec<T>> {
+    once(a.clone()).chain(from_fn(move || {
+        if next_permutation(&mut a) {
+            Some(a.clone())
         } else {
-            self.first = false;
-            Some(self.data.clone())
+            None
         }
-    }
-}
-
-pub fn permutations<T: Ord + Clone>(a: &[T]) -> Permutation<T> {
-    Permutation {
-        data: a.to_vec(),
-        first: true,
-    }
+    }))
 }
 
 #[cfg(test)]
@@ -54,7 +41,7 @@ mod tests {
         let a = [1, 2, 3];
 
         assert_eq!(
-            permutations(&a).collect::<Vec<_>>(),
+            permutations(a.to_vec()).collect::<Vec<_>>(),
             [
                 [1, 2, 3],
                 [1, 3, 2],
