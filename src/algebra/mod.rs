@@ -1,5 +1,5 @@
-pub mod traits;
 pub mod one_zero;
+pub mod traits;
 
 pub mod affine;
 pub mod bitxor;

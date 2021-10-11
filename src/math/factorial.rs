@@ -71,8 +71,8 @@ impl<T: FF + From<usize>> FactorialTable<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::modulo;
     use crate::math::modint::*;
+    use crate::modulo;
 
     modulo!(M, 1000000007);
     type Mint = ModInt<M>;

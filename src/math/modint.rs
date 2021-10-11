@@ -1,6 +1,6 @@
 pub use crate::{
+    algebra::one_zero::{One, Zero},
     math::ff_traits::{Frac, Inv, Pow, FF},
-    algebra::one_zero::{Zero, One},
 };
 use std::{
     fmt,
@@ -201,10 +201,14 @@ impl<M: Modulo> Sum for ModInt<M> {
 
 impl<M: Modulo> Zero for ModInt<M> {
     type Output = Self;
-    fn zero() -> Self::Output { Self::from(0) }
+    fn zero() -> Self::Output {
+        Self::from(0)
+    }
 }
 
 impl<M: Modulo> One for ModInt<M> {
     type Output = Self;
-    fn one() -> Self::Output { Self::from(1) }
+    fn one() -> Self::Output {
+        Self::from(1)
+    }
 }
