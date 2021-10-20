@@ -8,10 +8,10 @@ where
     T: Ord + Copy,
 {
     let n = a.len();
-    let mut dp = Vec::new();
-    let mut pos = Vec::new();
+    let mut dp = vec![];
+    let mut pos = vec![];
     let mut prev = vec![None; n];
-    let mut ret = Vec::new();
+    let mut ret = vec![];
 
     for i in 0..n {
         let x = a[i];

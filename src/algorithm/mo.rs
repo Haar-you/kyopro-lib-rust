@@ -13,22 +13,15 @@ pub struct Mo<'a> {
 }
 
 impl<'a> Mo<'a> {
-    pub fn new<F1, F2, F3, F4, F5>(
+    pub fn new(
         n: usize,
         q: usize,
-        append_right: Box<F1>,
-        append_left: Box<F2>,
-        remove_right: Box<F3>,
-        remove_left: Box<F4>,
-        query: Box<F5>,
-    ) -> Self
-    where
-        F1: 'a + Fn(usize),
-        F2: 'a + Fn(usize),
-        F3: 'a + Fn(usize),
-        F4: 'a + Fn(usize),
-        F5: 'a + Fn(usize),
-    {
+        append_right: Box<impl 'a + Fn(usize)>,
+        append_left: Box<impl 'a + Fn(usize)>,
+        remove_right: Box<impl 'a + Fn(usize)>,
+        remove_left: Box<impl 'a + Fn(usize)>,
+        query: Box<impl 'a + Fn(usize)>,
+    ) -> Self {
         Self {
             append_right,
             append_left,

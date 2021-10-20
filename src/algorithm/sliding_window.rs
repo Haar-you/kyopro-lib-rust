@@ -8,7 +8,7 @@ pub fn sliding_minimum<T: Ord + Copy>(a: &[T], k: usize) -> Vec<T> {
     let n = a.len();
 
     let mut dq = VecDeque::new();
-    let mut ret = Vec::new();
+    let mut ret = vec![];
 
     for i in 0..k {
         while !dq.is_empty() && a[*dq.back().unwrap()] >= a[i] {

@@ -8,7 +8,7 @@ pub fn max_rect_in_histogram<T>(h: &[T]) -> T
 where
     T: From<usize> + Mul<Output = T> + Ord + Copy,
 {
-    let mut st: Vec<(T, usize)> = Vec::new();
+    let mut st: Vec<(T, usize)> = vec![];
     let mut ret = T::from(0);
 
     for (i, &y1) in h.iter().enumerate() {
