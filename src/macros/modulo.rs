@@ -4,9 +4,10 @@ macro_rules! modulo {
         #[derive(Debug, Copy, Clone, PartialEq, Eq, Default)]
         struct $name {}
         impl Modulo for $name {
+            #[inline]
             fn value() -> u64 {
                 $m
             }
         }
-    }
+    };
 }
