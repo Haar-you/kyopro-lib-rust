@@ -7,3 +7,4 @@ pub mod math;
 pub mod misc;
 pub mod seq;
 pub mod utils;
+pub mod tree;

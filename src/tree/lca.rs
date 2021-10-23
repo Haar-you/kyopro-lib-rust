@@ -1,4 +1,4 @@
-use crate::graph::template::{Edge, Graph};
+use crate::tree::template::*;
 
 pub struct DoublingLCA {
     log2n: usize,
@@ -7,7 +7,7 @@ pub struct DoublingLCA {
 }
 
 impl DoublingLCA {
-    pub fn new<T>(tree: &Graph<T>, root: usize) -> Self {
+    pub fn new<T>(tree: &Tree<T>, root: usize) -> Self {
         let n = tree.len();
         let log2n = ((n as f64).log2().ceil() + 1.0) as usize;
         let mut ret = Self {
@@ -29,11 +29,11 @@ impl DoublingLCA {
         ret
     }
 
-    fn dfs<T>(&mut self, tree: &Graph<T>, cur: usize, par: Option<usize>, d: usize) {
+    fn dfs<T>(&mut self, tree: &Tree<T>, cur: usize, par: Option<usize>, d: usize) {
         self.parent[cur][0] = par;
         self.depth[cur] = d;
 
-        for &Edge { to, .. } in &tree.edges[cur] {
+        for &TreeEdge { to, .. } in tree.nodes[cur].neighbors() {
             if Some(to) != par {
                 self.dfs(tree, to, Some(cur), d + 1);
             }
