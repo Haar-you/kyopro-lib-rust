@@ -22,3 +22,5 @@ pub mod rational;
 pub mod totient;
 
 pub mod berlekamp_massey;
+
+pub mod matrix;
