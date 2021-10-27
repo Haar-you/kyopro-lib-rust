@@ -22,12 +22,16 @@ where
         self.data[i].clone()
     }
 
-    pub fn compress(&self, values: &[T]) -> Vec<usize> {
-        values.iter().map(|x| self.index(x)).collect()
+    pub fn compress(&self, values: Vec<T>) -> Vec<usize> {
+        values.into_iter().map(|x| self.index(&x)).collect()
     }
 
-    pub fn decompress(&self, indices: &[usize]) -> Vec<T> {
-        indices.iter().map(|&i| self.get(i)).collect()
+    pub fn decompress(&self, indices: Vec<usize>) -> Vec<T> {
+        indices.into_iter().map(|i| self.get(i)).collect()
+    }
+
+    pub fn size(&self) -> usize {
+        self.data.len()
     }
 }
 
@@ -62,7 +66,10 @@ mod tests {
         builder.add_vec(data.clone());
         let compressor = builder.build();
 
-        assert_eq!(compressor.compress(&data), vec![2, 4, 3, 5, 6, 7, 1, 0, 4]);
-        assert_eq!(compressor.decompress(&[2, 4, 3, 5, 6, 7, 1, 0, 4]), data);
+        assert_eq!(
+            compressor.compress(data.clone()),
+            vec![2, 4, 3, 5, 6, 7, 1, 0, 4]
+        );
+        assert_eq!(compressor.decompress(vec![2, 4, 3, 5, 6, 7, 1, 0, 4]), data);
     }
 }
