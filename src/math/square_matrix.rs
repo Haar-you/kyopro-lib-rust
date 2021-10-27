@@ -79,6 +79,97 @@ impl<T: SquareMatrixElem> SquareMatrix<T> {
     pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut T> {
         self.data.get_mut(i).map(|a| a.get_mut(j)).flatten()
     }
+
+    pub fn straight_mul(self, b: Self) -> Self {
+        assert_eq!(self.size, b.size);
+
+        let b = b.transpose();
+        let mut ret = Self::new(self.size);
+
+        for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
+            for (x, c) in r.iter_mut().zip(b.data.iter()) {
+                for (y, z) in r2.iter().zip(c.iter()) {
+                    *x = *x + *y * *z;
+                }
+            }
+        }
+
+        ret
+    }
+
+
+    pub fn strassen_mul(self, b: Self) -> Self {
+        let mut a = self;
+        let n = a.size();
+
+        if n <= 256 {
+            return Self::straight_mul(a, b);
+        }
+
+        let m = (n + 1) / 2;
+
+        let mut a11 = Self::new(m);
+        let mut a12 = Self::new(m);
+        let mut a21 = Self::new(m);
+        let mut a22 = Self::new(m);
+
+        let mut b11 = Self::new(m);
+        let mut b12 = Self::new(m);
+        let mut b21 = Self::new(m);
+        let mut b22 = Self::new(m);
+
+        for i in 0..m {
+            for j in 0..m {
+                a11.data[i][j] = a[i][j];
+                b11.data[i][j] = b[i][j];
+
+                if j + m < n {
+                    a12.data[i][j] = a[i][j + m];
+                    b12.data[i][j] = b[i][j + m];
+                }
+
+                if i + m < n {
+                    a21.data[i][j] = a[i + m][j];
+                    b21.data[i][j] = b[i + m][j];
+                }
+
+                if i + m < n && j + m < n {
+                    a22.data[i][j] = a[i + m][j + m];
+                    b22.data[i][j] = b[i + m][j + m];
+                }
+            }
+        }
+
+        let p1 = Self::strassen_mul(a11.clone() + a22.clone(), b11.clone() + b22.clone());
+        let p2 = Self::strassen_mul(a21.clone() + a22.clone(), b11.clone());
+        let p3 = Self::strassen_mul(a11.clone(), b12.clone() - b22.clone());
+        let p4 = Self::strassen_mul(a22.clone(), b21.clone() - b11.clone());
+        let p5 = Self::strassen_mul(a11.clone() + a12.clone(), b22.clone());
+        let p6 = Self::strassen_mul(a21 - a11, b11 + b12);
+        let p7 = Self::strassen_mul(a12 - a22, b21 + b22);
+
+        let c11 = p1.clone() + p4.clone() - p5.clone() + p7;
+        let c12 = p3.clone() + p5;
+        let c21 = p2.clone() + p4;
+        let c22 = p1 + p3 - p2 + p6;
+
+        for i in 0..m {
+            for j in 0..m {
+                a.data[i][j] = c11[i][j];
+                if j + m < n {
+                    a.data[i][j + m] = c12[i][j];
+                }
+                if i + m < n {
+                    a.data[i + m][j] = c21[i][j];
+                }
+                if i + m < n && j + m < n {
+                    a.data[i + m][j + m] = c22[i][j];
+                }
+            }
+        }
+
+        a
+    }
 }
 
 impl<T: SquareMatrixElem> Add for SquareMatrix<T> {
@@ -110,20 +201,7 @@ impl<T: SquareMatrixElem> Sub for SquareMatrix<T> {
 impl<T: SquareMatrixElem> Mul for SquareMatrix<T> {
     type Output = Self;
     fn mul(self, other: Self) -> Self {
-        assert_eq!(self.size, other.size);
-
-        let other = other.transpose();
-        let mut ret = Self::new(self.size);
-
-        for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
-            for (x, c) in r.iter_mut().zip(other.data.iter()) {
-                for (y, z) in r2.iter().zip(c.iter()) {
-                    *x = *x + *y * *z;
-                }
-            }
-        }
-
-        ret
+        self.strassen_mul(other)
     }
 }
 
@@ -161,5 +239,45 @@ impl<T> Index<usize> for SquareMatrix<T> {
     type Output = [T];
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[i]
+    }
+}
+
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rand::Rng;
+
+    use crate::{
+        math::{
+            modint::*,
+        },
+        modulo
+    };
+
+    modulo!(M, 1000000007);
+    type Mint = ModInt<M>;
+
+    #[test]
+    fn test() {
+        let mut rng = rand::thread_rng();
+
+        let size = 300;
+
+        let mut a = vec![vec![Mint::from(0); size]; size];
+        let mut b = vec![vec![Mint::from(0); size]; size];
+
+        for i in 0..size {
+            for j in 0..size {
+                a[i][j] = Mint::from(rng.gen::<u64>());
+                b[i][j] = Mint::from(rng.gen::<u64>());
+            }
+        }
+
+        let a = SquareMatrix::from_vec(a);
+        let b = SquareMatrix::from_vec(b);
+
+        assert_eq!(a.clone().straight_mul(b.clone()), a.strassen_mul(b));
     }
 }
