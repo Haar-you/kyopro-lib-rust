@@ -22,5 +22,4 @@ pub mod totient;
 
 pub mod berlekamp_massey;
 
-pub mod matrix;
-pub mod square_matrix;
+pub mod linalg;

@@ -272,4 +272,44 @@ mod tests {
 
         assert_eq!(a.clone().straight_mul(b.clone()), a.strassen_mul(b));
     }
+
+    #[test]
+    #[ignore]
+    fn benchmark() {
+        use crate::timer;
+
+        let mut rng = rand::thread_rng();
+
+        let mut straight = vec![];
+        let mut strassen = vec![];
+
+        for &size in &[1, 10, 100, 1000] {
+            let mut a = vec![vec![Mint::from(0); size]; size];
+            let mut b = vec![vec![Mint::from(0); size]; size];
+
+            for i in 0..size {
+                for j in 0..size {
+                    a[i][j] = Mint::from(rng.gen::<u64>());
+                    b[i][j] = Mint::from(rng.gen::<u64>());
+                }
+            }
+
+            let a = SquareMatrix::from_vec(a);
+            let b = SquareMatrix::from_vec(b);
+
+            straight.push(
+                timer!({
+                    a.clone().straight_mul(b.clone());
+                })
+            );
+
+            strassen.push(
+                timer!({
+                    a.clone().strassen_mul(b.clone());
+                })
+            )
+        }
+
+        dbg!(straight, strassen);
+    }
 }
