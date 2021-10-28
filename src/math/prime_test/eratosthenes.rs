@@ -1,6 +1,4 @@
-pub trait CheckPrime<T> {
-    fn is_prime(&self, value: T) -> bool;
-}
+use crate::math::prime_test::traits::*;
 
 pub struct EratosthenesSieve {
     data: Vec<bool>,
