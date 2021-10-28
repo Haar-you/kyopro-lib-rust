@@ -97,7 +97,6 @@ impl<T: SquareMatrixElem> SquareMatrix<T> {
         ret
     }
 
-
     pub fn strassen_mul(self, b: Self) -> Self {
         let mut a = self;
         let n = a.size();
@@ -242,19 +241,12 @@ impl<T> Index<usize> for SquareMatrix<T> {
     }
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use rand::Rng;
 
-    use crate::{
-        math::{
-            modint::*,
-        },
-        modulo
-    };
+    use crate::{math::ff::modint::*, modulo};
 
     modulo!(M, 1000000007);
     type Mint = ModInt<M>;

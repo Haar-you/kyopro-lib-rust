@@ -1,4 +1,4 @@
-use crate::math::{factorial::FactorialTable, ff_traits::FF};
+use crate::math::{factorial::FactorialTable, ff::traits::FF};
 
 impl<T: FF + From<usize>> FactorialTable<T> {
     pub fn catalan_number(&self, n: usize) -> T {
@@ -12,7 +12,7 @@ impl<T: FF + From<usize>> FactorialTable<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math::modint::*;
+    use crate::math::ff::modint::*;
     use crate::modulo;
 
     modulo!(M, 1000000007);

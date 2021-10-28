@@ -2,7 +2,7 @@ pub mod bell;
 pub mod bernoulli;
 pub mod catalan;
 
-use crate::math::ff_traits::FF;
+use crate::math::ff::traits::FF;
 
 #[derive(Clone, Debug, Default)]
 pub struct FactorialTable<T> {
@@ -71,7 +71,7 @@ impl<T: FF + From<usize>> FactorialTable<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math::modint::*;
+    use crate::math::ff::modint::*;
     use crate::modulo;
 
     modulo!(M, 1000000007);

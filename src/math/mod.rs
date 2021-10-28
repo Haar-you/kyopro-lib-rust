@@ -10,8 +10,7 @@ pub mod miller_rabin;
 pub mod prime_test;
 pub mod primitive_root;
 
-pub mod ff_traits;
-pub mod modint;
+pub mod ff;
 
 pub mod bell_number;
 pub mod binomial_coefficient;

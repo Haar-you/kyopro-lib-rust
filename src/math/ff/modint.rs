@@ -1,6 +1,6 @@
 pub use crate::{
     algebra::one_zero::{One, Zero},
-    math::ff_traits::{Frac, Inv, Pow, FF},
+    math::ff::traits::{Frac, Inv, Pow, FF},
 };
 use std::{
     fmt,
@@ -34,8 +34,9 @@ impl<M: Modulo> ModInt<M> {
 
     #[inline]
     fn add_internal(self, other: Self) -> Self {
+        let a = self.value + other.value;
         Self {
-            value: (self.value + other.value) % M::value(),
+            value: if a < M::value() { a } else { a - M::value() },
             phantom: PhantomData,
         }
     }
@@ -50,8 +51,9 @@ impl<M: Modulo> ModInt<M> {
 
     #[inline]
     fn mul_internal(self, other: Self) -> Self {
+        let a = self.value * other.value;
         Self {
-            value: (self.value * other.value) % M::value(),
+            value: if a < M::value() { a } else { a % M::value() },
             phantom: PhantomData,
         }
     }
@@ -136,7 +138,7 @@ macro_rules! modint_from_int {
                         value -= M::value();
                     }
 
-                    ModInt { value, phantom: PhantomData }
+                    Self { value, phantom: PhantomData }
                 }
             }
         )*
@@ -155,12 +157,14 @@ macro_rules! impl_modint_arith {
     ($tr:ident, $f:ident, $fi:ident, $tr_a:ident, $f_a:ident, $op:tt) => {
         impl<M: Modulo> $tr for ModInt<M> {
             type Output = Self;
+            #[inline]
             fn $f(self, other: Self) -> Self {
                 self.$fi(other)
             }
         }
 
         impl<M: Modulo + Copy> $tr_a for ModInt<M> {
+            #[inline]
             fn $f_a(&mut self, other: Self) {
                 *self = *self $op other;
             }
@@ -201,6 +205,7 @@ impl<M: Modulo> Sum for ModInt<M> {
 
 impl<M: Modulo> Zero for ModInt<M> {
     type Output = Self;
+    #[inline]
     fn zero() -> Self::Output {
         Self::from(0)
     }
@@ -208,6 +213,7 @@ impl<M: Modulo> Zero for ModInt<M> {
 
 impl<M: Modulo> One for ModInt<M> {
     type Output = Self;
+    #[inline]
     fn one() -> Self::Output {
         Self::from(1)
     }
