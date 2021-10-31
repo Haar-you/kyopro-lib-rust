@@ -30,3 +30,5 @@ pub mod cht;
 pub mod li_chao;
 
 pub mod binary_trie;
+
+pub mod succinct_dict;
