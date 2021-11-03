@@ -1,6 +1,6 @@
 #![allow(clippy::many_single_char_names)]
 
-use crate::{algorithm::merge::inplace_merge, chmax};
+use crate::{algo::merge::inplace_merge, chmax};
 use std::ops::Add;
 
 /// 要素数が小さいナップサック問題

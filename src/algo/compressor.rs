@@ -1,4 +1,4 @@
-use crate::algorithm::bsearch::lower_bound;
+use crate::algo::bsearch::lower_bound;
 
 #[derive(Clone)]
 pub struct Compressor<T> {

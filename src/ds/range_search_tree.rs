@@ -1,4 +1,4 @@
-use crate::algorithm::{bsearch::lower_bound, merge::merge};
+use crate::algo::{bsearch::lower_bound, merge::merge};
 
 pub struct RangeSearchTree {
     size: usize,
