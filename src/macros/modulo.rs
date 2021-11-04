@@ -5,7 +5,7 @@ macro_rules! modulo {
         struct $name {}
         impl Modulo for $name {
             #[inline]
-            fn value() -> u64 {
+            fn value() -> u32 {
                 $m
             }
         }
