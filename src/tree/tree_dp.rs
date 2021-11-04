@@ -1,22 +1,29 @@
 use crate::tree::template::*;
 
-pub struct TreeDP<Weight, T> {
+pub struct TreeDP<'a, Weight, T> {
     id: T,
-    accum: fn(T, T, (usize, Weight)) -> T,
-    apply: fn(T, usize) -> T,
+    merge: Box<dyn 'a + Fn(T, T) -> T>,
+    up: Box<dyn 'a + Fn(T, (usize, Weight)) -> T>,
+    apply: Box<dyn 'a + Fn(T, usize) -> T>,
 }
 
-impl<Weight, T> TreeDP<Weight, T>
+impl<'a, Weight, T> TreeDP<'a, Weight, T>
 where
     Weight: Copy,
     T: Clone,
 {
     pub fn new(
         id: T,
-        accum: fn(prev_acc: T, value: T, edge: (usize, Weight)) -> T,
-        apply: fn(acc: T, cur: usize) -> T,
+        merge: Box<impl 'a + Fn(T, T) -> T>,
+        up: Box<impl 'a + Fn(T, (usize, Weight)) -> T>,
+        apply: Box<impl 'a + Fn(T, usize) -> T>,
     ) -> Self {
-        Self { id, accum, apply }
+        Self {
+            id,
+            merge,
+            up,
+            apply,
+        }
     }
 
     pub fn run(&self, tree: &Tree<Weight>, root: usize) -> Vec<T> {
@@ -29,11 +36,12 @@ where
     }
 
     fn internal(&self, tree: &Tree<Weight>, cur: usize, ret: &mut Vec<T>) {
-        let mut temp = ret[cur].clone();
         for &TreeEdge { to, weight } in &tree.nodes[cur].children {
             self.internal(tree, to, ret);
-            temp = (self.accum)(temp.clone(), ret[to].clone(), (to, weight));
+
+            let temp = (self.up)(ret[to].clone(), (to, weight));
+            ret[cur] = (self.merge)(ret[cur].clone(), temp);
         }
-        ret[cur] = (self.apply)(temp, cur);
+        ret[cur] = (self.apply)(ret[cur].clone(), cur);
     }
 }
