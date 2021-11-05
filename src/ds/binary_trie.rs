@@ -1,4 +1,4 @@
-const BIT_LEN: usize = 64;
+use std::mem::size_of;
 
 #[derive(Default, Debug, Clone)]
 struct Node {
@@ -8,57 +8,62 @@ struct Node {
 
 impl Node {
     fn count(&self, value: u64, depth: usize) -> usize {
-        if depth > BIT_LEN {
+        if depth == 0 {
             self.size
         } else {
-            let b = (value >> (BIT_LEN - depth)) & 1;
+            let depth = depth - 1;
+            let b = (value >> depth) & 1;
             self.ch[b as usize]
                 .as_ref()
-                .map_or(0, |t| t.count(value, depth + 1))
+                .map_or(0, |t| t.count(value, depth))
         }
     }
 
     fn insert(&mut self, value: u64, depth: usize) {
         self.size += 1;
-        if depth <= BIT_LEN {
-            let b = (value >> (BIT_LEN - depth)) & 1;
+        if depth > 0 {
+            let depth = depth - 1;
+            let b = (value >> depth) & 1;
             self.ch[b as usize]
                 .get_or_insert(Box::new(Node::default()))
-                .insert(value, depth + 1);
+                .insert(value, depth);
         }
     }
 
     fn erase(&mut self, value: u64, depth: usize) {
         self.size -= 1;
-        if depth <= BIT_LEN {
-            let b = (value >> BIT_LEN - depth) & 1;
+        if depth > 0 {
+            let depth = depth - 1;
+            let b = (value >> depth) & 1;
             self.ch[b as usize]
                 .get_or_insert(Box::new(Node::default()))
-                .erase(value, depth + 1);
+                .erase(value, depth);
         }
     }
 
     fn min(&self, x: u64, depth: usize) -> u64 {
-        if depth > BIT_LEN {
+        if depth == 0 {
             0
         } else {
-            let mut b = (x >> (BIT_LEN - depth)) & 1;
+            let depth = depth - 1;
+            let mut b = (x >> depth) & 1;
             if self.ch[b as usize].as_ref().map_or(0, |t| t.size) == 0 {
                 b ^= 1;
             }
-            self.ch[b as usize].as_ref().unwrap().min(x, depth + 1) | (b << (BIT_LEN - depth))
+            self.ch[b as usize].as_ref().unwrap().min(x, depth) | (b << depth)
         }
     }
 
     fn max(&self, x: u64, depth: usize) -> u64 {
-        if depth > BIT_LEN {
+        if depth == 0 {
             0
         } else {
-            let mut b = ((x >> (BIT_LEN - depth)) & 1) ^ 1;
+            let depth = depth - 1;
+            let mut b = ((x >> depth) & 1) ^ 1;
             if self.ch[b as usize].as_ref().map_or(0, |t| t.size) == 0 {
                 b ^= 1;
             }
-            self.ch[b as usize].as_ref().unwrap().max(x, depth + 1) | (b << (BIT_LEN - depth))
+            self.ch[b as usize].as_ref().unwrap().max(x, depth) | (b << depth)
         }
     }
 
@@ -66,8 +71,12 @@ impl Node {
         if self.ch[0].is_none() && self.ch[1].is_none() {
             ret.extend_from_slice(&vec![value; self.size]);
         }
-        self.ch[0].as_ref().map(|t| t.to_vec(value << 1, ret));
-        self.ch[1].as_ref().map(|t| t.to_vec((value << 1) | 1, ret));
+        if let Some(t) = self.ch[0].as_ref() {
+            t.to_vec(value << 1, ret);
+        }
+        if let Some(t) = self.ch[1].as_ref() {
+            t.to_vec(value << 1 | 1, ret);
+        }
     }
 }
 
@@ -77,6 +86,10 @@ pub struct BinaryTrie {
 }
 
 impl BinaryTrie {
+    const fn bitlen() -> usize {
+        size_of::<u64>() * 8
+    }
+
     pub fn new() -> Self {
         Self { root: None }
     }
@@ -90,32 +103,36 @@ impl BinaryTrie {
     }
 
     pub fn count(&self, value: u64) -> usize {
-        self.root.as_ref().map_or(0, |t| t.count(value, 1))
+        self.root
+            .as_ref()
+            .map_or(0, |t| t.count(value, Self::bitlen()))
     }
 
     pub fn insert(&mut self, value: u64) {
         self.root
             .get_or_insert(Box::new(Node::default()))
-            .insert(value, 1);
+            .insert(value, Self::bitlen());
     }
 
     pub fn erase(&mut self, value: u64) {
         self.root
             .get_or_insert(Box::new(Node::default()))
-            .erase(value, 1);
+            .erase(value, Self::bitlen());
     }
 
     pub fn min(&mut self, x: u64) -> Option<u64> {
-        self.root.as_ref().map(|t| t.min(x, 1))
+        self.root.as_ref().map(|t| t.min(x, Self::bitlen()))
     }
 
     pub fn max(&mut self, x: u64) -> Option<u64> {
-        self.root.as_ref().map(|t| t.max(x, 1))
+        self.root.as_ref().map(|t| t.max(x, Self::bitlen()))
     }
 
     pub fn to_vec(&self) -> Vec<u64> {
         let mut ret = vec![];
-        self.root.as_ref().map(|t| t.to_vec(0, &mut ret));
+        if let Some(t) = self.root.as_ref() {
+            t.to_vec(0, &mut ret);
+        }
         ret
     }
 }
