@@ -1,4 +1,4 @@
-use crate::graph::template::*;
+use crate::graph::*;
 use std::collections::VecDeque;
 
 /// Time complexity O(N)

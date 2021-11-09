@@ -1,4 +1,4 @@
-use crate::graph::{scc::*, template::*};
+use crate::graph::{scc::*, *};
 
 pub struct TwoSat {
     size: usize,

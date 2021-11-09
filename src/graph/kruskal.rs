@@ -1,4 +1,4 @@
-use crate::{ds::unionfind::UnionFind, graph::template::*};
+use crate::{ds::unionfind::UnionFind, graph::*};
 
 pub fn kruskal<T: Copy + Ord>(g: &Graph<T>) -> Vec<(usize, usize, T)> {
     let n = g.len();

@@ -1,4 +1,4 @@
-use crate::graph::template::*;
+use crate::graph::*;
 use std::{cmp::Reverse, collections::BinaryHeap};
 
 pub fn prim<T: Copy + Ord>(g: &Graph<T>) -> Vec<(usize, usize, T)> {

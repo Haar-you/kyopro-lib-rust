@@ -1,4 +1,4 @@
-use crate::graph::template::*;
+use crate::graph::*;
 use std::{cmp::min, mem::swap};
 
 /// 橋の列挙

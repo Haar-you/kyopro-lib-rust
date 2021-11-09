@@ -1,4 +1,4 @@
-use crate::graph::template::*;
+use crate::graph::*;
 use std::{cmp::min, ops::Add};
 
 #[derive(Clone, Copy, PartialEq, Debug)]
@@ -22,8 +22,8 @@ where
     for i in 0..n {
         for s in 0..n {
             for &Edge { to, cost, .. } in &g.edges[s] {
-                match ret[s] {
-                    Value(x) => match ret[to] {
+                if let Value(x) = ret[s] {
+                    match ret[to] {
                         Value(y) => {
                             if x + cost < y && i == n - 1 {
                                 ret[to] = NegInf;
@@ -35,8 +35,7 @@ where
                             ret[to] = Value(x + cost);
                         }
                         _ => {}
-                    },
-                    _ => {}
+                    }
                 }
             }
         }

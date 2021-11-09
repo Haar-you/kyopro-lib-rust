@@ -1,6 +1,6 @@
 #![allow(clippy::needless_range_loop)]
 
-use crate::graph::template::*;
+use crate::graph::*;
 use std::{cmp::min, ops::Add};
 
 /// Time complexity O(n ^ 3)

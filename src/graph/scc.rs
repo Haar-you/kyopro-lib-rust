@@ -1,4 +1,4 @@
-use crate::{chmin, graph::template::*};
+use crate::{chmin, graph::*};
 
 struct SccRecParams<'a> {
     ret: &'a mut Vec<usize>,

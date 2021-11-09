@@ -1,4 +1,4 @@
-use crate::graph::template::*;
+use crate::graph::*;
 use std::{cmp::min, ops::Add};
 
 pub fn tsp<T>(g: &Graph<T>, src: usize) -> Option<T>

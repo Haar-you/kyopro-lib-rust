@@ -1,4 +1,4 @@
-use crate::graph::template::*;
+use crate::graph::*;
 
 pub fn check_bipartite<T>(g: &Graph<T>) -> Vec<Option<(Vec<usize>, Vec<usize>)>> {
     let mut ret = vec![];
