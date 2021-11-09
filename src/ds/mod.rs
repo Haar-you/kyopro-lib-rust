@@ -2,10 +2,10 @@ pub mod traits;
 
 pub mod unionfind;
 
-pub mod dual_segment_tree;
+pub mod dual_segtree;
 pub mod fenwick;
-pub mod seg_linear_add;
-pub mod segment_tree;
+pub mod segtree;
+pub mod segtree_linear_add;
 pub mod starry_sky_tree;
 
 pub mod cumulative_sum_1d;
