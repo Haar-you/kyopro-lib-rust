@@ -1,6 +1,7 @@
 use crate::graph::*;
 use std::cmp::min;
 
+#[derive(Debug, Clone)]
 pub struct Lowlink {
     pub size: usize,
     pub ord: Vec<usize>,
@@ -46,10 +47,14 @@ impl Lowlink {
         self.ord[cur] = *index;
         self.low[cur] = *index;
         *index += 1;
+        let mut count_par = 0;
 
         for &Edge { to, .. } in &g.edges[cur] {
             if par.map_or(false, |p| p == to) {
-                continue;
+                count_par += 1;
+                if count_par == 1 {
+                    continue;
+                }
             }
 
             if !check[to] {

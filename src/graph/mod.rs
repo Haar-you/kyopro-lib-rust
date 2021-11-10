@@ -12,6 +12,7 @@ pub mod scc;
 pub mod tsort;
 pub mod tsp;
 pub mod warshall_floyd;
+pub mod two_edge;
 
 pub mod hopcroft_karp;
 
