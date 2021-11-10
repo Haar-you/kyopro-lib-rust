@@ -1,11 +1,15 @@
 use crate::graph::{lowlink::*, *};
 
 pub fn articulation_points<T>(g: &Graph<T>) -> Vec<usize> {
-    let n = g.len();
+    let Lowlink {
+        size,
+        ord,
+        low,
+        par,
+        ch,
+    } = Lowlink::new(&g);
 
-    let Lowlink { ord, low, par, ch } = Lowlink::new(&g);
-
-    (0..n)
+    (0..size)
         .filter(|&i| {
             (par[i].is_none() && ch[i].len() >= 2)
                 || ch[i].iter().any(|&j| par[i].is_some() && ord[i] <= low[j])
