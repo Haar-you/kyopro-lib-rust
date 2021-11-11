@@ -1,4 +1,4 @@
-use crate::tree::template::*;
+use crate::tree::*;
 
 pub struct DoublingLCA {
     log2n: usize,

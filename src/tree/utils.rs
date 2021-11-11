@@ -1,6 +1,6 @@
 #![allow(clippy::many_single_char_names)]
 
-use crate::tree::template::*;
+use crate::tree::*;
 use std::{cmp::max, ops::Add};
 
 /// rootを根としたときの根から各頂点への距離を列挙する。

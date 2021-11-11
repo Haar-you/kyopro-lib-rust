@@ -1,4 +1,4 @@
-use crate::tree::template::*;
+use crate::tree::*;
 
 pub struct TreeDP<'a, Weight, T> {
     id: T,

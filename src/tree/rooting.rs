@@ -1,4 +1,4 @@
-use crate::tree::template::*;
+use crate::tree::*;
 use std::mem::swap;
 
 pub fn rooting<T>(tr: &mut Tree<T>, root: usize) -> Result<(), &str> {
@@ -44,7 +44,6 @@ pub fn rooting<T>(tr: &mut Tree<T>, root: usize) -> Result<(), &str> {
     Ok(())
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -62,10 +61,12 @@ mod tests {
         assert_eq!(rooting(&mut tr, 0), Ok(()));
 
         assert_eq!(
-            tr.nodes.into_iter().map(|nd| nd.parent.map(|p| p.to)).collect::<Vec<_>>(),
+            tr.nodes
+                .into_iter()
+                .map(|nd| nd.parent.map(|p| p.to))
+                .collect::<Vec<_>>(),
             vec![None, Some(0), Some(1), Some(2), Some(2), Some(1)]
         );
-
 
         let mut tr = Tree::<u32>::new(6);
 

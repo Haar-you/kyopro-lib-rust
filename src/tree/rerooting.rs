@@ -1,4 +1,4 @@
-use crate::tree::template::*;
+use crate::tree::*;
 
 pub struct RerootingDP<'a, Weight, T> {
     id: T,
