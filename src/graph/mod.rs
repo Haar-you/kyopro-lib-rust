@@ -11,9 +11,11 @@ pub mod prim;
 pub mod scc;
 pub mod tsort;
 pub mod tsp;
-pub mod warshall_floyd;
 pub mod two_edge;
+pub mod warshall_floyd;
 
+pub mod dinic;
+pub mod flow;
 pub mod hopcroft_karp;
 
 #[derive(Debug, Clone)]
