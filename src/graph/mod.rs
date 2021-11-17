@@ -18,6 +18,8 @@ pub mod dinic;
 pub mod flow;
 pub mod hopcroft_karp;
 
+pub mod bi_match;
+
 #[derive(Debug, Clone)]
 pub struct Edge<T> {
     pub from: usize,
