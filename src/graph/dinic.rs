@@ -115,4 +115,8 @@ impl MaxFlow for Dinic {
             .map(|e| (e.to, e.cap))
             .collect()
     }
+
+    fn reset(&mut self) {
+        todo!();
+    }
 }
