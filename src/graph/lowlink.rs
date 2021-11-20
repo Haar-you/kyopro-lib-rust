@@ -11,7 +11,7 @@ pub struct Lowlink {
 }
 
 impl Lowlink {
-    pub fn new<T>(g: &Graph<T>) -> Self {
+    pub fn new<E: EdgeTrait>(g: &Graph<E>) -> Self {
         let n = g.len();
         let mut ret = Self {
             size: n,
@@ -30,9 +30,9 @@ impl Lowlink {
         ret
     }
 
-    fn dfs<T>(
+    fn dfs<E: EdgeTrait>(
         &mut self,
-        g: &Graph<T>,
+        g: &Graph<E>,
         cur: usize,
         par: Option<usize>,
         index: &mut usize,
@@ -49,7 +49,8 @@ impl Lowlink {
         *index += 1;
         let mut count_par = 0;
 
-        for &Edge { to, .. } in &g.edges[cur] {
+        for e in &g.edges[cur] {
+            let to = e.to();
             if par.map_or(false, |p| p == to) {
                 count_par += 1;
                 if count_par == 1 {
