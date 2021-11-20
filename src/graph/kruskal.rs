@@ -1,6 +1,6 @@
 use crate::{ds::unionfind::UnionFind, graph::*};
 
-pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<E>) -> Vec<E> {
+pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<E>) -> Vec<&E> {
     let n = g.len();
     let mut edges = vec![];
     for es in &g.edges {
@@ -18,7 +18,7 @@ pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<E>) -> Vec<E>
         let (u, v) = (e.from(), e.to());
         if !uf.is_same(u, v) {
             uf.merge(u, v);
-            ret.push(e.clone());
+            ret.push(e);
         }
     }
 
