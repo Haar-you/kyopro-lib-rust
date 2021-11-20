@@ -1,7 +1,7 @@
-// pub mod articulation_points;
+pub mod articulation_points;
 // pub mod bellman_ford;
 // pub mod bipartite;
-// pub mod bridges;
+//pub mod bridges;
 // pub mod chinese_postman;
 // pub mod dijkstra;
 pub mod kruskal;
@@ -81,14 +81,14 @@ impl<E: EdgeTrait + Clone> Graph<E> {
         }
     }
 
-    pub fn add_directed(&mut self, edges: Vec<E>) {
-        for e in edges {
+    pub fn add_directed(&mut self, edges: impl IntoIterator<Item = E>) {
+        for e in edges.into_iter() {
             self.edges[e.from()].push(e);
         }
     }
 
-    pub fn add_undirected(&mut self, edges: Vec<E>) {
-        for e in edges {
+    pub fn add_undirected(&mut self, edges: impl IntoIterator<Item = E>) {
+        for e in edges.into_iter() {
             self.edges[e.from()].push(e.clone());
             self.edges[e.to()].push(e.rev());
         }
