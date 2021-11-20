@@ -5,13 +5,13 @@ use std::collections::VecDeque;
 ///
 /// gがDAGのとき、トポロジカルソートした結果をSomeに包んで返す。
 /// そうでなければ、Noneを返す。
-pub fn tsort<T>(g: &Graph<T>) -> Option<Vec<usize>> {
+pub fn tsort<E: EdgeTrait>(g: &Graph<E>) -> Option<Vec<usize>> {
     let n = g.len();
     let mut indeg = vec![0; n];
 
     for i in 0..n {
-        for &Edge { to, .. } in &g.edges[i] {
-            indeg[to] += 1;
+        for e in &g.edges[i] {
+            indeg[e.to()] += 1;
         }
     }
 
@@ -27,7 +27,8 @@ pub fn tsort<T>(g: &Graph<T>) -> Option<Vec<usize>> {
 
     while let Some(cur) = q.pop_front() {
         ret.push(cur);
-        for &Edge { to, .. } in &g.edges[cur] {
+        for e in &g.edges[cur] {
+            let to = e.to();
             indeg[to] -= 1;
             if indeg[to] == 0 {
                 q.push_back(to);
