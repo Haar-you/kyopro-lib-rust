@@ -2,7 +2,7 @@ use crate::graph::*;
 use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
 /// Time complexity O((E + V) log V)
-pub fn dijkstra<T>(g: &Graph<T>, src: &[usize]) -> Vec<Option<T>>
+pub fn dijkstra<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>, src: &[usize]) -> Vec<Option<T>>
 where
     T: Add<Output = T> + Copy + Ord + From<i32>,
 {
@@ -23,7 +23,8 @@ where
         }
         check[u] = true;
 
-        for &Edge { to, cost, .. } in &g.edges[u] {
+        for e in &g.edges[u] {
+            let (to, cost) = (e.to(), e.weight());
             if let Some(ref d2) = ret[to] {
                 if *d2 > d + cost {
                     let d = d + cost;
@@ -52,23 +53,31 @@ mod tests {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_A
 
         // sample 1
-        let graph =
-            Graph::<i32>::from_tuples(4, &[(0, 1, 1), (0, 2, 4), (1, 2, 2), (2, 3, 1), (1, 3, 5)]);
+        let mut graph = Graph::new(4);
+        graph.add_directed(
+            vec![(0, 1, 1), (0, 2, 4), (1, 2, 2), (2, 3, 1), (1, 3, 5)]
+                .into_iter()
+                .map(|(u, v, w)| Edge::new(u, v, w, ()))
+                .collect::<Vec<_>>(),
+        );
         let ans = dijkstra(&graph, &[0]);
 
         assert_eq!(ans, [Some(0), Some(1), Some(3), Some(4)]);
 
         // sample 2
-        let graph = Graph::<i32>::from_tuples(
-            4,
-            &[
+        let mut graph = Graph::new(4);
+        graph.add_directed(
+            vec![
                 (0, 1, 1),
                 (0, 2, 4),
                 (2, 0, 1),
                 (1, 2, 2),
                 (3, 1, 1),
                 (3, 2, 5),
-            ],
+            ]
+            .into_iter()
+            .map(|(u, v, w)| Edge::new(u, v, w, ()))
+            .collect::<Vec<_>>(),
         );
         let ans = dijkstra(&graph, &[1]);
 
