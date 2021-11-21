@@ -13,7 +13,7 @@ pub mod tsort;
 pub mod tsp;
 pub mod two_edge;
 pub mod warshall_floyd;
-// pub mod detect_cycle;
+pub mod detect_cycle;
 
 pub mod dinic;
 pub mod flow;
