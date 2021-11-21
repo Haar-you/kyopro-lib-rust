@@ -6,13 +6,13 @@ pub mod chinese_postman;
 pub mod dijkstra;
 pub mod kruskal;
 pub mod lowlink;
-// pub mod max_independent_set;
+pub mod max_independent_set;
 pub mod prim;
 // pub mod scc;
 pub mod tsort;
 pub mod tsp;
 pub mod two_edge;
-// pub mod warshall_floyd;
+pub mod warshall_floyd;
 // pub mod detect_cycle;
 
 pub mod dinic;
