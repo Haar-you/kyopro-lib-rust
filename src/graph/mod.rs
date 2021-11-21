@@ -10,7 +10,7 @@ pub mod lowlink;
 pub mod prim;
 // pub mod scc;
 pub mod tsort;
-// pub mod tsp;
+pub mod tsp;
 pub mod two_edge;
 // pub mod warshall_floyd;
 // pub mod detect_cycle;
