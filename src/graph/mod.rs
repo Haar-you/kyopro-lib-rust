@@ -8,7 +8,7 @@ pub mod kruskal;
 pub mod lowlink;
 pub mod max_independent_set;
 pub mod prim;
-// pub mod scc;
+pub mod scc;
 pub mod tsort;
 pub mod tsp;
 pub mod two_edge;
