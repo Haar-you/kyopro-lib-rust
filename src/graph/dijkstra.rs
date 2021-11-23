@@ -4,9 +4,9 @@ use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 /// Time complexity O((E + V) log V)
 pub fn dijkstra<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>, src: &[usize]) -> Vec<Option<T>>
 where
-    T: Add<Output = T> + Copy + Ord + From<i32>,
+    T: Add<Output = T> + Copy + Ord + Default,
 {
-    let zero = T::from(0);
+    let zero = T::default();
     let n = g.len();
     let mut ret = vec![None; n];
     let mut heap: BinaryHeap<Reverse<(T, usize)>> = BinaryHeap::new();

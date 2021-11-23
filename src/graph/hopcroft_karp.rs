@@ -2,20 +2,14 @@ use std::collections::VecDeque;
 
 #[derive(Clone, Debug)]
 pub struct Edge {
-    from: usize,
     to: usize,
     rev: Option<usize>,
     used: bool,
 }
 
 impl Edge {
-    fn new(from: usize, to: usize, rev: Option<usize>, used: bool) -> Self {
-        Self {
-            from,
-            to,
-            rev,
-            used,
-        }
+    fn new(to: usize, rev: Option<usize>, used: bool) -> Self {
+        Self { to, rev, used }
     }
 }
 
@@ -34,10 +28,10 @@ impl HopcroftKarp {
 
         let mut graph = vec![vec![]; size];
         for i in 0..left {
-            graph[0].push(Edge::new(0, i + 1, None, false));
+            graph[0].push(Edge::new(i + 1, None, false));
         }
         for i in 0..right {
-            graph[i + left + 1].push(Edge::new(i + left + 1, size - 1, None, false));
+            graph[i + left + 1].push(Edge::new(size - 1, None, false));
         }
 
         Self {
@@ -50,17 +44,17 @@ impl HopcroftKarp {
     }
 
     pub fn add_edge(&mut self, i: usize, j: usize) {
-        assert!(i <= self.left);
-        assert!(j <= self.right);
+        assert!(i < self.left);
+        assert!(j < self.right);
 
-        let x = i + 1;
-        let y = j + self.left + 1;
+        let i = i + 1;
+        let j = j + self.left + 1;
 
-        let e = Edge::new(x, y, Some(self.graph[y].len()), false);
-        self.graph[x].push(e);
+        let e = Edge::new(j, Some(self.graph[j].len()), false);
+        self.graph[i].push(e);
 
-        let e = Edge::new(y, x, Some(self.graph[x].len() - 1), true);
-        self.graph[y].push(e);
+        let e = Edge::new(i, Some(self.graph[i].len() - 1), true);
+        self.graph[j].push(e);
     }
 
     fn bfs(&mut self) -> bool {

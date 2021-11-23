@@ -3,6 +3,7 @@ pub mod bellman_ford;
 pub mod bipartite;
 pub mod bridges;
 pub mod chinese_postman;
+pub mod detect_cycle;
 pub mod dijkstra;
 pub mod kruskal;
 pub mod lowlink;
@@ -13,7 +14,6 @@ pub mod tsort;
 pub mod tsp;
 pub mod two_edge;
 pub mod warshall_floyd;
-pub mod detect_cycle;
 
 pub mod dinic;
 pub mod flow;

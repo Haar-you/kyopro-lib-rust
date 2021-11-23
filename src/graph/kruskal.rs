@@ -28,7 +28,6 @@ pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<E>) -> Vec<&E
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::graph::*;
 
     #[test]
     fn test() {

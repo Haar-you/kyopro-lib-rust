@@ -4,7 +4,7 @@ use crate::graph::*;
 enum Status {
     Unchecked,
     Searched,
-    Searching
+    Searching,
 }
 
 pub fn detect_cycle<E: EdgeTrait>(g: &Graph<E>) -> Option<Vec<&E>> {
@@ -26,7 +26,12 @@ pub fn detect_cycle<E: EdgeTrait>(g: &Graph<E>) -> Option<Vec<&E>> {
     None
 }
 
-fn rec<'a, E: EdgeTrait>(g: &'a Graph<E>, cur: usize, ret: &mut Vec<&'a E>, check: &mut [Status]) -> Option<isize> {
+fn rec<'a, E: EdgeTrait>(
+    g: &'a Graph<E>,
+    cur: usize,
+    ret: &mut Vec<&'a E>,
+    check: &mut [Status],
+) -> Option<isize> {
     match check[cur] {
         Status::Searched => None,
         Status::Searching => Some(cur as isize),
@@ -42,7 +47,7 @@ fn rec<'a, E: EdgeTrait>(g: &'a Graph<E>, cur: usize, ret: &mut Vec<&'a E>, chec
                         }
                     }
 
-                    return Some(res)
+                    return Some(res);
                 }
             }
 

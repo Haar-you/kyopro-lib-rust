@@ -52,11 +52,11 @@ mod tests {
                 (1, 3, 9),
                 (2, 0, 1),
                 (2, 3, 6),
-                (3, 2, 4)
+                (3, 2, 4),
             ]
-                .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>()
+            .into_iter()
+            .map(|(u, v, w)| Edge::new(u, v, w, ()))
+            .collect::<Vec<_>>(),
         );
         assert_eq!(tsp(&g, 0), Some(16));
 
@@ -65,7 +65,7 @@ mod tests {
             vec![(0, 1, 1), (1, 2, 1), (0, 2, 1)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>()
+                .collect::<Vec<_>>(),
         );
         assert_eq!(tsp(&g, 0), None);
     }

@@ -12,7 +12,7 @@ pub fn prim<T: Ord, E: EdgeTrait<Weight = T>>(g: &Graph<E>) -> Vec<&E> {
         heap.push(Reverse((e.weight(), e.from(), index)));
     }
 
-    while let Some(Reverse((d, from, index))) = heap.pop() {
+    while let Some(Reverse((_, from, index))) = heap.pop() {
         let e = &g.edges[from][index];
         if visit[e.from()] == visit[e.to()] {
             continue;
@@ -39,18 +39,20 @@ mod tests {
     fn test() {
         let mut g = Graph::new(6);
         g.add_undirected(
-            vec![(0, 1, 1),
-                 (0, 2, 3),
-                 (1, 2, 1),
-                 (1, 3, 7),
-                 (2, 4, 1),
-                 (1, 4, 3),
-                 (3, 4, 1),
-                 (3, 5, 1),
-                 (4, 5, 6)]
-                .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>()
+            vec![
+                (0, 1, 1),
+                (0, 2, 3),
+                (1, 2, 1),
+                (1, 3, 7),
+                (2, 4, 1),
+                (1, 4, 3),
+                (3, 4, 1),
+                (3, 5, 1),
+                (4, 5, 6),
+            ]
+            .into_iter()
+            .map(|(u, v, w)| Edge::new(u, v, w, ()))
+            .collect::<Vec<_>>(),
         );
 
         let ans = prim(&g).iter().map(|e| e.weight).sum::<i32>();

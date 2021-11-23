@@ -29,7 +29,7 @@ mod tests {
             vec![(0, 1, 1), (0, 2, 1), (1, 2, 1), (2, 3, 1)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>()
+                .collect::<Vec<_>>(),
         );
         let mut ans = articulation_points(&g);
         ans.sort();
@@ -40,7 +40,7 @@ mod tests {
             vec![(0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>()
+                .collect::<Vec<_>>(),
         );
         let mut ans = articulation_points(&g);
         ans.sort();

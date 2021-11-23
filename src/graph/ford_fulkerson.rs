@@ -5,13 +5,13 @@ struct Edge {
     to: usize,
     rev: usize,
     cap: u64,
-    is_rev: bool
+    is_rev: bool,
 }
 
 #[derive(Clone)]
 pub struct FordFulkerson {
     size: usize,
-    edges: Vec<Vec<Edge>>
+    edges: Vec<Vec<Edge>>,
 }
 
 impl FordFulkerson {
@@ -44,7 +44,7 @@ impl MaxFlow for FordFulkerson {
     fn new(size: usize) -> Self {
         Self {
             size,
-            edges: vec![vec![]; size]
+            edges: vec![vec![]; size],
         }
     }
 

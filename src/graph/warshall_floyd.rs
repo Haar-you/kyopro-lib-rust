@@ -56,9 +56,9 @@ mod tests {
                 (2, 3, 1),
                 (3, 2, 7),
             ]
-                .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>()
+            .into_iter()
+            .map(|(u, v, w)| Edge::new(u, v, w, ()))
+            .collect::<Vec<_>>(),
         );
 
         assert_eq!(
@@ -81,9 +81,9 @@ mod tests {
                 (2, 3, 1),
                 (3, 2, 7),
             ]
-                .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>()
+            .into_iter()
+            .map(|(u, v, w)| Edge::new(u, v, w, ()))
+            .collect::<Vec<_>>(),
         );
 
         assert_eq!(
@@ -106,9 +106,9 @@ mod tests {
                 (2, 3, 1),
                 (3, 2, -7),
             ]
-                .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>()
+            .into_iter()
+            .map(|(u, v, w)| Edge::new(u, v, w, ()))
+            .collect::<Vec<_>>(),
         );
 
         assert_eq!(warshall_floyd(&g), None);

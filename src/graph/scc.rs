@@ -1,8 +1,8 @@
-use crate::{chmin, graph::*};
+use crate::graph::*;
 
 pub struct SCC {
     size: usize,
-    groups: Vec<Vec<usize>>
+    groups: Vec<Vec<usize>>,
 }
 
 impl SCC {
@@ -49,7 +49,10 @@ impl SCC {
             }
         }
 
-        Self { size: n, groups: ret}
+        Self {
+            size: n,
+            groups: ret,
+        }
     }
 
     fn dfs<E: EdgeTrait>(g: &Graph<E>, cur: usize, ord: &mut Vec<usize>, check: &mut [bool]) {
@@ -96,9 +99,9 @@ mod tests {
                 (4, 3, 1),
                 (3, 2, 1),
             ]
-                .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>()
+            .into_iter()
+            .map(|(u, v, w)| Edge::new(u, v, w, ()))
+            .collect::<Vec<_>>(),
         );
         let scc = SCC::new(&g).to_vec();
 
