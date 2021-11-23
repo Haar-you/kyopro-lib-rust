@@ -5,6 +5,7 @@ pub mod bridges;
 pub mod chinese_postman;
 pub mod detect_cycle;
 pub mod dijkstra;
+pub mod eulerian;
 pub mod kruskal;
 pub mod lowlink;
 pub mod max_independent_set;
