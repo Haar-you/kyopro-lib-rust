@@ -1,13 +1,11 @@
 use std::iter::successors;
 
-pub fn subset_size_k(n: u32, k: u32) -> impl Iterator<Item = u32> {
-    let c = (1 << k) - 1;
-
-    successors(Some(c), move |&t| {
+pub fn subset_size_k(width: u32, k: u32) -> impl Iterator<Item = u32> {
+    successors(Some((1 << k) - 1), move |&t| {
         let x = ((t as i32) & (-(t as i32))) as u32;
         let y = t + x;
         let t = ((t & !y) / x) >> 1 | y;
-        if t >= 1 << n {
+        if t >= 1 << width {
             None
         } else {
             Some(t)
