@@ -19,6 +19,7 @@ pub mod dinic;
 pub mod flow;
 pub mod ford_fulkerson;
 pub mod hopcroft_karp;
+pub mod min_cost_flow;
 
 pub mod bi_match;
 
