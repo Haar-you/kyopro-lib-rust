@@ -3,7 +3,9 @@ pub mod bellman_ford;
 pub mod bipartite;
 pub mod bridges;
 pub mod chinese_postman;
+pub mod detect_cycle;
 pub mod dijkstra;
+pub mod eulerian;
 pub mod kruskal;
 pub mod lowlink;
 pub mod max_independent_set;
@@ -16,80 +18,86 @@ pub mod warshall_floyd;
 
 pub mod dinic;
 pub mod flow;
+pub mod ford_fulkerson;
 pub mod hopcroft_karp;
+pub mod min_cost_flow;
 
 pub mod bi_match;
 
-#[derive(Debug, Clone)]
-pub struct Edge<T> {
-    pub from: usize,
-    pub to: usize,
-    pub cost: T,
+pub trait EdgeTrait {
+    type Weight;
+    fn from(&self) -> usize;
+    fn to(&self) -> usize;
+    fn weight(&self) -> Self::Weight;
+    fn rev(self) -> Self;
 }
 
-impl<T> Edge<T> {
-    fn new(from: usize, to: usize, cost: T) -> Self {
-        Edge { from, to, cost }
+#[derive(Debug, Clone)]
+pub struct Edge<T, I> {
+    pub from: usize,
+    pub to: usize,
+    pub weight: T,
+    pub index: I,
+}
+
+impl<T, I> Edge<T, I> {
+    pub fn new(from: usize, to: usize, weight: T, index: I) -> Self {
+        Self {
+            from,
+            to,
+            weight,
+            index,
+        }
+    }
+}
+
+impl<T: Clone, I> EdgeTrait for Edge<T, I> {
+    type Weight = T;
+    #[inline]
+    fn from(&self) -> usize {
+        self.from
+    }
+    #[inline]
+    fn to(&self) -> usize {
+        self.to
+    }
+    #[inline]
+    fn weight(&self) -> Self::Weight {
+        self.weight.clone()
+    }
+    fn rev(mut self) -> Self {
+        std::mem::swap(&mut self.from, &mut self.to);
+        self
     }
 }
 
 #[derive(Debug, Clone)]
-pub struct Graph<T> {
-    pub edges: Vec<Vec<Edge<T>>>,
+pub struct Graph<E> {
+    pub edges: Vec<Vec<E>>,
 }
 
-impl<T: Copy> Graph<T> {
+impl<E: EdgeTrait + Clone> Graph<E> {
     pub fn new(size: usize) -> Self {
         Graph {
             edges: vec![vec![]; size],
         }
     }
 
-    pub fn add_directed(&mut self, from: usize, to: usize, cost: T) {
-        self.edges[from].push(Edge::new(from, to, cost));
-    }
-
-    pub fn add_undirected(&mut self, from: usize, to: usize, cost: T) {
-        self.add_directed(from, to, cost);
-        self.add_directed(to, from, cost);
-    }
-
-    pub fn from_tuples(n: usize, edges: &[(usize, usize, T)]) -> Self {
-        let mut ret = Graph::<T>::new(n);
-        for &(u, v, c) in edges {
-            ret.add_directed(u, v, c);
+    pub fn add_directed(&mut self, edges: impl IntoIterator<Item = E>) {
+        for e in edges.into_iter() {
+            self.edges[e.from()].push(e);
         }
-        ret
     }
 
-    pub fn from_tuples_undirected(n: usize, edges: &[(usize, usize, T)]) -> Self {
-        let mut ret = Graph::<T>::new(n);
-        for &(u, v, c) in edges {
-            ret.add_undirected(u, v, c);
+    pub fn add_undirected(&mut self, edges: impl IntoIterator<Item = E>) {
+        for e in edges.into_iter() {
+            self.edges[e.from()].push(e.clone());
+            self.edges[e.to()].push(e.rev());
         }
-        ret
     }
 }
 
-impl<T: Copy + From<u32>> Graph<T> {
-    pub fn from_tuples_unweighted(n: usize, edges: &[(usize, usize)]) -> Self {
-        let mut ret = Graph::<T>::new(n);
-        for &(u, v) in edges {
-            ret.add_directed(u, v, T::from(1));
-        }
-        ret
-    }
-
-    pub fn from_tuples_undirected_unweighted(n: usize, edges: &[(usize, usize)]) -> Self {
-        let mut ret = Graph::<T>::new(n);
-        for &(u, v) in edges {
-            ret.add_undirected(u, v, T::from(1));
-        }
-        ret
-    }
-}
-
-impl<T> Graph<T> {
+impl<E> Graph<E> {
     pub fn len(&self) -> usize {
         self.edges.len()
     }

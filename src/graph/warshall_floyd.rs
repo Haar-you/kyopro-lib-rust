@@ -4,7 +4,7 @@ use crate::graph::*;
 use std::{cmp::min, ops::Add};
 
 /// Time complexity O(n ^ 3)
-pub fn warshall_floyd<T>(g: &Graph<T>) -> Option<Vec<Vec<Option<T>>>>
+pub fn warshall_floyd<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>) -> Option<Vec<Vec<Option<T>>>>
 where
     T: Add<Output = T> + Copy + Clone + Ord + Default,
 {
@@ -14,8 +14,8 @@ where
 
     for i in 0..n {
         dist[i][i] = Some(zero);
-        for &Edge { from, to, cost } in &g.edges[i] {
-            dist[from][to] = Some(cost);
+        for e in &g.edges[i] {
+            dist[e.from()][e.to()] = Some(e.weight());
         }
     }
 
@@ -46,21 +46,23 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_C
-        let g = Graph::<i32>::from_tuples(
-            4,
-            &[
+        let mut g = Graph::new(4);
+        g.add_directed(
+            vec![
                 (0, 1, 1),
                 (0, 2, 5),
                 (1, 2, 2),
                 (1, 3, 4),
                 (2, 3, 1),
                 (3, 2, 7),
-            ],
+            ]
+            .into_iter()
+            .map(|(u, v, w)| Edge::new(u, v, w, ()))
+            .collect::<Vec<_>>(),
         );
-        let ans = warshall_floyd(&g);
 
         assert_eq!(
-            ans,
+            warshall_floyd(&g),
             Some(vec![
                 vec![Some(0), Some(1), Some(3), Some(4)],
                 vec![None, Some(0), Some(2), Some(3)],
@@ -69,21 +71,23 @@ mod tests {
             ])
         );
 
-        let g = Graph::<i32>::from_tuples(
-            4,
-            &[
+        let mut g = Graph::new(4);
+        g.add_directed(
+            vec![
                 (0, 1, 1),
                 (0, 2, -5),
                 (1, 2, 2),
                 (1, 3, 4),
                 (2, 3, 1),
                 (3, 2, 7),
-            ],
+            ]
+            .into_iter()
+            .map(|(u, v, w)| Edge::new(u, v, w, ()))
+            .collect::<Vec<_>>(),
         );
-        let ans = warshall_floyd(&g);
 
         assert_eq!(
-            ans,
+            warshall_floyd(&g),
             Some(vec![
                 vec![Some(0), Some(1), Some(-5), Some(-4)],
                 vec![None, Some(0), Some(2), Some(3)],
@@ -92,19 +96,21 @@ mod tests {
             ])
         );
 
-        let g = Graph::<i32>::from_tuples(
-            4,
-            &[
+        let mut g = Graph::new(4);
+        g.add_directed(
+            vec![
                 (0, 1, 1),
                 (0, 2, 5),
                 (1, 2, 2),
                 (1, 3, 4),
                 (2, 3, 1),
                 (3, 2, -7),
-            ],
+            ]
+            .into_iter()
+            .map(|(u, v, w)| Edge::new(u, v, w, ()))
+            .collect::<Vec<_>>(),
         );
-        let ans = warshall_floyd(&g);
 
-        assert_eq!(ans, None);
+        assert_eq!(warshall_floyd(&g), None);
     }
 }

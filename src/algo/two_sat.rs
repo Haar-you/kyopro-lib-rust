@@ -2,7 +2,7 @@ use crate::graph::{scc::*, *};
 
 pub struct TwoSat {
     size: usize,
-    g: Graph<u8>,
+    g: Graph<Edge<(), ()>>,
 }
 
 impl TwoSat {
@@ -25,7 +25,8 @@ impl TwoSat {
     }
 
     pub fn add_if(&mut self, a: isize, b: isize) {
-        self.g.add_directed(self.check(a), self.check(b), 1);
+        self.g
+            .add_directed(Some(Edge::new(self.check(a), self.check(b), (), ())));
     }
 
     pub fn add_or(&mut self, a: isize, b: isize) {
@@ -38,7 +39,7 @@ impl TwoSat {
     }
 
     pub fn solve(&self) -> Option<Vec<bool>> {
-        let (s, _) = scc(&self.g);
+        let s = SCC::new(&self.g).to_vec();
 
         for i in 0..self.size {
             if s[i] == s[i + self.size] {

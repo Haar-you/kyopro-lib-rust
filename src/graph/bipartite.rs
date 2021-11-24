@@ -1,8 +1,8 @@
 use crate::graph::*;
 
-pub fn check_bipartite<T>(g: &Graph<T>) -> Vec<Option<(Vec<usize>, Vec<usize>)>> {
-    let mut ret = vec![];
+pub fn check_bipartite<E: EdgeTrait>(g: &Graph<E>) -> Vec<Option<(Vec<usize>, Vec<usize>)>> {
     let n = g.len();
+    let mut ret = vec![];
     let mut check = vec![-1; n];
     let mut visit = vec![false; n];
 
@@ -25,7 +25,8 @@ pub fn check_bipartite<T>(g: &Graph<T>) -> Vec<Option<(Vec<usize>, Vec<usize>)>>
                 }
                 visit[cur] = true;
 
-                for &Edge { to, .. } in &g.edges[cur] {
+                for e in &g.edges[cur] {
+                    let to = e.to();
                     if check[to] == check[cur] {
                         return false;
                     }

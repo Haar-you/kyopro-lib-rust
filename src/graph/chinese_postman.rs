@@ -4,7 +4,7 @@ use crate::graph::*;
 use std::{cmp::min, ops::Add};
 
 /// Time complexity O(V ^ 2 * 2 ^ V)
-pub fn chinese_postman_problem<T>(g: &Graph<T>) -> T
+pub fn chinese_postman_problem<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>) -> T
 where
     T: Default + Copy + Ord + Add<Output = T>,
 {
@@ -17,7 +17,8 @@ where
     }
 
     for i in 0..n {
-        for &Edge { from, to, cost } in &g.edges[i] {
+        for e in &g.edges[i] {
+            let (from, to, cost) = (e.from(), e.to(), e.weight());
             dist[from][to] = Some(dist[from][to].map_or(cost, |x| min(x, cost)));
         }
     }
@@ -62,7 +63,8 @@ where
     let mut ret = T::default();
 
     for i in 0..n {
-        for &Edge { from, to, cost } in &g.edges[i] {
+        for e in &g.edges[i] {
+            let (from, to, cost) = (e.from(), e.to(), e.weight());
             if from <= to {
                 ret = ret + cost;
             }
@@ -78,17 +80,32 @@ mod tests {
 
     #[test]
     fn test() {
-        // https://onlinejudge.u-aizu.ac.jp/problems/DPL_2_B
-        let g = Graph::from_tuples_undirected(4, &[(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4)]);
+        // https://onlinejudge.u-aizu.ac.jp/problems/DPL_2_B/
+        let mut g = Graph::new(4);
+        g.add_undirected(
+            vec![(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4)]
+                .into_iter()
+                .map(|(u, v, w)| Edge::new(u, v, w, ()))
+                .collect::<Vec<_>>(),
+        );
         assert_eq!(chinese_postman_problem(&g), 10);
 
-        let g = Graph::from_tuples_undirected(
-            4,
-            &[(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4), (1, 2, 5)],
+        let mut g = Graph::new(4);
+        g.add_undirected(
+            vec![(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4), (1, 2, 5)]
+                .into_iter()
+                .map(|(u, v, w)| Edge::new(u, v, w, ()))
+                .collect::<Vec<_>>(),
         );
         assert_eq!(chinese_postman_problem(&g), 18);
 
-        let g = Graph::from_tuples_undirected(2, &[(0, 1, 1), (0, 1, 2), (0, 1, 3)]);
+        let mut g = Graph::new(2);
+        g.add_undirected(
+            vec![(0, 1, 1), (0, 1, 2), (0, 1, 3)]
+                .into_iter()
+                .map(|(u, v, w)| Edge::new(u, v, w, ()))
+                .collect::<Vec<_>>(),
+        );
         assert_eq!(chinese_postman_problem(&g), 7);
     }
 }

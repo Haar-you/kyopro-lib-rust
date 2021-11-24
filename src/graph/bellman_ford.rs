@@ -8,7 +8,7 @@ pub enum BFResult<T> {
     PosInf,
 }
 
-pub fn bellman_ford<T>(g: &Graph<T>, src: usize) -> Vec<BFResult<T>>
+pub fn bellman_ford<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>, src: usize) -> Vec<BFResult<T>>
 where
     T: Copy + Ord + Default + Add<Output = T>,
 {
@@ -21,7 +21,8 @@ where
 
     for i in 0..n {
         for s in 0..n {
-            for &Edge { to, cost, .. } in &g.edges[s] {
+            for e in &g.edges[s] {
+                let (to, cost) = (e.to(), e.weight());
                 if let Value(x) = ret[s] {
                     match ret[to] {
                         Value(y) => {
@@ -43,9 +44,9 @@ where
 
     for _ in 0..n {
         for s in 0..n {
-            for &Edge { to, .. } in &g.edges[s] {
+            for e in &g.edges[s] {
                 if matches!(ret[s], NegInf) {
-                    ret[to] = NegInf;
+                    ret[e.to()] = NegInf;
                 }
             }
         }
@@ -60,16 +61,25 @@ mod tests {
 
     #[test]
     fn test() {
-        let g =
-            Graph::<i32>::from_tuples(4, &[(0, 1, 2), (0, 2, 3), (1, 2, -5), (1, 3, 1), (2, 3, 2)]);
+        let mut g = Graph::new(4);
+        g.add_directed(
+            vec![(0, 1, 2), (0, 2, 3), (1, 2, -5), (1, 3, 1), (2, 3, 2)]
+                .into_iter()
+                .map(|(u, v, w)| Edge::new(u, v, w, ()))
+                .collect::<Vec<_>>(),
+        );
         assert_eq!(
             bellman_ford(&g, 0),
             [Value(0), Value(2), Value(-3), Value(-1)]
         );
 
-        let g =
-            Graph::<i32>::from_tuples(4, &[(0, 1, 2), (0, 2, 3), (1, 2, -5), (1, 3, 1), (2, 3, 2)]);
-
+        let mut g = Graph::new(4);
+        g.add_directed(
+            vec![(0, 1, 2), (0, 2, 3), (1, 2, -5), (1, 3, 1), (2, 3, 2)]
+                .into_iter()
+                .map(|(u, v, w)| Edge::new(u, v, w, ()))
+                .collect::<Vec<_>>(),
+        );
         assert_eq!(
             bellman_ford(&g, 1),
             [PosInf, Value(0), Value(-5), Value(-3)]

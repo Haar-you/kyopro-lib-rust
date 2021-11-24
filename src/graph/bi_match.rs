@@ -5,7 +5,7 @@ pub struct BipartiteMatching<F> {
     right: usize,
     flow: F,
     s: usize,
-    t: usize
+    t: usize,
 }
 
 impl<F: MaxFlow<Cap = u64>> BipartiteMatching<F> {
@@ -22,11 +22,17 @@ impl<F: MaxFlow<Cap = u64>> BipartiteMatching<F> {
         }
 
         Self {
-            left, right, flow, s, t
+            left,
+            right,
+            flow,
+            s,
+            t,
         }
     }
 
     pub fn add_edge(&mut self, i: usize, j: usize) {
+        assert!(i < self.left);
+        assert!(j < self.right);
         self.flow.add_edge(i, self.left + j, 1);
     }
 
@@ -34,4 +40,3 @@ impl<F: MaxFlow<Cap = u64>> BipartiteMatching<F> {
         self.flow.max_flow(self.s, self.t)
     }
 }
-
