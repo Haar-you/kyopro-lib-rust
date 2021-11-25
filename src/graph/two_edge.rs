@@ -1,7 +1,6 @@
-use crate::graph::{lowlink::*, *};
+pub use crate::graph::lowlink::*;
 
-pub fn two_edge_connected_components<E: EdgeTrait>(g: &Graph<E>) -> Vec<Vec<usize>> {
-    let ll = Lowlink::new(&g);
+pub fn two_edge_connected_components(ll: &Lowlink) -> Vec<Vec<usize>> {
     let mut ret = vec![];
 
     for i in 0..ll.size {

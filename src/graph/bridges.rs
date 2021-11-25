@@ -1,10 +1,10 @@
-use crate::graph::{lowlink::*, *};
+pub use crate::graph::lowlink::*;
 
 /// 橋の列挙
 ///
 /// Time complexity O(V + E)
-pub fn bridges<E: EdgeTrait>(g: &Graph<E>) -> Vec<(usize, usize)> {
-    let Lowlink { ord, low, ch, .. } = Lowlink::new(&g);
+pub fn bridges(ll: &Lowlink) -> Vec<(usize, usize)> {
+    let Lowlink { ord, low, ch, .. } = ll;
 
     ch.iter()
         .enumerate()
@@ -20,6 +20,7 @@ pub fn bridges<E: EdgeTrait>(g: &Graph<E>) -> Vec<(usize, usize)> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::graph::*;
 
     #[test]
     fn test() {
@@ -31,7 +32,7 @@ mod tests {
                 .map(|(u, v, w)| Edge::new(u, v, w, ()))
                 .collect::<Vec<_>>(),
         );
-        let mut ans = bridges(&g);
+        let mut ans = bridges(&Lowlink::new(&g));
         ans.sort();
         assert_eq!(ans, [(2, 3)]);
 
@@ -42,7 +43,7 @@ mod tests {
                 .map(|(u, v, w)| Edge::new(u, v, w, ()))
                 .collect::<Vec<_>>(),
         );
-        let mut ans = bridges(&g);
+        let mut ans = bridges(&Lowlink::new(&g));
         ans.sort();
         assert_eq!(ans, [(0, 1), (1, 2), (2, 3), (3, 4)]);
     }
