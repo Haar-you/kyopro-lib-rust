@@ -1,3 +1,5 @@
+//! 全頂点間最短経路長
+
 #![allow(clippy::needless_range_loop)]
 
 use crate::graph::*;

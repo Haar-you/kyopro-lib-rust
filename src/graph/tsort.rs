@@ -1,3 +1,5 @@
+//! トポロジカルソート
+
 use crate::graph::*;
 use std::collections::VecDeque;
 

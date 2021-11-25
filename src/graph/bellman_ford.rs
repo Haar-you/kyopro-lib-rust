@@ -1,3 +1,5 @@
+//! 負閉路を持つグラフの最短経路 (Bellman-Ford)
+
 use crate::graph::*;
 use std::{cmp::min, ops::Add};
 

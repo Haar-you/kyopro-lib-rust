@@ -1,3 +1,5 @@
+//! 最大独立集合
+
 pub fn max_independent_set(g: Vec<Vec<bool>>) -> Vec<usize> {
     let n = g.len();
 

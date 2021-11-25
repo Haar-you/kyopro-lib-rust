@@ -1,3 +1,5 @@
+//! 最小費用流
+
 use std::{
     cmp::{min, Reverse},
     collections::BinaryHeap,

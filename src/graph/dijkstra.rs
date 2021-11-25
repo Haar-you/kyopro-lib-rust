@@ -1,3 +1,5 @@
+//! 非負重み付き最短経路 (Dijkstra)
+
 use crate::graph::*;
 use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 

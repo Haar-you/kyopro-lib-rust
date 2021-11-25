@@ -1,3 +1,5 @@
+//! 二部グラフ判定
+
 use crate::graph::*;
 
 pub fn check_bipartite<E: EdgeTrait>(g: &Graph<E>) -> Vec<Option<(Vec<usize>, Vec<usize>)>> {

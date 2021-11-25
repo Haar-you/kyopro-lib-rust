@@ -1,3 +1,5 @@
+//! 中国人郵便配達問題
+
 #![allow(clippy::needless_range_loop)]
 
 use crate::graph::*;

@@ -1,3 +1,5 @@
+//! 巡回セールスマン問題
+
 use crate::graph::*;
 use std::{cmp::min, ops::Add};
 

@@ -1,3 +1,5 @@
+//! 強連結成分分解
+
 use crate::graph::*;
 
 pub struct SCC {

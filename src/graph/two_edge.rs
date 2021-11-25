@@ -1,3 +1,5 @@
+//! 二重辺連結成分分解
+
 pub use crate::graph::lowlink::*;
 
 pub fn two_edge_connected_components(ll: &Lowlink) -> Vec<Vec<usize>> {

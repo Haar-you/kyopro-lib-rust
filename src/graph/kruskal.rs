@@ -1,3 +1,5 @@
+//! 最小全域木 (Kruskal)
+
 use crate::{ds::unionfind::UnionFind, graph::*};
 
 pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<E>) -> Vec<&E> {
