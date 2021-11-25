@@ -16,6 +16,8 @@ pub mod tsp;
 pub mod two_edge;
 pub mod warshall_floyd;
 
+pub mod psp;
+
 pub mod dinic;
 pub mod flow;
 pub mod ford_fulkerson;
