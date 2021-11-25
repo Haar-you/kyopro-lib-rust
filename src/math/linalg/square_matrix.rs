@@ -297,17 +297,13 @@ mod tests {
             let a = SquareMatrix::from_vec(a);
             let b = SquareMatrix::from_vec(b);
 
-            straight.push(
-                timer!({
-                    a.clone().straight_mul(b.clone());
-                })
-            );
+            straight.push(timer!({
+                a.clone().straight_mul(b.clone());
+            }));
 
-            strassen.push(
-                timer!({
-                    a.clone().strassen_mul(b.clone());
-                })
-            )
+            strassen.push(timer!({
+                a.clone().strassen_mul(b.clone());
+            }))
         }
 
         dbg!(straight, strassen);
