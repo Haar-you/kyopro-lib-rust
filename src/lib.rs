@@ -1,6 +1,7 @@
 pub mod algebra;
 pub mod algo;
 pub mod ds;
+pub mod geom;
 pub mod graph;
 pub mod macros;
 pub mod math;
