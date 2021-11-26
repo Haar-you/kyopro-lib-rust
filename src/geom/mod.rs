@@ -5,6 +5,8 @@ pub mod intersect_segments;
 pub mod dist_segment_point;
 pub mod dist_segments;
 
+pub mod area_polygon;
+
 use std::marker::PhantomData;
 
 pub trait EpsValue {
@@ -32,7 +34,7 @@ pub trait Eps:
 }
 
 #[derive(Copy, Clone, Debug, Default)]
-pub struct EpsFloat<E>(f64, PhantomData<E>);
+pub struct EpsFloat<E>(pub f64, PhantomData<E>);
 
 impl<E> EpsFloat<E> {
     pub fn new(value: f64) -> Self {
