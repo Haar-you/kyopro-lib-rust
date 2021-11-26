@@ -1,6 +1,8 @@
 pub mod chmax;
 pub mod chmin;
 pub mod eps;
+pub mod max;
+pub mod min;
 pub mod modulo;
 pub mod mul_vec;
 pub mod rec;
