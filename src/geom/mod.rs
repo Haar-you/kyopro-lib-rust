@@ -7,6 +7,8 @@ pub mod dist_segments;
 
 pub mod area_polygon;
 
+pub mod convex;
+
 use std::marker::PhantomData;
 
 pub trait EpsValue {
