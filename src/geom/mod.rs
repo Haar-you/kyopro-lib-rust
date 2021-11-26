@@ -1,5 +1,7 @@
 pub mod ccw;
 
+pub mod intersect_segments;
+
 use std::marker::PhantomData;
 
 pub trait EpsValue {
@@ -117,7 +119,7 @@ impl<E> std::str::FromStr for EpsFloat<E> {
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
-pub struct Vector<T>(T, T);
+pub struct Vector<T>(pub T, pub T);
 
 impl<T: Eps> std::ops::Add for Vector<T> {
     type Output = Self;
@@ -174,50 +176,50 @@ impl<T: Eps> Vector<T> {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, Default)]
 pub struct Line<T> {
-    from: Vector<T>,
-    to: Vector<T>,
+    pub from: Vector<T>,
+    pub to: Vector<T>,
 }
 
 impl<T: Eps> Line<T> {
     pub fn new(from: Vector<T>, to: Vector<T>) -> Self {
         Self { from, to }
     }
-    pub fn unit(&self) -> Vector<T> {
+    pub fn unit(self) -> Vector<T> {
         (self.to - self.from).unit()
     }
-    pub fn normal(&self) -> Vector<T> {
+    pub fn normal(self) -> Vector<T> {
         (self.to - self.from).normal()
     }
-    pub fn diff(&self) -> Vector<T> {
+    pub fn diff(self) -> Vector<T> {
         self.to - self.from
     }
-    pub fn abs(&self) -> T {
+    pub fn abs(self) -> T {
         self.diff().abs()
     }
-    pub fn dot(&self, other: &Self) -> T {
+    pub fn dot(self, other: Self) -> T {
         self.diff().dot(other.diff())
     }
-    pub fn cross(&self, other: &Self) -> T {
+    pub fn cross(self, other: Self) -> T {
         self.diff().cross(other.diff())
     }
 }
 
 impl<T: Eps> Line<T> {
-    pub fn projection(&self, p: Vector<T>) -> Vector<T> {
+    pub fn projection(self, p: Vector<T>) -> Vector<T> {
         self.from + self.unit() * self.unit().dot(p - self.from)
     }
 
-    pub fn reflection(&self, p: Vector<T>) -> Vector<T> {
+    pub fn reflection(self, p: Vector<T>) -> Vector<T> {
         p + (self.projection(p) - p) * T::from(2.0)
     }
 
-    pub fn is_orthogonal(&self, other: &Self) -> bool {
+    pub fn is_orthogonal(self, other: Self) -> bool {
         self.dot(other).abs() == T::from(0.0)
     }
 
-    pub fn is_parallel(&self, other: &Self) -> bool {
+    pub fn is_parallel(self, other: Self) -> bool {
         self.cross(other).abs() == T::from(0.0)
     }
 }
