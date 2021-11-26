@@ -2,6 +2,9 @@ pub mod ccw;
 
 pub mod intersect_segments;
 
+pub mod dist_segment_point;
+pub mod dist_segments;
+
 use std::marker::PhantomData;
 
 pub trait EpsValue {
