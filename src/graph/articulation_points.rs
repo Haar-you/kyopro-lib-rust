@@ -31,8 +31,7 @@ mod tests {
         g.add_undirected(
             vec![(0, 1, 1), (0, 2, 1), (1, 2, 1), (2, 3, 1)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         let mut ans = articulation_points(&Lowlink::new(&g));
         ans.sort();
@@ -42,8 +41,7 @@ mod tests {
         g.add_undirected(
             vec![(0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         let mut ans = articulation_points(&Lowlink::new(&g));
         ans.sort();

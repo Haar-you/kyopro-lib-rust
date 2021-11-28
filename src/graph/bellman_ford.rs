@@ -67,8 +67,7 @@ mod tests {
         g.add_directed(
             vec![(0, 1, 2), (0, 2, 3), (1, 2, -5), (1, 3, 1), (2, 3, 2)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         assert_eq!(
             bellman_ford(&g, 0),
@@ -79,8 +78,7 @@ mod tests {
         g.add_directed(
             vec![(0, 1, 2), (0, 2, 3), (1, 2, -5), (1, 3, 1), (2, 3, 2)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         assert_eq!(
             bellman_ford(&g, 1),

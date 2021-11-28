@@ -102,8 +102,7 @@ mod tests {
                 (3, 2, 1),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ()))
-            .collect::<Vec<_>>(),
+            .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         let scc = SCC::new(&g).to_vec();
 
