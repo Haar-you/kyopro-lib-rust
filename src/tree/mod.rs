@@ -4,7 +4,6 @@ pub mod rooting;
 pub mod tree_dp;
 pub mod utils;
 
-
 #[derive(Clone, Debug)]
 pub struct TreeEdge<T> {
     pub to: usize,

@@ -19,6 +19,7 @@ impl<T> Node<T> {
 
 #[derive(Default, Debug)]
 pub struct PersistentQueue<T> {
+    #[allow(clippy::type_complexity)]
     front_back_node: Option<(Rc<Node<T>>, Rc<Node<T>>)>,
 }
 

@@ -1,7 +1,10 @@
-use crate::math::{mod_ops::pow::*, factorize::trial::*};
+use crate::math::{factorize::trial::*, mod_ops::pow::*};
 
 pub fn primitive_root(p: u64) -> Option<u64> {
-    let pf = factorize(p - 1).into_iter().map(|(x, _)| x).collect::<Vec<_>>();
+    let pf = factorize(p - 1)
+        .into_iter()
+        .map(|(x, _)| x)
+        .collect::<Vec<_>>();
 
     for g in 2..=p {
         if pf.iter().all(|f| mod_pow(g, (p - 1) / f, p) != 1) {

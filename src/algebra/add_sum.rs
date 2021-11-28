@@ -4,7 +4,7 @@ use std::{
     ops::{Add, Mul},
 };
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct AddSum<T, U>(PhantomData<T>, PhantomData<U>);
 
 impl<T, U> AddSum<T, U> {
@@ -15,22 +15,22 @@ impl<T, U> AddSum<T, U> {
 
 impl<T, U> Action<T, U> for AddSum<T, U>
 where
-    T: Clone + Add<Output = T> + Default + From<U>,
-    U: Clone + Add<Output = U> + Mul<Output = U> + Default + From<u64>,
+    T: Add<Output = T> + Default + From<U>,
+    U: Add<Output = U> + Mul<Output = U> + Default + From<u64>,
 {
     fn fold_id(&self) -> T {
         T::default()
     }
     fn fold(&self, x: T, y: T) -> T {
-        x.clone() + y.clone()
+        x + y
     }
     fn update_id(&self) -> U {
         U::default()
     }
     fn update(&self, x: U, y: U) -> U {
-        x.clone() + y.clone()
+        x + y
     }
     fn convert(&self, x: T, y: U, l: usize) -> T {
-        x.clone() + T::from(y.clone() * U::from(l as u64))
+        x + T::from(y * U::from(l as u64))
     }
 }

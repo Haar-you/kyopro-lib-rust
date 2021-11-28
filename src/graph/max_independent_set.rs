@@ -1,5 +1,6 @@
 //! 最大独立集合
 
+#[allow(clippy::cognitive_complexity)]
 pub fn max_independent_set(g: Vec<Vec<bool>>) -> Vec<usize> {
     let n = g.len();
 
