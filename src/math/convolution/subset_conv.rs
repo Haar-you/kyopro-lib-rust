@@ -1,7 +1,11 @@
 use crate::math::convolution::{mobius_sub::*, zeta_sub::*};
 use std::ops::{Add, Mul, Sub};
 
-#[allow(clippy::needless_range_loop, clippy::manual_memcpy, clippy::many_single_char_names)]
+#[allow(
+    clippy::needless_range_loop,
+    clippy::manual_memcpy,
+    clippy::many_single_char_names
+)]
 pub fn subset_convolution<T>(f: Vec<T>, g: Vec<T>) -> Vec<T>
 where
     T: Copy + Default + Add<Output = T> + Sub<Output = T> + Mul<Output = T>,

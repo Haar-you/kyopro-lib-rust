@@ -4,10 +4,10 @@ pub mod unionfind;
 
 pub mod dual_segtree;
 pub mod fenwick;
+pub mod lazy_segtree;
 pub mod segtree;
 pub mod segtree_linear_add;
 pub mod starry_sky_tree;
-pub mod lazy_segtree;
 
 pub mod cumulative_sum_1d;
 
