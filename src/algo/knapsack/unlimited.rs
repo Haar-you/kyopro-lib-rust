@@ -1,14 +1,17 @@
 use std::{cmp::max, ops::Add};
 
 /// 個数制限無しナップサック問題
-///
+/// # Complexity
 /// Time complexity O(n cap)
 ///
 /// Space complexity O(cap)
-pub fn knapsack_unlimited<T>(n: usize, cap: usize, ws: &[usize], vs: &[T]) -> T
+pub fn knapsack_unlimited<T>(cap: usize, ws: &[usize], vs: &[T]) -> T
 where
     T: Default + Copy + Ord + Add<Output = T>,
 {
+    let n = ws.len();
+    assert_eq!(ws.len(), vs.len());
+
     let mut dp = vec![vec![T::default(); cap + 1]; 2];
 
     for i in 0..n {

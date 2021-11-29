@@ -4,15 +4,18 @@ use crate::{algo::merge::inplace_merge, chmax};
 use std::ops::Add;
 
 /// 要素数が小さいナップサック問題
-///
+/// # Complexity
 /// Time complexity O(n * 2 ^ (n / 2))
 ///
 /// Space complexity O(2 ^ (n / 2))
-pub fn knapsack_small_quantity<W, V>(n: usize, cap: W, ws: &[W], vs: &[V]) -> V
+pub fn knapsack_small_quantity<W, V>(cap: W, ws: &[W], vs: &[V]) -> V
 where
     W: Default + Copy + Add<Output = W> + Ord,
     V: Default + Copy + Add<Output = V> + Ord,
 {
+    let n = ws.len();
+    assert_eq!(ws.len(), vs.len());
+
     let p = n / 2;
 
     let zero_w = W::default();
