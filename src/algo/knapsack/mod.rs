@@ -8,7 +8,6 @@
 //! | knapsack_limited | $O(n \cdot cap \log(\max(ms)))$ | $O(cap)$ |
 //! | knapsack_unlimited | $O(n \cdot cap)$ | $O(cap)$ |
 
-
 pub mod limited;
 pub mod small_quantity;
 pub mod small_value;
@@ -22,10 +21,7 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_1_B
-        assert_eq!(
-            knapsack_small_weight(5, &[2, 2, 1, 3], &[4, 5, 2, 8]),
-            13
-        );
+        assert_eq!(knapsack_small_weight(5, &[2, 2, 1, 3], &[4, 5, 2, 8]), 13);
         assert_eq!(knapsack_small_weight(20, &[9, 10], &[5, 4]), 9);
 
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_1_F
@@ -45,10 +41,7 @@ mod tests {
         assert_eq!(knapsack_unlimited(9, &[1, 1, 2], &[2, 3, 5]), 27);
 
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/1/DPL_1_H
-        assert_eq!(
-            knapsack_small_quantity(5, &[2, 2, 1, 3], &[4, 5, 2, 8]),
-            13
-        );
+        assert_eq!(knapsack_small_quantity(5, &[2, 2, 1, 3], &[4, 5, 2, 8]), 13);
         assert_eq!(knapsack_small_quantity(20, &[9, 10], &[5, 4]), 9);
     }
 }

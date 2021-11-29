@@ -2,9 +2,10 @@ use std::ops::Add;
 
 /// 部分和問題 (和を達成する組み合わせ数を返す)
 ///
-/// Time complexity O(nk)
+/// # Complexity
+/// Time complexity $O(nk)$
 ///
-/// Space complexity O(k)
+/// Space complexity $O(k)$
 pub fn subset_sum<T>(n: usize, k: usize, a: &[usize]) -> Vec<T>
 where
     T: Copy + From<usize> + Add<Output = T>,

@@ -1,8 +1,9 @@
 /// 各要素に最大使用回数が定められている部分和問題
 ///
-/// Time complexity O(nk)
+/// # Complexity
+/// Time complexity $O(nk)$
 ///
-/// Space complexity O(k)
+/// Space complexity $O(k)$
 ///
 /// # Arguments
 ///

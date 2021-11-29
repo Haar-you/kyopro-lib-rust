@@ -1,8 +1,11 @@
+//! 最長増加部分列
+
 use crate::algo::bsearch::lower_bound;
 
-/// 数列の最長増加部分列を求める。
+/// 列の最長増加部分列の一つを求める。
 ///
-/// Time complexity O(n log(n))
+/// # Complexity
+/// Time complexity $O(n \log(n))$
 pub fn lis<T>(a: &[T]) -> Vec<usize>
 where
     T: Ord + Copy,

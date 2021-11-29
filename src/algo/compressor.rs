@@ -17,14 +17,14 @@ where
 {
     /// `value`が何番目の値(0-index)かを返す。
     /// # Complexity
-    /// Time complexity O(log(n))
+    /// Time complexity $O(\log(n))$
     pub fn index(&self, value: &T) -> usize {
         lower_bound(&self.data, value)
     }
 
     /// `i`番目の値を返す。
     /// # Complexity
-    /// Time complexity O(1)
+    /// Time complexity $O(1)$
     pub fn get(&self, i: usize) -> &T {
         &self.data[i]
     }

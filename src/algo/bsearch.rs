@@ -1,3 +1,9 @@
+//! 二分探索
+
+/// x以上となる最小のindexを求める。
+///
+/// # Complexity
+/// Time complexity $O(\log(n))$
 pub fn lower_bound<T: Ord>(a: &[T], value: &T) -> usize {
     let n = a.len();
     let mut lb = 0;
@@ -18,6 +24,10 @@ pub fn lower_bound<T: Ord>(a: &[T], value: &T) -> usize {
     lb
 }
 
+/// xを超える最小のindexを求める。
+///
+/// # Complexity
+/// Time complexity $O(\log(n))$
 pub fn upper_bound<T: Ord>(a: &[T], value: &T) -> usize {
     let n = a.len();
     let mut ub = 0;
@@ -38,6 +48,10 @@ pub fn upper_bound<T: Ord>(a: &[T], value: &T) -> usize {
     ub
 }
 
+/// lower_bound, upper_boundの組を求める。
+///
+/// # Complexity
+/// Time complexity $O(\log(n))$
 pub fn equal_range<T: Ord>(a: &[T], value: &T) -> (usize, usize) {
     (lower_bound(a, value), upper_bound(a, value))
 }
