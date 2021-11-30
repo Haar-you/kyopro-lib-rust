@@ -29,12 +29,18 @@ where
         &self.data[i]
     }
 
-    pub fn compress(&self, values: impl IntoIterator<Item = T>) -> Vec<usize> {
-        values.into_iter().map(|x| self.index(&x)).collect()
+    pub fn compress<'a>(
+        &'a self,
+        values: impl IntoIterator<Item = T> + 'a,
+    ) -> impl Iterator<Item = usize> + 'a {
+        values.into_iter().map(move |x| self.index(&x))
     }
 
-    pub fn decompress(&self, indices: impl IntoIterator<Item = usize>) -> Vec<&T> {
-        indices.into_iter().map(|i| self.get(i)).collect()
+    pub fn decompress<'a>(
+        &'a self,
+        indices: impl IntoIterator<Item = usize> + 'a,
+    ) -> impl Iterator<Item = &T> + 'a {
+        indices.into_iter().map(move |i| self.get(i))
     }
 
     pub fn size(&self) -> usize {
@@ -76,13 +82,12 @@ mod tests {
         let compressor = builder.build();
 
         assert_eq!(
-            compressor.compress(data.clone()),
+            compressor.compress(data.clone()).collect::<Vec<_>>(),
             vec![2, 4, 3, 5, 6, 7, 1, 0, 4]
         );
         assert_eq!(
             compressor
                 .decompress(vec![2, 4, 3, 5, 6, 7, 1, 0, 4])
-                .into_iter()
                 .copied()
                 .collect::<Vec<_>>(),
             data
@@ -94,16 +99,12 @@ mod tests {
         let compressor = builder.build();
 
         assert_eq!(
-            compressor
-                .compress(data.clone())
-                .into_iter()
-                .collect::<HashSet<_>>(),
+            compressor.compress(data.clone()).collect::<HashSet<_>>(),
             hashset![2, 4, 3, 5, 6, 7, 1, 0, 4]
         );
         assert_eq!(
             compressor
                 .decompress(vec![2, 4, 3, 5, 6, 7, 1, 0, 4])
-                .into_iter()
                 .copied()
                 .collect::<HashSet<_>>(),
             data
