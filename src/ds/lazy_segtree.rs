@@ -9,7 +9,9 @@ pub struct LazySegmentTree<T, U, A> {
     action: A,
 }
 
-impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<T, U>> LazySegmentTree<T, U, A> {
+impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>>
+    LazySegmentTree<T, U, A>
+{
     pub fn new(n: usize, a: A) -> Self {
         let size = n.next_power_of_two() * 2;
         Self {
@@ -63,7 +65,7 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<T, U>> LazySegmentTree<T, U
     }
 }
 
-impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<T, U>> Updatable<Range<usize>>
+impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Updatable<Range<usize>>
     for LazySegmentTree<T, U, A>
 {
     type Value = U;
@@ -100,8 +102,8 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<T, U>> Updatable<Range<usiz
     }
 }
 
-impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<T, U>> FoldableMut<Range<usize>>
-    for LazySegmentTree<T, U, A>
+impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>>
+    FoldableMut<Range<usize>> for LazySegmentTree<T, U, A>
 {
     type Output = T;
     fn fold(&mut self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
