@@ -45,24 +45,19 @@ impl<T: Copy> Tree<T> {
         }
     }
 
-    pub fn from_tuples(size: usize, es: &[(usize, usize, T)]) -> Self {
-        let mut ret = Self::new(size);
-        for &(u, v, w) in es {
-            ret.add(u, v, w);
+    pub fn add_undirected(&mut self, edges: impl IntoIterator<Item = (usize, usize, T)>) {
+        for (u, v, w) in edges {
+            self.nodes[u].children.push(TreeEdge { to: v, weight: w });
+            self.nodes[v].children.push(TreeEdge { to: u, weight: w });
         }
-        ret
     }
 
-    pub fn add(&mut self, u: usize, v: usize, w: T) {
-        self.nodes[u].children.push(TreeEdge { to: v, weight: w });
-        self.nodes[v].children.push(TreeEdge { to: u, weight: w });
-    }
-
-    pub fn add_directed(&mut self, p: usize, c: usize, w: T) {
-        assert!(self.nodes[c].parent.is_none());
-
-        self.nodes[p].children.push(TreeEdge { to: c, weight: w });
-        self.nodes[c].parent = Some(TreeEdge { to: p, weight: w });
+    pub fn add_directed(&mut self, edges: impl IntoIterator<Item = (usize, usize, T)>) {
+        for (p, c, w) in edges {
+            assert!(self.nodes[c].parent.is_none());
+            self.nodes[p].children.push(TreeEdge { to: c, weight: w });
+            self.nodes[c].parent = Some(TreeEdge { to: p, weight: w });
+        }
     }
 }
 

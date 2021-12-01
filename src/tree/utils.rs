@@ -4,8 +4,8 @@ use crate::tree::*;
 use std::{cmp::max, ops::Add};
 
 /// rootを根としたときの根から各頂点への距離を列挙する。
-///
-/// Time complexity O(n)
+/// # Complexity
+/// Time complexity $O(n)$
 pub fn tree_distance<T>(tr: &Tree<T>, root: usize) -> Vec<T>
 where
     T: Add<Output = T> + Copy + Default,
@@ -30,8 +30,8 @@ where
 }
 
 /// 木の任意の2頂点の距離の最大値を求める。
-///
-/// Time complexity O(n)
+/// # Complexity
+/// Time complexity $O(n)$
 pub fn tree_diameter<T>(tr: &Tree<T>) -> (T, usize, usize)
 where
     T: Add<Output = T> + Copy + Default + Ord,
@@ -54,8 +54,8 @@ where
 }
 
 /// 木の各頂点について、そこからの距離の最大値を列挙する。
-///
-/// Time complexity O(n)
+/// # Complexity
+/// Time complexity $O(n)$
 pub fn tree_height<T>(tr: &Tree<T>) -> Vec<T>
 where
     T: Add<Output = T> + Copy + Default + Ord,
@@ -81,8 +81,8 @@ where
 }
 
 /// 木上の2頂点を結ぶパス上の頂点列を求める。
-///
-/// Time complexity O(n)
+/// # Complexity
+/// Time complexity $O(n)$
 pub fn tree_path<T>(tr: &Tree<T>, u: usize, v: usize) -> Vec<usize> {
     let n = tr.len();
     let mut ret = vec![];
@@ -122,14 +122,17 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_A
-        let g = Tree::<u32>::from_tuples(4, &[(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
-        assert_eq!(tree_diameter(&g).0, 5);
+        let mut tree = Tree::new(4);
+        tree.add_undirected(vec![(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
+        assert_eq!(tree_diameter(&tree).0, 5);
 
-        let g = Tree::<u32>::from_tuples(4, &[(0, 1, 1), (1, 2, 2), (2, 3, 4)]);
-        assert_eq!(tree_diameter(&g).0, 7);
+        let mut tree = Tree::new(4);
+        tree.add_undirected(vec![(0, 1, 1), (1, 2, 2), (2, 3, 4)]);
+        assert_eq!(tree_diameter(&tree).0, 7);
 
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_B
-        let g = Tree::<u32>::from_tuples(4, &[(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
-        assert_eq!(tree_height(&g), [5, 3, 4, 5]);
+        let mut tree = Tree::new(4);
+        tree.add_undirected(vec![(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
+        assert_eq!(tree_height(&tree), [5, 3, 4, 5]);
     }
 }
