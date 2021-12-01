@@ -1,3 +1,4 @@
+pub mod euler_tour;
 pub mod lca;
 pub mod rerooting;
 pub mod rooting;
