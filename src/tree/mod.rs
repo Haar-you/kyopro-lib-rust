@@ -1,3 +1,4 @@
+pub mod centroid;
 pub mod lca;
 pub mod rerooting;
 pub mod rooting;
