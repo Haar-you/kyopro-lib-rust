@@ -1,4 +1,5 @@
 pub mod centroid;
+pub mod depth_query;
 pub mod euler_tour;
 pub mod lca;
 pub mod rerooting;
