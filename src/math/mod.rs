@@ -23,3 +23,5 @@ pub mod totient;
 pub mod berlekamp_massey;
 
 pub mod linalg;
+
+pub mod sum_floor_linear;
