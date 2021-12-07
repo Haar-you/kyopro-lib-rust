@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["chmax",""],["chmin",""],["ds_macros",""],["max",""],["min",""],["modulo",""],["mul_vec",""],["rec",""],["timer",""],["trait_alias",""]]});

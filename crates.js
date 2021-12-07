@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["haar_kyopro_lib_rust"];

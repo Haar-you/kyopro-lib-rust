@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["bell",""],["bernoulli",""],["catalan",""]],"struct":[["FactorialTable",""]]});

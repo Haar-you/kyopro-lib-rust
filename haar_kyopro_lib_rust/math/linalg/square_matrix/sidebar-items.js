@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["SquareMatrix",""]],"trait":[["SquareMatrixElem",""]]});

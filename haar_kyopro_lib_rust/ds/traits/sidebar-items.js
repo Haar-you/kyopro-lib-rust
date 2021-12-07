@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Assignable",""],["Foldable",""],["FoldableMut",""],["IndexableMut",""],["Updatable",""]]});
