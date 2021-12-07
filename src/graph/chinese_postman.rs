@@ -1,3 +1,5 @@
+//! 中国人郵便配達問題
+
 #![allow(clippy::needless_range_loop)]
 
 use crate::graph::*;
@@ -85,8 +87,7 @@ mod tests {
         g.add_undirected(
             vec![(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         assert_eq!(chinese_postman_problem(&g), 10);
 
@@ -94,8 +95,7 @@ mod tests {
         g.add_undirected(
             vec![(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4), (1, 2, 5)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         assert_eq!(chinese_postman_problem(&g), 18);
 
@@ -103,8 +103,7 @@ mod tests {
         g.add_undirected(
             vec![(0, 1, 1), (0, 1, 2), (0, 1, 3)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         assert_eq!(chinese_postman_problem(&g), 7);
     }

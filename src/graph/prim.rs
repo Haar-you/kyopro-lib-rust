@@ -1,3 +1,5 @@
+//! 最小全域木 (Prim)
+
 use crate::graph::*;
 use std::{cmp::Reverse, collections::BinaryHeap};
 
@@ -51,8 +53,7 @@ mod tests {
                 (4, 5, 6),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ()))
-            .collect::<Vec<_>>(),
+            .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
 
         let ans = prim(&g).iter().map(|e| e.weight).sum::<i32>();

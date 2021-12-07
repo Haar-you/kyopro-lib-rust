@@ -1,18 +1,20 @@
-use crate::graph::{lowlink::*, *};
+//! 関節点の列挙
 
-pub fn articulation_points<E: EdgeTrait>(g: &Graph<E>) -> Vec<usize> {
+pub use crate::graph::lowlink::*;
+
+pub fn articulation_points(ll: &Lowlink) -> Vec<usize> {
     let Lowlink {
         size,
         ord,
         low,
         par,
         ch,
-    } = Lowlink::new(&g);
+    } = ll;
 
-    (0..size)
+    (0..*size)
         .filter(|&i| {
             (par[i].is_none() && ch[i].len() >= 2)
-                || ch[i].iter().any(|&j| par[i].is_some() && ord[i] <= low[j])
+                || (par[i].is_some() && ch[i].iter().any(|&j| ord[i] <= low[j]))
         })
         .collect()
 }
@@ -20,6 +22,7 @@ pub fn articulation_points<E: EdgeTrait>(g: &Graph<E>) -> Vec<usize> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::graph::*;
 
     #[test]
     fn test() {
@@ -28,10 +31,9 @@ mod tests {
         g.add_undirected(
             vec![(0, 1, 1), (0, 2, 1), (1, 2, 1), (2, 3, 1)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
-        let mut ans = articulation_points(&g);
+        let mut ans = articulation_points(&Lowlink::new(&g));
         ans.sort();
         assert_eq!(ans, [2]);
 
@@ -39,10 +41,9 @@ mod tests {
         g.add_undirected(
             vec![(0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
-        let mut ans = articulation_points(&g);
+        let mut ans = articulation_points(&Lowlink::new(&g));
         ans.sort();
         assert_eq!(ans, [1, 2, 3]);
     }

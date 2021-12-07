@@ -1,3 +1,5 @@
+//! 有向グラフの閉路検出
+
 use crate::graph::*;
 
 #[derive(Clone, Copy, PartialEq, Eq)]

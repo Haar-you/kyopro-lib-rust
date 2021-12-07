@@ -1,3 +1,5 @@
+//! 全頂点間最短経路長
+
 #![allow(clippy::needless_range_loop)]
 
 use crate::graph::*;
@@ -57,8 +59,7 @@ mod tests {
                 (3, 2, 7),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ()))
-            .collect::<Vec<_>>(),
+            .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
 
         assert_eq!(
@@ -82,8 +83,7 @@ mod tests {
                 (3, 2, 7),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ()))
-            .collect::<Vec<_>>(),
+            .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
 
         assert_eq!(
@@ -107,8 +107,7 @@ mod tests {
                 (3, 2, -7),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ()))
-            .collect::<Vec<_>>(),
+            .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
 
         assert_eq!(warshall_floyd(&g), None);
