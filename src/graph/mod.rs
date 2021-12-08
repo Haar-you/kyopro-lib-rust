@@ -1,3 +1,5 @@
+//! グラフ一般に関するもの
+
 pub mod articulation_points;
 pub mod bellman_ford;
 pub mod bipartite;

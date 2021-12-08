@@ -1,3 +1,5 @@
+//! データ構造
+
 pub mod traits;
 
 pub mod unionfind;

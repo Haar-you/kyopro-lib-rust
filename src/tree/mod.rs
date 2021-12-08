@@ -1,3 +1,5 @@
+//! 木に関するもの
+
 pub mod centroid;
 pub mod depth_query;
 pub mod euler_tour;

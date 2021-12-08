@@ -1,3 +1,5 @@
+//! 数学
+
 pub mod crt;
 pub mod divisor;
 pub mod ext_gcd;

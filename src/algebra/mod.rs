@@ -1,3 +1,5 @@
+//! 代数的構造
+
 pub mod one_zero;
 pub mod traits;
 

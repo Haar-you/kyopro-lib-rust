@@ -1,3 +1,5 @@
+//! macro_exportされたmacro置き場
+
 pub mod chmax;
 pub mod chmin;
 pub mod ds_macros;
