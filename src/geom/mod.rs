@@ -9,6 +9,8 @@ pub mod area_polygon;
 
 pub mod convex;
 
+pub mod point_in_polygon;
+
 use std::marker::PhantomData;
 
 pub trait EpsValue {
@@ -33,6 +35,7 @@ pub trait Eps:
     fn tan(self) -> Self;
     fn abs(self) -> Self;
     fn sqrt(self) -> Self;
+    fn atan2(self, other: Self) -> Self;
 }
 
 #[derive(Copy, Clone, Debug, Default)]
@@ -62,6 +65,9 @@ impl<E: EpsValue + Copy> Eps for EpsFloat<E> {
     }
     fn sqrt(self) -> Self {
         Self::new(self.0.sqrt())
+    }
+    fn atan2(self, other: Self) -> Self {
+        Self::new(self.0.atan2(other.0))
     }
 }
 
@@ -180,6 +186,9 @@ impl<T: Eps> Vector<T> {
     }
     pub fn normal(self) -> Self {
         Self(-self.1, self.0)
+    }
+    pub fn angle(self, other: Self) -> T {
+        (other.1 - self.1).atan2(other.0 - self.0)
     }
 }
 
