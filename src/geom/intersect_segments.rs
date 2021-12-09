@@ -13,15 +13,17 @@ pub fn intersect_segments<T: Eps>(
     a: Line<T>,
     b: Line<T>,
 ) -> (IntersectSegments, Option<Vector<T>>) {
+    use self::IntersectSegments::*;
+
     let cr = a.cross(b);
 
     if cr.abs() == T::from(0.0) {
         return if ccw(a.from, a.to, b.from).to_value() * ccw(a.from, a.to, b.to).to_value() <= 0
             && ccw(b.from, b.to, a.from).to_value() * ccw(b.from, b.to, a.to).to_value() <= 0
         {
-            (IntersectSegments::OVERLAPPED, None)
+            (OVERLAPPED, None)
         } else {
-            (IntersectSegments::NOT_INTERSECTED, None)
+            (NOT_INTERSECTED, None)
         };
     }
 
@@ -29,8 +31,8 @@ pub fn intersect_segments<T: Eps>(
     let t2 = (b.from - a.from).cross(a.diff()) / cr;
 
     if t1 < T::from(0.0) || t1 > T::from(1.0) || t2 < T::from(0.0) || t2 > T::from(1.0) {
-        (IntersectSegments::NOT_INTERSECTED, None)
+        (NOT_INTERSECTED, None)
     } else {
-        (IntersectSegments::INTERSECTED, Some(a.from + a.diff() * t1))
+        (INTERSECTED, Some(a.from + a.diff() * t1))
     }
 }
