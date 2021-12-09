@@ -124,7 +124,7 @@ impl BinaryTrie {
             .insert(value, Self::bitlen())
     }
 
-    pub fn erase(&mut self, value: u64) -> Option<usize>  {
+    pub fn erase(&mut self, value: u64) -> Option<usize> {
         self.root
             .get_or_insert(Box::new(Node::default()))
             .erase(value, Self::bitlen())
@@ -195,17 +195,14 @@ mod tests {
 
             let x = rng.gen::<u64>() % 100;
 
-            assert_eq!(
-                bt.erase(x).unwrap_or(0),
-                bt.count(x)
-            );
+            assert_eq!(bt.erase(x).unwrap_or(0), bt.count(x));
             match m.get_mut(&x) {
                 Some(y) if *y >= 1 => {
                     *y -= 1;
                     if *y == 0 {
                         m.remove(&x);
                     }
-                },
+                }
                 _ => {}
             }
         }

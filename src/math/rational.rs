@@ -1,3 +1,5 @@
+//! 有理数
+
 #![allow(clippy::suspicious_arithmetic_impl)]
 
 use crate::math::gcd_lcm::GcdLcm;

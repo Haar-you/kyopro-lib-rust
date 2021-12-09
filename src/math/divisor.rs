@@ -1,3 +1,5 @@
+//! 約数列挙
+
 /// Time complexity O(sqrt n)
 pub fn count_divisors(n: u64) -> u64 {
     let mut ret = 0;
@@ -37,7 +39,7 @@ pub fn enumerate_divisors(n: u64) -> Vec<u64> {
     }
 
     temp.reverse();
-    ret.extend(&temp);
+    ret.extend(temp);
 
     ret
 }

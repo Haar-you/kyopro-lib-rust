@@ -1,3 +1,5 @@
+//! 原始根
+
 use crate::math::{factorize::trial::*, mod_ops::pow::*};
 
 pub fn primitive_root(p: u64) -> Option<u64> {

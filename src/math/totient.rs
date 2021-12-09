@@ -1,3 +1,5 @@
+//! トーシェント関数
+
 pub fn totient(mut n: u64) -> u64 {
     let mut ret = n;
 
