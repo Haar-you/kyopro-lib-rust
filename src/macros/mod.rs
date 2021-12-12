@@ -3,6 +3,7 @@
 pub mod chmax;
 pub mod chmin;
 pub mod ds_macros;
+pub mod io;
 pub mod max;
 pub mod min;
 pub mod modulo;
