@@ -1,0 +1,34 @@
+use crate::geom::*;
+
+pub fn convex_diameter<T: Eps>(ps: Vec<Vector<T>>) -> T {
+    let n = ps.len();
+
+    let mut i = ps
+        .iter()
+        .enumerate()
+        .min_by(|(_, p), (_, q)| p.1.partial_cmp(&q.1).unwrap())
+        .unwrap()
+        .0;
+    let mut j = ps
+        .iter()
+        .enumerate()
+        .max_by(|(_, p), (_, q)| p.1.partial_cmp(&q.1).unwrap())
+        .unwrap()
+        .0;
+
+    let mut ret = (ps[i] - ps[j]).abs();
+
+    for _ in 0..2 * n {
+        if (ps[(i + 1) % n] - ps[i]).cross(ps[(j + 1) % n] - ps[j]) > T::from(0.0) {
+            j += 1;
+            j %= n;
+        } else {
+            i += 1;
+            i %= n;
+        }
+
+        ret = ret.max((ps[i] - ps[j]).abs());
+    }
+
+    ret
+}

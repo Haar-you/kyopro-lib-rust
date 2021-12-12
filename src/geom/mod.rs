@@ -9,6 +9,7 @@ pub mod area_polygon;
 
 pub mod convex;
 pub mod convex_hull;
+pub mod convex_diameter;
 
 pub mod point_in_polygon;
 
@@ -37,6 +38,8 @@ pub trait Eps:
     fn abs(self) -> Self;
     fn sqrt(self) -> Self;
     fn atan2(self, other: Self) -> Self;
+    fn max(self, other: Self) -> Self;
+    fn min(self, other: Self) -> Self;
 }
 
 #[derive(Copy, Clone, Debug, Default)]
@@ -69,6 +72,12 @@ impl<E: EpsValue + Copy> Eps for EpsFloat<E> {
     }
     fn atan2(self, other: Self) -> Self {
         Self::new(self.0.atan2(other.0))
+    }
+    fn max(self, other: Self) -> Self {
+        Self::new(self.0.max(other.0))
+    }
+    fn min(self, other: Self) -> Self {
+        Self::new(self.0.min(other.0))
     }
 }
 
