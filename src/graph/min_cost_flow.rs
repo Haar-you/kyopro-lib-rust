@@ -47,7 +47,7 @@ impl MinCostFlow {
         });
     }
 
-    pub fn min_cost_flow(&mut self, s: usize, t: usize, f: u64) -> Result<i64, (u64, i64)> {
+    pub fn min_cost_flow(&mut self, src: usize, sink: usize, f: u64) -> Result<i64, (u64, i64)> {
         let mut ret = 0;
         let mut flow = f;
         let mut h = vec![0; self.size];
@@ -57,8 +57,8 @@ impl MinCostFlow {
         while flow > 0 {
             let mut cost = vec![None; self.size];
 
-            cost[s] = Some(0);
-            pq.push(Reverse((0, s)));
+            cost[src] = Some(0);
+            pq.push(Reverse((0, src)));
 
             while let Some(Reverse((c, v))) = pq.pop() {
                 if cost[v].unwrap() < c {
@@ -77,7 +77,7 @@ impl MinCostFlow {
                 }
             }
 
-            if cost[t].is_none() {
+            if cost[sink].is_none() {
                 break;
             }
 
@@ -88,17 +88,17 @@ impl MinCostFlow {
             }
 
             let mut df = flow;
-            let mut cur = t;
-            while cur != s {
+            let mut cur = sink;
+            while cur != src {
                 df = min(df, self.edges[prev[cur].0][prev[cur].1].cap);
                 cur = prev[cur].0;
             }
 
             flow -= df;
-            ret += df as i64 * h[t];
+            ret += df as i64 * h[sink];
 
-            let mut cur = t;
-            while cur != s {
+            let mut cur = sink;
+            while cur != src {
                 let e = &mut self.edges[prev[cur].0][prev[cur].1];
                 e.cap -= df;
                 let rev = e.rev;
