@@ -1,5 +1,6 @@
 pub mod ccw;
 
+pub mod intersect_line_segment;
 pub mod intersect_segments;
 
 pub mod dist_segment_point;
