@@ -1,3 +1,5 @@
+//! 非負重み付き最短経路 (Dijkstra)
+
 use crate::graph::*;
 use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
@@ -57,8 +59,7 @@ mod tests {
         graph.add_directed(
             vec![(0, 1, 1), (0, 2, 4), (1, 2, 2), (2, 3, 1), (1, 3, 5)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         let ans = dijkstra(&graph, &[0]);
 
@@ -76,8 +77,7 @@ mod tests {
                 (3, 2, 5),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ()))
-            .collect::<Vec<_>>(),
+            .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         let ans = dijkstra(&graph, &[1]);
 

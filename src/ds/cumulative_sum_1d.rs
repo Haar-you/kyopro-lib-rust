@@ -37,7 +37,7 @@ impl<T, G> Index<usize> for CumulativeSum1D<T, G> {
 
 impl<T, G> CumulativeSum1DBuilder<T, G>
 where
-    T: Copy + std::fmt::Debug,
+    T: Copy,
     G: Group<Output = T> + Clone,
 {
     pub fn new(n: usize, group: G) -> Self {

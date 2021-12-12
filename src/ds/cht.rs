@@ -25,7 +25,7 @@ where
     (a.1 - b.1) * (a.0 - c.0) >= (a.1 - c.1) * (a.0 - b.0)
 }
 
-fn apply<T>(l: &(T, T), x: T) -> T
+fn apply<T>(l: (T, T), x: T) -> T
 where
     T: Add<Output = T> + Mul<Output = T> + Copy,
 {
@@ -93,11 +93,11 @@ where
         while self.lines.len() >= 2
             && self
                 .mode
-                .cmp(apply(&self.lines[0], x), apply(&self.lines[1], x))
+                .cmp(apply(self.lines[0], x), apply(self.lines[1], x))
         {
             self.lines.pop_front();
         }
 
-        apply(&self.lines[0], x)
+        apply(self.lines[0], x)
     }
 }

@@ -1,3 +1,5 @@
+//! 中国剰余定理
+
 #![allow(clippy::many_single_char_names)]
 
 use crate::math::ext_gcd::ext_gcd;
@@ -20,22 +22,16 @@ pub fn crt((b1, m1): (i64, u64), (b2, m2): (i64, u64)) -> Option<(i64, u64)> {
 }
 
 pub fn crt_vec(params: &[(i64, u64)]) -> Option<(i64, u64)> {
-    let bs = params.iter().map(|(x, _)| *x).collect::<Vec<_>>();
-    let ms = params.iter().map(|(_, y)| *y).collect::<Vec<_>>();
-    let n = params.len();
-
     let mut _r = 0;
     let mut _m = 1;
 
-    for i in 0..n {
-        match crt((_r, _m), (bs[i], ms[i])) {
+    for &p in params {
+        match crt((_r, _m), p) {
             Some((r, m)) => {
                 _r = r;
                 _m = m;
             }
-            _ => {
-                return None;
-            }
+            _ => return None,
         }
     }
 

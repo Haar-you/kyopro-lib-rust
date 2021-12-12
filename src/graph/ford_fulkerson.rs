@@ -1,3 +1,5 @@
+//! 最大流 (Ford-Fulkerson)
+
 pub use crate::graph::flow::*;
 
 #[derive(Clone, Debug)]

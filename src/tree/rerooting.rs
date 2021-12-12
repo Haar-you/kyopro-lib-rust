@@ -1,3 +1,5 @@
+//! 全方位木DP
+
 use crate::tree::*;
 
 pub struct RerootingDP<'a, Weight, T> {

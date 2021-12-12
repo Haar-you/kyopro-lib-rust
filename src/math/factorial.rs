@@ -66,6 +66,14 @@ impl<T: FF + From<usize>> FactorialTable<T> {
             self.perm(n, k) * self.invs[k]
         }
     }
+
+    pub fn h(&self, n: usize, k: usize) -> T {
+        if n == 0 && k == 0 {
+            T::from(1)
+        } else {
+            self.comb(n + k - 1, k)
+        }
+    }
 }
 
 #[cfg(test)]

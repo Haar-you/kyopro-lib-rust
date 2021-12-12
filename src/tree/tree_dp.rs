@@ -1,3 +1,5 @@
+//! 木DP
+
 use crate::tree::*;
 
 pub struct TreeDP<'a, Weight, T> {

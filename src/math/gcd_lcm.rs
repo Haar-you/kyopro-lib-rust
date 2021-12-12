@@ -1,3 +1,5 @@
+//! 最大公約数・最小公倍数
+
 use std::mem::swap;
 
 pub trait GcdLcm {
@@ -32,7 +34,8 @@ macro_rules! gcd_lcm_impl_all {
                 }
 
                 fn gcd_lcm(&self, b: Self::Output) -> (Self::Output, Self::Output) {
-                    (self.gcd(b), self.lcm(b))
+                    let g = self.gcd(b);
+                    (g, self / g * b)
                 }
             }
         )*

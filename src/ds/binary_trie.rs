@@ -19,25 +19,35 @@ impl Node {
         }
     }
 
-    fn insert(&mut self, value: u64, depth: usize) {
+    fn insert(&mut self, value: u64, depth: usize) -> usize {
         self.size += 1;
         if depth > 0 {
             let depth = depth - 1;
             let b = (value >> depth) & 1;
             self.ch[b as usize]
                 .get_or_insert(Box::new(Node::default()))
-                .insert(value, depth);
+                .insert(value, depth)
+        } else {
+            self.size
         }
     }
 
-    fn erase(&mut self, value: u64, depth: usize) {
-        self.size -= 1;
+    fn erase(&mut self, value: u64, depth: usize) -> Option<usize> {
         if depth > 0 {
             let depth = depth - 1;
             let b = (value >> depth) & 1;
-            self.ch[b as usize]
+            let ret = self.ch[b as usize]
                 .get_or_insert(Box::new(Node::default()))
                 .erase(value, depth);
+            ret.iter().for_each(|_| self.size -= 1);
+            ret
+        } else {
+            if self.size > 0 {
+                self.size -= 1;
+                Some(self.size)
+            } else {
+                None
+            }
         }
     }
 
@@ -108,16 +118,16 @@ impl BinaryTrie {
             .map_or(0, |t| t.count(value, Self::bitlen()))
     }
 
-    pub fn insert(&mut self, value: u64) {
+    pub fn insert(&mut self, value: u64) -> usize {
         self.root
             .get_or_insert(Box::new(Node::default()))
-            .insert(value, Self::bitlen());
+            .insert(value, Self::bitlen())
     }
 
-    pub fn erase(&mut self, value: u64) {
+    pub fn erase(&mut self, value: u64) -> Option<usize> {
         self.root
             .get_or_insert(Box::new(Node::default()))
-            .erase(value, Self::bitlen());
+            .erase(value, Self::bitlen())
     }
 
     pub fn min(&mut self, x: u64) -> Option<u64> {
@@ -126,6 +136,14 @@ impl BinaryTrie {
 
     pub fn max(&mut self, x: u64) -> Option<u64> {
         self.root.as_ref().map(|t| t.max(x, Self::bitlen()))
+    }
+
+    pub fn lower_bound(&mut self, x: u64) -> usize {
+        todo!();
+    }
+
+    pub fn upper_bound(&mut self, x: u64) -> usize {
+        todo!();
     }
 
     pub fn to_vec(&self) -> Vec<u64> {
@@ -173,7 +191,20 @@ mod tests {
                 (0..100)
                     .map(|i| *m.get(&i).unwrap_or(&0))
                     .collect::<Vec<_>>()
-            )
+            );
+
+            let x = rng.gen::<u64>() % 100;
+
+            assert_eq!(bt.erase(x).unwrap_or(0), bt.count(x));
+            match m.get_mut(&x) {
+                Some(y) if *y >= 1 => {
+                    *y -= 1;
+                    if *y == 0 {
+                        m.remove(&x);
+                    }
+                }
+                _ => {}
+            }
         }
     }
 }

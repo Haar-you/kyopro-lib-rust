@@ -1,3 +1,5 @@
+//! 最小全域木 (Kruskal)
+
 use crate::{ds::unionfind::UnionFind, graph::*};
 
 pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<E>) -> Vec<&E> {
@@ -45,8 +47,7 @@ mod tests {
                 (4, 5, 6),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ()))
-            .collect::<Vec<_>>(),
+            .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
 
         let ans = kruskal(&g).iter().map(|e| e.weight).sum::<i32>();

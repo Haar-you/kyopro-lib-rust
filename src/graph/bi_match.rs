@@ -1,3 +1,5 @@
+//! 二部マッチング
+
 use crate::graph::flow::MaxFlow;
 
 pub struct BipartiteMatching<F> {

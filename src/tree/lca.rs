@@ -1,3 +1,5 @@
+//! 最小共通祖先
+
 use crate::tree::*;
 
 pub struct DoublingLCA {

@@ -13,11 +13,13 @@ impl<T, U> AddSum<T, U> {
     }
 }
 
-impl<T, U> Action<T, U> for AddSum<T, U>
+impl<T, U> Action for AddSum<T, U>
 where
     T: Add<Output = T> + Default + From<U>,
     U: Add<Output = U> + Mul<Output = U> + Default + From<u64>,
 {
+    type FType = T;
+    type UType = U;
     fn fold_id(&self) -> T {
         T::default()
     }

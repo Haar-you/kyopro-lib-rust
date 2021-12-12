@@ -3,7 +3,8 @@ use std::{cmp::Ordering, ops::Mul};
 
 /// ヒストグラム中の最大面積長方形の面積を計算する。
 ///
-/// Time complexity O(|h|)
+/// # Complexity
+/// Time complexity $O(|h|)$
 pub fn max_rect_in_histogram<T>(h: &[T]) -> T
 where
     T: From<usize> + Mul<Output = T> + Ord + Copy,
@@ -45,7 +46,8 @@ where
 
 /// グリッド上の最大面積長方形の面積を計算する。
 ///
-/// Time complexity O(hw)
+/// # Complexity
+/// Time complexity $O(hw)$
 pub fn max_rect<T: Copy + PartialEq>(d: &[Vec<T>], value: T) -> usize {
     let h = d.len();
     let w = d[0].len();

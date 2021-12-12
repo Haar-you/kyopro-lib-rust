@@ -1,3 +1,5 @@
+//! 巡回セールスマン問題
+
 use crate::graph::*;
 use std::{cmp::min, ops::Add};
 
@@ -55,8 +57,7 @@ mod tests {
                 (3, 2, 4),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ()))
-            .collect::<Vec<_>>(),
+            .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         assert_eq!(tsp(&g, 0), Some(16));
 
@@ -64,8 +65,7 @@ mod tests {
         g.add_directed(
             vec![(0, 1, 1), (1, 2, 1), (0, 2, 1)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ()))
-                .collect::<Vec<_>>(),
+                .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         assert_eq!(tsp(&g, 0), None);
     }

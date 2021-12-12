@@ -1,3 +1,5 @@
+//! グラフ一般に関するもの
+
 pub mod articulation_points;
 pub mod bellman_ford;
 pub mod bipartite;
@@ -15,6 +17,8 @@ pub mod tsort;
 pub mod tsp;
 pub mod two_edge;
 pub mod warshall_floyd;
+
+pub mod psp;
 
 pub mod dinic;
 pub mod flow;

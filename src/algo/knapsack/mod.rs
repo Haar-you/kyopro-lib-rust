@@ -1,3 +1,13 @@
+//! ナップサック問題
+//!
+//! | function |time complexity | space complexity |
+//! | ---- | ---- | ---- |
+//! | knapsack_small_weight | $O(n \sdot cap)$ | $O(cap)$ |
+//! | knapsack_small_value | $O(n \sum_{v \in vs} v)$ | $O(\sum_{v \in vs} v)$ |
+//! | knapsack_small_quantity | $O(n 2 ^ {n / 2})$ | $O(2 ^ {n / 2})$ |
+//! | knapsack_limited | $O(n \cdot cap \log(\max(ms)))$ | $O(cap)$ |
+//! | knapsack_unlimited | $O(n \cdot cap)$ | $O(cap)$ |
+
 pub mod limited;
 pub mod small_quantity;
 pub mod small_value;
@@ -11,33 +21,27 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_1_B
-        assert_eq!(
-            knapsack_small_weight(4, 5, &[2, 2, 1, 3], &[4, 5, 2, 8]),
-            13
-        );
-        assert_eq!(knapsack_small_weight(2, 20, &[9, 10], &[5, 4]), 9);
+        assert_eq!(knapsack_small_weight(5, &[2, 2, 1, 3], &[4, 5, 2, 8]), 13);
+        assert_eq!(knapsack_small_weight(20, &[9, 10], &[5, 4]), 9);
 
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_1_F
-        assert_eq!(knapsack_small_value(4, 5, &[2, 2, 1, 3], &[4, 5, 2, 8]), 13);
-        assert_eq!(knapsack_small_value(2, 20, &[9, 10], &[5, 4]), 9);
+        assert_eq!(knapsack_small_value(5, &[2, 2, 1, 3], &[4, 5, 2, 8]), 13);
+        assert_eq!(knapsack_small_value(20, &[9, 10], &[5, 4]), 9);
 
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/1/DPL_1_G
         assert_eq!(
-            knapsack_limited(4, 8, &[3, 1, 2, 2], &[4, 2, 1, 3], &[2, 1, 4, 2]),
+            knapsack_limited(8, &[3, 1, 2, 2], &[4, 2, 1, 3], &[2, 1, 4, 2]),
             12
         );
-        assert_eq!(knapsack_limited(2, 100, &[1, 1], &[1, 2], &[100, 50]), 150);
+        assert_eq!(knapsack_limited(100, &[1, 1], &[1, 2], &[100, 50]), 150);
 
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/1/DPL_1_C
-        assert_eq!(knapsack_unlimited(4, 8, &[2, 2, 1, 3], &[4, 5, 2, 8]), 21);
-        assert_eq!(knapsack_unlimited(2, 20, &[9, 10], &[5, 4]), 10);
-        assert_eq!(knapsack_unlimited(3, 9, &[1, 1, 2], &[2, 3, 5]), 27);
+        assert_eq!(knapsack_unlimited(8, &[2, 2, 1, 3], &[4, 5, 2, 8]), 21);
+        assert_eq!(knapsack_unlimited(20, &[9, 10], &[5, 4]), 10);
+        assert_eq!(knapsack_unlimited(9, &[1, 1, 2], &[2, 3, 5]), 27);
 
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/1/DPL_1_H
-        assert_eq!(
-            knapsack_small_quantity(4, 5, &[2, 2, 1, 3], &[4, 5, 2, 8]),
-            13
-        );
-        assert_eq!(knapsack_small_quantity(2, 20, &[9, 10], &[5, 4]), 9);
+        assert_eq!(knapsack_small_quantity(5, &[2, 2, 1, 3], &[4, 5, 2, 8]), 13);
+        assert_eq!(knapsack_small_quantity(20, &[9, 10], &[5, 4]), 9);
     }
 }

@@ -1,5 +1,11 @@
+//! 最長共通部分列
+
 use crate::chmax;
 
+/// 列a, bの最長共通部分列の一つを求める。
+///
+/// # Complexity
+/// Time complexity $O(mn)$
 pub fn lcs<T: Copy + PartialEq>(a: &[T], b: &[T]) -> Vec<T> {
     let n = a.len();
     let m = b.len();

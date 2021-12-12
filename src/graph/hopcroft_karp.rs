@@ -1,3 +1,5 @@
+//! 二部マッチング (Hopcroft-Karp)
+
 use std::collections::VecDeque;
 
 #[derive(Clone, Debug)]
