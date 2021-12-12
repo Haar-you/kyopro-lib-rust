@@ -1,5 +1,6 @@
 pub mod ccw;
 
+pub mod intersect_circles;
 pub mod intersect_line_segment;
 pub mod intersect_segments;
 
@@ -37,6 +38,7 @@ pub trait Eps:
     fn sin(self) -> Self;
     fn cos(self) -> Self;
     fn tan(self) -> Self;
+    fn acos(self) -> Self;
     fn abs(self) -> Self;
     fn sqrt(self) -> Self;
     fn atan2(self, other: Self) -> Self;
@@ -64,7 +66,7 @@ impl<E: EpsValue + Copy> Eps for EpsFloat<E> {
     fn eps() -> f64 {
         E::eps()
     }
-    eps_float_impl_one_arg!(sin, cos, tan, abs, sqrt);
+    eps_float_impl_one_arg!(sin, cos, tan, acos, abs, sqrt);
     eps_float_impl_two_arg!(atan2, max, min);
 }
 
@@ -187,6 +189,9 @@ impl<T: Eps> Vector<T> {
     pub fn angle(self, other: Self) -> T {
         (other.1 - self.1).atan2(other.0 - self.0)
     }
+    pub fn polar(r: T, ang: T) -> Self {
+        Vector(r * ang.cos(), r * ang.sin())
+    }
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Default)]
@@ -234,5 +239,17 @@ impl<T: Eps> Line<T> {
 
     pub fn is_parallel(self, other: Self) -> bool {
         self.cross(other).abs() == T::from(0.0)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub struct Circle<T> {
+    center: Vector<T>,
+    radius: T,
+}
+
+impl<T> Circle<T> {
+    pub fn new(center: Vector<T>, radius: T) -> Self {
+        Circle { center, radius }
     }
 }
