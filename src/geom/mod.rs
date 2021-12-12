@@ -8,8 +8,8 @@ pub mod dist_segments;
 pub mod area_polygon;
 
 pub mod convex;
-pub mod convex_hull;
 pub mod convex_diameter;
+pub mod convex_hull;
 
 pub mod point_in_polygon;
 
@@ -51,34 +51,19 @@ impl<E> EpsFloat<E> {
     }
 }
 
+macro_rules! eps_float_impl_one_arg {
+    ($($f:tt),*) => { $(fn $f(self) -> Self { Self::new((self.0).$f()) })* }
+}
+macro_rules! eps_float_impl_two_arg {
+    ($($f:tt),*) => { $(fn $f(self, other: Self) -> Self { Self::new((self.0).$f(other.0)) })* }
+}
+
 impl<E: EpsValue + Copy> Eps for EpsFloat<E> {
     fn eps() -> f64 {
         E::eps()
     }
-    fn sin(self) -> Self {
-        Self::new(self.0.sin())
-    }
-    fn cos(self) -> Self {
-        Self::new(self.0.cos())
-    }
-    fn tan(self) -> Self {
-        Self::new(self.0.tan())
-    }
-    fn abs(self) -> Self {
-        Self::new(self.0.abs())
-    }
-    fn sqrt(self) -> Self {
-        Self::new(self.0.sqrt())
-    }
-    fn atan2(self, other: Self) -> Self {
-        Self::new(self.0.atan2(other.0))
-    }
-    fn max(self, other: Self) -> Self {
-        Self::new(self.0.max(other.0))
-    }
-    fn min(self, other: Self) -> Self {
-        Self::new(self.0.min(other.0))
-    }
+    eps_float_impl_one_arg!(sin, cos, tan, abs, sqrt);
+    eps_float_impl_two_arg!(atan2, max, min);
 }
 
 impl<E: EpsValue> PartialEq for EpsFloat<E> {
