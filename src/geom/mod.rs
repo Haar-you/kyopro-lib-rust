@@ -16,6 +16,8 @@ pub mod convex_hull;
 
 pub mod point_in_polygon;
 
+pub mod incircle;
+
 use std::marker::PhantomData;
 
 pub trait EpsValue {
@@ -244,8 +246,8 @@ impl<T: Eps> Line<T> {
 
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct Circle<T> {
-    center: Vector<T>,
-    radius: T,
+    pub center: Vector<T>,
+    pub radius: T,
 }
 
 impl<T> Circle<T> {
