@@ -21,6 +21,7 @@ pub mod point_in_polygon;
 pub mod circumcircle;
 pub mod incircle;
 
+pub mod common_tangent_circles;
 pub mod tangent_circle;
 
 use std::marker::PhantomData;
@@ -73,8 +74,12 @@ impl<E: EpsValue + Copy> Eps for EpsFloat<E> {
     fn eps() -> f64 {
         E::eps()
     }
-    eps_float_impl_one_arg!(sin, cos, tan, acos, abs, sqrt);
+    eps_float_impl_one_arg!(sin, cos, tan, acos, abs);
     eps_float_impl_two_arg!(atan2, max, min);
+
+    fn sqrt(self) -> Self {
+        Self::new(self.0.max(0.0).sqrt())
+    }
 }
 
 impl<E: EpsValue> PartialEq for EpsFloat<E> {
