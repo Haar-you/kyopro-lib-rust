@@ -16,6 +16,7 @@ pub mod convex_hull;
 
 pub mod point_in_polygon;
 
+pub mod circumcircle;
 pub mod incircle;
 
 use std::marker::PhantomData;
