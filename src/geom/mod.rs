@@ -9,6 +9,7 @@ pub mod dist_line_point;
 pub mod dist_segment_point;
 pub mod dist_segments;
 
+pub mod area_intersection_circles;
 pub mod area_polygon;
 
 pub mod convex;
