@@ -29,8 +29,7 @@ pub fn intersect_circles<T: Eps>(a: Circle<T>, b: Circle<T>) -> (IntersectCircle
     use self::IntersectCircles::*;
 
     let d = (a.center - b.center).abs();
-    let x = ((a.radius * a.radius + d * d - b.radius * b.radius) / (T::from(2.0) * d * a.radius))
-        .acos();
+    let x = ((a.radius.sq() + d.sq() - b.radius.sq()) / (T::from(2.0) * d * a.radius)).acos();
     let t = (b.center.1 - a.center.1).atan2(b.center.0 - a.center.0);
 
     if a.radius + b.radius == d {

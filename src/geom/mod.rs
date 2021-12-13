@@ -53,6 +53,7 @@ pub trait Eps:
     fn atan2(self, other: Self) -> Self;
     fn max(self, other: Self) -> Self;
     fn min(self, other: Self) -> Self;
+    fn sq(self) -> Self;
 }
 
 #[derive(Copy, Clone, Debug, Default)]
@@ -80,6 +81,9 @@ impl<E: EpsValue + Copy> Eps for EpsFloat<E> {
 
     fn sqrt(self) -> Self {
         Self::new(self.0.max(0.0).sqrt())
+    }
+    fn sq(self) -> Self {
+        self * self
     }
 }
 

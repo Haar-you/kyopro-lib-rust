@@ -8,7 +8,5 @@ pub fn area_polygon<T: Eps>(ps: &[Vector<T>]) -> T {
         ret = ret + (ps[i].0 - ps[(i + 1) % n].0) * (ps[i].1 + ps[(i + 1) % n].1);
     }
 
-    ret = ret.abs();
-    ret = ret / T::from(2.0);
-    ret
+    ret.abs() / T::from(2.0)
 }

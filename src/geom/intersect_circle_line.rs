@@ -26,7 +26,7 @@ pub fn intersect_circle_line<T: Eps>(
     if d == c.radius {
         (TANGENT, vec![b])
     } else {
-        let a = (c.radius * c.radius - d * d).sqrt();
+        let a = (c.radius.sq() - d.sq()).sqrt();
         (CROSSED, vec![b + l.unit() * a, b - l.unit() * a])
     }
 }
