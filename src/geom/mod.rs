@@ -21,6 +21,8 @@ pub mod point_in_polygon;
 pub mod circumcircle;
 pub mod incircle;
 
+pub mod tangent_circle;
+
 use std::marker::PhantomData;
 
 pub trait EpsValue {
