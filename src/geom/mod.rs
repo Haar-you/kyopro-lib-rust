@@ -1,6 +1,7 @@
 pub mod ccw;
 
 pub mod intersect_circle_line;
+pub mod intersect_circle_segment;
 pub mod intersect_circles;
 pub mod intersect_line_segment;
 pub mod intersect_segments;
@@ -9,6 +10,7 @@ pub mod dist_line_point;
 pub mod dist_segment_point;
 pub mod dist_segments;
 
+pub mod area_intersection_circle_polygon;
 pub mod area_intersection_circles;
 pub mod area_polygon;
 
@@ -25,7 +27,7 @@ pub mod incircle;
 pub mod common_tangent_circles;
 pub mod tangent_circle;
 
-use std::marker::PhantomData;
+use std::{f64::consts::PI, marker::PhantomData};
 
 pub trait EpsValue {
     fn eps() -> f64;
@@ -208,6 +210,17 @@ impl<T: Eps> Vector<T> {
     }
     pub fn polar(r: T, ang: T) -> Self {
         Vector(r * ang.cos(), r * ang.sin())
+    }
+    pub fn angle_diff(self, other: Self) -> T {
+        let r = other.1.atan2(other.0) - self.1.atan2(self.0);
+
+        if r < T::from(-PI) {
+            r + T::from(PI * 2.0)
+        } else if r > T::from(PI) {
+            r - T::from(PI * 2.0)
+        } else {
+            r
+        }
     }
 }
 
