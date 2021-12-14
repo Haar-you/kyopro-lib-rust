@@ -1,4 +1,4 @@
-use crate::geom::{ccw::*, *};
+use crate::geom::*;
 use std::cmp::Ordering::*;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
