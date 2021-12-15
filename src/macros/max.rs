@@ -3,7 +3,7 @@ macro_rules! max {
     ($x:expr, $($xs:expr),*) => {
         {
             let mut ret = $x;
-            for x in vec![$($xs),*] {
+            for &x in &[$($xs),*] {
                 if x > ret {
                     ret = x
                 }
