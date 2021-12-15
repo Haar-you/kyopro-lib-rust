@@ -24,23 +24,23 @@ pub fn point_in_polygon<T: Eps>(p: Vector<T>, pl: &[Vector<T>]) -> PointPolygon 
         let mut b = pl[(i + 1) % n].angle(p);
 
         if a < T::from(0.0) {
-            a = a + T::from(2.0 * PI);
+            a += T::from(2.0 * PI);
         }
         if b < T::from(0.0) {
-            b = b + T::from(2.0 * PI);
+            b += T::from(2.0 * PI);
         }
 
         let mut ang = b - a;
 
         if ang.abs() > T::from(PI) {
             if ang <= T::from(0.0) {
-                ang = ang + T::from(2.0 * PI);
+                ang += T::from(2.0 * PI);
             } else {
-                ang = ang - T::from(2.0 * PI);
+                ang -= T::from(2.0 * PI);
             }
         }
 
-        d = d + ang;
+        d += ang;
     }
 
     if (d.abs() - T::from(2.0 * PI)).abs() == T::from(0.0) {

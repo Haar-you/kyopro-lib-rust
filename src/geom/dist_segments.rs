@@ -3,7 +3,7 @@ use crate::{
     min,
 };
 
-pub fn dist_segments<T: Eps + std::fmt::Debug>(l1: Line<T>, l2: Line<T>) -> T {
+pub fn dist_segments<T: Eps>(l1: Line<T>, l2: Line<T>) -> T {
     let cr = l1.cross(l2);
     let t1 = (l2.from - l1.from).cross(l2.diff()) / cr;
     let t2 = (l2.from - l1.from).cross(l1.diff()) / cr;

@@ -5,7 +5,7 @@ pub fn area_polygon<T: Eps>(ps: &[Vector<T>]) -> T {
     let n = ps.len();
 
     for i in 0..n {
-        ret = ret + (ps[i].0 - ps[(i + 1) % n].0) * (ps[i].1 + ps[(i + 1) % n].1);
+        ret += (ps[i].0 - ps[(i + 1) % n].0) * (ps[i].1 + ps[(i + 1) % n].1);
     }
 
     ret.abs() / T::from(2.0)

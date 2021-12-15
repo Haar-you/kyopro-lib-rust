@@ -1,7 +1,7 @@
 use crate::geom::{ccw::*, intersect_line_segment::*, *};
 
 pub fn convex_cut<T: Eps>(ps: &[Vector<T>], l: Line<T>) -> (Vec<Vector<T>>, Vec<Vector<T>>) {
-    use crate::geom::intersect_line_segment::IntersectLineSegment::*;
+    use self::IntersectLineSegment::*;
 
     let n = ps.len();
     let mut left = vec![];

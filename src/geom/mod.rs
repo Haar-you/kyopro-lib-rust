@@ -44,6 +44,10 @@ pub trait Eps:
     + std::ops::Mul<Output = Self>
     + std::ops::Div<Output = Self>
     + std::ops::Neg<Output = Self>
+    + std::ops::AddAssign
+    + std::ops::SubAssign
+    + std::ops::MulAssign
+    + std::ops::DivAssign
     + Sized
     + From<f64>
 {
@@ -123,6 +127,20 @@ macro_rules! eps_ops {
 }
 
 eps_ops!(Add, add, +, Sub, sub, -, Mul, mul, *, Div, div, /);
+
+macro_rules! eps_ops_assign {
+    ( $($tr:ident, $fn:ident, $op:tt), * ) => {
+        $(
+            impl<E: EpsValue> std::ops::$tr for EpsFloat<E> {
+                fn $fn(&mut self, other: Self) {
+                    self.0 = self.0 $op other.0
+                }
+            }
+        )*
+    }
+}
+
+eps_ops_assign!(AddAssign, add_assign, +, SubAssign, sub_assign, -, MulAssign, mul_assign, *, DivAssign, div_assign, /);
 
 impl<E> std::ops::Neg for EpsFloat<E> {
     type Output = Self;

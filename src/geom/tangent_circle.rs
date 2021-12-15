@@ -6,7 +6,7 @@ pub fn tangent_circle<T: Eps>(c: Circle<T>, p: Vector<T>) -> Vec<Vector<T>> {
     if d < c.radius {
         return vec![];
     }
-    if d - c.radius == T::from(0.0) {
+    if d == c.radius {
         return vec![p];
     }
 

@@ -23,20 +23,18 @@ pub fn area_intersection_circle_polygon<T: Eps>(cl: Circle<T>, ps: &[Vector<T>])
 
         match res.len() {
             0 => match t {
-                INSIDE => temp = temp + (p1 - c).cross(p2 - c) / T::from(2.0),
-                _ => temp = temp + r.sq() * (p1 - c).angle_diff(p2 - c) / T::from(2.0),
+                INSIDE => temp += (p1 - c).cross(p2 - c) / T::from(2.0),
+                _ => temp += r.sq() * (p1 - c).angle_diff(p2 - c) / T::from(2.0),
             },
             1 => {
                 let q = res[0];
                 if d1 >= r && d2 >= r {
-                    temp = temp + r.sq() * (p1 - c).angle_diff(p2 - c) / T::from(2.0);
+                    temp += r.sq() * (p1 - c).angle_diff(p2 - c) / T::from(2.0);
                 } else if d1 >= r {
-                    temp = temp
-                        + r.sq() * (p1 - c).angle_diff(q - c) / T::from(2.0)
+                    temp += r.sq() * (p1 - c).angle_diff(q - c) / T::from(2.0)
                         + (q - c).cross(p2 - c) / T::from(2.0)
                 } else {
-                    temp = temp
-                        + (p1 - c).cross(q - c) / T::from(2.0)
+                    temp += (p1 - c).cross(q - c) / T::from(2.0)
                         + r.sq() * (q - c).angle_diff(p2 - c) / T::from(2.0)
                 }
             }
@@ -44,14 +42,13 @@ pub fn area_intersection_circle_polygon<T: Eps>(cl: Circle<T>, ps: &[Vector<T>])
                 let q1 = res[0];
                 let q2 = res[1];
 
-                temp = temp
-                    + r.sq() * (p1 - c).angle_diff(q1 - c) / T::from(2.0)
+                temp += r.sq() * (p1 - c).angle_diff(q1 - c) / T::from(2.0)
                     + (q1 - c).cross(q2 - c) / T::from(2.0)
                     + r.sq() * (q2 - c).angle_diff(p2 - c) / T::from(2.0)
             }
         }
 
-        ret = ret + temp;
+        ret += temp;
     }
 
     ret

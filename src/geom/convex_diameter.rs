@@ -20,11 +20,9 @@ pub fn convex_diameter<T: Eps>(ps: Vec<Vector<T>>) -> T {
 
     for _ in 0..2 * n {
         if (ps[(i + 1) % n] - ps[i]).cross(ps[(j + 1) % n] - ps[j]) > T::from(0.0) {
-            j += 1;
-            j %= n;
+            j = (j + 1) % n;
         } else {
-            i += 1;
-            i %= n;
+            i = (i + 1) % n;
         }
 
         ret = ret.max((ps[i] - ps[j]).abs());
