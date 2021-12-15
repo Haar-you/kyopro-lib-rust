@@ -30,6 +30,8 @@ pub mod tangent_circle;
 
 pub mod closest_pair;
 
+pub mod min_covering_circle;
+
 use std::{f64::consts::PI, marker::PhantomData};
 
 pub trait EpsValue {
