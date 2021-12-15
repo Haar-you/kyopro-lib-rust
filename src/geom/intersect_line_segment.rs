@@ -1,3 +1,4 @@
+//! 直線と線分の交差
 use crate::geom::*;
 use std::cmp::Ordering::*;
 

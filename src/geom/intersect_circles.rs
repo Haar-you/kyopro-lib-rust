@@ -1,3 +1,4 @@
+//! 2円の交差
 use crate::geom::*;
 
 #[derive(Clone, Copy, Debug, PartialEq)]

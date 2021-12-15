@@ -1,3 +1,4 @@
+//! 円と直線の交差
 use crate::geom::{dist_line_point::*, *};
 
 #[derive(Clone, Copy, Debug, PartialEq)]

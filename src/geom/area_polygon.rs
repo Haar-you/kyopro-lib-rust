@@ -1,3 +1,4 @@
+//! 多角形の面積
 use crate::geom::*;
 
 pub fn area_polygon<T: Eps>(ps: &[Vector<T>]) -> T {

@@ -1,3 +1,4 @@
+//! 三角形の外接円
 use crate::geom::*;
 
 pub fn circumcircle<T: Eps>(a: Vector<T>, b: Vector<T>, c: Vector<T>) -> Circle<T> {

@@ -1,3 +1,4 @@
+//! 点と多角形の交差
 use crate::geom::{ccw::*, *};
 use std::f64::consts::PI;
 

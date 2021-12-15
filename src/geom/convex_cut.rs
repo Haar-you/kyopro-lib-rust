@@ -1,3 +1,4 @@
+//! 凸角形の切断
 use crate::geom::{ccw::*, intersect_line_segment::*, *};
 
 pub fn convex_cut<T: Eps>(ps: &[Vector<T>], l: Line<T>) -> (Vec<Vector<T>>, Vec<Vector<T>>) {

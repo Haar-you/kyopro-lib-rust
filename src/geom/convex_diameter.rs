@@ -1,3 +1,4 @@
+//! 凸角形の直径
 use crate::geom::*;
 
 pub fn convex_diameter<T: Eps>(ps: Vec<Vector<T>>) -> T {

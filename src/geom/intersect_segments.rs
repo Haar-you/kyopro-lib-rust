@@ -1,3 +1,4 @@
+//! 2線分の交差
 use crate::geom::{ccw::*, *};
 
 #[derive(Clone, Copy, Debug, PartialEq)]

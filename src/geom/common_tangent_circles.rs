@@ -1,3 +1,4 @@
+//! 2円の共通接線
 use crate::geom::*;
 
 pub fn common_tangent_circles<T: Eps + std::fmt::Debug>(

@@ -1,3 +1,4 @@
+//! 点集合から最近点対を得る。
 use crate::{algo::merge::*, geom::*};
 
 pub fn closest_pair<T: Eps>(mut ps: Vec<Vector<T>>) -> Option<(Vector<T>, Vector<T>)> {

@@ -1,3 +1,4 @@
+//! 円の接線
 use crate::geom::*;
 
 pub fn tangent_circle<T: Eps>(c: Circle<T>, p: Vector<T>) -> Vec<Vector<T>> {
