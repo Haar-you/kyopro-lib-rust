@@ -27,6 +27,8 @@ pub mod incircle;
 pub mod common_tangent_circles;
 pub mod tangent_circle;
 
+pub mod closest_pair;
+
 use std::{f64::consts::PI, marker::PhantomData};
 
 pub trait EpsValue {
