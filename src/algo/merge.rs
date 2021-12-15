@@ -1,4 +1,4 @@
-pub fn inplace_merge<T: Ord + Copy>(a: &mut [T], k: usize) {
+pub fn inplace_merge_by<T: Copy>(a: &mut [T], k: usize, cmp: fn(&T, &T) -> bool) {
     let fst = &a[0..k].to_vec();
     let snd = &a[k..].to_vec();
 
@@ -14,7 +14,7 @@ pub fn inplace_merge<T: Ord + Copy>(a: &mut [T], k: usize) {
                 a[k] = snd[j];
                 j += 1;
             }
-        } else if j >= snd.len() || fst[i] < snd[j] {
+        } else if j >= snd.len() || cmp(&fst[i], &snd[j]) {
             a[k] = fst[i];
             i += 1;
         } else {
@@ -23,6 +23,10 @@ pub fn inplace_merge<T: Ord + Copy>(a: &mut [T], k: usize) {
         }
         k += 1;
     }
+}
+
+pub fn inplace_merge<T: Ord + Copy>(a: &mut [T], k: usize) {
+    inplace_merge_by(a, k, |x, y| x < y);
 }
 
 pub fn merge<T: Ord + Copy>(a: &[T], b: &[T]) -> Vec<T> {
