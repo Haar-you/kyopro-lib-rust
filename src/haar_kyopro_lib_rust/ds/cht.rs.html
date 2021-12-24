@@ -113,22 +113,22 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Mode</span> {
-    <span class="kw">pub</span>(<span class="self">self</span>) <span class="kw">fn</span> <span class="ident">cmp</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">Copy</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">a</span>: <span class="ident">T</span>, <span class="ident">b</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span>(<span class="self">self</span>) <span class="kw">fn</span> <span class="ident">cmp</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">Copy</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">a</span>: <span class="ident">T</span>, <span class="ident">b</span>: <span class="ident">T</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Mode::Max</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">a</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">b</span>,
-            <span class="ident">Mode::Min</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">a</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">b</span>,
+            <span class="ident">Mode::Max</span> =&gt; <span class="ident">a</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">b</span>,
+            <span class="ident">Mode::Min</span> =&gt; <span class="ident">a</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">b</span>,
         }
     }
 }
 
-<span class="kw">fn</span> <span class="ident">is_needless</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span>(<span class="ident">T</span>, <span class="ident">T</span>), <span class="ident">b</span>: <span class="kw-2">&amp;</span>(<span class="ident">T</span>, <span class="ident">T</span>), <span class="ident">c</span>: <span class="kw-2">&amp;</span>(<span class="ident">T</span>, <span class="ident">T</span>)) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>
+<span class="kw">fn</span> <span class="ident">is_needless</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span>(<span class="ident">T</span>, <span class="ident">T</span>), <span class="ident">b</span>: <span class="kw-2">&amp;</span>(<span class="ident">T</span>, <span class="ident">T</span>), <span class="ident">c</span>: <span class="kw-2">&amp;</span>(<span class="ident">T</span>, <span class="ident">T</span>)) -&gt; <span class="ident">bool</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Sub</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Mul</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">Copy</span>,
 {
     (<span class="ident">a</span>.<span class="number">1</span> <span class="op">-</span> <span class="ident">b</span>.<span class="number">1</span>) <span class="op">*</span> (<span class="ident">a</span>.<span class="number">0</span> <span class="op">-</span> <span class="ident">c</span>.<span class="number">0</span>) <span class="op">&gt;</span><span class="op">=</span> (<span class="ident">a</span>.<span class="number">1</span> <span class="op">-</span> <span class="ident">c</span>.<span class="number">1</span>) <span class="op">*</span> (<span class="ident">a</span>.<span class="number">0</span> <span class="op">-</span> <span class="ident">b</span>.<span class="number">0</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">apply</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">l</span>: <span class="kw-2">&amp;</span>(<span class="ident">T</span>, <span class="ident">T</span>), <span class="ident">x</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
+<span class="kw">fn</span> <span class="ident">apply</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">l</span>: (<span class="ident">T</span>, <span class="ident">T</span>), <span class="ident">x</span>: <span class="ident">T</span>) -&gt; <span class="ident">T</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Mul</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Copy</span>,
 {
@@ -147,7 +147,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">Sub</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Mul</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>,
 {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">mode</span>: <span class="ident">Mode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">mode</span>: <span class="ident">Mode</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">lines</span>: <span class="ident">VecDeque::new</span>(),
             <span class="ident">mode</span>,
@@ -165,7 +165,7 @@
         <span class="self">self</span>.<span class="ident">last_slope</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">a</span>);
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">l</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">lines</span>.<span class="ident">back</span>() {
-            <span class="kw">if</span> <span class="ident">l</span>.<span class="number">0</span> <span class="op">=</span><span class="op">=</span> <span class="ident">a</span> {
+            <span class="kw">if</span> <span class="ident">l</span>.<span class="number">0</span> <span class="op">==</span> <span class="ident">a</span> {
                 <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">mode</span>.<span class="ident">cmp</span>(<span class="ident">l</span>.<span class="number">1</span>, <span class="ident">b</span>) {
                     <span class="kw">return</span>;
                 }
@@ -185,7 +185,7 @@
         <span class="self">self</span>.<span class="ident">lines</span>.<span class="ident">push_back</span>((<span class="ident">a</span>, <span class="ident">b</span>));
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">query</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">query</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="ident">T</span>) -&gt; <span class="ident">T</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">last_query</span> {
             <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">p</span> {
                 <span class="macro">panic!</span>(<span class="string">&quot;x must be monotonic increasing.&quot;</span>);
@@ -196,12 +196,12 @@
         <span class="kw">while</span> <span class="self">self</span>.<span class="ident">lines</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span>
             <span class="op">&amp;&amp;</span> <span class="self">self</span>
                 .<span class="ident">mode</span>
-                .<span class="ident">cmp</span>(<span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">lines</span>[<span class="number">0</span>], <span class="ident">x</span>), <span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">lines</span>[<span class="number">1</span>], <span class="ident">x</span>))
+                .<span class="ident">cmp</span>(<span class="ident">apply</span>(<span class="self">self</span>.<span class="ident">lines</span>[<span class="number">0</span>], <span class="ident">x</span>), <span class="ident">apply</span>(<span class="self">self</span>.<span class="ident">lines</span>[<span class="number">1</span>], <span class="ident">x</span>))
         {
             <span class="self">self</span>.<span class="ident">lines</span>.<span class="ident">pop_front</span>();
         }
 
-        <span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">lines</span>[<span class="number">0</span>], <span class="ident">x</span>)
+        <span class="ident">apply</span>(<span class="self">self</span>.<span class="ident">lines</span>[<span class="number">0</span>], <span class="ident">x</span>)
     }
 }
 </code></pre></div>

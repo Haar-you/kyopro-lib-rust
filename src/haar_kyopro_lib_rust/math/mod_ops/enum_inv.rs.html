@@ -9,7 +9,7 @@
 <span id="9"> 9</span>
 <span id="10">10</span>
 <span id="11">11</span>
-</pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enumerate_mod_inv</span>(<span class="ident">n</span>: <span class="ident">usize</span>, <span class="ident">p</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+</pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enumerate_mod_inv</span>(<span class="ident">n</span>: <span class="ident">usize</span>, <span class="ident">p</span>: <span class="ident">u64</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">0</span>; <span class="ident">n</span> <span class="op">+</span> <span class="number">1</span>];
 
     <span class="ident">ret</span>[<span class="number">1</span>] <span class="op">=</span> <span class="number">1</span>;

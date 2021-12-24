@@ -65,11 +65,11 @@
 <span id="65">65</span>
 <span id="66">66</span>
 <span id="67">67</span>
-</pre><pre class="rust"><code><span class="kw">fn</span> <span class="ident">pow</span>(<span class="kw-2">mut</span> <span class="ident">a</span>: <span class="ident">u128</span>, <span class="kw-2">mut</span> <span class="ident">b</span>: <span class="ident">u128</span>, <span class="ident">p</span>: <span class="ident">u128</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u128</span> {
+</pre><pre class="rust"><code><span class="kw">fn</span> <span class="ident">pow</span>(<span class="kw-2">mut</span> <span class="ident">a</span>: <span class="ident">u128</span>, <span class="kw-2">mut</span> <span class="ident">b</span>: <span class="ident">u128</span>, <span class="ident">p</span>: <span class="ident">u128</span>) -&gt; <span class="ident">u128</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="number">1</span>;
 
     <span class="kw">while</span> <span class="ident">b</span> <span class="op">&gt;</span> <span class="number">0</span> {
-        <span class="kw">if</span> <span class="ident">b</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
+        <span class="kw">if</span> <span class="ident">b</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">1</span> {
             <span class="ident">ret</span> <span class="op">=</span> <span class="ident">ret</span> <span class="op">*</span> <span class="ident">a</span> <span class="op">%</span> <span class="ident">p</span>;
         }
         <span class="ident">a</span> <span class="op">=</span> <span class="ident">a</span> <span class="op">*</span> <span class="ident">a</span> <span class="op">%</span> <span class="ident">p</span>;
@@ -80,15 +80,15 @@
 }
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::many_single_char_names</span>)]</span>
-<span class="kw">fn</span> <span class="ident">is_composite</span>(<span class="ident">a</span>: <span class="ident">u64</span>, <span class="ident">p</span>: <span class="ident">u64</span>, <span class="ident">s</span>: <span class="ident">u64</span>, <span class="ident">d</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">is_composite</span>(<span class="ident">a</span>: <span class="ident">u64</span>, <span class="ident">p</span>: <span class="ident">u64</span>, <span class="ident">s</span>: <span class="ident">u64</span>, <span class="ident">d</span>: <span class="ident">u64</span>) -&gt; <span class="ident">bool</span> {
     <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">p</span> <span class="kw">as</span> <span class="ident">u128</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">pow</span>(<span class="ident">a</span> <span class="kw">as</span> <span class="ident">u128</span>, <span class="ident">d</span> <span class="kw">as</span> <span class="ident">u128</span>, <span class="ident">p</span>);
 
-    <span class="kw">if</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">1</span> {
         <span class="bool-val">false</span>
     } <span class="kw">else</span> {
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">s</span> {
-            <span class="kw">if</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="ident">p</span> <span class="op">-</span> <span class="number">1</span> {
+            <span class="kw">if</span> <span class="ident">x</span> <span class="op">==</span> <span class="ident">p</span> <span class="op">-</span> <span class="number">1</span> {
                 <span class="kw">return</span> <span class="bool-val">false</span>;
             }
             <span class="ident">x</span> <span class="op">=</span> <span class="ident">x</span> <span class="op">*</span> <span class="ident">x</span> <span class="op">%</span> <span class="ident">p</span>;
@@ -98,17 +98,17 @@
     }
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">miller_rabin</span>(<span class="ident">n</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">miller_rabin</span>(<span class="ident">n</span>: <span class="ident">u64</span>) -&gt; <span class="ident">bool</span> {
     <span class="kw">if</span> <span class="ident">n</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">1</span> {
         <span class="bool-val">false</span>
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">n</span> <span class="op">=</span><span class="op">=</span> <span class="number">2</span> {
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">n</span> <span class="op">==</span> <span class="number">2</span> {
         <span class="bool-val">true</span>
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">n</span> <span class="op">%</span> <span class="number">2</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">n</span> <span class="op">%</span> <span class="number">2</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="bool-val">false</span>
     } <span class="kw">else</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">n</span> <span class="op">-</span> <span class="number">1</span>;
-        <span class="kw">while</span> <span class="ident">d</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+        <span class="kw">while</span> <span class="ident">d</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="ident">s</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="ident">d</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">1</span>;
         }

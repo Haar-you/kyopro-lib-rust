@@ -34,7 +34,7 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::gcd_lcm::GcdLcm</span>;
 <span class="kw">use</span> <span class="ident">std::mem::swap</span>;
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mod_inv</span>(<span class="kw-2">mut</span> <span class="ident">a</span>: <span class="ident">u64</span>, <span class="ident">m</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mod_inv</span>(<span class="kw-2">mut</span> <span class="ident">a</span>: <span class="ident">u64</span>, <span class="ident">m</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
     <span class="kw">if</span> <span class="ident">a</span>.<span class="ident">gcd</span>(<span class="ident">m</span>) <span class="op">!</span><span class="op">=</span> <span class="number">1</span> {
         <span class="kw">return</span> <span class="prelude-val">None</span>;
     }

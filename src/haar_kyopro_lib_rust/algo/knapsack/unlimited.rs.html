@@ -35,7 +35,7 @@
 <span class="doccomment">/// Time complexity O(n cap)</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Space complexity O(cap)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">knapsack_unlimited</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">cap</span>: <span class="ident">usize</span>, <span class="ident">ws</span>: <span class="kw-2">&amp;</span>[<span class="ident">usize</span>], <span class="ident">vs</span>: <span class="kw-2">&amp;</span>[<span class="ident">T</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">knapsack_unlimited</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">cap</span>: <span class="ident">usize</span>, <span class="ident">ws</span>: <span class="kw-2">&amp;</span>[<span class="ident">usize</span>], <span class="ident">vs</span>: <span class="kw-2">&amp;</span>[<span class="ident">T</span>]) -&gt; <span class="ident">T</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Default</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>,
 {

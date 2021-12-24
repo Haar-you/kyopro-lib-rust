@@ -108,14 +108,15 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
-<span id="111">111</span>
-</pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::needless_range_loop</span>)]</span>
+</pre><pre class="rust"><code><span class="doccomment">//! 中国人郵便配達問題</span>
+
+<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::needless_range_loop</span>)]</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp::min</span>, <span class="ident">ops::Add</span>};
 
 <span class="doccomment">/// Time complexity O(V ^ 2 * 2 ^ V)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">chinese_postman_problem</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>: <span class="ident">EdgeTrait</span><span class="op">&lt;</span><span class="ident">Weight</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">chinese_postman_problem</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>: <span class="ident">EdgeTrait</span><span class="op">&lt;</span><span class="ident">Weight</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>) -&gt; <span class="ident">T</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Default</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>,
 {
@@ -146,7 +147,7 @@
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">odd</span> <span class="op">=</span> <span class="macro">vec!</span>[];
     <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">n</span> {
-        <span class="kw">if</span> <span class="ident">g</span>.<span class="ident">edges</span>[<span class="ident">i</span>].<span class="ident">len</span>() <span class="op">%</span> <span class="number">2</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
+        <span class="kw">if</span> <span class="ident">g</span>.<span class="ident">edges</span>[<span class="ident">i</span>].<span class="ident">len</span>() <span class="op">%</span> <span class="number">2</span> <span class="op">==</span> <span class="number">1</span> {
             <span class="ident">odd</span>.<span class="ident">push</span>(<span class="ident">i</span>);
         }
     }
@@ -159,7 +160,7 @@
     <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">m</span> {
         <span class="kw">for</span> <span class="ident">j</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">m</span> {
             <span class="kw">for</span> <span class="ident">k</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">j</span> {
-                <span class="kw">if</span> (<span class="ident">i</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">j</span>)) <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> (<span class="ident">i</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">k</span>)) <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+                <span class="kw">if</span> (<span class="ident">i</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">j</span>)) <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> (<span class="ident">i</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">k</span>)) <span class="op">==</span> <span class="number">0</span> {
                     <span class="kw">continue</span>;
                 }
 
@@ -196,8 +197,7 @@
         <span class="ident">g</span>.<span class="ident">add_undirected</span>(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)]
                 .<span class="ident">into_iter</span>()
-                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ()))
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ())),
         );
         <span class="macro">assert_eq!</span>(<span class="ident">chinese_postman_problem</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>), <span class="number">10</span>);
 
@@ -205,8 +205,7 @@
         <span class="ident">g</span>.<span class="ident">add_undirected</span>(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>)]
                 .<span class="ident">into_iter</span>()
-                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ()))
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ())),
         );
         <span class="macro">assert_eq!</span>(<span class="ident">chinese_postman_problem</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>), <span class="number">18</span>);
 
@@ -214,8 +213,7 @@
         <span class="ident">g</span>.<span class="ident">add_undirected</span>(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>), (<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>)]
                 .<span class="ident">into_iter</span>()
-                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ()))
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ())),
         );
         <span class="macro">assert_eq!</span>(<span class="ident">chinese_postman_problem</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>), <span class="number">7</span>);
     }

@@ -70,10 +70,12 @@
 <span id="70">70</span>
 <span id="71">71</span>
 <span id="72">72</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph</span>::<span class="kw-2">*</span>;
+</pre><pre class="rust"><code><span class="doccomment">//! 巡回セールスマン問題</span>
+
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp::min</span>, <span class="ident">ops::Add</span>};
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tsp</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>: <span class="ident">EdgeTrait</span><span class="op">&lt;</span><span class="ident">Weight</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>, <span class="ident">src</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tsp</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>: <span class="ident">EdgeTrait</span><span class="op">&lt;</span><span class="ident">Weight</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>, <span class="ident">src</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Default</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>,
 {
@@ -87,7 +89,7 @@
 
     <span class="kw">for</span> <span class="ident">s</span> <span class="kw">in</span> <span class="number">1</span>..<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">n</span> {
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">n</span> {
-            <span class="kw">if</span> (<span class="ident">s</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>)) <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> (<span class="ident">s</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>)) <span class="op">==</span> <span class="number">0</span> {
                 <span class="kw">continue</span>;
             }
 
@@ -127,8 +129,7 @@
                 (<span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>),
             ]
             .<span class="ident">into_iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ()))
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ())),
         );
         <span class="macro">assert_eq!</span>(<span class="ident">tsp</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>, <span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">16</span>));
 
@@ -136,8 +137,7 @@
         <span class="ident">g</span>.<span class="ident">add_directed</span>(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>)]
                 .<span class="ident">into_iter</span>()
-                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ()))
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ())),
         );
         <span class="macro">assert_eq!</span>(<span class="ident">tsp</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>, <span class="number">0</span>), <span class="prelude-val">None</span>);
     }

@@ -177,7 +177,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">HLD</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Copy</span><span class="op">&gt;</span>(<span class="ident">tree</span>: <span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">root</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Copy</span><span class="op">&gt;</span>(<span class="ident">tree</span>: <span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">root</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">tree</span>.<span class="ident">len</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="self">Self</span> {
             <span class="ident">size</span>,
@@ -231,7 +231,7 @@
         <span class="kw-2">*</span><span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
 
         <span class="kw">for</span> (<span class="ident">i</span>, <span class="kw-2">&amp;</span><span class="ident">to</span>) <span class="kw">in</span> <span class="ident">tree</span>[<span class="ident">cur</span>].<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
-            <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">to</span>] <span class="op">=</span> <span class="kw">if</span> <span class="ident">i</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> { <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">cur</span>] } <span class="kw">else</span> { <span class="ident">to</span> };
+            <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">to</span>] <span class="op">=</span> <span class="kw">if</span> <span class="ident">i</span> <span class="op">==</span> <span class="number">0</span> { <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">cur</span>] } <span class="kw">else</span> { <span class="ident">to</span> };
             <span class="self">self</span>.<span class="ident">dfs_build</span>(<span class="ident">tree</span>, <span class="ident">to</span>, <span class="ident">index</span>);
         }
 
@@ -239,14 +239,14 @@
     }
 
     <span class="doccomment">/// 演算は可換性を仮定する。</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">path_query_vertex</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">x</span>: <span class="ident">usize</span>, <span class="kw-2">mut</span> <span class="ident">y</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">path_query_vertex</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">x</span>: <span class="ident">usize</span>, <span class="kw-2">mut</span> <span class="ident">y</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="macro">vec!</span>[];
         <span class="kw">loop</span> {
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span>[<span class="ident">x</span>] <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">id</span>[<span class="ident">y</span>] {
                 <span class="ident">std::mem::swap</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">y</span>);
             }
             <span class="ident">ret</span>.<span class="ident">push</span>((<span class="ident">max</span>(<span class="self">self</span>.<span class="ident">id</span>[<span class="self">self</span>.<span class="ident">head</span>[<span class="ident">y</span>]], <span class="self">self</span>.<span class="ident">id</span>[<span class="ident">x</span>]), <span class="self">self</span>.<span class="ident">id</span>[<span class="ident">y</span>] <span class="op">+</span> <span class="number">1</span>));
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">x</span>] <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">y</span>] {
+            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">x</span>] <span class="op">==</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">y</span>] {
                 <span class="kw">break</span>;
             }
             <span class="ident">y</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">par</span>[<span class="self">self</span>.<span class="ident">head</span>[<span class="ident">y</span>]].<span class="ident">unwrap</span>();
@@ -254,13 +254,13 @@
         <span class="ident">ret</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">path_query_edge</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">x</span>: <span class="ident">usize</span>, <span class="kw-2">mut</span> <span class="ident">y</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">path_query_edge</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">x</span>: <span class="ident">usize</span>, <span class="kw-2">mut</span> <span class="ident">y</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="macro">vec!</span>[];
         <span class="kw">loop</span> {
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span>[<span class="ident">x</span>] <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">id</span>[<span class="ident">y</span>] {
                 <span class="ident">std::mem::swap</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">y</span>);
             }
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">x</span>] <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">y</span>] {
+            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">x</span>] <span class="op">==</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">y</span>] {
                 <span class="kw">if</span> <span class="ident">x</span> <span class="op">!</span><span class="op">=</span> <span class="ident">y</span> {
                     <span class="ident">ret</span>.<span class="ident">push</span>((<span class="self">self</span>.<span class="ident">id</span>[<span class="ident">x</span>] <span class="op">+</span> <span class="number">1</span>, <span class="self">self</span>.<span class="ident">id</span>[<span class="ident">y</span>] <span class="op">+</span> <span class="number">1</span>));
                 }
@@ -272,28 +272,28 @@
         <span class="ident">ret</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">subtree_query_vertex</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">x</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">usize</span>, <span class="ident">usize</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">subtree_query_vertex</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">x</span>: <span class="ident">usize</span>) -&gt; (<span class="ident">usize</span>, <span class="ident">usize</span>) {
         (<span class="self">self</span>.<span class="ident">id</span>[<span class="ident">x</span>], <span class="self">self</span>.<span class="ident">end</span>[<span class="ident">x</span>])
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">subtree_query_edge</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">x</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">usize</span>, <span class="ident">usize</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">subtree_query_edge</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">x</span>: <span class="ident">usize</span>) -&gt; (<span class="ident">usize</span>, <span class="ident">usize</span>) {
         (<span class="self">self</span>.<span class="ident">id</span>[<span class="ident">x</span>] <span class="op">+</span> <span class="number">1</span>, <span class="self">self</span>.<span class="ident">end</span>[<span class="ident">x</span>])
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parent</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">x</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parent</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">x</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">par</span>[<span class="ident">x</span>]
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">x</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">x</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">id</span>[<span class="ident">x</span>]
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lca</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">u</span>: <span class="ident">usize</span>, <span class="kw-2">mut</span> <span class="ident">v</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lca</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">u</span>: <span class="ident">usize</span>, <span class="kw-2">mut</span> <span class="ident">v</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
         <span class="kw">loop</span> {
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span>[<span class="ident">u</span>] <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">id</span>[<span class="ident">v</span>] {
                 <span class="ident">std::mem::swap</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">u</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">v</span>);
             }
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">u</span>] <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">v</span>] {
+            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">u</span>] <span class="op">==</span> <span class="self">self</span>.<span class="ident">head</span>[<span class="ident">v</span>] {
                 <span class="kw">return</span> <span class="ident">u</span>;
             }
             <span class="ident">v</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">par</span>[<span class="self">self</span>.<span class="ident">head</span>[<span class="ident">v</span>]].<span class="ident">unwrap</span>();

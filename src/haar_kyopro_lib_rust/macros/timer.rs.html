@@ -9,7 +9,7 @@
 <span id="9">9</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">timer</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>:<span class="ident">block</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>:<span class="ident">block</span>) =&gt; {{
         <span class="kw">use</span> <span class="ident">std::time::Instant</span>;
         <span class="kw">let</span> <span class="ident">start</span> <span class="op">=</span> <span class="ident">Instant::now</span>();
         <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>;

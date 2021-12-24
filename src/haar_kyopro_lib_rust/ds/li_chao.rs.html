@@ -171,22 +171,22 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Mode</span> {
-    <span class="kw">fn</span> <span class="ident">op</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Ord</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">a</span>: <span class="ident">T</span>, <span class="ident">b</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
+    <span class="kw">fn</span> <span class="ident">op</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Ord</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">a</span>: <span class="ident">T</span>, <span class="ident">b</span>: <span class="ident">T</span>) -&gt; <span class="ident">T</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Mode::Max</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">max</span>(<span class="ident">a</span>, <span class="ident">b</span>),
-            <span class="ident">Mode::Min</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">min</span>(<span class="ident">a</span>, <span class="ident">b</span>),
+            <span class="ident">Mode::Max</span> =&gt; <span class="ident">max</span>(<span class="ident">a</span>, <span class="ident">b</span>),
+            <span class="ident">Mode::Min</span> =&gt; <span class="ident">min</span>(<span class="ident">a</span>, <span class="ident">b</span>),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">cmp</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Ord</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">a</span>: <span class="ident">T</span>, <span class="ident">b</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">cmp</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Ord</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">a</span>: <span class="ident">T</span>, <span class="ident">b</span>: <span class="ident">T</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Mode::Max</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">a</span> <span class="op">&gt;</span> <span class="ident">b</span>,
-            <span class="ident">Mode::Min</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">a</span> <span class="op">&lt;</span> <span class="ident">b</span>,
+            <span class="ident">Mode::Max</span> =&gt; <span class="ident">a</span> <span class="op">&gt;</span> <span class="ident">b</span>,
+            <span class="ident">Mode::Min</span> =&gt; <span class="ident">a</span> <span class="op">&lt;</span> <span class="ident">b</span>,
         }
     }
 }
 
-<span class="kw">fn</span> <span class="ident">apply</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">l</span>: (<span class="ident">T</span>, <span class="ident">T</span>), <span class="ident">x</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
+<span class="kw">fn</span> <span class="ident">apply</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">l</span>: (<span class="ident">T</span>, <span class="ident">T</span>), <span class="ident">x</span>: <span class="ident">T</span>) -&gt; <span class="ident">T</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Mul</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Copy</span>,
 {
@@ -220,7 +220,7 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">xs_</span>: <span class="kw-2">&amp;</span>[<span class="ident">T</span>], <span class="ident">mode</span>: <span class="ident">Mode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">xs_</span>: <span class="kw-2">&amp;</span>[<span class="ident">T</span>], <span class="ident">mode</span>: <span class="ident">Mode</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">xs</span> <span class="op">=</span> <span class="ident">xs_</span>.<span class="ident">to_vec</span>();
         <span class="ident">xs</span>.<span class="ident">sort</span>();
         <span class="ident">xs</span>.<span class="ident">dedup</span>();
@@ -285,11 +285,11 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">lower_bound</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">xs</span>, <span class="kw-2">&amp;</span><span class="ident">r</span>) <span class="op">+</span> <span class="self">self</span>.<span class="ident">size</span>;
 
         <span class="kw">while</span> <span class="ident">l</span> <span class="op">&lt;</span> <span class="ident">r</span> {
-            <span class="kw">if</span> <span class="ident">r</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
+            <span class="kw">if</span> <span class="ident">r</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">1</span> {
                 <span class="ident">r</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
                 <span class="self">self</span>.<span class="ident">update</span>(<span class="ident">r</span>, <span class="ident">segment</span>, <span class="self">self</span>.<span class="ident">range</span>[<span class="ident">r</span>].<span class="number">0</span>, <span class="self">self</span>.<span class="ident">range</span>[<span class="ident">r</span>].<span class="number">1</span>);
             }
-            <span class="kw">if</span> <span class="ident">l</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
+            <span class="kw">if</span> <span class="ident">l</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">1</span> {
                 <span class="self">self</span>.<span class="ident">update</span>(<span class="ident">l</span>, <span class="ident">segment</span>, <span class="self">self</span>.<span class="ident">range</span>[<span class="ident">l</span>].<span class="number">0</span>, <span class="self">self</span>.<span class="ident">range</span>[<span class="ident">l</span>].<span class="number">1</span>);
                 <span class="ident">l</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             }
@@ -299,7 +299,7 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">query</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">x</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">query</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">x</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">xs</span>.<span class="ident">binary_search</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>).<span class="ident">expect</span>(<span class="string">&quot;`x` must be in `xs`&quot;</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">k</span> <span class="op">=</span> <span class="ident">i</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">size</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="prelude-val">None</span>;

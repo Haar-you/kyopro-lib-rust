@@ -40,7 +40,11 @@
 <span id="40">40</span>
 <span id="41">41</span>
 <span id="42">42</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::flow::MaxFlow</span>;
+<span id="43">43</span>
+<span id="44">44</span>
+</pre><pre class="rust"><code><span class="doccomment">//! 二部マッチング</span>
+
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::flow::MaxFlow</span>;
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BipartiteMatching</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span> {
     <span class="ident">left</span>: <span class="ident">usize</span>,
@@ -51,7 +55,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">MaxFlow</span><span class="op">&lt;</span><span class="ident">Cap</span> <span class="op">=</span> <span class="ident">u64</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">BipartiteMatching</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">left</span>: <span class="ident">usize</span>, <span class="ident">right</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">left</span>: <span class="ident">usize</span>, <span class="ident">right</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">flow</span> <span class="op">=</span> <span class="ident">F::new</span>(<span class="ident">left</span> <span class="op">+</span> <span class="ident">right</span> <span class="op">+</span> <span class="number">2</span>);
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">left</span> <span class="op">+</span> <span class="ident">right</span>;
         <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">s</span> <span class="op">+</span> <span class="number">1</span>;
@@ -78,7 +82,7 @@
         <span class="self">self</span>.<span class="ident">flow</span>.<span class="ident">add_edge</span>(<span class="ident">i</span>, <span class="self">self</span>.<span class="ident">left</span> <span class="op">+</span> <span class="ident">j</span>, <span class="number">1</span>);
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">matching</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">matching</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">u64</span> {
         <span class="self">self</span>.<span class="ident">flow</span>.<span class="ident">max_flow</span>(<span class="self">self</span>.<span class="ident">s</span>, <span class="self">self</span>.<span class="ident">t</span>)
     }
 }

@@ -106,7 +106,13 @@
 <span id="106">106</span>
 <span id="107">107</span>
 <span id="108">108</span>
-</pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">articulation_points</span>;
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+</pre><pre class="rust"><code><span class="doccomment">//! グラフ一般に関するもの</span>
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">articulation_points</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bellman_ford</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bipartite</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bridges</span>;
@@ -124,6 +130,8 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">two_edge</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">warshall_floyd</span>;
 
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">psp</span>;
+
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">dinic</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">flow</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ford_fulkerson</span>;
@@ -134,10 +142,10 @@
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">EdgeTrait</span> {
     <span class="kw">type</span> <span class="ident">Weight</span>;
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
-    <span class="kw">fn</span> <span class="ident">to</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
-    <span class="kw">fn</span> <span class="ident">weight</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Weight</span>;
-    <span class="kw">fn</span> <span class="ident">rev</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span>;
+    <span class="kw">fn</span> <span class="ident">to</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span>;
+    <span class="kw">fn</span> <span class="ident">weight</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Weight</span>;
+    <span class="kw">fn</span> <span class="ident">rev</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
@@ -149,7 +157,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span> <span class="ident">Edge</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">from</span>: <span class="ident">usize</span>, <span class="ident">to</span>: <span class="ident">usize</span>, <span class="ident">weight</span>: <span class="ident">T</span>, <span class="ident">index</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">from</span>: <span class="ident">usize</span>, <span class="ident">to</span>: <span class="ident">usize</span>, <span class="ident">weight</span>: <span class="ident">T</span>, <span class="ident">index</span>: <span class="ident">I</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">from</span>,
             <span class="ident">to</span>,
@@ -162,18 +170,18 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Clone</span>, <span class="ident">I</span><span class="op">&gt;</span> <span class="ident">EdgeTrait</span> <span class="kw">for</span> <span class="ident">Edge</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Weight</span> <span class="op">=</span> <span class="ident">T</span>;
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">from</span>
     }
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">to</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">fn</span> <span class="ident">to</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">to</span>
     }
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">weight</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Weight</span> {
+    <span class="kw">fn</span> <span class="ident">weight</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Weight</span> {
         <span class="self">self</span>.<span class="ident">weight</span>.<span class="ident">clone</span>()
     }
-    <span class="kw">fn</span> <span class="ident">rev</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">rev</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">std::mem::swap</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">from</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">to</span>);
         <span class="self">self</span>
     }
@@ -185,7 +193,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">EdgeTrait</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Graph</span> {
             <span class="ident">edges</span>: <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; <span class="ident">size</span>],
         }
@@ -206,11 +214,11 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">edges</span>.<span class="ident">len</span>()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">edges</span>.<span class="ident">is_empty</span>()
     }
 }

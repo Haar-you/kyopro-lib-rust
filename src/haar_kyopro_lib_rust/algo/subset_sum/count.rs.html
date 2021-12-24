@@ -38,11 +38,11 @@
 <span class="doccomment">/// Time complexity $O(nk)$</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Space complexity $O(k)$</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">subset_sum</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">n</span>: <span class="ident">usize</span>, <span class="ident">k</span>: <span class="ident">usize</span>, <span class="ident">a</span>: <span class="kw-2">&amp;</span>[<span class="ident">usize</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">subset_sum</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">n</span>: <span class="ident">usize</span>, <span class="ident">k</span>: <span class="ident">usize</span>, <span class="ident">a</span>: <span class="kw-2">&amp;</span>[<span class="ident">usize</span>]) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>,
 {
-    <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">n</span>);
+    <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="ident">n</span>);
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dp</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="ident">T::from</span>(<span class="number">0</span>); <span class="ident">k</span> <span class="op">+</span> <span class="number">1</span>]; <span class="number">2</span>];
 

@@ -47,21 +47,24 @@
 <span id="47">47</span>
 <span id="48">48</span>
 <span id="49">49</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph</span>::{<span class="ident">lowlink</span>::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+<span id="50">50</span>
+</pre><pre class="rust"><code><span class="doccomment">//! 関節点の列挙</span>
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">articulation_points</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">EdgeTrait</span><span class="op">&gt;</span>(<span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::lowlink</span>::<span class="kw-2">*</span>;
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">articulation_points</span>(<span class="ident">ll</span>: <span class="kw-2">&amp;</span><span class="ident">Lowlink</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">Lowlink</span> {
         <span class="ident">size</span>,
         <span class="ident">ord</span>,
         <span class="ident">low</span>,
         <span class="ident">par</span>,
         <span class="ident">ch</span>,
-    } <span class="op">=</span> <span class="ident">Lowlink::new</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>);
+    } <span class="op">=</span> <span class="ident">ll</span>;
 
-    (<span class="number">0</span>..<span class="ident">size</span>)
+    (<span class="number">0</span>..<span class="kw-2">*</span><span class="ident">size</span>)
         .<span class="ident">filter</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">i</span><span class="op">|</span> {
             (<span class="ident">par</span>[<span class="ident">i</span>].<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="ident">ch</span>[<span class="ident">i</span>].<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span>)
-                <span class="op">|</span><span class="op">|</span> <span class="ident">ch</span>[<span class="ident">i</span>].<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">j</span><span class="op">|</span> <span class="ident">par</span>[<span class="ident">i</span>].<span class="ident">is_some</span>() <span class="op">&amp;&amp;</span> <span class="ident">ord</span>[<span class="ident">i</span>] <span class="op">&lt;</span><span class="op">=</span> <span class="ident">low</span>[<span class="ident">j</span>])
+                <span class="op">|</span><span class="op">|</span> (<span class="ident">par</span>[<span class="ident">i</span>].<span class="ident">is_some</span>() <span class="op">&amp;&amp;</span> <span class="ident">ch</span>[<span class="ident">i</span>].<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">j</span><span class="op">|</span> <span class="ident">ord</span>[<span class="ident">i</span>] <span class="op">&lt;</span><span class="op">=</span> <span class="ident">low</span>[<span class="ident">j</span>]))
         })
         .<span class="ident">collect</span>()
 }
@@ -69,6 +72,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph</span>::<span class="kw-2">*</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test</span>() {
@@ -77,10 +81,9 @@
         <span class="ident">g</span>.<span class="ident">add_undirected</span>(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>)]
                 .<span class="ident">into_iter</span>()
-                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ()))
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ())),
         );
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ans</span> <span class="op">=</span> <span class="ident">articulation_points</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ans</span> <span class="op">=</span> <span class="ident">articulation_points</span>(<span class="kw-2">&amp;</span><span class="ident">Lowlink::new</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>));
         <span class="ident">ans</span>.<span class="ident">sort</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">ans</span>, [<span class="number">2</span>]);
 
@@ -88,10 +91,9 @@
         <span class="ident">g</span>.<span class="ident">add_undirected</span>(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>), (<span class="number">3</span>, <span class="number">4</span>, <span class="number">1</span>)]
                 .<span class="ident">into_iter</span>()
-                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ()))
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge::new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ())),
         );
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ans</span> <span class="op">=</span> <span class="ident">articulation_points</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ans</span> <span class="op">=</span> <span class="ident">articulation_points</span>(<span class="kw-2">&amp;</span><span class="ident">Lowlink::new</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>));
         <span class="ident">ans</span>.<span class="ident">sort</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">ans</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);
     }

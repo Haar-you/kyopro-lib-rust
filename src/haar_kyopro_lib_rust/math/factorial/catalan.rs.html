@@ -66,10 +66,10 @@
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math</span>::{<span class="ident">factorial::FactorialTable</span>, <span class="ident">ff::traits::FF</span>};
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">FF</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">FactorialTable</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">catalan_number</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">n</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">catalan_number</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">n</span>: <span class="ident">usize</span>) -&gt; <span class="ident">T</span> {
         <span class="kw">match</span> <span class="ident">n</span> {
-            <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">T::from</span>(<span class="number">1</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">comb</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">n</span>, <span class="ident">n</span>) <span class="op">-</span> <span class="self">self</span>.<span class="ident">comb</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">n</span>, <span class="ident">n</span> <span class="op">-</span> <span class="number">1</span>),
+            <span class="number">0</span> =&gt; <span class="ident">T::from</span>(<span class="number">1</span>),
+            <span class="kw">_</span> =&gt; <span class="self">self</span>.<span class="ident">comb</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">n</span>, <span class="ident">n</span>) <span class="op">-</span> <span class="self">self</span>.<span class="ident">comb</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">n</span>, <span class="ident">n</span> <span class="op">-</span> <span class="number">1</span>),
         }
     }
 }

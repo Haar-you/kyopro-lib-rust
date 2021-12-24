@@ -105,7 +105,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">RangeSearchTree</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, (<span class="ident">sx</span>, <span class="ident">sy</span>): (<span class="ident">i64</span>, <span class="ident">i64</span>), (<span class="ident">tx</span>, <span class="ident">ty</span>): (<span class="ident">i64</span>, <span class="ident">i64</span>)) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">i64</span>, <span class="ident">i64</span>)<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, (<span class="ident">sx</span>, <span class="ident">sy</span>): (<span class="ident">i64</span>, <span class="ident">i64</span>), (<span class="ident">tx</span>, <span class="ident">ty</span>): (<span class="ident">i64</span>, <span class="ident">i64</span>)) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">i64</span>, <span class="ident">i64</span>)<span class="op">&gt;</span> {
         <span class="macro">assert!</span>(<span class="ident">sx</span> <span class="op">&lt;</span> <span class="ident">tx</span>);
         <span class="macro">assert!</span>(<span class="ident">sy</span> <span class="op">&lt;</span> <span class="ident">ty</span>);
 
@@ -154,7 +154,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">RangeSearchTreeBuilder</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">size</span>: <span class="number">0</span>,
             <span class="ident">xs</span>: <span class="macro">vec!</span>[],
@@ -168,7 +168,7 @@
         <span class="self">self</span>.<span class="ident">ys</span>.<span class="ident">push</span>(<span class="ident">y</span>);
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RangeSearchTree</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="self">self</span>) -&gt; <span class="ident">RangeSearchTree</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cxs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">xs</span>.<span class="ident">clone</span>();
         <span class="ident">cxs</span>.<span class="ident">sort_unstable</span>();
         <span class="ident">cxs</span>.<span class="ident">dedup</span>();

@@ -170,25 +170,25 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ExtLucas</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">p</span>: <span class="ident">u64</span>, <span class="ident">q</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">p</span>: <span class="ident">u64</span>, <span class="ident">q</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">p</span>.<span class="ident">pow</span>(<span class="ident">q</span> <span class="kw">as</span> <span class="ident">u32</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prod</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1</span>; <span class="ident">m</span> <span class="kw">as</span> <span class="ident">usize</span>];
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">inv</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1</span>; <span class="ident">m</span> <span class="kw">as</span> <span class="ident">usize</span>];
 
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">1</span>..<span class="ident">m</span> <span class="kw">as</span> <span class="ident">usize</span> {
-            <span class="ident">prod</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">prod</span>[<span class="ident">i</span> <span class="op">-</span> <span class="number">1</span>] <span class="op">*</span> (<span class="kw">if</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u64</span> <span class="op">%</span> <span class="ident">p</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u64</span> }) <span class="op">%</span> <span class="ident">m</span>;
+            <span class="ident">prod</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">prod</span>[<span class="ident">i</span> <span class="op">-</span> <span class="number">1</span>] <span class="op">*</span> (<span class="kw">if</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u64</span> <span class="op">%</span> <span class="ident">p</span> <span class="op">==</span> <span class="number">0</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u64</span> }) <span class="op">%</span> <span class="ident">m</span>;
         }
 
         <span class="ident">inv</span>[<span class="ident">m</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">1</span>] <span class="op">=</span> <span class="ident">mod_inv</span>(<span class="ident">prod</span>[<span class="ident">m</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">1</span>], <span class="ident">m</span>).<span class="ident">unwrap</span>();
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> (<span class="number">1</span>..<span class="ident">m</span> <span class="kw">as</span> <span class="ident">usize</span>).<span class="ident">rev</span>() {
-            <span class="ident">inv</span>[<span class="ident">i</span> <span class="op">-</span> <span class="number">1</span>] <span class="op">=</span> <span class="ident">inv</span>[<span class="ident">i</span>] <span class="op">*</span> (<span class="kw">if</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u64</span> <span class="op">%</span> <span class="ident">p</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u64</span> }) <span class="op">%</span> <span class="ident">m</span>;
+            <span class="ident">inv</span>[<span class="ident">i</span> <span class="op">-</span> <span class="number">1</span>] <span class="op">=</span> <span class="ident">inv</span>[<span class="ident">i</span>] <span class="op">*</span> (<span class="kw">if</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u64</span> <span class="op">%</span> <span class="ident">p</span> <span class="op">==</span> <span class="number">0</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u64</span> }) <span class="op">%</span> <span class="ident">m</span>;
         }
 
         <span class="self">Self</span> { <span class="ident">prod</span>, <span class="ident">inv</span>, <span class="ident">p</span>, <span class="ident">q</span>, <span class="ident">m</span> }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">n</span>: <span class="ident">u64</span>, <span class="kw-2">mut</span> <span class="ident">k</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">n</span>: <span class="ident">u64</span>, <span class="kw-2">mut</span> <span class="ident">k</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
         <span class="macro">assert!</span>(<span class="ident">n</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">k</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">n</span> <span class="op">-</span> <span class="ident">k</span>;
@@ -198,7 +198,7 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">i</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">loop</span> {
-            <span class="kw">if</span> <span class="ident">n</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> <span class="ident">n</span> <span class="op">==</span> <span class="number">0</span> {
                 <span class="kw">break</span>;
             }
 
@@ -225,7 +225,7 @@
             }
         }
 
-        <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">p</span> <span class="op">!</span><span class="op">=</span> <span class="number">2</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">q</span> <span class="op">&lt;</span> <span class="number">3</span>) <span class="op">&amp;&amp;</span> <span class="ident">eq</span> <span class="op">%</span> <span class="number">2</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
+        <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">p</span> <span class="op">!</span><span class="op">=</span> <span class="number">2</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">q</span> <span class="op">&lt;</span> <span class="number">3</span>) <span class="op">&amp;&amp;</span> <span class="ident">eq</span> <span class="op">%</span> <span class="number">2</span> <span class="op">==</span> <span class="number">1</span> {
             <span class="ident">ret</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">m</span> <span class="op">-</span> <span class="ident">ret</span>;
         }
 
@@ -243,17 +243,17 @@
 }
 
 <span class="kw">impl</span> <span class="ident">BinomialCoefficient</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="kw-2">mut</span> <span class="ident">m</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="kw-2">mut</span> <span class="ident">m</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">m_primes</span> <span class="op">=</span> <span class="macro">vec!</span>[];
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ms</span> <span class="op">=</span> <span class="macro">vec!</span>[];
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lu</span> <span class="op">=</span> <span class="macro">vec!</span>[];
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">i</span> <span class="op">=</span> <span class="number">2</span>;
         <span class="kw">while</span> <span class="ident">i</span> <span class="op">*</span> <span class="ident">i</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">m</span> {
-            <span class="kw">if</span> <span class="ident">m</span> <span class="op">%</span> <span class="ident">i</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> <span class="ident">m</span> <span class="op">%</span> <span class="ident">i</span> <span class="op">==</span> <span class="number">0</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">t</span> <span class="op">=</span> <span class="number">1</span>;
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">c</span> <span class="op">=</span> <span class="number">0</span>;
-                <span class="kw">while</span> <span class="ident">m</span> <span class="op">%</span> <span class="ident">i</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+                <span class="kw">while</span> <span class="ident">m</span> <span class="op">%</span> <span class="ident">i</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="ident">m</span> <span class="op">/</span><span class="op">=</span> <span class="ident">i</span>;
                     <span class="ident">c</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                     <span class="ident">t</span> <span class="kw-2">*</span><span class="op">=</span> <span class="ident">i</span>;
@@ -276,7 +276,7 @@
         <span class="self">Self</span> { <span class="ident">lu</span>, <span class="ident">ms</span> }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">n</span>: <span class="ident">u64</span>, <span class="ident">k</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">n</span>: <span class="ident">u64</span>, <span class="ident">k</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
         <span class="kw">if</span> <span class="ident">n</span> <span class="op">&lt;</span> <span class="ident">k</span> {
             <span class="number">0</span>
         } <span class="kw">else</span> {

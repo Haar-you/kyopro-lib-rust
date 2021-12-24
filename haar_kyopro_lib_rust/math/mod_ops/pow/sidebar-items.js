@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["mod_pow","Time complexity O(log p)"]]});
+initSidebarItems({"fn":[["mod_pow","mod累乗"]]});

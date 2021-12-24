@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["inplace_merge",""],["merge",""]]});
+initSidebarItems({"fn":[["inplace_merge",""],["inplace_merge_by",""],["merge",""]]});

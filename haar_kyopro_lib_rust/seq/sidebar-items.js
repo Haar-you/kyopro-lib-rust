@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["edit_distance",""],["kmp",""],["manacher",""],["run_length_encoding",""],["zalgo",""]]});
+initSidebarItems({"mod":[["edit_distance",""],["kmp",""],["manacher",""],["rle",""],["sa",""],["zalgo",""]]});

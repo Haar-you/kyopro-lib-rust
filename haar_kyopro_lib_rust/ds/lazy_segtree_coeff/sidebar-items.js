@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["LazySegmentTreeCoeff","係数乗算付き区間加算区間総和遅延セグ木"]]});

@@ -92,7 +92,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_mod_pow</span>() {
-        <span class="kw">fn</span> <span class="ident">straight_forward</span>(<span class="ident">x</span>: <span class="ident">u64</span>, <span class="ident">p</span>: <span class="ident">u64</span>, <span class="ident">m</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+        <span class="kw">fn</span> <span class="ident">straight_forward</span>(<span class="ident">x</span>: <span class="ident">u64</span>, <span class="ident">p</span>: <span class="ident">u64</span>, <span class="ident">m</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="number">1</span>;
             <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">p</span> {
                 <span class="ident">ret</span> <span class="op">=</span> <span class="ident">ret</span> <span class="op">*</span> <span class="ident">x</span>;

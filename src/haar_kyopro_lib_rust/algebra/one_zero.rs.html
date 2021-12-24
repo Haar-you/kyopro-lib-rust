@@ -27,25 +27,25 @@
 <span id="27">27</span>
 </pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Zero</span> {
     <span class="kw">type</span> <span class="ident">Output</span>;
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span>;
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident"><span class="self">Self</span>::Output</span>;
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">One</span> {
     <span class="kw">type</span> <span class="ident">Output</span>;
-    <span class="kw">fn</span> <span class="ident">one</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span>;
+    <span class="kw">fn</span> <span class="ident">one</span>() -&gt; <span class="ident"><span class="self">Self</span>::Output</span>;
 }
 
 <span class="macro">macro_rules!</span> <span class="ident">impl_one_zero</span> {
-    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>),<span class="kw-2">*</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>),<span class="kw-2">*</span>) =&gt; {
         $(
             <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> {
                 <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>;
-                <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span> { <span class="number">0</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> }
+                <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident"><span class="self">Self</span>::Output</span> { <span class="number">0</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> }
             }
 
             <span class="kw">impl</span> <span class="ident">One</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> {
                 <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>;
-                <span class="kw">fn</span> <span class="ident">one</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span> { <span class="number">1</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> }
+                <span class="kw">fn</span> <span class="ident">one</span>() -&gt; <span class="ident"><span class="self">Self</span>::Output</span> { <span class="number">1</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> }
             }
         )<span class="op">*</span>
     }

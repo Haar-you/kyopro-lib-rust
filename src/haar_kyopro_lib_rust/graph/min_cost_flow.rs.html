@@ -112,7 +112,11 @@
 <span id="112">112</span>
 <span id="113">113</span>
 <span id="114">114</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
+<span id="115">115</span>
+<span id="116">116</span>
+</pre><pre class="rust"><code><span class="doccomment">//! 最小費用流</span>
+
+<span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cmp</span>::{<span class="ident">min</span>, <span class="ident">Reverse</span>},
     <span class="ident">collections::BinaryHeap</span>,
 };
@@ -133,7 +137,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">MinCostFlow</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">size</span>,
             <span class="ident">edges</span>: <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; <span class="ident">size</span>],
@@ -159,7 +163,7 @@
         });
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_cost_flow</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">s</span>: <span class="ident">usize</span>, <span class="ident">t</span>: <span class="ident">usize</span>, <span class="ident">f</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span>, (<span class="ident">u64</span>, <span class="ident">i64</span>)<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_cost_flow</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">src</span>: <span class="ident">usize</span>, <span class="ident">sink</span>: <span class="ident">usize</span>, <span class="ident">f</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span>, (<span class="ident">u64</span>, <span class="ident">i64</span>)<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">flow</span> <span class="op">=</span> <span class="ident">f</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">h</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">0</span>; <span class="self">self</span>.<span class="ident">size</span>];
@@ -169,8 +173,8 @@
         <span class="kw">while</span> <span class="ident">flow</span> <span class="op">&gt;</span> <span class="number">0</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cost</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="prelude-val">None</span>; <span class="self">self</span>.<span class="ident">size</span>];
 
-            <span class="ident">cost</span>[<span class="ident">s</span>] <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="number">0</span>);
-            <span class="ident">pq</span>.<span class="ident">push</span>(<span class="ident">Reverse</span>((<span class="number">0</span>, <span class="ident">s</span>)));
+            <span class="ident">cost</span>[<span class="ident">src</span>] <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="number">0</span>);
+            <span class="ident">pq</span>.<span class="ident">push</span>(<span class="ident">Reverse</span>((<span class="number">0</span>, <span class="ident">src</span>)));
 
             <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">Reverse</span>((<span class="ident">c</span>, <span class="ident">v</span>))) <span class="op">=</span> <span class="ident">pq</span>.<span class="ident">pop</span>() {
                 <span class="kw">if</span> <span class="ident">cost</span>[<span class="ident">v</span>].<span class="ident">unwrap</span>() <span class="op">&lt;</span> <span class="ident">c</span> {
@@ -189,7 +193,7 @@
                 }
             }
 
-            <span class="kw">if</span> <span class="ident">cost</span>[<span class="ident">t</span>].<span class="ident">is_none</span>() {
+            <span class="kw">if</span> <span class="ident">cost</span>[<span class="ident">sink</span>].<span class="ident">is_none</span>() {
                 <span class="kw">break</span>;
             }
 
@@ -200,17 +204,17 @@
             }
 
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">df</span> <span class="op">=</span> <span class="ident">flow</span>;
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="ident">t</span>;
-            <span class="kw">while</span> <span class="ident">cur</span> <span class="op">!</span><span class="op">=</span> <span class="ident">s</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="ident">sink</span>;
+            <span class="kw">while</span> <span class="ident">cur</span> <span class="op">!</span><span class="op">=</span> <span class="ident">src</span> {
                 <span class="ident">df</span> <span class="op">=</span> <span class="ident">min</span>(<span class="ident">df</span>, <span class="self">self</span>.<span class="ident">edges</span>[<span class="ident">prev</span>[<span class="ident">cur</span>].<span class="number">0</span>][<span class="ident">prev</span>[<span class="ident">cur</span>].<span class="number">1</span>].<span class="ident">cap</span>);
                 <span class="ident">cur</span> <span class="op">=</span> <span class="ident">prev</span>[<span class="ident">cur</span>].<span class="number">0</span>;
             }
 
             <span class="ident">flow</span> <span class="op">-</span><span class="op">=</span> <span class="ident">df</span>;
-            <span class="ident">ret</span> <span class="op">+</span><span class="op">=</span> <span class="ident">df</span> <span class="kw">as</span> <span class="ident">i64</span> <span class="op">*</span> <span class="ident">h</span>[<span class="ident">t</span>];
+            <span class="ident">ret</span> <span class="op">+</span><span class="op">=</span> <span class="ident">df</span> <span class="kw">as</span> <span class="ident">i64</span> <span class="op">*</span> <span class="ident">h</span>[<span class="ident">sink</span>];
 
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="ident">t</span>;
-            <span class="kw">while</span> <span class="ident">cur</span> <span class="op">!</span><span class="op">=</span> <span class="ident">s</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="ident">sink</span>;
+            <span class="kw">while</span> <span class="ident">cur</span> <span class="op">!</span><span class="op">=</span> <span class="ident">src</span> {
                 <span class="kw">let</span> <span class="ident">e</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">edges</span>[<span class="ident">prev</span>[<span class="ident">cur</span>].<span class="number">0</span>][<span class="ident">prev</span>[<span class="ident">cur</span>].<span class="number">1</span>];
                 <span class="ident">e</span>.<span class="ident">cap</span> <span class="op">-</span><span class="op">=</span> <span class="ident">df</span>;
                 <span class="kw">let</span> <span class="ident">rev</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">rev</span>;
@@ -219,7 +223,7 @@
             }
         }
 
-        <span class="kw">if</span> <span class="ident">flow</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+        <span class="kw">if</span> <span class="ident">flow</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">ret</span>)
         } <span class="kw">else</span> {
             <span class="prelude-val">Err</span>((<span class="ident">f</span> <span class="op">-</span> <span class="ident">flow</span>, <span class="ident">ret</span>))

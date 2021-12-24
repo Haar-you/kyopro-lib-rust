@@ -35,13 +35,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">FactorizeSieve</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">n</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">n</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">p</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">0</span>; <span class="ident">n</span> <span class="op">+</span> <span class="number">1</span>];
 
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">2</span>..<span class="op">=</span><span class="ident">n</span> {
-            <span class="kw">if</span> <span class="ident">p</span>[<span class="ident">i</span>] <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> <span class="ident">p</span>[<span class="ident">i</span>] <span class="op">==</span> <span class="number">0</span> {
                 <span class="kw">for</span> <span class="ident">j</span> <span class="kw">in</span> (<span class="ident">i</span>..<span class="op">=</span><span class="ident">n</span>).<span class="ident">step_by</span>(<span class="ident">i</span>) {
-                    <span class="kw">if</span> <span class="ident">p</span>[<span class="ident">j</span>] <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+                    <span class="kw">if</span> <span class="ident">p</span>[<span class="ident">j</span>] <span class="op">==</span> <span class="number">0</span> {
                         <span class="ident">p</span>[<span class="ident">j</span>] <span class="op">=</span> <span class="ident">i</span>;
                     }
                 }
@@ -51,7 +51,7 @@
         <span class="self">Self</span> { <span class="ident">p</span> }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">factorize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">n</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">factorize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">n</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="macro">vec!</span>[];
 
         <span class="kw">while</span> <span class="ident">n</span> <span class="op">&gt;</span> <span class="number">1</span> {

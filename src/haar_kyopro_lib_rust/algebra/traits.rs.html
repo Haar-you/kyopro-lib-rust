@@ -31,15 +31,15 @@
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">BinaryOp</span>: <span class="ident">AlgeStruct</span> {
-    <span class="kw">fn</span> <span class="ident">op</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="ident"><span class="self">Self</span>::Output</span>, <span class="kw">_</span>: <span class="ident"><span class="self">Self</span>::Output</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span>;
+    <span class="kw">fn</span> <span class="ident">op</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="ident"><span class="self">Self</span>::Output</span>, <span class="kw">_</span>: <span class="ident"><span class="self">Self</span>::Output</span>) -&gt; <span class="ident"><span class="self">Self</span>::Output</span>;
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Identity</span>: <span class="ident">AlgeStruct</span> {
-    <span class="kw">fn</span> <span class="ident">id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span>;
+    <span class="kw">fn</span> <span class="ident">id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Output</span>;
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Inverse</span>: <span class="ident">AlgeStruct</span> {
-    <span class="kw">fn</span> <span class="ident">inv</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="ident"><span class="self">Self</span>::Output</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span>;
+    <span class="kw">fn</span> <span class="ident">inv</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="ident"><span class="self">Self</span>::Output</span>) -&gt; <span class="ident"><span class="self">Self</span>::Output</span>;
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Commutative</span> {}
