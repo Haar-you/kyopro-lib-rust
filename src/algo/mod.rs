@@ -14,3 +14,5 @@ pub mod permutation;
 pub mod sliding_window;
 pub mod subset_sum;
 pub mod two_sat;
+
+pub mod static_range_inversions_query;
