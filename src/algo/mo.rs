@@ -1,8 +1,8 @@
 pub struct Mo<'a> {
-    append_right: Box<dyn 'a + Fn(usize)>,
     append_left: Box<dyn 'a + Fn(usize)>,
-    remove_right: Box<dyn 'a + Fn(usize)>,
+    append_right: Box<dyn 'a + Fn(usize)>,
     remove_left: Box<dyn 'a + Fn(usize)>,
+    remove_right: Box<dyn 'a + Fn(usize)>,
     query: Box<dyn 'a + Fn(usize)>,
     q: usize,
     index: usize,
@@ -16,17 +16,17 @@ impl<'a> Mo<'a> {
     pub fn new(
         n: usize,
         q: usize,
-        append_right: Box<impl 'a + Fn(usize)>,
         append_left: Box<impl 'a + Fn(usize)>,
-        remove_right: Box<impl 'a + Fn(usize)>,
+        append_right: Box<impl 'a + Fn(usize)>,
         remove_left: Box<impl 'a + Fn(usize)>,
+        remove_right: Box<impl 'a + Fn(usize)>,
         query: Box<impl 'a + Fn(usize)>,
     ) -> Self {
         Self {
-            append_right,
             append_left,
-            remove_right,
+            append_right,
             remove_left,
+            remove_right,
             query,
             q,
             index: 0,
