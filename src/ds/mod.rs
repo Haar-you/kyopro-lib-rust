@@ -6,6 +6,7 @@ pub mod unionfind;
 
 pub mod dual_segtree;
 pub mod fenwick;
+pub mod fenwick_add;
 pub mod lazy_segtree;
 pub mod lazy_segtree_coeff;
 pub mod segtree;
