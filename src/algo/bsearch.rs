@@ -1,27 +1,33 @@
 //! 二分探索
 
+macro_rules! bsearch_impl {
+    ($t:tt, $a:expr, $value:expr) => {{
+        let n = $a.len();
+        let mut b = 0;
+        let mut len = n;
+
+        while len > 0 {
+            let half = len / 2;
+            let mid = b + half;
+
+            if &$a[mid] $t $value {
+                len -= half + 1;
+                b = mid + 1;
+            } else {
+                len = half;
+            }
+        }
+
+        b
+    }}
+}
+
 /// x以上となる最小のindexを求める。
 ///
 /// # Complexity
 /// Time complexity $O(\log(n))$
 pub fn lower_bound<T: Ord>(a: &[T], value: &T) -> usize {
-    let n = a.len();
-    let mut lb = 0;
-    let mut len = n;
-
-    while len > 0 {
-        let half = len / 2;
-        let mid = lb + half;
-
-        if &a[mid] < value {
-            len -= half + 1;
-            lb = mid + 1;
-        } else {
-            len = half;
-        }
-    }
-
-    lb
+    bsearch_impl!(<, a, value)
 }
 
 /// xを超える最小のindexを求める。
@@ -29,23 +35,7 @@ pub fn lower_bound<T: Ord>(a: &[T], value: &T) -> usize {
 /// # Complexity
 /// Time complexity $O(\log(n))$
 pub fn upper_bound<T: Ord>(a: &[T], value: &T) -> usize {
-    let n = a.len();
-    let mut ub = 0;
-    let mut len = n;
-
-    while len > 0 {
-        let half = len / 2;
-        let mid = ub + half;
-
-        if &a[mid] <= value {
-            len -= half + 1;
-            ub = mid + 1;
-        } else {
-            len = half;
-        }
-    }
-
-    ub
+    bsearch_impl!(<=, a, value)
 }
 
 /// lower_bound, upper_boundの組を求める。
