@@ -161,4 +161,15 @@ mod tests {
             assert_eq!(s.select(i, false), t);
         }
     }
+
+    #[test]
+    fn test_access() {
+        let mut rng = rand::thread_rng();
+        let n = 1000;
+        let b = (0..n).map(|_| rng.gen::<bool>()).collect::<Vec<_>>();
+
+        let s = SuccinctDict::new(b.clone());
+
+        assert_eq!(b, (0..n).map(|i| s.access(i) != 0).collect::<Vec<_>>());
+    }
 }
