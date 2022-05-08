@@ -64,7 +64,8 @@ impl SuccinctDict {
             let mask =
                 self.data[chunk_pos * BLOCK_NUM + block_pos] & ((1 << (index % BLOCK_SIZE)) - 1);
 
-            (self.chunks[chunk_pos] + self.blocks[chunk_pos][block_pos] as u32 + mask.count_ones()) as usize
+            (self.chunks[chunk_pos] + self.blocks[chunk_pos][block_pos] as u32 + mask.count_ones())
+                as usize
         } else {
             index - self.rank(index, !b)
         }
@@ -80,11 +81,9 @@ impl SuccinctDict {
         ((self.data[index / BLOCK_SIZE] >> (index % BLOCK_SIZE)) & 1) as u64
     }
 
-    /// nth(1-indexed)番目の`b`の位置
+    /// nth(0-indexed)番目の`b`の位置
     pub fn select(&self, nth: usize, b: bool) -> Option<usize> {
-        assert!(nth >= 1);
-
-        if self.rank(self.size, b) < nth {
+        if self.rank(self.size, b) <= nth {
             None
         } else {
             let mut lb: isize = -1;
@@ -92,7 +91,7 @@ impl SuccinctDict {
             while (ub - lb).abs() > 1 {
                 let mid = (lb + ub) / 2;
 
-                if self.rank(mid as usize, b) >= nth {
+                if self.rank(mid as usize, b) > nth {
                     ub = mid;
                 } else {
                     lb = mid;
@@ -153,11 +152,11 @@ mod tests {
 
         let s = SuccinctDict::new(b.clone());
 
-        for i in 1..=n {
-            let t = (0..n).filter(|&i| b[i]).nth(i - 1);
+        for i in 0..n {
+            let t = (0..n).filter(|&i| b[i]).nth(i);
             assert_eq!(s.select(i, true), t);
 
-            let t = (0..n).filter(|&i| !b[i]).nth(i - 1);
+            let t = (0..n).filter(|&i| !b[i]).nth(i);
             assert_eq!(s.select(i, false), t);
         }
     }
