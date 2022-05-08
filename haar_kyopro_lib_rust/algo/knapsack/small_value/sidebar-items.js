@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["knapsack_small_value","価値の総和が小さいナップサック問題"]]});
+initSidebarItems({"fn":[["knapsack_small_value","価値の総和が小さいナップサック問題 # Complexity Time complexity O(n sum(vs))"]]});

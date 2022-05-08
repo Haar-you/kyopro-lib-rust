@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["knapsack_unlimited","個数制限無しナップサック問題"]]});
+initSidebarItems({"fn":[["knapsack_unlimited","個数制限無しナップサック問題 # Complexity Time complexity O(n cap)"]]});
