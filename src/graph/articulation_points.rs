@@ -29,9 +29,9 @@ mod tests {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_A
         let mut g = Graph::new(4);
         g.add_undirected(
-            vec![(0, 1, 1), (0, 2, 1), (1, 2, 1), (2, 3, 1)]
+            vec![(0, 1), (0, 2), (1, 2), (2, 3)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ())),
+                .map(|(u, v)| Edge::new(u, v, (), ())),
         );
         let mut ans = articulation_points(&Lowlink::new(&g));
         ans.sort();
@@ -39,9 +39,9 @@ mod tests {
 
         let mut g = Graph::new(5);
         g.add_undirected(
-            vec![(0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1)]
+            vec![(0, 1), (1, 2), (2, 3), (3, 4)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ())),
+                .map(|(u, v)| Edge::new(u, v, (), ())),
         );
         let mut ans = articulation_points(&Lowlink::new(&g));
         ans.sort();

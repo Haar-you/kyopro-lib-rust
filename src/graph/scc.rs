@@ -93,16 +93,9 @@ mod tests {
 
         let mut g = Graph::new(5);
         g.add_directed(
-            vec![
-                (0, 1, 1),
-                (1, 0, 1),
-                (1, 2, 1),
-                (2, 4, 1),
-                (4, 3, 1),
-                (3, 2, 1),
-            ]
-            .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ())),
+            vec![(0, 1), (1, 0), (1, 2), (2, 4), (4, 3), (3, 2)]
+                .into_iter()
+                .map(|(u, v)| Edge::new(u, v, (), ())),
         );
         let scc = SCC::new(&g).to_vec();
 
