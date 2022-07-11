@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Mode",""]],"struct":[["StarrySkyTree","区間加算・区間Max(Min)を処理できるデータ構造"]]});
+initSidebarItems({"enum":[["Mode",""]],"struct":[["StarrySkyTree",""]]});
