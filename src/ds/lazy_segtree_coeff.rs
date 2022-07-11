@@ -1,7 +1,8 @@
+//! 係数乗算付き区間加算区間総和遅延セグ木
+
 pub use crate::ds::traits::{FoldableMut, Updatable};
 use std::ops::{Add, Mul, Range};
 
-/// 係数乗算付き区間加算区間総和遅延セグ木
 pub struct LazySegmentTreeCoeff<T> {
     size: usize,
     data: Vec<T>,

@@ -1,3 +1,5 @@
+//! 冪等性と結合性をもつ列の区間取得(O(1))
+
 use crate::{algebra::traits::*, ds::traits::Foldable};
 use std::{cmp::min, ops::Range};
 

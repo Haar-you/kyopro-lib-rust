@@ -1,3 +1,5 @@
+//! 永続キュー
+
 use std::rc::Rc;
 
 #[derive(Debug)]

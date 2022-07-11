@@ -1,3 +1,5 @@
+//! ロールバック可能Vec
+
 use std::{
     fmt,
     fmt::{Debug, Formatter},
@@ -5,7 +7,7 @@ use std::{
 };
 
 #[derive(Clone)]
-enum RollbackableVecHistoryType<T> {
+enum HistoryType<T> {
     Update(T, usize),
     Push,
     Pop(T),
@@ -14,7 +16,7 @@ enum RollbackableVecHistoryType<T> {
 #[derive(Clone, Default)]
 pub struct RollbackableVec<T> {
     data: Vec<T>,
-    history: Vec<RollbackableVecHistoryType<T>>,
+    history: Vec<HistoryType<T>>,
 }
 
 impl<T> RollbackableVec<T>
@@ -29,7 +31,7 @@ where
     }
 
     pub fn push(&mut self, value: T) {
-        self.history.push(RollbackableVecHistoryType::Push);
+        self.history.push(HistoryType::Push);
         self.data.push(value);
     }
 
@@ -39,13 +41,13 @@ where
         } else {
             let x = self.data.pop();
             self.history
-                .push(RollbackableVecHistoryType::Pop(x.as_ref().unwrap().clone()));
+                .push(HistoryType::Pop(x.as_ref().unwrap().clone()));
             x
         }
     }
 
     pub fn assign(&mut self, index: usize, value: T) {
-        self.history.push(RollbackableVecHistoryType::Update(
+        self.history.push(HistoryType::Update(
             self.data[index].clone(),
             index,
         ));
@@ -57,13 +59,13 @@ where
             false
         } else {
             match self.history.pop().unwrap() {
-                RollbackableVecHistoryType::Update(value, index) => {
+                HistoryType::Update(value, index) => {
                     self.data[index] = value;
                 }
-                RollbackableVecHistoryType::Push => {
+                HistoryType::Push => {
                     self.data.pop();
                 }
-                RollbackableVecHistoryType::Pop(value) => {
+                HistoryType::Pop(value) => {
                     self.data.push(value);
                 }
             }

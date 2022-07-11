@@ -1,3 +1,5 @@
+//! 遅延加算付き融合可能ヒープ
+
 use std::{mem::swap, ops::AddAssign};
 
 #[derive(Debug, Clone)]

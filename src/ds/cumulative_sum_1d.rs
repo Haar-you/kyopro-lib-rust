@@ -1,3 +1,5 @@
+//! 1次元累積和
+
 pub use crate::algebra::traits::Group;
 pub use crate::ds::traits::Foldable;
 use std::ops::{Index, Range};

@@ -1,3 +1,5 @@
+//! 融合可能ヒープ
+
 use std::mem::swap;
 
 #[derive(Debug, Clone)]

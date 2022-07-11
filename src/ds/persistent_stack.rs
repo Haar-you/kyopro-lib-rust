@@ -1,3 +1,5 @@
+//! 永続スタック
+
 use std::{iter::from_fn, rc::Rc};
 
 #[derive(Debug, Default, Clone)]

@@ -1,3 +1,5 @@
+//! 区間加算・区間Max(Min)
+
 #![allow(clippy::many_single_char_names)]
 
 pub use crate::ds::traits::{Foldable, Updatable};
@@ -22,7 +24,6 @@ impl Mode {
     }
 }
 
-/// 区間加算・区間Max(Min)を処理できるデータ構造
 pub struct StarrySkyTree<T> {
     size: usize,
     data: Vec<T>,

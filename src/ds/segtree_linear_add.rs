@@ -1,3 +1,5 @@
+//! 区間一次関数加算セグメントツリー
+
 pub use crate::ds::traits::IndexableMut;
 use std::{
     mem::size_of,

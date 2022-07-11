@@ -1,3 +1,5 @@
+//! 永続配列
+
 #![allow(clippy::many_single_char_names)]
 
 use std::rc::Rc;
