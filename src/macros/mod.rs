@@ -2,8 +2,8 @@
 
 pub mod chmax;
 pub mod chmin;
-pub mod eps;
 pub mod ds_macros;
+pub mod eps;
 pub mod io;
 pub mod max;
 pub mod min;

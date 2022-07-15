@@ -47,10 +47,8 @@ where
     }
 
     pub fn assign(&mut self, index: usize, value: T) {
-        self.history.push(HistoryType::Update(
-            self.data[index].clone(),
-            index,
-        ));
+        self.history
+            .push(HistoryType::Update(self.data[index].clone(), index));
         self.data[index] = value;
     }
 
