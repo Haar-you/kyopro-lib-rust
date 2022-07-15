@@ -1,7 +1,5 @@
 //! 区間加算・区間Max(Min)
 
-#![allow(clippy::many_single_char_names)]
-
 pub use crate::ds::traits::{Foldable, Updatable};
 use crate::rec;
 use std::{

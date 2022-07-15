@@ -1,6 +1,5 @@
 //! 半群の列の区間演算を行う(O(1))
 
-#![allow(clippy::many_single_char_names)]
 pub use crate::algebra::traits::Semigroup;
 pub use crate::ds::traits::Foldable;
 use std::{iter::repeat, mem::size_of, ops::Range};

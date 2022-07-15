@@ -1,5 +1,3 @@
-#![allow(clippy::many_single_char_names)]
-
 use crate::math::{
     crt::crt_vec,
     mod_ops::{inv::*, pow::*},

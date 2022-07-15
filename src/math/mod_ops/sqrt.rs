@@ -1,5 +1,3 @@
-#![allow(clippy::many_single_char_names)]
-
 use crate::math::mod_ops::pow::*;
 use rand::Rng;
 

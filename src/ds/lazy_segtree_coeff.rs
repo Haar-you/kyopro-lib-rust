@@ -57,7 +57,6 @@ where
         }
     }
 
-    #[allow(clippy::many_single_char_names)]
     fn update_internal(&mut self, i: usize, l: usize, r: usize, s: usize, t: usize, value: T) -> T {
         self.propagate(i);
         if r <= s || t <= l {
@@ -74,7 +73,6 @@ where
         self.data[i]
     }
 
-    #[allow(clippy::many_single_char_names)]
     fn get_internal(&mut self, i: usize, l: usize, r: usize, x: usize, y: usize) -> T {
         self.propagate(i);
         if r <= x || y <= l {

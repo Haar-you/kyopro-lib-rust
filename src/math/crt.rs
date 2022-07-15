@@ -1,7 +1,5 @@
 //! 中国剰余定理
 
-#![allow(clippy::many_single_char_names)]
-
 use crate::math::ext_gcd::ext_gcd;
 
 pub fn crt((b1, m1): (i64, u64), (b2, m2): (i64, u64)) -> Option<(i64, u64)> {

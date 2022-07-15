@@ -1,5 +1,3 @@
-#![allow(clippy::many_single_char_names)]
-
 use crate::tree::*;
 use std::{cmp::max, ops::Add};
 

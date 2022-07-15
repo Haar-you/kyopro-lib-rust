@@ -1,5 +1,3 @@
-#![allow(clippy::many_single_char_names)]
-
 use crate::{algo::merge::inplace_merge, chmax};
 use std::ops::Add;
 

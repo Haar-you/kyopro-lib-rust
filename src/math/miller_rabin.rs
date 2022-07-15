@@ -12,7 +12,6 @@ fn pow(mut a: u128, mut b: u128, p: u128) -> u128 {
     ret
 }
 
-#[allow(clippy::many_single_char_names)]
 fn is_composite(a: u64, p: u64, s: u64, d: u64) -> bool {
     let p = p as u128;
     let mut x = pow(a as u128, d as u128, p);
