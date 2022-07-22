@@ -24,8 +24,7 @@ where
 
     /// Time complexity O(1)
     fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
-        self.group
-            .op(self.data[r].clone(), self.group.inv(self.data[l].clone()))
+        self.group.op(self.data[r], self.group.inv(self.data[l]))
     }
 }
 
@@ -49,9 +48,8 @@ where
         }
     }
 
-    pub fn update(&mut self, i: usize, value: T) -> &Self {
+    pub fn update(&mut self, i: usize, value: T) {
         self.data[i + 1] = self.group.op(self.data[i + 1], value);
-        self
     }
 
     pub fn build(self) -> CumulativeSum1D<T, G> {
