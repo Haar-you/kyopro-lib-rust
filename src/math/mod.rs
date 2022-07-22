@@ -18,6 +18,8 @@ pub mod bell_number;
 pub mod binomial_coefficient;
 pub mod factorial;
 
+pub mod montmort;
+
 pub mod convolution;
 pub mod rational;
 pub mod totient;
