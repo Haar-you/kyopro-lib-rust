@@ -2,6 +2,14 @@
 
 use crate::tree::*;
 
+/// 全方位木DP
+///
+/// # References
+/// - [https://null-mn.hatenablog.com/entry/2020/04/14/124151](https://null-mn.hatenablog.com/entry/2020/04/14/124151x)
+///
+/// # Verification
+/// - [EDPC V - Subtree #26944740](https://atcoder.jp/contests/dp/submissions/26944740)
+
 pub struct RerootingDP<'a, Weight, T> {
     id: T,
     merge: Box<dyn 'a + Fn(T, T) -> T>,
