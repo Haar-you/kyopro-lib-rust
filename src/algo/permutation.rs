@@ -1,50 +1,38 @@
 use std::iter::{from_fn, once};
 
-pub fn next_permutation<T: Ord>(a: &mut [T]) -> bool {
-    let n = a.len();
+macro_rules! impl_permutation {
+    ( $cmp1:tt, $cmp2:tt, $a: expr ) => {{
+        let n = $a.len();
 
-    if n <= 1 {
-        false
-    } else {
-        let i = (0..n - 1).rev().find(|&i| a[i] < a[i + 1]);
+        if n <= 1 {
+            false
+        } else {
+            let i = (0..n - 1).rev().find(|&i| $a[i] $cmp1 $a[i + 1]);
 
-        match i {
-            None => false,
-            Some(i) => {
-                let j = (i + 1..n).rev().find(|&j| a[j] > a[i]).unwrap();
+            match i {
+                None => false,
+                Some(i) => {
+                    let j = (i + 1..n).rev().find(|&j| $a[j] $cmp2 $a[i]).unwrap();
 
-                a.swap(i, j);
-                a[i + 1..].reverse();
+                    $a.swap(i, j);
+                    $a[i + 1..].reverse();
 
-                true
+                    true
+                }
             }
         }
-    }
+    }}
 }
 
-pub fn prev_permutation<T: Ord>(a: &mut [T]) -> bool {
-    let n = a.len();
-
-    if n <= 1 {
-        false
-    } else {
-        let i = (0..n - 1).rev().find(|&i| a[i] > a[i + 1]);
-
-        match i {
-            None => false,
-            Some(i) => {
-                let j = (i + 1..n).rev().find(|&j| a[j] < a[i]).unwrap();
-
-                a.swap(i, j);
-                a[i + 1..].reverse();
-
-                true
-            }
-        }
-    }
+pub fn next_permutation<T: Ord + Copy>(a: &mut [T]) -> bool {
+    impl_permutation!(<, >, a)
 }
 
-pub fn permutations<T: Ord + Clone>(mut a: Vec<T>) -> impl Iterator<Item = Vec<T>> {
+pub fn prev_permutation<T: Ord + Copy>(a: &mut [T]) -> bool {
+    impl_permutation!(>, <, a)
+}
+
+pub fn permutations<T: Ord + Copy>(mut a: Vec<T>) -> impl Iterator<Item = Vec<T>> {
     once(a.clone()).chain(from_fn(move || {
         if next_permutation(&mut a) {
             Some(a.clone())
