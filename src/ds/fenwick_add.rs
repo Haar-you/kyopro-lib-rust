@@ -7,7 +7,7 @@ pub struct FenwickTreeAdd<T> {
     zero: T,
 }
 
-impl<T: Copy> FenwickTreeAdd<T> {
+impl<T: Copy + Add<Output = T> + Sub<Output = T>> FenwickTreeAdd<T> {
     pub fn new(size: usize, zero: T) -> Self {
         Self {
             data: vec![zero; size + 1],
@@ -15,12 +15,16 @@ impl<T: Copy> FenwickTreeAdd<T> {
             zero,
         }
     }
-}
 
-impl<T: Copy + Add<Output = T>> Updatable<usize> for FenwickTreeAdd<T> {
-    type Value = T;
+    pub fn sub(&mut self, mut i: usize, value: T) {
+        i += 1;
+        while i <= self.size {
+            self.data[i] = self.data[i] - value;
+            i += (i as isize & (-(i as isize))) as usize;
+        }
+    }
 
-    fn update(&mut self, mut i: usize, value: T) {
+    pub fn add(&mut self, mut i: usize, value: T) {
         i += 1;
         while i <= self.size {
             self.data[i] = self.data[i] + value;

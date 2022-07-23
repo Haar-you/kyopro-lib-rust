@@ -53,22 +53,22 @@ impl StaticRangeInversionsQuery {
                 if l > self.qs[id].0 {
                     l -= 1;
                     temp += b.fold(0..self.data[l]);
-                    b.update(self.data[l], 1);
+                    b.add(self.data[l], 1);
                 }
                 if l < self.qs[id].0 {
                     temp -= b.fold(0..self.data[l]);
-                    b.update(self.data[l], -1);
+                    b.add(self.data[l], -1);
                     l += 1;
                 }
                 if r < self.qs[id].1 {
                     temp += b.fold(self.data[r] + 1..self.data.len());
-                    b.update(self.data[r], 1);
+                    b.add(self.data[r], 1);
                     r += 1;
                 }
                 if r > self.qs[id].1 {
                     r -= 1;
                     temp -= b.fold(self.data[r] + 1..self.data.len());
-                    b.update(self.data[r], -1);
+                    b.add(self.data[r], -1);
                 }
             }
 
