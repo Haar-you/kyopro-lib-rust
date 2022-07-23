@@ -1,5 +1,3 @@
-use std::cell::RefCell;
-
 const NIM_PRODUCT_TABLE_16: [[u8; 16]; 16] = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
@@ -20,7 +18,7 @@ const NIM_PRODUCT_TABLE_16: [[u8; 16]; 16] = [
 ];
 
 thread_local! {
-    static NIM_PRODUCT_TABLE_256: RefCell<[[u8; 256]; 256]> = {
+    static NIM_PRODUCT_TABLE_256: [[u8; 256]; 256] = {
         let mut ret = [[0; 256]; 256];
 
         let mask: u8 = 0xf;
@@ -43,12 +41,12 @@ thread_local! {
             }
         }
 
-        RefCell::new(ret)
+        ret
     };
 }
 
 pub fn nim_product_8(a: u8, b: u8) -> u8 {
-    NIM_PRODUCT_TABLE_256.with(|t| t.borrow()[a as usize][b as usize])
+    NIM_PRODUCT_TABLE_256.with(|t| t[a as usize][b as usize])
 }
 
 macro_rules! impl_nim_product {
