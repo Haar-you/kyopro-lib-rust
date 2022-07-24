@@ -9,13 +9,14 @@ pub mod main {
         utils::join_str::*,
     };
 
-    use std::io::{Read, Write};
+    use std::io::Write;
 
     #[derive(Clone, Default)]
     pub struct Problem {/* write variables here */}
 
     impl Problem {
         pub fn main(&mut self) -> Result<(), Box<dyn std::error::Error>> {
+            io!(cin, cout);
 
             Ok(())
         }
