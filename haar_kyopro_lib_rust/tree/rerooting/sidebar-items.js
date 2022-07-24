@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["RerootingDP",""]]});
+initSidebarItems({"struct":[["RerootingDP","全方位木DP"]]});

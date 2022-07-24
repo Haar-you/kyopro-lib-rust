@@ -51,6 +51,10 @@
 <span id="51">51</span>
 <span id="52">52</span>
 <span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ds</span>::<span class="ident">traits</span>::{<span class="ident">Foldable</span>, <span class="ident">Updatable</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::{<span class="ident">Add</span>, <span class="ident">Range</span>, <span class="ident">RangeTo</span>, <span class="ident">Sub</span>};
@@ -61,7 +65,7 @@
     <span class="ident">zero</span>: <span class="ident">T</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Copy</span><span class="op">&gt;</span> <span class="ident">FenwickTreeAdd</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Sub</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">FenwickTreeAdd</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">usize</span>, <span class="ident">zero</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">data</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">zero</span>; <span class="ident">size</span> <span class="op">+</span> <span class="number">1</span>],
@@ -69,12 +73,16 @@
             <span class="ident">zero</span>,
         }
     }
-}
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">Updatable</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FenwickTreeAdd</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="ident">T</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sub</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">i</span>: <span class="ident">usize</span>, <span class="ident">value</span>: <span class="ident">T</span>) {
+        <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+        <span class="kw">while</span> <span class="ident">i</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">size</span> {
+            <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">i</span>] <span class="op">-</span> <span class="ident">value</span>;
+            <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> (<span class="ident">i</span> <span class="kw">as</span> <span class="ident">isize</span> <span class="op">&amp;</span> (<span class="op">-</span>(<span class="ident">i</span> <span class="kw">as</span> <span class="ident">isize</span>))) <span class="kw">as</span> <span class="ident">usize</span>;
+        }
+    }
 
-    <span class="kw">fn</span> <span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">i</span>: <span class="ident">usize</span>, <span class="ident">value</span>: <span class="ident">T</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">i</span>: <span class="ident">usize</span>, <span class="ident">value</span>: <span class="ident">T</span>) {
         <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
         <span class="kw">while</span> <span class="ident">i</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">size</span> {
             <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">i</span>] <span class="op">+</span> <span class="ident">value</span>;

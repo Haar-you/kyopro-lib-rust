@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["join_str",""]]});
+initSidebarItems({"mod":[["join_str",""],["xor_shift",""]]});
