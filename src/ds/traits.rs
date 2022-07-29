@@ -22,3 +22,8 @@ pub trait IndexableMut<Idx> {
     type Output;
     fn get(&mut self, i: Idx) -> Self::Output;
 }
+
+pub trait Indexable<Idx> {
+    type Output;
+    fn get(&self, i: Idx) -> Self::Output;
+}

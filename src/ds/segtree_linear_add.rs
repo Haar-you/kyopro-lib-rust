@@ -1,17 +1,23 @@
 //! 区間一次関数加算セグメントツリー
 
-pub use crate::ds::traits::IndexableMut;
+pub use crate::ds::traits::Indexable;
 use std::{
+    cell::Cell,
     mem::size_of,
     ops::{Add, Mul, Range},
 };
 
 pub struct SegmentTreeLinearAdd<T> {
     hsize: usize,
-    data: Vec<(T, T)>,
+    data: Vec<Cell<(T, T)>>,
     from: Vec<usize>,
     zero: T,
 }
+
+fn add<T: Add<Output = T>>((a, b): (T, T), (c, d): (T, T)) -> (T, T) {
+    (a + c, b + d)
+}
+
 
 impl<T> SegmentTreeLinearAdd<T>
 where
@@ -34,7 +40,7 @@ where
 
         Self {
             hsize,
-            data: vec![(zero, zero); size],
+            data: vec![Cell::new((zero, zero)); size],
             from,
             zero,
         }
@@ -47,16 +53,16 @@ where
         while l_ < r_ {
             if r_ & 1 == 1 {
                 r_ -= 1;
-                self.data[r_] = Self::add(
-                    self.data[r_],
+                self.data[r_].set(add(
+                    self.data[r_].get(),
                     (b + a * T::from((self.from[r_] - l) as u32), a),
-                );
+                ));
             }
             if l_ & 1 == 1 {
-                self.data[l_] = Self::add(
-                    self.data[l_],
+                self.data[l_].set(add(
+                    self.data[l_].get(),
                     (b + a * T::from((self.from[l_] - l) as u32), a),
-                );
+                ));
                 l_ += 1;
             }
 
@@ -65,23 +71,22 @@ where
         }
     }
 
-    fn add((a, b): (T, T), (c, d): (T, T)) -> (T, T) {
-        (a + c, b + d)
-    }
-
-    fn propagate(&mut self, i: usize) {
+    fn propagate(&self, i: usize) {
         if i < self.hsize {
-            self.data[i << 1] = Self::add(self.data[i << 1], self.data[i]);
+            self.data[i << 1].set(add(self.data[i << 1].get(), self.data[i].get()));
 
             let len = self.hsize >> (size_of::<usize>() as u32 * 8 - i.leading_zeros());
-            self.data[i].0 = self.data[i].0 + self.data[i].1 * T::from(len as u32);
-            self.data[i << 1 | 1] = Self::add(self.data[i << 1 | 1], self.data[i]);
+            self.data[i].set((
+                self.data[i].get().0 + self.data[i].get().1 * T::from(len as u32),
+                self.data[i].get().1,
+            ));
+            self.data[i << 1 | 1].set(add(self.data[i << 1 | 1].get(), self.data[i].get()));
 
-            self.data[i] = (self.zero, self.zero);
+            self.data[i].set((self.zero, self.zero));
         }
     }
 
-    fn propagate_top_down(&mut self, mut i: usize) {
+    fn propagate_top_down(&self, mut i: usize) {
         let mut temp = vec![];
         while i > 1 {
             i >>= 1;
@@ -94,15 +99,15 @@ where
     }
 }
 
-impl<T> IndexableMut<usize> for SegmentTreeLinearAdd<T>
+impl<T> Indexable<usize> for SegmentTreeLinearAdd<T>
 where
     T: Copy + Add<Output = T> + Mul<Output = T> + From<u32>,
 {
     type Output = T;
 
-    fn get(&mut self, i: usize) -> Self::Output {
+    fn get(&self, i: usize) -> Self::Output {
         self.propagate_top_down(i + self.hsize);
-        self.data[i + self.hsize].0
+        self.data[i + self.hsize].get().0
     }
 }
 
