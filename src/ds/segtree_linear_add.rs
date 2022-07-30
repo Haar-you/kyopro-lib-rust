@@ -1,11 +1,17 @@
 //! 区間一次関数加算セグメントツリー
 
 pub use crate::ds::traits::Indexable;
+use crate::trait_alias;
 use std::{
     cell::Cell,
     mem::size_of,
     ops::{Add, Mul, Range},
 };
+
+trait_alias!(
+    Elem,
+    Copy + Add<Output = Self> + Mul<Output = Self> + From<u32>
+);
 
 pub struct SegmentTreeLinearAdd<T> {
     hsize: usize,
@@ -18,10 +24,7 @@ fn add<T: Add<Output = T>>((a, b): (T, T), (c, d): (T, T)) -> (T, T) {
     (a + c, b + d)
 }
 
-impl<T> SegmentTreeLinearAdd<T>
-where
-    T: Copy + Add<Output = T> + Mul<Output = T> + From<u32>,
-{
+impl<T: Elem> SegmentTreeLinearAdd<T> {
     pub fn new(n: usize, zero: T) -> Self {
         let size = n.next_power_of_two() * 2;
         let hsize = size / 2;
@@ -98,10 +101,7 @@ where
     }
 }
 
-impl<T> Indexable<usize> for SegmentTreeLinearAdd<T>
-where
-    T: Copy + Add<Output = T> + Mul<Output = T> + From<u32>,
-{
+impl<T: Elem> Indexable<usize> for SegmentTreeLinearAdd<T> {
     type Output = T;
 
     fn get(&self, i: usize) -> Self::Output {

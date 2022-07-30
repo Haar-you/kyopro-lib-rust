@@ -1,8 +1,14 @@
 //! 係数乗算付き区間加算区間総和遅延セグ木
 
 pub use crate::ds::traits::{Foldable, Updatable};
+use crate::trait_alias;
 use std::cell::Cell;
 use std::ops::{Add, Mul, Range};
+
+trait_alias!(
+    Elem,
+    Copy + Default + Add<Output = Self> + Mul<Output = Self> + PartialEq
+);
 
 pub struct LazySegmentTreeCoeff<T> {
     size: usize,
@@ -11,10 +17,7 @@ pub struct LazySegmentTreeCoeff<T> {
     coeff: Vec<T>,
 }
 
-impl<T> LazySegmentTreeCoeff<T>
-where
-    T: Copy + Default + Add<Output = T> + Mul<Output = T> + PartialEq,
-{
+impl<T: Elem> LazySegmentTreeCoeff<T> {
     pub fn new(n: usize, coefficients: Vec<T>) -> Self {
         let size = n.next_power_of_two() * 2;
 
@@ -88,20 +91,14 @@ where
     }
 }
 
-impl<T> Updatable<Range<usize>> for LazySegmentTreeCoeff<T>
-where
-    T: Copy + Default + Add<Output = T> + Mul<Output = T> + PartialEq,
-{
+impl<T: Elem> Updatable<Range<usize>> for LazySegmentTreeCoeff<T> {
     type Value = T;
     fn update(&mut self, Range { start, end }: Range<usize>, value: T) {
         self.update_internal(1, 0, self.size / 2, start, end, value);
     }
 }
 
-impl<T> Foldable<Range<usize>> for LazySegmentTreeCoeff<T>
-where
-    T: Copy + Default + Add<Output = T> + Mul<Output = T> + PartialEq,
-{
+impl<T: Elem> Foldable<Range<usize>> for LazySegmentTreeCoeff<T> {
     type Output = T;
     fn fold(&self, Range { start, end }: Range<usize>) -> T {
         self.get_internal(1, 0, self.size / 2, start, end)

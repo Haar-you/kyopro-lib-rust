@@ -1,11 +1,16 @@
 //! 区間加算・区間Max(Min)
 
 pub use crate::ds::traits::{Foldable, Updatable};
-use crate::rec;
+use crate::{rec, trait_alias};
 use std::{
     cmp::{max, min},
     ops::{Add, AddAssign, Range, SubAssign},
 };
+
+trait_alias!(
+    Elem,
+    Add<Output = Self> + AddAssign + SubAssign + Ord + Copy + Default
+);
 
 #[derive(Copy, Clone)]
 pub enum Mode {
@@ -29,10 +34,7 @@ pub struct StarrySkyTree<T> {
     mode: Mode,
 }
 
-impl<T> StarrySkyTree<T>
-where
-    T: Default + Copy,
-{
+impl<T: Elem> StarrySkyTree<T> {
     pub fn new(n: usize, mode: Mode) -> Self {
         let size = n.next_power_of_two() * 2;
         let zero = T::default();
@@ -45,10 +47,7 @@ where
     }
 }
 
-impl<T> Foldable<Range<usize>> for StarrySkyTree<T>
-where
-    T: Add<Output = T> + Ord + Copy,
-{
+impl<T: Elem> Foldable<Range<usize>> for StarrySkyTree<T> {
     type Output = T;
 
     fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
@@ -79,10 +78,7 @@ where
     }
 }
 
-impl<T> Updatable<Range<usize>> for StarrySkyTree<T>
-where
-    T: Add<Output = T> + AddAssign + SubAssign + Ord + Copy,
-{
+impl<T: Elem> Updatable<Range<usize>> for StarrySkyTree<T> {
     type Value = T;
 
     fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
