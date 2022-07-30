@@ -7,7 +7,7 @@ pub struct RangeSearchTree {
 }
 
 impl RangeSearchTree {
-    pub fn get(&self, (sx, sy): (i64, i64), (tx, ty): (i64, i64)) -> Vec<(i64, i64)> {
+    pub fn search(&self, (sx, sy): (i64, i64), (tx, ty): (i64, i64)) -> Vec<(i64, i64)> {
         assert!(sx < tx);
         assert!(sy < ty);
 
