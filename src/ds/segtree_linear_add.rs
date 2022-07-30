@@ -18,7 +18,6 @@ fn add<T: Add<Output = T>>((a, b): (T, T), (c, d): (T, T)) -> (T, T) {
     (a + c, b + d)
 }
 
-
 impl<T> SegmentTreeLinearAdd<T>
 where
     T: Copy + Add<Output = T> + Mul<Output = T> + From<u32>,

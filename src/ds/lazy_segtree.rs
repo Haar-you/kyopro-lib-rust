@@ -1,5 +1,5 @@
 use crate::algebra::action::Action;
-pub use crate::ds::traits::*;
+pub use crate::ds::traits::Updatable;
 use std::ops::Range;
 
 pub struct LazySegmentTree<T, U, A> {
@@ -63,6 +63,36 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>>
                 .fold(self.data[i << 1].clone(), self.data[i << 1 | 1].clone());
         }
     }
+
+    pub fn fold(&mut self, Range { start: l, end: r }: Range<usize>) -> T {
+        self.propagate_top_down(l + self.size / 2);
+        if r < self.size / 2 {
+            self.propagate_top_down(r + self.size / 2);
+        }
+
+        let mut ret_l = self.action.fold_id();
+        let mut ret_r = self.action.fold_id();
+
+        let mut l = l + self.size / 2;
+        let mut r = r + self.size / 2;
+
+        while l < r {
+            if r & 1 == 1 {
+                r -= 1;
+                self.propagate(r);
+                ret_r = self.action.fold(self.data[r].clone(), ret_r.clone());
+            }
+            if l & 1 == 1 {
+                self.propagate(l);
+                ret_l = self.action.fold(ret_l.clone(), self.data[l].clone());
+                l += 1;
+            }
+            r >>= 1;
+            l >>= 1;
+        }
+
+        self.action.fold(ret_l, ret_r)
+    }
 }
 
 impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Updatable<Range<usize>>
@@ -99,41 +129,6 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Upda
         if r < self.size / 2 {
             self.bottom_up(r + self.size / 2);
         }
-    }
-}
-
-impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>>
-    FoldableMut<Range<usize>> for LazySegmentTree<T, U, A>
-{
-    type Output = T;
-    fn fold(&mut self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
-        self.propagate_top_down(l + self.size / 2);
-        if r < self.size / 2 {
-            self.propagate_top_down(r + self.size / 2);
-        }
-
-        let mut ret_l = self.action.fold_id();
-        let mut ret_r = self.action.fold_id();
-
-        let mut l = l + self.size / 2;
-        let mut r = r + self.size / 2;
-
-        while l < r {
-            if r & 1 == 1 {
-                r -= 1;
-                self.propagate(r);
-                ret_r = self.action.fold(self.data[r].clone(), ret_r.clone());
-            }
-            if l & 1 == 1 {
-                self.propagate(l);
-                ret_l = self.action.fold(ret_l.clone(), self.data[l].clone());
-                l += 1;
-            }
-            r >>= 1;
-            l >>= 1;
-        }
-
-        self.action.fold(ret_l, ret_r)
     }
 }
 

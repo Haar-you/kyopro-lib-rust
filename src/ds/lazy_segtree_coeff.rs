@@ -1,12 +1,13 @@
 //! 係数乗算付き区間加算区間総和遅延セグ木
 
-pub use crate::ds::traits::{FoldableMut, Updatable};
+pub use crate::ds::traits::{Foldable, Updatable};
+use std::cell::Cell;
 use std::ops::{Add, Mul, Range};
 
 pub struct LazySegmentTreeCoeff<T> {
     size: usize,
-    data: Vec<T>,
-    lazy: Vec<T>,
+    data: Vec<Cell<T>>,
+    lazy: Vec<Cell<T>>,
     coeff: Vec<T>,
 }
 
@@ -28,58 +29,59 @@ where
 
         Self {
             size,
-            data: vec![T::default(); size],
-            lazy: vec![T::default(); size],
+            data: vec![Cell::new(T::default()); size],
+            lazy: vec![Cell::new(T::default()); size],
             coeff,
         }
     }
 
     pub fn init_with_vec(&mut self, value: Vec<T>) {
-        self.data = vec![T::default(); self.size];
-        self.lazy = vec![T::default(); self.size];
+        self.data = vec![Cell::new(T::default()); self.size];
+        self.lazy = vec![Cell::new(T::default()); self.size];
 
         for (i, x) in value.into_iter().enumerate() {
-            self.data[self.size / 2 + i] = x;
+            self.data[self.size / 2 + i].set(x);
         }
         for i in (1..self.size / 2).rev() {
-            self.data[i] = self.data[i << 1] + self.data[i << 1 | 1];
+            self.data[i].set(self.data[i << 1].get() + self.data[i << 1 | 1].get());
         }
     }
 
-    fn propagate(&mut self, i: usize) {
-        if self.lazy[i] != T::default() {
+    fn propagate(&self, i: usize) {
+        if self.lazy[i].get() != T::default() {
             if i < self.size / 2 {
-                self.lazy[i << 1] = self.lazy[i] + self.lazy[i << 1];
-                self.lazy[i << 1 | 1] = self.lazy[i] + self.lazy[i << 1 | 1];
+                self.lazy[i << 1].set(self.lazy[i].get() + self.lazy[i << 1].get());
+                self.lazy[i << 1 | 1].set(self.lazy[i].get() + self.lazy[i << 1 | 1].get());
             }
-            self.data[i] = self.data[i] + self.lazy[i] * self.coeff[i];
-            self.lazy[i] = T::default();
+            self.data[i].set(self.data[i].get() + self.lazy[i].get() * self.coeff[i]);
+            self.lazy[i].set(T::default());
         }
     }
 
     fn update_internal(&mut self, i: usize, l: usize, r: usize, s: usize, t: usize, value: T) -> T {
         self.propagate(i);
         if r <= s || t <= l {
-            return self.data[i];
+            return self.data[i].get();
         }
         if s <= l && r <= t {
-            self.lazy[i] = self.lazy[i] + value;
+            self.lazy[i].set(self.lazy[i].get() + value);
             self.propagate(i);
-            return self.data[i];
+            return self.data[i].get();
         }
 
-        self.data[i] = self.update_internal(i << 1, l, (l + r) / 2, s, t, value)
+        let t = self.update_internal(i << 1, l, (l + r) / 2, s, t, value)
             + self.update_internal(i << 1 | 1, (l + r) / 2, r, s, t, value);
-        self.data[i]
+
+        self.data[i].replace(t)
     }
 
-    fn get_internal(&mut self, i: usize, l: usize, r: usize, x: usize, y: usize) -> T {
+    fn get_internal(&self, i: usize, l: usize, r: usize, x: usize, y: usize) -> T {
         self.propagate(i);
         if r <= x || y <= l {
             return T::default();
         }
         if x <= l && r <= y {
-            return self.data[i];
+            return self.data[i].get();
         }
         self.get_internal(i << 1, l, (l + r) / 2, x, y)
             + self.get_internal(i << 1 | 1, (l + r) / 2, r, x, y)
@@ -96,12 +98,12 @@ where
     }
 }
 
-impl<T> FoldableMut<Range<usize>> for LazySegmentTreeCoeff<T>
+impl<T> Foldable<Range<usize>> for LazySegmentTreeCoeff<T>
 where
     T: Copy + Default + Add<Output = T> + Mul<Output = T> + PartialEq,
 {
     type Output = T;
-    fn fold(&mut self, Range { start, end }: Range<usize>) -> T {
+    fn fold(&self, Range { start, end }: Range<usize>) -> T {
         self.get_internal(1, 0, self.size / 2, start, end)
     }
 }

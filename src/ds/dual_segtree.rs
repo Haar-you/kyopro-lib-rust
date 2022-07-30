@@ -50,7 +50,7 @@ where
         }
     }
 
-    pub fn index(&mut self, i: usize) -> T {
+    pub fn get(&mut self, i: usize) -> T {
         self.propagate_top_down(i + self.size / 2);
         self.data[i + self.size / 2].clone()
     }
