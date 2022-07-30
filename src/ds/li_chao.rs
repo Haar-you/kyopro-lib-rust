@@ -29,7 +29,7 @@ impl Mode {
 
 fn apply<T>(l: (T, T), x: T) -> T
 where
-    T: Add<Output = T> + Mul<Output = T> + Copy,
+    T: Add<Output = T> + Mul<Output = T>,
 {
     l.0 * x + l.1
 }
