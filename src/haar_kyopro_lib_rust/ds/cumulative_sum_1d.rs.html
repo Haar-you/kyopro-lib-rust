@@ -183,6 +183,7 @@
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">algebra</span>::<span class="ident">sum</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">testtools</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">Rng</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -195,8 +196,8 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">other</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">n</span>];
 
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">1000</span> {
-            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="ident">n</span>;
-            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">1000</span>;
+            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="ident">n</span>);
+            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="op">-</span><span class="number">1000</span>..<span class="op">=</span><span class="number">1000</span>);
 
             <span class="ident">csb</span>.<span class="ident">update</span>(<span class="ident">i</span>, <span class="ident">x</span>);
             <span class="ident">other</span>[<span class="ident">i</span>] <span class="op">+</span><span class="op">=</span> <span class="ident">x</span>;
@@ -205,15 +206,14 @@
         <span class="kw">let</span> <span class="ident">cs</span> <span class="op">=</span> <span class="ident">csb</span>.<span class="ident">build</span>();
 
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">l</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="ident">n</span>;
-            <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">l</span> <span class="op">+</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> (<span class="ident">n</span> <span class="op">-</span> <span class="ident">l</span>) <span class="op">+</span> <span class="number">1</span>;
+            <span class="kw">let</span> <span class="ident">range</span> <span class="op">=</span> <span class="ident">rand_range</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rng</span>, <span class="number">0</span>..<span class="ident">n</span>);
 
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ans</span> <span class="op">=</span> <span class="number">0</span>;
-            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">l</span>..<span class="ident">r</span> {
+            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">range</span>.<span class="ident">clone</span>() {
                 <span class="ident">ans</span> <span class="op">+</span><span class="op">=</span> <span class="ident">other</span>[<span class="ident">i</span>];
             }
 
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">cs</span>.<span class="ident">fold</span>(<span class="ident">l</span>..<span class="ident">r</span>), <span class="ident">ans</span>);
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">cs</span>.<span class="ident">fold</span>(<span class="ident">range</span>), <span class="ident">ans</span>);
         }
     }
 }

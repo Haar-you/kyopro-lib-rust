@@ -108,13 +108,6 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! ロールバック可能Vec</span>
 
@@ -125,7 +118,7 @@
 };
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">enum</span> <span class="ident">HistoryType</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">enum</span> <span class="ident">History</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="ident">Update</span>(<span class="ident">T</span>, <span class="ident">usize</span>),
     <span class="ident">Push</span>,
     <span class="ident">Pop</span>(<span class="ident">T</span>),
@@ -134,7 +127,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RollbackableVec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
-    <span class="ident">history</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">HistoryType</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">history</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">History</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">RollbackableVec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
@@ -149,7 +142,7 @@
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">T</span>) {
-        <span class="self">self</span>.<span class="ident">history</span>.<span class="ident">push</span>(<span class="ident">HistoryType</span>::<span class="ident">Push</span>);
+        <span class="self">self</span>.<span class="ident">history</span>.<span class="ident">push</span>(<span class="ident">History</span>::<span class="ident">Push</span>);
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">push</span>(<span class="ident">value</span>);
     }
 
@@ -158,15 +151,14 @@
             <span class="prelude-val">None</span>
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">pop</span>();
-            <span class="self">self</span>.<span class="ident">history</span>
-                .<span class="ident">push</span>(<span class="ident">HistoryType</span>::<span class="ident">Pop</span>(<span class="ident">x</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">clone</span>()));
+            <span class="self">self</span>.<span class="ident">history</span>.<span class="ident">push</span>(<span class="ident">History</span>::<span class="ident">Pop</span>(<span class="ident">x</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">clone</span>()));
             <span class="ident">x</span>
         }
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">assign</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">usize</span>, <span class="ident">value</span>: <span class="ident">T</span>) {
         <span class="self">self</span>.<span class="ident">history</span>
-            .<span class="ident">push</span>(<span class="ident">HistoryType</span>::<span class="ident">Update</span>(<span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>].<span class="ident">clone</span>(), <span class="ident">index</span>));
+            .<span class="ident">push</span>(<span class="ident">History</span>::<span class="ident">Update</span>(<span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>].<span class="ident">clone</span>(), <span class="ident">index</span>));
         <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>] <span class="op">=</span> <span class="ident">value</span>;
     }
 
@@ -175,13 +167,13 @@
             <span class="bool-val">false</span>
         } <span class="kw">else</span> {
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">history</span>.<span class="ident">pop</span>().<span class="ident">unwrap</span>() {
-                <span class="ident">HistoryType</span>::<span class="ident">Update</span>(<span class="ident">value</span>, <span class="ident">index</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">History</span>::<span class="ident">Update</span>(<span class="ident">value</span>, <span class="ident">index</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>] <span class="op">=</span> <span class="ident">value</span>;
                 }
-                <span class="ident">HistoryType</span>::<span class="ident">Push</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">History</span>::<span class="ident">Push</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">pop</span>();
                 }
-                <span class="ident">HistoryType</span>::<span class="ident">Pop</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">History</span>::<span class="ident">Pop</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">push</span>(<span class="ident">value</span>);
                 }
             }
@@ -226,12 +218,6 @@
             <span class="ident">history</span>: <span class="macro">vec</span><span class="macro">!</span>[],
         }
     }
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test</span>() {}
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "haar_kyopro_lib_rust";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

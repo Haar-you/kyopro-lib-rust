@@ -22,6 +22,12 @@
 <span id="22">22</span>
 <span id="23">23</span>
 <span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">montmort</span>(<span class="ident">n</span>: <span class="ident">usize</span>, <span class="ident">m</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">n</span> <span class="op">+</span> <span class="number">1</span>];
@@ -44,7 +50,13 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test</span>() {
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">montmort</span>(<span class="number">10</span>, <span class="number">100</span>)[<span class="number">1</span>..], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">44</span>, <span class="number">65</span>, <span class="number">54</span>, <span class="number">33</span>, <span class="number">96</span>, <span class="number">61</span>]);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">montmort</span>(<span class="number">20</span>, <span class="number">998244353</span>)[<span class="number">1</span>..], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">44</span>, <span class="number">265</span>, <span class="number">1854</span>, <span class="number">14833</span>, <span class="number">133496</span>, <span class="number">1334961</span>, <span class="number">14684570</span>, <span class="number">176214841</span>, <span class="number">294304226</span>, <span class="number">127281753</span>, <span class="number">910981941</span>, <span class="number">600290115</span>, <span class="number">222488424</span>, <span class="number">11814221</span>, <span class="number">224470198</span>, <span class="number">496426549</span>]);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">montmort</span>(<span class="number">20</span>, <span class="number">998244353</span>)[<span class="number">1</span>..],
+            [
+                <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">44</span>, <span class="number">265</span>, <span class="number">1854</span>, <span class="number">14833</span>, <span class="number">133496</span>, <span class="number">1334961</span>, <span class="number">14684570</span>, <span class="number">176214841</span>, <span class="number">294304226</span>,
+                <span class="number">127281753</span>, <span class="number">910981941</span>, <span class="number">600290115</span>, <span class="number">222488424</span>, <span class="number">11814221</span>, <span class="number">224470198</span>, <span class="number">496426549</span>
+            ]
+        );
     }
 }
 </pre></div>

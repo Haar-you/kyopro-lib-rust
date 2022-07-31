@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SegmentTreeLinearAdd",""]]});
+initSidebarItems({"struct":[["SegmentTreeLinearAdd",""]],"trait":[["Elem",""]]});

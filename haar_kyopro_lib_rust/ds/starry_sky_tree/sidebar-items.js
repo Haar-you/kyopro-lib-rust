@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Mode",""]],"struct":[["StarrySkyTree",""]]});
+initSidebarItems({"enum":[["Mode",""]],"struct":[["StarrySkyTree",""]],"trait":[["Elem",""]]});

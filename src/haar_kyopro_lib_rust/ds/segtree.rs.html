@@ -283,6 +283,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">testtools</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">Rng</span>;
 
     <span class="kw">fn</span> <span class="ident">random_test_helper</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">M</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">size</span>: <span class="ident">usize</span>, <span class="ident">m</span>: <span class="ident">M</span>, <span class="kw-2">mut</span> <span class="ident">gen_value</span>: <span class="ident">F</span>)
@@ -297,27 +298,26 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">SegmentTree</span>::<span class="op">&lt;</span><span class="ident">T</span>, <span class="kw">_</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="ident">size</span>, <span class="ident">m</span>.<span class="ident">clone</span>());
 
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">1000</span> {
-            <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">2</span>;
+            <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="number">2</span>);
 
             <span class="kw">if</span> <span class="ident">ty</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="ident">size</span>;
+                <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="ident">size</span>);
                 <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">gen_value</span>();
 
                 <span class="ident">other</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">m</span>.<span class="ident">op</span>(<span class="ident">other</span>[<span class="ident">i</span>].<span class="ident">clone</span>(), <span class="ident">x</span>.<span class="ident">clone</span>());
                 <span class="ident">s</span>.<span class="ident">update</span>(<span class="ident">i</span>, <span class="ident">x</span>);
             } <span class="kw">else</span> {
-                <span class="kw">let</span> <span class="ident">l</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="ident">size</span>;
-                <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">l</span> <span class="op">+</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> (<span class="ident">size</span> <span class="op">-</span> <span class="ident">l</span>) <span class="op">+</span> <span class="number">1</span>;
+                <span class="kw">let</span> <span class="ident">lr</span> <span class="op">=</span> <span class="ident">rand_range</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rng</span>, <span class="number">0</span>..<span class="ident">size</span>);
 
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">temp</span> <span class="op">=</span> <span class="ident">m</span>.<span class="ident">id</span>().<span class="ident">clone</span>();
-                <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">l</span>..<span class="ident">r</span> {
+                <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">lr</span>.<span class="ident">clone</span>() {
                     <span class="ident">temp</span> <span class="op">=</span> <span class="ident">m</span>.<span class="ident">op</span>(<span class="ident">temp</span>.<span class="ident">clone</span>(), <span class="ident">other</span>[<span class="ident">i</span>].<span class="ident">clone</span>());
                 }
 
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">fold</span>(<span class="ident">l</span>..<span class="ident">r</span>), <span class="ident">temp</span>);
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">fold</span>(<span class="ident">lr</span>), <span class="ident">temp</span>);
             }
 
-            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="ident">size</span>;
+            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="ident">size</span>);
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>[<span class="ident">i</span>], <span class="ident">other</span>[<span class="ident">i</span>]);
         }
 

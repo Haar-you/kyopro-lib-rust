@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["LazySkewHeap",""]]});
+initSidebarItems({"struct":[["LazySkewHeap",""]],"trait":[["Elem",""]]});

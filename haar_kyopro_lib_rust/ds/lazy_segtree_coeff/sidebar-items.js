@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["LazySegmentTreeCoeff",""]]});
+initSidebarItems({"struct":[["LazySegmentTreeCoeff",""]],"trait":[["Elem",""]]});

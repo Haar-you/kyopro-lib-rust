@@ -182,20 +182,20 @@
 <span id="182">182</span>
 <span id="183">183</span>
 <span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! 区間加算・区間Max(Min)</span>
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ds</span>::<span class="ident">traits</span>::{<span class="ident">Foldable</span>, <span class="ident">Updatable</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rec</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">rec</span>, <span class="ident">trait_alias</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cmp</span>::{<span class="ident">max</span>, <span class="ident">min</span>},
     <span class="ident">ops</span>::{<span class="ident">Add</span>, <span class="ident">AddAssign</span>, <span class="ident">Range</span>, <span class="ident">SubAssign</span>},
 };
+
+<span class="macro">trait_alias</span><span class="macro">!</span>(
+    <span class="ident">Elem</span>,
+    <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AddAssign</span> <span class="op">+</span> <span class="ident">SubAssign</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Default</span>
+);
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Mode</span> {
@@ -219,10 +219,7 @@
     <span class="ident">mode</span>: <span class="ident">Mode</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">StarrySkyTree</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">Default</span> <span class="op">+</span> <span class="ident">Copy</span>,
-{
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Elem</span><span class="op">&gt;</span> <span class="ident">StarrySkyTree</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">n</span>: <span class="ident">usize</span>, <span class="ident">mode</span>: <span class="ident">Mode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">n</span>.<span class="ident">next_power_of_two</span>() <span class="op">*</span> <span class="number">2</span>;
         <span class="kw">let</span> <span class="ident">zero</span> <span class="op">=</span> <span class="ident">T</span>::<span class="ident">default</span>();
@@ -235,11 +232,8 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Foldable</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">StarrySkyTree</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Copy</span>,
-{
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span>;
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Elem</span><span class="op">&gt;</span> <span class="ident">Foldable</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">StarrySkyTree</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">fold</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">Range</span> { <span class="ident">start</span>: <span class="ident">l</span>, <span class="ident">end</span>: <span class="ident">r</span> }: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Output</span> {
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">l</span>;
@@ -265,14 +259,11 @@
             }
         );
 
-        <span class="ident">rec</span>((<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.<span class="ident">size</span> <span class="op">/</span> <span class="number">2</span>, <span class="self">self</span>.<span class="ident">zero</span>)).<span class="ident">unwrap</span>()
+        <span class="ident">rec</span>((<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.<span class="ident">size</span> <span class="op">/</span> <span class="number">2</span>, <span class="self">self</span>.<span class="ident">zero</span>))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Updatable</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">StarrySkyTree</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AddAssign</span> <span class="op">+</span> <span class="ident">SubAssign</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Copy</span>,
-{
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Elem</span><span class="op">&gt;</span> <span class="ident">Updatable</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">StarrySkyTree</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="ident">T</span>;
 
     <span class="kw">fn</span> <span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">Range</span> { <span class="ident">start</span>: <span class="ident">l</span>, <span class="ident">end</span>: <span class="ident">r</span> }: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">value</span>: <span class="ident">T</span>) {
@@ -319,6 +310,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">testtools</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">Rng</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -330,21 +322,20 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">StarrySkyTree</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="ident">size</span>, <span class="ident">Mode</span>::<span class="ident">Max</span>);
 
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">1000</span> {
-            <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">2</span>;
-            <span class="kw">let</span> <span class="ident">l</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="ident">size</span>;
-            <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">l</span> <span class="op">+</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> (<span class="ident">size</span> <span class="op">-</span> <span class="ident">l</span>) <span class="op">+</span> <span class="number">1</span>;
+            <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="number">2</span>);
+            <span class="kw">let</span> <span class="ident">lr</span> <span class="op">=</span> <span class="ident">rand_range</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rng</span>, <span class="number">0</span>..<span class="ident">size</span>);
 
             <span class="kw">if</span> <span class="ident">ty</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">1000</span>;
+                <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="op">-</span><span class="number">1000</span>..<span class="op">=</span><span class="number">1000</span>);
 
-                <span class="ident">s</span>.<span class="ident">update</span>(<span class="ident">l</span>..<span class="ident">r</span>, <span class="ident">x</span>);
-                <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">l</span>..<span class="ident">r</span> {
+                <span class="ident">s</span>.<span class="ident">update</span>(<span class="ident">lr</span>.<span class="ident">clone</span>(), <span class="ident">x</span>);
+                <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">lr</span> {
                     <span class="ident">other</span>[<span class="ident">i</span>] <span class="op">+</span><span class="op">=</span> <span class="ident">x</span>;
                 }
             } <span class="kw">else</span> {
-                <span class="kw">let</span> <span class="ident">ans</span> <span class="op">=</span> (<span class="ident">l</span>..<span class="ident">r</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">other</span>[<span class="ident">i</span>]).<span class="ident">max</span>().<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">ans</span> <span class="op">=</span> <span class="ident">lr</span>.<span class="ident">clone</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">other</span>[<span class="ident">i</span>]).<span class="ident">max</span>();
 
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">fold</span>(<span class="ident">l</span>..<span class="ident">r</span>), <span class="ident">ans</span>);
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">fold</span>(<span class="ident">lr</span>), <span class="ident">ans</span>);
             }
         }
     }
@@ -358,21 +349,20 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">StarrySkyTree</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="ident">size</span>, <span class="ident">Mode</span>::<span class="ident">Min</span>);
 
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">1000</span> {
-            <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">2</span>;
-            <span class="kw">let</span> <span class="ident">l</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="ident">size</span>;
-            <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">l</span> <span class="op">+</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() <span class="op">%</span> (<span class="ident">size</span> <span class="op">-</span> <span class="ident">l</span>) <span class="op">+</span> <span class="number">1</span>;
+            <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="number">2</span>);
+            <span class="kw">let</span> <span class="ident">lr</span> <span class="op">=</span> <span class="ident">rand_range</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rng</span>, <span class="number">0</span>..<span class="ident">size</span>);
 
             <span class="kw">if</span> <span class="ident">ty</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">1000</span>;
+                <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="op">-</span><span class="number">1000</span>..<span class="op">=</span><span class="number">1000</span>);
 
-                <span class="ident">s</span>.<span class="ident">update</span>(<span class="ident">l</span>..<span class="ident">r</span>, <span class="ident">x</span>);
-                <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">l</span>..<span class="ident">r</span> {
+                <span class="ident">s</span>.<span class="ident">update</span>(<span class="ident">lr</span>.<span class="ident">clone</span>(), <span class="ident">x</span>);
+                <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">lr</span> {
                     <span class="ident">other</span>[<span class="ident">i</span>] <span class="op">+</span><span class="op">=</span> <span class="ident">x</span>;
                 }
             } <span class="kw">else</span> {
-                <span class="kw">let</span> <span class="ident">ans</span> <span class="op">=</span> (<span class="ident">l</span>..<span class="ident">r</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">other</span>[<span class="ident">i</span>]).<span class="ident">min</span>().<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">ans</span> <span class="op">=</span> <span class="ident">lr</span>.<span class="ident">clone</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">other</span>[<span class="ident">i</span>]).<span class="ident">min</span>();
 
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">fold</span>(<span class="ident">l</span>..<span class="ident">r</span>), <span class="ident">ans</span>);
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">fold</span>(<span class="ident">lr</span>), <span class="ident">ans</span>);
             }
         }
     }
