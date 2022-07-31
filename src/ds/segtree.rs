@@ -112,6 +112,7 @@ impl<T, M> Index<usize> for SegmentTree<T, M> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::testtools::*;
     use rand::Rng;
 
     fn random_test_helper<T, M, F>(size: usize, m: M, mut gen_value: F)
@@ -126,27 +127,26 @@ mod tests {
         let mut s = SegmentTree::<T, _>::new(size, m.clone());
 
         for _ in 0..1000 {
-            let ty = rng.gen::<usize>() % 2;
+            let ty = rng.gen_range(0..2);
 
             if ty == 0 {
-                let i = rng.gen::<usize>() % size;
+                let i = rng.gen_range(0..size);
                 let x = gen_value();
 
                 other[i] = m.op(other[i].clone(), x.clone());
                 s.update(i, x);
             } else {
-                let l = rng.gen::<usize>() % size;
-                let r = l + rng.gen::<usize>() % (size - l) + 1;
+                let lr = rand_range(&mut rng, 0..size);
 
                 let mut temp = m.id().clone();
-                for i in l..r {
+                for i in lr.clone() {
                     temp = m.op(temp.clone(), other[i].clone());
                 }
 
-                assert_eq!(s.fold(l..r), temp);
+                assert_eq!(s.fold(lr), temp);
             }
 
-            let i = rng.gen::<usize>() % size;
+            let i = rng.gen_range(0..size);
             assert_eq!(s[i], other[i]);
         }
 

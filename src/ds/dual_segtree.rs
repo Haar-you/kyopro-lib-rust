@@ -104,6 +104,7 @@ where
 mod tests {
     use super::*;
     use crate::algebra::sum::*;
+    use crate::testtools::*;
     use rand::Rng;
 
     #[test]
@@ -117,12 +118,11 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         for _ in 0..100 {
-            let l = rng.gen::<usize>() % n;
-            let r = l + rng.gen::<usize>() % (n - l) + 1;
-            let x = rng.gen::<u32>() % 10000;
+            let lr = rand_range(&mut rng, 0..n);
+            let x = rng.gen_range(0..10000);
 
-            seg.update(l..r, x);
-            a[l..r].iter_mut().for_each(|e| *e += x);
+            seg.update(lr.clone(), x);
+            a[lr].iter_mut().for_each(|e| *e += x);
 
             assert_eq!(a, seg.to_vec());
         }

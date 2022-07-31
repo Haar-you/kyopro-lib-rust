@@ -10,3 +10,5 @@ pub mod misc;
 pub mod seq;
 pub mod tree;
 pub mod utils;
+
+pub mod testtools;

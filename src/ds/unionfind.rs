@@ -94,8 +94,8 @@ mod tests {
         let mut a = (0..n).map(|i| btreeset![i]).collect::<BTreeSet<_>>();
 
         for _ in 0..q {
-            let i = rng.gen::<usize>() % n;
-            let j = rng.gen::<usize>() % n;
+            let i = rng.gen_range(0..n);
+            let j = rng.gen_range(0..n);
 
             uf.merge(i, j);
 
@@ -111,8 +111,8 @@ mod tests {
         }
 
         for _ in 0..q {
-            let i = rng.gen::<usize>() % n;
-            let j = rng.gen::<usize>() % n;
+            let i = rng.gen_range(0..n);
+            let j = rng.gen_range(0..n);
 
             let ai = a.iter().find(|s| s.contains(&i)).unwrap();
 

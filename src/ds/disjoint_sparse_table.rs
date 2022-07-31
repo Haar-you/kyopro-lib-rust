@@ -98,6 +98,7 @@ impl<T: Clone + Default, S: Semigroup<Output = T>> Foldable<Range<usize>>
 mod tests {
     use super::*;
     use crate::algebra::sum::*;
+    use crate::testtools::*;
     use rand::Rng;
 
     #[test]
@@ -110,12 +111,15 @@ mod tests {
         let s = DisjointSparseTable::new(a.clone(), Sum::<u32>::new());
 
         for _ in 0..100 {
-            let l = rng.gen::<usize>() % n;
-            let r = l + rng.gen::<usize>() % (n - l) + 1;
+            let lr = rand_range(&mut rng, 0..n);
 
             assert_eq!(
-                s.fold(l..r),
-                Some(a[l..r].iter().fold(0, |acc, &x| acc + x))
+                s.fold(lr.clone()),
+                if lr.is_empty() {
+                    None
+                } else {
+                    Some(a[lr].iter().fold(0, |acc, &x| acc + x))
+                }
             );
         }
     }

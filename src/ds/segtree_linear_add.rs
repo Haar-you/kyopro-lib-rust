@@ -113,6 +113,7 @@ impl<T: Elem> Indexable<usize> for SegmentTreeLinearAdd<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::testtools::*;
     use rand::Rng;
 
     #[test]
@@ -124,15 +125,14 @@ mod tests {
         let mut vec = vec![0; n];
 
         for _ in 0..300 {
-            let l = rng.gen::<usize>() % n;
-            let r = l + rng.gen::<usize>() % (n - l) + 1;
+            let lr = rand_range(&mut rng, 0..n);
 
-            let a = rng.gen::<u64>() % 100;
-            let b = rng.gen::<u64>() % 100;
+            let a = rng.gen_range(0..100);
+            let b = rng.gen_range(0..100);
 
-            seg.update(l..r, (a as u64, b as u64));
+            seg.update(lr.clone(), (a, b));
 
-            for (k, i) in (l..r).enumerate() {
+            for (k, i) in lr.enumerate() {
                 vec[i] += a * k as u64 + b;
             }
 

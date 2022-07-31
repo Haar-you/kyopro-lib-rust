@@ -169,7 +169,7 @@ mod tests {
         let mut m = BTreeMap::new();
 
         for _ in 0..1000 {
-            let x = rng.gen::<u64>() % 100;
+            let x = rng.gen_range(0..100);
 
             bt.insert(x);
             *m.entry(x).or_insert(0) += 1;
@@ -193,7 +193,7 @@ mod tests {
                     .collect::<Vec<_>>()
             );
 
-            let x = rng.gen::<u64>() % 100;
+            let x = rng.gen_range(0..100);
 
             assert_eq!(bt.erase(x).unwrap_or(0), bt.count(x));
             match m.get_mut(&x) {

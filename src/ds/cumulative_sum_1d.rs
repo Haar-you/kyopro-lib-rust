@@ -73,6 +73,7 @@ where
 mod tests {
     use super::*;
     use crate::algebra::sum::*;
+    use crate::testtools::*;
     use rand::Rng;
 
     #[test]
@@ -85,8 +86,8 @@ mod tests {
         let mut other = vec![0; n];
 
         for _ in 0..1000 {
-            let i = rng.gen::<usize>() % n;
-            let x = rng.gen::<i32>() % 1000;
+            let i = rng.gen_range(0..n);
+            let x = rng.gen_range(-1000..=1000);
 
             csb.update(i, x);
             other[i] += x;
@@ -95,15 +96,14 @@ mod tests {
         let cs = csb.build();
 
         for _ in 0..100 {
-            let l = rng.gen::<usize>() % n;
-            let r = l + rng.gen::<usize>() % (n - l) + 1;
+            let range = rand_range(&mut rng, 0..n);
 
             let mut ans = 0;
-            for i in l..r {
+            for i in range.clone() {
                 ans += other[i];
             }
 
-            assert_eq!(cs.fold(l..r), ans);
+            assert_eq!(cs.fold(range), ans);
         }
     }
 }

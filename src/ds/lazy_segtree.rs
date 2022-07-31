@@ -136,6 +136,7 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Upda
 mod tests {
     use super::*;
     use crate::algebra::add_sum::*;
+    use crate::testtools::*;
     use rand::Rng;
 
     #[test]
@@ -150,18 +151,17 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         for _ in 0..q {
-            let l = rng.gen::<usize>() % n;
-            let r = l + rng.gen::<usize>() % (n - l) + 1;
+            let lr = rand_range(&mut rng, 0..n);
 
             match rng.gen::<u32>() % 2 {
                 0 => {
-                    let x = rng.gen::<u64>() % range;
+                    let x = rng.gen_range(0..range);
 
-                    seg.update(l..r, x);
-                    &vec[l..r].iter_mut().for_each(|y| *y += x);
+                    seg.update(lr.clone(), x);
+                    &vec[lr].iter_mut().for_each(|y| *y += x);
                 }
                 1 => {
-                    assert_eq!(seg.fold(l..r), vec[l..r].iter().sum());
+                    assert_eq!(seg.fold(lr.clone()), vec[lr].iter().sum());
                 }
                 _ => unreachable!(),
             }

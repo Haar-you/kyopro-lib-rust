@@ -146,12 +146,12 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         for _ in 0..100 {
-            let x = rng.gen::<u32>() % 10000;
+            let x = rng.gen_range(0..10000);
             heap.push(x);
             bheap.push(x);
         }
 
-        let x = rng.gen::<u32>() % 10000;
+        let x = rng.gen_range(0..10000);
         heap.add(x);
         bheap = bheap.into_iter().map(|a| a + x).collect::<BinaryHeap<_>>();
 

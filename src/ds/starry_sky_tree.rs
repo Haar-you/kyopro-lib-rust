@@ -48,7 +48,7 @@ impl<T: Elem> StarrySkyTree<T> {
 }
 
 impl<T: Elem> Foldable<Range<usize>> for StarrySkyTree<T> {
-    type Output = T;
+    type Output = Option<T>;
 
     fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
         let s = l;
@@ -74,7 +74,7 @@ impl<T: Elem> Foldable<Range<usize>> for StarrySkyTree<T> {
             }
         );
 
-        rec((1, 0, self.size / 2, self.zero)).unwrap()
+        rec((1, 0, self.size / 2, self.zero))
     }
 }
 
@@ -125,6 +125,7 @@ impl<T: Elem> Updatable<Range<usize>> for StarrySkyTree<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::testtools::*;
     use rand::Rng;
 
     #[test]
@@ -136,21 +137,20 @@ mod tests {
         let mut s = StarrySkyTree::<i32>::new(size, Mode::Max);
 
         for _ in 0..1000 {
-            let ty = rng.gen::<usize>() % 2;
-            let l = rng.gen::<usize>() % size;
-            let r = l + rng.gen::<usize>() % (size - l) + 1;
+            let ty = rng.gen_range(0..2);
+            let lr = rand_range(&mut rng, 0..size);
 
             if ty == 0 {
-                let x = rng.gen::<i32>() % 1000;
+                let x = rng.gen_range(-1000..=1000);
 
-                s.update(l..r, x);
-                for i in l..r {
+                s.update(lr.clone(), x);
+                for i in lr {
                     other[i] += x;
                 }
             } else {
-                let ans = (l..r).map(|i| other[i]).max().unwrap();
+                let ans = lr.clone().map(|i| other[i]).max();
 
-                assert_eq!(s.fold(l..r), ans);
+                assert_eq!(s.fold(lr), ans);
             }
         }
     }
@@ -164,21 +164,20 @@ mod tests {
         let mut s = StarrySkyTree::<i32>::new(size, Mode::Min);
 
         for _ in 0..1000 {
-            let ty = rng.gen::<usize>() % 2;
-            let l = rng.gen::<usize>() % size;
-            let r = l + rng.gen::<usize>() % (size - l) + 1;
+            let ty = rng.gen_range(0..2);
+            let lr = rand_range(&mut rng, 0..size);
 
             if ty == 0 {
-                let x = rng.gen::<i32>() % 1000;
+                let x = rng.gen_range(-1000..=1000);
 
-                s.update(l..r, x);
-                for i in l..r {
+                s.update(lr.clone(), x);
+                for i in lr {
                     other[i] += x;
                 }
             } else {
-                let ans = (l..r).map(|i| other[i]).min().unwrap();
+                let ans = lr.clone().map(|i| other[i]).min();
 
-                assert_eq!(s.fold(l..r), ans);
+                assert_eq!(s.fold(lr), ans);
             }
         }
     }

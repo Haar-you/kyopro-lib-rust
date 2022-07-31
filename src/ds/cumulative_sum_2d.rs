@@ -90,6 +90,7 @@ where
 mod tests {
     use super::*;
     use crate::algebra::sum::*;
+    use crate::testtools::*;
     use rand::Rng;
 
     #[test]
@@ -98,14 +99,14 @@ mod tests {
 
         let n = 20;
         let m = 30;
-        let mut csb = CumulativeSum2DBuilder::<i32, _>::new(n, m, Sum::<i32>::new());
+        let mut csb = CumulativeSum2DBuilder::new(n, m, Sum::<i32>::new());
 
         let mut other = vec![vec![0; m]; n];
 
         for _ in 0..1000 {
-            let i = rng.gen::<usize>() % n;
-            let j = rng.gen::<usize>() % m;
-            let x = rng.gen::<i32>() % 1000;
+            let i = rng.gen_range(0..n);
+            let j = rng.gen_range(0..m);
+            let x = rng.gen_range(-1000..=1000);
 
             csb.update(i, j, x);
             other[i][j] += x;
@@ -114,20 +115,17 @@ mod tests {
         let cs = csb.build();
 
         for _ in 0..100 {
-            let l = rng.gen::<usize>() % n;
-            let r = l + rng.gen::<usize>() % (n - l) + 1;
-
-            let d = rng.gen::<usize>() % m;
-            let u = d + rng.gen::<usize>() % (m - d) + 1;
+            let lr = rand_range(&mut rng, 0..n);
+            let du = rand_range(&mut rng, 0..m);
 
             let mut ans = 0;
-            for i in l..r {
-                for j in d..u {
+            for i in lr.clone() {
+                for j in du.clone() {
                     ans += other[i][j];
                 }
             }
 
-            assert_eq!(cs.fold((l, d)..(r, u)), ans);
+            assert_eq!(cs.fold(lr, du), ans);
         }
     }
 }
