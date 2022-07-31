@@ -1,7 +1,7 @@
 //! 2次元累積和
 
 pub use crate::algebra::traits::Group;
-pub use crate::ds::traits::Foldable;
+pub use crate::ds::traits::Foldable2D;
 use std::ops::{Index, Range};
 
 #[derive(Debug, Clone)]
@@ -17,7 +17,7 @@ pub struct CumulativeSum2DBuilder<T, G> {
     m: usize,
 }
 
-impl<T, G> Foldable<Range<(usize, usize)>> for CumulativeSum2D<T, G>
+impl<T, G> Foldable2D<Range<usize>> for CumulativeSum2D<T, G>
 where
     T: Copy,
     G: Group<Output = T>,
@@ -27,10 +27,8 @@ where
     /// Time Complexity O(1)
     fn fold(
         &self,
-        Range {
-            start: (l, d),
-            end: (r, u),
-        }: Range<(usize, usize)>,
+        Range { start: l, end: r }: Range<usize>,
+        Range { start: d, end: u }: Range<usize>,
     ) -> Self::Output {
         let a = self.group.inv(self.data[l][u]);
         let b = self.group.inv(self.data[r][d]);

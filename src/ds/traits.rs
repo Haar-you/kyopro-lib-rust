@@ -3,6 +3,11 @@ pub trait Foldable<Idx> {
     fn fold(&self, range: Idx) -> Self::Output;
 }
 
+pub trait Foldable2D<Idx> {
+    type Output;
+    fn fold(&self, x_range: Idx, y_range: Idx) -> Self::Output;
+}
+
 pub trait Assignable<Idx> {
     type Value;
     fn assign(&mut self, i: Idx, value: Self::Value);
