@@ -13,6 +13,7 @@ pub mod manacher;
 pub mod max_rect;
 pub mod merge;
 pub mod mo;
+pub mod num_subseq;
 pub mod permutation;
 pub mod rle;
 pub mod sa;
