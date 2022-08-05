@@ -6,8 +6,9 @@ pub struct Lowlink {
     pub size: usize,
     pub ord: Vec<usize>,
     pub low: Vec<usize>,
-    pub par: Vec<Option<usize>>,
-    pub ch: Vec<Vec<usize>>,
+    pub par: Vec<Option<usize>>, // DFS木での親ノード
+    pub ch: Vec<Vec<usize>>,     // DFS木での子ノード
+    pub back: Vec<Vec<usize>>,   // par, chのどちらにも属さないノード
 }
 
 impl Lowlink {
@@ -19,6 +20,7 @@ impl Lowlink {
             low: vec![0; n],
             par: vec![None; n],
             ch: vec![vec![]; n],
+            back: vec![vec![]; n],
         };
 
         let mut index = 0;
@@ -62,6 +64,8 @@ impl Lowlink {
                 self.ch[cur].push(to);
                 self.dfs(g, to, Some(cur), index, check);
                 self.low[cur] = min(self.low[cur], self.low[to]);
+            } else {
+                self.back[cur].push(to);
             }
 
             self.low[cur] = min(self.low[cur], self.ord[to]);

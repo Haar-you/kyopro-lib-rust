@@ -9,6 +9,7 @@ pub fn articulation_points(ll: &Lowlink) -> Vec<usize> {
         low,
         par,
         ch,
+        ..
     } = ll;
 
     (0..*size)
