@@ -227,6 +227,42 @@ impl SegmentTreeBeats {
         self.get_sum_(1, 0, self.hsize, start, end)
     }
 
+    fn get_max_(&mut self, i: usize, l: usize, r: usize, s: usize, t: usize) -> i64 {
+        if r <= s || t <= l {
+            return std::i64::MIN;
+        }
+        if s <= l && r <= t {
+            return self.fst_max[i];
+        }
+        self.propagate(i);
+        max(
+            self.get_max_(lc(i), l, (l + r) / 2, s, t),
+            self.get_max_(rc(i), (l + r) / 2, r, s, t),
+        )
+    }
+
+    pub fn get_max(&mut self, Range { start, end }: Range<usize>) -> i64 {
+        self.get_max_(1, 0, self.hsize, start, end)
+    }
+
+    fn get_min_(&mut self, i: usize, l: usize, r: usize, s: usize, t: usize) -> i64 {
+        if r <= s || t <= l {
+            return std::i64::MAX;
+        }
+        if s <= l && r <= t {
+            return self.fst_min[i];
+        }
+        self.propagate(i);
+        min(
+            self.get_min_(lc(i), l, (l + r) / 2, s, t),
+            self.get_min_(rc(i), (l + r) / 2, r, s, t),
+        )
+    }
+
+    pub fn get_min(&mut self, Range { start, end }: Range<usize>) -> i64 {
+        self.get_min_(1, 0, self.hsize, start, end)
+    }
+
     pub fn new_with_vec(a: Vec<i64>) -> Self {
         let mut ret = Self::new(a.len());
         let hsize = ret.hsize;
@@ -257,14 +293,14 @@ mod test {
     fn test() {
         let mut rng = rand::thread_rng();
 
-        let n = 100;
+        let n = 1000;
         let limit = 1000000000;
 
         let mut a = vec![0; n];
         let mut seg = SegmentTreeBeats::new_with_vec(a.clone());
 
-        for _ in 0..100 {
-            match rng.gen_range(0..4) {
+        for _ in 0..10000 {
+            match rng.gen_range(0..=5) {
                 0 => {
                     let lr = rand_range(&mut rng, 0..n);
                     let x = rng.gen_range(-limit..=limit);
@@ -287,6 +323,21 @@ mod test {
                     let lr = rand_range(&mut rng, 0..n);
                     assert_eq!(seg.get_sum(lr.clone()), a[lr].iter().sum());
                 }
+                4 => {
+                    let lr = rand_range(&mut rng, 0..n);
+                    assert_eq!(
+                        seg.get_max(lr.clone()),
+                        a[lr].iter().max().copied().unwrap_or(std::i64::MIN)
+                    );
+                }
+                5 => {
+                    let lr = rand_range(&mut rng, 0..n);
+                    assert_eq!(
+                        seg.get_min(lr.clone()),
+                        a[lr].iter().min().copied().unwrap_or(std::i64::MAX)
+                    );
+                }
+
                 _ => unreachable!(),
             }
         }
