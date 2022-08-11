@@ -42,6 +42,21 @@ impl DoublingLCA {
         }
     }
 
+    pub fn ancestor(&self, mut a: usize, mut n: usize) -> Option<usize> {
+        let bits = std::mem::size_of::<usize>() * 8;
+        while n != 0 {
+            let m1 = bits - n.leading_zeros() as usize - 1;
+            if let Some(&Some(b)) = self.parent[a].get(m1) {
+                a = b;
+                n ^= 1 << m1;
+            } else {
+                return None;
+            }
+        }
+
+        Some(a)
+    }
+
     pub fn get_lca(&self, mut a: usize, mut b: usize) -> usize {
         if self.depth[a] >= self.depth[b] {
             std::mem::swap(&mut a, &mut b);
