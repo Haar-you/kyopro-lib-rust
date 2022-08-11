@@ -60,3 +60,17 @@ impl KMP {
         ret
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let kmp = KMP::new("aaa");
+        assert_eq!(kmp.matches("aaaaaaaa"), vec![0, 1, 2, 3, 4, 5]);
+
+        let kmp = KMP::new("ab");
+        assert_eq!(kmp.matches("abracadabra"), vec![0, 7]);
+    }
+}
