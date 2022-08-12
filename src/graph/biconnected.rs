@@ -2,7 +2,10 @@
 
 pub use crate::graph::lowlink::Lowlink;
 
-pub fn biconnected(ll: &Lowlink) -> Vec<(Vec<usize>, Vec<(usize, usize)>)> {
+type Vertices = Vec<usize>;
+type Edges = Vec<(usize, usize)>;
+
+pub fn biconnected(ll: &Lowlink) -> Vec<(Vertices, Edges)> {
     let n = ll.size;
 
     let mut check = vec![false; n];
@@ -69,5 +72,91 @@ fn dfs(
                 ret.push((vs, es));
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::biconnected;
+    use crate::btreeset;
+    use crate::graph::{lowlink::Lowlink, *};
+    use std::collections::BTreeSet;
+    use std::iter::FromIterator;
+
+    #[test]
+    fn test() {
+        let mut g = Graph::new(4);
+        g.add_undirected(
+            vec![(0, 3), (0, 1), (3, 0), (2, 1), (2, 3)]
+                .into_iter()
+                .map(|(u, v)| Edge::new(u, v, (), ())),
+        );
+
+        assert_eq!(
+            BTreeSet::from_iter(
+                biconnected(&Lowlink::new(&g))
+                    .into_iter()
+                    .map(|(v, _)| BTreeSet::from_iter(v))
+            ),
+            btreeset! {
+                btreeset!{0, 1, 2, 3}
+            }
+        );
+
+        let mut g = Graph::new(10);
+        g.add_undirected(
+            vec![
+                (0, 6),
+                (0, 8),
+                (1, 2),
+                (1, 6),
+                (2, 6),
+                (3, 6),
+                (3, 9),
+                (4, 9),
+                (4, 7),
+                (5, 6),
+                (5, 9),
+                (6, 8),
+            ]
+            .into_iter()
+            .map(|(u, v)| Edge::new(u, v, (), ())),
+        );
+
+        assert_eq!(
+            BTreeSet::from_iter(
+                biconnected(&Lowlink::new(&g))
+                    .into_iter()
+                    .map(|(v, _)| BTreeSet::from_iter(v))
+            ),
+            btreeset! {
+                btreeset!{0, 6, 8},
+                btreeset!{1, 2, 6},
+                btreeset!{3, 5, 6, 9},
+                btreeset!{4, 7},
+                btreeset!{4, 9}
+            }
+        );
+
+        let mut g = Graph::new(5);
+        g.add_undirected(
+            vec![(0, 1), (1, 0), (0, 1)]
+                .into_iter()
+                .map(|(u, v)| Edge::new(u, v, (), ())),
+        );
+
+        assert_eq!(
+            BTreeSet::from_iter(
+                biconnected(&Lowlink::new(&g))
+                    .into_iter()
+                    .map(|(v, _)| BTreeSet::from_iter(v))
+            ),
+            btreeset! {
+                btreeset!{0, 1},
+                btreeset!{2},
+                btreeset!{3},
+                btreeset!{4}
+            }
+        );
     }
 }
