@@ -1,23 +1,17 @@
 //! 負閉路を持つグラフの最短経路 (Bellman-Ford)
 
 use crate::graph::*;
+pub use crate::utils::num_inf::NumInf;
 use std::{cmp::min, ops::Add};
 
-#[derive(Clone, Copy, PartialEq, Debug)]
-pub enum BFResult<T> {
-    NegInf,
-    Value(T),
-    PosInf,
-}
-
-pub fn bellman_ford<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>, src: usize) -> Vec<BFResult<T>>
+pub fn bellman_ford<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>, src: usize) -> Vec<NumInf<T>>
 where
     T: Copy + Ord + Default + Add<Output = T>,
 {
-    use self::BFResult::*;
+    use self::NumInf::*;
 
     let n = g.len();
-    let mut ret = vec![PosInf; n];
+    let mut ret = vec![Inf; n];
 
     ret[src] = Value(T::default());
 
@@ -34,7 +28,7 @@ where
                                 ret[to] = Value(min(y, x + cost));
                             }
                         }
-                        PosInf => {
+                        Inf => {
                             ret[to] = Value(x + cost);
                         }
                         _ => {}
@@ -47,7 +41,7 @@ where
     for _ in 0..n {
         for s in 0..n {
             for e in &g.edges[s] {
-                if matches!(ret[s], NegInf) {
+                if ret[s].is_neg_inf() {
                     ret[e.to()] = NegInf;
                 }
             }
@@ -59,7 +53,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::{BFResult::*, *};
+    use super::{NumInf::*, *};
 
     #[test]
     fn test() {
@@ -80,9 +74,6 @@ mod tests {
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
-        assert_eq!(
-            bellman_ford(&g, 1),
-            [PosInf, Value(0), Value(-5), Value(-3)]
-        );
+        assert_eq!(bellman_ford(&g, 1), [Inf, Value(0), Value(-5), Value(-3)]);
     }
 }
