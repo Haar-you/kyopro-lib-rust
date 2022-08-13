@@ -1,5 +1,5 @@
 [package]
-name = "haar_kyopro_lib_rust"
+name = "haar_lib"
 version = "0.1.0"
 authors = ["Haar"]
 edition = "2018"
