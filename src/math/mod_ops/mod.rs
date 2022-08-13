@@ -1,5 +1,6 @@
 pub mod enum_inv;
 pub mod inv;
+pub mod inv_p;
 pub mod log;
 pub mod pow;
 pub mod sqrt;
