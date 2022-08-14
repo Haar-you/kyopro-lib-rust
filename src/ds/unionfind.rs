@@ -1,14 +1,16 @@
 use std::cell::Cell;
 
-pub struct UnionFind {
+pub struct UnionFind<'a, T = ()> {
     n: usize,
     count: usize,
     parent: Vec<Cell<usize>>,
     depth: Vec<usize>,
     size: Vec<usize>,
+    values: Vec<Option<T>>,
+    merge: Option<Box<dyn 'a + Fn(T, T) -> T>>,
 }
 
-impl UnionFind {
+impl<'a> UnionFind<'a, ()> {
     pub fn new(n: usize) -> Self {
         UnionFind {
             n,
@@ -16,6 +18,22 @@ impl UnionFind {
             parent: (0..n).map(Cell::new).collect(),
             depth: vec![1; n],
             size: vec![1; n],
+            values: vec![None; n],
+            merge: None,
+        }
+    }
+}
+
+impl<'a, T> UnionFind<'a, T> {
+    pub fn new_with_values(n: usize, values: Vec<T>, merge: Box<impl 'a + Fn(T, T) -> T>) -> Self {
+        UnionFind {
+            n,
+            count: n,
+            parent: (0..n).map(Cell::new).collect(),
+            depth: vec![1; n],
+            size: vec![1; n],
+            values: values.into_iter().map(Option::Some).collect(),
+            merge: Some(Box::new(merge)),
         }
     }
 
@@ -45,6 +63,15 @@ impl UnionFind {
         if self.depth[i] < self.depth[j] {
             self.parent[i].set(j);
             self.size[j] += self.size[i];
+
+            if let Some(f) = self.merge.as_ref() {
+                let t = f(
+                    self.values[i].take().unwrap(),
+                    self.values[j].take().unwrap(),
+                );
+                self.values[j] = Some(t);
+            }
+
             j
         } else {
             self.parent[j].set(i);
@@ -52,6 +79,15 @@ impl UnionFind {
             if self.depth[i] == self.depth[j] {
                 self.depth[i] += 1;
             }
+
+            if let Some(f) = self.merge.as_ref() {
+                let t = f(
+                    self.values[i].take().unwrap(),
+                    self.values[j].take().unwrap(),
+                );
+                self.values[i] = Some(t);
+            }
+
             i
         }
     }
@@ -63,6 +99,11 @@ impl UnionFind {
 
     pub fn count_groups(&self) -> usize {
         self.count
+    }
+
+    pub fn value_of(&self, i: usize) -> Option<&T> {
+        let i = self.root_of(i);
+        self.values[i].as_ref()
     }
 
     pub fn get_groups(&self) -> Vec<Vec<usize>> {
