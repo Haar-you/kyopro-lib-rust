@@ -22,4 +22,5 @@ pub mod subset_sum;
 pub mod two_sat;
 pub mod zalgo;
 
+pub mod static_range_freq_query;
 pub mod static_range_inversions_query;
