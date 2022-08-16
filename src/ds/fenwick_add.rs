@@ -20,7 +20,7 @@ impl<T: Copy + Add<Output = T> + Sub<Output = T>> FenwickTreeAdd<T> {
         i += 1;
         while i <= self.size {
             self.data[i] = self.data[i] - value;
-            i += (i as isize & (-(i as isize))) as usize;
+            i += i & (!i + 1);
         }
     }
 
@@ -28,7 +28,7 @@ impl<T: Copy + Add<Output = T> + Sub<Output = T>> FenwickTreeAdd<T> {
         i += 1;
         while i <= self.size {
             self.data[i] = self.data[i] + value;
-            i += (i as isize & (-(i as isize))) as usize;
+            i += i & (!i + 1);
         }
     }
 }
@@ -41,7 +41,7 @@ impl<T: Copy + Add<Output = T>> Foldable<RangeTo<usize>> for FenwickTreeAdd<T> {
 
         while i > 0 {
             ret = ret + self.data[i];
-            i -= ((i as isize) & (-(i as isize))) as usize;
+            i -= i & (!i + 1);
         }
 
         ret

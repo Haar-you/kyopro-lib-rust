@@ -2,6 +2,7 @@ pub use crate::algebra::traits::Group;
 pub use crate::ds::traits::{Foldable, Updatable};
 use std::ops::{Range, RangeTo};
 
+#[derive(Clone, Default)]
 pub struct FenwickTree<T, G> {
     data: Vec<T>,
     size: usize,
@@ -25,7 +26,7 @@ impl<T: Clone, G: Group<Output = T>> Updatable<usize> for FenwickTree<T, G> {
         i += 1;
         while i <= self.size {
             self.data[i] = self.group.op(self.data[i].clone(), value.clone());
-            i += (i as isize & (-(i as isize))) as usize;
+            i += i & (!i + 1);
         }
     }
 }
@@ -38,7 +39,7 @@ impl<T: Clone, G: Group<Output = T>> Foldable<RangeTo<usize>> for FenwickTree<T,
 
         while i > 0 {
             ret = self.group.op(ret.clone(), self.data[i].clone());
-            i -= ((i as isize) & (-(i as isize))) as usize;
+            i -= i & (!i + 1);
         }
 
         ret
