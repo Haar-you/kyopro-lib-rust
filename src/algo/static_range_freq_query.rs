@@ -10,13 +10,13 @@ pub struct StaticRangeFreqQuery<T> {
     map: HashMap<T, Vec<usize>>,
 }
 
-impl<T: Hash + Eq + Clone> StaticRangeFreqQuery<T> {
+impl<T: Hash + Eq> StaticRangeFreqQuery<T> {
     /// Time Complexity $O(|a|)$
     pub fn new(a: Vec<T>) -> Self {
         let mut map = HashMap::new();
 
-        for (i, x) in a.iter().enumerate() {
-            map.entry(x.clone()).or_insert(vec![]).push(i);
+        for (i, x) in a.into_iter().enumerate() {
+            map.entry(x).or_insert(vec![]).push(i);
         }
 
         Self { map }
