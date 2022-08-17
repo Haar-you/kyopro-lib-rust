@@ -5,6 +5,7 @@ pub mod chmin;
 pub mod ds_macros;
 pub mod eps;
 pub mod for_loop;
+pub mod get_time;
 pub mod io;
 pub mod max;
 pub mod min;

@@ -276,7 +276,7 @@ mod tests {
     #[test]
     #[ignore]
     fn benchmark() {
-        use crate::timer;
+        use crate::get_time;
 
         let mut rng = rand::thread_rng();
 
@@ -297,13 +297,13 @@ mod tests {
             let a = SquareMatrix::from_vec(a);
             let b = SquareMatrix::from_vec(b);
 
-            straight.push(timer!({
+            straight.push(get_time!({
                 a.clone().straight_mul(b.clone());
             }));
 
-            strassen.push(timer!({
+            strassen.push(get_time!({
                 a.clone().strassen_mul(b.clone());
-            }))
+            }));
         }
 
         dbg!(straight, strassen);
