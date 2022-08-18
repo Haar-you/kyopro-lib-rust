@@ -1,6 +1,10 @@
+//! $x^2 = a \bmod p$を満たすxを一つ求める。
+
 use crate::math::mod_ops::pow::*;
 use rand::Rng;
 
+/// $x^2 = a \bmod p$を満たすxを一つ求める。
+#[inline]
 pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
     if p == 2 {
         return Some(a % 2);

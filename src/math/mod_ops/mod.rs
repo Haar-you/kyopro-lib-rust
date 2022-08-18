@@ -1,3 +1,5 @@
+//! mod mでの演算
+
 pub mod enum_inv;
 pub mod inv;
 pub mod inv_p;

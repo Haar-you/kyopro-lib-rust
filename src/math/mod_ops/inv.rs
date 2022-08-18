@@ -1,6 +1,13 @@
+//! mod mでの逆元
+
 use crate::math::gcd_lcm::GcdLcm;
 use std::mem::swap;
 
+/// mod mでの逆元
+///
+/// # Complexity
+/// Time Complexity $O(\log m)$
+#[inline]
 pub fn mod_inv(mut a: u64, m: u64) -> Option<u64> {
     if a.gcd(m) != 1 {
         return None;
@@ -18,7 +25,9 @@ pub fn mod_inv(mut a: u64, m: u64) -> Option<u64> {
 
         if u < t * v {
             u += m - (t * v) % m;
-            u %= m;
+            if u >= m {
+                u -= m;
+            }
         } else {
             u -= t * v;
         }

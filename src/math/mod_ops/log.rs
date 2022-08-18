@@ -1,9 +1,16 @@
+//! $a^x = b \bmod m$を満たすxを求める。
+
 use crate::math::{
     gcd_lcm::GcdLcm,
     mod_ops::{inv::*, pow::*},
 };
 use std::collections::HashMap;
 
+/// $a^x = b \bmod m$を満たすxを求める。
+///
+/// # Complexity
+/// Time Complexity $(\sqrt{m})$
+#[inline]
 pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
     if b == 1 {
         return Some(0);

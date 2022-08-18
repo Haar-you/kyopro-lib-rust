@@ -1,3 +1,10 @@
+//! 0,1,..,nの素数mod pでの逆元を列挙する。
+
+/// 0,1,..,nの素数mod pでの逆元を列挙する。
+///
+/// # Complexity
+/// Time Complexity $O(n)$
+#[inline]
 pub fn enumerate_mod_inv(n: usize, p: u64) -> Vec<u64> {
     let mut ret = vec![0; n + 1];
 

@@ -1,6 +1,10 @@
-/// mod累乗
+//! $x^p \bmod m$を求める。
+
+/// $x^p \bmod m$を求める。
+///
 /// # Complexity
-/// Time complexity $O(\log(p))$
+/// Time complexity $O(\log p)$
+#[inline]
 pub fn mod_pow(mut x: u64, mut p: u64, m: u64) -> u64 {
     let mut ret = 1;
     while p > 0 {
