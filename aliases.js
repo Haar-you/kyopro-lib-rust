@@ -1,2 +1,2 @@
 var ALIASES = {};
-ALIASES["haar_kyopro_lib_rust"] = {};
+ALIASES["haar_lib"] = {};

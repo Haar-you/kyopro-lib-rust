@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["enum_inv","0,1,..,nの素数mod pでの逆元を列挙する。"],["inv","mod mでの逆元"],["inv_p","素数mod pでの逆元"],["log","$a^x = b \\bmod m$を満たすxを求める。"],["pow","$x^p \\bmod m$を求める。"],["sqrt","$x^2 = a \\bmod p$を満たすxを一つ求める。"]]});

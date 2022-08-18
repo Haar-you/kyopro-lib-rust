@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["StaticRangeFreqQuery","配列に対する範囲頻度取得クエリを処理する。"]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["mod_log","$a^x = b \\bmod m$を満たすxを求める。"]]});
