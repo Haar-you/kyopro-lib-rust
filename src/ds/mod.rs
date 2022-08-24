@@ -24,8 +24,8 @@ pub mod rollbackable_vector;
 
 pub mod range_search_tree;
 
+pub mod foldable_deque;
 pub mod persistent_queue;
-pub mod swag;
 
 pub mod disjoint_sparse_table;
 pub mod sparse_table;
