@@ -6,6 +6,7 @@ pub mod euler_tour;
 pub mod hld;
 pub mod lca;
 pub mod rerooting;
+pub mod rooted_isomorphism;
 pub mod rooting;
 pub mod tree_dp;
 pub mod utils;
