@@ -1,13 +1,27 @@
+/*!
+領域内の点を列挙する
+
+# Problems
+- [AOJ DSL 2_C: Range Search(kD Tree)](https://onlinejudge.u-aizu.ac.jp/courses/library/3/DSL/2/DSL_2_C)
+*/
+
 use crate::algo::{bsearch::lower_bound, merge::merge};
 
-pub struct RangeSearchTree {
+pub struct RangeSearchTree<Index> {
     size: usize,
-    cxs: Vec<i64>,
-    data: Vec<Vec<(i64, usize)>>,
+    cxs: Vec<Index>,
+    data: Vec<Vec<(Index, usize)>>,
 }
 
-impl RangeSearchTree {
-    pub fn search(&self, (sx, sy): (i64, i64), (tx, ty): (i64, i64)) -> Vec<(i64, i64)> {
+impl<Index> RangeSearchTree<Index>
+where
+    Index: Copy + Ord,
+{
+    pub fn search(
+        &self,
+        (sx, sy): (Index, Index),
+        (tx, ty): (Index, Index),
+    ) -> Vec<(Index, Index)> {
         assert!(sx < tx);
         assert!(sy < ty);
 
@@ -20,11 +34,10 @@ impl RangeSearchTree {
                 r -= 1;
                 let a = &self.data[r];
 
-                let mut i = lower_bound(&a, &(sy, 0));
+                let i = lower_bound(&a, &(sy, 0));
 
-                while i < a.len() && a[i].0 < ty {
-                    ret.push((self.cxs[a[i].1], a[i].0));
-                    i += 1;
+                for &(y, x) in a.iter().skip(i).take_while(|(y, _)| *y < ty) {
+                    ret.push((self.cxs[x], y));
                 }
             }
 
@@ -32,11 +45,10 @@ impl RangeSearchTree {
                 let a = &self.data[l];
                 l += 1;
 
-                let mut i = lower_bound(&a, &(sy, 0));
+                let i = lower_bound(&a, &(sy, 0));
 
-                while i < a.len() && a[i].0 < ty {
-                    ret.push((self.cxs[a[i].1], a[i].0));
-                    i += 1;
+                for &(y, x) in a.iter().skip(i).take_while(|(y, _)| *y < ty) {
+                    ret.push((self.cxs[x], y));
                 }
             }
 
@@ -49,13 +61,16 @@ impl RangeSearchTree {
 }
 
 #[derive(Clone, Default)]
-pub struct RangeSearchTreeBuilder {
+pub struct RangeSearchTreeBuilder<Index> {
     size: usize,
-    xs: Vec<i64>,
-    ys: Vec<i64>,
+    xs: Vec<Index>,
+    ys: Vec<Index>,
 }
 
-impl RangeSearchTreeBuilder {
+impl<Index> RangeSearchTreeBuilder<Index>
+where
+    Index: Copy + Ord,
+{
     pub fn new() -> Self {
         Self {
             size: 0,
@@ -64,13 +79,13 @@ impl RangeSearchTreeBuilder {
         }
     }
 
-    pub fn add(&mut self, x: i64, y: i64) {
+    pub fn add(&mut self, x: Index, y: Index) {
         self.size += 1;
         self.xs.push(x);
         self.ys.push(y);
     }
 
-    pub fn build(self) -> RangeSearchTree {
+    pub fn build(self) -> RangeSearchTree<Index> {
         let mut cxs = self.xs.clone();
         cxs.sort_unstable();
         cxs.dedup();
@@ -78,7 +93,7 @@ impl RangeSearchTreeBuilder {
         let m = cxs.len();
         let size = m.next_power_of_two() * 2;
 
-        let mut data: Vec<Vec<(i64, usize)>> = vec![vec![]; size];
+        let mut data: Vec<Vec<(Index, usize)>> = vec![vec![]; size];
 
         for i in 0..self.size {
             let j = lower_bound(&cxs, &self.xs[i]);
