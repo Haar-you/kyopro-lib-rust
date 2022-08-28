@@ -22,13 +22,13 @@ pub fn totient(mut n: u64) -> u64 {
     ret
 }
 
-pub fn totient_table(n: usize) -> Vec<usize> {
-    let mut ret = (0..=n).collect::<Vec<_>>();
+pub fn totient_table(n: usize) -> Vec<u64> {
+    let mut ret = (0..=n as u64).collect::<Vec<_>>();
 
     for i in 2..=n {
-        if ret[i] == i {
+        if ret[i] == i as u64 {
             for j in (i..=n).step_by(i) {
-                ret[j] = ret[j] / i * (i - 1);
+                ret[j] = ret[j] / (i as u64) * (i as u64 - 1);
             }
         }
     }
