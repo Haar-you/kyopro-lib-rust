@@ -34,3 +34,5 @@ pub mod sum_floor_linear;
 pub mod sum_of_exponential_times_polynomial_limit;
 
 pub mod factorial_prime_factor;
+
+pub mod count_coprime;
