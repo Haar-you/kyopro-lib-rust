@@ -7,6 +7,7 @@ pub mod biconnected;
 pub mod bipartite;
 pub mod bridges;
 pub mod chinese_postman;
+pub mod chu_liu_edmonds;
 pub mod detect_cycle;
 pub mod dijkstra;
 pub mod eulerian;
