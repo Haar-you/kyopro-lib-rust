@@ -7,6 +7,8 @@ pub mod lowlink;
 pub mod scc;
 pub mod two_edge;
 
+pub mod pseudo_tree;
+
 pub mod bellman_ford;
 pub mod bfs;
 pub mod dijkstra;
