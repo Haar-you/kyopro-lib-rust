@@ -6,7 +6,7 @@ pub struct PseudoTree {
     pub in_loop: Vec<bool>,
 }
 
-pub fn pseudo_tree<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>) -> PseudoTree {
+pub fn pseudo_tree<E: EdgeTrait>(g: &Graph<Undirected, E>) -> PseudoTree {
     let n = g.len();
     let mut indeg = vec![0; n];
     let mut queue = VecDeque::new();
@@ -60,7 +60,7 @@ pub fn pseudo_tree<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>) -> PseudoTree {
     PseudoTree { group, in_loop }
 }
 
-fn dfs<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>, cur: usize, par: usize, group: &mut [usize]) {
+fn dfs<E: EdgeTrait>(g: &Graph<Undirected, E>, cur: usize, par: usize, group: &mut [usize]) {
     group[cur] = group[par];
 
     for e in &g.edges[cur] {

@@ -2,7 +2,7 @@ use crate::graph::{scc::*, *};
 
 pub struct TwoSat {
     size: usize,
-    g: Graph<Edge<(), ()>>,
+    g: Graph<Directed, Edge<(), ()>>,
 }
 
 impl TwoSat {
@@ -26,7 +26,7 @@ impl TwoSat {
 
     pub fn add_if(&mut self, a: isize, b: isize) {
         self.g
-            .add_directed(Some(Edge::new(self.check(a), self.check(b), (), ())));
+            .add(Some(Edge::new(self.check(a), self.check(b), (), ())));
     }
 
     pub fn add_or(&mut self, a: isize, b: isize) {

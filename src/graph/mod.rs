@@ -41,6 +41,8 @@ pub mod min_cost_flow;
 
 pub mod bi_match;
 
+use std::marker::PhantomData;
+
 pub trait EdgeTrait {
     type Weight;
     fn from(&self) -> usize;
@@ -88,25 +90,37 @@ impl<T: Clone, I> EdgeTrait for Edge<T, I> {
     }
 }
 
+pub trait Direction {}
+pub struct Directed;
+pub struct Undirected;
+impl Direction for Directed {}
+impl Direction for Undirected {}
+
 #[derive(Debug, Clone)]
-pub struct Graph<E> {
+pub struct Graph<D, E> {
     pub edges: Vec<Vec<E>>,
+    pub __phantom: PhantomData<D>,
 }
 
-impl<E: EdgeTrait + Clone> Graph<E> {
+impl<D: Direction, E: EdgeTrait + Clone> Graph<D, E> {
     pub fn new(size: usize) -> Self {
         Graph {
             edges: vec![vec![]; size],
+            __phantom: PhantomData,
         }
     }
+}
 
-    pub fn add_directed(&mut self, edges: impl IntoIterator<Item = E>) {
+impl<E: EdgeTrait + Clone> Graph<Directed, E> {
+    pub fn add(&mut self, edges: impl IntoIterator<Item = E>) {
         for e in edges.into_iter() {
             self.edges[e.from()].push(e);
         }
     }
+}
 
-    pub fn add_undirected(&mut self, edges: impl IntoIterator<Item = E>) {
+impl<E: EdgeTrait + Clone> Graph<Undirected, E> {
+    pub fn add(&mut self, edges: impl IntoIterator<Item = E>) {
         for e in edges.into_iter() {
             self.edges[e.from()].push(e.clone());
             self.edges[e.to()].push(e.rev());
@@ -114,7 +128,7 @@ impl<E: EdgeTrait + Clone> Graph<E> {
     }
 }
 
-impl<E> Graph<E> {
+impl<D, E> Graph<D, E> {
     pub fn len(&self) -> usize {
         self.edges.len()
     }

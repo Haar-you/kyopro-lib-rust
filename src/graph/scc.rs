@@ -8,7 +8,7 @@ pub struct SCC {
 }
 
 impl SCC {
-    pub fn new<E: EdgeTrait>(g: &Graph<E>) -> Self {
+    pub fn new<E: EdgeTrait>(g: &Graph<Directed, E>) -> Self {
         let n = g.len();
 
         let mut check = vec![false; n];
@@ -57,7 +57,12 @@ impl SCC {
         }
     }
 
-    fn dfs<E: EdgeTrait>(g: &Graph<E>, cur: usize, ord: &mut Vec<usize>, check: &mut [bool]) {
+    fn dfs<E: EdgeTrait>(
+        g: &Graph<Directed, E>,
+        cur: usize,
+        ord: &mut Vec<usize>,
+        check: &mut [bool],
+    ) {
         check[cur] = true;
         for e in &g.edges[cur] {
             if !check[e.to()] {
@@ -91,8 +96,8 @@ mod tests {
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_C
 
-        let mut g = Graph::new(5);
-        g.add_directed(
+        let mut g = Graph::<Directed, _>::new(5);
+        g.add(
             vec![(0, 1), (1, 0), (1, 2), (2, 4), (4, 3), (3, 2)]
                 .into_iter()
                 .map(|(u, v)| Edge::new(u, v, (), ())),

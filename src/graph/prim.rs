@@ -3,7 +3,7 @@
 use crate::graph::*;
 use std::{cmp::Reverse, collections::BinaryHeap};
 
-pub fn prim<T: Ord, E: EdgeTrait<Weight = T>>(g: &Graph<E>) -> Vec<&E> {
+pub fn prim<T: Ord, E: EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> Vec<&E> {
     let n = g.len();
     let mut visit = vec![false; n];
     let mut ret = vec![];
@@ -39,8 +39,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut g = Graph::new(6);
-        g.add_undirected(
+        let mut g = Graph::<Undirected, _>::new(6);
+        g.add(
             vec![
                 (0, 1, 1),
                 (0, 2, 3),

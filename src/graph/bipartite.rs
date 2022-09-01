@@ -2,7 +2,9 @@
 
 use crate::graph::*;
 
-pub fn check_bipartite<E: EdgeTrait>(g: &Graph<E>) -> Vec<Option<(Vec<usize>, Vec<usize>)>> {
+pub fn check_bipartite<E: EdgeTrait>(
+    g: &Graph<Undirected, E>,
+) -> Vec<Option<(Vec<usize>, Vec<usize>)>> {
     let n = g.len();
     let mut ret = vec![];
     let mut check = vec![-1; n];

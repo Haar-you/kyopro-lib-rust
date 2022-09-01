@@ -6,7 +6,7 @@ use crate::graph::*;
 use std::{cmp::min, ops::Add};
 
 /// Time complexity O(V ^ 2 * 2 ^ V)
-pub fn chinese_postman_problem<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>) -> T
+pub fn chinese_postman_problem<T, E: EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> T
 where
     T: Default + Copy + Ord + Add<Output = T>,
 {
@@ -83,24 +83,24 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/problems/DPL_2_B/
-        let mut g = Graph::new(4);
-        g.add_undirected(
+        let mut g = Graph::<Undirected, _>::new(4);
+        g.add(
             vec![(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         assert_eq!(chinese_postman_problem(&g), 10);
 
-        let mut g = Graph::new(4);
-        g.add_undirected(
+        let mut g = Graph::<Undirected, _>::new(4);
+        g.add(
             vec![(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4), (1, 2, 5)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
         assert_eq!(chinese_postman_problem(&g), 18);
 
-        let mut g = Graph::new(2);
-        g.add_undirected(
+        let mut g = Graph::<Undirected, _>::new(2);
+        g.add(
             vec![(0, 1, 1), (0, 1, 2), (0, 1, 3)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),

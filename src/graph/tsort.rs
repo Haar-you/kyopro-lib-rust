@@ -7,7 +7,7 @@ use std::collections::VecDeque;
 ///
 /// gがDAGのとき、トポロジカルソートした結果をSomeに包んで返す。
 /// そうでなければ、Noneを返す。
-pub fn tsort<E: EdgeTrait>(g: &Graph<E>) -> Option<Vec<usize>> {
+pub fn tsort<E: EdgeTrait>(g: &Graph<Directed, E>) -> Option<Vec<usize>> {
     let n = g.len();
     let mut indeg = vec![0; n];
 

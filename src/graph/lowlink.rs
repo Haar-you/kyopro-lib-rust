@@ -12,7 +12,7 @@ pub struct Lowlink {
 }
 
 impl Lowlink {
-    pub fn new<E: EdgeTrait>(g: &Graph<E>) -> Self {
+    pub fn new<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Self {
         let n = g.len();
         let mut ret = Self {
             size: n,
@@ -34,7 +34,7 @@ impl Lowlink {
 
     fn dfs<E: EdgeTrait>(
         &mut self,
-        g: &Graph<E>,
+        g: &Graph<Undirected, E>,
         cur: usize,
         par: Option<usize>,
         index: &mut usize,

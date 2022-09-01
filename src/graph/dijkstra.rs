@@ -4,7 +4,10 @@ use crate::graph::*;
 use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
 /// Time complexity O((E + V) log V)
-pub fn dijkstra<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>, src: &[usize]) -> Vec<Option<T>>
+pub fn dijkstra<D: Direction, T, E: EdgeTrait<Weight = T>>(
+    g: &Graph<D, E>,
+    src: &[usize],
+) -> Vec<Option<T>>
 where
     T: Add<Output = T> + Copy + Ord + Default,
 {
@@ -55,8 +58,8 @@ mod tests {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_A
 
         // sample 1
-        let mut graph = Graph::new(4);
-        graph.add_directed(
+        let mut graph = Graph::<Directed, _>::new(4);
+        graph.add(
             vec![(0, 1, 1), (0, 2, 4), (1, 2, 2), (2, 3, 1), (1, 3, 5)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),
@@ -66,8 +69,8 @@ mod tests {
         assert_eq!(ans, [Some(0), Some(1), Some(3), Some(4)]);
 
         // sample 2
-        let mut graph = Graph::new(4);
-        graph.add_directed(
+        let mut graph = Graph::<Directed, _>::new(4);
+        graph.add(
             vec![
                 (0, 1, 1),
                 (0, 2, 4),

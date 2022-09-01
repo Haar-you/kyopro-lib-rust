@@ -2,7 +2,7 @@
 
 use crate::{ds::unionfind::UnionFind, graph::*};
 
-pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<E>) -> Vec<&E> {
+pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> Vec<&E> {
     let n = g.len();
     let mut edges = vec![];
     for es in &g.edges {
@@ -33,8 +33,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut g = Graph::new(6);
-        g.add_undirected(
+        let mut g = Graph::<Undirected, _>::new(6);
+        g.add(
             vec![
                 (0, 1, 1),
                 (0, 2, 3),

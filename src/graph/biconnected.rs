@@ -85,8 +85,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut g = Graph::new(4);
-        g.add_undirected(
+        let mut g = Graph::<Undirected, _>::new(4);
+        g.add(
             vec![(0, 3), (0, 1), (3, 0), (2, 1), (2, 3)]
                 .into_iter()
                 .map(|(u, v)| Edge::new(u, v, (), ())),
@@ -103,8 +103,8 @@ mod tests {
             }
         );
 
-        let mut g = Graph::new(10);
-        g.add_undirected(
+        let mut g = Graph::<Undirected, _>::new(10);
+        g.add(
             vec![
                 (0, 6),
                 (0, 8),
@@ -138,8 +138,8 @@ mod tests {
             }
         );
 
-        let mut g = Graph::new(5);
-        g.add_undirected(
+        let mut g = Graph::<Undirected, _>::new(5);
+        g.add(
             vec![(0, 1), (1, 0), (0, 1)]
                 .into_iter()
                 .map(|(u, v)| Edge::new(u, v, (), ())),

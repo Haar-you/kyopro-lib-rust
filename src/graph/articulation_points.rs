@@ -28,8 +28,8 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_A
-        let mut g = Graph::new(4);
-        g.add_undirected(
+        let mut g = Graph::<Undirected, _>::new(4);
+        g.add(
             vec![(0, 1), (0, 2), (1, 2), (2, 3)]
                 .into_iter()
                 .map(|(u, v)| Edge::new(u, v, (), ())),
@@ -38,8 +38,8 @@ mod tests {
         ans.sort();
         assert_eq!(ans, [2]);
 
-        let mut g = Graph::new(5);
-        g.add_undirected(
+        let mut g = Graph::<Undirected, _>::new(5);
+        g.add(
             vec![(0, 1), (1, 2), (2, 3), (3, 4)]
                 .into_iter()
                 .map(|(u, v)| Edge::new(u, v, (), ())),
