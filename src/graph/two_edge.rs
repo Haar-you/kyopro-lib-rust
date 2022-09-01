@@ -39,7 +39,7 @@ mod tests {
     #[test]
     fn test() {
         let mut g = Graph::<Undirected, _>::new(4);
-        g.add(
+        g.extend(
             vec![(0, 2), (0, 1), (3, 0), (2, 1), (2, 3)]
                 .into_iter()
                 .map(|(u, v)| Edge::new(u, v, (), ())),
@@ -50,7 +50,7 @@ mod tests {
         assert_eq!(ans, btreeset! {btreeset!{0, 1, 2, 3}});
 
         let mut g = Graph::<Undirected, _>::new(13);
-        g.add(
+        g.extend(
             vec![
                 (4, 5),
                 (8, 7),

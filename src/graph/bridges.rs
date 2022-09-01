@@ -28,7 +28,7 @@ mod tests {
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_B
         let mut g = Graph::<Undirected, _>::new(4);
-        g.add(
+        g.extend(
             vec![(0, 1), (0, 2), (1, 2), (2, 3)]
                 .into_iter()
                 .map(|(u, v)| Edge::new(u, v, (), ())),
@@ -38,7 +38,7 @@ mod tests {
         assert_eq!(ans, [(2, 3)]);
 
         let mut g = Graph::<Undirected, _>::new(5);
-        g.add(
+        g.extend(
             vec![(0, 1), (1, 2), (2, 3), (3, 4)]
                 .into_iter()
                 .map(|(u, v)| Edge::new(u, v, (), ())),

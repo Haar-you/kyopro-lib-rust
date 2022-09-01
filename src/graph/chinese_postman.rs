@@ -84,7 +84,7 @@ mod tests {
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/problems/DPL_2_B/
         let mut g = Graph::<Undirected, _>::new(4);
-        g.add(
+        g.extend(
             vec![(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),
@@ -92,7 +92,7 @@ mod tests {
         assert_eq!(chinese_postman_problem(&g), 10);
 
         let mut g = Graph::<Undirected, _>::new(4);
-        g.add(
+        g.extend(
             vec![(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4), (1, 2, 5)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),
@@ -100,7 +100,7 @@ mod tests {
         assert_eq!(chinese_postman_problem(&g), 18);
 
         let mut g = Graph::<Undirected, _>::new(2);
-        g.add(
+        g.extend(
             vec![(0, 1, 1), (0, 1, 2), (0, 1, 3)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),

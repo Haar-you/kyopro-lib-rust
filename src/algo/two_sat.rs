@@ -25,8 +25,7 @@ impl TwoSat {
     }
 
     pub fn add_if(&mut self, a: isize, b: isize) {
-        self.g
-            .add(Some(Edge::new(self.check(a), self.check(b), (), ())));
+        self.g.add(Edge::new(self.check(a), self.check(b), (), ()));
     }
 
     pub fn add_or(&mut self, a: isize, b: isize) {

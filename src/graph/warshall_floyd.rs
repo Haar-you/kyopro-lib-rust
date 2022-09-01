@@ -51,7 +51,7 @@ mod tests {
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_C
         let mut g = Graph::<Directed, _>::new(4);
-        g.add(
+        g.extend(
             vec![
                 (0, 1, 1),
                 (0, 2, 5),
@@ -75,7 +75,7 @@ mod tests {
         );
 
         let mut g = Graph::<Directed, _>::new(4);
-        g.add(
+        g.extend(
             vec![
                 (0, 1, 1),
                 (0, 2, -5),
@@ -99,7 +99,7 @@ mod tests {
         );
 
         let mut g = Graph::<Directed, _>::new(4);
-        g.add(
+        g.extend(
             vec![
                 (0, 1, 1),
                 (0, 2, 5),

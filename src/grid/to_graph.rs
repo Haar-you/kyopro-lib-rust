@@ -27,7 +27,7 @@ pub fn grid_to_graph<T: Clone>(
                 }
 
                 let e = Edge::new(index(p), index(q), edge_cost(p, q), ());
-                g.add(Some(e));
+                g.add(e);
             }
         }
     }

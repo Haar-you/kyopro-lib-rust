@@ -97,7 +97,7 @@ mod tests {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_C
 
         let mut g = Graph::<Directed, _>::new(5);
-        g.add(
+        g.extend(
             vec![(0, 1), (1, 0), (1, 2), (2, 4), (4, 3), (3, 2)]
                 .into_iter()
                 .map(|(u, v)| Edge::new(u, v, (), ())),

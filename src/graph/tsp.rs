@@ -47,7 +47,7 @@ mod tests {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/2/DPL_2_A
 
         let mut g = Graph::<Directed, _>::new(4);
-        g.add(
+        g.extend(
             vec![
                 (0, 1, 2),
                 (1, 2, 3),
@@ -62,7 +62,7 @@ mod tests {
         assert_eq!(tsp(&g, 0), Some(16));
 
         let mut g = Graph::<Directed, _>::new(3);
-        g.add(
+        g.extend(
             vec![(0, 1, 1), (1, 2, 1), (0, 2, 1)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),

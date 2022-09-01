@@ -91,7 +91,9 @@ impl<T: Clone, I> EdgeTrait for Edge<T, I> {
 }
 
 pub trait Direction {}
+#[derive(Debug, Clone)]
 pub struct Directed;
+#[derive(Debug, Clone)]
 pub struct Undirected;
 impl Direction for Directed {}
 impl Direction for Undirected {}
@@ -112,19 +114,23 @@ impl<D: Direction, E: EdgeTrait + Clone> Graph<D, E> {
 }
 
 impl<E: EdgeTrait + Clone> Graph<Directed, E> {
-    pub fn add(&mut self, edges: impl IntoIterator<Item = E>) {
-        for e in edges.into_iter() {
-            self.edges[e.from()].push(e);
-        }
+    pub fn add(&mut self, e: E) {
+        self.edges[e.from()].push(e);
+    }
+
+    pub fn extend(&mut self, edges: impl IntoIterator<Item = E>) {
+        edges.into_iter().for_each(|e| self.add(e));
     }
 }
 
 impl<E: EdgeTrait + Clone> Graph<Undirected, E> {
-    pub fn add(&mut self, edges: impl IntoIterator<Item = E>) {
-        for e in edges.into_iter() {
-            self.edges[e.from()].push(e.clone());
-            self.edges[e.to()].push(e.rev());
-        }
+    pub fn add(&mut self, e: E) {
+        self.edges[e.from()].push(e.clone());
+        self.edges[e.to()].push(e.rev());
+    }
+
+    pub fn extend(&mut self, edges: impl IntoIterator<Item = E>) {
+        edges.into_iter().for_each(|e| self.add(e));
     }
 }
 

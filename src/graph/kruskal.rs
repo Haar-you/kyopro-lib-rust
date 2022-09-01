@@ -34,7 +34,7 @@ mod tests {
     #[test]
     fn test() {
         let mut g = Graph::<Undirected, _>::new(6);
-        g.add(
+        g.extend(
             vec![
                 (0, 1, 1),
                 (0, 2, 3),

@@ -61,7 +61,7 @@ mod tests {
     #[test]
     fn test() {
         let mut g = Graph::<Directed, _>::new(4);
-        g.add(
+        g.extend(
             vec![(0, 1, 2), (0, 2, 3), (1, 2, -5), (1, 3, 1), (2, 3, 2)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),
@@ -72,7 +72,7 @@ mod tests {
         );
 
         let mut g = Graph::<Directed, _>::new(4);
-        g.add(
+        g.extend(
             vec![(0, 1, 2), (0, 2, 3), (1, 2, -5), (1, 3, 1), (2, 3, 2)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),
