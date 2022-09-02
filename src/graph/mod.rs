@@ -14,6 +14,7 @@ pub mod bfs;
 pub mod dijkstra;
 pub mod warshall_floyd;
 
+pub mod cycle;
 pub mod detect_cycle;
 pub mod eulerian;
 
