@@ -2,6 +2,7 @@
 
 pub mod traits;
 
+pub mod partially_persistent_unionfind;
 pub mod unionfind;
 
 pub mod dual_segtree;
