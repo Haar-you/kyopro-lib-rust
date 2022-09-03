@@ -7,8 +7,8 @@ pub fn grid_to_graph<T: Clone>(
     index: impl Fn(Position) -> usize,
     check_passable: impl Fn(Position, Position) -> bool,
     edge_cost: impl Fn(Position, Position) -> T,
-) -> Graph<Edge<T, ()>> {
-    let mut g = Graph::new(h * w);
+) -> Graph<Directed, Edge<T, ()>> {
+    let mut g = Graph::<Directed, _>::new(h * w);
 
     for i in 0..h {
         for j in 0..w {
@@ -27,7 +27,7 @@ pub fn grid_to_graph<T: Clone>(
                 }
 
                 let e = Edge::new(index(p), index(q), edge_cost(p, q), ());
-                g.add_directed(Some(e));
+                g.add(e);
             }
         }
     }

@@ -13,7 +13,7 @@ type Edge_<'a, T, E> = (usize, usize, T, &'a E);
 ///
 /// # Problems
 /// - [AOJ GRL_2_B](https://onlinejudge.u-aizu.ac.jp/problems/GRL_2_B)
-pub fn chu_liu_edmonds<T, E>(g: &Graph<E>, root: usize) -> Vec<&E>
+pub fn chu_liu_edmonds<T, E>(g: &Graph<Directed, E>, root: usize) -> Vec<&E>
 where
     T: Ord + Copy + Sub<Output = T>,
     E: EdgeTrait<Weight = T>,

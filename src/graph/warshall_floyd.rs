@@ -6,7 +6,9 @@ use crate::graph::*;
 use std::{cmp::min, ops::Add};
 
 /// Time complexity O(n ^ 3)
-pub fn warshall_floyd<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>) -> Option<Vec<Vec<Option<T>>>>
+pub fn warshall_floyd<D: Direction, T, E: EdgeTrait<Weight = T>>(
+    g: &Graph<D, E>,
+) -> Option<Vec<Vec<Option<T>>>>
 where
     T: Add<Output = T> + Copy + Clone + Ord + Default,
 {
@@ -48,8 +50,8 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_C
-        let mut g = Graph::new(4);
-        g.add_directed(
+        let mut g = Graph::<Directed, _>::new(4);
+        g.extend(
             vec![
                 (0, 1, 1),
                 (0, 2, 5),
@@ -72,8 +74,8 @@ mod tests {
             ])
         );
 
-        let mut g = Graph::new(4);
-        g.add_directed(
+        let mut g = Graph::<Directed, _>::new(4);
+        g.extend(
             vec![
                 (0, 1, 1),
                 (0, 2, -5),
@@ -96,8 +98,8 @@ mod tests {
             ])
         );
 
-        let mut g = Graph::new(4);
-        g.add_directed(
+        let mut g = Graph::<Directed, _>::new(4);
+        g.extend(
             vec![
                 (0, 1, 1),
                 (0, 2, 5),

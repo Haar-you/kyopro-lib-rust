@@ -9,7 +9,7 @@ enum Status {
     Searching,
 }
 
-pub fn detect_cycle<E: EdgeTrait>(g: &Graph<E>) -> Option<Vec<&E>> {
+pub fn detect_cycle<D: Direction, E: EdgeTrait>(g: &Graph<D, E>) -> Option<Vec<&E>> {
     let size = g.len();
     let mut check = vec![Status::Unchecked; size];
 
@@ -28,8 +28,8 @@ pub fn detect_cycle<E: EdgeTrait>(g: &Graph<E>) -> Option<Vec<&E>> {
     None
 }
 
-fn rec<'a, E: EdgeTrait>(
-    g: &'a Graph<E>,
+fn rec<'a, D: Direction, E: EdgeTrait>(
+    g: &'a Graph<D, E>,
     cur: usize,
     ret: &mut Vec<&'a E>,
     check: &mut [Status],

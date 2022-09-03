@@ -1,8 +1,8 @@
 use crate::graph::*;
 use std::collections::VecDeque;
 
-pub fn bfs<T, E: EdgeTrait<Weight = T>>(
-    g: &Graph<E>,
+pub fn bfs<D: Direction, T, E: EdgeTrait<Weight = T>>(
+    g: &Graph<D, E>,
     src: impl IntoIterator<Item = usize>,
 ) -> Vec<Option<usize>> {
     let mut ret = vec![None; g.len()];

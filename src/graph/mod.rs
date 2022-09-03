@@ -14,6 +14,7 @@ pub mod bfs;
 pub mod dijkstra;
 pub mod warshall_floyd;
 
+pub mod cycle;
 pub mod detect_cycle;
 pub mod eulerian;
 
@@ -40,6 +41,8 @@ pub mod hopcroft_karp;
 pub mod min_cost_flow;
 
 pub mod bi_match;
+
+use std::marker::PhantomData;
 
 pub trait EdgeTrait {
     type Weight;
@@ -88,33 +91,51 @@ impl<T: Clone, I> EdgeTrait for Edge<T, I> {
     }
 }
 
+pub trait Direction {}
 #[derive(Debug, Clone)]
-pub struct Graph<E> {
+pub struct Directed;
+#[derive(Debug, Clone)]
+pub struct Undirected;
+impl Direction for Directed {}
+impl Direction for Undirected {}
+
+#[derive(Debug, Clone)]
+pub struct Graph<D, E> {
     pub edges: Vec<Vec<E>>,
+    pub __phantom: PhantomData<D>,
 }
 
-impl<E: EdgeTrait + Clone> Graph<E> {
+impl<D: Direction, E: EdgeTrait + Clone> Graph<D, E> {
     pub fn new(size: usize) -> Self {
         Graph {
             edges: vec![vec![]; size],
-        }
-    }
-
-    pub fn add_directed(&mut self, edges: impl IntoIterator<Item = E>) {
-        for e in edges.into_iter() {
-            self.edges[e.from()].push(e);
-        }
-    }
-
-    pub fn add_undirected(&mut self, edges: impl IntoIterator<Item = E>) {
-        for e in edges.into_iter() {
-            self.edges[e.from()].push(e.clone());
-            self.edges[e.to()].push(e.rev());
+            __phantom: PhantomData,
         }
     }
 }
 
-impl<E> Graph<E> {
+impl<E: EdgeTrait + Clone> Graph<Directed, E> {
+    pub fn add(&mut self, e: E) {
+        self.edges[e.from()].push(e);
+    }
+
+    pub fn extend(&mut self, edges: impl IntoIterator<Item = E>) {
+        edges.into_iter().for_each(|e| self.add(e));
+    }
+}
+
+impl<E: EdgeTrait + Clone> Graph<Undirected, E> {
+    pub fn add(&mut self, e: E) {
+        self.edges[e.from()].push(e.clone());
+        self.edges[e.to()].push(e.rev());
+    }
+
+    pub fn extend(&mut self, edges: impl IntoIterator<Item = E>) {
+        edges.into_iter().for_each(|e| self.add(e));
+    }
+}
+
+impl<D, E> Graph<D, E> {
     pub fn len(&self) -> usize {
         self.edges.len()
     }

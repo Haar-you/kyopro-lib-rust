@@ -4,7 +4,10 @@ use crate::graph::*;
 pub use crate::utils::num_inf::NumInf;
 use std::{cmp::min, ops::Add};
 
-pub fn bellman_ford<T, E: EdgeTrait<Weight = T>>(g: &Graph<E>, src: usize) -> Vec<NumInf<T>>
+pub fn bellman_ford<D: Direction, T, E: EdgeTrait<Weight = T>>(
+    g: &Graph<D, E>,
+    src: usize,
+) -> Vec<NumInf<T>>
 where
     T: Copy + Ord + Default + Add<Output = T>,
 {
@@ -57,8 +60,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut g = Graph::new(4);
-        g.add_directed(
+        let mut g = Graph::<Directed, _>::new(4);
+        g.extend(
             vec![(0, 1, 2), (0, 2, 3), (1, 2, -5), (1, 3, 1), (2, 3, 2)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),
@@ -68,8 +71,8 @@ mod tests {
             [Value(0), Value(2), Value(-3), Value(-1)]
         );
 
-        let mut g = Graph::new(4);
-        g.add_directed(
+        let mut g = Graph::<Directed, _>::new(4);
+        g.extend(
             vec![(0, 1, 2), (0, 2, 3), (1, 2, -5), (1, 3, 1), (2, 3, 2)]
                 .into_iter()
                 .map(|(u, v, w)| Edge::new(u, v, w, ())),
