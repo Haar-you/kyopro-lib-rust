@@ -1,5 +1,5 @@
 use crate::tree::*;
-use std::{cmp::max, ops::Add};
+use std::ops::Add;
 
 /// rootを根としたときの根から各頂点への距離を列挙する。
 /// # Complexity
@@ -54,7 +54,7 @@ where
 /// 木の各頂点について、そこからの距離の最大値を列挙する。
 /// # Complexity
 /// Time complexity $O(n)$
-pub fn tree_height<T>(tr: &Tree<T>) -> Vec<T>
+pub fn tree_height<T>(tr: &Tree<T>) -> Vec<(T, usize)>
 where
     T: Add<Output = T> + Copy + Default + Ord,
 {
@@ -74,7 +74,7 @@ where
 
     d1.into_iter()
         .zip(d2.into_iter())
-        .map(|(x, y)| max(x, y))
+        .map(|(x, y)| if x > y { (x, u) } else { (y, v) })
         .collect()
 }
 
@@ -131,6 +131,12 @@ mod tests {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_B
         let mut tree = Tree::new(4);
         tree.add_undirected(vec![(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
-        assert_eq!(tree_height(&tree), [5, 3, 4, 5]);
+        assert_eq!(
+            tree_height(&tree)
+                .into_iter()
+                .map(|(x, _)| x)
+                .collect::<Vec<_>>(),
+            [5, 3, 4, 5]
+        );
     }
 }
