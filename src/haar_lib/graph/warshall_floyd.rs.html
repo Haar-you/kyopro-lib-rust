@@ -113,6 +113,8 @@
 <span id="113">113</span>
 <span id="114">114</span>
 <span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! 全頂点間最短経路長</span>
 
@@ -122,7 +124,9 @@
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp</span>::<span class="ident">min</span>, <span class="ident">ops</span>::<span class="ident">Add</span>};
 
 <span class="doccomment">/// Time complexity O(n ^ 3)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">warshall_floyd</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>: <span class="ident">EdgeTrait</span><span class="op">&lt;</span><span class="ident">Weight</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">warshall_floyd</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Direction</span>, <span class="ident">T</span>, <span class="ident">E</span>: <span class="ident">EdgeTrait</span><span class="op">&lt;</span><span class="ident">Weight</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Default</span>,
 {
@@ -164,8 +168,8 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test</span>() {
         <span class="comment">// https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_C</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">g</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="ident">new</span>(<span class="number">4</span>);
-        <span class="ident">g</span>.<span class="ident">add_directed</span>(
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">g</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="op">&lt;</span><span class="ident">Directed</span>, <span class="kw">_</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="number">4</span>);
+        <span class="ident">g</span>.<span class="ident">extend</span>(
             <span class="macro">vec</span><span class="macro">!</span>[
                 (<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>),
                 (<span class="number">0</span>, <span class="number">2</span>, <span class="number">5</span>),
@@ -188,8 +192,8 @@
             ])
         );
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">g</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="ident">new</span>(<span class="number">4</span>);
-        <span class="ident">g</span>.<span class="ident">add_directed</span>(
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">g</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="op">&lt;</span><span class="ident">Directed</span>, <span class="kw">_</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="number">4</span>);
+        <span class="ident">g</span>.<span class="ident">extend</span>(
             <span class="macro">vec</span><span class="macro">!</span>[
                 (<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>),
                 (<span class="number">0</span>, <span class="number">2</span>, <span class="op">-</span><span class="number">5</span>),
@@ -212,8 +216,8 @@
             ])
         );
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">g</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="ident">new</span>(<span class="number">4</span>);
-        <span class="ident">g</span>.<span class="ident">add_directed</span>(
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">g</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="op">&lt;</span><span class="ident">Directed</span>, <span class="kw">_</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="number">4</span>);
+        <span class="ident">g</span>.<span class="ident">extend</span>(
             <span class="macro">vec</span><span class="macro">!</span>[
                 (<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>),
                 (<span class="number">0</span>, <span class="number">2</span>, <span class="number">5</span>),

@@ -49,13 +49,12 @@
 <span id="49">49</span>
 <span id="50">50</span>
 <span id="51">51</span>
-<span id="52">52</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">graph</span>::{<span class="ident">scc</span>::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TwoSat</span> {
     <span class="ident">size</span>: <span class="ident">usize</span>,
-    <span class="ident">g</span>: <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">Edge</span><span class="op">&lt;</span>(), ()<span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">g</span>: <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">Directed</span>, <span class="ident">Edge</span><span class="op">&lt;</span>(), ()<span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">TwoSat</span> {
@@ -78,8 +77,7 @@
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_if</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">a</span>: <span class="ident">isize</span>, <span class="ident">b</span>: <span class="ident">isize</span>) {
-        <span class="self">self</span>.<span class="ident">g</span>
-            .<span class="ident">add_directed</span>(<span class="prelude-val">Some</span>(<span class="ident">Edge</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">check</span>(<span class="ident">a</span>), <span class="self">self</span>.<span class="ident">check</span>(<span class="ident">b</span>), (), ())));
+        <span class="self">self</span>.<span class="ident">g</span>.<span class="ident">add</span>(<span class="ident">Edge</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">check</span>(<span class="ident">a</span>), <span class="self">self</span>.<span class="ident">check</span>(<span class="ident">b</span>), (), ()));
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_or</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">a</span>: <span class="ident">isize</span>, <span class="ident">b</span>: <span class="ident">isize</span>) {

@@ -84,6 +84,9 @@
 <span id="84">84</span>
 <span id="85">85</span>
 <span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! 非負重み付き最短経路 (Dijkstra)</span>
 
@@ -91,7 +94,10 @@
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp</span>::<span class="ident">Reverse</span>, <span class="ident">collections</span>::<span class="ident">BinaryHeap</span>, <span class="ident">ops</span>::<span class="ident">Add</span>};
 
 <span class="doccomment">/// Time complexity O((E + V) log V)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dijkstra</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>: <span class="ident">EdgeTrait</span><span class="op">&lt;</span><span class="ident">Weight</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">usize</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dijkstra</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Direction</span>, <span class="ident">T</span>, <span class="ident">E</span>: <span class="ident">EdgeTrait</span><span class="op">&lt;</span><span class="ident">Weight</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+    <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">usize</span>],
+) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Add</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Default</span>,
 {
@@ -142,8 +148,8 @@
         <span class="comment">// https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_A</span>
 
         <span class="comment">// sample 1</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="ident">new</span>(<span class="number">4</span>);
-        <span class="ident">graph</span>.<span class="ident">add_directed</span>(
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="op">&lt;</span><span class="ident">Directed</span>, <span class="kw">_</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="number">4</span>);
+        <span class="ident">graph</span>.<span class="ident">extend</span>(
             <span class="macro">vec</span><span class="macro">!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>)]
                 .<span class="ident">into_iter</span>()
                 .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>)<span class="op">|</span> <span class="ident">Edge</span>::<span class="ident">new</span>(<span class="ident">u</span>, <span class="ident">v</span>, <span class="ident">w</span>, ())),
@@ -153,8 +159,8 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ans</span>, [<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">3</span>), <span class="prelude-val">Some</span>(<span class="number">4</span>)]);
 
         <span class="comment">// sample 2</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="ident">new</span>(<span class="number">4</span>);
-        <span class="ident">graph</span>.<span class="ident">add_directed</span>(
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="op">&lt;</span><span class="ident">Directed</span>, <span class="kw">_</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="number">4</span>);
+        <span class="ident">graph</span>.<span class="ident">extend</span>(
             <span class="macro">vec</span><span class="macro">!</span>[
                 (<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>),
                 (<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>),

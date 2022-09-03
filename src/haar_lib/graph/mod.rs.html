@@ -112,28 +112,72 @@
 <span id="112">112</span>
 <span id="113">113</span>
 <span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! グラフ一般に関するもの</span>
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">articulation_points</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">biconnected</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bridges</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">lowlink</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">scc</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">two_edge</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pseudo_tree</span>;
+
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bellman_ford</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bfs</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">biconnected</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bipartite</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bridges</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">chinese_postman</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">detect_cycle</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">dijkstra</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">eulerian</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">kruskal</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">lowlink</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">max_independent_set</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">prim</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">scc</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tsort</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tsp</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">two_edge</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">warshall_floyd</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">cycle</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">detect_cycle</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">eulerian</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bipartite</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">enumerate_triangles</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">max_independent_set</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">chu_liu_edmonds</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">kruskal</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">prim</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tsort</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">chinese_postman</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tsp</span>;
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">psp</span>;
 
@@ -144,6 +188,8 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">min_cost_flow</span>;
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bi_match</span>;
+
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">EdgeTrait</span> {
     <span class="kw">type</span> <span class="ident">Weight</span>;
@@ -192,33 +238,51 @@
     }
 }
 
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Direction</span> {}
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Directed</span>;
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Undirected</span>;
+<span class="kw">impl</span> <span class="ident">Direction</span> <span class="kw">for</span> <span class="ident">Directed</span> {}
+<span class="kw">impl</span> <span class="ident">Direction</span> <span class="kw">for</span> <span class="ident">Undirected</span> {}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">E</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="ident">edges</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">__phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">EdgeTrait</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Direction</span>, <span class="ident">E</span>: <span class="ident">EdgeTrait</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">E</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">Graph</span> {
             <span class="ident">edges</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="macro">vec</span><span class="macro">!</span>[]; <span class="ident">size</span>],
-        }
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_directed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">edges</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span>) {
-        <span class="kw">for</span> <span class="ident">e</span> <span class="kw">in</span> <span class="ident">edges</span>.<span class="ident">into_iter</span>() {
-            <span class="self">self</span>.<span class="ident">edges</span>[<span class="ident">e</span>.<span class="ident">from</span>()].<span class="ident">push</span>(<span class="ident">e</span>);
-        }
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_undirected</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">edges</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span>) {
-        <span class="kw">for</span> <span class="ident">e</span> <span class="kw">in</span> <span class="ident">edges</span>.<span class="ident">into_iter</span>() {
-            <span class="self">self</span>.<span class="ident">edges</span>[<span class="ident">e</span>.<span class="ident">from</span>()].<span class="ident">push</span>(<span class="ident">e</span>.<span class="ident">clone</span>());
-            <span class="self">self</span>.<span class="ident">edges</span>[<span class="ident">e</span>.<span class="ident">to</span>()].<span class="ident">push</span>(<span class="ident">e</span>.<span class="ident">rev</span>());
+            <span class="ident">__phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">EdgeTrait</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">Directed</span>, <span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">e</span>: <span class="ident">E</span>) {
+        <span class="self">self</span>.<span class="ident">edges</span>[<span class="ident">e</span>.<span class="ident">from</span>()].<span class="ident">push</span>(<span class="ident">e</span>);
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extend</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">edges</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span>) {
+        <span class="ident">edges</span>.<span class="ident">into_iter</span>().<span class="ident">for_each</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">add</span>(<span class="ident">e</span>));
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">EdgeTrait</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">Undirected</span>, <span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">e</span>: <span class="ident">E</span>) {
+        <span class="self">self</span>.<span class="ident">edges</span>[<span class="ident">e</span>.<span class="ident">from</span>()].<span class="ident">push</span>(<span class="ident">e</span>.<span class="ident">clone</span>());
+        <span class="self">self</span>.<span class="ident">edges</span>[<span class="ident">e</span>.<span class="ident">to</span>()].<span class="ident">push</span>(<span class="ident">e</span>.<span class="ident">rev</span>());
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extend</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">edges</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span>) {
+        <span class="ident">edges</span>.<span class="ident">into_iter</span>().<span class="ident">for_each</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">add</span>(<span class="ident">e</span>));
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">E</span><span class="op">&gt;</span> <span class="ident">Graph</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">E</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">edges</span>.<span class="ident">len</span>()
     }
