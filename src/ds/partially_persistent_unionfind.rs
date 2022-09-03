@@ -3,8 +3,6 @@
 //! - [AGC 002 D - Stamp Rally](https://atcoder.jp/contests/agc002/tasks/agc002_d)
 //! - [CODE THANKS FESTIVAL 2017 H - Union Sets](https://atcoder.jp/contests/code-thanks-festival-2017-open/tasks/code_thanks_festival_2017_h)
 
-use crate::algo::bsearch::lower_bound;
-
 pub struct PartiallyPersistentUnionFind {
     time: usize,
     p: Vec<Vec<(usize, usize)>>,
@@ -13,9 +11,9 @@ pub struct PartiallyPersistentUnionFind {
 }
 
 pub struct At<'a> {
+    time: usize,
     p: &'a Vec<Vec<(usize, usize)>>,
     par: &'a Vec<usize>,
-    time: usize,
 }
 
 impl PartiallyPersistentUnionFind {
@@ -32,9 +30,9 @@ impl PartiallyPersistentUnionFind {
     pub fn at<'a>(&'a self, t: usize) -> At<'a> {
         assert!(t <= self.time);
         At {
+            time: t,
             p: &self.p,
             par: &self.par,
-            time: t,
         }
     }
 
@@ -75,16 +73,14 @@ impl PartiallyPersistentUnionFind {
 
 impl<'a> At<'a> {
     pub fn root_of(&self, i: usize) -> usize {
-        if self.par[i] == i {
-            return i;
-        }
+        let &(t, r) = self.p[i].last().unwrap();
 
-        if self.p[i].last().unwrap().0 == 0 || self.time < self.p[i].last().unwrap().0 {
-            return i;
-        } else if self.time == self.p[i].last().unwrap().0 {
-            return self.p[i].last().unwrap().1;
+        if self.par[i] == i || t == 0 || self.time < t {
+            i
+        } else if self.time == t {
+            r
         } else {
-            return self.root_of(self.par[i]);
+            self.root_of(self.par[i])
         }
     }
 
@@ -92,10 +88,13 @@ impl<'a> At<'a> {
         self.root_of(u) == self.root_of(v)
     }
 
+    /// # Complexity
+    /// Time Complexity $(\log t)$
     pub fn size_of(&self, u: usize) -> usize {
         let u = self.root_of(u);
 
-        let i = lower_bound(&self.p[u], &(self.time + 1, 0));
-        self.p[u][i - 1].1
+        match self.p[u].binary_search(&(self.time + 1, 0)) {
+            Ok(i) | Err(i) => self.p[u][i - 1].1,
+        }
     }
 }
