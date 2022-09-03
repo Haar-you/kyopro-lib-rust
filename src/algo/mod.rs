@@ -10,6 +10,7 @@ pub mod knapsack;
 pub mod lcs;
 pub mod lis;
 pub mod manacher;
+pub mod max_partial_sum;
 pub mod max_rect;
 pub mod merge;
 pub mod mo;
