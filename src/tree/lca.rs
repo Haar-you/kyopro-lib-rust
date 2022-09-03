@@ -79,4 +79,16 @@ impl DoublingLCA {
 
         self.parent[a][0].unwrap()
     }
+
+    /// s-t最短パス上で、sから見てd番目の頂点を返す。
+    pub fn jump(&self, s: usize, t: usize, d: usize) -> Option<usize> {
+        let a = self.get_lca(s, t);
+        if self.depth[s] - self.depth[a] >= d {
+            self.ancestor(s, d)
+        } else if self.depth[s] + self.depth[t] - self.depth[a] * 2 >= d {
+            self.ancestor(t, self.depth[s] + self.depth[t] - self.depth[a] * 2 - d)
+        } else {
+            None
+        }
+    }
 }
