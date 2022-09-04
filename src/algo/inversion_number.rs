@@ -3,7 +3,7 @@
 /// 数列の転倒数を計算する。
 /// # Complexity
 /// Time complexity $O(n \log(n))$
-pub fn inversion_number<T: Clone + PartialOrd + Copy>(a: &mut [T]) -> u64 {
+pub fn inversion_number<T: PartialOrd + Copy>(a: &mut [T]) -> u64 {
     let n = a.len();
 
     if n <= 1 {
