@@ -26,7 +26,7 @@ pub struct HLD {
 }
 
 impl HLD {
-    pub fn new<T: Copy>(tree: Tree<T>, root: usize) -> Self {
+    pub fn new<E: TreeEdgeTrait>(tree: Tree<E>, root: usize) -> Self {
         let size = tree.len();
         let mut ret = Self {
             size,
@@ -39,9 +39,9 @@ impl HLD {
         };
 
         let mut tr = vec![vec![]; size];
-        for (i, edges) in tree.nodes.iter().enumerate() {
-            for &TreeEdge { to, .. } in edges.neighbors() {
-                tr[i].push(to);
+        for (i, nodes) in tree.nodes.iter().enumerate() {
+            for e in nodes.neighbors() {
+                tr[i].push(e.to());
             }
         }
 

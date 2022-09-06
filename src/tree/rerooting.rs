@@ -36,7 +36,7 @@ where
         }
     }
 
-    pub fn run(&self, tree: &Tree<Weight>) -> Vec<T> {
+    pub fn run<E: TreeEdgeTrait<Weight = Weight>>(&self, tree: &Tree<E>) -> Vec<T> {
         let size = tree.len();
 
         let mut dp = vec![vec![]; size];
@@ -45,13 +45,14 @@ where
         for (i, x) in dp.iter_mut().enumerate() {
             *x = vec![self.id.clone(); tree.nodes[i].neighbors_size()];
         }
+
         self.rec1(tree, &mut dp, 0, None);
         self.rec2(tree, &mut dp, 0, None, self.id.clone());
         for i in 0..size {
             for (j, e) in tree.nodes[i].neighbors().enumerate() {
                 ret[i] = (self.merge)(
                     ret[i].clone(),
-                    (self.up)(dp[i][j].clone(), (e.to, e.weight)),
+                    (self.up)(dp[i][j].clone(), (e.to(), e.weight())),
                 );
             }
 
@@ -61,24 +62,33 @@ where
         ret
     }
 
-    fn rec1(&self, tree: &Tree<Weight>, dp: &mut Vec<Vec<T>>, cur: usize, par: Option<usize>) -> T {
+    fn rec1<E: TreeEdgeTrait<Weight = Weight>>(
+        &self,
+        tree: &Tree<E>,
+        dp: &mut Vec<Vec<T>>,
+        cur: usize,
+        par: Option<usize>,
+    ) -> T {
         let mut acc = self.id.clone();
 
         for (i, e) in tree.nodes[cur].neighbors().enumerate() {
-            if par.map_or(false, |u| u == e.to) {
+            if par.map_or(false, |u| u == e.to()) {
                 continue;
             }
 
-            dp[cur][i] = self.rec1(tree, dp, e.to, Some(cur));
-            acc = (self.merge)(acc.clone(), (self.up)(dp[cur][i].clone(), (e.to, e.weight)));
+            dp[cur][i] = self.rec1(tree, dp, e.to(), Some(cur));
+            acc = (self.merge)(
+                acc.clone(),
+                (self.up)(dp[cur][i].clone(), (e.to(), e.weight())),
+            );
         }
 
         (self.apply)(acc, cur)
     }
 
-    fn rec2(
+    fn rec2<E: TreeEdgeTrait<Weight = Weight>>(
         &self,
-        tree: &Tree<Weight>,
+        tree: &Tree<E>,
         dp: &mut Vec<Vec<T>>,
         cur: usize,
         par: Option<usize>,
@@ -87,7 +97,7 @@ where
         let len = tree.nodes[cur].neighbors_size();
 
         for (i, e) in tree.nodes[cur].neighbors().enumerate() {
-            if par.map_or(false, |u| u == e.to) {
+            if par.map_or(false, |u| u == e.to()) {
                 dp[cur][i] = value.clone();
             }
         }
@@ -99,7 +109,7 @@ where
             for (i, e) in tree.nodes[cur].neighbors().take(len - 1).enumerate() {
                 left[i + 1] = (self.merge)(
                     left[i].clone(),
-                    (self.up)(dp[cur][i].clone(), (e.to, e.weight)),
+                    (self.up)(dp[cur][i].clone(), (e.to(), e.weight())),
                 );
             }
 
@@ -107,20 +117,20 @@ where
                 let i = len - i - 1;
                 right[i - 1] = (self.merge)(
                     right[i].clone(),
-                    (self.up)(dp[cur][i].clone(), (e.to, e.weight)),
+                    (self.up)(dp[cur][i].clone(), (e.to(), e.weight())),
                 );
             }
         }
 
         for (i, e) in tree.nodes[cur].neighbors().enumerate() {
-            if par.map_or(false, |u| u == e.to) {
+            if par.map_or(false, |u| u == e.to()) {
                 continue;
             }
 
             self.rec2(
                 tree,
                 dp,
-                e.to,
+                e.to(),
                 Some(cur),
                 (self.apply)((self.merge)(left[i].clone(), right[i].clone()), cur),
             );

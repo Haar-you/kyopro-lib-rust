@@ -1,4 +1,4 @@
-use crate::{algo::bsearch::lower_bound, tree::*};
+use crate::tree::*;
 use std::collections::VecDeque;
 
 /// Tree depth query
@@ -6,6 +6,9 @@ use std::collections::VecDeque;
 /// # References
 /// - [https://niuez.github.io/posts/entry/2019/10/05/002503/](https://niuez.github.io/posts/entry/2019/10/05/002503/)
 /// - [https://niuez.github.io/posts/dfs_bfs_et/](https://niuez.github.io/posts/dfs_bfs_et/)
+///
+/// # Problems
+/// - [yukicoder No.899 γatheree](https://yukicoder.me/problems/no/899)
 
 pub struct TreeDepthQuery {
     par: Vec<Option<usize>>,
@@ -18,7 +21,7 @@ pub struct TreeDepthQuery {
 }
 
 impl TreeDepthQuery {
-    pub fn new<T>(tree: &Tree<T>, root: usize) -> Self {
+    pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
         let size = tree.len();
         let mut ret = Self {
             par: vec![None; size],
@@ -44,9 +47,9 @@ impl TreeDepthQuery {
             ret.ord[i] = ord;
             ord += 1;
 
-            for &TreeEdge { to, .. } in tree.nodes[i].neighbors() {
-                if Some(to) != ret.par[i] {
-                    q.push_back((to, d + 1));
+            for e in tree.nodes[i].neighbors() {
+                if Some(e.to()) != ret.par[i] {
+                    q.push_back((e.to(), d + 1));
                 }
             }
         }
@@ -54,9 +57,9 @@ impl TreeDepthQuery {
         ret
     }
 
-    fn dfs<T>(
+    fn dfs<E: TreeEdgeTrait>(
         &mut self,
-        tree: &Tree<T>,
+        tree: &Tree<E>,
         cur: usize,
         par: Option<usize>,
         d: usize,
@@ -72,9 +75,9 @@ impl TreeDepthQuery {
         self.left[cur] = *ord;
         *ord += 1;
 
-        for &TreeEdge { to, .. } in tree.nodes[cur].neighbors() {
-            if Some(to) != par {
-                self.dfs(tree, to, Some(cur), d + 1, ord);
+        for e in tree.nodes[cur].neighbors() {
+            if Some(e.to()) != par {
+                self.dfs(tree, e.to(), Some(cur), d + 1, ord);
             }
         }
 
@@ -84,8 +87,12 @@ impl TreeDepthQuery {
     pub fn children_query(&self, i: usize, d: usize) -> Option<(usize, usize)> {
         let d = d + self.depth[i];
         if self.bfs_ord.len() > d {
-            let l = lower_bound(&self.dfs_ord[d], &self.left[i]);
-            let r = lower_bound(&self.dfs_ord[d], &self.right[i]);
+            let l = match self.dfs_ord[d].binary_search(&self.left[i]) {
+                Ok(x) | Err(x) => x,
+            };
+            let r = match self.dfs_ord[d].binary_search(&self.right[i]) {
+                Ok(x) | Err(x) => x,
+            };
 
             if l >= self.bfs_ord[d].len() {
                 return None;

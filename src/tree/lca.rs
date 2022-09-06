@@ -9,7 +9,7 @@ pub struct DoublingLCA {
 }
 
 impl DoublingLCA {
-    pub fn new<T>(tree: &Tree<T>, root: usize) -> Self {
+    pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
         let n = tree.len();
         let log2n = ((n as f64).log2().ceil() + 1.0) as usize;
         let mut ret = Self {
@@ -31,13 +31,13 @@ impl DoublingLCA {
         ret
     }
 
-    fn dfs<T>(&mut self, tree: &Tree<T>, cur: usize, par: Option<usize>, d: usize) {
+    fn dfs<E: TreeEdgeTrait>(&mut self, tree: &Tree<E>, cur: usize, par: Option<usize>, d: usize) {
         self.parent[cur][0] = par;
         self.depth[cur] = d;
 
-        for &TreeEdge { to, .. } in tree.nodes[cur].neighbors() {
-            if Some(to) != par {
-                self.dfs(tree, to, Some(cur), d + 1);
+        for e in tree.nodes[cur].neighbors() {
+            if Some(e.to()) != par {
+                self.dfs(tree, e.to(), Some(cur), d + 1);
             }
         }
     }
