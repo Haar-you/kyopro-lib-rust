@@ -56,7 +56,7 @@ impl SuccinctDict {
     }
 
     /// [0, index) に含まれる`b`の個数
-    pub fn rank(&self, index: usize, b: bool) -> u32 {
+    pub fn rank(&self, index: usize, b: bool) -> usize {
         if b {
             let chunk_pos = index / CHUNK_SIZE;
             let block_pos = (index % CHUNK_SIZE) / BLOCK_SIZE;
@@ -64,27 +64,29 @@ impl SuccinctDict {
             let mask =
                 self.data[chunk_pos * BLOCK_NUM + block_pos] & ((1 << (index % BLOCK_SIZE)) - 1);
 
-            self.chunks[chunk_pos] + self.blocks[chunk_pos][block_pos] as u32 + mask.count_ones()
+            self.chunks[chunk_pos] as usize
+                + self.blocks[chunk_pos][block_pos] as usize
+                + mask.count_ones() as usize
         } else {
-            index as u32 - self.rank(index, !b)
+            index - self.rank(index, !b)
         }
     }
 
     /// [l, r) に含まれる`b`の個数
-    pub fn count(&self, Range { start: l, end: r }: Range<usize>, b: bool) -> u32 {
+    pub fn count(&self, Range { start: l, end: r }: Range<usize>, b: bool) -> usize {
         assert!(l <= r);
         self.rank(r, b) - self.rank(l, b)
     }
 
-    pub fn access(&self, index: usize) -> u32 {
-        ((self.data[index / BLOCK_SIZE] >> (index % BLOCK_SIZE)) & 1) as u32
+    pub fn access(&self, index: usize) -> u64 {
+        (self.data[index / BLOCK_SIZE] >> (index % BLOCK_SIZE)) & 1
     }
 
-    /// nth(1-indexed)番目の`b`の位置
+    /// nth(0-indexed)番目の`b`の位置
     pub fn select(&self, nth: usize, b: bool) -> Option<usize> {
-        assert!(nth >= 1);
+        let nth = nth + 1;
 
-        if self.rank(self.size, b) < nth as u32 {
+        if self.rank(self.size, b) < nth {
             None
         } else {
             let mut lb: isize = -1;
@@ -92,7 +94,7 @@ impl SuccinctDict {
             while (ub - lb).abs() > 1 {
                 let mid = (lb + ub) / 2;
 
-                if self.rank(mid as usize, b) >= nth as u32 {
+                if self.rank(mid as usize, b) >= nth {
                     ub = mid;
                 } else {
                     lb = mid;
@@ -119,10 +121,10 @@ mod tests {
 
         for i in 0..=n {
             let t = (0..i).filter(|&i| b[i]).count();
-            assert_eq!(s.rank(i, true), t as u32);
+            assert_eq!(s.rank(i, true), t);
 
             let t = (0..i).filter(|&i| !b[i]).count();
-            assert_eq!(s.rank(i, false), t as u32);
+            assert_eq!(s.rank(i, false), t);
         }
     }
 
@@ -137,10 +139,10 @@ mod tests {
         for l in 0..=n {
             for r in l..=n {
                 let t = (l..r).filter(|&i| b[i]).count();
-                assert_eq!(s.count(l..r, true), t as u32);
+                assert_eq!(s.count(l..r, true), t);
 
                 let t = (l..r).filter(|&i| !b[i]).count();
-                assert_eq!(s.count(l..r, false), t as u32);
+                assert_eq!(s.count(l..r, false), t);
             }
         }
     }
@@ -154,10 +156,10 @@ mod tests {
         let s = SuccinctDict::new(b.clone());
 
         for i in 1..=n {
-            let t = (0..n).filter(|&i| b[i]).nth(i - 1);
+            let t = (0..n).filter(|&i| b[i]).nth(i);
             assert_eq!(s.select(i, true), t);
 
-            let t = (0..n).filter(|&i| !b[i]).nth(i - 1);
+            let t = (0..n).filter(|&i| !b[i]).nth(i);
             assert_eq!(s.select(i, false), t);
         }
     }
