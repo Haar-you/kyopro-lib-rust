@@ -11,26 +11,66 @@ pub mod rooting;
 pub mod tree_dp;
 pub mod utils;
 
+pub trait TreeEdgeTrait {
+    type Weight;
+    fn from(&self) -> usize;
+    fn to(&self) -> usize;
+    fn weight(&self) -> Self::Weight;
+    fn rev(self) -> Self;
+}
+
 #[derive(Clone, Debug)]
-pub struct TreeEdge<T> {
+pub struct TreeEdge<T, I> {
+    pub from: usize,
     pub to: usize,
     pub weight: T,
+    pub index: I,
+}
+
+impl<T, I> TreeEdge<T, I> {
+    pub fn new(from: usize, to: usize, weight: T, index: I) -> Self {
+        Self {
+            from,
+            to,
+            weight,
+            index,
+        }
+    }
+}
+
+impl<T: Clone, I> TreeEdgeTrait for TreeEdge<T, I> {
+    type Weight = T;
+    #[inline]
+    fn from(&self) -> usize {
+        self.from
+    }
+    #[inline]
+    fn to(&self) -> usize {
+        self.to
+    }
+    #[inline]
+    fn weight(&self) -> Self::Weight {
+        self.weight.clone()
+    }
+    fn rev(mut self) -> Self {
+        std::mem::swap(&mut self.from, &mut self.to);
+        self
+    }
 }
 
 #[derive(Clone, Debug)]
-pub struct TreeNode<T> {
-    pub index: usize,
-    pub parent: Option<TreeEdge<T>>,
-    pub children: Vec<TreeEdge<T>>,
+pub struct TreeNode<E> {
+    pub parent: Option<E>,
+    pub children: Vec<E>,
 }
 
 #[derive(Clone, Debug)]
-pub struct Tree<T> {
-    pub nodes: Vec<TreeNode<T>>,
+pub struct Tree<E> {
+    pub nodes: Vec<TreeNode<E>>,
 }
 
-impl<T> TreeNode<T> {
-    pub fn neighbors(&self) -> impl DoubleEndedIterator<Item = &TreeEdge<T>> {
+impl<E: TreeEdgeTrait> TreeNode<E> {
+    pub fn neighbors(&self) -> impl DoubleEndedIterator<Item = &E> {
         self.children.iter().chain(self.parent.iter())
     }
 
@@ -39,36 +79,36 @@ impl<T> TreeNode<T> {
     }
 }
 
-impl<T: Copy> Tree<T> {
+impl<E: TreeEdgeTrait + Clone> Tree<E> {
     pub fn new(size: usize) -> Self {
         Self {
-            nodes: (0..size)
-                .map(|i| TreeNode {
-                    index: i,
+            nodes: vec![
+                TreeNode {
                     parent: None,
                     children: vec![],
-                })
-                .collect(),
+                };
+                size
+            ],
         }
     }
 
-    pub fn add_undirected(&mut self, edges: impl IntoIterator<Item = (usize, usize, T)>) {
-        for (u, v, w) in edges {
-            self.nodes[u].children.push(TreeEdge { to: v, weight: w });
-            self.nodes[v].children.push(TreeEdge { to: u, weight: w });
+    pub fn extend(&mut self, edges: impl IntoIterator<Item = E>) {
+        for e in edges {
+            self.nodes[e.from()].children.push(e.clone());
+            self.nodes[e.to()].children.push(e.rev());
         }
     }
 
-    pub fn add_directed(&mut self, edges: impl IntoIterator<Item = (usize, usize, T)>) {
-        for (p, c, w) in edges {
-            assert!(self.nodes[c].parent.is_none());
-            self.nodes[p].children.push(TreeEdge { to: c, weight: w });
-            self.nodes[c].parent = Some(TreeEdge { to: p, weight: w });
+    pub fn extend_rooted(&mut self, edges: impl IntoIterator<Item = E>) {
+        for e in edges {
+            assert!(self.nodes[e.to()].parent.is_none());
+            self.nodes[e.from()].children.push(e.clone());
+            self.nodes[e.to()].parent.replace(e.rev());
         }
     }
 }
 
-impl<T> Tree<T> {
+impl<E> Tree<E> {
     pub fn len(&self) -> usize {
         self.nodes.len()
     }

@@ -6,7 +6,7 @@ pub struct EulerTour {
 }
 
 impl EulerTour {
-    pub fn new<T>(tree: &Tree<T>, root: usize) -> Self {
+    pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
         let n = tree.len();
         let mut ret = Self {
             begin: vec![0; n],
@@ -16,13 +16,19 @@ impl EulerTour {
         ret
     }
 
-    fn dfs<T>(&mut self, tree: &Tree<T>, cur: usize, par: Option<usize>, pos: &mut usize) {
+    fn dfs<E: TreeEdgeTrait>(
+        &mut self,
+        tree: &Tree<E>,
+        cur: usize,
+        par: Option<usize>,
+        pos: &mut usize,
+    ) {
         self.begin[cur] = *pos;
         *pos += 1;
 
-        for &TreeEdge { to, .. } in tree.nodes[cur].neighbors() {
-            if Some(to) != par {
-                self.dfs(tree, to, Some(cur), pos);
+        for e in tree.nodes[cur].neighbors() {
+            if Some(e.to()) != par {
+                self.dfs(tree, e.to(), Some(cur), pos);
             }
         }
 

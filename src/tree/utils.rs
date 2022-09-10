@@ -4,7 +4,7 @@ use std::ops::Add;
 /// rootを根としたときの根から各頂点への距離を列挙する。
 /// # Complexity
 /// Time complexity $O(n)$
-pub fn tree_distance<T>(tr: &Tree<T>, root: usize) -> Vec<T>
+pub fn tree_distance<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>, root: usize) -> Vec<T>
 where
     T: Add<Output = T> + Copy + Default,
 {
@@ -16,10 +16,10 @@ where
     while let Some(cur) = stack.pop() {
         check[cur] = true;
 
-        for &TreeEdge { to, weight } in tr.nodes[cur].neighbors() {
-            if !check[to] {
-                ret[to] = ret[cur] + weight;
-                stack.push(to);
+        for e in tr.nodes[cur].neighbors() {
+            if !check[e.to()] {
+                ret[e.to()] = ret[cur] + e.weight();
+                stack.push(e.to());
             }
         }
     }
@@ -30,7 +30,7 @@ where
 /// 木の任意の2頂点の距離の最大値を求める。
 /// # Complexity
 /// Time complexity $O(n)$
-pub fn tree_diameter<T>(tr: &Tree<T>) -> (T, usize, usize)
+pub fn tree_diameter<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>) -> (T, usize, usize)
 where
     T: Add<Output = T> + Copy + Default + Ord,
 {
@@ -54,7 +54,7 @@ where
 /// 木の各頂点について、そこからの距離の最大値を列挙する。
 /// # Complexity
 /// Time complexity $O(n)$
-pub fn tree_height<T>(tr: &Tree<T>) -> Vec<(T, usize)>
+pub fn tree_height<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>) -> Vec<(T, usize)>
 where
     T: Add<Output = T> + Copy + Default + Ord,
 {
@@ -81,7 +81,7 @@ where
 /// 木上の2頂点を結ぶパス上の頂点列を求める。
 /// # Complexity
 /// Time complexity $O(n)$
-pub fn tree_path<T>(tr: &Tree<T>, u: usize, v: usize) -> Vec<usize> {
+pub fn tree_path<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>, u: usize, v: usize) -> Vec<usize> {
     let n = tr.len();
     let mut ret = vec![];
     let mut stack = vec![];
@@ -102,9 +102,9 @@ pub fn tree_path<T>(tr: &Tree<T>, u: usize, v: usize) -> Vec<usize> {
 
             check[i] = true;
 
-            for &TreeEdge { to, .. } in tr.nodes[i].neighbors() {
-                if !check[to] {
-                    stack.push((to, 0));
+            for e in tr.nodes[i].neighbors() {
+                if !check[e.to()] {
+                    stack.push((e.to(), 0));
                 }
             }
         }
@@ -121,16 +121,28 @@ mod tests {
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_A
         let mut tree = Tree::new(4);
-        tree.add_undirected(vec![(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
+        tree.extend(
+            vec![(0, 1, 2), (1, 2, 1), (1, 3, 3)]
+                .into_iter()
+                .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
+        );
         assert_eq!(tree_diameter(&tree).0, 5);
 
         let mut tree = Tree::new(4);
-        tree.add_undirected(vec![(0, 1, 1), (1, 2, 2), (2, 3, 4)]);
+        tree.extend(
+            vec![(0, 1, 1), (1, 2, 2), (2, 3, 4)]
+                .into_iter()
+                .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
+        );
         assert_eq!(tree_diameter(&tree).0, 7);
 
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_B
         let mut tree = Tree::new(4);
-        tree.add_undirected(vec![(0, 1, 2), (1, 2, 1), (1, 3, 3)]);
+        tree.extend(
+            vec![(0, 1, 2), (1, 2, 1), (1, 3, 3)]
+                .into_iter()
+                .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
+        );
         assert_eq!(
             tree_height(&tree)
                 .into_iter()

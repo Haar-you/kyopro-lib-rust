@@ -2,7 +2,7 @@ use crate::tree::*;
 use std::collections::{hash_map::DefaultHasher, HashMap};
 use std::hash::{Hash, Hasher};
 
-pub fn rooted_isomorphism<T>(tree: &Tree<T>, root: usize) -> (usize, Vec<usize>) {
+pub fn rooted_isomorphism<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> (usize, Vec<usize>) {
     let n = tree.len();
     let mut ret = vec![0; n];
     let mut map = HashMap::new();
@@ -15,9 +15,9 @@ pub fn rooted_isomorphism<T>(tree: &Tree<T>, root: usize) -> (usize, Vec<usize>)
         if back {
             let mut children = vec![];
 
-            for &TreeEdge { to, .. } in tree.nodes[cur].neighbors() {
-                if Some(to) != par {
-                    children.push(ret[to]);
+            for e in tree.nodes[cur].neighbors() {
+                if Some(e.to()) != par {
+                    children.push(ret[e.to()]);
                 }
             }
 
@@ -31,9 +31,9 @@ pub fn rooted_isomorphism<T>(tree: &Tree<T>, root: usize) -> (usize, Vec<usize>)
             ret[cur] = *map.entry(h).or_insert(k);
         } else {
             stack.push((true, cur, par));
-            for &TreeEdge { to, .. } in tree.nodes[cur].neighbors() {
-                if Some(to) != par {
-                    stack.push((false, to, Some(cur)));
+            for e in tree.nodes[cur].neighbors() {
+                if Some(e.to()) != par {
+                    stack.push((false, e.to(), Some(cur)));
                 }
             }
         }

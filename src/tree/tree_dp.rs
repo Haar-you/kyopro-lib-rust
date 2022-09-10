@@ -28,20 +28,30 @@ where
         }
     }
 
-    pub fn run(&self, tree: &Tree<Weight>, root: usize) -> Vec<T> {
+    pub fn run<E: TreeEdgeTrait<Weight = Weight>>(&self, tree: &Tree<E>, root: usize) -> Vec<T> {
         let size = tree.len();
         let mut ret = vec![self.id.clone(); size];
 
-        self.internal(tree, root, &mut ret);
+        self.internal(tree, root, None, &mut ret);
 
         ret
     }
 
-    fn internal(&self, tree: &Tree<Weight>, cur: usize, ret: &mut Vec<T>) {
-        for &TreeEdge { to, weight } in &tree.nodes[cur].children {
-            self.internal(tree, to, ret);
+    fn internal<E: TreeEdgeTrait<Weight = Weight>>(
+        &self,
+        tree: &Tree<E>,
+        cur: usize,
+        par: Option<usize>,
+        ret: &mut Vec<T>,
+    ) {
+        for e in tree.nodes[cur].neighbors() {
+            if Some(e.to()) == par {
+                continue;
+            }
 
-            let temp = (self.up)(ret[to].clone(), (to, weight));
+            self.internal(tree, e.to(), Some(cur), ret);
+
+            let temp = (self.up)(ret[e.to()].clone(), (e.to(), e.weight()));
             ret[cur] = (self.merge)(ret[cur].clone(), temp);
         }
         ret[cur] = (self.apply)(ret[cur].clone(), cur);

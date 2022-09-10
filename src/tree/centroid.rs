@@ -2,7 +2,7 @@
 
 use crate::tree::*;
 
-pub fn centroids<T>(tree: &Tree<T>) -> Vec<usize> {
+pub fn centroids<E: TreeEdgeTrait>(tree: &Tree<E>) -> Vec<usize> {
     let n = tree.len();
     let mut sub = vec![0; n];
     let mut ret = vec![];
@@ -10,8 +10,8 @@ pub fn centroids<T>(tree: &Tree<T>) -> Vec<usize> {
     ret
 }
 
-fn dfs<T>(
-    tree: &Tree<T>,
+fn dfs<E: TreeEdgeTrait>(
+    tree: &Tree<E>,
     sub: &mut [usize],
     ret: &mut Vec<usize>,
     size: usize,
@@ -22,17 +22,17 @@ fn dfs<T>(
 
     let mut check = true;
 
-    for &TreeEdge { to, .. } in tree.nodes[cur].neighbors() {
-        if Some(to) == par {
+    for e in tree.nodes[cur].neighbors() {
+        if Some(e.to()) == par {
             continue;
         }
 
-        dfs(tree, sub, ret, size, to, Some(cur));
+        dfs(tree, sub, ret, size, e.to(), Some(cur));
 
-        if sub[to] > size / 2 {
+        if sub[e.to()] > size / 2 {
             check = false;
         }
-        sub[cur] += sub[to];
+        sub[cur] += sub[e.to()];
     }
 
     if size - sub[cur] > size / 2 {
@@ -51,11 +51,19 @@ mod tests {
     #[test]
     fn test() {
         let mut tree = Tree::new(3);
-        tree.add_undirected(vec![(0, 1, ()), (1, 2, ())]);
+        tree.extend(
+            vec![(0, 1), (1, 2)]
+                .into_iter()
+                .map(|(u, v)| TreeEdge::new(u, v, (), ())),
+        );
         assert_eq!(centroids(&tree), vec![1]);
 
         let mut tree = Tree::new(4);
-        tree.add_undirected(vec![(0, 1, ()), (1, 2, ()), (2, 3, ())]);
+        tree.extend(
+            vec![(0, 1), (1, 2), (2, 3)]
+                .into_iter()
+                .map(|(u, v)| TreeEdge::new(u, v, (), ())),
+        );
         let mut ans = centroids(&tree);
         ans.sort();
         assert_eq!(ans, vec![1, 2]);

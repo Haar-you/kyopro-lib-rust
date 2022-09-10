@@ -3,7 +3,7 @@
 use crate::tree::*;
 use std::mem::swap;
 
-pub fn rooting<T>(tr: &mut Tree<T>, root: usize) -> Result<(), &str> {
+pub fn rooting<E: TreeEdgeTrait>(tr: &mut Tree<E>, root: usize) -> Result<(), &str> {
     let n = tr.len();
     let mut stack = vec![(root, -1)];
     let mut check = vec![false; n];
@@ -20,7 +20,7 @@ pub fn rooting<T>(tr: &mut Tree<T>, root: usize) -> Result<(), &str> {
             }
         } else if let Some(mut p) = tr.nodes[cur].parent.take() {
             for mut e in tr.nodes[cur].children.iter_mut() {
-                if e.to == par as usize {
+                if e.to() == par as usize {
                     swap(&mut p, &mut e);
                     tr.nodes[cur].parent = Some(p);
                     break;
@@ -28,7 +28,7 @@ pub fn rooting<T>(tr: &mut Tree<T>, root: usize) -> Result<(), &str> {
             }
         } else {
             for (i, e) in tr.nodes[cur].children.iter().enumerate() {
-                if e.to == par as usize {
+                if e.to() == par as usize {
                     let x = tr.nodes[cur].children.swap_remove(i);
                     tr.nodes[cur].parent = Some(x);
                     break;
@@ -36,8 +36,8 @@ pub fn rooting<T>(tr: &mut Tree<T>, root: usize) -> Result<(), &str> {
             }
         }
 
-        for &TreeEdge { to, .. } in &tr.nodes[cur].children {
-            stack.push((to, cur as isize));
+        for e in &tr.nodes[cur].children {
+            stack.push((e.to(), cur as isize));
         }
     }
 
@@ -51,13 +51,11 @@ mod tests {
     #[test]
     fn test() {
         let mut tr = Tree::new(6);
-        tr.add_undirected(vec![
-            (0, 1, ()),
-            (1, 2, ()),
-            (2, 3, ()),
-            (2, 4, ()),
-            (5, 1, ()),
-        ]);
+        tr.extend(
+            vec![(0, 1), (1, 2), (2, 3), (2, 4), (5, 1)]
+                .into_iter()
+                .map(|(u, v)| TreeEdge::new(u, v, (), ())),
+        );
 
         assert_eq!(rooting(&mut tr, 0), Ok(()));
 
@@ -70,13 +68,11 @@ mod tests {
         );
 
         let mut tr = Tree::new(6);
-        tr.add_undirected(vec![
-            (0, 1, ()),
-            (1, 2, ()),
-            (2, 3, ()),
-            (2, 1, ()),
-            (5, 1, ()),
-        ]);
+        tr.extend(
+            vec![(0, 1), (1, 2), (2, 3), (2, 1), (5, 1)]
+                .into_iter()
+                .map(|(u, v)| TreeEdge::new(u, v, (), ())),
+        );
 
         assert!(rooting(&mut tr, 0).is_err());
     }
