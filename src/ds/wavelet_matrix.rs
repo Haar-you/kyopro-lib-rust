@@ -3,6 +3,7 @@ use std::ops::{Bound, RangeBounds};
 
 const BIT_SIZE: usize = 64;
 
+#[derive(Clone)]
 pub struct WaveletMatrix {
     size: usize,
     sdict: Vec<SuccinctDict>,
@@ -121,11 +122,94 @@ impl WaveletMatrix {
             Some(p)
         }
     }
+
+    /// `range`でk(0-indexed)番目に小さい値。
+    pub fn quantile(&self, range: impl RangeBounds<usize>, nth: usize) -> Option<u64> {
+        let (mut l, mut r) = self.get_half_open_range(range);
+        if nth >= r - l {
+            return None;
+        }
+
+        let mut nth = nth + 1;
+        let mut ret = 0;
+
+        for i in 0..BIT_SIZE {
+            let count_1 = self.sdict[i].count(l..r, true);
+            let count_0 = r - l - count_1;
+
+            let mut t = 0;
+
+            if nth > count_0 {
+                t = 1;
+                ret |= t << (BIT_SIZE - i - 1);
+                nth -= count_0;
+            }
+
+            l = self.sdict[i].rank(l, t == 1) + t as usize * self.zero_pos[i];
+            r = self.sdict[i].rank(r, t == 1) + t as usize * self.zero_pos[i];
+        }
+
+        Some(ret)
+    }
+
+    /// `range`での最大値
+    pub fn maximum(&self, range: impl RangeBounds<usize>) -> Option<u64> {
+        let (l, r) = self.get_half_open_range(range);
+        if r > l {
+            self.quantile(l..r, r - l - 1)
+        } else {
+            None
+        }
+    }
+
+    /// `range`での最小値
+    pub fn minimum(&self, range: impl RangeBounds<usize>) -> Option<u64> {
+        self.quantile(range, 0)
+    }
+
+    fn range_freq_lt(&self, range: impl RangeBounds<usize>, ub: u64) -> usize {
+        let (mut l, mut r) = self.get_half_open_range(range);
+        let mut ret = 0;
+        for i in 0..BIT_SIZE {
+            let t = (ub >> (BIT_SIZE - i - 1)) & 1;
+            if t == 1 {
+                ret += self.sdict[i].count(l..r, false);
+            }
+            l = self.sdict[i].rank(l, t == 1) + t as usize * self.zero_pos[i];
+            r = self.sdict[i].rank(r, t == 1) + t as usize * self.zero_pos[i];
+        }
+        ret
+    }
+
+    /// `range`で`lb`以上の最小値
+    pub fn next_value(&self, range: impl RangeBounds<usize> + Clone, lb: u64) -> Option<u64> {
+        let c = self.range_freq_lt(range.clone(), lb);
+        self.quantile(range, c)
+    }
+
+    /// `range`で`ub`未満の最大値
+    pub fn prev_value(&self, range: impl RangeBounds<usize> + Clone, ub: u64) -> Option<u64> {
+        let c = self.range_freq_lt(range.clone(), ub);
+        if c == 0 {
+            None
+        } else {
+            self.quantile(range, c - 1)
+        }
+    }
+
+    /// `range`で`lb`以上`ub`未満の値の個数
+    pub fn range_freq(&self, range: impl RangeBounds<usize> + Clone, lb: u64, ub: u64) -> usize {
+        if lb >= ub {
+            return 0;
+        }
+        self.range_freq_lt(range.clone(), ub) - self.range_freq_lt(range, lb)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::algo::bsearch::{lower_bound, upper_bound};
     use crate::testtools::*;
     use rand::Rng;
 
@@ -213,6 +297,98 @@ mod tests {
                     .map(|i| wm.select(i, x).unwrap())
                     .collect::<Vec<_>>(),
                 (0..n).filter(|&i| b[i] == x).collect::<Vec<_>>()
+            );
+        }
+    }
+
+    #[test]
+    fn test_quantile() {
+        let mut rng = rand::thread_rng();
+
+        let m = 50;
+        let table = (0..m).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+
+        let n = 300;
+        let b = (0..n)
+            .map(|_| table[rng.gen::<usize>() % m])
+            .collect::<Vec<_>>();
+
+        let wm = WaveletMatrix::new(b.clone());
+
+        for _ in 0..300 {
+            let lr = rand_range(&mut rng, 0..n);
+
+            let mut a = b[lr.clone()].to_vec();
+            a.sort();
+
+            assert_eq!(
+                (0..lr.end - lr.start)
+                    .map(|i| wm.quantile(lr.clone(), i).unwrap())
+                    .collect::<Vec<_>>(),
+                a
+            );
+
+            assert_eq!(wm.maximum(lr.clone()), a.last().copied());
+            assert_eq!(wm.minimum(lr.clone()), a.first().copied());
+        }
+    }
+
+    #[test]
+    fn test_prev_next_value() {
+        let mut rng = rand::thread_rng();
+
+        let m = 50;
+        let table = (0..m).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+
+        let n = 300;
+        let b = (0..n)
+            .map(|_| table[rng.gen::<usize>() % m])
+            .collect::<Vec<_>>();
+
+        let wm = WaveletMatrix::new(b.clone());
+
+        for _ in 0..1000 {
+            let lr = rand_range(&mut rng, 0..n);
+
+            let mut a = b[lr.clone()].to_vec();
+            a.sort();
+
+            let x = rng.gen::<u64>();
+            let i = lower_bound(&a, &x);
+
+            assert_eq!(wm.next_value(lr.clone(), x), a.get(i).copied());
+
+            let i = lower_bound(&a, &x);
+
+            assert_eq!(
+                wm.prev_value(lr, x),
+                if i == 0 { None } else { a.get(i - 1).copied() }
+            );
+        }
+    }
+
+    #[test]
+    fn test_range_freq() {
+        let mut rng = rand::thread_rng();
+
+        let m = 50;
+        let table = (0..m).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+
+        let n = 300;
+        let b = (0..n)
+            .map(|_| table[rng.gen::<usize>() % m])
+            .collect::<Vec<_>>();
+
+        let wm = WaveletMatrix::new(b.clone());
+
+        for _ in 0..1000 {
+            let lr = rand_range(&mut rng, 0..n);
+            let lb = rng.gen::<u64>();
+            let ub = rng.gen::<u64>();
+
+            assert_eq!(
+                wm.range_freq(lr.clone(), lb, ub),
+                b[lr].iter().filter(|&&x| lb <= x && x < ub).count()
             );
         }
     }
