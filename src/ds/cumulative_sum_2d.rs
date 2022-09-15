@@ -73,9 +73,9 @@ where
                 data[i][j] = self.group.op(data[i][j], data[i - 1][j]);
             }
         }
-        for i in 0..=self.n {
+        for data in data.iter_mut().take(self.n + 1) {
             for j in 1..=self.m {
-                data[i][j] = self.group.op(data[i][j], data[i][j - 1]);
+                data[j] = self.group.op(data[j], data[j - 1]);
             }
         }
 

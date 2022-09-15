@@ -11,7 +11,7 @@ pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<Undirected, E
         }
     }
 
-    edges.sort_by(|a, b| a.weight().cmp(&b.weight()));
+    edges.sort_by_key(|a| a.weight());
 
     let mut uf = UnionFind::new(n);
     let mut ret = vec![];

@@ -1,11 +1,13 @@
 use crate::algo::bsearch::lower_bound;
 use std::ops::{Range, RangeTo};
 
+#[derive(Clone, Default)]
 pub struct FenwickOnFenwickBuilder {
     xs: Vec<i64>,
     ys: Vec<i64>,
 }
 
+#[derive(Clone)]
 pub struct FenwickOnFenwick<T> {
     c_xs: Vec<i64>,
     c_ys: Vec<Vec<i64>>,
@@ -30,7 +32,7 @@ impl FenwickOnFenwickBuilder {
     pub fn build<T: Copy>(self, zero: T) -> FenwickOnFenwick<T> {
         let n = self.xs.len();
         let mut c_xs = self.xs.clone();
-        c_xs.sort();
+        c_xs.sort_unstable();
         c_xs.dedup();
 
         let x_size = c_xs.len();
@@ -51,9 +53,9 @@ impl FenwickOnFenwickBuilder {
 
         let mut segs = vec![vec![]];
 
-        for i in 1..=x_size {
-            c_ys[i].dedup();
-            segs.push(vec![zero; c_ys[i].len() + 1]);
+        for ys in c_ys.iter_mut().take(x_size + 1).skip(1) {
+            ys.dedup();
+            segs.push(vec![zero; ys.len() + 1]);
         }
 
         FenwickOnFenwick {

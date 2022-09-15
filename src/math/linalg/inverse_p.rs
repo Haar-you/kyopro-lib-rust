@@ -36,7 +36,7 @@ pub fn inverse_p(mut b: Vec<Vec<u64>>, p: u64) -> Option<Vec<Vec<u64>>> {
                 if *x >= t {
                     *x -= t;
                 } else {
-                    *x = p - t + *x;
+                    *x += p - t;
                 }
             }
         }

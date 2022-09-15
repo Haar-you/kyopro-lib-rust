@@ -41,13 +41,11 @@ impl Node {
                 .erase(value, depth);
             ret.iter().for_each(|_| self.size -= 1);
             ret
+        } else if self.size > 0 {
+            self.size -= 1;
+            Some(self.size)
         } else {
-            if self.size > 0 {
-                self.size -= 1;
-                Some(self.size)
-            } else {
-                None
-            }
+            None
         }
     }
 
@@ -138,11 +136,11 @@ impl BinaryTrie {
         self.root.as_ref().map(|t| t.max(x, Self::bitlen()))
     }
 
-    pub fn lower_bound(&mut self, x: u64) -> usize {
+    pub fn lower_bound(&mut self, _x: u64) -> usize {
         todo!();
     }
 
-    pub fn upper_bound(&mut self, x: u64) -> usize {
+    pub fn upper_bound(&mut self, _x: u64) -> usize {
         todo!();
     }
 

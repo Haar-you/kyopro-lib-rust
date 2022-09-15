@@ -26,7 +26,7 @@ impl Lowlink {
         let mut index = 0;
         let mut check = vec![false; n];
         for i in 0..n {
-            ret.dfs(&g, i, None, &mut index, &mut check);
+            ret.dfs(g, i, None, &mut index, &mut check);
         }
 
         ret

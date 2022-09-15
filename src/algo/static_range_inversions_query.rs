@@ -12,7 +12,7 @@ impl StaticRangeInversionsQuery {
         a.sort();
         a.dedup();
 
-        let data = data.into_iter().map(|x| lower_bound(&a, x)).collect();
+        let data = data.iter().map(|x| lower_bound(&a, x)).collect();
         Self { data, qs: vec![] }
     }
 

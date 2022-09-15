@@ -108,15 +108,19 @@ where
     }
 
     pub fn front(&self) -> Option<&T> {
-        self.front_stack.last().or(self.back_stack.first())
+        self.front_stack.last().or_else(|| self.back_stack.first())
     }
 
     pub fn back(&self) -> Option<&T> {
-        self.back_stack.last().or(self.front_stack.first())
+        self.back_stack.last().or_else(|| self.front_stack.first())
     }
 
     pub fn len(&self) -> usize {
         self.front_stack.len() + self.back_stack.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.front_stack.is_empty() && self.back_stack.is_empty()
     }
 }
 

@@ -6,7 +6,7 @@ pub fn count_coprime(n: u64, m: u64) -> u64 {
 
     let mut ret = 0;
 
-    for i in 0..(1 as usize) << k {
+    for i in 0..1_usize << k {
         let mut s = 1;
 
         for (j, (p, _)) in ps.iter().enumerate() {
