@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["centroid","重心列挙"],["depth_query",""],["euler_tour",""],["hld","重軽分解"],["lca","最小共通祖先"],["rerooting","全方位木DP"],["rooted_isomorphism",""],["rooting","根付き木に変換"],["tree_dp","木DP"],["utils",""]],"struct":[["Tree",""],["TreeEdge",""],["TreeNode",""]]});
+initSidebarItems({"mod":[["centroid","重心列挙"],["depth_query",""],["euler_tour",""],["hld","重軽分解"],["lca","最小共通祖先"],["rerooting","全方位木DP"],["rooted_isomorphism",""],["rooting","根付き木に変換"],["tree_dp","木DP"],["utils",""]],"struct":[["Tree",""],["TreeEdge",""],["TreeNode",""]],"trait":[["TreeEdgeTrait",""]]});

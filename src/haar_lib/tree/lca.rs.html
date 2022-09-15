@@ -104,7 +104,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">DoublingLCA</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">tree</span>: <span class="kw-2">&amp;</span><span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">root</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">TreeEdgeTrait</span><span class="op">&gt;</span>(<span class="ident">tree</span>: <span class="kw-2">&amp;</span><span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>, <span class="ident">root</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">tree</span>.<span class="ident">len</span>();
         <span class="kw">let</span> <span class="ident">log2n</span> <span class="op">=</span> ((<span class="ident">n</span> <span class="kw">as</span> <span class="ident">f64</span>).<span class="ident">log2</span>().<span class="ident">ceil</span>() <span class="op">+</span> <span class="number">1.0</span>) <span class="kw">as</span> <span class="ident">usize</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="self">Self</span> {
@@ -126,13 +126,13 @@
         <span class="ident">ret</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">dfs</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">tree</span>: <span class="kw-2">&amp;</span><span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">cur</span>: <span class="ident">usize</span>, <span class="ident">par</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">d</span>: <span class="ident">usize</span>) {
+    <span class="kw">fn</span> <span class="ident">dfs</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">TreeEdgeTrait</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">tree</span>: <span class="kw-2">&amp;</span><span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>, <span class="ident">cur</span>: <span class="ident">usize</span>, <span class="ident">par</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">d</span>: <span class="ident">usize</span>) {
         <span class="self">self</span>.<span class="ident">parent</span>[<span class="ident">cur</span>][<span class="number">0</span>] <span class="op">=</span> <span class="ident">par</span>;
         <span class="self">self</span>.<span class="ident">depth</span>[<span class="ident">cur</span>] <span class="op">=</span> <span class="ident">d</span>;
 
-        <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">TreeEdge</span> { <span class="ident">to</span>, .. } <span class="kw">in</span> <span class="ident">tree</span>.<span class="ident">nodes</span>[<span class="ident">cur</span>].<span class="ident">neighbors</span>() {
-            <span class="kw">if</span> <span class="prelude-val">Some</span>(<span class="ident">to</span>) <span class="op">!</span><span class="op">=</span> <span class="ident">par</span> {
-                <span class="self">self</span>.<span class="ident">dfs</span>(<span class="ident">tree</span>, <span class="ident">to</span>, <span class="prelude-val">Some</span>(<span class="ident">cur</span>), <span class="ident">d</span> <span class="op">+</span> <span class="number">1</span>);
+        <span class="kw">for</span> <span class="ident">e</span> <span class="kw">in</span> <span class="ident">tree</span>.<span class="ident">nodes</span>[<span class="ident">cur</span>].<span class="ident">neighbors</span>() {
+            <span class="kw">if</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">to</span>()) <span class="op">!</span><span class="op">=</span> <span class="ident">par</span> {
+                <span class="self">self</span>.<span class="ident">dfs</span>(<span class="ident">tree</span>, <span class="ident">e</span>.<span class="ident">to</span>(), <span class="prelude-val">Some</span>(<span class="ident">cur</span>), <span class="ident">d</span> <span class="op">+</span> <span class="number">1</span>);
             }
         }
     }
