@@ -42,3 +42,4 @@ pub mod li_chao;
 pub mod binary_trie;
 
 pub mod succinct_dict;
+pub mod wavelet_matrix;
