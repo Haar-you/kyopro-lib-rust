@@ -209,7 +209,7 @@ impl WaveletMatrix {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::algo::bsearch::{lower_bound, upper_bound};
+    use crate::algo::bsearch::lower_bound;
     use crate::testtools::*;
     use rand::Rng;
 

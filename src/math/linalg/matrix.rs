@@ -160,11 +160,3 @@ impl<T> Index<usize> for Matrix<T> {
         &self.data[i]
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test() {}
-}
