@@ -6,7 +6,7 @@ pub fn centroids<E: TreeEdgeTrait>(tree: &Tree<E>) -> Vec<usize> {
     let n = tree.len();
     let mut sub = vec![0; n];
     let mut ret = vec![];
-    dfs(&tree, &mut sub, &mut ret, n, 0, None);
+    dfs(tree, &mut sub, &mut ret, n, 0, None);
     ret
 }
 
