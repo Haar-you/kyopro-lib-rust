@@ -17,13 +17,3 @@ where
 
     Range { start, end }
 }
-
-pub trait RangeIsEmpty {
-    fn is_empty(&self) -> bool;
-}
-
-impl<T: PartialOrd> RangeIsEmpty for Range<T> {
-    fn is_empty(&self) -> bool {
-        !(self.start < self.end)
-    }
-}
