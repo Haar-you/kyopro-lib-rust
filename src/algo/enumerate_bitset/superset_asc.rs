@@ -3,11 +3,7 @@ use std::iter::successors;
 pub fn super_asc(a: u32, n: u32) -> impl Iterator<Item = u32> {
     successors(Some(a), move |&t| {
         let t = (t + 1) | a;
-        if t >= 1 << n {
-            None
-        } else {
-            Some(t)
-        }
+        (t < 1 << n).then(|| t)
     })
 }
 

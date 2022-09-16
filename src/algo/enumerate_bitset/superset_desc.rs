@@ -4,17 +4,7 @@ pub fn superset_desc(a: u32, n: u32) -> impl Iterator<Item = u32> {
     let x = (1 << n) - 1;
     let y = x ^ (a & x);
 
-    successors(
-        Some(y),
-        move |&t| {
-            if t == 0 {
-                None
-            } else {
-                Some((t - 1) & y)
-            }
-        },
-    )
-    .map(move |t| t | a)
+    successors(Some(y), move |&t| (t != 0).then(|| (t - 1) & y)).map(move |t| t | a)
 }
 
 #[cfg(test)]

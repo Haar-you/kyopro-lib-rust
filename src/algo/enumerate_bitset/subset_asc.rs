@@ -2,11 +2,7 @@ use std::iter::successors;
 
 pub fn subset_asc(a: u32) -> impl Iterator<Item = u32> {
     successors(Some(0), move |&t| {
-        if t == a {
-            None
-        } else {
-            Some(((t as i32 - a as i32) & (a as i32)) as u32)
-        }
+        (t != a).then(|| ((t as i32 - a as i32) & (a as i32)) as u32)
     })
 }
 
