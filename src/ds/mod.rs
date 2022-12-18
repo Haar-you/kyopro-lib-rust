@@ -43,3 +43,5 @@ pub mod binary_trie;
 
 pub mod succinct_dict;
 pub mod wavelet_matrix;
+
+pub mod multiset;
