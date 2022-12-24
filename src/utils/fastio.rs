@@ -1,3 +1,4 @@
+use std::fmt::Display;
 use std::io::{Read, Write};
 
 pub struct FastIO {
@@ -94,11 +95,11 @@ impl FastIO {
         ret
     }
 
-    pub fn write(&mut self, s: &str) {
-        self.out_buf.write_all(s.as_bytes()).unwrap();
+    pub fn write<T: Display>(&mut self, s: T) {
+        self.out_buf.write_all(format!("{}", s).as_bytes()).unwrap();
     }
 
-    pub fn writeln(&mut self, s: &str) {
+    pub fn writeln<T: Display>(&mut self, s: T) {
         self.write(s);
         self.out_buf.write_all(&[b'\n']).unwrap();
     }
