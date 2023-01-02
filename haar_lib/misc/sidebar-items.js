@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["dice",""]]});
+initSidebarItems({"mod":[["dice",""],["paren",""]]});

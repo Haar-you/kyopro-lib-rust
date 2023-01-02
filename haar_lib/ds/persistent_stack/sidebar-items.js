@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["PersistentStack",""]]});
+initSidebarItems({"struct":[["PersistentStack","永続スタック"]]});
