@@ -51,7 +51,7 @@ where
     }
 
     pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut T> {
-        self.data.get_mut(i).map(|a| a.get_mut(j)).flatten()
+        self.data.get_mut(i).and_then(|a| a.get_mut(j))
     }
 }
 

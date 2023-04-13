@@ -8,13 +8,7 @@ pub fn primitive_root(p: u64) -> Option<u64> {
         .map(|(x, _)| x)
         .collect::<Vec<_>>();
 
-    for g in 2..=p {
-        if pf.iter().all(|f| mod_pow(g, (p - 1) / f, p) != 1) {
-            return Some(g);
-        }
-    }
-
-    None
+    (2..=p).find(|&g| pf.iter().all(|f| mod_pow(g, (p - 1) / f, p) != 1))
 }
 
 #[cfg(test)]

@@ -40,7 +40,7 @@ impl<T: Elem> Node<T> {
             other.as_mut().propagate();
 
             if self.value < other.value {
-                swap(self, &mut other.as_mut());
+                swap(self, other.as_mut());
             }
 
             match self.right.as_mut() {

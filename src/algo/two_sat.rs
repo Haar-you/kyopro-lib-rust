@@ -15,12 +15,12 @@ impl TwoSat {
 
     fn check(&self, x: isize) -> usize {
         assert!(x != 0);
-        assert!(x.abs() as usize <= self.size);
+        assert!(x.unsigned_abs() <= self.size);
 
         if x > 0 {
             x as usize - 1
         } else {
-            x.abs() as usize + self.size - 1
+            x.unsigned_abs() + self.size - 1
         }
     }
 

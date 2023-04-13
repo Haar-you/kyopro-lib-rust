@@ -108,7 +108,7 @@ where
                 let &c = g[i].iter().min_by(|x, y| x.2.cmp(&y.2)).unwrap();
 
                 for e in g[i].iter_mut() {
-                    (*e).2 = (*e).2 - c.2;
+                    e.2 = e.2 - c.2;
                 }
             }
 

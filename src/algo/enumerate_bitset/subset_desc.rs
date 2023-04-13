@@ -1,7 +1,7 @@
 use std::iter::successors;
 
 pub fn subset_desc(a: u32) -> impl Iterator<Item = u32> {
-    successors(Some(a), move |&t| (t != 0).then(|| (t - 1) & a))
+    successors(Some(a), move |&t| t.checked_sub(1).map(|x| x & a))
 }
 
 #[cfg(test)]

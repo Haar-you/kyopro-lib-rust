@@ -21,7 +21,7 @@ impl<T: Ord> Node<T> {
     pub fn meld(&mut self, other: Option<Box<Node<T>>>) {
         if let Some(mut other) = other {
             if self.value < other.value {
-                swap(self, &mut other.as_mut());
+                swap(self, other.as_mut());
             }
 
             match self.right.as_mut() {

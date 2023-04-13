@@ -15,7 +15,6 @@ fn rc(i: usize) -> usize {
 
 #[derive(Clone, Debug)]
 pub struct SegmentTreeBeats {
-    size: usize,
     hsize: usize,
 
     fst_max: Vec<i64>,
@@ -35,7 +34,6 @@ impl SegmentTreeBeats {
         let size = n.next_power_of_two() * 2;
 
         Self {
-            size,
             hsize: size / 2,
             fst_max: vec![std::i64::MIN; size],
             snd_max: vec![std::i64::MIN; size],

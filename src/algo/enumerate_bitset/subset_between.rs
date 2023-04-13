@@ -3,8 +3,8 @@ use std::iter::successors;
 pub fn subset_between(a: u32, b: u32) -> impl Iterator<Item = u32> {
     let x = b ^ (a & b);
 
-    successors((a & !b == 0).then(|| 0), move |&t| {
-        (t != 0).then(|| (t - 1) % x)
+    successors((a & !b == 0).then_some(0), move |&t: &u32| {
+        t.checked_sub(1).map(|a| a % x)
     })
     .map(move |t| t | a)
 }

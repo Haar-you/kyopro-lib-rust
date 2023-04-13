@@ -10,12 +10,11 @@ pub fn bridges(ll: &Lowlink) -> Vec<(usize, usize)> {
 
     ch.iter()
         .enumerate()
-        .map(|(i, es)| {
+        .flat_map(|(i, es)| {
             es.iter()
-                .filter_map(|&j| if ord[i] < low[j] { Some((i, j)) } else { None })
+                .filter_map(|&j| (ord[i] < low[j]).then_some((i, j)))
                 .collect::<Vec<_>>()
         })
-        .flatten()
         .collect()
 }
 

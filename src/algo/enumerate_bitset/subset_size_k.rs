@@ -5,7 +5,7 @@ pub fn subset_size_k(width: u32, k: u32) -> impl Iterator<Item = u32> {
         let x = ((t as i32) & (-(t as i32))) as u32;
         let y = t + x;
         let t = ((t & !y) / x) >> 1 | y;
-        (t < 1 << width).then(|| t)
+        (t < 1 << width).then_some(t)
     })
 }
 
