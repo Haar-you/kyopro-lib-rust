@@ -46,3 +46,5 @@ pub mod succinct_dict;
 pub mod wavelet_matrix;
 
 pub mod multiset;
+
+pub mod qword_tree;
