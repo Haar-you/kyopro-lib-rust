@@ -2,7 +2,7 @@
 
 pub use crate::algebra::traits::Semigroup;
 pub use crate::ds::traits::Foldable;
-use std::{iter::repeat, mem::size_of, ops::Range};
+use std::{iter::repeat, ops::Range};
 
 pub struct DisjointSparseTable<T, S> {
     data: Vec<Vec<Option<T>>>,
@@ -15,7 +15,7 @@ impl<T: Clone, S: Semigroup<Output = T>> DisjointSparseTable<T, S> {
         assert!(!seq.is_empty());
 
         let size = seq.len();
-        let log_size = size_of::<usize>() * 8 - (size - 1).leading_zeros() as usize;
+        let log_size = usize::BITS as usize - (size - 1).leading_zeros() as usize;
         let mut data = vec![vec![None; 1 << log_size]; log_size];
 
         let seq = seq
@@ -82,7 +82,7 @@ impl<T: Clone + Default, S: Semigroup<Output = T>> Foldable<Range<usize>>
             if l == r {
                 self.seq[l].clone()
             } else {
-                let k = size_of::<usize>() * 8 - 1 - (l ^ r).leading_zeros() as usize;
+                let k = usize::BITS as usize - 1 - (l ^ r).leading_zeros() as usize;
                 match (self.data[k][l].clone(), self.data[k][r].clone()) {
                     (Some(x), Some(y)) => Some(self.semigroup.op(x, y)),
                     (a @ Some(_), None) => a,

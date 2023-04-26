@@ -19,9 +19,9 @@ pub fn rooting<E: TreeEdgeTrait>(tr: &mut Tree<E>, root: usize) -> Result<(), &s
                 tr.nodes[cur].children.push(p);
             }
         } else if let Some(mut p) = tr.nodes[cur].parent.take() {
-            for mut e in tr.nodes[cur].children.iter_mut() {
+            for e in tr.nodes[cur].children.iter_mut() {
                 if e.to() == par as usize {
-                    swap(&mut p, &mut e);
+                    swap(&mut p, e);
                     tr.nodes[cur].parent = Some(p);
                     break;
                 }

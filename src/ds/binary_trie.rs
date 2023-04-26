@@ -1,5 +1,3 @@
-use std::mem::size_of;
-
 #[derive(Default, Debug, Clone)]
 struct Node {
     ch: [Option<Box<Node>>; 2],
@@ -25,7 +23,7 @@ impl Node {
             let depth = depth - 1;
             let b = (value >> depth) & 1;
             self.ch[b as usize]
-                .get_or_insert(Box::new(Node::default()))
+                .get_or_insert(Box::<Node>::default())
                 .insert(value, depth)
         } else {
             self.size
@@ -37,7 +35,7 @@ impl Node {
             let depth = depth - 1;
             let b = (value >> depth) & 1;
             let ret = self.ch[b as usize]
-                .get_or_insert(Box::new(Node::default()))
+                .get_or_insert(Box::<Node>::default())
                 .erase(value, depth);
             ret.iter().for_each(|_| self.size -= 1);
             ret
@@ -95,7 +93,7 @@ pub struct BinaryTrie {
 
 impl BinaryTrie {
     const fn bitlen() -> usize {
-        size_of::<u64>() * 8
+        u64::BITS as usize
     }
 
     pub fn new() -> Self {
@@ -118,13 +116,13 @@ impl BinaryTrie {
 
     pub fn insert(&mut self, value: u64) -> usize {
         self.root
-            .get_or_insert(Box::new(Node::default()))
+            .get_or_insert(Box::<Node>::default())
             .insert(value, Self::bitlen())
     }
 
     pub fn erase(&mut self, value: u64) -> Option<usize> {
         self.root
-            .get_or_insert(Box::new(Node::default()))
+            .get_or_insert(Box::<Node>::default())
             .erase(value, Self::bitlen())
     }
 

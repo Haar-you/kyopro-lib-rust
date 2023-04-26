@@ -38,5 +38,5 @@ pub fn tsort<E: EdgeTrait>(g: &Graph<Directed, E>) -> Option<Vec<usize>> {
         }
     }
 
-    (ret.len() == n).then(|| ret)
+    (ret.len() == n).then_some(ret)
 }

@@ -134,7 +134,7 @@ fn sa(mut s: Vec<u32>) -> Vec<usize> {
     }
 
     let t: Vec<_> = (0..=n).map(|i| rank[i]).filter(|&x| x != 0).collect();
-    let lms_sorted: Vec<_> = sa(t).into_iter().skip(1).map(|i| lms[i] as usize).collect();
+    let lms_sorted: Vec<_> = sa(t).into_iter().skip(1).map(|i| lms[i]).collect();
 
     induced_sort(&lms_sorted)
 }
@@ -170,15 +170,13 @@ impl SuffixArray {
             rank[self.data[i]] = i;
         }
 
-        let mut h = 0;
+        let mut h: usize = 0;
         for i in 0..n {
             if rank[i] == 0 {
                 continue;
             }
 
-            if h > 0 {
-                h -= 1;
-            }
+            h = h.saturating_sub(1);
             let j = self.data[rank[i] - 1];
             while j + h < n && i + h < n {
                 if self.str_data[j + h] != self.str_data[i + h] {

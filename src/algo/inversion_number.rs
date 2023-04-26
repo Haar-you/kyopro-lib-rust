@@ -12,11 +12,11 @@ pub fn inversion_number<T: PartialOrd + Copy>(a: &mut [T]) -> u64 {
 
     let mut ret = 0;
 
-    let mut b = &mut a[0..n / 2].to_vec();
-    let mut c = &mut a[n / 2..n].to_vec();
+    let b = &mut a[0..n / 2].to_vec();
+    let c = &mut a[n / 2..n].to_vec();
 
-    ret += inversion_number(&mut b);
-    ret += inversion_number(&mut c);
+    ret += inversion_number(b);
+    ret += inversion_number(c);
 
     let mut bi = 0;
     let mut ci = 0;

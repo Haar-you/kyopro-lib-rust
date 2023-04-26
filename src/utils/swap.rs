@@ -1,4 +1,4 @@
-pub fn swap_vv<T>(a: &mut Vec<Vec<T>>, i1: usize, j1: usize, i2: usize, j2: usize) {
+pub fn swap_vv<T>(a: &mut [Vec<T>], i1: usize, j1: usize, i2: usize, j2: usize) {
     let p1: *mut T = &mut a[i1][j1];
     let p2: *mut T = &mut a[i2][j2];
 
