@@ -33,7 +33,7 @@ impl TreeDepthQuery {
             ord: vec![0; size],
         };
 
-        ret.dfs(&tree, root, None, 0, &mut 0);
+        ret.dfs(tree, root, None, 0, &mut 0);
 
         let mut q = VecDeque::new();
         q.push_back((root, 0));

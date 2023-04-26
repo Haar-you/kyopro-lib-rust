@@ -16,7 +16,7 @@ impl SCC {
         ord.reserve(n);
         for i in 0..n {
             if !check[i] {
-                Self::dfs(&g, i, &mut ord, &mut check);
+                Self::dfs(g, i, &mut ord, &mut check);
             }
         }
         ord.reverse();

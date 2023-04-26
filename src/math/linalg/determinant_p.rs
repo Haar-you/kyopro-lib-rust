@@ -34,8 +34,8 @@ pub fn determinant_p(mut a: Vec<Vec<u64>>, p: u64) -> u64 {
     }
 
     let mut ret = 1;
-    for i in 0..n {
-        ret = (ret * a[i][i]) % p;
+    for (i, a) in a.into_iter().enumerate() {
+        ret = (ret * a[i]) % p;
     }
 
     if s == 1 && ret != 0 {

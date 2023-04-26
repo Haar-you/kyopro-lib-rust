@@ -10,12 +10,10 @@ pub fn enumerate_triangles<T, E: EdgeTrait>(
 
     for i in 0..n {
         for e in &g.edges[i] {
-            if g.edges[e.from()].len() < g.edges[e.to()].len() {
+            if g.edges[e.from()].len() < g.edges[e.to()].len()
+                || (g.edges[e.from()].len() == g.edges[e.to()].len() && e.from() < e.to())
+            {
                 adjacent[e.from()].insert(e.to());
-            } else if g.edges[e.from()].len() == g.edges[e.to()].len() {
-                if e.from() < e.to() {
-                    adjacent[e.from()].insert(e.to());
-                }
             }
         }
     }

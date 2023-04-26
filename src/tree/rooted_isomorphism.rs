@@ -21,7 +21,7 @@ pub fn rooted_isomorphism<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> (usi
                 }
             }
 
-            children.sort();
+            children.sort_unstable();
 
             let mut hasher = DefaultHasher::new();
             children.hash(&mut hasher);

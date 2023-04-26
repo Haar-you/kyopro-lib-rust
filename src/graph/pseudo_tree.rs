@@ -51,7 +51,7 @@ pub fn pseudo_tree<E: EdgeTrait>(g: &Graph<Undirected, E>) -> PseudoTree {
             group[i] = i;
             for e in &g.edges[i] {
                 if !in_loop[e.to()] {
-                    dfs(&g, e.to(), i, &mut group);
+                    dfs(g, e.to(), i, &mut group);
                 }
             }
         }

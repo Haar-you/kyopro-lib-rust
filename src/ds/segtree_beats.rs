@@ -305,19 +305,19 @@ mod test {
                     let lr = rand_range(&mut rng, 0..n);
                     let x = rng.gen_range(-limit..=limit);
                     seg.chmax(lr.clone(), x);
-                    &a[lr].iter_mut().for_each(|y| *y = std::cmp::max(x, *y));
+                    a[lr].iter_mut().for_each(|y| *y = std::cmp::max(x, *y));
                 }
                 1 => {
                     let lr = rand_range(&mut rng, 0..n);
                     let x = rng.gen_range(-limit..=limit);
                     seg.chmin(lr.clone(), x);
-                    &a[lr].iter_mut().for_each(|y| *y = std::cmp::min(x, *y));
+                    a[lr].iter_mut().for_each(|y| *y = std::cmp::min(x, *y));
                 }
                 2 => {
                     let lr = rand_range(&mut rng, 0..n);
                     let x = rng.gen_range(-limit..=limit);
                     seg.add(lr.clone(), x);
-                    &a[lr].iter_mut().for_each(|y| *y += x);
+                    a[lr].iter_mut().for_each(|y| *y += x);
                 }
                 3 => {
                     let lr = rand_range(&mut rng, 0..n);

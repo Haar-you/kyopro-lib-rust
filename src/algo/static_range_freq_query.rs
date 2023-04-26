@@ -16,7 +16,7 @@ impl<T: Hash + Eq> StaticRangeFreqQuery<T> {
         let mut map = HashMap::new();
 
         for (i, x) in a.into_iter().enumerate() {
-            map.entry(x).or_insert(vec![]).push(i);
+            map.entry(x).or_insert_with(Vec::new).push(i);
         }
 
         Self { map }

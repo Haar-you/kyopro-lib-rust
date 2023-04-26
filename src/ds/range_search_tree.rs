@@ -34,7 +34,7 @@ where
                 r -= 1;
                 let a = &self.data[r];
 
-                let i = lower_bound(&a, &(sy, 0));
+                let i = lower_bound(a, &(sy, 0));
 
                 for &(y, x) in a.iter().skip(i).take_while(|(y, _)| *y < ty) {
                     ret.push((self.cxs[x], y));
@@ -45,7 +45,7 @@ where
                 let a = &self.data[l];
                 l += 1;
 
-                let i = lower_bound(&a, &(sy, 0));
+                let i = lower_bound(a, &(sy, 0));
 
                 for &(y, x) in a.iter().skip(i).take_while(|(y, _)| *y < ty) {
                     ret.push((self.cxs[x], y));

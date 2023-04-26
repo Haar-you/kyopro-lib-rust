@@ -34,14 +34,14 @@ pub fn tree_diameter<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>) -> (T, usize
 where
     T: Add<Output = T> + Copy + Default + Ord,
 {
-    let a = tree_distance(&tr, 0);
+    let a = tree_distance(tr, 0);
     let (u, _) = a
         .iter()
         .enumerate()
         .max_by(|(_, x), (_, y)| x.cmp(y))
         .unwrap();
 
-    let b = tree_distance(&tr, u);
+    let b = tree_distance(tr, u);
     let (v, &d) = b
         .iter()
         .enumerate()
@@ -58,19 +58,19 @@ pub fn tree_height<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>) -> Vec<(T, usi
 where
     T: Add<Output = T> + Copy + Default + Ord,
 {
-    let d = tree_distance(&tr, 0);
+    let d = tree_distance(tr, 0);
     let (u, _) = d
         .iter()
         .enumerate()
         .max_by(|(_, x), (_, y)| x.cmp(y))
         .unwrap();
-    let d1 = tree_distance(&tr, u);
+    let d1 = tree_distance(tr, u);
     let (v, _) = d1
         .iter()
         .enumerate()
         .max_by(|(_, x), (_, y)| x.cmp(y))
         .unwrap();
-    let d2 = tree_distance(&tr, v);
+    let d2 = tree_distance(tr, v);
 
     d1.into_iter()
         .zip(d2.into_iter())

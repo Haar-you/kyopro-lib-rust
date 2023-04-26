@@ -44,7 +44,7 @@ where
 
     for (i, es) in g.iter().enumerate() {
         if i != root {
-            let (from, to, weight, e) = es.iter().min_by(|x, y| x.2.cmp(&y.2)).unwrap().clone();
+            let &(from, to, weight, e) = es.iter().min_by(|x, y| x.2.cmp(&y.2)).unwrap();
 
             in_edges[from] = Some((from, to, weight, e));
             out_count[to] += 1;
@@ -105,7 +105,7 @@ where
 
         for cycle in cycles {
             for &i in &cycle {
-                let c = g[i].iter().min_by(|x, y| x.2.cmp(&y.2)).unwrap().clone();
+                let &c = g[i].iter().min_by(|x, y| x.2.cmp(&y.2)).unwrap();
 
                 for e in g[i].iter_mut() {
                     (*e).2 = (*e).2 - c.2;
@@ -119,8 +119,8 @@ where
             groups.push(cycle);
         }
 
-        for i in 0..n {
-            if !in_cycle[i] {
+        for (i, x) in in_cycle.into_iter().enumerate() {
+            if !x {
                 groups.push(vec![i]);
             }
         }
@@ -152,7 +152,7 @@ where
             let mut c = vec![];
 
             for &x in &groups[i] {
-                for e in &g[x] {
+                for &e in &g[x] {
                     let to = e.1;
                     if s[to] == p {
                         c.push(e);
@@ -160,7 +160,7 @@ where
                 }
             }
 
-            let &(from, to, weight, e) = c.iter().min_by(|x, y| x.2.cmp(&y.2)).unwrap().clone();
+            let &(from, to, weight, e) = c.iter().min_by(|x, y| x.2.cmp(&y.2)).unwrap();
 
             in_edges[from] = Some((from, to, weight, e));
         }

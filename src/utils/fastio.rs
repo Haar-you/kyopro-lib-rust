@@ -1,4 +1,5 @@
-use std::fmt::Display;
+#![allow(clippy::new_without_default)]
+
 use std::io::{Read, Write};
 
 pub struct FastIO {

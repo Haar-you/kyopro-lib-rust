@@ -32,7 +32,7 @@ fn dfs(
     check: &mut [bool],
     vcheck: &mut [bool],
     stack: &mut Vec<(usize, usize)>,
-    ret: &mut Vec<(Vec<usize>, Vec<(usize, usize)>)>,
+    ret: &mut Vec<(Vertices, Edges)>,
 ) {
     check[cur] = true;
 

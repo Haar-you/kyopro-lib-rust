@@ -9,7 +9,7 @@ pub fn two_edge_connected_components(ll: &Lowlink) -> Vec<Vec<usize>> {
         if ll.par[i].is_none() {
             let index = ret.len();
             ret.push(vec![]);
-            rec(&ll, i, index, &mut ret);
+            rec(ll, i, index, &mut ret);
         }
     }
 

@@ -12,7 +12,7 @@ impl EulerTour {
             begin: vec![0; n],
             end: vec![0; n],
         };
-        ret.dfs(&tree, root, None, &mut 0);
+        ret.dfs(tree, root, None, &mut 0);
         ret
     }
 
