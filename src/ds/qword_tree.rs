@@ -11,6 +11,12 @@ pub struct QwordTree {
     count: usize,
 }
 
+impl Default for QwordTree {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl QwordTree {
     pub fn new() -> Self {
         Self {
@@ -22,6 +28,9 @@ impl QwordTree {
         }
     }
 
+    /// # Safety
+    ///
+    /// `x`は`MAX`以下でなければならない。
     pub unsafe fn insert_unchecked(&mut self, x: u32) {
         let x = x as usize;
 
@@ -46,6 +55,9 @@ impl QwordTree {
         }
     }
 
+    /// # Safety
+    ///
+    /// `x`は`MAX`以下でなければならない。
     pub unsafe fn erase_unchecked(&mut self, x: u32) {
         let x = x as usize;
 
@@ -83,6 +95,11 @@ impl QwordTree {
         } else {
             unsafe { self.v3.get_unchecked(x as usize >> 6) & (1 << (x & 0x3f)) != 0 }
         }
+    }
+
+    /// 集合が空かどうかを判断する
+    pub fn is_empty(&self) -> bool {
+        self.count == 0
     }
 
     /// 集合に含まれている要素数を返す
