@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Default)]
 pub struct MultiSet<T> {
     map: BTreeMap<T, usize>,
     size: usize,
@@ -81,7 +81,7 @@ impl<T: Ord + Eq + Clone> MultiSet<T> {
     }
 
     pub fn count(&self, value: &T) -> usize {
-        self.map.get(&value).cloned().unwrap_or(0)
+        self.map.get(value).cloned().unwrap_or(0)
     }
 
     pub fn len(&self) -> usize {

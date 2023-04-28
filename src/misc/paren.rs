@@ -7,7 +7,7 @@ pub fn check_paren<T: Copy + Eq>(s: impl IntoIterator<Item = T>, open: T, close:
     let mut stack = vec![];
 
     for c in s {
-        if let Some(_) = stack.last() {
+        if stack.last().is_some() {
             if c == close {
                 stack.pop();
             } else if c == open {
@@ -15,12 +15,10 @@ pub fn check_paren<T: Copy + Eq>(s: impl IntoIterator<Item = T>, open: T, close:
             } else {
                 return false;
             }
+        } else if c == open {
+            stack.push(c);
         } else {
-            if c == open {
-                stack.push(c);
-            } else {
-                return false;
-            }
+            return false;
         }
     }
 
