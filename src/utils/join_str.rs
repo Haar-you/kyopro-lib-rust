@@ -5,7 +5,7 @@ pub trait JoinStr {
 impl<T, I> JoinStr for I
 where
     T: ToString,
-    I: Iterator<Item = T>
+    I: Iterator<Item = T>,
 {
     fn join_str(self, s: &str) -> String {
         self.map(|x| x.to_string()).collect::<Vec<_>>().join(s)
