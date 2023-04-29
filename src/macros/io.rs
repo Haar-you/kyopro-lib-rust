@@ -32,7 +32,7 @@ macro_rules! input {
         let $name = get!($in, $type);
     };
 
-    ( $in:ident, $($($names:ident)* : $type:tt),* ) => {
+    ( $in:ident >> $($($names:ident)* : $type:tt),* ) => {
         $(
             input!(@inner $in, $($names)* : $type);
         )*
