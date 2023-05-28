@@ -3,10 +3,10 @@ pub mod main {
     use haar_lib::{
         get,
         input,
-        io,
         //chmin, chmax,
         //mul_vec,
         utils::join_str::*,
+        utils::fastio::*
     };
 
     use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet};
@@ -17,7 +17,7 @@ pub mod main {
 
     impl Problem {
         pub fn main(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-            io!(cin, cout);
+            let mut io = FastIO::new();
 
             Ok(())
         }
