@@ -36,3 +36,5 @@ pub mod sum_of_exponential_times_polynomial_limit;
 pub mod factorial_prime_factor;
 
 pub mod count_coprime;
+
+pub mod enumerate_quotients;
