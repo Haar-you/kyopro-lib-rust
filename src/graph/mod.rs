@@ -102,7 +102,7 @@ impl Direction for Undirected {}
 #[derive(Debug, Clone)]
 pub struct Graph<D, E> {
     pub edges: Vec<Vec<E>>,
-    pub __phantom: PhantomData<D>,
+    __phantom: PhantomData<D>,
 }
 
 impl<D: Direction, E: EdgeTrait + Clone> Graph<D, E> {
