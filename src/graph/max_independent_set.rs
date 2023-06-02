@@ -1,95 +1,73 @@
 //! 最大独立集合
+use crate::graph::*;
+use std::collections::HashSet;
 
-#[allow(clippy::cognitive_complexity)]
-pub fn max_independent_set(g: Vec<Vec<bool>>) -> Vec<usize> {
+/// 最大独立集合を求める
+///
+/// nは64以下に制限している。
+/// 最大独立集合の補集合は最小頂点被覆集合になる。
+///
+/// # Verifications
+/// Library Checker [Maximum Independent Set](https://judge.yosupo.jp/problem/maximum_independent_set) [#142761](https://judge.yosupo.jp/submission/142761) (n <= 40)
+pub fn max_independent_set<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Vec<usize> {
     let n = g.len();
+    assert!(n <= 64);
 
-    let h1 = n / 2;
-    let h2 = n - h1;
+    let mut set = HashSet::new();
+    rec(g, 0, 0, &mut set);
 
-    let mut dp1 = vec![true; 1 << h1];
-    for i in 0..h1 {
-        for j in 0..h1 {
-            if g[i][j] {
-                dp1[(1 << i) | (1 << j)] = false;
-            }
+    let (a, _) = set
+        .into_iter()
+        .filter(|(indep, cover)| (indep | cover).count_ones() as usize == n)
+        .max_by_key(|&(indep, _)| indep.count_ones())
+        .unwrap();
+
+    (0..n).filter(|i| a & (1 << i) != 0).collect()
+}
+
+fn rec<E: EdgeTrait>(
+    g: &Graph<Undirected, E>,
+    indep: u64,
+    cover: u64,
+    set: &mut HashSet<(u64, u64)>,
+) {
+    if set.contains(&(indep, cover)) {
+        return;
+    }
+
+    set.insert((indep, cover));
+
+    let removed = indep | cover;
+
+    let next = (0..g.len())
+        .filter(|i| removed & (1 << i) == 0)
+        .max_by_key(|&i| {
+            g.edges[i]
+                .iter()
+                .filter(|e| removed & (1 << e.to()) == 0)
+                .count()
+        });
+
+    let next = if let Some(next) = next {
+        next
+    } else {
+        return;
+    };
+
+    let mut deg = 0;
+    let mut neighbour: u64 = 0;
+
+    for e in &g.edges[next] {
+        if removed & (1 << e.to()) == 0 {
+            deg += 1;
+            neighbour |= 1 << e.to();
         }
     }
 
-    for s in 0..1 << h1 {
-        if !dp1[s] {
-            for j in 0..h1 {
-                dp1[s | (1 << j)] = false;
-            }
-        }
+    if deg <= 1 {
+        rec(g, indep | (1 << next), cover | neighbour, set);
+    } else {
+        rec(g, indep | (1 << next), cover | neighbour, set);
+        rec(g, indep, cover | (1 << next), set);
     }
-
-    let mut dp2 = vec![true; 1 << h2];
-    for i in h1..n {
-        for j in h1..n {
-            if g[i][j] {
-                dp2[(1 << (i - h1)) | (1 << (j - h1))] = false;
-            }
-        }
-    }
-
-    for s in 0..1 << h2 {
-        if !dp2[s] {
-            for j in 0..h2 {
-                dp2[s | (1 << j)] = false;
-            }
-        }
-    }
-
-    let mut dp3 = vec![0; 1 << h1];
-    dp3[0] = (1 << h2) - 1;
-
-    for i in 0..h1 {
-        let mut t = 0;
-        for j in h1..n {
-            if g[i][j] {
-                t |= 1 << (j - h1);
-            }
-        }
-        dp3[1 << i] = t ^ ((1 << h2) - 1);
-    }
-
-    for s in 0..1 << h1 {
-        for j in 0..h1 {
-            if s & (1 << j) == 0 {
-                dp3[s | (1 << j)] = dp3[s] & dp3[1 << j];
-            }
-        }
-    }
-
-    let mut dp4 = vec![0; 1 << h2];
-    for i in 0..1 << h2 {
-        if dp2[i] {
-            dp4[i] = i;
-        }
-    }
-
-    for s in 0..1 << h2 {
-        for j in 0..h2 {
-            if s & (1 << j) == 0 && dp4[s | (1 << j)].count_ones() <= dp4[s].count_ones() {
-                dp4[s | (1 << j)] = dp4[s];
-            }
-        }
-    }
-
-    let mut ans = 0;
-    let mut size = 0;
-
-    for s in 0..1 << h1 {
-        if dp1[s] {
-            let t = s | (dp4[dp3[s]] << h1);
-
-            if t.count_ones() > size {
-                size = t.count_ones();
-                ans = t;
-            }
-        }
-    }
-
-    (0..64).filter(|i| (ans >> i) & 1 == 1).collect()
 }
