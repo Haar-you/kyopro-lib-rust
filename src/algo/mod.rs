@@ -17,6 +17,7 @@ pub mod merge;
 pub mod mo;
 pub mod num_subseq;
 pub mod permutation;
+pub mod psp;
 pub mod rle;
 pub mod rolling_hash;
 pub mod sa;

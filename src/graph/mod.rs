@@ -32,8 +32,6 @@ pub mod tsort;
 pub mod chinese_postman;
 pub mod tsp;
 
-pub mod psp;
-
 pub mod dinic;
 pub mod flow;
 pub mod ford_fulkerson;
