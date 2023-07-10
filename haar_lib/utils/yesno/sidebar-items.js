@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["YesNo",""]]});
+window.SIDEBAR_ITEMS = {"trait":[["YesNo",""]]};

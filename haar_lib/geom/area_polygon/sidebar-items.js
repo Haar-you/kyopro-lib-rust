@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["area_polygon",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["area_polygon",""]]};

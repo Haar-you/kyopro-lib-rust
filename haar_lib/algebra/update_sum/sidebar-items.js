@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["UpdateSum",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["UpdateSum",""]]};

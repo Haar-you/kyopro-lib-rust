@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["modint",""],["traits",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["const_modint",""],["modint",""],["traits",""]]};

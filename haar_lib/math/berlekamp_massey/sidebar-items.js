@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["berlekamp_massey",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["berlekamp_massey",""]]};

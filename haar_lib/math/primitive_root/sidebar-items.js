@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["primitive_root",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["primitive_root",""]]};

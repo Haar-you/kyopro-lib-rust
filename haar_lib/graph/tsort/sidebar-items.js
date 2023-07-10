@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["tsort","Time complexity O(N)"]]});
+window.SIDEBAR_ITEMS = {"fn":[["tsort","Time complexity O(N)"]]};

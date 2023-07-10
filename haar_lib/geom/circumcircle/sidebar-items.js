@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["circumcircle",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["circumcircle",""]]};

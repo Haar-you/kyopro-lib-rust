@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["WaveletMatrix",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["WaveletMatrix",""]]};

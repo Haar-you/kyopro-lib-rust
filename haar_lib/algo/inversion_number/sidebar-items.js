@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["inversion_number","数列の転倒数を計算する。 # Complexity Time complexity $O(n \\log(n))$"]]});
+window.SIDEBAR_ITEMS = {"fn":[["inversion_number","数列の転倒数を計算する。"]]};

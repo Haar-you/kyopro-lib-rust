@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["LazySegmentTree",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["LazySegmentTree",""]]};

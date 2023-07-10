@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["AlgeStruct",""],["Associative",""],["BinaryOp",""],["Commutative",""],["Group",""],["Idempotence",""],["Identity",""],["Inverse",""],["Monoid",""],["Semigroup",""]]});
+window.SIDEBAR_ITEMS = {"trait":[["AlgeStruct",""],["Associative",""],["BinaryOp",""],["Commutative",""],["Group",""],["Idempotence",""],["Identity",""],["Inverse",""],["Monoid",""],["Semigroup",""]]};

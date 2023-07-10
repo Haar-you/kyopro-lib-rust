@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["swap_vv",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["swap_vv",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["sum_of_exponential_times_polynomial_limit","$\\sum_{i=0}^{\\infty} r^ii^d$"]]});
+window.SIDEBAR_ITEMS = {"fn":[["sum_of_exponential_times_polynomial_limit","$\\sum_{i=0}^{\\infty} r^ii^d$"]]};

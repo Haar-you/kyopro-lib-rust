@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["bridges","橋の列挙"]]});
+window.SIDEBAR_ITEMS = {"fn":[["bridges","橋の列挙"]]};

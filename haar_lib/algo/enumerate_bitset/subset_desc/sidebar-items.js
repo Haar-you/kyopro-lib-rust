@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["subset_desc",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["subset_desc",""]]};

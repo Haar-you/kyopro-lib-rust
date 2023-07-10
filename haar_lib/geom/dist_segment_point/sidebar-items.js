@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["dist_segment_point",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["dist_segment_point",""]]};

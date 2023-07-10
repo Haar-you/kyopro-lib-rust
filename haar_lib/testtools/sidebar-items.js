@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["rand_range",""]],"trait":[["RangeIsEmpty",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["rand_range",""]]};

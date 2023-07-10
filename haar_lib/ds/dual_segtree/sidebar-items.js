@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["DualSegmentTree",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["DualSegmentTree",""]]};

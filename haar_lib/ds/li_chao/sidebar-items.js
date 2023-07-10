@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Mode",""]],"struct":[["LiChaoTree",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["Mode",""]],"struct":[["LiChaoTree",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["pseudo_tree",""]],"struct":[["PseudoTree",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["pseudo_tree",""]],"struct":[["PseudoTree",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["area_intersection_circles",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["area_intersection_circles",""]]};

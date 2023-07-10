@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["grid_to_graph",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["grid_to_graph",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["max_partial_sum","空でない連続する部分列の和で最大のものを返す。"]]});
+window.SIDEBAR_ITEMS = {"fn":[["max_partial_sum","空でない連続する部分列の和で最大のものを返す。"]]};

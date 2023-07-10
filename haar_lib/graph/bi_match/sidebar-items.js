@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["BipartiteMatching",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["BipartiteMatching",""]]};

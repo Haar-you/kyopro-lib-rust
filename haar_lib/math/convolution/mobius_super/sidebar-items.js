@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["fast_mobius_superset",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["fast_mobius_superset",""]]};

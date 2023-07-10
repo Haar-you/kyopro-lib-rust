@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["knapsack_small_quantity","要素数が小さいナップサック問題 # Complexity Time complexity O(n * 2 ^ (n / 2))"]]});
+window.SIDEBAR_ITEMS = {"fn":[["knapsack_small_quantity","要素数が小さいナップサック問題"]]};

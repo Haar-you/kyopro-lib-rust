@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["mod_inv","mod mでの逆元"]]});
+window.SIDEBAR_ITEMS = {"fn":[["mod_inv","mod mでの逆元"]]};

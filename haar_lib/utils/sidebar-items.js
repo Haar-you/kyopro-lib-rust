@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["bits",""],["fastio",""],["join_str",""],["num_inf","正の無限大、負の無限大をもつ数"],["swap",""],["transpose",""],["xor_shift",""],["yesno",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["bits",""],["fastio",""],["join_str",""],["num_inf","正の無限大、負の無限大をもつ数"],["swap",""],["transpose",""],["xor_shift",""],["yesno",""]]};

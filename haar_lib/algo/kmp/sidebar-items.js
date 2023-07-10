@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["KMP",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["KMP",""]]};

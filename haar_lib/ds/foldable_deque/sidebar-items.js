@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["FoldableDeque",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["FoldableDeque",""]]};

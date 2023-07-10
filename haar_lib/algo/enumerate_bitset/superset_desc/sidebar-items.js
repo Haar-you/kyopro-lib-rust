@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["superset_desc",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["superset_desc",""]]};

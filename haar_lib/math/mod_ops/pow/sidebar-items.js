@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["mod_pow","$x^p \\bmod m$を求める。"]]});
+window.SIDEBAR_ITEMS = {"fn":[["mod_pow","$x^p \\bmod m$を求める。"]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["rooted_isomorphism",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["rooted_isomorphism",""]]};

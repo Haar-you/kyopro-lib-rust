@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["rooting",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["rooting",""]]};

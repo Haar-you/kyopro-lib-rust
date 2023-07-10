@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["is_convex",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["is_convex",""]]};

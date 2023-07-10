@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["detect_cycle",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["detect_cycle",""]]};

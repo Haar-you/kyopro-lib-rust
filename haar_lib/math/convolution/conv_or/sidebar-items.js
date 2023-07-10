@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["convolution_or",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["convolution_or",""]]};

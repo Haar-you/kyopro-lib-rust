@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["PointPolygon",""]],"fn":[["point_in_polygon",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["PointPolygon",""]],"fn":[["point_in_polygon",""]]};

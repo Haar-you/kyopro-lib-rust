@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Hull",""]],"fn":[["convex_hull",""],["half_hull",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["Hull",""]],"fn":[["convex_hull",""],["half_hull",""]]};

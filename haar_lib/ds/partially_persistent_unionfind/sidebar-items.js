@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["At",""],["PartiallyPersistentUnionFind",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["At",""],["PartiallyPersistentUnionFind",""]]};

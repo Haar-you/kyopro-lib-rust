@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["majority_vote",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["majority_vote",""]]};

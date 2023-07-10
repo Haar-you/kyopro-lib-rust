@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["TreeDepthQuery","Tree depth query"]]});
+window.SIDEBAR_ITEMS = {"struct":[["TreeDepthQuery","Tree depth query"]]};

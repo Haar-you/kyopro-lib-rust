@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["FastIO",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["FastIO",""]]};

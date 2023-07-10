@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SuffixArray",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["SuffixArray",""]]};

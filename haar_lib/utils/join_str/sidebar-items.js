@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["JoinStr",""]]});
+window.SIDEBAR_ITEMS = {"trait":[["JoinStr",""]]};

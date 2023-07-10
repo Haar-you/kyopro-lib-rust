@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["RollbackableVec",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["RollbackableVec",""]]};

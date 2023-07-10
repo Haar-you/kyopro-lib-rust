@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["lcs","列a, bの最長共通部分列の一つを求める。"]]});
+window.SIDEBAR_ITEMS = {"fn":[["lcs","列a, bの最長共通部分列の一つを求める。"]]};

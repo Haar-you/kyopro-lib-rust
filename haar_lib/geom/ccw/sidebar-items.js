@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["CCW",""]],"fn":[["ccw",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["CCW",""]],"fn":[["ccw",""]]};

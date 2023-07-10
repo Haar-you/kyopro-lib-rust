@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["lis","列の最長増加部分列の一つを求める。"]]});
+window.SIDEBAR_ITEMS = {"fn":[["lis","列の最長増加部分列の一つを求める。"]]};

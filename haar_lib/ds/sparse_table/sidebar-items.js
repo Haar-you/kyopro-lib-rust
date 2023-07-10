@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SparseTable",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["SparseTable",""]]};

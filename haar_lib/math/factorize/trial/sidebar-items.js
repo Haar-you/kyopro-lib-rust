@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["factorize",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["factorize",""]]};

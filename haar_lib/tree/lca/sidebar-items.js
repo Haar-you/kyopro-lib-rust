@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["DoublingLCA",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["DoublingLCA",""]]};

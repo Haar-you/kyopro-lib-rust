@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["crt",""],["crt_vec",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["crt",""],["crt_vec",""]]};

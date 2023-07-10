@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["check_paren","括弧列が対応が取れているかを調べる"]]});
+window.SIDEBAR_ITEMS = {"fn":[["check_paren","括弧列が対応が取れているかを調べる"]]};

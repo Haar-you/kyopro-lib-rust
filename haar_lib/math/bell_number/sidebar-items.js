@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["bell_number_table",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["bell_number_table",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["FenwickTreeAdd",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["FenwickTreeAdd",""]]};

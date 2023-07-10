@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["MultiSet",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["MultiSet",""]]};

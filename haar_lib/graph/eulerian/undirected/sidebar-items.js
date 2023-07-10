@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["UndirectedEulerianTrail",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["UndirectedEulerianTrail",""]]};

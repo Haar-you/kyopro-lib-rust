@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["directed",""],["undirected",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["directed",""],["undirected",""]]};

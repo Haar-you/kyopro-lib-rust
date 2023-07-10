@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["Assignable",""],["Foldable",""],["Foldable2D",""],["Indexable",""],["Updatable",""]]});
+window.SIDEBAR_ITEMS = {"trait":[["Assignable",""],["Foldable",""],["Foldable2D",""],["Indexable",""],["Updatable",""]]};

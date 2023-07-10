@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["inplace_merge",""],["inplace_merge_by",""],["merge",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["inplace_merge",""],["inplace_merge_by",""],["merge",""]]};

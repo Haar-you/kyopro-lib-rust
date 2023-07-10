@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["BinaryTrie",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["BinaryTrie",""]]};

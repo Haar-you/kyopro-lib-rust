@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SuccinctDict",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["SuccinctDict",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["common_tangent_circles",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["common_tangent_circles",""]]};

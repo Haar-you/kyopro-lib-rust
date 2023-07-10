@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["RerootingDP","全方位木DP"]]});
+window.SIDEBAR_ITEMS = {"struct":[["RerootingDP","全方位木DP"]]};

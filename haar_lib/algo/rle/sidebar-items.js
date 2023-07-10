@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["rle",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["rle",""]]};

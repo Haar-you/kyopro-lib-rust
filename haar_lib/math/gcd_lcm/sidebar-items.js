@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["GcdLcm",""]]});
+window.SIDEBAR_ITEMS = {"trait":[["GcdLcm",""]]};

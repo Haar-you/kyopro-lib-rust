@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["IntersectCircles",""]],"fn":[["intersect_circles",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["IntersectCircles",""]],"fn":[["intersect_circles",""]]};

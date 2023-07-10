@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["totient",""],["totient_table",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["totient",""],["totient_table",""]]};

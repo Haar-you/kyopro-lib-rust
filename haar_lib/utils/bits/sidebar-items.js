@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["highest_one",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["highest_one",""]]};

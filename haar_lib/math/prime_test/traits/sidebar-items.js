@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["CheckPrime",""]]});
+window.SIDEBAR_ITEMS = {"trait":[["CheckPrime",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Max",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["Max",""]]};

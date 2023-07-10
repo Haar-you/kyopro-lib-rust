@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["knapsack_small_weight","容量が小さいナップサック問題 # Complexity Time complexity O(n cap)"]]});
+window.SIDEBAR_ITEMS = {"fn":[["knapsack_small_weight","容量が小さいナップサック問題"]]};

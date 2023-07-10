@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["bell",""],["bernoulli",""],["catalan",""]],"struct":[["FactorialTable",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["bell",""],["bernoulli",""],["catalan",""]],"struct":[["FactorialTable",""]]};

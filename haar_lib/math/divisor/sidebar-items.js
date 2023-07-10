@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["count_divisors","Time complexity O(sqrt n)"],["enumerate_divisors","Time complexity O(sqrt n)"]]});
+window.SIDEBAR_ITEMS = {"fn":[["count_divisors","Time complexity O(sqrt n)"],["enumerate_divisors","Time complexity O(sqrt n)"]]};

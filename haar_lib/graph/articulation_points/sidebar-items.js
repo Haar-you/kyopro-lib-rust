@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["articulation_points",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["articulation_points",""]]};

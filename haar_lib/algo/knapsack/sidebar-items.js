@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["limited",""],["small_quantity",""],["small_value",""],["small_weight",""],["unlimited",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["limited",""],["small_quantity",""],["small_value",""],["small_weight",""],["unlimited",""]]};

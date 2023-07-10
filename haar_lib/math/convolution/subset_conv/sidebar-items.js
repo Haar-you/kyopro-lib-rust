@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["subset_convolution",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["subset_convolution",""]]};

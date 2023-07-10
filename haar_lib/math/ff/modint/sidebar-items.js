@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["ModInt",""]],"trait":[["Modulo",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["ModInt",""]],"trait":[["Modulo",""]]};

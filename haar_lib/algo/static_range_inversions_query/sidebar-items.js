@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["StaticRangeInversionsQuery",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["StaticRangeInversionsQuery",""]]};

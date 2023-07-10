@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SegmentTreeBeats",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["SegmentTreeBeats",""]]};

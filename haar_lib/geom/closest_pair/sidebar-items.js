@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["closest_pair",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["closest_pair",""]]};

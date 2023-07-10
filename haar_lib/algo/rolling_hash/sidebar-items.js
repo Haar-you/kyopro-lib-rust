@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["RollingHash",""],["Table",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["RollingHash",""],["Table",""]]};

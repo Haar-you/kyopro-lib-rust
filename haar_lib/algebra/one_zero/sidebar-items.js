@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["One",""],["Zero",""]]});
+window.SIDEBAR_ITEMS = {"trait":[["One",""],["Zero",""]]};

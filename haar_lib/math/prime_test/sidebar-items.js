@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["eratosthenes",""],["traits",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["eratosthenes",""],["traits",""]]};
