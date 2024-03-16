@@ -1,5 +1,5 @@
 pub use crate::{
-    algebra::one_zero::{One, Zero},
+    traits::one_zero::{One, Zero},
     math::ff::traits::{Frac, Inv, Pow, FF},
 };
 use std::{

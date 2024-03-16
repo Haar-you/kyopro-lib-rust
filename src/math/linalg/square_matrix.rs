@@ -1,4 +1,4 @@
-pub use crate::algebra::one_zero::*;
+pub use crate::traits::one_zero::*;
 use crate::trait_alias;
 use std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 

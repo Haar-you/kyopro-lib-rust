@@ -1,4 +1,4 @@
-pub use crate::algebra::one_zero::*;
+pub use crate::traits::one_zero::*;
 pub use crate::algebra::traits::*;
 use std::{marker::PhantomData, ops::Mul};
 
