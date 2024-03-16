@@ -21,5 +21,6 @@ pub mod math;
 pub mod misc;
 pub mod tree;
 pub mod utils;
+pub mod traits;
 
 pub mod testtools;
