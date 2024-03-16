@@ -1,6 +1,7 @@
 //! 非負重み付き最短経路 (Dijkstra)
 
 use crate::graph::*;
+use crate::traits::{num::Unsigned, one_zero::Zero};
 use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
 /// Time complexity O((E + V) log V)
@@ -9,9 +10,9 @@ pub fn dijkstra<D: Direction, T, E: EdgeTrait<Weight = T>>(
     src: &[usize],
 ) -> Vec<Option<T>>
 where
-    T: Add<Output = T> + Copy + Ord + Default,
+    T: Add<Output = T> + Copy + Ord + Zero<Output = T> + Unsigned
 {
-    let zero = T::default();
+    let zero = T::zero();
     let n = g.len();
     let mut ret = vec![None; n];
     let mut heap: BinaryHeap<Reverse<(T, usize)>> = BinaryHeap::new();
@@ -58,7 +59,7 @@ mod tests {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_A
 
         // sample 1
-        let mut graph = Graph::<Directed, _>::new(4);
+        let mut graph = Graph::<Directed, Edge<u32, ()>>::new(4);
         graph.extend(
             vec![(0, 1, 1), (0, 2, 4), (1, 2, 2), (2, 3, 1), (1, 3, 5)]
                 .into_iter()
@@ -69,7 +70,7 @@ mod tests {
         assert_eq!(ans, [Some(0), Some(1), Some(3), Some(4)]);
 
         // sample 2
-        let mut graph = Graph::<Directed, _>::new(4);
+        let mut graph = Graph::<Directed, Edge<u32, ()>>::new(4);
         graph.extend(
             vec![
                 (0, 1, 1),
