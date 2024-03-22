@@ -1,13 +1,14 @@
+use crate::traits::{num::Signed, one_zero::Zero};
 use std::ops::{Add, Range, Sub};
 
 pub struct Imos1D<T> {
     data: Vec<T>,
 }
 
-impl<T: Copy + Default + Add<Output = T> + Sub<Output = T>> Imos1D<T> {
+impl<T: Copy + Signed + Zero<Output = T> + Add<Output = T> + Sub<Output = T>> Imos1D<T> {
     pub fn new(n: usize) -> Self {
         Self {
-            data: vec![T::default(); n],
+            data: vec![T::zero(); n],
         }
     }
 
@@ -24,5 +25,36 @@ impl<T: Copy + Default + Add<Output = T> + Sub<Output = T>> Imos1D<T> {
         }
 
         self.data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::testtools::*;
+    use rand::Rng;
+
+    #[test]
+    fn test() {
+        let n = 100;
+        let t = 1000;
+
+        let mut rng = rand::thread_rng();
+
+        let mut a = Imos1D::<i32>::new(n);
+        let mut ans = vec![0; n];
+
+        for _ in 0..t {
+            let lr = rand_range(&mut rng, 0..n + 1);
+            let x = rng.gen_range(-100..=100);
+
+            a.update(lr.clone(), x);
+
+            for i in lr {
+                ans[i] += x;
+            }
+        }
+
+        assert_eq!(a.build(), ans);
     }
 }
