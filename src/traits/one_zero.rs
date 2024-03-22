@@ -1,8 +1,10 @@
+/// 加算についての単位元をもつ
 pub trait Zero {
     type Output;
     fn zero() -> Self::Output;
 }
 
+/// 乗算についての単位元をもつ
 pub trait One {
     type Output;
     fn one() -> Self::Output;
