@@ -1,6 +1,6 @@
 pub use crate::{
-    traits::one_zero::{One, Zero},
     math::ff::traits::{Frac, Inv, Pow, FF},
+    traits::one_zero::{One, Zero},
 };
 use std::{
     fmt,

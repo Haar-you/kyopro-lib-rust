@@ -1,5 +1,5 @@
-pub use crate::traits::one_zero::*;
 use crate::trait_alias;
+pub use crate::traits::one_zero::*;
 use std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 
 trait_alias!(
