@@ -3,19 +3,21 @@
 #![allow(clippy::needless_range_loop)]
 
 use crate::graph::*;
+use crate::traits::one_zero::Zero;
 use std::{cmp::min, ops::Add};
 
 /// Time complexity O(V ^ 2 * 2 ^ V)
 pub fn chinese_postman_problem<T, E: EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> T
 where
-    T: Default + Copy + Ord + Add<Output = T>,
+    T: Zero<Output = T> + Copy + Ord + Add<Output = T>,
 {
     let n = g.len();
+    let zero = T::zero();
 
     let mut dist = vec![vec![None; n]; n];
 
     for i in 0..n {
-        dist[i][i] = Some(T::default());
+        dist[i][i] = Some(zero);
     }
 
     for i in 0..n {
@@ -45,7 +47,7 @@ where
     let m = odd.len();
 
     let mut dp = vec![None; 1 << m];
-    dp[0] = Some(T::default());
+    dp[0] = Some(zero);
 
     for i in 0..1 << m {
         for j in 0..m {
@@ -62,7 +64,7 @@ where
         }
     }
 
-    let mut ret = T::default();
+    let mut ret = zero;
 
     for i in 0..n {
         for e in &g.edges[i] {

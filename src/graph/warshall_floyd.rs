@@ -3,6 +3,7 @@
 #![allow(clippy::needless_range_loop)]
 
 use crate::graph::*;
+use crate::traits::one_zero::Zero;
 use std::{cmp::min, ops::Add};
 
 /// Time complexity O(n ^ 3)
@@ -10,9 +11,9 @@ pub fn warshall_floyd<D: Direction, T, E: EdgeTrait<Weight = T>>(
     g: &Graph<D, E>,
 ) -> Option<Vec<Vec<Option<T>>>>
 where
-    T: Add<Output = T> + Copy + Clone + Ord + Default,
+    T: Add<Output = T> + Copy + Ord + Zero<Output = T>,
 {
-    let zero = T::default();
+    let zero = T::zero();
     let n = g.len();
     let mut dist = vec![vec![None; n]; n];
 

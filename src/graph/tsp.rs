@@ -5,7 +5,7 @@ use std::{cmp::min, ops::Add};
 
 pub fn tsp<T, E: EdgeTrait<Weight = T>>(g: &Graph<Directed, E>, src: usize) -> Option<T>
 where
-    T: Default + Copy + Ord + Add<Output = T>,
+    T: Copy + Ord + Add<Output = T>,
 {
     let n = g.len();
     let mut dp = vec![vec![None; 1 << n]; n];
