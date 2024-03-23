@@ -118,7 +118,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test() {
+    fn test_diameter() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_A
         let mut tree = Tree::new(4);
         tree.extend(
@@ -135,7 +135,10 @@ mod tests {
                 .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
         );
         assert_eq!(tree_diameter(&tree).0, 7);
+    }
 
+    #[test]
+    fn test_height() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_B
         let mut tree = Tree::new(4);
         tree.extend(
