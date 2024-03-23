@@ -19,8 +19,8 @@ pub mod grid;
 pub mod macros;
 pub mod math;
 pub mod misc;
+pub mod traits;
 pub mod tree;
 pub mod utils;
-pub mod traits;
 
 pub mod testtools;
