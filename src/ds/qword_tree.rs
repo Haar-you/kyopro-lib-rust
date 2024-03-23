@@ -31,7 +31,11 @@ impl QwordTree {
     /// # Safety
     ///
     /// `x`は`MAX`以下でなければならない。
+    ///
+    /// `x`はQwordTreeに含まれていない。
     pub unsafe fn insert_unchecked(&mut self, x: u32) {
+        self.count += 1;
+
         let x = x as usize;
 
         *self.v3.get_unchecked_mut(x >> 6) |= 1 << (x & 0x3f);
@@ -45,8 +49,6 @@ impl QwordTree {
         if x > MAX || self.v3[x as usize >> 6] & (1 << (x & 0x3f)) != 0 {
             false
         } else {
-            self.count += 1;
-
             unsafe {
                 self.insert_unchecked(x);
             }
@@ -58,7 +60,11 @@ impl QwordTree {
     /// # Safety
     ///
     /// `x`は`MAX`以下でなければならない。
+    ///
+    /// `x`はQwordTreeに含まれている。
     pub unsafe fn erase_unchecked(&mut self, x: u32) {
+        self.count -= 1;
+
         let x = x as usize;
 
         *self.v3.get_unchecked_mut(x >> 6) &= !(1 << (x & 0x3f));
@@ -78,8 +84,6 @@ impl QwordTree {
         if x > MAX || self.v3[x as usize >> 6] & (1 << (x & 0x3f)) == 0 {
             false
         } else {
-            self.count -= 1;
-
             unsafe {
                 self.erase_unchecked(x);
             }
