@@ -25,12 +25,16 @@
 <a href="#25" id="25">25</a>
 <a href="#26" id="26">26</a>
 <a href="#27" id="27">27</a>
-</pre><pre class="rust"><code><span class="kw">pub trait </span>Zero {
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+</pre><pre class="rust"><code><span class="doccomment">/// 加算についての単位元をもつ
+</span><span class="kw">pub trait </span>Zero {
     <span class="kw">type </span>Output;
     <span class="kw">fn </span>zero() -&gt; <span class="self">Self</span>::Output;
 }
 
-<span class="kw">pub trait </span>One {
+<span class="doccomment">/// 乗算についての単位元をもつ
+</span><span class="kw">pub trait </span>One {
     <span class="kw">type </span>Output;
     <span class="kw">fn </span>one() -&gt; <span class="self">Self</span>::Output;
 }

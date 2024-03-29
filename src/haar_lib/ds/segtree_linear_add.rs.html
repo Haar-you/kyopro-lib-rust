@@ -139,11 +139,11 @@
 <a href="#139" id="139">139</a>
 <a href="#140" id="140">140</a>
 <a href="#141" id="141">141</a>
-<a href="#142" id="142">142</a>
 </pre><pre class="rust"><code><span class="doccomment">//! 区間一次関数加算セグメントツリー
 
 </span><span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::Indexable;
 <span class="kw">use </span><span class="kw">crate</span>::trait_alias;
+<span class="kw">use </span><span class="kw">crate</span>::traits::one_zero::Zero;
 <span class="kw">use </span>std::{
     cell::Cell,
     mem::size_of,
@@ -152,14 +152,13 @@
 
 <span class="macro">trait_alias!</span>(
     Elem,
-    Copy + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt; + From&lt;u32&gt;
+    Copy + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt; + Zero&lt;Output = <span class="self">Self</span>&gt; + From&lt;u32&gt;
 );
 
 <span class="kw">pub struct </span>SegmentTreeLinearAdd&lt;T&gt; {
     hsize: usize,
     data: Vec&lt;Cell&lt;(T, T)&gt;&gt;,
     from: Vec&lt;usize&gt;,
-    zero: T,
 }
 
 <span class="kw">fn </span>add&lt;T: Add&lt;Output = T&gt;&gt;((a, b): (T, T), (c, d): (T, T)) -&gt; (T, T) {
@@ -167,7 +166,7 @@
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; SegmentTreeLinearAdd&lt;T&gt; {
-    <span class="kw">pub fn </span>new(n: usize, zero: T) -&gt; <span class="self">Self </span>{
+    <span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
         <span class="kw">let </span>hsize = size / <span class="number">2</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>from = <span class="macro">vec!</span>[<span class="number">0</span>; size];
@@ -184,9 +183,8 @@
 
         <span class="self">Self </span>{
             hsize,
-            data: <span class="macro">vec!</span>[Cell::new((zero, zero)); size],
+            data: <span class="macro">vec!</span>[Cell::new((T::zero(), T::zero())); size],
             from,
-            zero,
         }
     }
 
@@ -226,7 +224,7 @@
             ));
             <span class="self">self</span>.data[i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>].set(add(<span class="self">self</span>.data[i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>].get(), <span class="self">self</span>.data[i].get()));
 
-            <span class="self">self</span>.data[i].set((<span class="self">self</span>.zero, <span class="self">self</span>.zero));
+            <span class="self">self</span>.data[i].set((T::zero(), T::zero()));
         }
     }
 
@@ -263,7 +261,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
 
         <span class="kw">let </span>n = <span class="number">100</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>seg = SegmentTreeLinearAdd::&lt;u64&gt;::new(n, <span class="number">0</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>seg = SegmentTreeLinearAdd::&lt;u64&gt;::new(n);
         <span class="kw">let </span><span class="kw-2">mut </span>vec = <span class="macro">vec!</span>[<span class="number">0</span>; n];
 
         <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">300 </span>{

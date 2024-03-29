@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":[["Float",""],["Int",""],["Signed",""],["Unsigned",""]]};
+window.SIDEBAR_ITEMS = {"trait":[["Float","浮動小数点型"],["Int","整数型"],["Signed","符号付きの数値型"],["Unsigned","非負の数値型"]]};

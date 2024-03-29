@@ -307,6 +307,10 @@
 <a href="#307" id="307">307</a>
 <a href="#308" id="308">308</a>
 <a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
 </pre><pre class="rust"><code><span class="doccomment">//! 64分木
 
 </span><span class="kw">pub const </span>MAX: u32 = (<span class="number">1 </span>&lt;&lt; <span class="number">24</span>) - <span class="number">1</span>;
@@ -340,7 +344,11 @@
     <span class="doccomment">/// # Safety
     ///
     /// `x`は`MAX`以下でなければならない。
+    ///
+    /// `x`はQwordTreeに含まれていない。
     </span><span class="kw">pub unsafe fn </span>insert_unchecked(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: u32) {
+        <span class="self">self</span>.count += <span class="number">1</span>;
+
         <span class="kw">let </span>x = x <span class="kw">as </span>usize;
 
         <span class="kw-2">*</span><span class="self">self</span>.v3.get_unchecked_mut(x &gt;&gt; <span class="number">6</span>) |= <span class="number">1 </span>&lt;&lt; (x &amp; <span class="number">0x3f</span>);
@@ -354,8 +362,6 @@
         <span class="kw">if </span>x &gt; MAX || <span class="self">self</span>.v3[x <span class="kw">as </span>usize &gt;&gt; <span class="number">6</span>] &amp; (<span class="number">1 </span>&lt;&lt; (x &amp; <span class="number">0x3f</span>)) != <span class="number">0 </span>{
             <span class="bool-val">false
         </span>} <span class="kw">else </span>{
-            <span class="self">self</span>.count += <span class="number">1</span>;
-
             <span class="kw">unsafe </span>{
                 <span class="self">self</span>.insert_unchecked(x);
             }
@@ -367,7 +373,11 @@
     <span class="doccomment">/// # Safety
     ///
     /// `x`は`MAX`以下でなければならない。
+    ///
+    /// `x`はQwordTreeに含まれている。
     </span><span class="kw">pub unsafe fn </span>erase_unchecked(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: u32) {
+        <span class="self">self</span>.count -= <span class="number">1</span>;
+
         <span class="kw">let </span>x = x <span class="kw">as </span>usize;
 
         <span class="kw-2">*</span><span class="self">self</span>.v3.get_unchecked_mut(x &gt;&gt; <span class="number">6</span>) &amp;= !(<span class="number">1 </span>&lt;&lt; (x &amp; <span class="number">0x3f</span>));
@@ -387,8 +397,6 @@
         <span class="kw">if </span>x &gt; MAX || <span class="self">self</span>.v3[x <span class="kw">as </span>usize &gt;&gt; <span class="number">6</span>] &amp; (<span class="number">1 </span>&lt;&lt; (x &amp; <span class="number">0x3f</span>)) == <span class="number">0 </span>{
             <span class="bool-val">false
         </span>} <span class="kw">else </span>{
-            <span class="self">self</span>.count -= <span class="number">1</span>;
-
             <span class="kw">unsafe </span>{
                 <span class="self">self</span>.erase_unchecked(x);
             }

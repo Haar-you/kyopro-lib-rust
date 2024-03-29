@@ -108,24 +108,28 @@
 <a href="#108" id="108">108</a>
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
 </pre><pre class="rust"><code><span class="doccomment">//! 中国人郵便配達問題
 
 </span><span class="attr">#![allow(clippy::needless_range_loop)]
 
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
+<span class="kw">use </span><span class="kw">crate</span>::traits::one_zero::Zero;
 <span class="kw">use </span>std::{cmp::min, ops::Add};
 
 <span class="doccomment">/// Time complexity O(V ^ 2 * 2 ^ V)
 </span><span class="kw">pub fn </span>chinese_postman_problem&lt;T, E: EdgeTrait&lt;Weight = T&gt;&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; T
 <span class="kw">where
-    </span>T: Default + Copy + Ord + Add&lt;Output = T&gt;,
+    </span>T: Zero&lt;Output = T&gt; + Copy + Ord + Add&lt;Output = T&gt;,
 {
     <span class="kw">let </span>n = g.len();
+    <span class="kw">let </span>zero = T::zero();
 
     <span class="kw">let </span><span class="kw-2">mut </span>dist = <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="prelude-val">None</span>; n]; n];
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-        dist[i][i] = <span class="prelude-val">Some</span>(T::default());
+        dist[i][i] = <span class="prelude-val">Some</span>(zero);
     }
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
@@ -155,7 +159,7 @@
     <span class="kw">let </span>m = odd.len();
 
     <span class="kw">let </span><span class="kw-2">mut </span>dp = <span class="macro">vec!</span>[<span class="prelude-val">None</span>; <span class="number">1 </span>&lt;&lt; m];
-    dp[<span class="number">0</span>] = <span class="prelude-val">Some</span>(T::default());
+    dp[<span class="number">0</span>] = <span class="prelude-val">Some</span>(zero);
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="number">1 </span>&lt;&lt; m {
         <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..m {
@@ -172,7 +176,7 @@
         }
     }
 
-    <span class="kw">let </span><span class="kw-2">mut </span>ret = T::default();
+    <span class="kw">let </span><span class="kw-2">mut </span>ret = zero;
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
         <span class="kw">for </span>e <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges[i] {

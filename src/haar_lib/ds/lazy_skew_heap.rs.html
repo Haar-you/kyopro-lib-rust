@@ -172,12 +172,14 @@
 <a href="#172" id="172">172</a>
 <a href="#173" id="173">173</a>
 <a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
 </pre><pre class="rust"><code><span class="doccomment">//! 遅延加算付き融合可能ヒープ
 
 </span><span class="kw">use </span><span class="kw">crate</span>::trait_alias;
+<span class="kw">use </span><span class="kw">crate</span>::traits::one_zero::Zero;
 <span class="kw">use </span>std::{mem::swap, ops::AddAssign};
 
-<span class="macro">trait_alias!</span>(Elem, Ord + Default + Copy + AddAssign);
+<span class="macro">trait_alias!</span>(Elem, Ord + Copy + Zero&lt;Output = <span class="self">Self</span>&gt; + AddAssign);
 
 <span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">struct </span>Node&lt;T&gt; {
@@ -191,7 +193,7 @@
     <span class="kw">pub fn </span>new(value: T) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             value,
-            lazy: T::default(),
+            lazy: T::zero(),
             left: <span class="prelude-val">None</span>,
             right: <span class="prelude-val">None</span>,
         }
@@ -205,7 +207,7 @@
         <span class="kw">if let </span><span class="prelude-val">Some</span>(right) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.right {
             right.as_mut().lazy += <span class="self">self</span>.lazy;
         }
-        <span class="self">self</span>.lazy = T::default();
+        <span class="self">self</span>.lazy = T::zero();
     }
 
     <span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="prelude-ty">Option</span>&lt;Box&lt;Node&lt;T&gt;&gt;&gt;) {

@@ -17,6 +17,10 @@
 <a href="#17" id="17">17</a>
 <a href="#18" id="18">18</a>
 <a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
 </pre><pre class="rust"><code><span class="macro">macro_rules! </span>implement {
     (<span class="macro-nonterminal">$tr</span>:ty; $(<span class="macro-nonterminal">$t</span>:ty),<span class="kw-2">*</span>) =&gt; {
         $(
@@ -25,15 +29,20 @@
     }
 }
 
-<span class="kw">pub trait </span>Unsigned {}
+<span class="doccomment">/// 非負の数値型
+</span><span class="kw">pub trait </span>Unsigned {}
 <span class="macro">implement!</span>(Unsigned; u8, u16, u32, u64, u128, usize);
 
-<span class="kw">pub trait </span>Signed {}
+<span class="doccomment">/// 符号付きの数値型
+</span><span class="kw">pub trait </span>Signed {}
 <span class="macro">implement!</span>(Signed; i8, i16, i32, i64, i128, isize, f32, f64);
 
-<span class="kw">pub trait </span>Int {}
+<span class="doccomment">/// 整数型
+</span><span class="kw">pub trait </span>Int {}
 <span class="macro">implement!</span>(Int; u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
 
-<span class="kw">pub trait </span>Float {}
-<span class="macro">implement!</span>(Float; f32, f64);</code></pre></div>
+<span class="doccomment">/// 浮動小数点型
+</span><span class="kw">pub trait </span>Float {}
+<span class="macro">implement!</span>(Float; f32, f64);
+</code></pre></div>
 </section></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="haar_lib" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0 (2c8cc3432 2023-03-06)" data-search-js="search-98d53477a794af0b.js" data-settings-js="settings-c3c521c753752a1a.js" data-settings-css="settings-08ddfdda51b8ee2e.css" ></div></body></html>

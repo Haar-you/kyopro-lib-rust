@@ -98,13 +98,16 @@
 <a href="#98" id="98">98</a>
 <a href="#99" id="99">99</a>
 <a href="#100" id="100">100</a>
-<a href="#101" id="101">101</a>
-<a href="#102" id="102">102</a>
-<a href="#103" id="103">103</a>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::trait_alias;
+<span class="kw">use </span>std::{
     collections::VecDeque,
     ops::{Add, Mul, Sub},
 };
+
+<span class="macro">trait_alias!</span>(
+    Elem,
+    Copy + PartialEq + PartialOrd + Sub&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt; + Add&lt;Output = <span class="self">Self</span>&gt;
+);
 
 <span class="attr">#[derive(PartialEq, Eq, Copy, Clone, Debug)]
 </span><span class="kw">pub enum </span>Mode {
@@ -121,17 +124,11 @@
     }
 }
 
-<span class="kw">fn </span>is_needless&lt;T&gt;(a: <span class="kw-2">&amp;</span>(T, T), b: <span class="kw-2">&amp;</span>(T, T), c: <span class="kw-2">&amp;</span>(T, T)) -&gt; bool
-<span class="kw">where
-    </span>T: Sub&lt;Output = T&gt; + Mul&lt;Output = T&gt; + PartialOrd + Copy,
-{
+<span class="kw">fn </span>is_needless&lt;T: Elem&gt;(a: <span class="kw-2">&amp;</span>(T, T), b: <span class="kw-2">&amp;</span>(T, T), c: <span class="kw-2">&amp;</span>(T, T)) -&gt; bool {
     (a.<span class="number">1 </span>- b.<span class="number">1</span>) * (a.<span class="number">0 </span>- c.<span class="number">0</span>) &gt;= (a.<span class="number">1 </span>- c.<span class="number">1</span>) * (a.<span class="number">0 </span>- b.<span class="number">0</span>)
 }
 
-<span class="kw">fn </span>apply&lt;T&gt;(l: (T, T), x: T) -&gt; T
-<span class="kw">where
-    </span>T: Add&lt;Output = T&gt; + Mul&lt;Output = T&gt;,
-{
+<span class="kw">fn </span>apply&lt;T: Elem&gt;(l: (T, T), x: T) -&gt; T {
     l.<span class="number">0 </span>* x + l.<span class="number">1
 </span>}
 
@@ -143,10 +140,7 @@
     last_slope: <span class="prelude-ty">Option</span>&lt;T&gt;,
 }
 
-<span class="kw">impl</span>&lt;T&gt; ConvexHullTrick&lt;T&gt;
-<span class="kw">where
-    </span>T: Copy + PartialEq + PartialOrd + Sub&lt;Output = T&gt; + Mul&lt;Output = T&gt; + Add&lt;Output = T&gt;,
-{
+<span class="kw">impl</span>&lt;T: Elem&gt; ConvexHullTrick&lt;T&gt; {
     <span class="kw">pub fn </span>new(mode: Mode) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             lines: VecDeque::new(),

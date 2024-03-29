@@ -55,21 +55,31 @@
 <a href="#55" id="55">55</a>
 <a href="#56" id="56">56</a>
 <a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
 </pre><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::{Foldable, Updatable};
+<span class="kw">use </span><span class="kw">crate</span>::trait_alias;
+<span class="kw">use </span><span class="kw">crate</span>::traits::one_zero::Zero;
 <span class="kw">use </span>std::ops::{Add, Range, RangeTo, Sub};
+
+<span class="macro">trait_alias!</span>(
+    Elem,
+    Copy + Zero&lt;Output = <span class="self">Self</span>&gt; + Add&lt;Output = <span class="self">Self</span>&gt; + Sub&lt;Output = <span class="self">Self</span>&gt;
+);
 
 <span class="kw">pub struct </span>FenwickTreeAdd&lt;T&gt; {
     data: Vec&lt;T&gt;,
     size: usize,
-    zero: T,
 }
 
-<span class="kw">impl</span>&lt;T: Copy + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt;&gt; FenwickTreeAdd&lt;T&gt; {
-    <span class="kw">pub fn </span>new(size: usize, zero: T) -&gt; <span class="self">Self </span>{
+<span class="kw">impl</span>&lt;T: Elem&gt; FenwickTreeAdd&lt;T&gt; {
+    <span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            data: <span class="macro">vec!</span>[zero; size + <span class="number">1</span>],
+            data: <span class="macro">vec!</span>[T::zero(); size + <span class="number">1</span>],
             size,
-            zero,
         }
     }
 
@@ -90,11 +100,11 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T: Copy + Add&lt;Output = T&gt;&gt; Foldable&lt;RangeTo&lt;usize&gt;&gt; <span class="kw">for </span>FenwickTreeAdd&lt;T&gt; {
+<span class="kw">impl</span>&lt;T: Elem&gt; Foldable&lt;RangeTo&lt;usize&gt;&gt; <span class="kw">for </span>FenwickTreeAdd&lt;T&gt; {
     <span class="kw">type </span>Output = T;
 
     <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, RangeTo { end: <span class="kw-2">mut </span>i }: RangeTo&lt;usize&gt;) -&gt; <span class="self">Self</span>::Output {
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">self</span>.zero;
+        <span class="kw">let </span><span class="kw-2">mut </span>ret = T::zero();
 
         <span class="kw">while </span>i &gt; <span class="number">0 </span>{
             ret = ret + <span class="self">self</span>.data[i];
@@ -105,7 +115,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T: Copy + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt;&gt; Foldable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>FenwickTreeAdd&lt;T&gt; {
+<span class="kw">impl</span>&lt;T: Elem&gt; Foldable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>FenwickTreeAdd&lt;T&gt; {
     <span class="kw">type </span>Output = T;
 
     <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="self">Self</span>::Output {

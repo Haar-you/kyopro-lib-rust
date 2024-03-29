@@ -158,11 +158,17 @@
 <a href="#158" id="158">158</a>
 <a href="#159" id="159">159</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
+<span class="kw">use </span><span class="kw">crate</span>::trait_alias;
 <span class="kw">use </span>std::{
     cmp::{max, min},
     mem::swap,
     ops::{Add, Mul},
 };
+
+<span class="macro">trait_alias!</span>(
+    Elem,
+    Copy + Ord + Default + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt;
+);
 
 <span class="attr">#[derive(PartialEq, Eq, Copy, Clone, Debug)]
 </span><span class="kw">pub enum </span>Mode {
@@ -171,14 +177,14 @@
 }
 
 <span class="kw">impl </span>Mode {
-    <span class="kw">fn </span>op&lt;T: Copy + Ord&gt;(<span class="self">self</span>, a: T, b: T) -&gt; T {
+    <span class="kw">fn </span>op&lt;T: Elem&gt;(<span class="self">self</span>, a: T, b: T) -&gt; T {
         <span class="kw">match </span><span class="self">self </span>{
             Mode::Max =&gt; max(a, b),
             Mode::Min =&gt; min(a, b),
         }
     }
 
-    <span class="kw">fn </span>cmp&lt;T: Copy + Ord&gt;(<span class="self">self</span>, a: T, b: T) -&gt; bool {
+    <span class="kw">fn </span>cmp&lt;T: Elem&gt;(<span class="self">self</span>, a: T, b: T) -&gt; bool {
         <span class="kw">match </span><span class="self">self </span>{
             Mode::Max =&gt; a &gt; b,
             Mode::Min =&gt; a &lt; b,
@@ -186,10 +192,7 @@
     }
 }
 
-<span class="kw">fn </span>apply&lt;T&gt;(l: (T, T), x: T) -&gt; T
-<span class="kw">where
-    </span>T: Add&lt;Output = T&gt; + Mul&lt;Output = T&gt;,
-{
+<span class="kw">fn </span>apply&lt;T: Elem&gt;(l: (T, T), x: T) -&gt; T {
     l.<span class="number">0 </span>* x + l.<span class="number">1
 </span>}
 
@@ -201,10 +204,7 @@
     mode: Mode,
 }
 
-<span class="kw">impl</span>&lt;T&gt; LiChaoTree&lt;T&gt;
-<span class="kw">where
-    </span>T: Copy + Ord + Default + Add&lt;Output = T&gt; + Mul&lt;Output = T&gt;,
-{
+<span class="kw">impl</span>&lt;T: Elem&gt; LiChaoTree&lt;T&gt; {
     <span class="kw">fn </span>init_range(
         range: <span class="kw-2">&amp;mut </span>Vec&lt;(usize, usize)&gt;,
         size: usize,

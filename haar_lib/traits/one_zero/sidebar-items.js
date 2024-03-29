@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":[["One",""],["Zero",""]]};
+window.SIDEBAR_ITEMS = {"trait":[["One","乗算についての単位元をもつ"],["Zero","加算についての単位元をもつ"]]};

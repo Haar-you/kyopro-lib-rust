@@ -112,6 +112,22 @@
 <a href="#112" id="112">112</a>
 <a href="#113" id="113">113</a>
 <a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
 </pre><pre class="rust"><code><span class="attr">#![allow(clippy::new_without_default)]
 
 </span><span class="kw">use </span>std::fmt::Display;
@@ -176,6 +192,14 @@
         ret
     }
 
+    <span class="kw">pub fn </span>read_u32(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u32 {
+        <span class="self">self</span>.read_u64() <span class="kw">as </span>u32
+    }
+
+    <span class="kw">pub fn </span>read_usize(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; usize {
+        <span class="self">self</span>.read_u64() <span class="kw">as </span>usize
+    }
+
     <span class="kw">pub fn </span>read_i64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; i64 {
         <span class="self">self</span>.skip();
         <span class="kw">let </span><span class="kw-2">mut </span>ret: i64 = <span class="number">0</span>;
@@ -197,6 +221,14 @@
         }
 
         ret
+    }
+
+    <span class="kw">pub fn </span>read_i32(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; i32 {
+        <span class="self">self</span>.read_i64() <span class="kw">as </span>i32
+    }
+
+    <span class="kw">pub fn </span>read_isize(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; isize {
+        <span class="self">self</span>.read_i64() <span class="kw">as </span>isize
     }
 
     <span class="kw">pub fn </span>read_chars(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;char&gt; {

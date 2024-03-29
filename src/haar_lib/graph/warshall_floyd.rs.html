@@ -115,11 +115,13 @@
 <a href="#115" id="115">115</a>
 <a href="#116" id="116">116</a>
 <a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
 </pre><pre class="rust"><code><span class="doccomment">//! 全頂点間最短経路長
 
 </span><span class="attr">#![allow(clippy::needless_range_loop)]
 
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
+<span class="kw">use </span><span class="kw">crate</span>::traits::one_zero::Zero;
 <span class="kw">use </span>std::{cmp::min, ops::Add};
 
 <span class="doccomment">/// Time complexity O(n ^ 3)
@@ -127,9 +129,9 @@
     g: <span class="kw-2">&amp;</span>Graph&lt;D, E&gt;,
 ) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;Vec&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;&gt;&gt;
 <span class="kw">where
-    </span>T: Add&lt;Output = T&gt; + Copy + Clone + Ord + Default,
+    </span>T: Add&lt;Output = T&gt; + Copy + Ord + Zero&lt;Output = T&gt;,
 {
-    <span class="kw">let </span>zero = T::default();
+    <span class="kw">let </span>zero = T::zero();
     <span class="kw">let </span>n = g.len();
     <span class="kw">let </span><span class="kw-2">mut </span>dist = <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="prelude-val">None</span>; n]; n];
 

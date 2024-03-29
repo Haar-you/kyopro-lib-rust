@@ -104,7 +104,7 @@
         <span class="kw">let </span>n = <span class="self">self</span>.data.len();
         <span class="kw">let </span>width = (n <span class="kw">as </span>f64).sqrt() <span class="kw">as </span>usize;
 
-        <span class="kw">let </span><span class="kw-2">mut </span>b = FenwickTreeAdd::&lt;i64&gt;::new(n, <span class="number">0</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>b = FenwickTreeAdd::&lt;i64&gt;::new(n);
         <span class="kw">let </span><span class="kw-2">mut </span>temp = <span class="number">0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="number">0</span>; <span class="self">self</span>.qs.len()];
 

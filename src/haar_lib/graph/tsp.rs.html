@@ -77,7 +77,7 @@
 
 <span class="kw">pub fn </span>tsp&lt;T, E: EdgeTrait&lt;Weight = T&gt;&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Directed, E&gt;, src: usize) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt;
 <span class="kw">where
-    </span>T: Default + Copy + Ord + Add&lt;Output = T&gt;,
+    </span>T: Copy + Ord + Add&lt;Output = T&gt;,
 {
     <span class="kw">let </span>n = g.len();
     <span class="kw">let </span><span class="kw-2">mut </span>dp = <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="prelude-val">None</span>; <span class="number">1 </span>&lt;&lt; n]; n];

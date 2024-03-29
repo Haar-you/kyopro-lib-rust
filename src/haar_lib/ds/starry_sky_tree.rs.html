@@ -181,10 +181,10 @@
 <a href="#181" id="181">181</a>
 <a href="#182" id="182">182</a>
 <a href="#183" id="183">183</a>
-<a href="#184" id="184">184</a>
 </pre><pre class="rust"><code><span class="doccomment">//! 区間加算・区間Max(Min)
 
 </span><span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::{Foldable, Updatable};
+<span class="kw">use </span><span class="kw">crate</span>::traits::one_zero::Zero;
 <span class="kw">use crate</span>::{rec, trait_alias};
 <span class="kw">use </span>std::{
     cmp::{max, min},
@@ -193,7 +193,7 @@
 
 <span class="macro">trait_alias!</span>(
     Elem,
-    Add&lt;Output = <span class="self">Self</span>&gt; + AddAssign + SubAssign + Ord + Copy + Default
+    Add&lt;Output = <span class="self">Self</span>&gt; + AddAssign + SubAssign + Ord + Copy + Zero&lt;Output = <span class="self">Self</span>&gt;
 );
 
 <span class="attr">#[derive(Copy, Clone)]
@@ -214,18 +214,16 @@
 <span class="kw">pub struct </span>StarrySkyTree&lt;T&gt; {
     size: usize,
     data: Vec&lt;T&gt;,
-    zero: T,
     mode: Mode,
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; StarrySkyTree&lt;T&gt; {
     <span class="kw">pub fn </span>new(n: usize, mode: Mode) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
-        <span class="kw">let </span>zero = T::default();
+        <span class="kw">let </span>zero = T::zero();
         StarrySkyTree {
             size,
             data: <span class="macro">vec!</span>[zero; size],
-            zero,
             mode,
         }
     }
@@ -258,7 +256,7 @@
             }
         );
 
-        rec((<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, <span class="self">self</span>.zero))
+        rec((<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, T::zero()))
     }
 }
 
