@@ -1,6 +1,7 @@
 //! 区間加算・区間Max(Min)
 
 pub use crate::ds::traits::{Foldable, Updatable};
+use crate::traits::one_zero::Zero;
 use crate::{rec, trait_alias};
 use std::{
     cmp::{max, min},
@@ -9,7 +10,7 @@ use std::{
 
 trait_alias!(
     Elem,
-    Add<Output = Self> + AddAssign + SubAssign + Ord + Copy + Default
+    Add<Output = Self> + AddAssign + SubAssign + Ord + Copy + Zero<Output = Self>
 );
 
 #[derive(Copy, Clone)]
@@ -30,18 +31,16 @@ impl Mode {
 pub struct StarrySkyTree<T> {
     size: usize,
     data: Vec<T>,
-    zero: T,
     mode: Mode,
 }
 
 impl<T: Elem> StarrySkyTree<T> {
     pub fn new(n: usize, mode: Mode) -> Self {
         let size = n.next_power_of_two() * 2;
-        let zero = T::default();
+        let zero = T::zero();
         StarrySkyTree {
             size,
             data: vec![zero; size],
-            zero,
             mode,
         }
     }
@@ -74,7 +73,7 @@ impl<T: Elem> Foldable<Range<usize>> for StarrySkyTree<T> {
             }
         );
 
-        rec((1, 0, self.size / 2, self.zero))
+        rec((1, 0, self.size / 2, T::zero()))
     }
 }
 

@@ -1,9 +1,15 @@
 use crate::algo::bsearch::lower_bound;
+use crate::trait_alias;
 use std::{
     cmp::{max, min},
     mem::swap,
     ops::{Add, Mul},
 };
+
+trait_alias!(
+    Elem,
+    Copy + Ord + Default + Add<Output = Self> + Mul<Output = Self>
+);
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug)]
 pub enum Mode {
@@ -12,14 +18,14 @@ pub enum Mode {
 }
 
 impl Mode {
-    fn op<T: Copy + Ord>(self, a: T, b: T) -> T {
+    fn op<T: Elem>(self, a: T, b: T) -> T {
         match self {
             Mode::Max => max(a, b),
             Mode::Min => min(a, b),
         }
     }
 
-    fn cmp<T: Copy + Ord>(self, a: T, b: T) -> bool {
+    fn cmp<T: Elem>(self, a: T, b: T) -> bool {
         match self {
             Mode::Max => a > b,
             Mode::Min => a < b,
@@ -27,10 +33,7 @@ impl Mode {
     }
 }
 
-fn apply<T>(l: (T, T), x: T) -> T
-where
-    T: Add<Output = T> + Mul<Output = T>,
-{
+fn apply<T: Elem>(l: (T, T), x: T) -> T {
     l.0 * x + l.1
 }
 
@@ -42,10 +45,7 @@ pub struct LiChaoTree<T> {
     mode: Mode,
 }
 
-impl<T> LiChaoTree<T>
-where
-    T: Copy + Ord + Default + Add<Output = T> + Mul<Output = T>,
-{
+impl<T: Elem> LiChaoTree<T> {
     fn init_range(
         range: &mut Vec<(usize, usize)>,
         size: usize,

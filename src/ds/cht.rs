@@ -1,7 +1,13 @@
+use crate::trait_alias;
 use std::{
     collections::VecDeque,
     ops::{Add, Mul, Sub},
 };
+
+trait_alias!(
+    Elem,
+    Copy + PartialEq + PartialOrd + Sub<Output = Self> + Mul<Output = Self> + Add<Output = Self>
+);
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug)]
 pub enum Mode {
@@ -18,17 +24,11 @@ impl Mode {
     }
 }
 
-fn is_needless<T>(a: &(T, T), b: &(T, T), c: &(T, T)) -> bool
-where
-    T: Sub<Output = T> + Mul<Output = T> + PartialOrd + Copy,
-{
+fn is_needless<T: Elem>(a: &(T, T), b: &(T, T), c: &(T, T)) -> bool {
     (a.1 - b.1) * (a.0 - c.0) >= (a.1 - c.1) * (a.0 - b.0)
 }
 
-fn apply<T>(l: (T, T), x: T) -> T
-where
-    T: Add<Output = T> + Mul<Output = T>,
-{
+fn apply<T: Elem>(l: (T, T), x: T) -> T {
     l.0 * x + l.1
 }
 
@@ -40,10 +40,7 @@ pub struct ConvexHullTrick<T> {
     last_slope: Option<T>,
 }
 
-impl<T> ConvexHullTrick<T>
-where
-    T: Copy + PartialEq + PartialOrd + Sub<Output = T> + Mul<Output = T> + Add<Output = T>,
-{
+impl<T: Elem> ConvexHullTrick<T> {
     pub fn new(mode: Mode) -> Self {
         Self {
             lines: VecDeque::new(),

@@ -24,7 +24,7 @@ impl StaticRangeInversionsQuery {
         let n = self.data.len();
         let width = (n as f64).sqrt() as usize;
 
-        let mut b = FenwickTreeAdd::<i64>::new(n, 0);
+        let mut b = FenwickTreeAdd::<i64>::new(n);
         let mut temp = 0;
         let mut ret = vec![0; self.qs.len()];
 

@@ -1,18 +1,23 @@
 pub use crate::ds::traits::{Foldable, Updatable};
+use crate::trait_alias;
+use crate::traits::one_zero::Zero;
 use std::ops::{Add, Range, RangeTo, Sub};
+
+trait_alias!(
+    Elem,
+    Copy + Zero<Output = Self> + Add<Output = Self> + Sub<Output = Self>
+);
 
 pub struct FenwickTreeAdd<T> {
     data: Vec<T>,
     size: usize,
-    zero: T,
 }
 
-impl<T: Copy + Add<Output = T> + Sub<Output = T>> FenwickTreeAdd<T> {
-    pub fn new(size: usize, zero: T) -> Self {
+impl<T: Elem> FenwickTreeAdd<T> {
+    pub fn new(size: usize) -> Self {
         Self {
-            data: vec![zero; size + 1],
+            data: vec![T::zero(); size + 1],
             size,
-            zero,
         }
     }
 
@@ -33,11 +38,11 @@ impl<T: Copy + Add<Output = T> + Sub<Output = T>> FenwickTreeAdd<T> {
     }
 }
 
-impl<T: Copy + Add<Output = T>> Foldable<RangeTo<usize>> for FenwickTreeAdd<T> {
+impl<T: Elem> Foldable<RangeTo<usize>> for FenwickTreeAdd<T> {
     type Output = T;
 
     fn fold(&self, RangeTo { end: mut i }: RangeTo<usize>) -> Self::Output {
-        let mut ret = self.zero;
+        let mut ret = T::zero();
 
         while i > 0 {
             ret = ret + self.data[i];
@@ -48,7 +53,7 @@ impl<T: Copy + Add<Output = T>> Foldable<RangeTo<usize>> for FenwickTreeAdd<T> {
     }
 }
 
-impl<T: Copy + Add<Output = T> + Sub<Output = T>> Foldable<Range<usize>> for FenwickTreeAdd<T> {
+impl<T: Elem> Foldable<Range<usize>> for FenwickTreeAdd<T> {
     type Output = T;
 
     fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {

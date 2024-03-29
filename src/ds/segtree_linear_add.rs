@@ -2,6 +2,7 @@
 
 pub use crate::ds::traits::Indexable;
 use crate::trait_alias;
+use crate::traits::one_zero::Zero;
 use std::{
     cell::Cell,
     mem::size_of,
@@ -10,14 +11,13 @@ use std::{
 
 trait_alias!(
     Elem,
-    Copy + Add<Output = Self> + Mul<Output = Self> + From<u32>
+    Copy + Add<Output = Self> + Mul<Output = Self> + Zero<Output = Self> + From<u32>
 );
 
 pub struct SegmentTreeLinearAdd<T> {
     hsize: usize,
     data: Vec<Cell<(T, T)>>,
     from: Vec<usize>,
-    zero: T,
 }
 
 fn add<T: Add<Output = T>>((a, b): (T, T), (c, d): (T, T)) -> (T, T) {
@@ -25,7 +25,7 @@ fn add<T: Add<Output = T>>((a, b): (T, T), (c, d): (T, T)) -> (T, T) {
 }
 
 impl<T: Elem> SegmentTreeLinearAdd<T> {
-    pub fn new(n: usize, zero: T) -> Self {
+    pub fn new(n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
         let hsize = size / 2;
         let mut from = vec![0; size];
@@ -42,9 +42,8 @@ impl<T: Elem> SegmentTreeLinearAdd<T> {
 
         Self {
             hsize,
-            data: vec![Cell::new((zero, zero)); size],
+            data: vec![Cell::new((T::zero(), T::zero())); size],
             from,
-            zero,
         }
     }
 
@@ -84,7 +83,7 @@ impl<T: Elem> SegmentTreeLinearAdd<T> {
             ));
             self.data[i << 1 | 1].set(add(self.data[i << 1 | 1].get(), self.data[i].get()));
 
-            self.data[i].set((self.zero, self.zero));
+            self.data[i].set((T::zero(), T::zero()));
         }
     }
 
@@ -121,7 +120,7 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 100;
-        let mut seg = SegmentTreeLinearAdd::<u64>::new(n, 0);
+        let mut seg = SegmentTreeLinearAdd::<u64>::new(n);
         let mut vec = vec![0; n];
 
         for _ in 0..300 {

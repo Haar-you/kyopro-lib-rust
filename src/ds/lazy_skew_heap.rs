@@ -1,9 +1,10 @@
 //! 遅延加算付き融合可能ヒープ
 
 use crate::trait_alias;
+use crate::traits::one_zero::Zero;
 use std::{mem::swap, ops::AddAssign};
 
-trait_alias!(Elem, Ord + Default + Copy + AddAssign);
+trait_alias!(Elem, Ord + Copy + Zero<Output = Self> + AddAssign);
 
 #[derive(Debug, Clone)]
 struct Node<T> {
@@ -17,7 +18,7 @@ impl<T: Elem> Node<T> {
     pub fn new(value: T) -> Self {
         Self {
             value,
-            lazy: T::default(),
+            lazy: T::zero(),
             left: None,
             right: None,
         }
@@ -31,7 +32,7 @@ impl<T: Elem> Node<T> {
         if let Some(right) = &mut self.right {
             right.as_mut().lazy += self.lazy;
         }
-        self.lazy = T::default();
+        self.lazy = T::zero();
     }
 
     pub fn meld(&mut self, other: Option<Box<Node<T>>>) {

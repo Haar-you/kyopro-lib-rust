@@ -2,12 +2,13 @@
 
 pub use crate::ds::traits::{Foldable, Updatable};
 use crate::trait_alias;
+use crate::traits::one_zero::Zero;
 use std::cell::Cell;
 use std::ops::{Add, Mul, Range};
 
 trait_alias!(
     Elem,
-    Copy + Default + Add<Output = Self> + Mul<Output = Self> + PartialEq
+    Copy + Zero<Output = Self> + Add<Output = Self> + Mul<Output = Self> + PartialEq
 );
 
 pub struct LazySegmentTreeCoeff<T> {
@@ -21,7 +22,7 @@ impl<T: Elem> LazySegmentTreeCoeff<T> {
     pub fn new(n: usize, coefficients: Vec<T>) -> Self {
         let size = n.next_power_of_two() * 2;
 
-        let mut coeff = vec![T::default(); size];
+        let mut coeff = vec![T::zero(); size];
 
         for i in 0..coefficients.len() {
             coeff[i + size / 2] = coefficients[i];
@@ -32,15 +33,15 @@ impl<T: Elem> LazySegmentTreeCoeff<T> {
 
         Self {
             size,
-            data: vec![Cell::new(T::default()); size],
-            lazy: vec![Cell::new(T::default()); size],
+            data: vec![Cell::new(T::zero()); size],
+            lazy: vec![Cell::new(T::zero()); size],
             coeff,
         }
     }
 
     pub fn init_with_vec(&mut self, value: Vec<T>) {
-        self.data = vec![Cell::new(T::default()); self.size];
-        self.lazy = vec![Cell::new(T::default()); self.size];
+        self.data = vec![Cell::new(T::zero()); self.size];
+        self.lazy = vec![Cell::new(T::zero()); self.size];
 
         for (i, x) in value.into_iter().enumerate() {
             self.data[self.size / 2 + i].set(x);
@@ -51,13 +52,13 @@ impl<T: Elem> LazySegmentTreeCoeff<T> {
     }
 
     fn propagate(&self, i: usize) {
-        if self.lazy[i].get() != T::default() {
+        if self.lazy[i].get() != T::zero() {
             if i < self.size / 2 {
                 self.lazy[i << 1].set(self.lazy[i].get() + self.lazy[i << 1].get());
                 self.lazy[i << 1 | 1].set(self.lazy[i].get() + self.lazy[i << 1 | 1].get());
             }
             self.data[i].set(self.data[i].get() + self.lazy[i].get() * self.coeff[i]);
-            self.lazy[i].set(T::default());
+            self.lazy[i].set(T::zero());
         }
     }
 
@@ -81,7 +82,7 @@ impl<T: Elem> LazySegmentTreeCoeff<T> {
     fn get_internal(&self, i: usize, l: usize, r: usize, x: usize, y: usize) -> T {
         self.propagate(i);
         if r <= x || y <= l {
-            return T::default();
+            return T::zero();
         }
         if x <= l && r <= y {
             return self.data[i].get();
