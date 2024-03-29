@@ -62,6 +62,14 @@ impl FastIO {
         ret
     }
 
+    pub fn read_u32(&mut self) -> u32 {
+        self.read_u64() as u32
+    }
+
+    pub fn read_usize(&mut self) -> usize {
+        self.read_u64() as usize
+    }
+
     pub fn read_i64(&mut self) -> i64 {
         self.skip();
         let mut ret: i64 = 0;
@@ -83,6 +91,14 @@ impl FastIO {
         }
 
         ret
+    }
+
+    pub fn read_i32(&mut self) -> i32 {
+        self.read_i64() as i32
+    }
+
+    pub fn read_isize(&mut self) -> isize {
+        self.read_i64() as isize
     }
 
     pub fn read_chars(&mut self) -> Vec<char> {
