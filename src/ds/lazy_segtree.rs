@@ -2,16 +2,14 @@ use crate::algebra::action::Action;
 pub use crate::ds::traits::Updatable;
 use std::ops::Range;
 
-pub struct LazySegmentTree<T, U, A> {
+pub struct LazySegtree<T, U, A> {
     size: usize,
     data: Vec<T>,
     lazy: Vec<U>,
     action: A,
 }
 
-impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>>
-    LazySegmentTree<T, U, A>
-{
+impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> LazySegtree<T, U, A> {
     pub fn new(n: usize, a: A) -> Self {
         let size = n.next_power_of_two() * 2;
         Self {
@@ -96,7 +94,7 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>>
 }
 
 impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Updatable<Range<usize>>
-    for LazySegmentTree<T, U, A>
+    for LazySegtree<T, U, A>
 {
     type Value = U;
     fn update(&mut self, Range { start: l, end: r }: Range<usize>, x: U) {
@@ -145,7 +143,7 @@ mod tests {
         let q = 100;
         let range = 1000;
 
-        let mut seg = LazySegmentTree::new(n, AddSum::<u64, u64>::new());
+        let mut seg = LazySegtree::new(n, AddSum::<u64, u64>::new());
         let mut vec = vec![0; n];
 
         let mut rng = rand::thread_rng();

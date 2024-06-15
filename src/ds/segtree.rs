@@ -3,21 +3,21 @@ pub use crate::ds::traits::{Assignable, Foldable, Updatable};
 use std::ops::{Index, RangeBounds};
 
 #[derive(Clone)]
-pub struct SegmentTree<T, M> {
+pub struct Segtree<T, M> {
     original_size: usize,
     size: usize,
     data: Vec<T>,
     monoid: M,
 }
 
-impl<T, M> SegmentTree<T, M>
+impl<T, M> Segtree<T, M>
 where
     T: Clone,
     M: Monoid<Output = T>,
 {
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
-        SegmentTree {
+        Segtree {
             original_size: n,
             size,
             data: vec![monoid.id(); size],
@@ -26,7 +26,7 @@ where
     }
 }
 
-impl<T, M, R> Foldable<R> for SegmentTree<T, M>
+impl<T, M, R> Foldable<R> for Segtree<T, M>
 where
     T: Clone,
     M: Monoid<Output = T>,
@@ -72,7 +72,7 @@ where
     }
 }
 
-impl<T, M> Assignable<usize> for SegmentTree<T, M>
+impl<T, M> Assignable<usize> for Segtree<T, M>
 where
     T: Clone,
     M: Monoid<Output = T>,
@@ -92,7 +92,7 @@ where
     }
 }
 
-impl<T, M> Updatable<usize> for SegmentTree<T, M>
+impl<T, M> Updatable<usize> for Segtree<T, M>
 where
     T: Clone,
     M: Monoid<Output = T>,
@@ -107,16 +107,16 @@ where
     }
 }
 
-impl<T, M> From<&SegmentTree<T, M>> for Vec<T>
+impl<T, M> From<&Segtree<T, M>> for Vec<T>
 where
     T: Clone,
 {
-    fn from(from: &SegmentTree<T, M>) -> Vec<T> {
+    fn from(from: &Segtree<T, M>) -> Vec<T> {
         from.data[from.size / 2..from.size / 2 + from.original_size].to_vec()
     }
 }
 
-impl<T, M> Index<usize> for SegmentTree<T, M> {
+impl<T, M> Index<usize> for Segtree<T, M> {
     type Output = T;
 
     fn index(&self, i: usize) -> &Self::Output {
@@ -139,7 +139,7 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let mut other = vec![m.id().clone(); size];
-        let mut s = SegmentTree::<T, _>::new(size, m.clone());
+        let mut s = Segtree::<T, _>::new(size, m.clone());
 
         for _ in 0..1000 {
             let ty = rng.gen_range(0..2);

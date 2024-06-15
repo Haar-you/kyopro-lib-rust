@@ -14,7 +14,7 @@ trait_alias!(
     Copy + Add<Output = Self> + Mul<Output = Self> + Zero<Output = Self> + From<u32>
 );
 
-pub struct SegmentTreeLinearAdd<T> {
+pub struct SegtreeLinearAdd<T> {
     hsize: usize,
     data: Vec<Cell<(T, T)>>,
     from: Vec<usize>,
@@ -24,7 +24,7 @@ fn add<T: Add<Output = T>>((a, b): (T, T), (c, d): (T, T)) -> (T, T) {
     (a + c, b + d)
 }
 
-impl<T: Elem> SegmentTreeLinearAdd<T> {
+impl<T: Elem> SegtreeLinearAdd<T> {
     pub fn new(n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
         let hsize = size / 2;
@@ -100,7 +100,7 @@ impl<T: Elem> SegmentTreeLinearAdd<T> {
     }
 }
 
-impl<T: Elem> Indexable<usize> for SegmentTreeLinearAdd<T> {
+impl<T: Elem> Indexable<usize> for SegtreeLinearAdd<T> {
     type Output = T;
 
     fn get(&self, i: usize) -> Self::Output {
@@ -120,7 +120,7 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 100;
-        let mut seg = SegmentTreeLinearAdd::<u64>::new(n);
+        let mut seg = SegtreeLinearAdd::<u64>::new(n);
         let mut vec = vec![0; n];
 
         for _ in 0..300 {

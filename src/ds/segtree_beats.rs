@@ -14,7 +14,7 @@ fn rc(i: usize) -> usize {
 }
 
 #[derive(Clone, Debug)]
-pub struct SegmentTreeBeats {
+pub struct SegtreeBeats {
     hsize: usize,
 
     fst_max: Vec<i64>,
@@ -29,7 +29,7 @@ pub struct SegmentTreeBeats {
     lazy_add: Vec<i64>,
 }
 
-impl SegmentTreeBeats {
+impl SegtreeBeats {
     pub fn new(n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
 
@@ -295,7 +295,7 @@ mod test {
         let limit = 1000000000;
 
         let mut a = vec![0; n];
-        let mut seg = SegmentTreeBeats::new_with_vec(a.clone());
+        let mut seg = SegtreeBeats::new_with_vec(a.clone());
 
         for _ in 0..10000 {
             match rng.gen_range(0..=5) {

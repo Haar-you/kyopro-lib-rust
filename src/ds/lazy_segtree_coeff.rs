@@ -11,14 +11,14 @@ trait_alias!(
     Copy + Zero<Output = Self> + Add<Output = Self> + Mul<Output = Self> + PartialEq
 );
 
-pub struct LazySegmentTreeCoeff<T> {
+pub struct LazySegtreeCoeff<T> {
     size: usize,
     data: Vec<Cell<T>>,
     lazy: Vec<Cell<T>>,
     coeff: Vec<T>,
 }
 
-impl<T: Elem> LazySegmentTreeCoeff<T> {
+impl<T: Elem> LazySegtreeCoeff<T> {
     pub fn new(n: usize, coefficients: Vec<T>) -> Self {
         let size = n.next_power_of_two() * 2;
 
@@ -92,14 +92,14 @@ impl<T: Elem> LazySegmentTreeCoeff<T> {
     }
 }
 
-impl<T: Elem> Updatable<Range<usize>> for LazySegmentTreeCoeff<T> {
+impl<T: Elem> Updatable<Range<usize>> for LazySegtreeCoeff<T> {
     type Value = T;
     fn update(&mut self, Range { start, end }: Range<usize>, value: T) {
         self.update_internal(1, 0, self.size / 2, start, end, value);
     }
 }
 
-impl<T: Elem> Foldable<Range<usize>> for LazySegmentTreeCoeff<T> {
+impl<T: Elem> Foldable<Range<usize>> for LazySegtreeCoeff<T> {
     type Output = T;
     fn fold(&self, Range { start, end }: Range<usize>) -> T {
         self.get_internal(1, 0, self.size / 2, start, end)
