@@ -7,6 +7,7 @@ pub mod lowlink;
 pub mod scc;
 pub mod two_edge;
 
+pub mod functional_graph;
 pub mod pseudo_tree;
 
 pub mod bellman_ford;
