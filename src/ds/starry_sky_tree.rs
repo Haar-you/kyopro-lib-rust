@@ -1,16 +1,16 @@
 //! 区間加算・区間Max(Min)
 
 pub use crate::ds::traits::{Foldable, Updatable};
+use crate::trait_alias;
 use crate::traits::one_zero::Zero;
-use crate::{rec, trait_alias};
 use std::{
     cmp::{max, min},
-    ops::{Add, AddAssign, Range, SubAssign},
+    ops::{Add, Range, Sub},
 };
 
 trait_alias!(
     Elem,
-    Add<Output = Self> + AddAssign + SubAssign + Ord + Copy + Zero<Output = Self>
+    Add<Output = Self> + Sub<Output = Self> + Ord + Copy + Zero<Output = Self>
 );
 
 #[derive(Copy, Clone)]
@@ -44,43 +44,30 @@ impl<T: Elem> StarrySkyTree<T> {
             mode,
         }
     }
-}
 
-impl<T: Elem> Foldable<Range<usize>> for StarrySkyTree<T> {
-    type Output = Option<T>;
+    fn rec(&self, s: usize, t: usize, i: usize, l: usize, r: usize, value: T) -> Option<T> {
+        if r <= s || t <= l {
+            return None;
+        }
+        if s <= l && r <= t {
+            return Some(value + self.data[i]);
+        }
 
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
-        let s = l;
-        let t = r;
+        let a = self.rec(s, t, i << 1, l, (l + r) / 2, value + self.data[i]);
+        let b = self.rec(s, t, i << 1 | 1, (l + r) / 2, r, value + self.data[i]);
 
-        let rec = rec!(
-            |rec, (i, l, r, value): (usize, usize, usize, T)| -> Option<T> {
-                if r <= s || t <= l {
-                    return None;
-                }
-                if s <= l && r <= t {
-                    return Some(value + self.data[i]);
-                }
-
-                let a = rec((i << 1, l, (l + r) / 2, value + self.data[i]));
-                let b = rec((i << 1 | 1, (l + r) / 2, r, value + self.data[i]));
-
-                match (a, b) {
-                    (None, _) => b,
-                    (_, None) => a,
-                    (Some(a), Some(b)) => Some(self.mode.op(a, b)),
-                }
-            }
-        );
-
-        rec((1, 0, self.size / 2, T::zero()))
+        match (a, b) {
+            (None, _) => b,
+            (_, None) => a,
+            (Some(a), Some(b)) => Some(self.mode.op(a, b)),
+        }
     }
-}
 
-impl<T: Elem> Updatable<Range<usize>> for StarrySkyTree<T> {
-    type Value = T;
+    fn _fold(&self, l: usize, r: usize) -> Option<T> {
+        self.rec(l, r, 1, 0, self.size / 2, T::zero())
+    }
 
-    fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
+    fn _update(&mut self, l: usize, r: usize, value: T) {
         let hsize = self.size / 2;
         let mut ll = l + self.size / 2;
         let mut rr = r + self.size / 2;
@@ -88,10 +75,10 @@ impl<T: Elem> Updatable<Range<usize>> for StarrySkyTree<T> {
         while ll < rr {
             if (rr & 1) != 0 {
                 rr -= 1;
-                self.data[rr] += value;
+                self.data[rr] = self.data[rr] + value;
             }
             if (ll & 1) != 0 {
-                self.data[ll] += value;
+                self.data[ll] = self.data[ll] + value;
                 ll += 1;
             }
             ll >>= 1;
@@ -107,9 +94,9 @@ impl<T: Elem> Updatable<Range<usize>> for StarrySkyTree<T> {
                 if i < self.size / 2 {
                     let d = self.mode.op(self.data[i << 1], self.data[i << 1 | 1]);
 
-                    self.data[i << 1] -= d;
-                    self.data[i << 1 | 1] -= d;
-                    self.data[i] += d;
+                    self.data[i << 1] = self.data[i << 1] - d;
+                    self.data[i << 1 | 1] = self.data[i << 1 | 1] - d;
+                    self.data[i] = self.data[i] + d;
                 }
 
                 i >>= 1;
@@ -118,6 +105,22 @@ impl<T: Elem> Updatable<Range<usize>> for StarrySkyTree<T> {
 
         bottom_up(l + hsize);
         bottom_up(r + hsize);
+    }
+}
+
+impl<T: Elem> Foldable<Range<usize>> for StarrySkyTree<T> {
+    type Output = Option<T>;
+
+    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
+        self._fold(l, r)
+    }
+}
+
+impl<T: Elem> Updatable<Range<usize>> for StarrySkyTree<T> {
+    type Value = T;
+
+    fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
+        self._update(l, r, value);
     }
 }
 
