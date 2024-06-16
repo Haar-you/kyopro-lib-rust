@@ -30,7 +30,7 @@ impl<E: EdgeTrait + Clone> DirectedEulerianTrail<E> {
     fn dfs(&mut self, cur: usize, vs: &mut Vec<usize>, es: &mut Vec<E>) {
         while let Some(e) = self.graph[cur].pop() {
             let next = e.to();
-            self.dfs(next as usize, vs, es);
+            self.dfs(next, vs, es);
             es.push(e);
         }
 
