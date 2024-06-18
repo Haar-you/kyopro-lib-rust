@@ -1,26 +1,50 @@
 pub mod to_graph;
 
-#[derive(Clone, Copy, Debug, Default)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Position {
-    pub x: isize,
-    pub y: isize,
+    pub x: usize,
+    pub y: usize,
+}
+
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct Dir {
+    pub dx: isize,
+    pub dy: isize,
 }
 
 impl Position {
-    pub fn new(x: isize, y: isize) -> Self {
+    pub fn new(x: usize, y: usize) -> Self {
         Self { x, y }
     }
-    pub const L: Position = Position { x: 0, y: -1 };
-    pub const R: Position = Position { x: 0, y: 1 };
-    pub const U: Position = Position { x: -1, y: 0 };
-    pub const D: Position = Position { x: 1, y: 0 };
-    pub const DIR_4: [Position; 4] = [Self::L, Self::R, Self::U, Self::D];
+
+    pub fn mov_strict(self, d: Dir, h: usize, w: usize) -> Option<Self> {
+        let x = self.x.checked_add_signed(d.dx)?;
+        let y = self.y.checked_add_signed(d.dy)?;
+
+        if x >= h || y >= w {
+            None
+        } else {
+            Some(Self::new(x, y))
+        }
+    }
 }
 
-impl std::ops::Add for Position {
+impl Dir {
+    pub fn new(dx: isize, dy: isize) -> Self {
+        Self { dx, dy }
+    }
+
+    pub const L: Dir = Dir { dx: 0, dy: -1 };
+    pub const R: Dir = Dir { dx: 0, dy: 1 };
+    pub const U: Dir = Dir { dx: -1, dy: 0 };
+    pub const D: Dir = Dir { dx: 1, dy: 0 };
+    pub const DIR_4: [Dir; 4] = [Self::L, Self::R, Self::U, Self::D];
+}
+
+impl std::ops::Add for Dir {
     type Output = Self;
     fn add(self, other: Self) -> Self {
-        Self::new(self.x + other.x, self.y + other.y)
+        Self::new(self.dx + other.dx, self.dy + other.dy)
     }
 }
 
@@ -53,7 +77,7 @@ impl<T> Grid<T> {
     pub fn for_each<F: FnMut(Position, &T)>(&self, mut f: F) {
         for (i, v) in self.grid.iter().enumerate() {
             for (j, c) in v.iter().enumerate() {
-                f(Position::new(i as isize, j as isize), c);
+                f(Position::new(i, j), c);
             }
         }
     }
