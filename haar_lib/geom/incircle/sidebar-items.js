@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["incircle",""]]};
+window.SIDEBAR_ITEMS = {"fn":["incircle"]};

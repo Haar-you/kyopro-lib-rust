@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["factorial_prime_factor","$a!$の素因数pの個数を求める。"]]};
+window.SIDEBAR_ITEMS = {"fn":["factorial_prime_factor"]};

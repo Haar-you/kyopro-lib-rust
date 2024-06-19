@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["super_asc",""]]};
+window.SIDEBAR_ITEMS = {"fn":["super_asc"]};

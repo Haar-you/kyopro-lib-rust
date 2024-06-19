@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["subset_sum_limited","各要素に最大使用回数が定められている部分和問題"]]};
+window.SIDEBAR_ITEMS = {"fn":["subset_sum_limited"]};

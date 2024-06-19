@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["enumerate_mod_inv","0,1,..,nの素数mod pでの逆元を列挙する。"]]};
+window.SIDEBAR_ITEMS = {"fn":["enumerate_mod_inv"]};

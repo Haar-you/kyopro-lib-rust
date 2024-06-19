@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["subset_size_k",""]]};
+window.SIDEBAR_ITEMS = {"fn":["subset_size_k"]};

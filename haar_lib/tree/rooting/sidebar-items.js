@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["rooting",""]]};
+window.SIDEBAR_ITEMS = {"fn":["rooting"]};

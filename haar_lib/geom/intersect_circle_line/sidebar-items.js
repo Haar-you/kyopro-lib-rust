@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["IntersectCircleLine",""]],"fn":[["intersect_circle_line",""]]};
+window.SIDEBAR_ITEMS = {"enum":["IntersectCircleLine"],"fn":["intersect_circle_line"]};

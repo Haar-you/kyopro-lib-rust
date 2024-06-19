@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["LazySegmentTreeCoeff",""]],"trait":[["Elem",""]]};
+window.SIDEBAR_ITEMS = {"struct":["LazySegtreeCoeff"],"trait":["Elem"]};

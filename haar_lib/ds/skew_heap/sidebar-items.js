@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["SkewHeap",""]]};
+window.SIDEBAR_ITEMS = {"struct":["SkewHeap"]};

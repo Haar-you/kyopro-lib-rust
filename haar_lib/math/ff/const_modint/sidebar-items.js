@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["ConstModInt",""]]};
+window.SIDEBAR_ITEMS = {"struct":["ConstModInt"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["rle",""]]};
+window.SIDEBAR_ITEMS = {"fn":["rle"]};

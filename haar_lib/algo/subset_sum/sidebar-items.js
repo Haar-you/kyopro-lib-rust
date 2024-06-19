@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["count",""],["limited",""]]};
+window.SIDEBAR_ITEMS = {"mod":["count","limited"]};

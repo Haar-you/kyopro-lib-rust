@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["PSP","Project Selection Problem"]]};
+window.SIDEBAR_ITEMS = {"struct":["PSP"]};

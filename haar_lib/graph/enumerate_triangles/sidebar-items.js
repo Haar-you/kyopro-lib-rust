@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["enumerate_triangles",""]]};
+window.SIDEBAR_ITEMS = {"fn":["enumerate_triangles"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["LazySkewHeap",""]],"trait":[["Elem",""]]};
+window.SIDEBAR_ITEMS = {"struct":["LazySkewHeap"],"trait":["Elem"]};

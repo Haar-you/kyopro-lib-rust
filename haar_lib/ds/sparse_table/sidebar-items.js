@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["SparseTable",""]]};
+window.SIDEBAR_ITEMS = {"struct":["SparseTable"]};

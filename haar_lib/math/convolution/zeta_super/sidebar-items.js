@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["fast_zeta_superset",""]]};
+window.SIDEBAR_ITEMS = {"fn":["fast_zeta_superset"]};

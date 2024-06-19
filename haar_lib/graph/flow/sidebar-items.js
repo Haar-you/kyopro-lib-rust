@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":[["MaxFlow",""]]};
+window.SIDEBAR_ITEMS = {"trait":["MaxFlow"]};

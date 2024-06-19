@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["directed_shortest_cycle","有向グラフで単一始点の最短サイクルを求める。"]]};
+window.SIDEBAR_ITEMS = {"fn":["directed_shortest_cycle"]};

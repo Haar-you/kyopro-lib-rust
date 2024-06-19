@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["convolution_and",""]]};
+window.SIDEBAR_ITEMS = {"fn":["convolution_and"]};

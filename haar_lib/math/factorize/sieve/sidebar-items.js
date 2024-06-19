@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["FactorizeSieve",""]]};
+window.SIDEBAR_ITEMS = {"struct":["FactorizeSieve"]};

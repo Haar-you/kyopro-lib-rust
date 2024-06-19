@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["MinCostFlow",""]]};
+window.SIDEBAR_ITEMS = {"struct":["MinCostFlow"]};

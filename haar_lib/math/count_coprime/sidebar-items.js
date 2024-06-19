@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["count_coprime",""]]};
+window.SIDEBAR_ITEMS = {"fn":["count_coprime"]};

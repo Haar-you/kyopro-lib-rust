@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["TreeDP",""]]};
+window.SIDEBAR_ITEMS = {"struct":["TreeDP"]};

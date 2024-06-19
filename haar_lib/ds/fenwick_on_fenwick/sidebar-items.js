@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["FenwickOnFenwick",""],["FenwickOnFenwickBuilder",""]]};
+window.SIDEBAR_ITEMS = {"struct":["FenwickOnFenwick","FenwickOnFenwickBuilder"]};

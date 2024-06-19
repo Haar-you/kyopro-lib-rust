@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["PersistentQueue",""]]};
+window.SIDEBAR_ITEMS = {"struct":["PersistentQueue"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["centroids",""]]};
+window.SIDEBAR_ITEMS = {"fn":["centroids"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["XorShift",""]]};
+window.SIDEBAR_ITEMS = {"struct":["XorShift"]};

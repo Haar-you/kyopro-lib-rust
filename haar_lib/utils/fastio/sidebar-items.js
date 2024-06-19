@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["FastIO",""]]};
+window.SIDEBAR_ITEMS = {"struct":["FastIO"]};

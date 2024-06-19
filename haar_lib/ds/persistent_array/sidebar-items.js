@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["PersistentArray",""]]};
+window.SIDEBAR_ITEMS = {"struct":["PersistentArray"]};

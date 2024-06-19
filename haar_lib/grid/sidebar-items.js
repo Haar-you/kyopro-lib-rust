@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["to_graph",""]],"struct":[["Grid",""],["Position",""]]};
+window.SIDEBAR_ITEMS = {"mod":["to_graph"],"struct":["Dir","Grid","Position"]};

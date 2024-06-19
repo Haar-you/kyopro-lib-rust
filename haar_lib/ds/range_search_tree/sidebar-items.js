@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["RangeSearchTree",""],["RangeSearchTreeBuilder",""]]};
+window.SIDEBAR_ITEMS = {"struct":["RangeSearchTree","RangeSearchTreeBuilder"]};

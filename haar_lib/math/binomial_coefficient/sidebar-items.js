@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["BinomialCoefficient",""],["ExtLucas",""]]};
+window.SIDEBAR_ITEMS = {"struct":["BinomialCoefficient","ExtLucas"]};

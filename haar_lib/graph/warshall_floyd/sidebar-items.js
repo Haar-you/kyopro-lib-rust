@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["warshall_floyd","Time complexity O(n ^ 3)"]]};
+window.SIDEBAR_ITEMS = {"fn":["warshall_floyd"]};

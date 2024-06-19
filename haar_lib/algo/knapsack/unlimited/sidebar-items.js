@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["knapsack_unlimited","個数制限無しナップサック問題"]]};
+window.SIDEBAR_ITEMS = {"fn":["knapsack_unlimited"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["check_bipartite",""]]};
+window.SIDEBAR_ITEMS = {"fn":["check_bipartite"]};

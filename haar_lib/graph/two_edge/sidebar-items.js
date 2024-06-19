@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["two_edge_connected_components",""]]};
+window.SIDEBAR_ITEMS = {"fn":["two_edge_connected_components"]};

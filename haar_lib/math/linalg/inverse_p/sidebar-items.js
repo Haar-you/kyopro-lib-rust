@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["inverse_p","素数mod p上での逆行列を求める。 $O(n^3)$"]]};
+window.SIDEBAR_ITEMS = {"fn":["inverse_p"]};

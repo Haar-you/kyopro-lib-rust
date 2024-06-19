@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["ext_gcd",""]]};
+window.SIDEBAR_ITEMS = {"fn":["ext_gcd"]};

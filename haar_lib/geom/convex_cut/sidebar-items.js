@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["convex_cut",""]]};
+window.SIDEBAR_ITEMS = {"fn":["convex_cut"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["biconnected",""]]};
+window.SIDEBAR_ITEMS = {"fn":["biconnected"]};

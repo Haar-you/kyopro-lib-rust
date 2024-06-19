@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["dijkstra","Time complexity O((E + V) log V)"]]};
+window.SIDEBAR_ITEMS = {"fn":["dijkstra"]};

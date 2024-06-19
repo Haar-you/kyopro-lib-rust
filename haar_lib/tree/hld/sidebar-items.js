@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["HLD","重軽分解"]]};
+window.SIDEBAR_ITEMS = {"struct":["HLD"]};

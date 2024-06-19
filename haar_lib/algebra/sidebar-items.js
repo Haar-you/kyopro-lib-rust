@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["action",""],["add_sum",""],["affine",""],["bitxor",""],["dihedral",""],["dual",""],["max",""],["min",""],["prod",""],["sum",""],["traits",""],["update",""],["update_sum",""]]};
+window.SIDEBAR_ITEMS = {"mod":["action","add_sum","affine","bitxor","dihedral","dual","max","min","prod","sum","traits","update","update_sum"]};

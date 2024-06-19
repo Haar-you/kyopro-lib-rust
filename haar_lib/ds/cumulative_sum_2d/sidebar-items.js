@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["CumulativeSum2D",""],["CumulativeSum2DBuilder",""]]};
+window.SIDEBAR_ITEMS = {"struct":["CumulativeSum2D","CumulativeSum2DBuilder"]};

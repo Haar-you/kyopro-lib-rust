@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["dist_line_point",""]]};
+window.SIDEBAR_ITEMS = {"fn":["dist_line_point"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["StaticRangeFreqQuery","配列に対する範囲頻度取得クエリを処理する。"]]};
+window.SIDEBAR_ITEMS = {"struct":["StaticRangeFreqQuery"]};

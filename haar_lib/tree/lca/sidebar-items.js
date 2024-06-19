@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["DoublingLCA",""]]};
+window.SIDEBAR_ITEMS = {"struct":["DoublingLCA"]};

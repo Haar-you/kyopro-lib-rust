@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["subset_asc",""]]};
+window.SIDEBAR_ITEMS = {"fn":["subset_asc"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["chinese_postman_problem","Time complexity O(V ^ 2 * 2 ^ V)"]]};
+window.SIDEBAR_ITEMS = {"fn":["chinese_postman_problem"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["FenwickTreeAdd",""]],"trait":[["Elem",""]]};
+window.SIDEBAR_ITEMS = {"struct":["FenwickTreeAdd"],"trait":["Elem"]};

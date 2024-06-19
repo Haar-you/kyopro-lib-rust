@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["dist_segments",""]]};
+window.SIDEBAR_ITEMS = {"fn":["dist_segments"]};

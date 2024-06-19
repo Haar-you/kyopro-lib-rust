@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["next_permutation",""],["permutations",""],["prev_permutation",""]]};
+window.SIDEBAR_ITEMS = {"fn":["next_permutation","permutations","prev_permutation"]};

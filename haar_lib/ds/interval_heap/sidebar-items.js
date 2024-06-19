@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["IntervalHeap",""]]};
+window.SIDEBAR_ITEMS = {"struct":["IntervalHeap"]};

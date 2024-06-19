@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["enumerate_quotients","1以上N以下の自然数xについて`floor(N/x)`の取りうる値とそれを与えるxの範囲を列挙する。"]],"struct":[["Quotient",""]]};
+window.SIDEBAR_ITEMS = {"fn":["enumerate_quotients"],"struct":["Quotient"]};

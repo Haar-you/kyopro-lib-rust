@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["num_subseq","返り値`ret`に対して、`ret[i]`は`a[0..i]`の相異なる部分列の総数"]]};
+window.SIDEBAR_ITEMS = {"fn":["num_subseq"]};

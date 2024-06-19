@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["fast_mobius_subset",""]]};
+window.SIDEBAR_ITEMS = {"fn":["fast_mobius_subset"]};

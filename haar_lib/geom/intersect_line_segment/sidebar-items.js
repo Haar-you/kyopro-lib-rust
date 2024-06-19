@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["IntersectLineSegment",""]],"fn":[["intersect_line_segment",""]]};
+window.SIDEBAR_ITEMS = {"enum":["IntersectLineSegment"],"fn":["intersect_line_segment"]};

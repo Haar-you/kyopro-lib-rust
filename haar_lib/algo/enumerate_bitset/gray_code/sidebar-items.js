@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["gray_code",""]]};
+window.SIDEBAR_ITEMS = {"fn":["gray_code"]};

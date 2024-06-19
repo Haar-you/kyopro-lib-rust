@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["mod_log","$a^x = b \\bmod m$を満たすxを求める。"]]};
+window.SIDEBAR_ITEMS = {"fn":["mod_log"]};

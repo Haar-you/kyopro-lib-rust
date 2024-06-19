@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["subset_between",""]]};
+window.SIDEBAR_ITEMS = {"fn":["subset_between"]};

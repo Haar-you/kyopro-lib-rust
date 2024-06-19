@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["convex_diameter",""]]};
+window.SIDEBAR_ITEMS = {"fn":["convex_diameter"]};

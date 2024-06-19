@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["edit_distance",""]]};
+window.SIDEBAR_ITEMS = {"fn":["edit_distance"]};

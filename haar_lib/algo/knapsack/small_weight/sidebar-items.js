@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["knapsack_small_weight","容量が小さいナップサック問題"]]};
+window.SIDEBAR_ITEMS = {"fn":["knapsack_small_weight"]};

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/ds/starry_sky_tree.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>starry_sky_tree.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-93196c7a1c3542a8.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../static.files/light-4743e13df3dfe8c4.css"><link rel="stylesheet" disabled href="../../../static.files/dark-0e1b889528bd466b.css"><link rel="stylesheet" disabled href="../../../static.files/ayu-65289d5d067c7c66.css"><script id="default-settings" ></script><script src="../../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../../static.files/source-script-ea63cb6500f71309.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-3367e395607fafc1.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../haar_lib/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/ds/starry_sky_tree.rs`."><title>starry_sky_tree.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="haar_lib" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../haar_lib/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -181,19 +181,22 @@
 <a href="#181" id="181">181</a>
 <a href="#182" id="182">182</a>
 <a href="#183" id="183">183</a>
-</pre><pre class="rust"><code><span class="doccomment">//! 区間加算・区間Max(Min)
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 区間加算・区間Max(Min)
 
 </span><span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::{Foldable, Updatable};
+<span class="kw">use </span><span class="kw">crate</span>::trait_alias;
 <span class="kw">use </span><span class="kw">crate</span>::traits::one_zero::Zero;
-<span class="kw">use crate</span>::{rec, trait_alias};
 <span class="kw">use </span>std::{
     cmp::{max, min},
-    ops::{Add, AddAssign, Range, SubAssign},
+    ops::{Add, Range, Sub},
 };
 
 <span class="macro">trait_alias!</span>(
     Elem,
-    Add&lt;Output = <span class="self">Self</span>&gt; + AddAssign + SubAssign + Ord + Copy + Zero&lt;Output = <span class="self">Self</span>&gt;
+    Add&lt;Output = <span class="self">Self</span>&gt; + Sub&lt;Output = <span class="self">Self</span>&gt; + Ord + Copy + Zero&lt;Output = <span class="self">Self</span>&gt;
 );
 
 <span class="attr">#[derive(Copy, Clone)]
@@ -227,43 +230,30 @@
             mode,
         }
     }
-}
 
-<span class="kw">impl</span>&lt;T: Elem&gt; Foldable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>StarrySkyTree&lt;T&gt; {
-    <span class="kw">type </span>Output = <span class="prelude-ty">Option</span>&lt;T&gt;;
+    <span class="kw">fn </span>rec(<span class="kw-2">&amp;</span><span class="self">self</span>, s: usize, t: usize, i: usize, l: usize, r: usize, value: T) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="kw">if </span>r &lt;= s || t &lt;= l {
+            <span class="kw">return </span><span class="prelude-val">None</span>;
+        }
+        <span class="kw">if </span>s &lt;= l &amp;&amp; r &lt;= t {
+            <span class="kw">return </span><span class="prelude-val">Some</span>(value + <span class="self">self</span>.data[i]);
+        }
 
-    <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="self">Self</span>::Output {
-        <span class="kw">let </span>s = l;
-        <span class="kw">let </span>t = r;
+        <span class="kw">let </span>a = <span class="self">self</span>.rec(s, t, i &lt;&lt; <span class="number">1</span>, l, (l + r) / <span class="number">2</span>, value + <span class="self">self</span>.data[i]);
+        <span class="kw">let </span>b = <span class="self">self</span>.rec(s, t, i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>, (l + r) / <span class="number">2</span>, r, value + <span class="self">self</span>.data[i]);
 
-        <span class="kw">let </span>rec = <span class="macro">rec!</span>(
-            |rec, (i, l, r, value): (usize, usize, usize, T)| -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
-                <span class="kw">if </span>r &lt;= s || t &lt;= l {
-                    <span class="kw">return </span><span class="prelude-val">None</span>;
-                }
-                <span class="kw">if </span>s &lt;= l &amp;&amp; r &lt;= t {
-                    <span class="kw">return </span><span class="prelude-val">Some</span>(value + <span class="self">self</span>.data[i]);
-                }
-
-                <span class="kw">let </span>a = rec((i &lt;&lt; <span class="number">1</span>, l, (l + r) / <span class="number">2</span>, value + <span class="self">self</span>.data[i]));
-                <span class="kw">let </span>b = rec((i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>, (l + r) / <span class="number">2</span>, r, value + <span class="self">self</span>.data[i]));
-
-                <span class="kw">match </span>(a, b) {
-                    (<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; b,
-                    (<span class="kw">_</span>, <span class="prelude-val">None</span>) =&gt; a,
-                    (<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)) =&gt; <span class="prelude-val">Some</span>(<span class="self">self</span>.mode.op(a, b)),
-                }
-            }
-        );
-
-        rec((<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, T::zero()))
+        <span class="kw">match </span>(a, b) {
+            (<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; b,
+            (<span class="kw">_</span>, <span class="prelude-val">None</span>) =&gt; a,
+            (<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)) =&gt; <span class="prelude-val">Some</span>(<span class="self">self</span>.mode.op(a, b)),
+        }
     }
-}
 
-<span class="kw">impl</span>&lt;T: Elem&gt; Updatable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>StarrySkyTree&lt;T&gt; {
-    <span class="kw">type </span>Value = T;
+    <span class="kw">fn </span>_fold(<span class="kw-2">&amp;</span><span class="self">self</span>, l: usize, r: usize) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="self">self</span>.rec(l, r, <span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, T::zero())
+    }
 
-    <span class="kw">fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, value: T) {
+    <span class="kw">fn </span>_update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, l: usize, r: usize, value: T) {
         <span class="kw">let </span>hsize = <span class="self">self</span>.size / <span class="number">2</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>ll = l + <span class="self">self</span>.size / <span class="number">2</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>rr = r + <span class="self">self</span>.size / <span class="number">2</span>;
@@ -271,10 +261,10 @@
         <span class="kw">while </span>ll &lt; rr {
             <span class="kw">if </span>(rr &amp; <span class="number">1</span>) != <span class="number">0 </span>{
                 rr -= <span class="number">1</span>;
-                <span class="self">self</span>.data[rr] += value;
+                <span class="self">self</span>.data[rr] = <span class="self">self</span>.data[rr] + value;
             }
             <span class="kw">if </span>(ll &amp; <span class="number">1</span>) != <span class="number">0 </span>{
-                <span class="self">self</span>.data[ll] += value;
+                <span class="self">self</span>.data[ll] = <span class="self">self</span>.data[ll] + value;
                 ll += <span class="number">1</span>;
             }
             ll &gt;&gt;= <span class="number">1</span>;
@@ -290,9 +280,9 @@
                 <span class="kw">if </span>i &lt; <span class="self">self</span>.size / <span class="number">2 </span>{
                     <span class="kw">let </span>d = <span class="self">self</span>.mode.op(<span class="self">self</span>.data[i &lt;&lt; <span class="number">1</span>], <span class="self">self</span>.data[i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>]);
 
-                    <span class="self">self</span>.data[i &lt;&lt; <span class="number">1</span>] -= d;
-                    <span class="self">self</span>.data[i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>] -= d;
-                    <span class="self">self</span>.data[i] += d;
+                    <span class="self">self</span>.data[i &lt;&lt; <span class="number">1</span>] = <span class="self">self</span>.data[i &lt;&lt; <span class="number">1</span>] - d;
+                    <span class="self">self</span>.data[i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>] = <span class="self">self</span>.data[i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>] - d;
+                    <span class="self">self</span>.data[i] = <span class="self">self</span>.data[i] + d;
                 }
 
                 i &gt;&gt;= <span class="number">1</span>;
@@ -301,6 +291,22 @@
 
         bottom_up(l + hsize);
         bottom_up(r + hsize);
+    }
+}
+
+<span class="kw">impl</span>&lt;T: Elem&gt; Foldable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>StarrySkyTree&lt;T&gt; {
+    <span class="kw">type </span>Output = <span class="prelude-ty">Option</span>&lt;T&gt;;
+
+    <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="self">self</span>._fold(l, r)
+    }
+}
+
+<span class="kw">impl</span>&lt;T: Elem&gt; Updatable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>StarrySkyTree&lt;T&gt; {
+    <span class="kw">type </span>Value = T;
+
+    <span class="kw">fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, value: T) {
+        <span class="self">self</span>._update(l, r, value);
     }
 }
 
@@ -364,5 +370,4 @@
         }
     }
 }
-</code></pre></div>
-</section></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="haar_lib" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0 (2c8cc3432 2023-03-06)" data-search-js="search-98d53477a794af0b.js" data-settings-js="settings-c3c521c753752a1a.js" data-settings-css="settings-08ddfdda51b8ee2e.css" ></div></body></html>
+</code></pre></div></section></main></body></html>

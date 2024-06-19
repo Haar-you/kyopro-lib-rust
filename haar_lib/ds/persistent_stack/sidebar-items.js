@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["PersistentStack","永続スタック"]]};
+window.SIDEBAR_ITEMS = {"struct":["PersistentStack"]};

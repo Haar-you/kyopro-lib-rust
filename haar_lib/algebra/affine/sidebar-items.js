@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Affine",""]]};
+window.SIDEBAR_ITEMS = {"struct":["Affine"]};
