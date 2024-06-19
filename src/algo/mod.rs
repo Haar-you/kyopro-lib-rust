@@ -1,4 +1,5 @@
 pub mod bsearch;
+pub mod bsearch_f;
 pub mod compressor;
 pub mod edit_distance;
 pub mod enumerate_bitset;
