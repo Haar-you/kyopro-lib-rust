@@ -1,6 +1,6 @@
 #[macro_export]
 macro_rules! chmin {
-    ( $a:expr, $b:expr ) => {
+    ( $a:expr, $b:expr ) => {{
         let temp = $b;
         if $a > temp {
             $a = temp;
@@ -8,5 +8,5 @@ macro_rules! chmin {
         } else {
             false
         }
-    };
+    }};
 }
