@@ -1,9 +1,17 @@
+//! Li-Chao tree
+//!
+//! # Problems
+//!
+//! - [Line Add Get Min](https://judge.yosupo.jp/submission/217829)
+//! - [Segment Add Get Min](https://judge.yosupo.jp/submission/217834)
+
 use crate::algo::bsearch::lower_bound;
 use crate::trait_alias;
+use crate::utils::linear::*;
 use std::{
     cmp::{max, min},
     mem::swap,
-    ops::{Add, Mul},
+    ops::{Add, Mul, RangeInclusive},
 };
 
 trait_alias!(
@@ -33,14 +41,10 @@ impl Mode {
     }
 }
 
-fn apply<T: Elem>(l: (T, T), x: T) -> T {
-    l.0 * x + l.1
-}
-
 pub struct LiChaoTree<T> {
     xs: Vec<T>,
     size: usize,
-    data: Vec<Option<(T, T)>>,
+    data: Vec<Option<Linear<T>>>,
     range: Vec<(usize, usize)>,
     mode: Mode,
 }
@@ -61,8 +65,7 @@ impl<T: Elem> LiChaoTree<T> {
         }
     }
 
-    pub fn new(xs_: &[T], mode: Mode) -> Self {
-        let mut xs = xs_.to_vec();
+    pub fn new(mut xs: Vec<T>, mode: Mode) -> Self {
         xs.sort();
         xs.dedup();
 
@@ -83,16 +86,16 @@ impl<T: Elem> LiChaoTree<T> {
         }
     }
 
-    fn update(&mut self, i: usize, mut new_line: (T, T), l: usize, r: usize) {
-        if let Some(line) = self.data[i] {
+    fn update(&mut self, i: usize, mut new_line: Linear<T>, l: usize, r: usize) {
+        if let Some(line) = &self.data[i] {
             let m = (l + r) / 2;
             let lx = self.xs[l];
             let mx = self.xs[m];
             let rx = self.xs[r - 1];
 
-            let left = self.mode.cmp(apply(new_line, lx), apply(line, lx));
-            let mid = self.mode.cmp(apply(new_line, mx), apply(line, mx));
-            let right = self.mode.cmp(apply(new_line, rx), apply(line, rx));
+            let left = self.mode.cmp(new_line.apply(lx), line.apply(lx));
+            let mid = self.mode.cmp(new_line.apply(mx), line.apply(mx));
+            let right = self.mode.cmp(new_line.apply(rx), line.apply(rx));
 
             if left && right {
                 self.data[i] = Some(new_line);
@@ -117,21 +120,21 @@ impl<T: Elem> LiChaoTree<T> {
         }
     }
 
-    pub fn add_line(&mut self, line: (T, T)) {
+    pub fn add_line(&mut self, line: Linear<T>) {
         self.update(1, line, 0, self.size);
     }
 
-    pub fn add_segment(&mut self, segment: (T, T), (l, r): (T, T)) {
-        let mut l = lower_bound(&self.xs, &l) + self.size;
-        let mut r = lower_bound(&self.xs, &r) + self.size;
+    pub fn add_segment(&mut self, segment: Linear<T>, range: RangeInclusive<T>) {
+        let mut l = lower_bound(&self.xs, range.start()) + self.size;
+        let mut r = lower_bound(&self.xs, range.end()) + self.size;
 
         while l < r {
             if r & 1 == 1 {
                 r -= 1;
-                self.update(r, segment, self.range[r].0, self.range[r].1);
+                self.update(r, segment.clone(), self.range[r].0, self.range[r].1);
             }
             if l & 1 == 1 {
-                self.update(l, segment, self.range[l].0, self.range[l].1);
+                self.update(l, segment.clone(), self.range[l].0, self.range[l].1);
                 l += 1;
             }
 
@@ -146,8 +149,8 @@ impl<T: Elem> LiChaoTree<T> {
         let mut ret = None;
 
         while k > 0 {
-            if let Some(line) = self.data[k] {
-                let a = apply(line, self.xs[i]);
+            if let Some(line) = &self.data[k] {
+                let a = line.apply(self.xs[i]);
                 ret = Some(ret.map_or(a, |y| self.mode.op(y, a)));
             }
 

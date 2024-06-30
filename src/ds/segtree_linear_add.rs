@@ -1,8 +1,13 @@
 //! 区間一次関数加算セグメントツリー
+//!
+//! # Problems
+//!
+//! - [HUPC 2020 B 三角形足し算](https://onlinejudge.u-aizu.ac.jp/challenges/sources/VPC/HUPC/3165?year=2020)
 
 pub use crate::ds::traits::Indexable;
 use crate::trait_alias;
 use crate::traits::one_zero::Zero;
+use crate::utils::linear::*;
 use std::{
     cell::Cell,
     mem::size_of,
@@ -47,7 +52,8 @@ impl<T: Elem> SegtreeLinearAdd<T> {
         }
     }
 
-    pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, (a, b): (T, T)) {
+    /// 範囲`l..r`に一次関数`ax + b`の値を加算する。(`x`の値は`l..r`の範囲)
+    pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, linear: Linear<T>) {
         let mut l_ = l + self.hsize;
         let mut r_ = r + self.hsize;
 
@@ -56,13 +62,13 @@ impl<T: Elem> SegtreeLinearAdd<T> {
                 r_ -= 1;
                 self.data[r_].set(add(
                     self.data[r_].get(),
-                    (b + a * T::from((self.from[r_] - l) as u32), a),
+                    (linear.apply(T::from(self.from[r_] as u32)), linear.a),
                 ));
             }
             if l_ & 1 == 1 {
                 self.data[l_].set(add(
                     self.data[l_].get(),
-                    (b + a * T::from((self.from[l_] - l) as u32), a),
+                    (linear.apply(T::from(self.from[l_] as u32)), linear.a),
                 ));
                 l_ += 1;
             }
@@ -129,10 +135,10 @@ mod tests {
             let a = rng.gen_range(0..100);
             let b = rng.gen_range(0..100);
 
-            seg.update(lr.clone(), (a, b));
+            seg.update(lr.clone(), Linear { a, b });
 
-            for (k, i) in lr.enumerate() {
-                vec[i] += a * k as u64 + b;
+            for i in lr {
+                vec[i] += a * i as u64 + b;
             }
 
             assert_eq!((0..n).map(|i| seg.get(i)).collect::<Vec<_>>(), vec);

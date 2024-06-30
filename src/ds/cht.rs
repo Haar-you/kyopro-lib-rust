@@ -1,4 +1,11 @@
+//! Convex Hull Trick
+//!
+//! # Problems
+//!
+//! - [EDPC Z - Frog 3](https://atcoder.jp/contests/dp/submissions/54932537)
+
 use crate::trait_alias;
+use crate::utils::linear::*;
 use std::{
     collections::VecDeque,
     ops::{Add, Mul, Sub},
@@ -24,17 +31,13 @@ impl Mode {
     }
 }
 
-fn is_needless<T: Elem>(a: &(T, T), b: &(T, T), c: &(T, T)) -> bool {
-    (a.1 - b.1) * (a.0 - c.0) >= (a.1 - c.1) * (a.0 - b.0)
-}
-
-fn apply<T: Elem>(l: (T, T), x: T) -> T {
-    l.0 * x + l.1
+fn is_needless<T: Elem>(a: &Linear<T>, b: &Linear<T>, c: &Linear<T>) -> bool {
+    (a.b - b.b) * (a.a - c.a) >= (a.b - c.b) * (a.a - b.a)
 }
 
 #[derive(Clone, Debug)]
 pub struct ConvexHullTrick<T> {
-    lines: VecDeque<(T, T)>,
+    lines: VecDeque<Linear<T>>,
     mode: Mode,
     last_query: Option<T>,
     last_slope: Option<T>,
@@ -50,7 +53,9 @@ impl<T: Elem> ConvexHullTrick<T> {
         }
     }
 
-    pub fn add(&mut self, (a, b): (T, T)) {
+    /// 最小値を求めたいならば、傾きは単調減少でなければならない。
+    /// 最大値を求めたいならば、傾きは単調増加でなければならない。
+    pub fn add(&mut self, line @ Linear { a, b }: Linear<T>) {
         if let Some(p) = self.last_slope {
             if !self.mode.cmp(p, a) {
                 panic!("`a` must be monotonic increasing / decreasing if `mode` is Max / Min");
@@ -59,8 +64,8 @@ impl<T: Elem> ConvexHullTrick<T> {
         self.last_slope = Some(a);
 
         if let Some(l) = self.lines.back() {
-            if l.0 == a {
-                if !self.mode.cmp(l.1, b) {
+            if l.a == a {
+                if !self.mode.cmp(l.b, b) {
                     return;
                 }
                 self.lines.pop_back();
@@ -68,7 +73,7 @@ impl<T: Elem> ConvexHullTrick<T> {
         }
         while self.lines.len() >= 2
             && is_needless(
-                &(a, b),
+                &line,
                 self.lines.back().unwrap(),
                 self.lines.get(self.lines.len() - 2).unwrap(),
             )
@@ -76,9 +81,10 @@ impl<T: Elem> ConvexHullTrick<T> {
             self.lines.pop_back();
         }
 
-        self.lines.push_back((a, b));
+        self.lines.push_back(line);
     }
 
+    /// クエリの座標は単調増加でなければならない。
     pub fn query(&mut self, x: T) -> T {
         if let Some(p) = self.last_query {
             if x < p {
@@ -90,11 +96,11 @@ impl<T: Elem> ConvexHullTrick<T> {
         while self.lines.len() >= 2
             && self
                 .mode
-                .cmp(apply(self.lines[0], x), apply(self.lines[1], x))
+                .cmp(self.lines[0].apply(x), self.lines[1].apply(x))
         {
             self.lines.pop_front();
         }
 
-        apply(self.lines[0], x)
+        self.lines[0].apply(x)
     }
 }
