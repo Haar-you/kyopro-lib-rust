@@ -1,5 +1,8 @@
+//! 範囲転倒数取得クエリ
+
 use crate::{algo::bsearch::*, ds::fenwick_add::*};
 use std::convert::TryFrom;
+use std::ops::Range;
 
 pub struct StaticRangeInversionsQuery {
     data: Vec<usize>,
@@ -16,7 +19,7 @@ impl StaticRangeInversionsQuery {
         Self { data, qs: vec![] }
     }
 
-    pub fn add(&mut self, l: usize, r: usize) {
+    pub fn add_query(&mut self, Range { start: l, end: r }: Range<usize>) {
         self.qs.push((l, r));
     }
 
