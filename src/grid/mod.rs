@@ -61,24 +61,22 @@ impl<T> Grid<T> {
     }
 
     pub fn get(&self, p: Position) -> &T {
-        &self.grid[p.x as usize][p.y as usize]
+        &self.grid[p.x][p.y]
     }
 
-    pub fn find_all<P: FnMut(&T) -> bool>(&self, mut p: P) -> Vec<Position> {
-        let mut ret = vec![];
-        self.for_each(|a, c| {
-            if p(c) {
-                ret.push(a);
-            }
-        });
-        ret
+    pub fn iter(&self) -> impl Iterator<Item = (Position, &T)> {
+        self.grid.iter().enumerate().flat_map(|(i, v)| {
+            v.iter()
+                .enumerate()
+                .map(move |(j, x)| (Position::new(i, j), x))
+        })
     }
 
-    pub fn for_each<F: FnMut(Position, &T)>(&self, mut f: F) {
-        for (i, v) in self.grid.iter().enumerate() {
-            for (j, c) in v.iter().enumerate() {
-                f(Position::new(i, j), c);
-            }
-        }
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = (Position, &mut T)> {
+        self.grid.iter_mut().enumerate().flat_map(|(i, v)| {
+            v.iter_mut()
+                .enumerate()
+                .map(move |(j, x)| (Position::new(i, j), x))
+        })
     }
 }
