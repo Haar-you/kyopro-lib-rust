@@ -18,6 +18,7 @@ pub mod max_rect;
 pub mod merge;
 pub mod mo;
 pub mod num_subseq;
+pub mod parallel_binary_search;
 pub mod permutation;
 pub mod psp;
 pub mod rle;
