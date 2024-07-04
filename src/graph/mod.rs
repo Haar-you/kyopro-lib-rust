@@ -14,6 +14,7 @@ pub mod bellman_ford;
 pub mod bfs;
 pub mod dijkstra;
 pub mod warshall_floyd;
+pub mod yen;
 
 pub mod cycle;
 pub mod detect_cycle;
