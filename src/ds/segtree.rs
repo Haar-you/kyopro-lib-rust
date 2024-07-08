@@ -3,18 +3,14 @@ pub use crate::ds::traits::{Assignable, Foldable, Updatable};
 use std::ops::{Index, RangeBounds};
 
 #[derive(Clone)]
-pub struct Segtree<T, M> {
+pub struct Segtree<M: Monoid> {
     original_size: usize,
     size: usize,
-    data: Vec<T>,
+    data: Vec<M::Output>,
     monoid: M,
 }
 
-impl<T, M> Segtree<T, M>
-where
-    T: Clone,
-    M: Monoid<Output = T>,
-{
+impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
         Segtree {
@@ -26,12 +22,7 @@ where
     }
 }
 
-impl<T, M, R> Foldable<R> for Segtree<T, M>
-where
-    T: Clone,
-    M: Monoid<Output = T>,
-    R: RangeBounds<usize>,
-{
+impl<T: Clone, M: Monoid<Output = T>, R: RangeBounds<usize>> Foldable<R> for Segtree<M> {
     type Output = T;
 
     fn fold(&self, range: R) -> Self::Output {
@@ -72,11 +63,7 @@ where
     }
 }
 
-impl<T, M> Assignable<usize> for Segtree<T, M>
-where
-    T: Clone,
-    M: Monoid<Output = T>,
-{
+impl<T: Clone, M: Monoid<Output = T>> Assignable<usize> for Segtree<M> {
     type Value = T;
 
     fn assign(&mut self, i: usize, value: T) {
@@ -92,11 +79,7 @@ where
     }
 }
 
-impl<T, M> Updatable<usize> for Segtree<T, M>
-where
-    T: Clone,
-    M: Monoid<Output = T>,
-{
+impl<T: Clone, M: Monoid<Output = T>> Updatable<usize> for Segtree<M> {
     type Value = T;
 
     fn update(&mut self, i: usize, value: T) {
@@ -107,17 +90,14 @@ where
     }
 }
 
-impl<T, M> From<&Segtree<T, M>> for Vec<T>
-where
-    T: Clone,
-{
-    fn from(from: &Segtree<T, M>) -> Vec<T> {
+impl<T: Clone, M: Monoid<Output = T>> From<&Segtree<M>> for Vec<T> {
+    fn from(from: &Segtree<M>) -> Vec<T> {
         from.data[from.size / 2..from.size / 2 + from.original_size].to_vec()
     }
 }
 
-impl<T, M> Index<usize> for Segtree<T, M> {
-    type Output = T;
+impl<M: Monoid> Index<usize> for Segtree<M> {
+    type Output = M::Output;
 
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[self.size / 2 + i]
@@ -139,7 +119,7 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let mut other = vec![m.id().clone(); size];
-        let mut s = Segtree::<T, _>::new(size, m.clone());
+        let mut s = Segtree::new(size, m.clone());
 
         for _ in 0..1000 {
             let ty = rng.gen_range(0..2);

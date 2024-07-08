@@ -5,21 +5,17 @@ pub use crate::ds::traits::Foldable;
 use std::ops::{Index, Range};
 
 #[derive(Debug, Clone)]
-pub struct CumulativeSum1D<T, G> {
-    data: Vec<T>,
+pub struct CumulativeSum1D<G: Group> {
+    data: Vec<G::Output>,
     group: G,
 }
 
-pub struct CumulativeSum1DBuilder<T, G> {
-    data: Vec<T>,
+pub struct CumulativeSum1DBuilder<G: Group> {
+    data: Vec<G::Output>,
     group: G,
 }
 
-impl<T, G> Foldable<Range<usize>> for CumulativeSum1D<T, G>
-where
-    T: Copy,
-    G: Group<Output = T>,
-{
+impl<T: Copy, G: Group<Output = T>> Foldable<Range<usize>> for CumulativeSum1D<G> {
     type Output = T;
 
     /// Time complexity O(1)
@@ -28,7 +24,7 @@ where
     }
 }
 
-impl<T, G> Index<usize> for CumulativeSum1D<T, G> {
+impl<T, G: Group<Output = T>> Index<usize> for CumulativeSum1D<G> {
     type Output = T;
 
     fn index(&self, i: usize) -> &Self::Output {
@@ -36,11 +32,7 @@ impl<T, G> Index<usize> for CumulativeSum1D<T, G> {
     }
 }
 
-impl<T, G> CumulativeSum1DBuilder<T, G>
-where
-    T: Copy,
-    G: Group<Output = T> + Clone,
-{
+impl<T: Copy, G: Group<Output = T>> CumulativeSum1DBuilder<G> {
     pub fn new(n: usize, group: G) -> Self {
         CumulativeSum1DBuilder {
             data: vec![group.id(); n + 1],
@@ -52,7 +44,7 @@ where
         self.data[i + 1] = self.group.op(self.data[i + 1], value);
     }
 
-    pub fn build(self) -> CumulativeSum1D<T, G> {
+    pub fn build(self) -> CumulativeSum1D<G> {
         let data = self
             .data
             .iter()
@@ -81,7 +73,7 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 20;
-        let mut csb = CumulativeSum1DBuilder::<i32, _>::new(n, Sum::<i32>::new());
+        let mut csb = CumulativeSum1DBuilder::new(n, Sum::<i32>::new());
 
         let mut other = vec![0; n];
 

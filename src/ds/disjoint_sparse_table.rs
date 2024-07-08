@@ -4,13 +4,13 @@ pub use crate::algebra::traits::Semigroup;
 pub use crate::ds::traits::Foldable;
 use std::{iter::repeat, ops::Range};
 
-pub struct DisjointSparseTable<T, S> {
-    data: Vec<Vec<Option<T>>>,
-    seq: Vec<Option<T>>,
+pub struct DisjointSparseTable<S: Semigroup> {
+    data: Vec<Vec<Option<S::Output>>>,
+    seq: Vec<Option<S::Output>>,
     semigroup: S,
 }
 
-impl<T: Clone, S: Semigroup<Output = T>> DisjointSparseTable<T, S> {
+impl<T: Clone, S: Semigroup<Output = T>> DisjointSparseTable<S> {
     pub fn new(seq: Vec<T>, semigroup: S) -> Self {
         assert!(!seq.is_empty());
 
@@ -68,9 +68,7 @@ impl<T: Clone, S: Semigroup<Output = T>> DisjointSparseTable<T, S> {
     }
 }
 
-impl<T: Clone + Default, S: Semigroup<Output = T>> Foldable<Range<usize>>
-    for DisjointSparseTable<T, S>
-{
+impl<T: Clone, S: Semigroup<Output = T>> Foldable<Range<usize>> for DisjointSparseTable<S> {
     type Output = Option<T>;
 
     fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {

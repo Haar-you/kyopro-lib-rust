@@ -1,18 +1,14 @@
 pub use crate::algebra::traits::*;
 
-pub struct FoldableDeque<T, S> {
-    front_stack: Vec<T>,
-    back_stack: Vec<T>,
-    front_sum: Vec<T>,
-    back_sum: Vec<T>,
+pub struct FoldableDeque<S: Semigroup> {
+    front_stack: Vec<S::Output>,
+    back_stack: Vec<S::Output>,
+    front_sum: Vec<S::Output>,
+    back_sum: Vec<S::Output>,
     semigroup: S,
 }
 
-impl<T, S> FoldableDeque<T, S>
-where
-    T: Clone,
-    S: Semigroup<Output = T>,
-{
+impl<T: Clone, S: Semigroup<Output = T>> FoldableDeque<S> {
     pub fn new(semigroup: S) -> Self {
         FoldableDeque {
             front_stack: vec![],

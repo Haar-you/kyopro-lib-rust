@@ -3,13 +3,13 @@ pub use crate::ds::traits::{Foldable, Updatable};
 use std::ops::{Range, RangeTo};
 
 #[derive(Clone, Default)]
-pub struct FenwickTree<T, G> {
-    data: Vec<T>,
+pub struct FenwickTree<G: Group> {
+    data: Vec<G::Output>,
     size: usize,
     group: G,
 }
 
-impl<T: Clone, G: Group<Output = T>> FenwickTree<T, G> {
+impl<T: Clone, G: Group<Output = T>> FenwickTree<G> {
     pub fn new(size: usize, group: G) -> Self {
         Self {
             data: vec![group.id(); size + 1],
@@ -19,7 +19,7 @@ impl<T: Clone, G: Group<Output = T>> FenwickTree<T, G> {
     }
 }
 
-impl<T: Clone, G: Group<Output = T>> Updatable<usize> for FenwickTree<T, G> {
+impl<T: Clone, G: Group<Output = T>> Updatable<usize> for FenwickTree<G> {
     type Value = T;
 
     fn update(&mut self, mut i: usize, value: T) {
@@ -31,7 +31,7 @@ impl<T: Clone, G: Group<Output = T>> Updatable<usize> for FenwickTree<T, G> {
     }
 }
 
-impl<T: Clone, G: Group<Output = T>> Foldable<RangeTo<usize>> for FenwickTree<T, G> {
+impl<T: Clone, G: Group<Output = T>> Foldable<RangeTo<usize>> for FenwickTree<G> {
     type Output = T;
 
     fn fold(&self, RangeTo { end: mut i }: RangeTo<usize>) -> Self::Output {
@@ -46,7 +46,7 @@ impl<T: Clone, G: Group<Output = T>> Foldable<RangeTo<usize>> for FenwickTree<T,
     }
 }
 
-impl<T: Clone, G: Group<Output = T>> Foldable<Range<usize>> for FenwickTree<T, G> {
+impl<T: Clone, G: Group<Output = T>> Foldable<Range<usize>> for FenwickTree<G> {
     type Output = T;
 
     fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {

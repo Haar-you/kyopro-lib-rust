@@ -5,23 +5,19 @@ pub use crate::ds::traits::Foldable2D;
 use std::ops::{Index, Range};
 
 #[derive(Debug, Clone)]
-pub struct CumulativeSum2D<T, G> {
-    data: Vec<Vec<T>>,
+pub struct CumulativeSum2D<G: Group> {
+    data: Vec<Vec<G::Output>>,
     group: G,
 }
 
-pub struct CumulativeSum2DBuilder<T, G> {
-    data: Vec<Vec<T>>,
+pub struct CumulativeSum2DBuilder<G: Group> {
+    data: Vec<Vec<G::Output>>,
     group: G,
     n: usize,
     m: usize,
 }
 
-impl<T, G> Foldable2D<Range<usize>> for CumulativeSum2D<T, G>
-where
-    T: Copy,
-    G: Group<Output = T>,
-{
+impl<T: Copy, G: Group<Output = T>> Foldable2D<Range<usize>> for CumulativeSum2D<G> {
     type Output = T;
 
     /// Time Complexity O(1)
@@ -39,7 +35,7 @@ where
     }
 }
 
-impl<T, G> Index<(usize, usize)> for CumulativeSum2D<T, G> {
+impl<T, G: Group<Output = T>> Index<(usize, usize)> for CumulativeSum2D<G> {
     type Output = T;
 
     fn index(&self, (i, j): (usize, usize)) -> &Self::Output {
@@ -47,11 +43,7 @@ impl<T, G> Index<(usize, usize)> for CumulativeSum2D<T, G> {
     }
 }
 
-impl<T, G> CumulativeSum2DBuilder<T, G>
-where
-    T: Copy,
-    G: Group<Output = T> + Clone,
-{
+impl<T: Copy, G: Group<Output = T>> CumulativeSum2DBuilder<G> {
     pub fn new(n: usize, m: usize, group: G) -> Self {
         CumulativeSum2DBuilder {
             data: vec![vec![group.id(); m + 1]; n + 1],
@@ -65,7 +57,7 @@ where
         self.data[i + 1][j + 1] = self.group.op(self.data[i + 1][j + 1], value);
     }
 
-    pub fn build(self) -> CumulativeSum2D<T, G> {
+    pub fn build(self) -> CumulativeSum2D<G> {
         let mut data = self.data;
 
         for i in 1..=self.n {

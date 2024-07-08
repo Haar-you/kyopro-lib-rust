@@ -4,18 +4,14 @@ pub use crate::algebra::traits::Monoid;
 pub use crate::ds::traits::Updatable;
 use std::ops::Range;
 
-pub struct DualSegtree<T, M> {
+pub struct DualSegtree<M: Monoid> {
     original_size: usize,
     size: usize,
-    data: Vec<T>,
+    data: Vec<M::Output>,
     monoid: M,
 }
 
-impl<T, M> DualSegtree<T, M>
-where
-    T: Clone,
-    M: Monoid<Output = T>,
-{
+impl<T: Clone, M: Monoid<Output = T>> DualSegtree<M> {
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
         DualSegtree {
@@ -71,11 +67,7 @@ where
     }
 }
 
-impl<T, M> Updatable<Range<usize>> for DualSegtree<T, M>
-where
-    T: Clone,
-    M: Monoid<Output = T>,
-{
+impl<T: Clone, M: Monoid<Output = T>> Updatable<Range<usize>> for DualSegtree<M> {
     type Value = T;
 
     fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: Self::Value) {
