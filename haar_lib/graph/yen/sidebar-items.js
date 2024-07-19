@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["yen_algorithm"],"trait":["Elem"]};

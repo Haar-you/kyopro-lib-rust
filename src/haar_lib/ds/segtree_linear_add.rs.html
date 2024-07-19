@@ -139,11 +139,22 @@
 <a href="#139" id="139">139</a>
 <a href="#140" id="140">140</a>
 <a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 区間一次関数加算セグメントツリー
+//!
+//! # Problems
+//!
+//! - [HUPC 2020 B 三角形足し算](https://onlinejudge.u-aizu.ac.jp/challenges/sources/VPC/HUPC/3165?year=2020)
 
 </span><span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::Indexable;
 <span class="kw">use </span><span class="kw">crate</span>::trait_alias;
 <span class="kw">use </span><span class="kw">crate</span>::traits::one_zero::Zero;
+<span class="kw">use </span><span class="kw">crate</span>::utils::linear::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::{
     cell::Cell,
     mem::size_of,
@@ -188,7 +199,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, (a, b): (T, T)) {
+    <span class="doccomment">/// 範囲`l..r`に一次関数`ax + b`の値を加算する。(`x`の値は`l..r`の範囲)
+    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, linear: Linear&lt;T&gt;) {
         <span class="kw">let </span><span class="kw-2">mut </span>l_ = l + <span class="self">self</span>.hsize;
         <span class="kw">let </span><span class="kw-2">mut </span>r_ = r + <span class="self">self</span>.hsize;
 
@@ -197,13 +209,13 @@
                 r_ -= <span class="number">1</span>;
                 <span class="self">self</span>.data[r_].set(add(
                     <span class="self">self</span>.data[r_].get(),
-                    (b + a * T::from((<span class="self">self</span>.from[r_] - l) <span class="kw">as </span>u32), a),
+                    (linear.apply(T::from(<span class="self">self</span>.from[r_] <span class="kw">as </span>u32)), linear.a),
                 ));
             }
             <span class="kw">if </span>l_ &amp; <span class="number">1 </span>== <span class="number">1 </span>{
                 <span class="self">self</span>.data[l_].set(add(
                     <span class="self">self</span>.data[l_].get(),
-                    (b + a * T::from((<span class="self">self</span>.from[l_] - l) <span class="kw">as </span>u32), a),
+                    (linear.apply(T::from(<span class="self">self</span>.from[l_] <span class="kw">as </span>u32)), linear.a),
                 ));
                 l_ += <span class="number">1</span>;
             }
@@ -270,10 +282,10 @@
             <span class="kw">let </span>a = rng.gen_range(<span class="number">0</span>..<span class="number">100</span>);
             <span class="kw">let </span>b = rng.gen_range(<span class="number">0</span>..<span class="number">100</span>);
 
-            seg.update(lr.clone(), (a, b));
+            seg.update(lr.clone(), Linear { a, b });
 
-            <span class="kw">for </span>(k, i) <span class="kw">in </span>lr.enumerate() {
-                vec[i] += a * k <span class="kw">as </span>u64 + b;
+            <span class="kw">for </span>i <span class="kw">in </span>lr {
+                vec[i] += a * i <span class="kw">as </span>u64 + b;
             }
 
             <span class="macro">assert_eq!</span>((<span class="number">0</span>..n).map(|i| seg.get(i)).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(), vec);

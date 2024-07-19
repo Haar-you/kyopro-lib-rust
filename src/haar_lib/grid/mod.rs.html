@@ -80,8 +80,6 @@
 <a href="#80" id="80">80</a>
 <a href="#81" id="81">81</a>
 <a href="#82" id="82">82</a>
-<a href="#83" id="83">83</a>
-<a href="#84" id="84">84</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>to_graph;
 
 <span class="attr">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -145,25 +143,23 @@
     }
 
     <span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, p: Position) -&gt; <span class="kw-2">&amp;</span>T {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.grid[p.x <span class="kw">as </span>usize][p.y <span class="kw">as </span>usize]
+        <span class="kw-2">&amp;</span><span class="self">self</span>.grid[p.x][p.y]
     }
 
-    <span class="kw">pub fn </span>find_all&lt;P: FnMut(<span class="kw-2">&amp;</span>T) -&gt; bool&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>p: P) -&gt; Vec&lt;Position&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
-        <span class="self">self</span>.for_each(|a, c| {
-            <span class="kw">if </span>p(c) {
-                ret.push(a);
-            }
-        });
-        ret
+    <span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (Position, <span class="kw-2">&amp;</span>T)&gt; {
+        <span class="self">self</span>.grid.iter().enumerate().flat_map(|(i, v)| {
+            v.iter()
+                .enumerate()
+                .map(<span class="kw">move </span>|(j, x)| (Position::new(i, j), x))
+        })
     }
 
-    <span class="kw">pub fn </span>for_each&lt;F: FnMut(Position, <span class="kw-2">&amp;</span>T)&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>f: F) {
-        <span class="kw">for </span>(i, v) <span class="kw">in </span><span class="self">self</span>.grid.iter().enumerate() {
-            <span class="kw">for </span>(j, c) <span class="kw">in </span>v.iter().enumerate() {
-                f(Position::new(i, j), c);
-            }
-        }
+    <span class="kw">pub fn </span>iter_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (Position, <span class="kw-2">&amp;mut </span>T)&gt; {
+        <span class="self">self</span>.grid.iter_mut().enumerate().flat_map(|(i, v)| {
+            v.iter_mut()
+                .enumerate()
+                .map(<span class="kw">move </span>|(j, x)| (Position::new(i, j), x))
+        })
     }
 }
 </code></pre></div></section></main></body></html>

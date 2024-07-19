@@ -178,25 +178,17 @@
 <a href="#178" id="178">178</a>
 <a href="#179" id="179">179</a>
 <a href="#180" id="180">180</a>
-<a href="#181" id="181">181</a>
-<a href="#182" id="182">182</a>
-<a href="#183" id="183">183</a>
-<a href="#184" id="184">184</a>
 </pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 
-<span class="kw">pub struct </span>FoldableDeque&lt;T, S&gt; {
-    front_stack: Vec&lt;T&gt;,
-    back_stack: Vec&lt;T&gt;,
-    front_sum: Vec&lt;T&gt;,
-    back_sum: Vec&lt;T&gt;,
+<span class="kw">pub struct </span>FoldableDeque&lt;S: Semigroup&gt; {
+    front_stack: Vec&lt;S::Output&gt;,
+    back_stack: Vec&lt;S::Output&gt;,
+    front_sum: Vec&lt;S::Output&gt;,
+    back_sum: Vec&lt;S::Output&gt;,
     semigroup: S,
 }
 
-<span class="kw">impl</span>&lt;T, S&gt; FoldableDeque&lt;T, S&gt;
-<span class="kw">where
-    </span>T: Clone,
-    S: Semigroup&lt;Output = T&gt;,
-{
+<span class="kw">impl</span>&lt;T: Clone, S: Semigroup&lt;Output = T&gt;&gt; FoldableDeque&lt;S&gt; {
     <span class="kw">pub fn </span>new(semigroup: S) -&gt; <span class="self">Self </span>{
         FoldableDeque {
             front_stack: <span class="macro">vec!</span>[],

@@ -78,8 +78,14 @@
 <a href="#78" id="78">78</a>
 <a href="#79" id="79">79</a>
 <a href="#80" id="80">80</a>
-</pre></div><pre class="rust"><code><span class="kw">use crate</span>::{algo::bsearch::<span class="kw-2">*</span>, ds::fenwick_add::<span class="kw-2">*</span>};
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 範囲転倒数取得クエリ
+
+</span><span class="kw">use crate</span>::{algo::bsearch::<span class="kw-2">*</span>, ds::fenwick_add::<span class="kw-2">*</span>};
 <span class="kw">use </span>std::convert::TryFrom;
+<span class="kw">use </span>std::ops::Range;
 
 <span class="kw">pub struct </span>StaticRangeInversionsQuery {
     data: Vec&lt;usize&gt;,
@@ -96,7 +102,7 @@
         <span class="self">Self </span>{ data, qs: <span class="macro">vec!</span>[] }
     }
 
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, l: usize, r: usize) {
+    <span class="kw">pub fn </span>add_query(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) {
         <span class="self">self</span>.qs.push((l, r));
     }
 

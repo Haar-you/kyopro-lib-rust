@@ -55,30 +55,18 @@
 <a href="#55" id="55">55</a>
 <a href="#56" id="56">56</a>
 <a href="#57" id="57">57</a>
-<a href="#58" id="58">58</a>
-<a href="#59" id="59">59</a>
-<a href="#60" id="60">60</a>
-<a href="#61" id="61">61</a>
-<a href="#62" id="62">62</a>
-<a href="#63" id="63">63</a>
-<a href="#64" id="64">64</a>
-<a href="#65" id="65">65</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 冪等性と結合性をもつ列の区間取得(O(1))
 
 </span><span class="kw">use crate</span>::{algebra::traits::<span class="kw-2">*</span>, ds::traits::Foldable};
 <span class="kw">use </span>std::{cmp::min, ops::Range};
 
-<span class="kw">pub struct </span>SparseTable&lt;T, A&gt; {
-    data: Vec&lt;Vec&lt;T&gt;&gt;,
+<span class="kw">pub struct </span>SparseTable&lt;A: BinaryOp&gt; {
+    data: Vec&lt;Vec&lt;A::Output&gt;&gt;,
     log_table: Vec&lt;usize&gt;,
     semilattice: A,
 }
 
-<span class="kw">impl</span>&lt;T, A&gt; SparseTable&lt;T, A&gt;
-<span class="kw">where
-    </span>T: Clone + Default,
-    A: BinaryOp&lt;Output = T&gt;,
-{
+<span class="kw">impl</span>&lt;T: Clone + Default, A: BinaryOp&lt;Output = T&gt;&gt; SparseTable&lt;A&gt; {
     <span class="kw">pub fn </span>new(s: Vec&lt;T&gt;, a: A) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = s.len();
         <span class="kw">let </span>logn = n.next_power_of_two().trailing_zeros() <span class="kw">as </span>usize + <span class="number">1</span>;
@@ -109,11 +97,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T, A&gt; Foldable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>SparseTable&lt;T, A&gt;
-<span class="kw">where
-    </span>T: Clone + Default,
-    A: BinaryOp&lt;Output = T&gt;,
-{
+<span class="kw">impl</span>&lt;T: Clone + Default, A: BinaryOp&lt;Output = T&gt;&gt; Foldable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>SparseTable&lt;A&gt; {
     <span class="kw">type </span>Output = <span class="prelude-ty">Option</span>&lt;T&gt;;
 
     <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="self">Self</span>::Output {

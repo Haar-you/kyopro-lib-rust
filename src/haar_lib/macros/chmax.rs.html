@@ -12,7 +12,7 @@
 <a href="#12" id="12">12</a>
 </pre></div><pre class="rust"><code><span class="attr">#[macro_export]
 </span><span class="macro">macro_rules! </span>chmax {
-    ( <span class="macro-nonterminal">$a</span>:expr, <span class="macro-nonterminal">$b</span>:expr ) =&gt; {
+    ( <span class="macro-nonterminal">$a</span>:expr, <span class="macro-nonterminal">$b</span>:expr ) =&gt; {{
         <span class="kw">let </span>temp = <span class="macro-nonterminal">$b</span>;
         <span class="kw">if </span><span class="macro-nonterminal">$a </span>&lt; temp {
             <span class="macro-nonterminal">$a </span>= temp;
@@ -20,6 +20,6 @@
         </span>} <span class="kw">else </span>{
             <span class="bool-val">false
         </span>}
-    };
+    }};
 }
 </code></pre></div></section></main></body></html>

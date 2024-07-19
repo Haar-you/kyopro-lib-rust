@@ -98,7 +98,20 @@
 <a href="#98" id="98">98</a>
 <a href="#99" id="99">99</a>
 <a href="#100" id="100">100</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::trait_alias;
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Convex Hull Trick
+//!
+//! # Problems
+//!
+//! - [EDPC Z - Frog 3](https://atcoder.jp/contests/dp/submissions/54932537)
+
+</span><span class="kw">use </span><span class="kw">crate</span>::trait_alias;
+<span class="kw">use </span><span class="kw">crate</span>::utils::linear::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::{
     collections::VecDeque,
     ops::{Add, Mul, Sub},
@@ -124,17 +137,13 @@
     }
 }
 
-<span class="kw">fn </span>is_needless&lt;T: Elem&gt;(a: <span class="kw-2">&amp;</span>(T, T), b: <span class="kw-2">&amp;</span>(T, T), c: <span class="kw-2">&amp;</span>(T, T)) -&gt; bool {
-    (a.<span class="number">1 </span>- b.<span class="number">1</span>) * (a.<span class="number">0 </span>- c.<span class="number">0</span>) &gt;= (a.<span class="number">1 </span>- c.<span class="number">1</span>) * (a.<span class="number">0 </span>- b.<span class="number">0</span>)
+<span class="kw">fn </span>is_needless&lt;T: Elem&gt;(a: <span class="kw-2">&amp;</span>Linear&lt;T&gt;, b: <span class="kw-2">&amp;</span>Linear&lt;T&gt;, c: <span class="kw-2">&amp;</span>Linear&lt;T&gt;) -&gt; bool {
+    (a.b - b.b) * (a.a - c.a) &gt;= (a.b - c.b) * (a.a - b.a)
 }
-
-<span class="kw">fn </span>apply&lt;T: Elem&gt;(l: (T, T), x: T) -&gt; T {
-    l.<span class="number">0 </span>* x + l.<span class="number">1
-</span>}
 
 <span class="attr">#[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>ConvexHullTrick&lt;T&gt; {
-    lines: VecDeque&lt;(T, T)&gt;,
+    lines: VecDeque&lt;Linear&lt;T&gt;&gt;,
     mode: Mode,
     last_query: <span class="prelude-ty">Option</span>&lt;T&gt;,
     last_slope: <span class="prelude-ty">Option</span>&lt;T&gt;,
@@ -150,7 +159,9 @@
         }
     }
 
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, (a, b): (T, T)) {
+    <span class="doccomment">/// 最小値を求めたいならば、傾きは単調減少でなければならない。
+    /// 最大値を求めたいならば、傾きは単調増加でなければならない。
+    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, line @ Linear { a, b }: Linear&lt;T&gt;) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.last_slope {
             <span class="kw">if </span>!<span class="self">self</span>.mode.cmp(p, a) {
                 <span class="macro">panic!</span>(<span class="string">&quot;`a` must be monotonic increasing / decreasing if `mode` is Max / Min&quot;</span>);
@@ -159,8 +170,8 @@
         <span class="self">self</span>.last_slope = <span class="prelude-val">Some</span>(a);
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(l) = <span class="self">self</span>.lines.back() {
-            <span class="kw">if </span>l.<span class="number">0 </span>== a {
-                <span class="kw">if </span>!<span class="self">self</span>.mode.cmp(l.<span class="number">1</span>, b) {
+            <span class="kw">if </span>l.a == a {
+                <span class="kw">if </span>!<span class="self">self</span>.mode.cmp(l.b, b) {
                     <span class="kw">return</span>;
                 }
                 <span class="self">self</span>.lines.pop_back();
@@ -168,7 +179,7 @@
         }
         <span class="kw">while </span><span class="self">self</span>.lines.len() &gt;= <span class="number">2
             </span>&amp;&amp; is_needless(
-                <span class="kw-2">&amp;</span>(a, b),
+                <span class="kw-2">&amp;</span>line,
                 <span class="self">self</span>.lines.back().unwrap(),
                 <span class="self">self</span>.lines.get(<span class="self">self</span>.lines.len() - <span class="number">2</span>).unwrap(),
             )
@@ -176,10 +187,11 @@
             <span class="self">self</span>.lines.pop_back();
         }
 
-        <span class="self">self</span>.lines.push_back((a, b));
+        <span class="self">self</span>.lines.push_back(line);
     }
 
-    <span class="kw">pub fn </span>query(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: T) -&gt; T {
+    <span class="doccomment">/// クエリの座標は単調増加でなければならない。
+    </span><span class="kw">pub fn </span>query(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: T) -&gt; T {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.last_query {
             <span class="kw">if </span>x &lt; p {
                 <span class="macro">panic!</span>(<span class="string">&quot;x must be monotonic increasing.&quot;</span>);
@@ -190,12 +202,12 @@
         <span class="kw">while </span><span class="self">self</span>.lines.len() &gt;= <span class="number">2
             </span>&amp;&amp; <span class="self">self
                 </span>.mode
-                .cmp(apply(<span class="self">self</span>.lines[<span class="number">0</span>], x), apply(<span class="self">self</span>.lines[<span class="number">1</span>], x))
+                .cmp(<span class="self">self</span>.lines[<span class="number">0</span>].apply(x), <span class="self">self</span>.lines[<span class="number">1</span>].apply(x))
         {
             <span class="self">self</span>.lines.pop_front();
         }
 
-        apply(<span class="self">self</span>.lines[<span class="number">0</span>], x)
+        <span class="self">self</span>.lines[<span class="number">0</span>].apply(x)
     }
 }
 </code></pre></div></section></main></body></html>

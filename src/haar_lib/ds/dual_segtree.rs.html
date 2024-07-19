@@ -120,32 +120,20 @@
 <a href="#120" id="120">120</a>
 <a href="#121" id="121">121</a>
 <a href="#122" id="122">122</a>
-<a href="#123" id="123">123</a>
-<a href="#124" id="124">124</a>
-<a href="#125" id="125">125</a>
-<a href="#126" id="126">126</a>
-<a href="#127" id="127">127</a>
-<a href="#128" id="128">128</a>
-<a href="#129" id="129">129</a>
-<a href="#130" id="130">130</a>
 </pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::wrong_self_convention)]
 
 </span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::Monoid;
 <span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::Updatable;
 <span class="kw">use </span>std::ops::Range;
 
-<span class="kw">pub struct </span>DualSegtree&lt;T, M&gt; {
+<span class="kw">pub struct </span>DualSegtree&lt;M: Monoid&gt; {
     original_size: usize,
     size: usize,
-    data: Vec&lt;T&gt;,
+    data: Vec&lt;M::Output&gt;,
     monoid: M,
 }
 
-<span class="kw">impl</span>&lt;T, M&gt; DualSegtree&lt;T, M&gt;
-<span class="kw">where
-    </span>T: Clone,
-    M: Monoid&lt;Output = T&gt;,
-{
+<span class="kw">impl</span>&lt;T: Clone, M: Monoid&lt;Output = T&gt;&gt; DualSegtree&lt;M&gt; {
     <span class="kw">pub fn </span>new(n: usize, monoid: M) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
         DualSegtree {
@@ -201,11 +189,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T, M&gt; Updatable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>DualSegtree&lt;T, M&gt;
-<span class="kw">where
-    </span>T: Clone,
-    M: Monoid&lt;Output = T&gt;,
-{
+<span class="kw">impl</span>&lt;T: Clone, M: Monoid&lt;Output = T&gt;&gt; Updatable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>DualSegtree&lt;M&gt; {
     <span class="kw">type </span>Value = T;
 
     <span class="kw">fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, value: <span class="self">Self</span>::Value) {
