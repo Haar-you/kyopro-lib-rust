@@ -29,11 +29,9 @@ pub fn inplace_merge<T: Ord + Copy>(a: &mut [T], k: usize) {
     inplace_merge_by(a, k, |x, y| x < y);
 }
 
-pub fn merge<T: Ord + Copy>(a: &[T], b: &[T]) -> Vec<T> {
-    let mut ret = vec![];
-    ret.reserve(a.len() + b.len());
-    ret.extend_from_slice(a);
-    ret.extend_from_slice(b);
-    inplace_merge(&mut ret, a.len());
-    ret
+pub fn merge<T: Ord + Copy>(mut a: Vec<T>, mut b: Vec<T>) -> Vec<T> {
+    let n = a.len();
+    a.append(&mut b);
+    inplace_merge(&mut a, n);
+    a
 }
