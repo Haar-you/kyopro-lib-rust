@@ -16,6 +16,7 @@ pub mod segtree_linear_add;
 pub mod starry_sky_tree;
 
 pub mod fenwick_on_fenwick;
+pub mod segtree_on_segtree;
 
 pub mod cumulative_sum_1d;
 pub mod cumulative_sum_2d;
