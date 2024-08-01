@@ -1,6 +1,6 @@
 use crate::geom::*;
 
-pub fn convex_diameter<T: Eps>(ps: Vec<Vector<T>>) -> T {
+pub fn convex_diameter(ps: &Vec<Vector>) -> f64 {
     let n = ps.len();
 
     let mut i = ps
@@ -19,7 +19,7 @@ pub fn convex_diameter<T: Eps>(ps: Vec<Vector<T>>) -> T {
     let mut ret = (ps[i] - ps[j]).abs();
 
     for _ in 0..2 * n {
-        if (ps[(i + 1) % n] - ps[i]).cross(ps[(j + 1) % n] - ps[j]) > T::from(0.0) {
+        if (ps[(i + 1) % n] - ps[i]).cross(ps[(j + 1) % n] - ps[j]) > 0.0 {
             j = (j + 1) % n;
         } else {
             i = (i + 1) % n;

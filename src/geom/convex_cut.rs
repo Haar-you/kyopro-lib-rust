@@ -1,6 +1,6 @@
 use crate::geom::{ccw::*, intersect_line_segment::*, *};
 
-pub fn convex_cut<T: Eps>(ps: &[Vector<T>], l: Line<T>) -> (Vec<Vector<T>>, Vec<Vector<T>>) {
+pub fn convex_cut(ps: &[Vector], l: Line, eps: Eps) -> (Vec<Vector>, Vec<Vector>) {
     use self::IntersectLineSegment::*;
 
     let n = ps.len();
@@ -8,7 +8,7 @@ pub fn convex_cut<T: Eps>(ps: &[Vector<T>], l: Line<T>) -> (Vec<Vector<T>>, Vec<
     let mut right = vec![];
 
     for i in 0..n {
-        let (s, c) = intersect_line_segment(l, Line::new(ps[i], ps[(i + 1) % n]));
+        let (s, c) = intersect_line_segment(l, Line::new(ps[i], ps[(i + 1) % n]), eps);
 
         match s {
             LEFTSIDE => left.push(ps[i]),
@@ -18,7 +18,7 @@ pub fn convex_cut<T: Eps>(ps: &[Vector<T>], l: Line<T>) -> (Vec<Vector<T>>, Vec<
                 right.push(ps[i]);
             }
             CROSSED => {
-                match ccw(l.from, l.to, ps[i]) {
+                match ccw(l.from, l.to, ps[i], eps) {
                     CCW::CLOCKWISE => right.push(ps[i]),
                     _ => left.push(ps[i]),
                 };

@@ -6,7 +6,7 @@ pub enum Hull {
     Lower,
 }
 
-pub fn half_hull<T: Eps>(mut ps: Vec<Vector<T>>, hull: Hull) -> Vec<Vector<T>> {
+pub fn half_hull(mut ps: Vec<Vector>, hull: Hull, eps: Eps) -> Vec<Vector> {
     if ps.is_empty() {
         return vec![];
     }
@@ -27,7 +27,7 @@ pub fn half_hull<T: Eps>(mut ps: Vec<Vector<T>>, hull: Hull) -> Vec<Vector<T>> {
             let p = ret[ret.len() - 2];
             let q = *ret.last().unwrap();
 
-            if (q - p).cross(s - p) <= T::from(0.0) {
+            if eps.le((q - p).cross(s - p), 0.0) {
                 ret.push(s);
             } else {
                 ret.pop();
@@ -39,10 +39,10 @@ pub fn half_hull<T: Eps>(mut ps: Vec<Vector<T>>, hull: Hull) -> Vec<Vector<T>> {
     ret
 }
 
-pub fn convex_hull<T: Eps>(ps: Vec<Vector<T>>) -> Vec<Vector<T>> {
-    let mut ret = half_hull(ps.clone(), Hull::Upper);
+pub fn convex_hull(ps: Vec<Vector>, eps: Eps) -> Vec<Vector> {
+    let mut ret = half_hull(ps.clone(), Hull::Upper, eps);
     ret.pop();
-    let mut lower = half_hull(ps, Hull::Lower);
+    let mut lower = half_hull(ps, Hull::Lower, eps);
     lower.pop();
     ret.extend(lower);
     ret

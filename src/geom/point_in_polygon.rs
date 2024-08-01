@@ -9,41 +9,53 @@ pub enum PointPolygon {
     EXCLUSION,
 }
 
-pub fn point_in_polygon<T: Eps>(p: Vector<T>, pl: &[Vector<T>]) -> PointPolygon {
+impl PointPolygon {
+    pub fn inclusion(self) -> bool {
+        self == Self::INCLUSION
+    }
+    pub fn on_segment(self) -> bool {
+        self == Self::ON_SEGMENT
+    }
+    pub fn exclusion(self) -> bool {
+        self == Self::EXCLUSION
+    }
+}
+
+pub fn point_in_polygon(p: Vector, pl: &[Vector], eps: Eps) -> PointPolygon {
     use self::PointPolygon::*;
 
     let n = pl.len();
-    let mut d = T::from(0.0);
+    let mut d = 0.0;
 
     for i in 0..n {
-        if ccw(pl[i], pl[(i + 1) % n], p) == CCW::ON_SEGMENT {
+        if ccw(pl[i], pl[(i + 1) % n], p, eps) == CCW::ON_SEGMENT {
             return ON_SEGMENT;
         }
 
         let mut a = pl[i].angle(p);
         let mut b = pl[(i + 1) % n].angle(p);
 
-        if a < T::from(0.0) {
-            a += T::from(2.0 * PI);
+        if eps.lt(a, 0.0) {
+            a += 2.0 * PI;
         }
-        if b < T::from(0.0) {
-            b += T::from(2.0 * PI);
+        if eps.lt(b, 0.0) {
+            b += 2.0 * PI;
         }
 
         let mut ang = b - a;
 
-        if ang.abs() > T::from(PI) {
-            if ang <= T::from(0.0) {
-                ang += T::from(2.0 * PI);
+        if eps.gt(ang.abs(), PI) {
+            if eps.le(ang, 0.0) {
+                ang += 2.0 * PI;
             } else {
-                ang -= T::from(2.0 * PI);
+                ang -= 2.0 * PI;
             }
         }
 
         d += ang;
     }
 
-    if (d.abs() - T::from(2.0 * PI)).abs() == T::from(0.0) {
+    if eps.eq((d.abs() - 2.0 * PI).abs(), 0.0) {
         INCLUSION
     } else {
         EXCLUSION

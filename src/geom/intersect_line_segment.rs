@@ -10,16 +10,32 @@ pub enum IntersectLineSegment {
     CROSSED,
 }
 
-pub fn intersect_line_segment<T: Eps>(
-    l: Line<T>,
-    s: Line<T>,
-) -> (IntersectLineSegment, Option<Vector<T>>) {
+impl IntersectLineSegment {
+    pub fn leftside(self) -> bool {
+        self == Self::LEFTSIDE
+    }
+    pub fn rightside(self) -> bool {
+        self == Self::RIGHTSIDE
+    }
+    pub fn overlapped(self) -> bool {
+        self == Self::OVERLAPPED
+    }
+    pub fn crossed(self) -> bool {
+        self == Self::CROSSED
+    }
+}
+
+pub fn intersect_line_segment(
+    l: Line,
+    s: Line,
+    eps: Eps,
+) -> (IntersectLineSegment, Option<Vector>) {
     use self::IntersectLineSegment::*;
 
     let a = l.diff().cross(s.from - l.from);
     let b = l.diff().cross(s.to - l.from);
 
-    match (a.partial_cmp(&T::from(0.0)), b.partial_cmp(&T::from(0.0))) {
+    match (eps.partial_cmp(a, 0.0), eps.partial_cmp(b, 0.0)) {
         (Some(Equal), Some(Equal)) => (OVERLAPPED, None),
         (Some(Less), Some(Less)) => (RIGHTSIDE, None),
         (Some(Greater), Some(Greater)) => (LEFTSIDE, None),

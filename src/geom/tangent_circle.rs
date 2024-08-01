@@ -1,12 +1,12 @@
 use crate::geom::*;
 
-pub fn tangent_circle<T: Eps>(c: Circle<T>, p: Vector<T>) -> Vec<Vector<T>> {
+pub fn tangent_circle(c: Circle, p: Vector, eps: Eps) -> Vec<Vector> {
     let d = (p - c.center).abs();
 
-    if d < c.radius {
+    if eps.lt(d, c.radius) {
         return vec![];
     }
-    if d == c.radius {
+    if eps.eq(d, c.radius) {
         return vec![p];
     }
 
