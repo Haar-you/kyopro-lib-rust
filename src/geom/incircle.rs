@@ -1,3 +1,5 @@
+//! 三角形の内接円
+
 use crate::geom::*;
 
 pub fn incircle(a: Vector, b: Vector, c: Vector) -> Circle {

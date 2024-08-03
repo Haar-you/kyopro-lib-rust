@@ -1,3 +1,5 @@
+//! 最近点対
+
 use crate::{algo::merge::*, geom::*};
 
 pub fn closest_pair(mut ps: Vec<Vector>, eps: Eps) -> Option<(Vector, Vector)> {

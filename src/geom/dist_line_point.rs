@@ -1,3 +1,5 @@
+//! 直線と点の距離
+
 use crate::geom::*;
 
 pub fn dist_line_point(l: Line, p: Vector) -> f64 {

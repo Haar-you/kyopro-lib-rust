@@ -1,3 +1,5 @@
+//! 点と多角形の位置関係
+
 use crate::geom::{ccw::*, *};
 use std::f64::consts::PI;
 

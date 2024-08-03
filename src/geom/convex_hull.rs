@@ -1,3 +1,5 @@
+//! 凸包
+
 use crate::geom::*;
 
 #[derive(Clone, Copy, PartialEq, Eq)]

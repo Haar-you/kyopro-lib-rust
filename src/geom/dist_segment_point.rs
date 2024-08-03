@@ -1,3 +1,5 @@
+//! 線分と点の距離
+
 use crate::geom::*;
 
 pub fn dist_segment_point(l: Line, p: Vector) -> f64 {

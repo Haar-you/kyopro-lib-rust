@@ -1,3 +1,5 @@
+//! 2つの円の共通接線
+
 use crate::geom::*;
 
 pub fn common_tangent_circles(a: Circle, b: Circle, eps: Eps) -> Vec<Vector> {

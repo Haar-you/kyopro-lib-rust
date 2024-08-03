@@ -1,3 +1,5 @@
+//! 円と直線の位置関係
+
 use crate::geom::{dist_line_point::*, *};
 
 #[derive(Clone, Copy, Debug, PartialEq)]

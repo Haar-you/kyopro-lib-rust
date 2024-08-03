@@ -1,3 +1,5 @@
+//! 凸多角形の判定
+
 use crate::geom::{ccw::*, *};
 
 pub fn is_convex(ps: &[Vector], eps: Eps) -> bool {

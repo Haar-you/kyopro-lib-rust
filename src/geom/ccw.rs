@@ -1,3 +1,5 @@
+//! 点と線分の位置関係
+
 use crate::geom::*;
 
 #[derive(Clone, Copy, Debug, PartialEq)]

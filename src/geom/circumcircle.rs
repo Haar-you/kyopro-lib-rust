@@ -1,3 +1,5 @@
+//! 三角形の外接円
+
 use crate::geom::*;
 
 pub fn circumcircle(a: Vector, b: Vector, c: Vector) -> Circle {

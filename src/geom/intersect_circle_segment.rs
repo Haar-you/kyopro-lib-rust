@@ -1,3 +1,5 @@
+//! 円と線分の位置関係
+
 use crate::geom::{dist_segment_point::*, *};
 
 #[derive(Clone, Copy, Debug, PartialEq)]

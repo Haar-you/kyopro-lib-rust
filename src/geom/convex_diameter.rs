@@ -1,3 +1,5 @@
+//! 凸多角形の直径
+
 use crate::geom::*;
 
 pub fn convex_diameter(ps: &Vec<Vector>) -> f64 {

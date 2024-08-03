@@ -1,3 +1,5 @@
+//! 2つの円の共通部分の面積
+
 use crate::geom::{intersect_circles::*, *};
 use std::f64::consts::PI;
 

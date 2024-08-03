@@ -1,3 +1,5 @@
+//! 2つの線分の位置関係
+
 use crate::geom::{ccw::*, *};
 
 #[derive(Clone, Copy, Debug, PartialEq)]

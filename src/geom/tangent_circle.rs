@@ -1,3 +1,5 @@
+//! 点を通る円の接線
+
 use crate::geom::*;
 
 pub fn tangent_circle(c: Circle, p: Vector, eps: Eps) -> Vec<Vector> {
