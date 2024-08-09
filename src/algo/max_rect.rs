@@ -1,16 +1,20 @@
 use crate::chmax;
-use std::{cmp::Ordering, ops::Mul};
+use std::{
+    cmp::Ordering,
+    ops::{Mul, Range},
+};
 
 /// ヒストグラム中の最大面積長方形の面積を計算する。
 ///
 /// # Complexity
 /// Time complexity $O(|h|)$
-pub fn max_rect_in_histogram<T>(h: &[T]) -> T
+pub fn max_rect_in_histogram<T>(h: &[T]) -> (T, Range<usize>)
 where
     T: From<usize> + Mul<Output = T> + Ord + Copy,
 {
     let mut st: Vec<(T, usize)> = vec![];
     let mut ret = T::from(0);
+    let mut lr = (0, 0);
 
     for (i, &y1) in h.iter().enumerate() {
         if let Some(&(y2, _)) = st.last() {
@@ -24,7 +28,9 @@ where
                         if y3 <= y1 {
                             break;
                         }
-                        chmax!(ret, y3 * T::from(i - k));
+                        if chmax!(ret, y3 * T::from(i - k)) {
+                            lr = (k, i);
+                        }
                         j = k;
                         st.pop();
                     }
@@ -38,10 +44,18 @@ where
     }
 
     while let Some((y, i)) = st.pop() {
-        chmax!(ret, y * T::from(h.len() - i));
+        if chmax!(ret, y * T::from(h.len() - i)) {
+            lr = (i, h.len());
+        }
     }
 
-    ret
+    (
+        ret,
+        Range {
+            start: lr.0,
+            end: lr.1,
+        },
+    )
 }
 
 /// グリッド上の最大面積長方形の面積を計算する。
@@ -70,7 +84,7 @@ pub fn max_rect<T: Copy + PartialEq>(d: &[Vec<T>], value: T) -> usize {
     }
 
     c.into_iter()
-        .map(|s| max_rect_in_histogram(&s))
+        .map(|s| max_rect_in_histogram(&s).0)
         .max()
         .unwrap()
 }
@@ -82,8 +96,16 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_3_C
-        assert_eq!(max_rect_in_histogram(&[2, 1, 3, 5, 3, 4, 2, 1]), 12);
-        assert_eq!(max_rect_in_histogram(&[2, 0, 1]), 2);
+
+        let a = [2, 1, 3, 5, 3, 4, 2, 1];
+        let (ans, Range { start: l, end: r }) = max_rect_in_histogram(&a);
+        assert_eq!(ans, 12);
+        assert_eq!(ans, a[l..r].into_iter().min().unwrap() * (r - l));
+
+        let a = [2, 0, 1];
+        let (ans, Range { start: l, end: r }) = max_rect_in_histogram(&a);
+        assert_eq!(ans, 2);
+        assert_eq!(ans, a[l..r].into_iter().min().unwrap() * (r - l));
 
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_3_B
         assert_eq!(
