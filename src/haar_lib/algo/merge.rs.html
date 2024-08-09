@@ -35,8 +35,6 @@
 <a href="#35" id="35">35</a>
 <a href="#36" id="36">36</a>
 <a href="#37" id="37">37</a>
-<a href="#38" id="38">38</a>
-<a href="#39" id="39">39</a>
 </pre></div><pre class="rust"><code><span class="kw">pub fn </span>inplace_merge_by&lt;T: Copy&gt;(a: <span class="kw-2">&amp;mut </span>[T], k: usize, cmp: <span class="kw">fn</span>(<span class="kw-2">&amp;</span>T, <span class="kw-2">&amp;</span>T) -&gt; bool) {
     <span class="kw">let </span>fst = <span class="kw-2">&amp;</span>a[<span class="number">0</span>..k].to_vec();
     <span class="kw">let </span>snd = <span class="kw-2">&amp;</span>a[k..].to_vec();
@@ -68,12 +66,10 @@
     inplace_merge_by(a, k, |x, y| x &lt; y);
 }
 
-<span class="kw">pub fn </span>merge&lt;T: Ord + Copy&gt;(a: <span class="kw-2">&amp;</span>[T], b: <span class="kw-2">&amp;</span>[T]) -&gt; Vec&lt;T&gt; {
-    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
-    ret.reserve(a.len() + b.len());
-    ret.extend_from_slice(a);
-    ret.extend_from_slice(b);
-    inplace_merge(<span class="kw-2">&amp;mut </span>ret, a.len());
-    ret
+<span class="kw">pub fn </span>merge&lt;T: Ord + Copy&gt;(<span class="kw-2">mut </span>a: Vec&lt;T&gt;, <span class="kw-2">mut </span>b: Vec&lt;T&gt;) -&gt; Vec&lt;T&gt; {
+    <span class="kw">let </span>n = a.len();
+    a.append(<span class="kw-2">&amp;mut </span>b);
+    inplace_merge(<span class="kw-2">&amp;mut </span>a, n);
+    a
 }
 </code></pre></div></section></main></body></html>

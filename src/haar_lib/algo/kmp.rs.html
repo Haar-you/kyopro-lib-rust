@@ -74,20 +74,33 @@
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
 <a href="#76" id="76">76</a>
-</pre></div><pre class="rust"><code><span class="attr">#[derive(Clone, Debug)]
-</span><span class="kw">pub struct </span>KMP {
-    pat: Vec&lt;u8&gt;,
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Knuth-Morris-Pratt法
+
+</span><span class="attr">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>KMP&lt;T&gt; {
+    pat: Vec&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;,
     table: Vec&lt;isize&gt;,
 }
 
-<span class="kw">impl </span>KMP {
-    <span class="kw">pub fn </span>new(pat: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
+<span class="kw">impl</span>&lt;T: PartialEq + Clone&gt; KMP&lt;T&gt; {
+    <span class="kw">pub fn </span>new(pat: Vec&lt;T&gt;) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>m = pat.len();
         <span class="kw">let </span><span class="kw-2">mut </span>table: Vec&lt;isize&gt; = <span class="macro">vec!</span>[<span class="number">0</span>; m + <span class="number">1</span>];
         table[<span class="number">0</span>] = -<span class="number">1</span>;
 
-        <span class="kw">let </span><span class="kw-2">mut </span>pat: Vec&lt;u8&gt; = pat.as_bytes().to_vec();
-        pat.push(<span class="number">0</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>pat: Vec&lt;<span class="kw">_</span>&gt; = pat.into_iter().map(|a| <span class="prelude-val">Some</span>(a)).collect();
+        pat.push(<span class="prelude-val">None</span>);
 
         <span class="kw">let </span><span class="kw-2">mut </span>i: usize = <span class="number">2</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>j: usize = <span class="number">0</span>;
@@ -107,16 +120,14 @@
         <span class="self">Self </span>{ pat, table }
     }
 
-    <span class="kw">pub fn </span>matches(<span class="kw-2">&amp;</span><span class="self">self</span>, s: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;usize&gt; {
+    <span class="kw">pub fn </span>matches(<span class="kw-2">&amp;</span><span class="self">self</span>, s: <span class="kw-2">&amp;</span>[T]) -&gt; Vec&lt;usize&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
         <span class="kw">let </span>n = s.len();
-
-        <span class="kw">let </span>s = s.as_bytes().to_vec();
 
         <span class="kw">let </span><span class="kw-2">mut </span>m = <span class="number">0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>i = <span class="number">0</span>;
         <span class="kw">while </span>m + i &lt; n {
-            <span class="kw">if </span><span class="self">self</span>.pat[i] == s[m + i] {
+            <span class="kw">if </span><span class="self">self</span>.pat[i].as_ref() == <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>s[m + i]) {
                 i += <span class="number">1</span>;
                 <span class="kw">if </span>i == <span class="self">self</span>.pat.len() - <span class="number">1 </span>{
                     ret.push(m);
@@ -140,14 +151,25 @@
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span>test_case::test_case;
 
-    <span class="attr">#[test]
-    </span><span class="kw">fn </span>test() {
-        <span class="kw">let </span>kmp = KMP::new(<span class="string">&quot;aaa&quot;</span>);
-        <span class="macro">assert_eq!</span>(kmp.matches(<span class="string">&quot;aaaaaaaa&quot;</span>), <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]);
+    <span class="attr">#[test_case(<span class="string">&quot;aaa&quot;</span>, <span class="string">&quot;aaaaaaaa&quot;</span>)]
+    #[test_case(<span class="string">&quot;ab&quot;</span>, <span class="string">&quot;abracadabra&quot;</span>)]
+    </span><span class="kw">fn </span>test(pat: <span class="kw-2">&amp;</span>str, s: <span class="kw-2">&amp;</span>str) {
+        <span class="kw">let </span>kmp = KMP::new(pat.as_bytes().to_owned());
+        <span class="kw">let </span>indices = kmp.matches(s.as_bytes());
 
-        <span class="kw">let </span>kmp = KMP::new(<span class="string">&quot;ab&quot;</span>);
-        <span class="macro">assert_eq!</span>(kmp.matches(<span class="string">&quot;abracadabra&quot;</span>), <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">7</span>]);
+        <span class="macro">assert_eq!</span>(indices, bruteforce(pat, s));
+    }
+
+    <span class="kw">fn </span>bruteforce(pat: <span class="kw-2">&amp;</span>str, s: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;usize&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..=s.len() - pat.len() {
+            <span class="kw">if </span><span class="kw-2">&amp;</span>s[i..i + pat.len()] == pat {
+                ret.push(i);
+            }
+        }
+        ret
     }
 }
 </code></pre></div></section></main></body></html>

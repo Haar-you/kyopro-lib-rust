@@ -100,19 +100,45 @@
 <a href="#100" id="100">100</a>
 <a href="#101" id="101">101</a>
 <a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::chmax;
-<span class="kw">use </span>std::{cmp::Ordering, ops::Mul};
+<span class="kw">use </span>std::{
+    cmp::Ordering,
+    ops::{Mul, Range},
+};
 
 <span class="doccomment">/// ヒストグラム中の最大面積長方形の面積を計算する。
 ///
 /// # Complexity
 /// Time complexity $O(|h|)$
-</span><span class="kw">pub fn </span>max_rect_in_histogram&lt;T&gt;(h: <span class="kw-2">&amp;</span>[T]) -&gt; T
+</span><span class="kw">pub fn </span>max_rect_in_histogram&lt;T&gt;(h: <span class="kw-2">&amp;</span>[T]) -&gt; (T, Range&lt;usize&gt;)
 <span class="kw">where
     </span>T: From&lt;usize&gt; + Mul&lt;Output = T&gt; + Ord + Copy,
 {
     <span class="kw">let </span><span class="kw-2">mut </span>st: Vec&lt;(T, usize)&gt; = <span class="macro">vec!</span>[];
     <span class="kw">let </span><span class="kw-2">mut </span>ret = T::from(<span class="number">0</span>);
+    <span class="kw">let </span><span class="kw-2">mut </span>lr = (<span class="number">0</span>, <span class="number">0</span>);
 
     <span class="kw">for </span>(i, <span class="kw-2">&amp;</span>y1) <span class="kw">in </span>h.iter().enumerate() {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>(y2, <span class="kw">_</span>)) = st.last() {
@@ -126,7 +152,9 @@
                         <span class="kw">if </span>y3 &lt;= y1 {
                             <span class="kw">break</span>;
                         }
-                        <span class="macro">chmax!</span>(ret, y3 * T::from(i - k));
+                        <span class="kw">if </span><span class="macro">chmax!</span>(ret, y3 * T::from(i - k)) {
+                            lr = (k, i);
+                        }
                         j = k;
                         st.pop();
                     }
@@ -140,10 +168,18 @@
     }
 
     <span class="kw">while let </span><span class="prelude-val">Some</span>((y, i)) = st.pop() {
-        <span class="macro">chmax!</span>(ret, y * T::from(h.len() - i));
+        <span class="kw">if </span><span class="macro">chmax!</span>(ret, y * T::from(h.len() - i)) {
+            lr = (i, h.len());
+        }
     }
 
-    ret
+    (
+        ret,
+        Range {
+            start: lr.<span class="number">0</span>,
+            end: lr.<span class="number">1</span>,
+        },
+    )
 }
 
 <span class="doccomment">/// グリッド上の最大面積長方形の面積を計算する。
@@ -172,7 +208,7 @@
     }
 
     c.into_iter()
-        .map(|s| max_rect_in_histogram(<span class="kw-2">&amp;</span>s))
+        .map(|s| max_rect_in_histogram(<span class="kw-2">&amp;</span>s).<span class="number">0</span>)
         .max()
         .unwrap()
 }
@@ -184,8 +220,16 @@
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {
         <span class="comment">// https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_3_C
-        </span><span class="macro">assert_eq!</span>(max_rect_in_histogram(<span class="kw-2">&amp;</span>[<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>]), <span class="number">12</span>);
-        <span class="macro">assert_eq!</span>(max_rect_in_histogram(<span class="kw-2">&amp;</span>[<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>]), <span class="number">2</span>);
+
+        </span><span class="kw">let </span>a = [<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>];
+        <span class="kw">let </span>(ans, Range { start: l, end: r }) = max_rect_in_histogram(<span class="kw-2">&amp;</span>a);
+        <span class="macro">assert_eq!</span>(ans, <span class="number">12</span>);
+        <span class="macro">assert_eq!</span>(ans, a[l..r].into_iter().min().unwrap() * (r - l));
+
+        <span class="kw">let </span>a = [<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>];
+        <span class="kw">let </span>(ans, Range { start: l, end: r }) = max_rect_in_histogram(<span class="kw-2">&amp;</span>a);
+        <span class="macro">assert_eq!</span>(ans, <span class="number">2</span>);
+        <span class="macro">assert_eq!</span>(ans, a[l..r].into_iter().min().unwrap() * (r - l));
 
         <span class="comment">// https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_3_B
         </span><span class="macro">assert_eq!</span>(
