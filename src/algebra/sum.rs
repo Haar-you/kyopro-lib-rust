@@ -1,9 +1,7 @@
 pub use crate::algebra::traits::*;
+use crate::impl_algebra;
 pub use crate::traits::one_zero::*;
-use std::{
-    marker::PhantomData,
-    ops::{Add, Neg},
-};
+use std::marker::PhantomData;
 
 #[derive(Clone, Default)]
 pub struct Sum<T>(PhantomData<T>);
@@ -17,20 +15,19 @@ impl<T> AlgeStruct for Sum<T> {
     type Output = T;
 }
 
-impl<T: Add<Output = T>> BinaryOp for Sum<T> {
-    fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output {
-        a + b
-    }
-}
+impl_algebra!(Sum<i8>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: i8| -a, commutative: {}, associative: {});
+impl_algebra!(Sum<i16>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: i16| -a, commutative: {}, associative: {});
+impl_algebra!(Sum<i32>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: i32| -a, commutative: {}, associative: {});
+impl_algebra!(Sum<i64>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: i64| -a, commutative: {}, associative: {});
+impl_algebra!(Sum<i128>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: i128| -a, commutative: {}, associative: {});
+impl_algebra!(Sum<isize>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: isize| -a, commutative: {}, associative: {});
 
-impl<T: Zero<Output = T>> Identity for Sum<T> {
-    fn id(&self) -> Self::Output {
-        T::zero()
-    }
-}
+impl_algebra!(Sum<u8>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
+impl_algebra!(Sum<u16>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
+impl_algebra!(Sum<u32>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
+impl_algebra!(Sum<u64>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
+impl_algebra!(Sum<u128>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
+impl_algebra!(Sum<usize>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
 
-impl<T: Neg<Output = T>> Inverse for Sum<T> {
-    fn inv(&self, a: Self::Output) -> Self::Output {
-        -a
-    }
-}
+impl_algebra!(Sum<f32>, binaryop: |_, a, b| a + b, identity: |_| 0.0, inverse: |_, a: f32| -a, commutative: {}, associative: {});
+impl_algebra!(Sum<f64>, binaryop: |_, a, b| a + b, identity: |_| 0.0, inverse: |_, a: f64| -a, commutative: {}, associative: {});

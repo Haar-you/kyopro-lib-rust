@@ -1,4 +1,5 @@
 pub use crate::algebra::traits::*;
+use crate::impl_algebra;
 use std::marker::PhantomData;
 
 #[derive(Clone, Default)]
@@ -9,23 +10,20 @@ impl<T> BitXor<T> {
     }
 }
 
-macro_rules! int_bitxor_impl {
-    ( $($t:ty),* ) => {
-        $(
-            impl AlgeStruct for BitXor<$t> {
-                type Output = $t;
-            }
-            impl Inverse for BitXor<$t> {
-                fn inv(&self, a: Self::Output) -> Self::Output { a }
-            }
-            impl BinaryOp for BitXor<$t> {
-                fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output { a ^ b }
-            }
-            impl Identity for BitXor<$t> {
-                fn id(&self) -> Self::Output { 0 }
-            }
-        )*
-    }
+impl<T> AlgeStruct for BitXor<T> {
+    type Output = T;
 }
 
-int_bitxor_impl!(i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize);
+impl_algebra!(BitXor<i8>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<i16>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<i32>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<i64>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<i128>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<isize>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+
+impl_algebra!(BitXor<u8>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<u16>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<u32>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<u64>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<u128>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<usize>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
