@@ -84,7 +84,7 @@ mod tests {
     }
 
     #[test]
-    fn test() {
+    fn test_random() {
         let mut rng = rand::thread_rng();
 
         let n = 100;

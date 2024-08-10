@@ -94,7 +94,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test() {
+    fn test_histogram() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_3_C
 
         let a = [2, 1, 3, 5, 3, 4, 2, 1];
@@ -106,7 +106,10 @@ mod tests {
         let (ans, Range { start: l, end: r }) = max_rect_in_histogram(&a);
         assert_eq!(ans, 2);
         assert_eq!(ans, a[l..r].into_iter().min().unwrap() * (r - l));
+    }
 
+    #[test]
+    fn test_max_rect() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_3_B
         assert_eq!(
             max_rect(

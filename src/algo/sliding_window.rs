@@ -46,8 +46,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test() {
+    fn test_minimum() {
         assert_eq!(sliding_minimum(&[1, 7, 7, 4, 8, 1, 6], 3), [1, 4, 4, 1, 1]);
+    }
+
+    #[test]
+    fn test_maximum() {
         assert_eq!(sliding_maximum(&[1, 7, 7, 4, 8, 1, 6], 3), [7, 7, 8, 8, 8]);
     }
 }

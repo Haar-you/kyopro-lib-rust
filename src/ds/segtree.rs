@@ -154,12 +154,26 @@ mod tests {
     use crate::algebra::sum::Sum;
 
     #[test]
-    fn test() {
+    fn test_sum() {
         let mut rng = rand::thread_rng();
-
         random_test_helper(10, Sum::<i32>::new(), || rng.gen::<i32>() % 10000);
+    }
+
+    #[test]
+    fn test_xor() {
+        let mut rng = rand::thread_rng();
         random_test_helper(10, BitXor::<u32>::new(), || rng.gen::<u32>() % 10000);
+    }
+
+    #[test]
+    fn test_min() {
+        let mut rng = rand::thread_rng();
         random_test_helper(10, Min::<i32>::new(), || Some(rng.gen::<i32>() % 10000));
+    }
+
+    #[test]
+    fn test_max() {
+        let mut rng = rand::thread_rng();
         random_test_helper(10, Max::<i32>::new(), || Some(rng.gen::<i32>() % 10000));
     }
 }

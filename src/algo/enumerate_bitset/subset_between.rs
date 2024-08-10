@@ -12,7 +12,13 @@ pub fn subset_between(a: u32, b: u32) -> impl Iterator<Item = u32> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use test_case::test_case;
 
+    #[test_case(0b11111111, 0b11111111)]
+    #[test_case(0b00000000, 0b11111111)]
+    #[test_case(0b10101010, 0b11111111)]
+    #[test_case(0b00000001, 0b01010101)]
+    #[test_case(0b00000001, 0b00000010)]
     fn check(x: u32, y: u32) {
         let a = (0..=x)
             .filter(|i| (x & !i) == 0 && (!y & i) == 0)
@@ -21,14 +27,5 @@ mod tests {
         let b = subset_between(x, y).collect::<Vec<_>>();
 
         assert_eq!(a, b);
-    }
-
-    #[test]
-    fn test() {
-        check(0b11111111, 0b11111111);
-        check(0b00000000, 0b11111111);
-        check(0b10101010, 0b11111111);
-        check(0b00000001, 0b01010101);
-        check(0b00000001, 0b00000010);
     }
 }
