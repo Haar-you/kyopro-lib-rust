@@ -1,5 +1,7 @@
+//! 直線と点の距離
+
 use crate::geom::*;
 
-pub fn dist_line_point<T: Eps>(l: Line<T>, p: Vector<T>) -> T {
+pub fn dist_line_point(l: Line, p: Vector) -> f64 {
     l.diff().cross(p - l.from).abs() / l.abs()
 }

@@ -1,9 +1,11 @@
+//! 線分と点の距離
+
 use crate::geom::*;
 
-pub fn dist_segment_point<T: Eps>(l: Line<T>, p: Vector<T>) -> T {
-    if l.diff().dot(p - l.from) < T::from(0.0) {
+pub fn dist_segment_point(l: Line, p: Vector) -> f64 {
+    if l.diff().dot(p - l.from) < 0.0 {
         (p - l.from).abs()
-    } else if -l.diff().dot(p - l.to) < T::from(0.0) {
+    } else if -l.diff().dot(p - l.to) < 0.0 {
         (p - l.to).abs()
     } else {
         l.diff().cross(p - l.from).abs() / l.abs()
