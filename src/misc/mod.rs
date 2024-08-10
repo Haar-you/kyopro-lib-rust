@@ -2,3 +2,4 @@
 
 pub mod dice;
 pub mod paren;
+pub mod parse_paren;
