@@ -1,9 +1,11 @@
+pub use crate::math::ff::traits::*;
 use std::{
     fmt,
     fmt::{Debug, Display, Formatter},
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ModIntBuilder {
     modulo: u32,
 }
@@ -12,21 +14,31 @@ impl ModIntBuilder {
     pub fn new(modulo: u32) -> Self {
         Self { modulo }
     }
+}
 
-    pub fn value(&self, value: u32) -> ModInt {
+impl FF for ModIntBuilder {
+    type Output = ModInt;
+    fn from_u64(&self, value: u64) -> Self::Output {
+        ModInt::new((value % self.modulo as u64) as u32, self.modulo)
+    }
+
+    fn from_i64(&self, value: i64) -> Self::Output {
+        let value = ((value % self.modulo as i64) + self.modulo as i64) as u32;
         ModInt::new(value, self.modulo)
     }
 
-    // pub fn frac(&self, numerator: i64, denominator: i64) -> ModInt {
-    //     self.value(numerator) * self.value(denominator).inv()
-    // }
+    fn frac(&self, numerator: i64, denominator: i64) -> Self::Output {
+        self.from_i64(numerator) * self.from_i64(denominator).inv()
+    }
 }
 
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 pub struct ModInt {
     value: u32,
     modulo: u32,
 }
+
+impl FFElem for ModInt {}
 
 impl ModInt {
     pub fn new(value: u32, modulo: u32) -> Self {
@@ -76,14 +88,13 @@ impl ModInt {
     fn mul_internal(self, other: Self) -> Self {
         assert_eq!(self.modulo, other.modulo);
         let a = self.value as u64 * other.value as u64;
-        Self::new_unchecked(
-            if a < self.modulo as u64 {
-                a as u32
-            } else {
-                (a % self.modulo as u64) as u32
-            },
-            self.modulo,
-        )
+        let value = if a < self.modulo as u64 {
+            a as u32
+        } else {
+            (a % self.modulo as u64) as u32
+        };
+
+        Self::new_unchecked(value, self.modulo)
     }
 
     #[inline]
@@ -115,12 +126,18 @@ impl ModInt {
 
         Self::new_unchecked(ret as u32, self.modulo)
     }
+}
 
-    pub fn pow(self, p: u64) -> Self {
+impl Pow for ModInt {
+    type Output = Self;
+    fn pow(self, p: u64) -> Self::Output {
         self.pow_internal(p)
     }
+}
 
-    pub fn inv(self) -> Self {
+impl Inv for ModInt {
+    type Output = Self;
+    fn inv(self) -> Self::Output {
         self.inv_internal()
     }
 }
@@ -175,25 +192,3 @@ impl Neg for ModInt {
         )
     }
 }
-
-// impl Sum for ModInt {
-//     fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
-//         iter.fold(Self::new_unchecked(0), |a, b| a + b)
-//     }
-// }
-
-// impl<M: Modulo> Zero for ModInt<M> {
-//     type Output = Self;
-//     #[inline]
-//     fn zero() -> Self::Output {
-//         Self::new_unchecked(0)
-//     }
-// }
-
-// impl<M: Modulo> One for ModInt<M> {
-//     type Output = Self;
-//     #[inline]
-//     fn one() -> Self::Output {
-//         Self::new_unchecked(1)
-//     }
-// }

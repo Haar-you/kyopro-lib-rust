@@ -1,20 +1,41 @@
-pub use crate::{
-    math::ff::traits::{Frac, Inv, Pow, FF},
-    traits::one_zero::{One, Zero},
-};
+pub use crate::math::ff::traits::*;
 use std::{
     fmt,
     fmt::{Debug, Display, Formatter},
-    iter::Sum,
-    num::ParseIntError,
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
-    str::FromStr,
 };
+
+#[derive(Clone, PartialEq, Eq)]
+pub struct ConstModIntBuilder<const M: u32> {}
+
+impl<const M: u32> ConstModIntBuilder<M> {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
+impl<const M: u32> FF for ConstModIntBuilder<M> {
+    type Output = ConstModInt<M>;
+    fn from_u64(&self, a: u64) -> Self::Output {
+        Self::Output::new_unchecked(if a < M as u64 {
+            a as u32
+        } else {
+            (a % M as u64) as u32
+        })
+    }
+    fn from_i64(&self, value: i64) -> Self::Output {
+        let value = ((value % M as i64) + M as i64) as u32;
+        Self::Output::new(value)
+    }
+    fn frac(&self, numerator: i64, denominator: i64) -> Self::Output {
+        self.from_i64(numerator) * self.from_i64(denominator).inv()
+    }
+}
 
 #[derive(Copy, Clone, PartialEq, Default)]
 pub struct ConstModInt<const M: u32>(u32);
 
-impl<const M: u32> FF for ConstModInt<M> {}
+impl<const M: u32> FFElem for ConstModInt<M> {}
 
 impl<const M: u32> ConstModInt<M> {
     pub fn new(n: u32) -> Self {
@@ -100,14 +121,6 @@ impl<const M: u32> Inv for ConstModInt<M> {
     }
 }
 
-impl<const M: u32> Frac for ConstModInt<M> {
-    type Output = Self;
-
-    fn frac(numerator: i64, denominator: i64) -> Self {
-        Self::from(numerator) * Self::from(denominator).inv()
-    }
-}
-
 impl<const M: u32> Display for ConstModInt<M> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.0)
@@ -120,24 +133,24 @@ impl<const M: u32> Debug for ConstModInt<M> {
     }
 }
 
-macro_rules! modint_from_int {
-    ( $($t:ty),* ) => {
-        $(
-            impl<const M: u32> From<$t> for ConstModInt<M> {
-                fn from(from: $t) -> Self {
-                    let mut value = ((from % M as $t) + M as $t) as u32;
-                    if value >= M {
-                        value -= M;
-                    }
+// macro_rules! modint_from_int {
+//     ( $($t:ty),* ) => {
+//         $(
+//             impl<const M: u32> From<$t> for ConstModInt<M> {
+//                 fn from(from: $t) -> Self {
+//                     let mut value = ((from % M as $t) + M as $t) as u32;
+//                     if value >= M {
+//                         value -= M;
+//                     }
 
-                    Self::new_unchecked(value)
-                }
-            }
-        )*
-    }
-}
+//                     Self::new_unchecked(value)
+//                 }
+//             }
+//         )*
+//     }
+// }
 
-modint_from_int!(i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize);
+// modint_from_int!(i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize);
 
 impl<const M: u32> From<ConstModInt<M>> for u32 {
     fn from(from: ConstModInt<M>) -> Self {
@@ -174,36 +187,5 @@ impl<const M: u32> Neg for ConstModInt<M> {
 
     fn neg(self) -> Self {
         Self::new_unchecked(if self.0 == 0 { 0 } else { M - self.0 })
-    }
-}
-
-impl<const M: u32> FromStr for ConstModInt<M> {
-    type Err = ParseIntError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let x = s.parse::<u32>()?;
-        Ok(Self::from(x))
-    }
-}
-
-impl<const M: u32> Sum for ConstModInt<M> {
-    fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
-        iter.fold(Self::new_unchecked(0), |a, b| a + b)
-    }
-}
-
-impl<const M: u32> Zero for ConstModInt<M> {
-    type Output = Self;
-    #[inline]
-    fn zero() -> Self::Output {
-        Self::new_unchecked(0)
-    }
-}
-
-impl<const M: u32> One for ConstModInt<M> {
-    type Output = Self;
-    #[inline]
-    fn one() -> Self::Output {
-        Self::new_unchecked(1)
     }
 }

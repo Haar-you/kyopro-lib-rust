@@ -1,13 +1,16 @@
-use crate::math::{factorial::FactorialTable, ff::traits::FF};
+use crate::math::{factorial::FactorialTable, ff::traits::*};
 use std::cmp::min;
 
-impl<T: FF + From<usize>> FactorialTable<T> {
-    pub fn bell_number(&self, n: usize, k: usize) -> T {
+impl<Modulo: FF> FactorialTable<Modulo>
+where
+    Modulo::Output: FFElem,
+{
+    pub fn bell_number(&self, n: usize, k: usize) -> Modulo::Output {
         match n {
-            0 => T::from(1),
+            0 => self.modulo.from_u64(1),
             _ => {
                 let k = min(n, k);
-                let mut t = vec![T::from(1); k];
+                let mut t = vec![self.modulo.from_u64(1); k];
 
                 for i in 1..k {
                     t[i] = match i % 2 {
@@ -17,8 +20,10 @@ impl<T: FF + From<usize>> FactorialTable<T> {
                 }
 
                 (1..=k)
-                    .map(|i| t[k - i] * T::from(i).pow(n as u64) * self.inv_facto(i))
-                    .sum()
+                    .map(|i| {
+                        t[k - i] * self.modulo.from_u64(i as u64).pow(n as u64) * self.inv_facto(i)
+                    })
+                    .fold(self.modulo.from_u64(0), std::ops::Add::add)
             }
         }
     }

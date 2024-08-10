@@ -1,57 +1,67 @@
-use crate::trait_alias;
-pub use crate::traits::one_zero::*;
+use crate::math::ff::traits::*;
 use std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 
-trait_alias!(
-    SquareMatrixElem,
-    Copy
-        + Add<Output = Self>
-        + Sub<Output = Self>
-        + Mul<Output = Self>
-        + One<Output = Self>
-        + Zero<Output = Self>
-);
-
-#[derive(Clone, PartialEq, Eq, Debug)]
-pub struct SquareMatrix<T> {
+#[derive(Clone, PartialEq, Eq)]
+pub struct SquareMatrix<Modulo: FF>
+where
+    Modulo::Output: FFElem,
+{
     size: usize,
-    data: Vec<Vec<T>>,
+    modulo: Modulo,
+    data: Vec<Vec<Modulo::Output>>,
 }
 
-impl<T: SquareMatrixElem> SquareMatrix<T> {
-    pub fn new(size: usize) -> Self {
+impl<Modulo: FF> SquareMatrix<Modulo>
+where
+    Modulo::Output: FFElem,
+{
+    pub fn new(size: usize, modulo: Modulo) -> Self {
         Self {
             size,
-            data: vec![vec![T::zero(); size]; size],
+            data: vec![vec![modulo.from_u64(0); size]; size],
+            modulo,
         }
     }
 
-    pub fn unit(size: usize) -> Self {
-        let mut ret = Self::new(size);
+    pub fn unit(size: usize, modulo: Modulo) -> Self {
+        let mut ret = Self::new(size, modulo.clone());
         for i in 0..size {
-            ret.data[i][i] = T::one();
+            ret.data[i][i] = modulo.from_u64(1);
         }
         ret
     }
 
-    pub fn from_vec(other: Vec<Vec<T>>) -> Self {
+    pub fn from_vec(other: Vec<Vec<u32>>, modulo: Modulo) -> Self {
         let size = other.len();
         assert!(size > 0);
         assert!(other.iter().all(|r| r.len() == size));
 
-        Self { size, data: other }
+        let other = other
+            .into_iter()
+            .map(|a| {
+                a.into_iter()
+                    .map(|x| modulo.from_u64(x as u64))
+                    .collect::<Vec<_>>()
+            })
+            .collect();
+
+        Self {
+            size,
+            data: other,
+            modulo,
+        }
     }
 
-    pub fn to_vec(&self) -> Vec<Vec<T>> {
-        self.data.clone()
-    }
+    // pub fn to_vec(&self) -> Vec<Vec<T>> {
+    //     self.data.clone()
+    // }
 
     pub fn size(&self) -> usize {
         self.size
     }
 
     pub fn transpose(self) -> Self {
-        let mut ret = Self::new(self.size);
+        let mut ret = Self::new(self.size, self.modulo);
         for i in 0..self.size {
             for j in 0..self.size {
                 ret.data[j][i] = self.data[i][j];
@@ -61,7 +71,7 @@ impl<T: SquareMatrixElem> SquareMatrix<T> {
     }
 
     pub fn pow(self, mut p: u64) -> Self {
-        let mut ret = Self::unit(self.size);
+        let mut ret = Self::unit(self.size, self.modulo.clone());
         let mut a = self;
 
         while p > 0 {
@@ -76,7 +86,7 @@ impl<T: SquareMatrixElem> SquareMatrix<T> {
         ret
     }
 
-    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut T> {
+    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Output> {
         self.data.get_mut(i).and_then(|a| a.get_mut(j))
     }
 
@@ -84,7 +94,7 @@ impl<T: SquareMatrixElem> SquareMatrix<T> {
         assert_eq!(self.size, b.size);
 
         let b = b.transpose();
-        let mut ret = Self::new(self.size);
+        let mut ret = Self::new(self.size, self.modulo);
 
         for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
             for (x, c) in r.iter_mut().zip(b.data.iter()) {
@@ -107,15 +117,15 @@ impl<T: SquareMatrixElem> SquareMatrix<T> {
 
         let m = (n + 1) / 2;
 
-        let mut a11 = Self::new(m);
-        let mut a12 = Self::new(m);
-        let mut a21 = Self::new(m);
-        let mut a22 = Self::new(m);
+        let mut a11 = Self::new(m, a.modulo.clone());
+        let mut a12 = Self::new(m, a.modulo.clone());
+        let mut a21 = Self::new(m, a.modulo.clone());
+        let mut a22 = Self::new(m, a.modulo.clone());
 
-        let mut b11 = Self::new(m);
-        let mut b12 = Self::new(m);
-        let mut b21 = Self::new(m);
-        let mut b22 = Self::new(m);
+        let mut b11 = Self::new(m, a.modulo.clone());
+        let mut b12 = Self::new(m, a.modulo.clone());
+        let mut b21 = Self::new(m, a.modulo.clone());
+        let mut b22 = Self::new(m, a.modulo.clone());
 
         for i in 0..m {
             for j in 0..m {
@@ -171,7 +181,10 @@ impl<T: SquareMatrixElem> SquareMatrix<T> {
     }
 }
 
-impl<T: SquareMatrixElem> Add for SquareMatrix<T> {
+impl<Modulo: FF> Add for SquareMatrix<Modulo>
+where
+    Modulo::Output: FFElem,
+{
     type Output = Self;
     fn add(mut self, other: Self) -> Self {
         assert_eq!(self.size, other.size);
@@ -184,7 +197,10 @@ impl<T: SquareMatrixElem> Add for SquareMatrix<T> {
     }
 }
 
-impl<T: SquareMatrixElem> Sub for SquareMatrix<T> {
+impl<Modulo: FF> Sub for SquareMatrix<Modulo>
+where
+    Modulo::Output: FFElem,
+{
     type Output = Self;
     fn sub(mut self, other: Self) -> Self {
         assert_eq!(self.size, other.size);
@@ -197,32 +213,47 @@ impl<T: SquareMatrixElem> Sub for SquareMatrix<T> {
     }
 }
 
-impl<T: SquareMatrixElem> Mul for SquareMatrix<T> {
+impl<Modulo: FF> Mul for SquareMatrix<Modulo>
+where
+    Modulo::Output: FFElem,
+{
     type Output = Self;
     fn mul(self, other: Self) -> Self {
         self.strassen_mul(other)
     }
 }
 
-impl<T: SquareMatrixElem> AddAssign for SquareMatrix<T> {
+impl<Modulo: FF> AddAssign for SquareMatrix<Modulo>
+where
+    Modulo::Output: FFElem,
+{
     fn add_assign(&mut self, other: Self) {
         *self = self.clone() + other;
     }
 }
 
-impl<T: SquareMatrixElem> SubAssign for SquareMatrix<T> {
+impl<Modulo: FF> SubAssign for SquareMatrix<Modulo>
+where
+    Modulo::Output: FFElem,
+{
     fn sub_assign(&mut self, other: Self) {
         *self = self.clone() - other;
     }
 }
 
-impl<T: SquareMatrixElem> MulAssign for SquareMatrix<T> {
+impl<Modulo: FF> MulAssign for SquareMatrix<Modulo>
+where
+    Modulo::Output: FFElem,
+{
     fn mul_assign(&mut self, other: Self) {
         *self = self.clone() * other;
     }
 }
 
-impl<T: SquareMatrixElem + Neg<Output = T>> Neg for SquareMatrix<T> {
+impl<Modulo: FF> Neg for SquareMatrix<Modulo>
+where
+    Modulo::Output: FFElem,
+{
     type Output = Self;
     fn neg(mut self) -> Self {
         self.data.iter_mut().for_each(|r| {
@@ -234,8 +265,11 @@ impl<T: SquareMatrixElem + Neg<Output = T>> Neg for SquareMatrix<T> {
     }
 }
 
-impl<T> Index<usize> for SquareMatrix<T> {
-    type Output = [T];
+impl<Modulo: FF> Index<usize> for SquareMatrix<Modulo>
+where
+    Modulo::Output: FFElem,
+{
+    type Output = [Modulo::Output];
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[i]
     }
@@ -246,31 +280,29 @@ mod tests {
     use super::*;
     use rand::Rng;
 
-    use crate::{math::ff::modint::*, modulo};
-
-    modulo!(M, 1000000007);
-    type Mint = ModInt<M>;
+    use crate::math::ff::const_modint::*;
 
     #[test]
     fn test() {
         let mut rng = rand::thread_rng();
+        let modulo = ConstModIntBuilder::<1000000007>::new();
 
         let size = 300;
 
-        let mut a = vec![vec![Mint::from(0); size]; size];
-        let mut b = vec![vec![Mint::from(0); size]; size];
+        let mut a = vec![vec![0; size]; size];
+        let mut b = vec![vec![0; size]; size];
 
         for i in 0..size {
             for j in 0..size {
-                a[i][j] = Mint::from(rng.gen::<u64>());
-                b[i][j] = Mint::from(rng.gen::<u64>());
+                a[i][j] = rng.gen::<u32>();
+                b[i][j] = rng.gen::<u32>();
             }
         }
 
-        let a = SquareMatrix::from_vec(a);
-        let b = SquareMatrix::from_vec(b);
+        let a = SquareMatrix::from_vec(a, modulo.clone());
+        let b = SquareMatrix::from_vec(b, modulo);
 
-        assert_eq!(a.clone().straight_mul(b.clone()), a.strassen_mul(b));
+        assert!(a.clone().straight_mul(b.clone()) == a.strassen_mul(b));
     }
 
     #[test]
@@ -279,23 +311,24 @@ mod tests {
         use crate::get_time;
 
         let mut rng = rand::thread_rng();
+        let modulo = ConstModIntBuilder::<1000000007>::new();
 
         let mut straight = vec![];
         let mut strassen = vec![];
 
-        for &size in &[1, 10, 100, 1000] {
-            let mut a = vec![vec![Mint::from(0); size]; size];
-            let mut b = vec![vec![Mint::from(0); size]; size];
+        for &size in &[1, 10, 100, 300, 500] {
+            let mut a = vec![vec![0; size]; size];
+            let mut b = vec![vec![0; size]; size];
 
             for i in 0..size {
                 for j in 0..size {
-                    a[i][j] = Mint::from(rng.gen::<u64>());
-                    b[i][j] = Mint::from(rng.gen::<u64>());
+                    a[i][j] = rng.gen::<u32>();
+                    b[i][j] = rng.gen::<u32>();
                 }
             }
 
-            let a = SquareMatrix::from_vec(a);
-            let b = SquareMatrix::from_vec(b);
+            let a = SquareMatrix::from_vec(a, modulo.clone());
+            let b = SquareMatrix::from_vec(b, modulo.clone());
 
             straight.push(get_time!({
                 a.clone().straight_mul(b.clone());
