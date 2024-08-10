@@ -1,9 +1,11 @@
 pub mod bits;
+pub mod bitset;
 pub mod fastio;
 pub mod join_str;
 pub mod linear;
 pub mod num_inf;
 pub mod swap;
+pub mod total_f64;
 pub mod transpose;
 pub mod xor_shift;
 pub mod yesno;
