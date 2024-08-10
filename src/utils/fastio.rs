@@ -101,6 +101,14 @@ impl FastIO {
         self.read_i64() as isize
     }
 
+    pub fn read_f64(&mut self) -> f64 {
+        self.read_chars()
+            .into_iter()
+            .collect::<String>()
+            .parse()
+            .unwrap()
+    }
+
     pub fn read_chars(&mut self) -> Vec<char> {
         self.skip();
         let mut ret = vec![];
