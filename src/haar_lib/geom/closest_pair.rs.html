@@ -72,24 +72,28 @@
 <a href="#72" id="72">72</a>
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
-</pre></div><pre class="rust"><code><span class="kw">use crate</span>::{algo::merge::<span class="kw-2">*</span>, geom::<span class="kw-2">*</span>};
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 最近点対
 
-<span class="kw">pub fn </span>closest_pair&lt;T: Eps&gt;(<span class="kw-2">mut </span>ps: Vec&lt;Vector&lt;T&gt;&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;(Vector&lt;T&gt;, Vector&lt;T&gt;)&gt; {
+</span><span class="kw">use crate</span>::{algo::merge::<span class="kw-2">*</span>, geom::<span class="kw-2">*</span>};
+
+<span class="kw">pub fn </span>closest_pair(<span class="kw-2">mut </span>ps: Vec&lt;Vector&gt;, eps: Eps) -&gt; <span class="prelude-ty">Option</span>&lt;(Vector, Vector)&gt; {
     <span class="kw">if </span>ps.len() &lt; <span class="number">2 </span>{
         <span class="prelude-val">None
     </span>} <span class="kw">else </span>{
         ps.sort_by(|p, q| p.<span class="number">0</span>.partial_cmp(<span class="kw-2">&amp;</span>q.<span class="number">0</span>).unwrap());
-        rec(<span class="kw-2">&amp;mut </span>ps)
+        rec(<span class="kw-2">&amp;mut </span>ps, eps)
     }
 }
 
-<span class="kw">fn </span>rec&lt;T: Eps&gt;(ps: <span class="kw-2">&amp;mut </span>[Vector&lt;T&gt;]) -&gt; <span class="prelude-ty">Option</span>&lt;(Vector&lt;T&gt;, Vector&lt;T&gt;)&gt; {
+<span class="kw">fn </span>rec(ps: <span class="kw-2">&amp;mut </span>[Vector], eps: Eps) -&gt; <span class="prelude-ty">Option</span>&lt;(Vector, Vector)&gt; {
     <span class="kw">let </span>n = ps.len();
     <span class="kw">match </span>n {
         <span class="number">0 </span>=&gt; <span class="macro">unreachable!</span>(),
         <span class="number">1 </span>=&gt; <span class="prelude-val">None</span>,
         <span class="number">2 </span>=&gt; {
-            <span class="kw">if </span>ps[<span class="number">0</span>].<span class="number">1 </span>&gt; ps[<span class="number">1</span>].<span class="number">1 </span>{
+            <span class="kw">if </span>eps.gt(ps[<span class="number">0</span>].<span class="number">1</span>, ps[<span class="number">1</span>].<span class="number">1</span>) {
                 ps.swap(<span class="number">0</span>, <span class="number">1</span>);
             }
             <span class="prelude-val">Some</span>((ps[<span class="number">0</span>], ps[<span class="number">1</span>]))
@@ -97,43 +101,43 @@
         <span class="kw">_ </span>=&gt; {
             <span class="kw">let </span>mid_x = ps[n / <span class="number">2</span>].<span class="number">0</span>;
             <span class="kw">let </span>(left, right) = ps.split_at_mut(n / <span class="number">2</span>);
-            <span class="kw">let </span>d1 = rec(left);
-            <span class="kw">let </span>d2 = rec(right);
+            <span class="kw">let </span>d1 = rec(left, eps);
+            <span class="kw">let </span>d2 = rec(right, eps);
 
             inplace_merge_by(ps, n / <span class="number">2</span>, |a, b| a.<span class="number">1 </span>&lt; b.<span class="number">1</span>);
 
-            <span class="kw">let </span><span class="kw-2">mut </span>d = T::from(std::f64::INFINITY);
+            <span class="kw">let </span><span class="kw-2">mut </span>d = std::f64::INFINITY;
             <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="prelude-val">None</span>;
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>((p, q)) = d1 {
                 <span class="kw">let </span>t = (p - q).abs();
-                <span class="kw">if </span>t &lt; d {
+                <span class="kw">if </span>eps.lt(t, d) {
                     d = t;
                     ret = <span class="prelude-val">Some</span>((p, q));
                 }
             }
             <span class="kw">if let </span><span class="prelude-val">Some</span>((p, q)) = d2 {
                 <span class="kw">let </span>t = (p - q).abs();
-                <span class="kw">if </span>t &lt; d {
+                <span class="kw">if </span>eps.lt(t, d) {
                     d = t;
                     ret = <span class="prelude-val">Some</span>((p, q));
                 }
             }
 
-            <span class="kw">let </span><span class="kw-2">mut </span>v: Vec&lt;Vector&lt;T&gt;&gt; = <span class="macro">vec!</span>[];
+            <span class="kw">let </span><span class="kw-2">mut </span>v: Vec&lt;Vector&gt; = <span class="macro">vec!</span>[];
 
             <span class="kw">for </span><span class="kw-2">&amp;mut </span>p <span class="kw">in </span>ps {
-                <span class="kw">if </span>(p.<span class="number">0 </span>- mid_x).abs() &gt; d {
+                <span class="kw">if </span>eps.gt((p.<span class="number">0 </span>- mid_x).abs(), d) {
                     <span class="kw">continue</span>;
                 }
 
                 <span class="kw">for </span><span class="kw-2">&amp;</span>q <span class="kw">in </span>v.iter().rev() {
-                    <span class="kw">if </span>(p.<span class="number">1 </span>- q.<span class="number">1</span>).abs() &gt; d {
+                    <span class="kw">if </span>eps.gt((p.<span class="number">1 </span>- q.<span class="number">1</span>).abs(), d) {
                         <span class="kw">break</span>;
                     }
 
                     <span class="kw">let </span>t = (p - q).abs();
-                    <span class="kw">if </span>t &lt; d {
+                    <span class="kw">if </span>eps.lt(t, d) {
                         d = t;
                         ret = <span class="prelude-val">Some</span>((p, q));
                     }

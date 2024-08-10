@@ -31,9 +31,13 @@
 <a href="#31" id="31">31</a>
 <a href="#32" id="32">32</a>
 <a href="#33" id="33">33</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::{ccw::<span class="kw-2">*</span>, intersect_line_segment::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 凸多角形の直線での切断
 
-<span class="kw">pub fn </span>convex_cut&lt;T: Eps&gt;(ps: <span class="kw-2">&amp;</span>[Vector&lt;T&gt;], l: Line&lt;T&gt;) -&gt; (Vec&lt;Vector&lt;T&gt;&gt;, Vec&lt;Vector&lt;T&gt;&gt;) {
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::{ccw::<span class="kw-2">*</span>, intersect_line_segment::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+
+<span class="kw">pub fn </span>convex_cut(ps: <span class="kw-2">&amp;</span>[Vector], l: Line, eps: Eps) -&gt; (Vec&lt;Vector&gt;, Vec&lt;Vector&gt;) {
     <span class="kw">use </span><span class="self">self</span>::IntersectLineSegment::<span class="kw-2">*</span>;
 
     <span class="kw">let </span>n = ps.len();
@@ -41,7 +45,7 @@
     <span class="kw">let </span><span class="kw-2">mut </span>right = <span class="macro">vec!</span>[];
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-        <span class="kw">let </span>(s, c) = intersect_line_segment(l, Line::new(ps[i], ps[(i + <span class="number">1</span>) % n]));
+        <span class="kw">let </span>(s, c) = intersect_line_segment(l, Line::new(ps[i], ps[(i + <span class="number">1</span>) % n]), eps);
 
         <span class="kw">match </span>s {
             LEFTSIDE =&gt; left.push(ps[i]),
@@ -51,7 +55,7 @@
                 right.push(ps[i]);
             }
             CROSSED =&gt; {
-                <span class="kw">match </span>ccw(l.from, l.to, ps[i]) {
+                <span class="kw">match </span>ccw(l.from, l.to, ps[i], eps) {
                     CCW::CLOCKWISE =&gt; right.push(ps[i]),
                     <span class="kw">_ </span>=&gt; left.push(ps[i]),
                 };

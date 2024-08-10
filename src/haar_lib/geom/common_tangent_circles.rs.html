@@ -42,29 +42,27 @@
 <a href="#42" id="42">42</a>
 <a href="#43" id="43">43</a>
 <a href="#44" id="44">44</a>
-<a href="#45" id="45">45</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+</pre></div><pre class="rust"><code><span class="doccomment">//! 2つの円の共通接線
 
-<span class="kw">pub fn </span>common_tangent_circles&lt;T: Eps + std::fmt::Debug&gt;(
-    a: Circle&lt;T&gt;,
-    b: Circle&lt;T&gt;,
-) -&gt; Vec&lt;Vector&lt;T&gt;&gt; {
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+
+<span class="kw">pub fn </span>common_tangent_circles(a: Circle, b: Circle, eps: Eps) -&gt; Vec&lt;Vector&gt; {
     <span class="kw">let </span>cc = b.center - a.center;
     <span class="kw">let </span>d = cc.abs();
     <span class="kw">let </span>n = cc.unit();
     <span class="kw">let </span>r_diff = a.radius - b.radius;
     <span class="kw">let </span>r_sum = a.radius + b.radius;
 
-    <span class="kw">if </span>r_sum == d {
-        <span class="kw">let </span>t = cc.normal() * (cc.abs_sq() - r_diff.sq()).sqrt();
+    <span class="kw">if </span>eps.eq(r_sum, d) {
+        <span class="kw">let </span>t = cc.normal() * (cc.abs_sq() - r_diff * r_diff).sqrt();
         <span class="macro">vec!</span>[
             a.center + (cc * r_diff + t) * a.radius / cc.abs_sq(),
             a.center + (cc * r_diff - t) * a.radius / cc.abs_sq(),
             a.center + n * a.radius,
         ]
-    } <span class="kw">else if </span>r_sum &lt; d {
-        <span class="kw">let </span>t_diff = cc.normal() * (cc.abs_sq() - r_diff.sq()).sqrt();
-        <span class="kw">let </span>t_sum = cc.normal() * (cc.abs_sq() - r_sum.sq()).sqrt();
+    } <span class="kw">else if </span>eps.lt(r_sum, d) {
+        <span class="kw">let </span>t_diff = cc.normal() * (cc.abs_sq() - r_diff * r_diff).sqrt();
+        <span class="kw">let </span>t_sum = cc.normal() * (cc.abs_sq() - r_sum * r_sum).sqrt();
 
         <span class="macro">vec!</span>[
             a.center + (cc * r_diff + t_diff) * a.radius / cc.abs_sq(),
@@ -72,14 +70,14 @@
             a.center + (cc * r_sum + t_sum) * a.radius / cc.abs_sq(),
             a.center + (cc * r_sum - t_sum) * a.radius / cc.abs_sq(),
         ]
-    } <span class="kw">else if </span>r_sum &gt; d &amp;&amp; d &gt; (a.radius - b.radius).abs() {
-        <span class="kw">let </span>t = cc.normal() * (cc.abs_sq() - r_diff.sq()).sqrt();
+    } <span class="kw">else if </span>eps.gt(r_sum, d) &amp;&amp; eps.gt(d, (a.radius - b.radius).abs()) {
+        <span class="kw">let </span>t = cc.normal() * (cc.abs_sq() - r_diff * r_diff).sqrt();
         <span class="macro">vec!</span>[
             a.center + (cc * r_diff + t) * a.radius / cc.abs_sq(),
             a.center + (cc * r_diff - t) * a.radius / cc.abs_sq(),
         ]
-    } <span class="kw">else if </span>(a.radius - b.radius).abs() == d {
-        <span class="macro">vec!</span>[<span class="kw">if </span>a.radius &gt; b.radius {
+    } <span class="kw">else if </span>eps.eq((a.radius - b.radius).abs(), d) {
+        <span class="macro">vec!</span>[<span class="kw">if </span>eps.gt(a.radius, b.radius) {
             a.center + n * a.radius
         } <span class="kw">else </span>{
             b.center - n * b.radius

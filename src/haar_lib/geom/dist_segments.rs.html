@@ -21,25 +21,19 @@
 <a href="#21" id="21">21</a>
 <a href="#22" id="22">22</a>
 <a href="#23" id="23">23</a>
-<a href="#24" id="24">24</a>
-<a href="#25" id="25">25</a>
-<a href="#26" id="26">26</a>
-</pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
+</pre></div><pre class="rust"><code><span class="doccomment">//! 2つの線分間の距離
+
+</span><span class="kw">use crate</span>::{
     geom::{dist_segment_point::<span class="kw-2">*</span>, <span class="kw-2">*</span>},
     min,
 };
 
-<span class="kw">pub fn </span>dist_segments&lt;T: Eps&gt;(l1: Line&lt;T&gt;, l2: Line&lt;T&gt;) -&gt; T {
+<span class="kw">pub fn </span>dist_segments(l1: Line, l2: Line) -&gt; f64 {
     <span class="kw">let </span>cr = l1.cross(l2);
     <span class="kw">let </span>t1 = (l2.from - l1.from).cross(l2.diff()) / cr;
     <span class="kw">let </span>t2 = (l2.from - l1.from).cross(l1.diff()) / cr;
 
-    <span class="kw">if </span>cr == T::from(<span class="number">0.0</span>)
-        || t1 &lt; T::from(<span class="number">0.0</span>)
-        || t1 &gt; T::from(<span class="number">1.0</span>)
-        || t2 &lt; T::from(<span class="number">0.0</span>)
-        || t2 &gt; T::from(<span class="number">1.0</span>)
-    {
+    <span class="kw">if </span>cr == <span class="number">0.0 </span>|| t1 &lt; <span class="number">0.0 </span>|| t1 &gt; <span class="number">1.0 </span>|| t2 &lt; <span class="number">0.0 </span>|| t2 &gt; <span class="number">1.0 </span>{
         <span class="macro">min! </span>{
             dist_segment_point(l1, l2.from),
             dist_segment_point(l1, l2.to),
@@ -47,7 +41,7 @@
             dist_segment_point(l2, l1.to)
         }
     } <span class="kw">else </span>{
-        T::from(<span class="number">0.0</span>)
-    }
+        <span class="number">0.0
+    </span>}
 }
 </code></pre></div></section></main></body></html>

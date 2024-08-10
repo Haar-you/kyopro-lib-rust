@@ -122,6 +122,9 @@
 <a href="#122" id="122">122</a>
 <a href="#123" id="123">123</a>
 <a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::chmax;
 <span class="kw">use </span>std::{
     cmp::Ordering,
@@ -218,7 +221,7 @@
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
     <span class="attr">#[test]
-    </span><span class="kw">fn </span>test() {
+    </span><span class="kw">fn </span>test_histogram() {
         <span class="comment">// https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_3_C
 
         </span><span class="kw">let </span>a = [<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>];
@@ -230,7 +233,10 @@
         <span class="kw">let </span>(ans, Range { start: l, end: r }) = max_rect_in_histogram(<span class="kw-2">&amp;</span>a);
         <span class="macro">assert_eq!</span>(ans, <span class="number">2</span>);
         <span class="macro">assert_eq!</span>(ans, a[l..r].into_iter().min().unwrap() * (r - l));
+    }
 
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_max_rect() {
         <span class="comment">// https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_3_B
         </span><span class="macro">assert_eq!</span>(
             max_rect(

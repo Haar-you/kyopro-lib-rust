@@ -30,9 +30,13 @@
 <a href="#30" id="30">30</a>
 <a href="#31" id="31">31</a>
 <a href="#32" id="32">32</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 凸多角形の直径
 
-<span class="kw">pub fn </span>convex_diameter&lt;T: Eps&gt;(ps: Vec&lt;Vector&lt;T&gt;&gt;) -&gt; T {
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+
+<span class="kw">pub fn </span>convex_diameter(ps: <span class="kw-2">&amp;</span>Vec&lt;Vector&gt;) -&gt; f64 {
     <span class="kw">let </span>n = ps.len();
 
     <span class="kw">let </span><span class="kw-2">mut </span>i = ps
@@ -51,7 +55,7 @@
     <span class="kw">let </span><span class="kw-2">mut </span>ret = (ps[i] - ps[j]).abs();
 
     <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">2 </span>* n {
-        <span class="kw">if </span>(ps[(i + <span class="number">1</span>) % n] - ps[i]).cross(ps[(j + <span class="number">1</span>) % n] - ps[j]) &gt; T::from(<span class="number">0.0</span>) {
+        <span class="kw">if </span>(ps[(i + <span class="number">1</span>) % n] - ps[i]).cross(ps[(j + <span class="number">1</span>) % n] - ps[j]) &gt; <span class="number">0.0 </span>{
             j = (j + <span class="number">1</span>) % n;
         } <span class="kw">else </span>{
             i = (i + <span class="number">1</span>) % n;

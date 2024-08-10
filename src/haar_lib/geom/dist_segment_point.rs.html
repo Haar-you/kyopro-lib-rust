@@ -9,12 +9,16 @@
 <a href="#9" id="9">9</a>
 <a href="#10" id="10">10</a>
 <a href="#11" id="11">11</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 線分と点の距離
 
-<span class="kw">pub fn </span>dist_segment_point&lt;T: Eps&gt;(l: Line&lt;T&gt;, p: Vector&lt;T&gt;) -&gt; T {
-    <span class="kw">if </span>l.diff().dot(p - l.from) &lt; T::from(<span class="number">0.0</span>) {
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+
+<span class="kw">pub fn </span>dist_segment_point(l: Line, p: Vector) -&gt; f64 {
+    <span class="kw">if </span>l.diff().dot(p - l.from) &lt; <span class="number">0.0 </span>{
         (p - l.from).abs()
-    } <span class="kw">else if </span>-l.diff().dot(p - l.to) &lt; T::from(<span class="number">0.0</span>) {
+    } <span class="kw">else if </span>-l.diff().dot(p - l.to) &lt; <span class="number">0.0 </span>{
         (p - l.to).abs()
     } <span class="kw">else </span>{
         l.diff().cross(p - l.from).abs() / l.abs()

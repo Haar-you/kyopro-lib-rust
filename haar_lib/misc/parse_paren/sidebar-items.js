@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Elem"],"fn":["parse_paren"],"struct":["ParseResult"]};

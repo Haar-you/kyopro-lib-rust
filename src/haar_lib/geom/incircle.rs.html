@@ -11,13 +11,17 @@
 <a href="#11" id="11">11</a>
 <a href="#12" id="12">12</a>
 <a href="#13" id="13">13</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 三角形の内接円
 
-<span class="kw">pub fn </span>incircle&lt;T: Eps&gt;(a: Vector&lt;T&gt;, b: Vector&lt;T&gt;, c: Vector&lt;T&gt;) -&gt; Circle&lt;T&gt; {
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+
+<span class="kw">pub fn </span>incircle(a: Vector, b: Vector, c: Vector) -&gt; Circle {
     <span class="kw">let </span>a_ = (b - c).abs();
     <span class="kw">let </span>b_ = (a - c).abs();
     <span class="kw">let </span>c_ = (a - b).abs();
-    <span class="kw">let </span>s = (a_ + b_ + c_) / T::from(<span class="number">2.0</span>);
+    <span class="kw">let </span>s = (a_ + b_ + c_) / <span class="number">2.0</span>;
 
     Circle::new(
         (a * a_ + b * b_ + c * c_) / (a_ + b_ + c_),

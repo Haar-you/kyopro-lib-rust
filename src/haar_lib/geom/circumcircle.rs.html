@@ -16,16 +16,20 @@
 <a href="#16" id="16">16</a>
 <a href="#17" id="17">17</a>
 <a href="#18" id="18">18</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 三角形の外接円
 
-<span class="kw">pub fn </span>circumcircle&lt;T: Eps&gt;(a: Vector&lt;T&gt;, b: Vector&lt;T&gt;, c: Vector&lt;T&gt;) -&gt; Circle&lt;T&gt; {
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+
+<span class="kw">pub fn </span>circumcircle(a: Vector, b: Vector, c: Vector) -&gt; Circle {
     <span class="kw">let </span>a_ = (b - c).abs_sq();
     <span class="kw">let </span>b_ = (a - c).abs_sq();
     <span class="kw">let </span>c_ = (a - b).abs_sq();
     <span class="kw">let </span>s = a_ + b_ + c_;
-    <span class="kw">let </span>a_ = a_ * (s - a_ * T::from(<span class="number">2.0</span>));
-    <span class="kw">let </span>b_ = b_ * (s - b_ * T::from(<span class="number">2.0</span>));
-    <span class="kw">let </span>c_ = c_ * (s - c_ * T::from(<span class="number">2.0</span>));
+    <span class="kw">let </span>a_ = a_ * (s - a_ * <span class="number">2.0</span>);
+    <span class="kw">let </span>b_ = b_ * (s - b_ * <span class="number">2.0</span>);
+    <span class="kw">let </span>c_ = c_ * (s - c_ * <span class="number">2.0</span>);
     <span class="kw">let </span>s = a_ + b_ + c_;
     <span class="kw">let </span>a_ = a_ / s;
     <span class="kw">let </span>b_ = b_ / s;

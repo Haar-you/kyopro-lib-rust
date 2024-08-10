@@ -52,7 +52,30 @@
 <a href="#52" id="52">52</a>
 <a href="#53" id="53">53</a>
 <a href="#54" id="54">54</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 2つの円の位置関係
+
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
 
 <span class="attr">#[derive(Clone, Copy, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
@@ -66,6 +89,25 @@
 }
 
 <span class="kw">impl </span>IntersectCircles {
+    <span class="kw">pub fn </span>same(<span class="self">self</span>) -&gt; bool {
+        <span class="self">self </span>== <span class="self">Self</span>::SAME
+    }
+    <span class="kw">pub fn </span>inside(<span class="self">self</span>) -&gt; bool {
+        <span class="self">self </span>== <span class="self">Self</span>::INSIDE
+    }
+    <span class="kw">pub fn </span>inscribed(<span class="self">self</span>) -&gt; bool {
+        <span class="self">self </span>== <span class="self">Self</span>::INSCRIBED
+    }
+    <span class="kw">pub fn </span>intersected(<span class="self">self</span>) -&gt; bool {
+        <span class="self">self </span>== <span class="self">Self</span>::INTERSECTED
+    }
+    <span class="kw">pub fn </span>circumscribed(<span class="self">self</span>) -&gt; bool {
+        <span class="self">self </span>== <span class="self">Self</span>::CIRCUMSCRIBED
+    }
+    <span class="kw">pub fn </span>outside(<span class="self">self</span>) -&gt; bool {
+        <span class="self">self </span>== <span class="self">Self</span>::OUTSIDE
+    }
+
     <span class="kw">pub fn </span>num_common_tangent(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;u32&gt; {
         <span class="kw">use </span><span class="self">self</span>::IntersectCircles::<span class="kw-2">*</span>;
         <span class="kw">match </span><span class="self">self </span>{
@@ -79,18 +121,18 @@
     }
 }
 
-<span class="kw">pub fn </span>intersect_circles&lt;T: Eps&gt;(a: Circle&lt;T&gt;, b: Circle&lt;T&gt;) -&gt; (IntersectCircles, Vec&lt;Vector&lt;T&gt;&gt;) {
+<span class="kw">pub fn </span>intersect_circles(a: Circle, b: Circle, eps: Eps) -&gt; (IntersectCircles, Vec&lt;Vector&gt;) {
     <span class="kw">use </span><span class="self">self</span>::IntersectCircles::<span class="kw-2">*</span>;
 
     <span class="kw">let </span>d = (a.center - b.center).abs();
-    <span class="kw">let </span>x = ((a.radius.sq() + d.sq() - b.radius.sq()) / (T::from(<span class="number">2.0</span>) * d * a.radius)).acos();
+    <span class="kw">let </span>x = ((a.radius * a.radius + d * d - b.radius * b.radius) / (<span class="number">2.0 </span>* d * a.radius)).acos();
     <span class="kw">let </span>t = (b.center.<span class="number">1 </span>- a.center.<span class="number">1</span>).atan2(b.center.<span class="number">0 </span>- a.center.<span class="number">0</span>);
 
-    <span class="kw">if </span>a.radius + b.radius == d {
+    <span class="kw">if </span>eps.eq(a.radius + b.radius, d) {
         (CIRCUMSCRIBED, <span class="macro">vec!</span>[a.center + Vector::polar(a.radius, t)])
-    } <span class="kw">else if </span>(a.radius - b.radius).abs() == d {
+    } <span class="kw">else if </span>eps.eq((a.radius - b.radius).abs(), d) {
         (INSCRIBED, <span class="macro">vec!</span>[a.center + Vector::polar(a.radius, t)])
-    } <span class="kw">else if </span>a.radius + b.radius &gt; d &amp;&amp; d &gt; (a.radius - b.radius).abs() {
+    } <span class="kw">else if </span>eps.gt(a.radius + b.radius, d) &amp;&amp; eps.gt(d, (a.radius - b.radius).abs()) {
         (
             INTERSECTED,
             <span class="macro">vec!</span>[
@@ -98,9 +140,9 @@
                 a.center + Vector::polar(a.radius, t - x),
             ],
         )
-    } <span class="kw">else if </span>a.radius + b.radius &lt; d {
+    } <span class="kw">else if </span>eps.lt(a.radius + b.radius, d) {
         (OUTSIDE, <span class="macro">vec!</span>[])
-    } <span class="kw">else if </span>(a.radius - b.radius).abs() &gt; d {
+    } <span class="kw">else if </span>eps.gt((a.radius - b.radius).abs(), d) {
         (INSIDE, <span class="macro">vec!</span>[])
     } <span class="kw">else </span>{
         (SAME, <span class="macro">vec!</span>[])

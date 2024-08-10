@@ -53,16 +53,18 @@
 <a href="#53" id="53">53</a>
 <a href="#54" id="54">54</a>
 <a href="#55" id="55">55</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::{intersect_circle_segment::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+</pre></div><pre class="rust"><code><span class="doccomment">//!  円と多角形の共通部分の面積
 
-<span class="kw">pub fn </span>area_intersection_circle_polygon&lt;T: Eps&gt;(cl: Circle&lt;T&gt;, ps: <span class="kw-2">&amp;</span>[Vector&lt;T&gt;]) -&gt; T {
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::{intersect_circle_segment::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+
+<span class="kw">pub fn </span>area_intersection_circle_polygon(cl: Circle, ps: <span class="kw-2">&amp;</span>[Vector], eps: Eps) -&gt; f64 {
     <span class="kw">use </span><span class="self">self</span>::IntersectCircleSegment::<span class="kw-2">*</span>;
 
     <span class="kw">let </span>n = ps.len();
-    <span class="kw">let </span><span class="kw-2">mut </span>ret = T::from(<span class="number">0.0</span>);
+    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="number">0.0</span>;
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-        <span class="kw">let </span><span class="kw-2">mut </span>temp = T::from(<span class="number">0.0</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>temp = <span class="number">0.0</span>;
 
         <span class="kw">let </span>Circle {
             center: c,
@@ -71,36 +73,34 @@
         <span class="kw">let </span>p1 = ps[i];
         <span class="kw">let </span>p2 = ps[(i + <span class="number">1</span>) % n];
 
-        <span class="kw">let </span>(t, res) = intersect_circle_segment(cl, Line::new(p1, p2));
+        <span class="kw">let </span>(t, res) = intersect_circle_segment(cl, Line::new(p1, p2), eps);
 
         <span class="kw">let </span>d1 = (p1 - c).abs();
         <span class="kw">let </span>d2 = (p2 - c).abs();
 
         <span class="kw">match </span>res.len() {
             <span class="number">0 </span>=&gt; <span class="kw">match </span>t {
-                INSIDE =&gt; temp += (p1 - c).cross(p2 - c) / T::from(<span class="number">2.0</span>),
-                <span class="kw">_ </span>=&gt; temp += r.sq() * (p1 - c).angle_diff(p2 - c) / T::from(<span class="number">2.0</span>),
+                INSIDE =&gt; temp += (p1 - c).cross(p2 - c) / <span class="number">2.0</span>,
+                <span class="kw">_ </span>=&gt; temp += r * r * (p1 - c).angle_diff(p2 - c) / <span class="number">2.0</span>,
             },
             <span class="number">1 </span>=&gt; {
                 <span class="kw">let </span>q = res[<span class="number">0</span>];
                 <span class="kw">if </span>d1 &gt;= r &amp;&amp; d2 &gt;= r {
-                    temp += r.sq() * (p1 - c).angle_diff(p2 - c) / T::from(<span class="number">2.0</span>);
+                    temp += r * r * (p1 - c).angle_diff(p2 - c) / <span class="number">2.0</span>;
                 } <span class="kw">else if </span>d1 &gt;= r {
-                    temp += r.sq() * (p1 - c).angle_diff(q - c) / T::from(<span class="number">2.0</span>)
-                        + (q - c).cross(p2 - c) / T::from(<span class="number">2.0</span>)
-                } <span class="kw">else </span>{
-                    temp += (p1 - c).cross(q - c) / T::from(<span class="number">2.0</span>)
-                        + r.sq() * (q - c).angle_diff(p2 - c) / T::from(<span class="number">2.0</span>)
-                }
+                    temp += r * r * (p1 - c).angle_diff(q - c) / <span class="number">2.0 </span>+ (q - c).cross(p2 - c) / <span class="number">2.0
+                </span>} <span class="kw">else </span>{
+                    temp += (p1 - c).cross(q - c) / <span class="number">2.0 </span>+ r * r * (q - c).angle_diff(p2 - c) / <span class="number">2.0
+                </span>}
             }
             <span class="kw">_ </span>=&gt; {
                 <span class="kw">let </span>q1 = res[<span class="number">0</span>];
                 <span class="kw">let </span>q2 = res[<span class="number">1</span>];
 
-                temp += r.sq() * (p1 - c).angle_diff(q1 - c) / T::from(<span class="number">2.0</span>)
-                    + (q1 - c).cross(q2 - c) / T::from(<span class="number">2.0</span>)
-                    + r.sq() * (q2 - c).angle_diff(p2 - c) / T::from(<span class="number">2.0</span>)
-            }
+                temp += r * r * (p1 - c).angle_diff(q1 - c) / <span class="number">2.0
+                    </span>+ (q1 - c).cross(q2 - c) / <span class="number">2.0
+                    </span>+ r * r * (q2 - c).angle_diff(p2 - c) / <span class="number">2.0
+            </span>}
         }
 
         ret += temp;

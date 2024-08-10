@@ -18,15 +18,19 @@
 <a href="#18" id="18">18</a>
 <a href="#19" id="19">19</a>
 <a href="#20" id="20">20</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 点を通る円の接線
 
-<span class="kw">pub fn </span>tangent_circle&lt;T: Eps&gt;(c: Circle&lt;T&gt;, p: Vector&lt;T&gt;) -&gt; Vec&lt;Vector&lt;T&gt;&gt; {
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::<span class="kw-2">*</span>;
+
+<span class="kw">pub fn </span>tangent_circle(c: Circle, p: Vector, eps: Eps) -&gt; Vec&lt;Vector&gt; {
     <span class="kw">let </span>d = (p - c.center).abs();
 
-    <span class="kw">if </span>d &lt; c.radius {
+    <span class="kw">if </span>eps.lt(d, c.radius) {
         <span class="kw">return </span><span class="macro">vec!</span>[];
     }
-    <span class="kw">if </span>d == c.radius {
+    <span class="kw">if </span>eps.eq(d, c.radius) {
         <span class="kw">return </span><span class="macro">vec!</span>[p];
     }
 

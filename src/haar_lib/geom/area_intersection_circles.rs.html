@@ -28,34 +28,38 @@
 <a href="#28" id="28">28</a>
 <a href="#29" id="29">29</a>
 <a href="#30" id="30">30</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::{intersect_circles::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 2つの円の共通部分の面積
+
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::{intersect_circles::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
 <span class="kw">use </span>std::f64::consts::PI;
 
-<span class="kw">pub fn </span>area_intersection_circles&lt;T: Eps&gt;(a: Circle&lt;T&gt;, b: Circle&lt;T&gt;) -&gt; T {
+<span class="kw">pub fn </span>area_intersection_circles(a: Circle, b: Circle, eps: Eps) -&gt; f64 {
     <span class="kw">use </span><span class="self">self</span>::IntersectCircles::<span class="kw-2">*</span>;
-    <span class="kw">let </span>(s, <span class="kw">_</span>) = intersect_circles(a, b);
+    <span class="kw">let </span>(s, <span class="kw">_</span>) = intersect_circles(a, b, eps);
 
     <span class="kw">match </span>s {
-        SAME =&gt; a.radius.sq() * T::from(PI),
+        SAME =&gt; a.radius * a.radius * PI,
         INSIDE | INSCRIBED =&gt; {
-            <span class="kw">let </span>a_s = a.radius.sq() * T::from(PI);
-            <span class="kw">let </span>b_s = b.radius.sq() * T::from(PI);
+            <span class="kw">let </span>a_s = a.radius * a.radius * PI;
+            <span class="kw">let </span>b_s = b.radius * b.radius * PI;
             a_s.min(b_s)
         }
         INTERSECTED =&gt; {
             <span class="kw">let </span>d = (a.center - b.center).abs();
 
             <span class="kw">let </span>ang =
-                ((a.radius.sq() + d.sq() - b.radius.sq()) / (a.radius * d * T::from(<span class="number">2.0</span>))).acos();
-            <span class="kw">let </span>t1 = (ang - (ang * T::from(<span class="number">2.0</span>)).sin() / T::from(<span class="number">2.0</span>)) * a.radius.sq();
+                ((a.radius * a.radius + d * d - b.radius * b.radius) / (a.radius * d * <span class="number">2.0</span>)).acos();
+            <span class="kw">let </span>t1 = (ang - (ang * <span class="number">2.0</span>).sin() / <span class="number">2.0</span>) * a.radius * a.radius;
 
             <span class="kw">let </span>ang =
-                ((b.radius.sq() + d.sq() - a.radius.sq()) / (b.radius * d * T::from(<span class="number">2.0</span>))).acos();
-            <span class="kw">let </span>t2 = (ang - (ang * T::from(<span class="number">2.0</span>)).sin() / T::from(<span class="number">2.0</span>)) * b.radius.sq();
+                ((b.radius * b.radius + d * d - a.radius * a.radius) / (b.radius * d * <span class="number">2.0</span>)).acos();
+            <span class="kw">let </span>t2 = (ang - (ang * <span class="number">2.0</span>).sin() / <span class="number">2.0</span>) * b.radius * b.radius;
 
             t1 + t2
         }
-        <span class="kw">_ </span>=&gt; T::from(<span class="number">0.0</span>),
+        <span class="kw">_ </span>=&gt; <span class="number">0.0</span>,
     }
 }
 </code></pre></div></section></main></body></html>

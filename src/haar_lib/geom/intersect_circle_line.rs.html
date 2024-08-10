@@ -30,7 +30,20 @@
 <a href="#30" id="30">30</a>
 <a href="#31" id="31">31</a>
 <a href="#32" id="32">32</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::{dist_line_point::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 円と直線の位置関係
+
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::{dist_line_point::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
 
 <span class="attr">#[derive(Clone, Copy, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
@@ -40,25 +53,34 @@
     CROSSED,
 }
 
-<span class="kw">pub fn </span>intersect_circle_line&lt;T: Eps&gt;(
-    c: Circle&lt;T&gt;,
-    l: Line&lt;T&gt;,
-) -&gt; (IntersectCircleLine, Vec&lt;Vector&lt;T&gt;&gt;) {
+<span class="kw">impl </span>IntersectCircleLine {
+    <span class="kw">pub fn </span>outside(<span class="self">self</span>) -&gt; bool {
+        <span class="self">self </span>== <span class="self">Self</span>::OUTSIDE
+    }
+    <span class="kw">pub fn </span>tangent(<span class="self">self</span>) -&gt; bool {
+        <span class="self">self </span>== <span class="self">Self</span>::TANGENT
+    }
+    <span class="kw">pub fn </span>crossed(<span class="self">self</span>) -&gt; bool {
+        <span class="self">self </span>== <span class="self">Self</span>::CROSSED
+    }
+}
+
+<span class="kw">pub fn </span>intersect_circle_line(c: Circle, l: Line, eps: Eps) -&gt; (IntersectCircleLine, Vec&lt;Vector&gt;) {
     <span class="kw">use </span><span class="self">self</span>::IntersectCircleLine::<span class="kw-2">*</span>;
 
     <span class="kw">let </span>d = dist_line_point(l, c.center);
 
-    <span class="kw">if </span>d &gt; c.radius {
+    <span class="kw">if </span>eps.gt(d, c.radius) {
         <span class="kw">return </span>(OUTSIDE, <span class="macro">vec!</span>[]);
     }
 
     <span class="kw">let </span>n = l.normal();
     <span class="kw">let </span>b = l.from + l.diff() * n.cross(c.center + n - l.from) / n.cross(l.diff());
 
-    <span class="kw">if </span>d == c.radius {
+    <span class="kw">if </span>eps.eq(d, c.radius) {
         (TANGENT, <span class="macro">vec!</span>[b])
     } <span class="kw">else </span>{
-        <span class="kw">let </span>a = (c.radius.sq() - d.sq()).sqrt();
+        <span class="kw">let </span>a = (c.radius * c.radius - d * d).sqrt();
         (CROSSED, <span class="macro">vec!</span>[b + l.unit() * a, b - l.unit() * a])
     }
 }

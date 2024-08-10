@@ -18,14 +18,18 @@
 <a href="#18" id="18">18</a>
 <a href="#19" id="19">19</a>
 <a href="#20" id="20">20</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::geom::{ccw::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 凸多角形の判定
 
-<span class="kw">pub fn </span>is_convex&lt;T: Eps&gt;(ps: <span class="kw-2">&amp;</span>[Vector&lt;T&gt;]) -&gt; bool {
+</span><span class="kw">use </span><span class="kw">crate</span>::geom::{ccw::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+
+<span class="kw">pub fn </span>is_convex(ps: <span class="kw-2">&amp;</span>[Vector], eps: Eps) -&gt; bool {
     <span class="kw">let </span>n = ps.len();
     <span class="kw">let </span><span class="kw-2">mut </span>temp = <span class="prelude-val">None</span>;
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-        <span class="kw">let </span>c = ccw(ps[i], ps[(i + <span class="number">1</span>) % n], ps[(i + <span class="number">2</span>) % n]);
+        <span class="kw">let </span>c = ccw(ps[i], ps[(i + <span class="number">1</span>) % n], ps[(i + <span class="number">2</span>) % n], eps);
 
         <span class="kw">if </span>c == CCW::CLOCKWISE || c == CCW::COUNTER_CLOCKWISE {
             <span class="kw">match </span>temp {
