@@ -59,7 +59,7 @@ where
     }
 
     while let Some(i) = q.pop_front() {
-        for &(_, to, ..) in &in_edges[i] {
+        if let Some((_, to, ..)) = in_edges[i] {
             out_count[to] -= 1;
 
             if out_count[to] == 0 {
