@@ -24,30 +24,28 @@
 <a href="#24" id="24">24</a>
 <a href="#25" id="25">25</a>
 <a href="#26" id="26">26</a>
-<a href="#27" id="27">27</a>
 </pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
-<span class="kw">use </span>std::marker::PhantomData;
 
 <span class="attr">#[derive(Clone)]
-</span><span class="kw">pub struct </span>Dual&lt;T, S&gt;(S, PhantomData&lt;T&gt;);
+</span><span class="kw">pub struct </span>Dual&lt;S&gt;(S);
 
-<span class="kw">impl</span>&lt;T, S: AlgeStruct&lt;Output = T&gt;&gt; Dual&lt;T, S&gt; {
+<span class="kw">impl</span>&lt;S: AlgeStruct&gt; Dual&lt;S&gt; {
     <span class="kw">pub fn </span>new(s: S) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(s, PhantomData)
+        <span class="self">Self</span>(s)
     }
 }
 
-<span class="kw">impl</span>&lt;T, S: AlgeStruct&gt; AlgeStruct <span class="kw">for </span>Dual&lt;T, S&gt; {
+<span class="kw">impl</span>&lt;S: AlgeStruct&gt; AlgeStruct <span class="kw">for </span>Dual&lt;S&gt; {
     <span class="kw">type </span>Output = S::Output;
 }
 
-<span class="kw">impl</span>&lt;T, S: BinaryOp&gt; BinaryOp <span class="kw">for </span>Dual&lt;T, S&gt; {
+<span class="kw">impl</span>&lt;S: BinaryOp&gt; BinaryOp <span class="kw">for </span>Dual&lt;S&gt; {
     <span class="kw">fn </span>op(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="self">Self</span>::Output, b: <span class="self">Self</span>::Output) -&gt; <span class="self">Self</span>::Output {
         <span class="self">self</span>.<span class="number">0</span>.op(b, a)
     }
 }
 
-<span class="kw">impl</span>&lt;T, S: Identity&gt; Identity <span class="kw">for </span>Dual&lt;T, S&gt; {
+<span class="kw">impl</span>&lt;S: Identity&gt; Identity <span class="kw">for </span>Dual&lt;S&gt; {
     <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Output {
         <span class="self">self</span>.<span class="number">0</span>.id()
     }

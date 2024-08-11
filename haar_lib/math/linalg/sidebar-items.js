@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["determinant_p","inverse_p","matrix","square_matrix"]};
+window.SIDEBAR_ITEMS = {"mod":["determinant_mod_2","determinant_p","gaussian_elim_mod_2","inverse_mod_2","inverse_p","matrix","square_matrix"]};
