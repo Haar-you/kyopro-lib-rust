@@ -1,14 +1,14 @@
 use super::ff::const_modint::ConstModInt;
 use crate::math::ff::modint::{Inv, Pow};
 
-pub struct NTT<const P: u32, const PRIM_ROOT: u32> {
+pub struct NTT<const P: u32> {
     base: Vec<ConstModInt<P>>,
     inv_base: Vec<ConstModInt<P>>,
     max_size: usize,
 }
 
-impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
-    pub fn new(max_size: usize) -> Self {
+impl<const P: u32> NTT<P> {
+    pub fn new(prim_root: u32, max_size: usize) -> Self {
         assert!(max_size.is_power_of_two());
         assert!((P as usize - 1) % max_size == 0);
 
@@ -17,7 +17,7 @@ impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
         let mut base = vec![ConstModInt::new(0); max_power + 1];
         let mut inv_base = vec![ConstModInt::new(0); max_power + 1];
 
-        let mut t = ConstModInt::new(PRIM_ROOT).pow((P as u64 - 1) >> (max_power + 2));
+        let mut t = ConstModInt::new(prim_root).pow((P as u64 - 1) >> (max_power + 2));
         let mut s = t.inv();
 
         for i in (0..max_power).rev() {
@@ -129,7 +129,7 @@ mod tests {
     fn test() {
         const MOD: u32 = 998244353;
 
-        let ntt = NTT::<MOD, 3>::new(1 << 20);
+        let ntt = NTT::<MOD>::new(3, 1 << 20);
         let ff = ConstModIntBuilder::<MOD>::new();
 
         let mut rng = rand::thread_rng();
