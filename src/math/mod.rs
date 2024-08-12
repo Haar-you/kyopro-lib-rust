@@ -40,4 +40,5 @@ pub mod count_coprime;
 pub mod enumerate_quotients;
 
 pub mod ntt;
+pub mod polynomial;
 pub mod polynomial_taylor_shift;
