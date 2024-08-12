@@ -38,3 +38,5 @@ pub mod factorial_prime_factor;
 pub mod count_coprime;
 
 pub mod enumerate_quotients;
+
+pub mod linear_congruence;
