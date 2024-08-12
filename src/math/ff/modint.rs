@@ -53,7 +53,7 @@ impl ModInt {
     }
 
     #[inline]
-    pub fn value(self) -> u32 {
+    pub fn to_u32(self) -> u32 {
         self.value
     }
 

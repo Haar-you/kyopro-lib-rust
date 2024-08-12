@@ -42,6 +42,10 @@ impl<const M: u32> ConstModInt<M> {
         Self(if n < M { n } else { n % M })
     }
 
+    pub fn to_u32(self) -> u32 {
+        self.0
+    }
+
     #[inline]
     fn new_unchecked(value: u32) -> Self {
         Self(value)
