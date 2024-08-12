@@ -12,8 +12,7 @@ impl SCC {
         let n = g.len();
 
         let mut check = vec![false; n];
-        let mut ord = vec![];
-        ord.reserve(n);
+        let mut ord = Vec::with_capacity(n);
         for i in 0..n {
             if !check[i] {
                 Self::dfs(g, i, &mut ord, &mut check);
@@ -31,8 +30,7 @@ impl SCC {
         let mut ret = vec![];
         let mut check = vec![false; n];
 
-        let mut stack: Vec<usize> = vec![];
-        stack.reserve(n);
+        let mut stack: Vec<usize> = Vec::with_capacity(n);
 
         for u in ord {
             if !check[u] {

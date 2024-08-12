@@ -2,7 +2,7 @@
 
 use crate::geom::*;
 
-pub fn convex_diameter(ps: &Vec<Vector>) -> f64 {
+pub fn convex_diameter(ps: &[Vector]) -> f64 {
     let n = ps.len();
 
     let mut i = ps

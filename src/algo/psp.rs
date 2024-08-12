@@ -93,19 +93,19 @@ impl PSP {
     /// 頂点iは<font color="red"><b>赤</b></font>でなければならない。
     pub fn must_be_red(&mut self, i: usize) {
         assert!(i < self.size);
-        self.penalty_if_blue(i, std::u64::MAX);
+        self.penalty_if_blue(i, u64::MAX);
     }
 
     /// 頂点iは<font color="blue"><b>青</b></font>でなければならない。
     pub fn must_be_blue(&mut self, i: usize) {
         assert!(i < self.size);
-        self.penalty_if_red(i, std::u64::MAX);
+        self.penalty_if_red(i, u64::MAX);
     }
 
     /// 頂点iが<font color="red"><b>赤</b></font>ならば、頂点jも<font color="red"><b>赤</b></font>でなければならない。
     pub fn if_red_then_must_be_red(&mut self, i: usize, j: usize) {
         assert!(i < self.size && j < self.size);
-        self.penalty_if_red_blue(i, j, std::u64::MAX);
+        self.penalty_if_red_blue(i, j, u64::MAX);
     }
 
     /// 頂点iとjがともに<font color="red"><b>赤</b></font>ならばcの利益を得る。
@@ -116,8 +116,8 @@ impl PSP {
         self.node_count += 1;
 
         self.edges.push((self.src, w, c));
-        self.edges.push((w, i, std::u64::MAX));
-        self.edges.push((w, j, std::u64::MAX));
+        self.edges.push((w, i, u64::MAX));
+        self.edges.push((w, j, u64::MAX));
     }
 
     /// 頂点iとjがともに<font color="blue"><b>青</b></font>ならばcの利益を得る。
@@ -128,8 +128,8 @@ impl PSP {
         self.node_count += 1;
 
         self.edges.push((w, self.sink, c));
-        self.edges.push((i, w, std::u64::MAX));
-        self.edges.push((j, w, std::u64::MAX));
+        self.edges.push((i, w, u64::MAX));
+        self.edges.push((j, w, u64::MAX));
     }
 
     /// must be制約を破った場合、`None`を返す。そうでなければ、利益の最大値を`Some`に包んで返す。
@@ -141,7 +141,7 @@ impl PSP {
 
         let flow = f.max_flow(self.src, self.sink);
 
-        if flow == std::u64::MAX {
+        if flow == u64::MAX {
             None
         } else {
             Some(self.default_gain as i64 - flow as i64)

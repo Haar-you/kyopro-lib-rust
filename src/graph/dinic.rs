@@ -20,7 +20,7 @@ pub struct Dinic {
 impl Dinic {
     fn dfs(&mut self, path: &mut Vec<(usize, usize)>, cur: usize, t: usize, level: &[u32]) -> u64 {
         if cur == t {
-            let mut f = std::u64::MAX;
+            let mut f = u64::MAX;
 
             for (i, j) in path.clone() {
                 let e = self.edges[i][j].clone();

@@ -10,7 +10,7 @@ pub fn dist_segments(l1: Line, l2: Line) -> f64 {
     let t1 = (l2.from - l1.from).cross(l2.diff()) / cr;
     let t2 = (l2.from - l1.from).cross(l1.diff()) / cr;
 
-    if cr == 0.0 || t1 < 0.0 || t1 > 1.0 || t2 < 0.0 || t2 > 1.0 {
+    if cr == 0.0 || !(0.0..1.0).contains(&t1) || !(0.0..1.0).contains(&t2) {
         min! {
             dist_segment_point(l1, l2.from),
             dist_segment_point(l1, l2.to),

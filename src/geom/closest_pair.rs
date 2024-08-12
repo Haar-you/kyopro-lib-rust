@@ -30,7 +30,7 @@ fn rec(ps: &mut [Vector], eps: Eps) -> Option<(Vector, Vector)> {
 
             inplace_merge_by(ps, n / 2, |a, b| a.1 < b.1);
 
-            let mut d = std::f64::INFINITY;
+            let mut d = f64::INFINITY;
             let mut ret = None;
 
             if let Some((p, q)) = d1 {

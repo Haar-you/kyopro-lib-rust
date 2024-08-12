@@ -10,7 +10,7 @@ pub fn knapsack_small_value(cap: u64, ws: &[u64], vs: &[usize]) -> usize {
     assert_eq!(ws.len(), vs.len());
 
     let max_v = vs.iter().sum::<usize>();
-    let mut dp = vec![vec![std::u64::MAX; max_v + 1]; 2];
+    let mut dp = vec![vec![u64::MAX; max_v + 1]; 2];
 
     dp[0][0] = 0;
 
@@ -19,7 +19,7 @@ pub fn knapsack_small_value(cap: u64, ws: &[u64], vs: &[usize]) -> usize {
         let cur = i & 1;
         for j in 0..=max_v {
             chmin!(dp[next][j], dp[cur][j]);
-            if j + vs[i] <= max_v && dp[cur][j] < std::u64::MAX {
+            if j + vs[i] <= max_v && dp[cur][j] < u64::MAX {
                 chmin!(dp[next][j + vs[i]], dp[cur][j] + ws[i]);
             }
         }

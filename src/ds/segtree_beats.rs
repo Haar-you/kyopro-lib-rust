@@ -35,11 +35,11 @@ impl SegtreeBeats {
 
         Self {
             hsize: size / 2,
-            fst_max: vec![std::i64::MIN; size],
-            snd_max: vec![std::i64::MIN; size],
+            fst_max: vec![i64::MIN; size],
+            snd_max: vec![i64::MIN; size],
             max_count: vec![0; size],
-            fst_min: vec![std::i64::MAX; size],
-            snd_min: vec![std::i64::MAX; size],
+            fst_min: vec![i64::MAX; size],
+            snd_min: vec![i64::MAX; size],
             min_count: vec![0; size],
             sum: vec![0; size],
             lazy_add: vec![0; size],
@@ -76,12 +76,12 @@ impl SegtreeBeats {
         self.sum[i] += x * len as i64;
 
         self.fst_max[i] += x;
-        if self.snd_max[i] != std::i64::MIN {
+        if self.snd_max[i] != i64::MIN {
             self.snd_max[i] += x;
         }
 
         self.fst_min[i] += x;
-        if self.snd_min[i] != std::i64::MAX {
+        if self.snd_min[i] != i64::MAX {
             self.snd_min[i] += x;
         }
 
@@ -227,7 +227,7 @@ impl SegtreeBeats {
 
     fn get_max_(&mut self, i: usize, l: usize, r: usize, s: usize, t: usize) -> i64 {
         if r <= s || t <= l {
-            return std::i64::MIN;
+            return i64::MIN;
         }
         if s <= l && r <= t {
             return self.fst_max[i];
@@ -245,7 +245,7 @@ impl SegtreeBeats {
 
     fn get_min_(&mut self, i: usize, l: usize, r: usize, s: usize, t: usize) -> i64 {
         if r <= s || t <= l {
-            return std::i64::MAX;
+            return i64::MAX;
         }
         if s <= l && r <= t {
             return self.fst_min[i];

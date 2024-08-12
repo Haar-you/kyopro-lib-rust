@@ -129,10 +129,10 @@ pub fn yen_algorithm<D: Direction, T: Elem, E: EdgeTrait<Weight = T>>(
                 }
 
                 for j in 0..i {
-                    if check[j] {
-                        if prev_path[k + 1] != g.edges[u][result[j].as_ref().unwrap().1[k]].to() {
-                            check[j] = false;
-                        }
+                    if check[j]
+                        && prev_path[k + 1] != g.edges[u][result[j].as_ref().unwrap().1[k]].to()
+                    {
+                        check[j] = false;
                     }
                 }
             }

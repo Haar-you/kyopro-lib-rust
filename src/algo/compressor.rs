@@ -58,7 +58,7 @@ impl<T: Clone + Ord + Eq> CompressorBuilder<T> {
     }
 
     pub fn add_vec(&mut self, values: impl IntoIterator<Item = T>) {
-        self.data.extend(values.into_iter());
+        self.data.extend(values);
     }
 
     pub fn build(mut self) -> Compressor<T> {

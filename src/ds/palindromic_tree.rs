@@ -1,3 +1,5 @@
+#![allow(clippy::len_without_is_empty)]
+
 use std::collections::BTreeMap;
 
 const ODD: usize = 0;
@@ -36,15 +38,19 @@ impl PalindromicTree {
     pub fn new(s: &str) -> Self {
         let s = s.chars().collect::<Vec<_>>();
 
-        let mut even_root = Node::default();
-        even_root.length = 0;
-        even_root.index = EVEN;
-        even_root.suffix_link = Some(ODD);
+        let even_root = Node {
+            length: 0,
+            index: EVEN,
+            suffix_link: Some(ODD),
+            ..Default::default()
+        };
 
-        let mut odd_root = Node::default();
-        odd_root.length = -1;
-        odd_root.index = ODD;
-        odd_root.reverse_suffix_links.push(EVEN);
+        let odd_root = Node {
+            length: -1,
+            index: ODD,
+            reverse_suffix_links: vec![EVEN],
+            ..Default::default()
+        };
 
         let mut cur = odd_root.index;
 
@@ -60,12 +66,15 @@ impl PalindromicTree {
                     let index = list.len();
                     let t = &mut list[t];
 
-                    if t.children.get(&c).is_none() {
-                        let mut a = Node::default();
-                        a.length = t.length + 2;
-                        a.count = 1;
-                        a.index = index;
-                        a.parent = Some(t.index);
+                    if !t.children.contains_key(&c) {
+                        let a = Node {
+                            length: t.length + 2,
+                            count: 1,
+                            index,
+                            parent: Some(t.index),
+                            ..Default::default()
+                        };
+
                         sindex_list.push(a.index);
 
                         t.children.insert(c, a.index);

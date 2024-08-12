@@ -72,7 +72,7 @@ impl MaxFlow for FordFulkerson {
 
         loop {
             let mut check = vec![false; self.size];
-            let flow = self.dfs(s, t, std::u64::MAX, &mut check);
+            let flow = self.dfs(s, t, u64::MAX, &mut check);
             if flow == 0 {
                 return ret;
             }
