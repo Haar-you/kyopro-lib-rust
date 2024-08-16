@@ -58,15 +58,10 @@ impl<T: Clone, I> TreeEdgeTrait for TreeEdge<T, I> {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct TreeNode<E> {
     pub parent: Option<E>,
     pub children: Vec<E>,
-}
-
-#[derive(Clone, Debug)]
-pub struct Tree<E> {
-    pub nodes: Vec<TreeNode<E>>,
 }
 
 impl<E: TreeEdgeTrait> TreeNode<E> {
@@ -79,7 +74,11 @@ impl<E: TreeEdgeTrait> TreeNode<E> {
     }
 }
 
-impl<E: TreeEdgeTrait + Clone> Tree<E> {
+pub struct TreeBuilder<E> {
+    nodes: Vec<TreeNode<E>>,
+}
+
+impl<E: TreeEdgeTrait + Clone> TreeBuilder<E> {
     pub fn new(size: usize) -> Self {
         Self {
             nodes: vec![
@@ -99,21 +98,69 @@ impl<E: TreeEdgeTrait + Clone> Tree<E> {
         }
     }
 
-    pub fn extend_rooted(&mut self, edges: impl IntoIterator<Item = E>) {
+    pub fn build(self) -> Tree<E> {
+        Tree {
+            nodes: self.nodes,
+            root: None,
+        }
+    }
+}
+
+pub struct RootedTreeBuilder<E> {
+    nodes: Vec<TreeNode<E>>,
+    root: usize,
+}
+
+impl<E: TreeEdgeTrait + Clone> RootedTreeBuilder<E> {
+    pub fn new(size: usize, root: usize) -> Self {
+        Self {
+            nodes: vec![
+                TreeNode {
+                    parent: None,
+                    children: vec![],
+                };
+                size
+            ],
+            root,
+        }
+    }
+
+    pub fn extend(&mut self, edges: impl IntoIterator<Item = E>) {
         for e in edges {
             assert!(self.nodes[e.to()].parent.is_none());
             self.nodes[e.from()].children.push(e.clone());
             self.nodes[e.to()].parent.replace(e.rev());
         }
     }
+
+    pub fn build(self) -> Tree<E> {
+        Tree {
+            nodes: self.nodes,
+            root: Some(self.root),
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct Tree<E> {
+    nodes: Vec<TreeNode<E>>,
+    root: Option<usize>,
 }
 
 impl<E> Tree<E> {
+    pub fn nodes_iter(&self) -> impl Iterator<Item = &TreeNode<E>> {
+        self.nodes.iter()
+    }
+
     pub fn len(&self) -> usize {
         self.nodes.len()
     }
 
     pub fn is_empty(&self) -> bool {
         self.nodes.is_empty()
+    }
+
+    pub fn root(&self) -> Option<usize> {
+        self.root
     }
 }

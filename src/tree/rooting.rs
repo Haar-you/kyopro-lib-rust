@@ -50,15 +50,14 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut tr = Tree::new(6);
-        tr.extend(
+        let mut builder = TreeBuilder::new(6);
+        builder.extend(
             vec![(0, 1), (1, 2), (2, 3), (2, 4), (5, 1)]
                 .into_iter()
                 .map(|(u, v)| TreeEdge::new(u, v, (), ())),
         );
-
+        let mut tr = builder.build();
         assert_eq!(rooting(&mut tr, 0), Ok(()));
-
         assert_eq!(
             tr.nodes
                 .into_iter()
@@ -67,13 +66,13 @@ mod tests {
             vec![None, Some(0), Some(1), Some(2), Some(2), Some(1)]
         );
 
-        let mut tr = Tree::new(6);
-        tr.extend(
+        let mut builder = TreeBuilder::new(6);
+        builder.extend(
             vec![(0, 1), (1, 2), (2, 3), (2, 1), (5, 1)]
                 .into_iter()
                 .map(|(u, v)| TreeEdge::new(u, v, (), ())),
         );
-
+        let mut tr = builder.build();
         assert!(rooting(&mut tr, 0).is_err());
     }
 }

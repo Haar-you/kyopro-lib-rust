@@ -50,20 +50,22 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut tree = Tree::new(3);
-        tree.extend(
+        let mut builder = TreeBuilder::new(3);
+        builder.extend(
             vec![(0, 1), (1, 2)]
                 .into_iter()
                 .map(|(u, v)| TreeEdge::new(u, v, (), ())),
         );
+        let tree = builder.build();
         assert_eq!(centroids(&tree), vec![1]);
 
-        let mut tree = Tree::new(4);
-        tree.extend(
+        let mut builder = TreeBuilder::new(4);
+        builder.extend(
             vec![(0, 1), (1, 2), (2, 3)]
                 .into_iter()
                 .map(|(u, v)| TreeEdge::new(u, v, (), ())),
         );
+        let tree = builder.build();
         let mut ans = centroids(&tree);
         ans.sort();
         assert_eq!(ans, vec![1, 2]);
