@@ -1,6 +1,6 @@
 //! 最大流 (Ford-Fulkerson)
 
-pub use crate::graph::flow::*;
+pub use crate::flow::*;
 
 #[derive(Clone, Debug)]
 struct Edge {

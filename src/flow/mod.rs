@@ -1,3 +1,8 @@
+pub mod dinic;
+pub mod ford_fulkerson;
+
+pub mod min_cost_flow;
+
 pub trait MaxFlow {
     type Cap;
     fn new(n: usize) -> Self;

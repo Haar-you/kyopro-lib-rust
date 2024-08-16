@@ -1,6 +1,6 @@
 //! Project Selection Problem
 
-use crate::graph::flow::*;
+use crate::flow::*;
 
 /// Project Selection Problem
 ///

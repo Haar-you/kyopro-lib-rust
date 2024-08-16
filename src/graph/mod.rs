@@ -34,14 +34,6 @@ pub mod tsort;
 pub mod chinese_postman;
 pub mod tsp;
 
-pub mod dinic;
-pub mod flow;
-pub mod ford_fulkerson;
-pub mod hopcroft_karp;
-pub mod min_cost_flow;
-
-pub mod bi_match;
-
 use std::marker::PhantomData;
 
 pub trait EdgeTrait {
