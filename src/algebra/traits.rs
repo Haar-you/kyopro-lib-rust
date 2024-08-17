@@ -18,8 +18,8 @@ pub trait Commutative {}
 pub trait Associative {}
 pub trait Idempotence {}
 
-pub trait Semigroup: BinaryOp {}
-impl<T: BinaryOp> Semigroup for T {}
+pub trait Semigroup: BinaryOp + Associative {}
+impl<T: BinaryOp + Associative> Semigroup for T {}
 
 pub trait Monoid: Semigroup + Identity {}
 impl<T: Semigroup + Identity> Monoid for T {}

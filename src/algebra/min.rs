@@ -28,3 +28,7 @@ impl<T> Identity for Min<T> {
         None
     }
 }
+
+impl<T> Commutative for Min<T> {}
+impl<T> Associative for Min<T> {}
+impl<T> Idempotence for Min<T> {}

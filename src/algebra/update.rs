@@ -28,3 +28,6 @@ impl<T> Identity for Update<T> {
         None
     }
 }
+
+impl<T> Associative for Update<T> {}
+impl<T> Idempotence for Update<T> {}

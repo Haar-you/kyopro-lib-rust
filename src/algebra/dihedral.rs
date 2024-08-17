@@ -50,3 +50,5 @@ impl Inverse for Dihedral {
         }
     }
 }
+
+impl Associative for Dihedral {}

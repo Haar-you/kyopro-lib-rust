@@ -24,3 +24,7 @@ impl<S: Identity> Identity for Dual<S> {
         self.0.id()
     }
 }
+
+impl<S: Commutative> Commutative for Dual<S> {}
+impl<S: Associative> Associative for Dual<S> {}
+impl<S: Idempotence> Idempotence for Dual<S> {}

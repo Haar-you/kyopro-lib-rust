@@ -28,3 +28,7 @@ impl<T> Identity for Max<T> {
         None
     }
 }
+
+impl<T> Commutative for Max<T> {}
+impl<T> Associative for Max<T> {}
+impl<T> Idempotence for Max<T> {}

@@ -29,3 +29,5 @@ impl<T: One<Output = T> + Zero<Output = T> + Copy> Identity for Affine<T> {
         (T::one(), T::zero())
     }
 }
+
+impl<T> Associative for Affine<T> {}
