@@ -5,7 +5,7 @@ use std::{
     ops::{Add, Mul},
 };
 
-#[derive(Clone, Default)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Affine<T>(PhantomData<T>);
 
 impl<T> Affine<T> {

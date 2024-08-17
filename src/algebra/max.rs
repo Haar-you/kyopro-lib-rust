@@ -1,7 +1,7 @@
 pub use crate::algebra::traits::*;
 use std::{cmp::max, marker::PhantomData};
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Debug, PartialEq, Eq)]
 pub struct Max<T>(PhantomData<T>);
 impl<T> Max<T> {
     pub fn new() -> Self {

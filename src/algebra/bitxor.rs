@@ -2,7 +2,7 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use std::marker::PhantomData;
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Debug, PartialEq, Eq)]
 pub struct BitXor<T>(PhantomData<T>);
 impl<T> BitXor<T> {
     pub fn new() -> Self {

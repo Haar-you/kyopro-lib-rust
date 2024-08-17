@@ -1,6 +1,6 @@
 pub use crate::algebra::traits::*;
 
-#[derive(Clone)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Dual<S>(S);
 
 impl<S: AlgeStruct> Dual<S> {

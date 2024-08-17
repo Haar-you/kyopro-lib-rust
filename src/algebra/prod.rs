@@ -3,7 +3,7 @@ use crate::impl_algebra;
 pub use crate::traits::one_zero::*;
 use std::marker::PhantomData;
 
-#[derive(Clone, Default)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Prod<T>(PhantomData<T>);
 impl<T> Prod<T> {
     pub fn new() -> Self {

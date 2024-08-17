@@ -1,7 +1,7 @@
 pub use crate::algebra::traits::*;
 use std::marker::PhantomData;
 
-#[derive(Clone, Default)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Update<T>(PhantomData<T>);
 
 impl<T> Update<T> {

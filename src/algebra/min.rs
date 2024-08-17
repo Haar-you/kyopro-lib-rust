@@ -1,7 +1,7 @@
 pub use crate::algebra::traits::*;
 use std::{cmp::min, marker::PhantomData};
 
-#[derive(Clone, Default)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Min<T>(PhantomData<T>);
 impl<T> Min<T> {
     pub fn new() -> Self {

@@ -1,12 +1,12 @@
 pub use crate::algebra::traits::*;
 
-#[derive(Clone, Debug, Copy)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DihedralValue {
     R(usize),
     S(usize),
 }
 
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Dihedral {
     k: usize,
 }
