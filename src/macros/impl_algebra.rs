@@ -27,6 +27,9 @@ macro_rules! impl_algebra {
     ($t:ty, associative: $f:expr) => {
         impl Associative for $t {}
     };
+    ($t:ty, idempotence: $f:expr) => {
+        impl Idempotence for $t {}
+    };
 
     ($t:ty, $($s:ident: $f:expr),+) => {
         $(
