@@ -18,10 +18,10 @@ pub fn parallel_binary_search(
         let mut check = true;
         let mut mids = vec![vec![]; m];
 
-        for i in 0..q {
-            if ok[i] - ng[i] > 1 {
+        for (i, (ok, ng)) in ok.iter().zip(&ng).enumerate() {
+            if ok - ng > 1 {
                 check = false;
-                let mid = (ok[i] + ng[i]) / 2;
+                let mid = (ok + ng) / 2;
                 mids[mid as usize].push(i);
             }
         }
@@ -32,9 +32,9 @@ pub fn parallel_binary_search(
 
         init();
 
-        for i in 0..m {
+        for (i, mid) in mids.iter().enumerate() {
             process(i);
-            for &j in &mids[i] {
+            for &j in mid {
                 if checker(j) {
                     ok[j] = i as isize;
                 } else {
