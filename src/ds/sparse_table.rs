@@ -3,13 +3,13 @@
 use crate::{algebra::traits::*, ds::traits::Foldable};
 use std::{cmp::min, ops::Range};
 
-pub struct SparseTable<A: BinaryOp> {
+pub struct SparseTable<A: BinaryOp + Associative + Idempotence> {
     data: Vec<Vec<A::Output>>,
     log_table: Vec<usize>,
     semilattice: A,
 }
 
-impl<T: Clone + Default, A: BinaryOp<Output = T>> SparseTable<A> {
+impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> SparseTable<A> {
     pub fn new(s: Vec<T>, a: A) -> Self {
         let n = s.len();
         let logn = n.next_power_of_two().trailing_zeros() as usize + 1;
@@ -40,7 +40,9 @@ impl<T: Clone + Default, A: BinaryOp<Output = T>> SparseTable<A> {
     }
 }
 
-impl<T: Clone + Default, A: BinaryOp<Output = T>> Foldable<Range<usize>> for SparseTable<A> {
+impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> Foldable<Range<usize>>
+    for SparseTable<A>
+{
     type Output = Option<T>;
 
     fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
