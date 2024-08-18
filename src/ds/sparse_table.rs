@@ -57,3 +57,64 @@ impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> Fo
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::fmt::Debug;
+
+    use crate::algebra::{bitand::BitAnd, bitor::BitOr, max::Max, min::Min};
+
+    use super::*;
+    use rand::Rng;
+
+    fn test<T, A>(s: Vec<T>, a: A)
+    where
+        T: Clone + Default + PartialEq + Debug + Copy,
+        A: BinaryOp<Output = T> + Associative + Idempotence + Identity + Clone,
+    {
+        let st = SparseTable::new(s.clone(), a.clone());
+
+        for l in 0..s.len() {
+            for r in l..=s.len() {
+                let ans = &s[l..r].iter().fold(a.id(), |x, y| a.op(x, *y));
+                assert_eq!(*ans, st.fold(l..r).unwrap_or(a.id()));
+            }
+        }
+    }
+
+    #[test]
+    fn test_max() {
+        let mut rng = rand::thread_rng();
+        let n = 100;
+        let s = (0..n).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let a = Max::<u64>::new();
+        test(s, a);
+    }
+
+    #[test]
+    fn test_min() {
+        let mut rng = rand::thread_rng();
+        let n = 100;
+        let s = (0..n).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let a = Min::<u64>::new();
+        test(s, a);
+    }
+
+    #[test]
+    fn test_bitand() {
+        let mut rng = rand::thread_rng();
+        let n = 100;
+        let s = (0..n).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let a = BitAnd::<u64>::new();
+        test(s, a);
+    }
+
+    #[test]
+    fn test_bitor() {
+        let mut rng = rand::thread_rng();
+        let n = 100;
+        let s = (0..n).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let a = BitOr::<u64>::new();
+        test(s, a);
+    }
+}
