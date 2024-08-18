@@ -14,9 +14,9 @@ impl<T> AlgeStruct for BitAnd<T> {
     type Output = T;
 }
 
-impl_algebra!(BitAnd<u8>, binaryop: |_, a, b| a & b, identity: |_| !0, commutative: {}, associative: {}, idempotence: {});
-impl_algebra!(BitAnd<u16>, binaryop: |_, a, b| a & b, identity: |_| !0, commutative: {}, associative: {}, idempotence: {});
-impl_algebra!(BitAnd<u32>, binaryop: |_, a, b| a & b, identity: |_| !0, commutative: {}, associative: {}, idempotence: {});
-impl_algebra!(BitAnd<u64>, binaryop: |_, a, b| a & b, identity: |_| !0, commutative: {}, associative: {}, idempotence: {});
-impl_algebra!(BitAnd<u128>, binaryop: |_, a, b| a & b, identity: |_| !0, commutative: {}, associative: {}, idempotence: {});
-impl_algebra!(BitAnd<usize>, binaryop: |_, a, b| a & b, identity: |_| !0, commutative: {}, associative: {}, idempotence: {});
+impl_algebra!(BitAnd<u8>, op: |_, a, b| a & b, id: |_| !0, commu: {}, assoc: {}, idem: {});
+impl_algebra!(BitAnd<u16>, op: |_, a, b| a & b, id: |_| !0, commu: {}, assoc: {}, idem: {});
+impl_algebra!(BitAnd<u32>, op: |_, a, b| a & b, id: |_| !0, commu: {}, assoc: {}, idem: {});
+impl_algebra!(BitAnd<u64>, op: |_, a, b| a & b, id: |_| !0, commu: {}, assoc: {}, idem: {});
+impl_algebra!(BitAnd<u128>, op: |_, a, b| a & b, id: |_| !0, commu: {}, assoc: {}, idem: {});
+impl_algebra!(BitAnd<usize>, op: |_, a, b| a & b, id: |_| !0, commu: {}, assoc: {}, idem: {});

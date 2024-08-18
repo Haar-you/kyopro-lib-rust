@@ -14,9 +14,9 @@ impl<T> AlgeStruct for BitOr<T> {
     type Output = T;
 }
 
-impl_algebra!(BitOr<u8>, binaryop: |_, a, b| a | b, identity: |_| 0, commutative: {}, associative: {}, idempotence: {});
-impl_algebra!(BitOr<u16>, binaryop: |_, a, b| a | b, identity: |_| 0, commutative: {}, associative: {}, idempotence: {});
-impl_algebra!(BitOr<u32>, binaryop: |_, a, b| a | b, identity: |_| 0, commutative: {}, associative: {}, idempotence: {});
-impl_algebra!(BitOr<u64>, binaryop: |_, a, b| a | b, identity: |_| 0, commutative: {}, associative: {}, idempotence: {});
-impl_algebra!(BitOr<u128>, binaryop: |_, a, b| a | b, identity: |_| 0, commutative: {}, associative: {}, idempotence: {});
-impl_algebra!(BitOr<usize>, binaryop: |_, a, b| a | b, identity: |_| 0, commutative: {}, associative: {}, idempotence: {});
+impl_algebra!(BitOr<u8>, op: |_, a, b| a | b, id: |_| 0, commu: {}, assoc: {}, idem: {});
+impl_algebra!(BitOr<u16>, op: |_, a, b| a | b, id: |_| 0, commu: {}, assoc: {}, idem: {});
+impl_algebra!(BitOr<u32>, op: |_, a, b| a | b, id: |_| 0, commu: {}, assoc: {}, idem: {});
+impl_algebra!(BitOr<u64>, op: |_, a, b| a | b, id: |_| 0, commu: {}, assoc: {}, idem: {});
+impl_algebra!(BitOr<u128>, op: |_, a, b| a | b, id: |_| 0, commu: {}, assoc: {}, idem: {});
+impl_algebra!(BitOr<usize>, op: |_, a, b| a | b, id: |_| 0, commu: {}, assoc: {}, idem: {});

@@ -14,19 +14,19 @@ impl<T> AlgeStruct for Sum<T> {
     type Output = T;
 }
 
-impl_algebra!(Sum<i8>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: i8| -a, commutative: {}, associative: {});
-impl_algebra!(Sum<i16>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: i16| -a, commutative: {}, associative: {});
-impl_algebra!(Sum<i32>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: i32| -a, commutative: {}, associative: {});
-impl_algebra!(Sum<i64>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: i64| -a, commutative: {}, associative: {});
-impl_algebra!(Sum<i128>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: i128| -a, commutative: {}, associative: {});
-impl_algebra!(Sum<isize>, binaryop: |_, a, b| a + b, identity: |_| 0, inverse: |_, a: isize| -a, commutative: {}, associative: {});
+impl_algebra!(Sum<i8>, op: |_, a, b| a + b, id: |_| 0, inv: |_, a: i8| -a, commu: {}, assoc: {});
+impl_algebra!(Sum<i16>, op: |_, a, b| a + b, id: |_| 0, inv: |_, a: i16| -a, commu: {}, assoc: {});
+impl_algebra!(Sum<i32>, op: |_, a, b| a + b, id: |_| 0, inv: |_, a: i32| -a, commu: {}, assoc: {});
+impl_algebra!(Sum<i64>, op: |_, a, b| a + b, id: |_| 0, inv: |_, a: i64| -a, commu: {}, assoc: {});
+impl_algebra!(Sum<i128>, op: |_, a, b| a + b, id: |_| 0, inv: |_, a: i128| -a, commu: {}, assoc: {});
+impl_algebra!(Sum<isize>, op: |_, a, b| a + b, id: |_| 0, inv: |_, a: isize| -a, commu: {}, assoc: {});
 
-impl_algebra!(Sum<u8>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
-impl_algebra!(Sum<u16>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
-impl_algebra!(Sum<u32>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
-impl_algebra!(Sum<u64>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
-impl_algebra!(Sum<u128>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
-impl_algebra!(Sum<usize>, binaryop: |_, a, b| a + b, identity: |_| 0, commutative: {}, associative: {});
+impl_algebra!(Sum<u8>, op: |_, a, b| a + b, id: |_| 0, commu: {}, assoc: {});
+impl_algebra!(Sum<u16>, op: |_, a, b| a + b, id: |_| 0, commu: {}, assoc: {});
+impl_algebra!(Sum<u32>, op: |_, a, b| a + b, id: |_| 0, commu: {}, assoc: {});
+impl_algebra!(Sum<u64>, op: |_, a, b| a + b, id: |_| 0, commu: {}, assoc: {});
+impl_algebra!(Sum<u128>, op: |_, a, b| a + b, id: |_| 0, commu: {}, assoc: {});
+impl_algebra!(Sum<usize>, op: |_, a, b| a + b, id: |_| 0, commu: {}, assoc: {});
 
-impl_algebra!(Sum<f32>, binaryop: |_, a, b| a + b, identity: |_| 0.0, inverse: |_, a: f32| -a, commutative: {}, associative: {});
-impl_algebra!(Sum<f64>, binaryop: |_, a, b| a + b, identity: |_| 0.0, inverse: |_, a: f64| -a, commutative: {}, associative: {});
+impl_algebra!(Sum<f32>, op: |_, a, b| a + b, id: |_| 0.0, inv: |_, a: f32| -a, commu: {}, assoc: {});
+impl_algebra!(Sum<f64>, op: |_, a, b| a + b, id: |_| 0.0, inv: |_, a: f64| -a, commu: {}, assoc: {});

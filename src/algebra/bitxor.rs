@@ -14,16 +14,16 @@ impl<T> AlgeStruct for BitXor<T> {
     type Output = T;
 }
 
-impl_algebra!(BitXor<i8>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
-impl_algebra!(BitXor<i16>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
-impl_algebra!(BitXor<i32>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
-impl_algebra!(BitXor<i64>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
-impl_algebra!(BitXor<i128>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
-impl_algebra!(BitXor<isize>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<i8>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<i16>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<i32>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<i64>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<i128>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<isize>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
 
-impl_algebra!(BitXor<u8>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
-impl_algebra!(BitXor<u16>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
-impl_algebra!(BitXor<u32>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
-impl_algebra!(BitXor<u64>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
-impl_algebra!(BitXor<u128>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
-impl_algebra!(BitXor<usize>, binaryop: |_, a, b| a ^ b, identity: |_| 0, inverse: |_, a| a, commutative: {}, associative: {});
+impl_algebra!(BitXor<u8>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<u16>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<u32>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<u64>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<u128>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<usize>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});

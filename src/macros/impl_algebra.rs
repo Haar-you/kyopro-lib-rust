@@ -1,33 +1,33 @@
 #[macro_export]
 macro_rules! impl_algebra {
-    ($t:ty, binaryop: $f:expr) => {
+    ($t:ty, op: $f:expr) => {
         impl BinaryOp for $t {
             fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output {
                 $f(&self, a, b)
             }
         }
     };
-    ($t:ty, identity: $f:expr) => {
+    ($t:ty, id: $f:expr) => {
         impl Identity for $t {
             fn id(&self) -> Self::Output {
                 $f(&self)
             }
         }
     };
-    ($t:ty, inverse: $f:expr) => {
+    ($t:ty, inv: $f:expr) => {
         impl Inverse for $t {
             fn inv(&self, a: Self::Output) -> Self::Output {
                 $f(self, a)
             }
         }
     };
-    ($t:ty, commutative: $f:expr) => {
+    ($t:ty, commu: $f:expr) => {
         impl Commutative for $t {}
     };
-    ($t:ty, associative: $f:expr) => {
+    ($t:ty, assoc: $f:expr) => {
         impl Associative for $t {}
     };
-    ($t:ty, idempotence: $f:expr) => {
+    ($t:ty, idem: $f:expr) => {
         impl Idempotence for $t {}
     };
 

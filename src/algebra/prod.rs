@@ -14,19 +14,19 @@ impl<T> AlgeStruct for Prod<T> {
     type Output = T;
 }
 
-impl_algebra!(Prod<i8>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
-impl_algebra!(Prod<i16>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
-impl_algebra!(Prod<i32>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
-impl_algebra!(Prod<i64>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
-impl_algebra!(Prod<i128>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
-impl_algebra!(Prod<isize>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
+impl_algebra!(Prod<i8>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
+impl_algebra!(Prod<i16>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
+impl_algebra!(Prod<i32>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
+impl_algebra!(Prod<i64>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
+impl_algebra!(Prod<i128>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
+impl_algebra!(Prod<isize>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
 
-impl_algebra!(Prod<u8>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
-impl_algebra!(Prod<u16>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
-impl_algebra!(Prod<u32>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
-impl_algebra!(Prod<u64>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
-impl_algebra!(Prod<u128>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
-impl_algebra!(Prod<usize>, binaryop: |_, a, b| a * b, identity: |_| 1, commutative: {}, associative: {});
+impl_algebra!(Prod<u8>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
+impl_algebra!(Prod<u16>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
+impl_algebra!(Prod<u32>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
+impl_algebra!(Prod<u64>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
+impl_algebra!(Prod<u128>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
+impl_algebra!(Prod<usize>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});
 
-impl_algebra!(Prod<f32>, binaryop: |_, a, b| a * b, identity: |_| 1.0, commutative: {}, associative: {});
-impl_algebra!(Prod<f64>, binaryop: |_, a, b| a * b, identity: |_| 1.0, commutative: {}, associative: {});
+impl_algebra!(Prod<f32>, op: |_, a, b| a * b, id: |_| 1.0, commu: {}, assoc: {});
+impl_algebra!(Prod<f64>, op: |_, a, b| a * b, id: |_| 1.0, commu: {}, assoc: {});
