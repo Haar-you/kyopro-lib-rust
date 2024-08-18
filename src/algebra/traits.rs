@@ -24,5 +24,11 @@ impl<T: BinaryOp + Associative> Semigroup for T {}
 pub trait Monoid: Semigroup + Identity {}
 impl<T: Semigroup + Identity> Monoid for T {}
 
+pub trait AbelianMonoid: Monoid + Commutative {}
+impl<T: Monoid + Commutative> AbelianMonoid for T{}
+
 pub trait Group: Monoid + Inverse {}
 impl<T: Monoid + Inverse> Group for T {}
+
+pub trait AbelianGroup: Group + Commutative {}
+impl<T: Group + Commutative> AbelianGroup for T {}
