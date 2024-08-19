@@ -1,153 +1,168 @@
-#[derive(Default, Debug, Clone)]
+#[derive(Debug, Clone)]
 struct Node {
-    ch: [Option<Box<Node>>; 2],
-    size: usize,
+    ch: [usize; 2],
+    count: usize,
 }
 
-impl Node {
-    fn count(&self, value: u64, depth: usize) -> usize {
-        if depth == 0 {
-            self.size
-        } else {
-            let depth = depth - 1;
-            let b = (value >> depth) & 1;
-            self.ch[b as usize]
-                .as_ref()
-                .map_or(0, |t| t.count(value, depth))
+impl Default for Node {
+    fn default() -> Self {
+        Self {
+            ch: [NIL, NIL],
+            count: 0,
         }
     }
+}
 
-    fn insert(&mut self, value: u64, depth: usize) -> usize {
-        self.size += 1;
-        if depth > 0 {
-            let depth = depth - 1;
-            let b = (value >> depth) & 1;
-            self.ch[b as usize]
-                .get_or_insert(Box::<Node>::default())
-                .insert(value, depth)
-        } else {
-            self.size
-        }
+const NIL: usize = !0;
+
+#[derive(Debug, Clone)]
+pub struct BinaryTrie {
+    data: Vec<Node>,
+    bitlen: usize,
+}
+
+impl BinaryTrie {
+    pub fn new(bitlen: usize) -> Self {
+        assert!(bitlen <= 64);
+        let data = vec![Node::default()];
+        Self { data, bitlen }
     }
 
-    fn erase(&mut self, value: u64, depth: usize) -> Option<usize> {
-        if depth > 0 {
-            let depth = depth - 1;
+    pub fn len(&self) -> usize {
+        self.data[0].count
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.data[0].count == 0
+    }
+
+    pub fn count(&self, value: u64) -> usize {
+        let mut node = 0;
+        let mut depth = self.bitlen;
+
+        while depth > 0 {
+            depth -= 1;
             let b = (value >> depth) & 1;
-            let ret = self.ch[b as usize]
-                .get_or_insert(Box::<Node>::default())
-                .erase(value, depth);
-            ret.iter().for_each(|_| self.size -= 1);
-            ret
-        } else if self.size > 0 {
-            self.size -= 1;
-            Some(self.size)
+
+            let t = self.data[node].ch[b as usize];
+            if t == NIL {
+                return 0;
+            }
+            node = t;
+        }
+
+        self.data[node].count
+    }
+
+    pub fn insert(&mut self, value: u64) -> usize {
+        let mut node = 0;
+        let mut depth = self.bitlen;
+
+        while depth > 0 {
+            self.data[node].count += 1;
+            depth -= 1;
+
+            let b = (value >> depth) & 1;
+
+            let ch = self.data[node].ch[b as usize];
+            if ch != NIL {
+                node = ch;
+            } else {
+                self.data.push(Node::default());
+                let ch = self.data.len() - 1;
+                self.data[node].ch[b as usize] = ch;
+                node = ch;
+            }
+        }
+
+        self.data[node].count += 1;
+        self.data[node].count
+    }
+
+    pub fn erase(&mut self, value: u64) -> Option<usize> {
+        let mut node = 0;
+        let mut depth = self.bitlen;
+        let mut path = vec![];
+
+        while depth > 0 {
+            depth -= 1;
+            let b = (value >> depth) & 1;
+
+            path.push(node);
+
+            let ch = self.data[node].ch[b as usize];
+            if ch != NIL {
+                node = ch;
+            } else {
+                self.data.push(Node::default());
+                let ch = self.data.len() - 1;
+                self.data[node].ch[b as usize] = ch;
+                node = ch;
+            }
+        }
+
+        if self.data[node].count > 0 {
+            path.push(node);
+            for a in path {
+                self.data[a].count -= 1;
+            }
+
+            Some(self.data[node].count)
         } else {
             None
         }
     }
 
-    fn min(&self, x: u64, depth: usize) -> u64 {
-        if depth == 0 {
-            0
-        } else {
-            let depth = depth - 1;
-            let mut b = (x >> depth) & 1;
-            if self.ch[b as usize].as_ref().map_or(0, |t| t.size) == 0 {
-                b ^= 1;
-            }
-            self.ch[b as usize].as_ref().unwrap().min(x, depth) | (b << depth)
-        }
-    }
-
-    fn max(&self, x: u64, depth: usize) -> u64 {
-        if depth == 0 {
-            0
-        } else {
-            let depth = depth - 1;
-            let mut b = ((x >> depth) & 1) ^ 1;
-            if self.ch[b as usize].as_ref().map_or(0, |t| t.size) == 0 {
-                b ^= 1;
-            }
-            self.ch[b as usize].as_ref().unwrap().max(x, depth) | (b << depth)
-        }
-    }
-
-    fn to_vec(&self, value: u64, ret: &mut Vec<u64>) {
-        if self.ch[0].is_none() && self.ch[1].is_none() {
-            ret.extend_from_slice(&vec![value; self.size]);
-        }
-        if let Some(t) = self.ch[0].as_ref() {
-            t.to_vec(value << 1, ret);
-        }
-        if let Some(t) = self.ch[1].as_ref() {
-            t.to_vec(value << 1 | 1, ret);
-        }
-    }
-}
-
-#[derive(Default, Debug, Clone)]
-pub struct BinaryTrie {
-    root: Option<Box<Node>>,
-}
-
-impl BinaryTrie {
-    const fn bitlen() -> usize {
-        u64::BITS as usize
-    }
-
-    pub fn new() -> Self {
-        Self { root: None }
-    }
-
-    pub fn len(&self) -> usize {
-        self.root.as_ref().map_or(0, |x| x.size)
-    }
-
-    pub fn is_empty(&self) -> bool {
-        self.root.is_none()
-    }
-
-    pub fn count(&self, value: u64) -> usize {
-        self.root
-            .as_ref()
-            .map_or(0, |t| t.count(value, Self::bitlen()))
-    }
-
-    pub fn insert(&mut self, value: u64) -> usize {
-        self.root
-            .get_or_insert(Box::<Node>::default())
-            .insert(value, Self::bitlen())
-    }
-
-    pub fn erase(&mut self, value: u64) -> Option<usize> {
-        self.root
-            .get_or_insert(Box::<Node>::default())
-            .erase(value, Self::bitlen())
-    }
-
     pub fn min(&mut self, x: u64) -> Option<u64> {
-        self.root.as_ref().map(|t| t.min(x, Self::bitlen()))
+        if self.data[0].count == 0 {
+            None
+        } else {
+            let mut node = 0;
+            let mut depth = self.bitlen;
+            let mut ret = 0;
+
+            while depth > 0 {
+                depth -= 1;
+
+                let mut b = (x >> depth) & 1;
+
+                let t = self.data[node].ch[b as usize];
+                if t == NIL || self.data[t].count == 0 {
+                    b ^= 1;
+                }
+
+                node = self.data[node].ch[b as usize];
+                ret |= b << depth;
+            }
+
+            Some(ret)
+        }
     }
 
     pub fn max(&mut self, x: u64) -> Option<u64> {
-        self.root.as_ref().map(|t| t.max(x, Self::bitlen()))
-    }
+        if self.data[0].count == 0 {
+            None
+        } else {
+            let mut node = 0;
+            let mut depth = self.bitlen;
+            let mut ret = 0;
 
-    pub fn lower_bound(&mut self, _x: u64) -> usize {
-        todo!();
-    }
+            while depth > 0 {
+                depth -= 1;
 
-    pub fn upper_bound(&mut self, _x: u64) -> usize {
-        todo!();
-    }
+                let mut b = ((x >> depth) & 1) ^ 1;
 
-    pub fn to_vec(&self) -> Vec<u64> {
-        let mut ret = vec![];
-        if let Some(t) = self.root.as_ref() {
-            t.to_vec(0, &mut ret);
+                let t = self.data[node].ch[b as usize];
+                if t == NIL || self.data[t].count == 0 {
+                    b ^= 1;
+                }
+
+                node = self.data[node].ch[b as usize];
+                ret |= b << depth;
+            }
+
+            Some(ret)
         }
-        ret
     }
 }
 
@@ -161,7 +176,7 @@ mod tests {
     fn test() {
         let mut rng = rand::thread_rng();
 
-        let mut bt = BinaryTrie::new();
+        let mut bt = BinaryTrie::new(64);
         let mut m = BTreeMap::new();
 
         for _ in 0..1000 {
