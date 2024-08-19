@@ -21,6 +21,7 @@ pub mod macros;
 pub mod matching;
 pub mod math;
 pub mod misc;
+pub mod num;
 pub mod traits;
 pub mod tree;
 pub mod utils;

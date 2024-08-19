@@ -1,7 +1,7 @@
 //! 負閉路を持つグラフの最短経路 (Bellman-Ford)
 
 use crate::graph::*;
-pub use crate::utils::num_inf::NumInf;
+pub use crate::num::num_inf::NumInf;
 use std::{cmp::min, ops::Add};
 
 pub fn bellman_ford<D: Direction, T, E: EdgeTrait<Weight = T>>(

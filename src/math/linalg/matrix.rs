@@ -1,4 +1,4 @@
-use crate::math::ff::traits::*;
+use crate::num::ff::*;
 use std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 
 #[derive(Clone, PartialEq, Eq)]

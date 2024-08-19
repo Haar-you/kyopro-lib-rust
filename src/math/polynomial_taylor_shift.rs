@@ -1,7 +1,5 @@
-use crate::math::{
-    ff::{const_modint::ConstModInt, modint::Inv},
-    ntt::*,
-};
+use crate::math::ntt::*;
+use crate::num::const_modint::*;
 
 type Poly<const P: u32> = Vec<ConstModInt<P>>;
 

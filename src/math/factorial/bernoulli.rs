@@ -1,4 +1,5 @@
-use crate::math::{factorial::FactorialTable, ff::traits::*};
+use crate::math::factorial::FactorialTable;
+use crate::num::ff::*;
 
 impl<Modulo: FF> FactorialTable<Modulo>
 where
@@ -26,7 +27,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math::ff::const_modint::*;
+    use crate::num::const_modint::*;
 
     #[test]
     fn test() {

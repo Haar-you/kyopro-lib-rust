@@ -1,6 +1,5 @@
-use crate::math::{ff::const_modint::ConstModInt, ntt::NTT};
-
-use super::ff::modint::Inv;
+use crate::math::ntt::NTT;
+use crate::num::const_modint::*;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Polynomial<const P: u32> {
@@ -180,7 +179,7 @@ impl<'a, const P: u32> PolynomialOperator<'a, P> {
 
 #[cfg(test)]
 mod tests {
-    use crate::math::ff::{const_modint::ConstModIntBuilder, modint::FF};
+    use crate::num::const_modint::ConstModIntBuilder;
 
     use super::*;
 

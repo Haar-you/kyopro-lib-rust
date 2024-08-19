@@ -1,6 +1,6 @@
 #![allow(clippy::needless_range_loop)]
 
-use crate::math::ff::traits::*;
+use crate::num::ff::*;
 
 pub fn bell_number_table<Modulo: FF>(n: usize, modulo: Modulo) -> Vec<Vec<Modulo::Output>>
 where

@@ -1,5 +1,4 @@
-use super::ff::const_modint::ConstModInt;
-use crate::math::ff::modint::{Inv, Pow};
+use crate::num::const_modint::*;
 
 pub struct NTT<const P: u32> {
     base: Vec<ConstModInt<P>>,
@@ -122,7 +121,6 @@ impl<const P: u32> NTT<P> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math::ff::const_modint::*;
     use rand::Rng;
 
     #[test]

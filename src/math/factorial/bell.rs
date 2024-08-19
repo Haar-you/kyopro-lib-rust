@@ -1,4 +1,5 @@
-use crate::math::{factorial::FactorialTable, ff::traits::*};
+use crate::math::factorial::FactorialTable;
+use crate::num::ff::*;
 use std::cmp::min;
 
 impl<Modulo: FF> FactorialTable<Modulo>

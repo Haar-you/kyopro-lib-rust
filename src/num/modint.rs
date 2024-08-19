@@ -1,4 +1,4 @@
-pub use crate::math::ff::traits::*;
+pub use crate::num::ff::*;
 use std::{
     fmt,
     fmt::{Debug, Display, Formatter},

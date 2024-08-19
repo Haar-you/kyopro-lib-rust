@@ -1,4 +1,4 @@
-use crate::math::ff::traits::*;
+use crate::num::ff::*;
 
 pub fn berlekamp_massey<Modulo: FF>(s: Vec<u32>, modulo: Modulo) -> Vec<Modulo::Output>
 where

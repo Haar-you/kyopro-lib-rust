@@ -2,7 +2,7 @@ pub mod bell;
 pub mod bernoulli;
 pub mod catalan;
 
-use crate::math::ff::traits::*;
+use crate::num::ff::*;
 
 #[derive(Clone, Debug)]
 pub struct FactorialTable<Modulo: FF> {
@@ -87,7 +87,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math::ff::modint::*;
+    use crate::num::modint::*;
 
     #[test]
     fn test() {

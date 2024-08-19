@@ -1,6 +1,5 @@
-use crate::math::{
-    ff::const_modint::ConstModInt, polynomial::Polynomial, polynomial::PolynomialOperator,
-};
+use crate::math::polynomial::{Polynomial, PolynomialOperator};
+use crate::num::const_modint::ConstModInt;
 
 pub fn multipoint_eval<const P: u32>(
     a: Polynomial<P>,
@@ -38,7 +37,8 @@ pub fn multipoint_eval<const P: u32>(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math::{ff::const_modint::*, ntt::*, polynomial::*};
+    use crate::math::{ntt::*, polynomial::*};
+    use crate::num::const_modint::*;
     use rand::Rng;
 
     #[test]

@@ -1,4 +1,4 @@
-pub use crate::math::ff::traits::*;
+pub use crate::num::ff::*;
 use std::{
     fmt,
     fmt::{Debug, Display, Formatter},
@@ -136,25 +136,6 @@ impl<const M: u32> Debug for ConstModInt<M> {
         write!(f, "{} (mod {})", self.0, M)
     }
 }
-
-// macro_rules! modint_from_int {
-//     ( $($t:ty),* ) => {
-//         $(
-//             impl<const M: u32> From<$t> for ConstModInt<M> {
-//                 fn from(from: $t) -> Self {
-//                     let mut value = ((from % M as $t) + M as $t) as u32;
-//                     if value >= M {
-//                         value -= M;
-//                     }
-
-//                     Self::new_unchecked(value)
-//                 }
-//             }
-//         )*
-//     }
-// }
-
-// modint_from_int!(i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize);
 
 impl<const M: u32> From<ConstModInt<M>> for u32 {
     fn from(from: ConstModInt<M>) -> Self {

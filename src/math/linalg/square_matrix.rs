@@ -1,4 +1,4 @@
-use crate::math::ff::traits::*;
+use crate::num::ff::*;
 use std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 
 #[derive(Clone, PartialEq, Eq)]
@@ -280,7 +280,7 @@ mod tests {
     use super::*;
     use rand::Rng;
 
-    use crate::math::ff::const_modint::*;
+    use crate::num::const_modint::*;
 
     #[test]
     fn test() {
