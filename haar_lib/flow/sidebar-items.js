@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["dinic","ford_fulkerson","min_cost_flow"],"trait":["MaxFlow"]};

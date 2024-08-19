@@ -34,34 +34,40 @@
 <a href="#34" id="34">34</a>
 <a href="#35" id="35">35</a>
 <a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
 </pre></div><pre class="rust"><code><span class="attr">#[macro_export]
 </span><span class="macro">macro_rules! </span>impl_algebra {
-    (<span class="macro-nonterminal">$t</span>:ty, binaryop: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
+    (<span class="macro-nonterminal">$t</span>:ty, op: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
         <span class="kw">impl </span>BinaryOp <span class="kw">for </span><span class="macro-nonterminal">$t </span>{
             <span class="kw">fn </span>op(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="self">Self</span>::Output, b: <span class="self">Self</span>::Output) -&gt; <span class="self">Self</span>::Output {
                 <span class="macro-nonterminal">$f</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, a, b)
             }
         }
     };
-    (<span class="macro-nonterminal">$t</span>:ty, identity: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
+    (<span class="macro-nonterminal">$t</span>:ty, id: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
         <span class="kw">impl </span>Identity <span class="kw">for </span><span class="macro-nonterminal">$t </span>{
             <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Output {
                 <span class="macro-nonterminal">$f</span>(<span class="kw-2">&amp;</span><span class="self">self</span>)
             }
         }
     };
-    (<span class="macro-nonterminal">$t</span>:ty, inverse: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
+    (<span class="macro-nonterminal">$t</span>:ty, inv: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
         <span class="kw">impl </span>Inverse <span class="kw">for </span><span class="macro-nonterminal">$t </span>{
             <span class="kw">fn </span>inv(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="self">Self</span>::Output) -&gt; <span class="self">Self</span>::Output {
                 <span class="macro-nonterminal">$f</span>(<span class="self">self</span>, a)
             }
         }
     };
-    (<span class="macro-nonterminal">$t</span>:ty, commutative: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
+    (<span class="macro-nonterminal">$t</span>:ty, commu: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
         <span class="kw">impl </span>Commutative <span class="kw">for </span><span class="macro-nonterminal">$t </span>{}
     };
-    (<span class="macro-nonterminal">$t</span>:ty, associative: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
+    (<span class="macro-nonterminal">$t</span>:ty, assoc: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
         <span class="kw">impl </span>Associative <span class="kw">for </span><span class="macro-nonterminal">$t </span>{}
+    };
+    (<span class="macro-nonterminal">$t</span>:ty, idem: <span class="macro-nonterminal">$f</span>:expr) =&gt; {
+        <span class="kw">impl </span>Idempotence <span class="kw">for </span><span class="macro-nonterminal">$t </span>{}
     };
 
     (<span class="macro-nonterminal">$t</span>:ty, $(<span class="macro-nonterminal">$s</span>:ident: <span class="macro-nonterminal">$f</span>:expr),+) =&gt; {

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["centroid","depth_query","euler_tour","hld","lca","rerooting","rooted_isomorphism","rooting","tree_dp","utils"],"struct":["Tree","TreeEdge","TreeNode"],"trait":["TreeEdgeTrait"]};
+window.SIDEBAR_ITEMS = {"mod":["centroid","depth_query","euler_tour","hld","lca","rerooting","rooted_isomorphism","rooting","tree_dp","utils"],"struct":["RootedTreeBuilder","Tree","TreeBuilder","TreeEdge","TreeNode"],"trait":["TreeEdgeTrait"]};

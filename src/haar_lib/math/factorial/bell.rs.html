@@ -23,16 +23,26 @@
 <a href="#23" id="23">23</a>
 <a href="#24" id="24">24</a>
 <a href="#25" id="25">25</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::math::{factorial::FactorialTable, ff::traits::FF};
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::math::factorial::FactorialTable;
+<span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::cmp::min;
 
-<span class="kw">impl</span>&lt;T: FF + From&lt;usize&gt;&gt; FactorialTable&lt;T&gt; {
-    <span class="kw">pub fn </span>bell_number(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; T {
+<span class="kw">impl</span>&lt;Modulo: FF&gt; FactorialTable&lt;Modulo&gt;
+<span class="kw">where
+    </span>Modulo::Output: FFElem,
+{
+    <span class="kw">pub fn </span>bell_number(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; Modulo::Output {
         <span class="kw">match </span>n {
-            <span class="number">0 </span>=&gt; T::from(<span class="number">1</span>),
+            <span class="number">0 </span>=&gt; <span class="self">self</span>.modulo.from_u64(<span class="number">1</span>),
             <span class="kw">_ </span>=&gt; {
                 <span class="kw">let </span>k = min(n, k);
-                <span class="kw">let </span><span class="kw-2">mut </span>t = <span class="macro">vec!</span>[T::from(<span class="number">1</span>); k];
+                <span class="kw">let </span><span class="kw-2">mut </span>t = <span class="macro">vec!</span>[<span class="self">self</span>.modulo.from_u64(<span class="number">1</span>); k];
 
                 <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..k {
                     t[i] = <span class="kw">match </span>i % <span class="number">2 </span>{
@@ -42,8 +52,10 @@
                 }
 
                 (<span class="number">1</span>..=k)
-                    .map(|i| t[k - i] * T::from(i).pow(n <span class="kw">as </span>u64) * <span class="self">self</span>.inv_facto(i))
-                    .sum()
+                    .map(|i| {
+                        t[k - i] * <span class="self">self</span>.modulo.from_u64(i <span class="kw">as </span>u64).pow(n <span class="kw">as </span>u64) * <span class="self">self</span>.inv_facto(i)
+                    })
+                    .fold(<span class="self">self</span>.modulo.from_u64(<span class="number">0</span>), std::ops::Add::add)
             }
         }
     }

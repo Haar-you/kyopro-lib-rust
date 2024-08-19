@@ -46,49 +46,31 @@
 <a href="#46" id="46">46</a>
 <a href="#47" id="47">47</a>
 <a href="#48" id="48">48</a>
-<a href="#49" id="49">49</a>
-<a href="#50" id="50">50</a>
-<a href="#51" id="51">51</a>
-<a href="#52" id="52">52</a>
-<a href="#53" id="53">53</a>
-<a href="#54" id="54">54</a>
-<a href="#55" id="55">55</a>
-<a href="#56" id="56">56</a>
-<a href="#57" id="57">57</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::{Add, AddAssign, Div, Mul, Neg, SubAssign};
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
 
-<span class="kw">pub fn </span>berlekamp_massey&lt;T&gt;(s: Vec&lt;T&gt;) -&gt; Vec&lt;T&gt;
+<span class="kw">pub fn </span>berlekamp_massey&lt;Modulo: FF&gt;(s: Vec&lt;u32&gt;, modulo: Modulo) -&gt; Vec&lt;Modulo::Output&gt;
 <span class="kw">where
-    </span>T: From&lt;u64&gt;
-        + Default
-        + Copy
-        + PartialEq
-        + Add&lt;Output = T&gt;
-        + Div&lt;Output = T&gt;
-        + Mul&lt;Output = T&gt;
-        + Neg&lt;Output = T&gt;
-        + AddAssign
-        + SubAssign,
+    </span>Modulo::Output: FFElem,
 {
     <span class="kw">let </span>len = s.len();
-    <span class="kw">let </span><span class="kw-2">mut </span>c_ = <span class="macro">vec!</span>[T::from(<span class="number">1</span>)];
-    <span class="kw">let </span><span class="kw-2">mut </span>b_ = <span class="macro">vec!</span>[T::from(<span class="number">1</span>)];
+    <span class="kw">let </span><span class="kw-2">mut </span>c_ = <span class="macro">vec!</span>[modulo.from_u64(<span class="number">1</span>)];
+    <span class="kw">let </span><span class="kw-2">mut </span>b_ = <span class="macro">vec!</span>[modulo.from_u64(<span class="number">1</span>)];
     <span class="kw">let </span><span class="kw-2">mut </span>l = <span class="number">0</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>m = <span class="number">1</span>;
-    <span class="kw">let </span><span class="kw-2">mut </span>b = T::from(<span class="number">1</span>);
+    <span class="kw">let </span><span class="kw-2">mut </span>b = modulo.from_u64(<span class="number">1</span>);
 
     <span class="kw">for </span>n <span class="kw">in </span><span class="number">0</span>..len {
-        <span class="kw">let </span>d = s[n]
+        <span class="kw">let </span>d = modulo.from_u64(s[n] <span class="kw">as </span>u64)
             + (<span class="number">1</span>..c_.len())
-                .map(|i| c_[i] * s[n - i])
-                .fold(T::from(<span class="number">0</span>), Add::add);
+                .map(|i| c_[i] * modulo.from_u64(s[n - i] <span class="kw">as </span>u64))
+                .fold(modulo.from_u64(<span class="number">0</span>), std::ops::Add::add);
 
-        <span class="kw">if </span>d == T::from(<span class="number">0</span>) {
+        <span class="kw">if </span>d == modulo.from_u64(<span class="number">0</span>) {
             m += <span class="number">1</span>;
         } <span class="kw">else if </span><span class="number">2 </span>* l &lt;= n {
             <span class="kw">let </span>temp = c_.clone();
             <span class="kw">if </span>c_.len() &lt; b_.len() + m {
-                c_.resize(b_.len() + m, T::default());
+                c_.resize(b_.len() + m, modulo.from_u64(<span class="number">0</span>));
             }
             <span class="kw">let </span>t = d / b;
             <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..b_.len() {
@@ -100,7 +82,7 @@
             m = <span class="number">1</span>;
         } <span class="kw">else </span>{
             <span class="kw">if </span>c_.len() &lt; b_.len() + m {
-                c_.resize(b_.len() + m, T::default());
+                c_.resize(b_.len() + m, modulo.from_u64(<span class="number">0</span>));
             }
             <span class="kw">let </span>t = d / b;
             <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..b_.len() {
@@ -110,6 +92,6 @@
         }
     }
 
-    (<span class="number">0</span>..l).map(|i| -c_[i + <span class="number">1</span>]).collect()
+    c_.into_iter().skip(<span class="number">1</span>).take(l).map(|x| -x).collect()
 }
 </code></pre></div></section></main></body></html>

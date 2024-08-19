@@ -27,11 +27,11 @@
 <a href="#27" id="27">27</a>
 <a href="#28" id="28">28</a>
 <a href="#29" id="29">29</a>
-<a href="#30" id="30">30</a>
 </pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
-<span class="kw">use </span>std::{cmp::max, marker::PhantomData};
+<span class="kw">use </span><span class="kw">crate</span>::impl_algebra;
+<span class="kw">use </span>std::marker::PhantomData;
 
-<span class="attr">#[derive(Clone, Default)]
+<span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>Max&lt;T&gt;(PhantomData&lt;T&gt;);
 <span class="kw">impl</span>&lt;T&gt; Max&lt;T&gt; {
     <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
@@ -40,22 +40,20 @@
 }
 
 <span class="kw">impl</span>&lt;T&gt; AlgeStruct <span class="kw">for </span>Max&lt;T&gt; {
-    <span class="kw">type </span>Output = <span class="prelude-ty">Option</span>&lt;T&gt;;
+    <span class="kw">type </span>Output = T;
 }
 
-<span class="kw">impl</span>&lt;T: Ord + Copy&gt; BinaryOp <span class="kw">for </span>Max&lt;T&gt; {
-    <span class="kw">fn </span>op(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="self">Self</span>::Output, b: <span class="self">Self</span>::Output) -&gt; <span class="self">Self</span>::Output {
-        <span class="kw">match </span>(a, b) {
-            (<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; b,
-            (<span class="kw">_</span>, <span class="prelude-val">None</span>) =&gt; a,
-            (<span class="prelude-val">Some</span>(x), <span class="prelude-val">Some</span>(y)) =&gt; <span class="prelude-val">Some</span>(max(x, y)),
-        }
-    }
-}
+<span class="macro">impl_algebra!</span>(Max&lt;i8&gt;, op: |<span class="kw">_</span>, a: i8, b| a.max(b), id: |<span class="kw">_</span>| i8::MIN, commu: {}, assoc: {}, idem: {});
+<span class="macro">impl_algebra!</span>(Max&lt;i16&gt;, op: |<span class="kw">_</span>, a: i16, b| a.max(b), id: |<span class="kw">_</span>| i16::MIN, commu: {}, assoc: {}, idem: {});
+<span class="macro">impl_algebra!</span>(Max&lt;i32&gt;, op: |<span class="kw">_</span>, a: i32, b| a.max(b), id: |<span class="kw">_</span>| i32::MIN, commu: {}, assoc: {}, idem: {});
+<span class="macro">impl_algebra!</span>(Max&lt;i64&gt;, op: |<span class="kw">_</span>, a: i64, b| a.max(b), id: |<span class="kw">_</span>| i64::MIN, commu: {}, assoc: {}, idem: {});
+<span class="macro">impl_algebra!</span>(Max&lt;i128&gt;, op: |<span class="kw">_</span>, a: i128, b| a.max(b), id: |<span class="kw">_</span>| i128::MIN, commu: {}, assoc: {}, idem: {});
+<span class="macro">impl_algebra!</span>(Max&lt;isize&gt;, op: |<span class="kw">_</span>, a: isize, b| a.max(b), id: |<span class="kw">_</span>| isize::MIN, commu: {}, assoc: {}, idem: {});
 
-<span class="kw">impl</span>&lt;T&gt; Identity <span class="kw">for </span>Max&lt;T&gt; {
-    <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Output {
-        <span class="prelude-val">None
-    </span>}
-}
+<span class="macro">impl_algebra!</span>(Max&lt;u8&gt;, op: |<span class="kw">_</span>, a: u8, b| a.max(b), id: |<span class="kw">_</span>| u8::MIN, commu: {}, assoc: {}, idem: {});
+<span class="macro">impl_algebra!</span>(Max&lt;u16&gt;, op: |<span class="kw">_</span>, a: u16, b| a.max(b), id: |<span class="kw">_</span>| u16::MIN, commu: {}, assoc: {}, idem: {});
+<span class="macro">impl_algebra!</span>(Max&lt;u32&gt;, op: |<span class="kw">_</span>, a: u32, b| a.max(b), id: |<span class="kw">_</span>| u32::MIN, commu: {}, assoc: {}, idem: {});
+<span class="macro">impl_algebra!</span>(Max&lt;u64&gt;, op: |<span class="kw">_</span>, a: u64, b| a.max(b), id: |<span class="kw">_</span>| u64::MIN, commu: {}, assoc: {}, idem: {});
+<span class="macro">impl_algebra!</span>(Max&lt;u128&gt;, op: |<span class="kw">_</span>, a: u128, b| a.max(b), id: |<span class="kw">_</span>| u128::MIN, commu: {}, assoc: {}, idem: {});
+<span class="macro">impl_algebra!</span>(Max&lt;usize&gt;, op: |<span class="kw">_</span>, a: usize, b| a.max(b), id: |<span class="kw">_</span>| usize::MIN, commu: {}, assoc: {}, idem: {});
 </code></pre></div></section></main></body></html>

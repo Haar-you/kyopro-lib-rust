@@ -76,7 +76,6 @@
 <a href="#76" id="76">76</a>
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
-<a href="#79" id="79">79</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 根付き木に変換
 
 </span><span class="kw">use </span><span class="kw">crate</span>::tree::<span class="kw-2">*</span>;
@@ -129,15 +128,14 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {
-        <span class="kw">let </span><span class="kw-2">mut </span>tr = Tree::new(<span class="number">6</span>);
-        tr.extend(
+        <span class="kw">let </span><span class="kw-2">mut </span>builder = TreeBuilder::new(<span class="number">6</span>);
+        builder.extend(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">4</span>), (<span class="number">5</span>, <span class="number">1</span>)]
                 .into_iter()
                 .map(|(u, v)| TreeEdge::new(u, v, (), ())),
         );
-
+        <span class="kw">let </span><span class="kw-2">mut </span>tr = builder.build();
         <span class="macro">assert_eq!</span>(rooting(<span class="kw-2">&amp;mut </span>tr, <span class="number">0</span>), <span class="prelude-val">Ok</span>(()));
-
         <span class="macro">assert_eq!</span>(
             tr.nodes
                 .into_iter()
@@ -146,13 +144,13 @@
             <span class="macro">vec!</span>[<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">2</span>), <span class="prelude-val">Some</span>(<span class="number">2</span>), <span class="prelude-val">Some</span>(<span class="number">1</span>)]
         );
 
-        <span class="kw">let </span><span class="kw-2">mut </span>tr = Tree::new(<span class="number">6</span>);
-        tr.extend(
+        <span class="kw">let </span><span class="kw-2">mut </span>builder = TreeBuilder::new(<span class="number">6</span>);
+        builder.extend(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">5</span>, <span class="number">1</span>)]
                 .into_iter()
                 .map(|(u, v)| TreeEdge::new(u, v, (), ())),
         );
-
+        <span class="kw">let </span><span class="kw-2">mut </span>tr = builder.build();
         <span class="macro">assert!</span>(rooting(<span class="kw-2">&amp;mut </span>tr, <span class="number">0</span>).is_err());
     }
 }

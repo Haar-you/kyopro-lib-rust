@@ -55,18 +55,81 @@
 <a href="#55" id="55">55</a>
 <a href="#56" id="56">56</a>
 <a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 冪等性と結合性をもつ列の区間取得(O(1))
 
 </span><span class="kw">use crate</span>::{algebra::traits::<span class="kw-2">*</span>, ds::traits::Foldable};
 <span class="kw">use </span>std::{cmp::min, ops::Range};
 
-<span class="kw">pub struct </span>SparseTable&lt;A: BinaryOp&gt; {
+<span class="kw">pub struct </span>SparseTable&lt;A: BinaryOp + Associative + Idempotence&gt; {
     data: Vec&lt;Vec&lt;A::Output&gt;&gt;,
     log_table: Vec&lt;usize&gt;,
     semilattice: A,
 }
 
-<span class="kw">impl</span>&lt;T: Clone + Default, A: BinaryOp&lt;Output = T&gt;&gt; SparseTable&lt;A&gt; {
+<span class="kw">impl</span>&lt;T: Clone + Default, A: BinaryOp&lt;Output = T&gt; + Associative + Idempotence&gt; SparseTable&lt;A&gt; {
     <span class="kw">pub fn </span>new(s: Vec&lt;T&gt;, a: A) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = s.len();
         <span class="kw">let </span>logn = n.next_power_of_two().trailing_zeros() <span class="kw">as </span>usize + <span class="number">1</span>;
@@ -97,7 +160,9 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T: Clone + Default, A: BinaryOp&lt;Output = T&gt;&gt; Foldable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>SparseTable&lt;A&gt; {
+<span class="kw">impl</span>&lt;T: Clone + Default, A: BinaryOp&lt;Output = T&gt; + Associative + Idempotence&gt; Foldable&lt;Range&lt;usize&gt;&gt;
+    <span class="kw">for </span>SparseTable&lt;A&gt;
+{
     <span class="kw">type </span>Output = <span class="prelude-ty">Option</span>&lt;T&gt;;
 
     <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="self">Self</span>::Output {
@@ -110,6 +175,67 @@
                     .op(<span class="self">self</span>.data[k][l].clone(), <span class="self">self</span>.data[k][r - (<span class="number">1 </span>&lt;&lt; k)].clone()),
             )
         }
+    }
+}
+
+<span class="attr">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use </span>std::fmt::Debug;
+
+    <span class="kw">use </span><span class="kw">crate</span>::algebra::{bitand::BitAnd, bitor::BitOr, max::Max, min::Min};
+
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span>rand::Rng;
+
+    <span class="kw">fn </span>test&lt;T, A&gt;(s: Vec&lt;T&gt;, a: A)
+    <span class="kw">where
+        </span>T: Clone + Default + PartialEq + Debug + Copy,
+        A: BinaryOp&lt;Output = T&gt; + Associative + Idempotence + Identity + Clone,
+    {
+        <span class="kw">let </span>st = SparseTable::new(s.clone(), a.clone());
+
+        <span class="kw">for </span>l <span class="kw">in </span><span class="number">0</span>..s.len() {
+            <span class="kw">for </span>r <span class="kw">in </span>l..=s.len() {
+                <span class="kw">let </span>ans = <span class="kw-2">&amp;</span>s[l..r].iter().fold(a.id(), |x, y| a.op(x, <span class="kw-2">*</span>y));
+                <span class="macro">assert_eq!</span>(<span class="kw-2">*</span>ans, st.fold(l..r).unwrap_or(a.id()));
+            }
+        }
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_max() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+        <span class="kw">let </span>n = <span class="number">100</span>;
+        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| rng.gen::&lt;u64&gt;()).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        <span class="kw">let </span>a = Max::&lt;u64&gt;::new();
+        test(s, a);
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_min() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+        <span class="kw">let </span>n = <span class="number">100</span>;
+        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| rng.gen::&lt;u64&gt;()).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        <span class="kw">let </span>a = Min::&lt;u64&gt;::new();
+        test(s, a);
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_bitand() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+        <span class="kw">let </span>n = <span class="number">100</span>;
+        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| rng.gen::&lt;u64&gt;()).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        <span class="kw">let </span>a = BitAnd::&lt;u64&gt;::new();
+        test(s, a);
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_bitor() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+        <span class="kw">let </span>n = <span class="number">100</span>;
+        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| rng.gen::&lt;u64&gt;()).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        <span class="kw">let </span>a = BitOr::&lt;u64&gt;::new();
+        test(s, a);
     }
 }
 </code></pre></div></section></main></body></html>

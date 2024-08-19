@@ -26,22 +26,28 @@
 <a href="#26" id="26">26</a>
 <a href="#27" id="27">27</a>
 <a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
 </pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::needless_range_loop)]
 
-</span><span class="kw">use </span><span class="kw">crate</span>::math::ff::traits::FF;
+</span><span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
 
-<span class="kw">pub fn </span>bell_number_table&lt;T: FF + From&lt;usize&gt;&gt;(n: usize) -&gt; Vec&lt;Vec&lt;T&gt;&gt; {
-    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="macro">vec!</span>[T::from(<span class="number">0</span>); n + <span class="number">1</span>]; n + <span class="number">1</span>];
-    ret[<span class="number">0</span>][<span class="number">0</span>] = T::from(<span class="number">1</span>);
+<span class="kw">pub fn </span>bell_number_table&lt;Modulo: FF&gt;(n: usize, modulo: Modulo) -&gt; Vec&lt;Vec&lt;Modulo::Output&gt;&gt;
+<span class="kw">where
+    </span>Modulo::Output: FFElem,
+{
+    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="macro">vec!</span>[modulo.from_u64(<span class="number">0</span>); n + <span class="number">1</span>]; n + <span class="number">1</span>];
+    ret[<span class="number">0</span>][<span class="number">0</span>] = modulo.from_u64(<span class="number">1</span>);
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..=n {
-        ret[i][<span class="number">1</span>] = T::from(<span class="number">1</span>);
-        ret[i][i] = T::from(<span class="number">1</span>);
+        ret[i][<span class="number">1</span>] = modulo.from_u64(<span class="number">1</span>);
+        ret[i][i] = modulo.from_u64(<span class="number">1</span>);
     }
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">3</span>..=n {
         <span class="kw">for </span>j <span class="kw">in </span><span class="number">2</span>..i {
-            ret[i][j] = ret[i - <span class="number">1</span>][j - <span class="number">1</span>] + T::from(j) * ret[i - <span class="number">1</span>][j];
+            ret[i][j] = ret[i - <span class="number">1</span>][j - <span class="number">1</span>] + modulo.from_u64(j <span class="kw">as </span>u64) * ret[i - <span class="number">1</span>][j];
         }
     }
 

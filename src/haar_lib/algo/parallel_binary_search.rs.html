@@ -66,10 +66,10 @@
         <span class="kw">let </span><span class="kw-2">mut </span>check = <span class="bool-val">true</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>mids = <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; m];
 
-        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..q {
-            <span class="kw">if </span>ok[i] - ng[i] &gt; <span class="number">1 </span>{
+        <span class="kw">for </span>(i, (ok, ng)) <span class="kw">in </span>ok.iter().zip(<span class="kw-2">&amp;</span>ng).enumerate() {
+            <span class="kw">if </span>ok - ng &gt; <span class="number">1 </span>{
                 check = <span class="bool-val">false</span>;
-                <span class="kw">let </span>mid = (ok[i] + ng[i]) / <span class="number">2</span>;
+                <span class="kw">let </span>mid = (ok + ng) / <span class="number">2</span>;
                 mids[mid <span class="kw">as </span>usize].push(i);
             }
         }
@@ -80,9 +80,9 @@
 
         init();
 
-        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..m {
+        <span class="kw">for </span>(i, mid) <span class="kw">in </span>mids.iter().enumerate() {
             process(i);
-            <span class="kw">for </span><span class="kw-2">&amp;</span>j <span class="kw">in </span><span class="kw-2">&amp;</span>mids[i] {
+            <span class="kw">for </span><span class="kw-2">&amp;</span>j <span class="kw">in </span>mid {
                 <span class="kw">if </span>checker(j) {
                     ok[j] = i <span class="kw">as </span>isize;
                 } <span class="kw">else </span>{

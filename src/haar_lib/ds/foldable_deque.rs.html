@@ -178,6 +178,7 @@
 <a href="#178" id="178">178</a>
 <a href="#179" id="179">179</a>
 <a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
 </pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 
 <span class="kw">pub struct </span>FoldableDeque&lt;S: Semigroup&gt; {
@@ -299,63 +300,64 @@
         <span class="self">self</span>.front_stack.is_empty() &amp;&amp; <span class="self">self</span>.back_stack.is_empty()
     }
 }
+<span class="comment">/*
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{algebra::affine::*, math::ff::modint::*, modulo};
+    use rand::Rng;
+    use std::collections::VecDeque;
 
-<span class="attr">#[cfg(test)]
-</span><span class="kw">mod </span>tests {
-    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use crate</span>::{algebra::affine::<span class="kw-2">*</span>, math::ff::modint::<span class="kw-2">*</span>, modulo};
-    <span class="kw">use </span>rand::Rng;
-    <span class="kw">use </span>std::collections::VecDeque;
+    const M: u32 = 998244353;
+    modulo!(Mod, M);
+    type Mint = ModInt&lt;Mod&gt;;
 
-    <span class="kw">const </span>M: u32 = <span class="number">998244353</span>;
-    <span class="macro">modulo!</span>(Mod, M);
-    <span class="kw">type </span>Mint = ModInt&lt;Mod&gt;;
+    #[test]
+    fn test() {
+        let mut rng = rand::thread_rng();
 
-    <span class="attr">#[test]
-    </span><span class="kw">fn </span>test() {
-        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+        let monoid = Affine::&lt;Mint&gt;::new();
 
-        <span class="kw">let </span>monoid = Affine::&lt;Mint&gt;::new();
+        let mut deq = VecDeque::&lt;(Mint, Mint)&gt;::new();
+        let mut swag = FoldableDeque::new(monoid.clone());
 
-        <span class="kw">let </span><span class="kw-2">mut </span>deq = VecDeque::&lt;(Mint, Mint)&gt;::new();
-        <span class="kw">let </span><span class="kw-2">mut </span>swag = FoldableDeque::new(monoid.clone());
+        for _ in 0..1000 {
+            assert_eq!(deq.front(), swag.front());
+            assert_eq!(deq.back(), swag.back());
+            assert_eq!(deq.len(), swag.len());
 
-        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">1000 </span>{
-            <span class="macro">assert_eq!</span>(deq.front(), swag.front());
-            <span class="macro">assert_eq!</span>(deq.back(), swag.back());
-            <span class="macro">assert_eq!</span>(deq.len(), swag.len());
+            let ty = rng.gen_range(0..5);
 
-            <span class="kw">let </span>ty = rng.gen_range(<span class="number">0</span>..<span class="number">5</span>);
-
-            <span class="kw">match </span>ty {
-                <span class="number">0 </span>=&gt; {
-                    <span class="kw">let </span>a = rng.gen_range(<span class="number">0</span>..M).into();
-                    <span class="kw">let </span>b = rng.gen_range(<span class="number">0</span>..M).into();
+            match ty {
+                0 =&gt; {
+                    let a = rng.gen_range(0..M).into();
+                    let b = rng.gen_range(0..M).into();
                     deq.push_front((a, b));
                     swag.push_front((a, b));
                 }
-                <span class="number">1 </span>=&gt; {
-                    <span class="kw">let </span>a = rng.gen_range(<span class="number">0</span>..M).into();
-                    <span class="kw">let </span>b = rng.gen_range(<span class="number">0</span>..M).into();
+                1 =&gt; {
+                    let a = rng.gen_range(0..M).into();
+                    let b = rng.gen_range(0..M).into();
                     deq.push_back((a, b));
                     swag.push_back((a, b));
                 }
-                <span class="number">2 </span>=&gt; {
-                    <span class="macro">assert_eq!</span>(deq.pop_front(), swag.pop_front());
+                2 =&gt; {
+                    assert_eq!(deq.pop_front(), swag.pop_front());
                 }
-                <span class="number">3 </span>=&gt; {
-                    <span class="macro">assert_eq!</span>(deq.pop_back(), swag.pop_back());
+                3 =&gt; {
+                    assert_eq!(deq.pop_back(), swag.pop_back());
                 }
-                <span class="number">4 </span>=&gt; {
-                    <span class="macro">assert_eq!</span>(
+                4 =&gt; {
+                    assert_eq!(
                         deq.iter()
-                            .fold((<span class="number">1</span>.into(), <span class="number">0</span>.into()), |acc, <span class="kw-2">&amp;</span>x| monoid.op(acc, x)),
+                            .fold((1.into(), 0.into()), |acc, &amp;x| monoid.op(acc, x)),
                         swag.fold().unwrap_or(monoid.id())
                     );
                 }
-                <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+                _ =&gt; unreachable!(),
             }
         }
     }
 }
-</code></pre></div></section></main></body></html>
+*/
+</span></code></pre></div></section></main></body></html>

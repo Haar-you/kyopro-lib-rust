@@ -171,7 +171,7 @@
     }
 
     <span class="kw">pub fn </span>add_vec(<span class="kw-2">&amp;mut </span><span class="self">self</span>, values: <span class="kw">impl </span>IntoIterator&lt;Item = T&gt;) {
-        <span class="self">self</span>.data.extend(values.into_iter());
+        <span class="self">self</span>.data.extend(values);
     }
 
     <span class="kw">pub fn </span>build(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Compressor&lt;T&gt; {

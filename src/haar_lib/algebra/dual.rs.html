@@ -24,9 +24,13 @@
 <a href="#24" id="24">24</a>
 <a href="#25" id="25">25</a>
 <a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
 </pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 
-<span class="attr">#[derive(Clone)]
+<span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>Dual&lt;S&gt;(S);
 
 <span class="kw">impl</span>&lt;S: AlgeStruct&gt; Dual&lt;S&gt; {
@@ -50,4 +54,8 @@
         <span class="self">self</span>.<span class="number">0</span>.id()
     }
 }
+
+<span class="kw">impl</span>&lt;S: Commutative&gt; Commutative <span class="kw">for </span>Dual&lt;S&gt; {}
+<span class="kw">impl</span>&lt;S: Associative&gt; Associative <span class="kw">for </span>Dual&lt;S&gt; {}
+<span class="kw">impl</span>&lt;S: Idempotence&gt; Idempotence <span class="kw">for </span>Dual&lt;S&gt; {}
 </code></pre></div></section></main></body></html>

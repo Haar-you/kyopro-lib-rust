@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["bits","bitset","fastio","join_str","linear","num_inf","swap","total_f64","transpose","xor_shift","yesno"]};
+window.SIDEBAR_ITEMS = {"mod":["bits","fastio","join_str","linear","swap","transpose","xor_shift","yesno"]};

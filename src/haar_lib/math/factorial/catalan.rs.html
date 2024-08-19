@@ -61,12 +61,22 @@
 <a href="#61" id="61">61</a>
 <a href="#62" id="62">62</a>
 <a href="#63" id="63">63</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::math::{factorial::FactorialTable, ff::traits::FF};
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::math::factorial::FactorialTable;
+<span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
 
-<span class="kw">impl</span>&lt;T: FF + From&lt;usize&gt;&gt; FactorialTable&lt;T&gt; {
-    <span class="kw">pub fn </span>catalan_number(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize) -&gt; T {
+<span class="kw">impl</span>&lt;Modulo: FF&gt; FactorialTable&lt;Modulo&gt;
+<span class="kw">where
+    </span>Modulo::Output: FFElem,
+{
+    <span class="kw">pub fn </span>catalan_number(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize) -&gt; Modulo::Output {
         <span class="kw">match </span>n {
-            <span class="number">0 </span>=&gt; T::from(<span class="number">1</span>),
+            <span class="number">0 </span>=&gt; <span class="self">self</span>.modulo.from_u64(<span class="number">1</span>),
             <span class="kw">_ </span>=&gt; <span class="self">self</span>.comb(<span class="number">2 </span>* n, n) - <span class="self">self</span>.comb(<span class="number">2 </span>* n, n - <span class="number">1</span>),
         }
     }
@@ -75,13 +85,12 @@
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use </span><span class="kw">crate</span>::math::ff::const_modint::<span class="kw-2">*</span>;
-
-    <span class="kw">type </span>Mint = ConstModInt&lt;<span class="number">1000000007</span>&gt;;
+    <span class="kw">use </span><span class="kw">crate</span>::num::const_modint::<span class="kw-2">*</span>;
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {
-        <span class="kw">let </span>ft = FactorialTable::&lt;Mint&gt;::new(<span class="number">100</span>);
+        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;::new();
+        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">100</span>, modulo.clone());
 
         <span class="kw">let </span>catalans = (<span class="number">0</span>..=<span class="number">30</span>).map(|i| ft.catalan_number(i)).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
@@ -119,7 +128,10 @@
             <span class="number">1002242216651368</span>,
             <span class="number">3814986502092304</span>,
         ];
-        <span class="kw">let </span>ans = ans.into_iter().map(|x| Mint::from(x)).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        <span class="kw">let </span>ans = ans
+            .into_iter()
+            .map(|x| modulo.from_u64(x))
+            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
         <span class="macro">assert_eq!</span>(catalans, ans);
     }

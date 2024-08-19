@@ -155,6 +155,9 @@
 <a href="#155" id="155">155</a>
 <a href="#156" id="156">156</a>
 <a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::tree::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::ops::Add;
 
@@ -277,32 +280,35 @@
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_diameter() {
         <span class="comment">// https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_A
-        </span><span class="kw">let </span><span class="kw-2">mut </span>tree = Tree::new(<span class="number">4</span>);
-        tree.extend(
+        </span><span class="kw">let </span><span class="kw-2">mut </span>builder = TreeBuilder::new(<span class="number">4</span>);
+        builder.extend(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>)]
                 .into_iter()
                 .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
         );
+        <span class="kw">let </span>tree = builder.build();
         <span class="macro">assert_eq!</span>(tree_diameter(<span class="kw-2">&amp;</span>tree).<span class="number">0</span>, <span class="number">5</span>);
 
-        <span class="kw">let </span><span class="kw-2">mut </span>tree = Tree::new(<span class="number">4</span>);
-        tree.extend(
+        <span class="kw">let </span><span class="kw-2">mut </span>builder = TreeBuilder::new(<span class="number">4</span>);
+        builder.extend(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)]
                 .into_iter()
                 .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
         );
+        <span class="kw">let </span>tree = builder.build();
         <span class="macro">assert_eq!</span>(tree_diameter(<span class="kw-2">&amp;</span>tree).<span class="number">0</span>, <span class="number">7</span>);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_height() {
         <span class="comment">// https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_5_B
-        </span><span class="kw">let </span><span class="kw-2">mut </span>tree = Tree::new(<span class="number">4</span>);
-        tree.extend(
+        </span><span class="kw">let </span><span class="kw-2">mut </span>builder = TreeBuilder::new(<span class="number">4</span>);
+        builder.extend(
             <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>)]
                 .into_iter()
                 .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
         );
+        <span class="kw">let </span>tree = builder.build();
         <span class="macro">assert_eq!</span>(
             tree_height(<span class="kw-2">&amp;</span>tree)
                 .into_iter()

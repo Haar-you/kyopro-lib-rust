@@ -30,13 +30,11 @@
 <a href="#30" id="30">30</a>
 <a href="#31" id="31">31</a>
 <a href="#32" id="32">32</a>
-<a href="#33" id="33">33</a>
 </pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 <span class="kw">use </span><span class="kw">crate</span>::impl_algebra;
-<span class="kw">pub use </span><span class="kw">crate</span>::traits::one_zero::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::marker::PhantomData;
 
-<span class="attr">#[derive(Clone, Default)]
+<span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>Prod&lt;T&gt;(PhantomData&lt;T&gt;);
 <span class="kw">impl</span>&lt;T&gt; Prod&lt;T&gt; {
     <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
@@ -48,20 +46,20 @@
     <span class="kw">type </span>Output = T;
 }
 
-<span class="macro">impl_algebra!</span>(Prod&lt;i8&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;i16&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;i32&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;i64&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;i128&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;isize&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;i8&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;i16&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;i32&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;i64&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;i128&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;isize&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
 
-<span class="macro">impl_algebra!</span>(Prod&lt;u8&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;u16&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;u32&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;u64&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;u128&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;usize&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1</span>, commutative: {}, associative: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;u8&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;u16&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;u32&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;u64&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;u128&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;usize&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1</span>, commu: {}, assoc: {});
 
-<span class="macro">impl_algebra!</span>(Prod&lt;f32&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1.0</span>, commutative: {}, associative: {});
-<span class="macro">impl_algebra!</span>(Prod&lt;f64&gt;, binaryop: |<span class="kw">_</span>, a, b| a * b, identity: |<span class="kw">_</span>| <span class="number">1.0</span>, commutative: {}, associative: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;f32&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1.0</span>, commu: {}, assoc: {});
+<span class="macro">impl_algebra!</span>(Prod&lt;f64&gt;, op: |<span class="kw">_</span>, a, b| a * b, id: |<span class="kw">_</span>| <span class="number">1.0</span>, commu: {}, assoc: {});
 </code></pre></div></section></main></body></html>

@@ -282,10 +282,10 @@
                 }
 
                 <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..i {
-                    <span class="kw">if </span>check[j] {
-                        <span class="kw">if </span>prev_path[k + <span class="number">1</span>] != g.edges[u][result[j].as_ref().unwrap().<span class="number">1</span>[k]].to() {
-                            check[j] = <span class="bool-val">false</span>;
-                        }
+                    <span class="kw">if </span>check[j]
+                        &amp;&amp; prev_path[k + <span class="number">1</span>] != g.edges[u][result[j].as_ref().unwrap().<span class="number">1</span>[k]].to()
+                    {
+                        check[j] = <span class="bool-val">false</span>;
                     }
                 }
             }

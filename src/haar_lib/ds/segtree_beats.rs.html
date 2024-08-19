@@ -378,11 +378,11 @@
 
         <span class="self">Self </span>{
             hsize: size / <span class="number">2</span>,
-            fst_max: <span class="macro">vec!</span>[std::i64::MIN; size],
-            snd_max: <span class="macro">vec!</span>[std::i64::MIN; size],
+            fst_max: <span class="macro">vec!</span>[i64::MIN; size],
+            snd_max: <span class="macro">vec!</span>[i64::MIN; size],
             max_count: <span class="macro">vec!</span>[<span class="number">0</span>; size],
-            fst_min: <span class="macro">vec!</span>[std::i64::MAX; size],
-            snd_min: <span class="macro">vec!</span>[std::i64::MAX; size],
+            fst_min: <span class="macro">vec!</span>[i64::MAX; size],
+            snd_min: <span class="macro">vec!</span>[i64::MAX; size],
             min_count: <span class="macro">vec!</span>[<span class="number">0</span>; size],
             sum: <span class="macro">vec!</span>[<span class="number">0</span>; size],
             lazy_add: <span class="macro">vec!</span>[<span class="number">0</span>; size],
@@ -419,12 +419,12 @@
         <span class="self">self</span>.sum[i] += x * len <span class="kw">as </span>i64;
 
         <span class="self">self</span>.fst_max[i] += x;
-        <span class="kw">if </span><span class="self">self</span>.snd_max[i] != std::i64::MIN {
+        <span class="kw">if </span><span class="self">self</span>.snd_max[i] != i64::MIN {
             <span class="self">self</span>.snd_max[i] += x;
         }
 
         <span class="self">self</span>.fst_min[i] += x;
-        <span class="kw">if </span><span class="self">self</span>.snd_min[i] != std::i64::MAX {
+        <span class="kw">if </span><span class="self">self</span>.snd_min[i] != i64::MAX {
             <span class="self">self</span>.snd_min[i] += x;
         }
 
@@ -570,7 +570,7 @@
 
     <span class="kw">fn </span>get_max_(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, l: usize, r: usize, s: usize, t: usize) -&gt; i64 {
         <span class="kw">if </span>r &lt;= s || t &lt;= l {
-            <span class="kw">return </span>std::i64::MIN;
+            <span class="kw">return </span>i64::MIN;
         }
         <span class="kw">if </span>s &lt;= l &amp;&amp; r &lt;= t {
             <span class="kw">return </span><span class="self">self</span>.fst_max[i];
@@ -588,7 +588,7 @@
 
     <span class="kw">fn </span>get_min_(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, l: usize, r: usize, s: usize, t: usize) -&gt; i64 {
         <span class="kw">if </span>r &lt;= s || t &lt;= l {
-            <span class="kw">return </span>std::i64::MAX;
+            <span class="kw">return </span>i64::MAX;
         }
         <span class="kw">if </span>s &lt;= l &amp;&amp; r &lt;= t {
             <span class="kw">return </span><span class="self">self</span>.fst_min[i];

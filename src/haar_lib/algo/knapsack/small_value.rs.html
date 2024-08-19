@@ -45,7 +45,7 @@
     <span class="macro">assert_eq!</span>(ws.len(), vs.len());
 
     <span class="kw">let </span>max_v = vs.iter().sum::&lt;usize&gt;();
-    <span class="kw">let </span><span class="kw-2">mut </span>dp = <span class="macro">vec!</span>[<span class="macro">vec!</span>[std::u64::MAX; max_v + <span class="number">1</span>]; <span class="number">2</span>];
+    <span class="kw">let </span><span class="kw-2">mut </span>dp = <span class="macro">vec!</span>[<span class="macro">vec!</span>[u64::MAX; max_v + <span class="number">1</span>]; <span class="number">2</span>];
 
     dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;
 
@@ -54,7 +54,7 @@
         <span class="kw">let </span>cur = i &amp; <span class="number">1</span>;
         <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..=max_v {
             <span class="macro">chmin!</span>(dp[next][j], dp[cur][j]);
-            <span class="kw">if </span>j + vs[i] &lt;= max_v &amp;&amp; dp[cur][j] &lt; std::u64::MAX {
+            <span class="kw">if </span>j + vs[i] &lt;= max_v &amp;&amp; dp[cur][j] &lt; u64::MAX {
                 <span class="macro">chmin!</span>(dp[next][j + vs[i]], dp[cur][j] + ws[i]);
             }
         }

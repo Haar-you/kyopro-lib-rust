@@ -150,7 +150,7 @@
 <a href="#150" id="150">150</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Project Selection Problem
 
-</span><span class="kw">use </span><span class="kw">crate</span>::graph::flow::<span class="kw-2">*</span>;
+</span><span class="kw">use </span><span class="kw">crate</span>::flow::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// Project Selection Problem
 ///
@@ -243,19 +243,19 @@
     <span class="doccomment">/// 頂点iは&lt;font color=&quot;red&quot;&gt;&lt;b&gt;赤&lt;/b&gt;&lt;/font&gt;でなければならない。
     </span><span class="kw">pub fn </span>must_be_red(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize) {
         <span class="macro">assert!</span>(i &lt; <span class="self">self</span>.size);
-        <span class="self">self</span>.penalty_if_blue(i, std::u64::MAX);
+        <span class="self">self</span>.penalty_if_blue(i, u64::MAX);
     }
 
     <span class="doccomment">/// 頂点iは&lt;font color=&quot;blue&quot;&gt;&lt;b&gt;青&lt;/b&gt;&lt;/font&gt;でなければならない。
     </span><span class="kw">pub fn </span>must_be_blue(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize) {
         <span class="macro">assert!</span>(i &lt; <span class="self">self</span>.size);
-        <span class="self">self</span>.penalty_if_red(i, std::u64::MAX);
+        <span class="self">self</span>.penalty_if_red(i, u64::MAX);
     }
 
     <span class="doccomment">/// 頂点iが&lt;font color=&quot;red&quot;&gt;&lt;b&gt;赤&lt;/b&gt;&lt;/font&gt;ならば、頂点jも&lt;font color=&quot;red&quot;&gt;&lt;b&gt;赤&lt;/b&gt;&lt;/font&gt;でなければならない。
     </span><span class="kw">pub fn </span>if_red_then_must_be_red(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) {
         <span class="macro">assert!</span>(i &lt; <span class="self">self</span>.size &amp;&amp; j &lt; <span class="self">self</span>.size);
-        <span class="self">self</span>.penalty_if_red_blue(i, j, std::u64::MAX);
+        <span class="self">self</span>.penalty_if_red_blue(i, j, u64::MAX);
     }
 
     <span class="doccomment">/// 頂点iとjがともに&lt;font color=&quot;red&quot;&gt;&lt;b&gt;赤&lt;/b&gt;&lt;/font&gt;ならばcの利益を得る。
@@ -266,8 +266,8 @@
         <span class="self">self</span>.node_count += <span class="number">1</span>;
 
         <span class="self">self</span>.edges.push((<span class="self">self</span>.src, w, c));
-        <span class="self">self</span>.edges.push((w, i, std::u64::MAX));
-        <span class="self">self</span>.edges.push((w, j, std::u64::MAX));
+        <span class="self">self</span>.edges.push((w, i, u64::MAX));
+        <span class="self">self</span>.edges.push((w, j, u64::MAX));
     }
 
     <span class="doccomment">/// 頂点iとjがともに&lt;font color=&quot;blue&quot;&gt;&lt;b&gt;青&lt;/b&gt;&lt;/font&gt;ならばcの利益を得る。
@@ -278,8 +278,8 @@
         <span class="self">self</span>.node_count += <span class="number">1</span>;
 
         <span class="self">self</span>.edges.push((w, <span class="self">self</span>.sink, c));
-        <span class="self">self</span>.edges.push((i, w, std::u64::MAX));
-        <span class="self">self</span>.edges.push((j, w, std::u64::MAX));
+        <span class="self">self</span>.edges.push((i, w, u64::MAX));
+        <span class="self">self</span>.edges.push((j, w, u64::MAX));
     }
 
     <span class="doccomment">/// must be制約を破った場合、`None`を返す。そうでなければ、利益の最大値を`Some`に包んで返す。
@@ -291,7 +291,7 @@
 
         <span class="kw">let </span>flow = f.max_flow(<span class="self">self</span>.src, <span class="self">self</span>.sink);
 
-        <span class="kw">if </span>flow == std::u64::MAX {
+        <span class="kw">if </span>flow == u64::MAX {
             <span class="prelude-val">None
         </span>} <span class="kw">else </span>{
             <span class="prelude-val">Some</span>(<span class="self">self</span>.default_gain <span class="kw">as </span>i64 - flow <span class="kw">as </span>i64)

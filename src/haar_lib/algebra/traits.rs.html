@@ -26,6 +26,12 @@
 <a href="#26" id="26">26</a>
 <a href="#27" id="27">27</a>
 <a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
 </pre></div><pre class="rust"><code><span class="kw">pub trait </span>AlgeStruct {
     <span class="kw">type </span>Output;
 }
@@ -46,12 +52,18 @@
 <span class="kw">pub trait </span>Associative {}
 <span class="kw">pub trait </span>Idempotence {}
 
-<span class="kw">pub trait </span>Semigroup: BinaryOp {}
-<span class="kw">impl</span>&lt;T: BinaryOp&gt; Semigroup <span class="kw">for </span>T {}
+<span class="kw">pub trait </span>Semigroup: BinaryOp + Associative {}
+<span class="kw">impl</span>&lt;T: BinaryOp + Associative&gt; Semigroup <span class="kw">for </span>T {}
 
 <span class="kw">pub trait </span>Monoid: Semigroup + Identity {}
 <span class="kw">impl</span>&lt;T: Semigroup + Identity&gt; Monoid <span class="kw">for </span>T {}
 
+<span class="kw">pub trait </span>AbelianMonoid: Monoid + Commutative {}
+<span class="kw">impl</span>&lt;T: Monoid + Commutative&gt; AbelianMonoid <span class="kw">for </span>T{}
+
 <span class="kw">pub trait </span>Group: Monoid + Inverse {}
 <span class="kw">impl</span>&lt;T: Monoid + Inverse&gt; Group <span class="kw">for </span>T {}
+
+<span class="kw">pub trait </span>AbelianGroup: Group + Commutative {}
+<span class="kw">impl</span>&lt;T: Group + Commutative&gt; AbelianGroup <span class="kw">for </span>T {}
 </code></pre></div></section></main></body></html>

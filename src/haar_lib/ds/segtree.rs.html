@@ -347,13 +347,13 @@
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_min() {
         <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-        random_test_helper(<span class="number">10</span>, Min::&lt;i32&gt;::new(), || <span class="prelude-val">Some</span>(rng.gen::&lt;i32&gt;() % <span class="number">10000</span>));
+        random_test_helper(<span class="number">10</span>, Min::&lt;i32&gt;::new(), || rng.gen::&lt;i32&gt;() % <span class="number">10000</span>);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_max() {
         <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-        random_test_helper(<span class="number">10</span>, Max::&lt;i32&gt;::new(), || <span class="prelude-val">Some</span>(rng.gen::&lt;i32&gt;() % <span class="number">10000</span>));
+        random_test_helper(<span class="number">10</span>, Max::&lt;i32&gt;::new(), || rng.gen::&lt;i32&gt;() % <span class="number">10000</span>);
     }
 }
 </code></pre></div></section></main></body></html>

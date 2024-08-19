@@ -94,59 +94,74 @@
 <a href="#94" id="94">94</a>
 <a href="#95" id="95">95</a>
 <a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>bell;
 <span class="kw">pub mod </span>bernoulli;
 <span class="kw">pub mod </span>catalan;
 
-<span class="kw">use </span><span class="kw">crate</span>::math::ff::traits::FF;
+<span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
 
-<span class="attr">#[derive(Clone, Debug, Default)]
-</span><span class="kw">pub struct </span>FactorialTable&lt;T&gt; {
-    factorial: Vec&lt;T&gt;,
-    invs: Vec&lt;T&gt;,
+<span class="attr">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>FactorialTable&lt;Modulo: FF&gt; {
+    factorial: Vec&lt;Modulo::Output&gt;,
+    invs: Vec&lt;Modulo::Output&gt;,
+    modulo: Modulo,
 }
 
-<span class="kw">impl</span>&lt;T: FF + From&lt;usize&gt;&gt; FactorialTable&lt;T&gt; {
+<span class="kw">impl</span>&lt;Modulo: FF&gt; FactorialTable&lt;Modulo&gt;
+<span class="kw">where
+    </span>Modulo::Output: FFElem,
+{
     <span class="doccomment">/// Time complexity O(n)
     ///
     /// Space complexity O(n)
-    </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span><span class="kw-2">mut </span>factorial = <span class="macro">vec!</span>[T::from(<span class="number">1</span>); n + <span class="number">1</span>];
-        <span class="kw">let </span><span class="kw-2">mut </span>invs = <span class="macro">vec!</span>[T::from(<span class="number">1</span>); n + <span class="number">1</span>];
+    </span><span class="kw">pub fn </span>new(n: usize, modulo: Modulo) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>factorial = <span class="macro">vec!</span>[modulo.from_u64(<span class="number">1</span>); n + <span class="number">1</span>];
+        <span class="kw">let </span><span class="kw-2">mut </span>invs = <span class="macro">vec!</span>[modulo.from_u64(<span class="number">1</span>); n + <span class="number">1</span>];
 
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..=n {
-            factorial[i] = factorial[i - <span class="number">1</span>] * T::from(i);
+            factorial[i] = factorial[i - <span class="number">1</span>] * modulo.from_u64(i <span class="kw">as </span>u64);
         }
 
-        invs[n] = T::from(<span class="number">1</span>) / factorial[n];
+        invs[n] = modulo.from_u64(<span class="number">1</span>) / factorial[n];
 
         <span class="kw">for </span>i <span class="kw">in </span>(<span class="number">0</span>..n).rev() {
-            invs[i] = invs[i + <span class="number">1</span>] * T::from(i + <span class="number">1</span>);
+            invs[i] = invs[i + <span class="number">1</span>] * modulo.from_u64(i <span class="kw">as </span>u64 + <span class="number">1</span>);
         }
 
-        <span class="self">Self </span>{ factorial, invs }
+        <span class="self">Self </span>{
+            factorial,
+            invs,
+            modulo,
+        }
     }
 
     <span class="doccomment">/// nの階乗
     ///
     /// Time complexity O(1)
-    </span><span class="kw">pub fn </span>facto(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize) -&gt; T {
+    </span><span class="kw">pub fn </span>facto(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize) -&gt; Modulo::Output {
         <span class="self">self</span>.factorial[n]
     }
 
     <span class="doccomment">/// nの階乗の逆元
     ///
     /// Time complexity O(1)
-    </span><span class="kw">pub fn </span>inv_facto(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize) -&gt; T {
+    </span><span class="kw">pub fn </span>inv_facto(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize) -&gt; Modulo::Output {
         <span class="self">self</span>.invs[n]
     }
 
     <span class="doccomment">/// n個からk個とりだす順列の個数 (nPk)
     ///
     /// Time complexity O(1)
-    </span><span class="kw">pub fn </span>perm(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; T {
+    </span><span class="kw">pub fn </span>perm(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; Modulo::Output {
         <span class="kw">if </span>n &lt; k {
-            T::from(<span class="number">0</span>)
+            <span class="self">self</span>.modulo.from_u64(<span class="number">0</span>)
         } <span class="kw">else </span>{
             <span class="self">self</span>.factorial[n] * <span class="self">self</span>.invs[n - k]
         }
@@ -155,17 +170,17 @@
     <span class="doccomment">/// n個からk個とりだす組み合わせの個数 (nCk)
     ///
     /// Time complexity O(1)
-    </span><span class="kw">pub fn </span>comb(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; T {
+    </span><span class="kw">pub fn </span>comb(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; Modulo::Output {
         <span class="kw">if </span>n &lt; k {
-            T::from(<span class="number">0</span>)
+            <span class="self">self</span>.modulo.from_u64(<span class="number">0</span>)
         } <span class="kw">else </span>{
             <span class="self">self</span>.perm(n, k) * <span class="self">self</span>.invs[k]
         }
     }
 
-    <span class="kw">pub fn </span>h(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; T {
+    <span class="kw">pub fn </span>h(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; Modulo::Output {
         <span class="kw">if </span>n == <span class="number">0 </span>&amp;&amp; k == <span class="number">0 </span>{
-            T::from(<span class="number">1</span>)
+            <span class="self">self</span>.modulo.from_u64(<span class="number">1</span>)
         } <span class="kw">else </span>{
             <span class="self">self</span>.comb(n + k - <span class="number">1</span>, k)
         }
@@ -175,19 +190,18 @@
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use </span><span class="kw">crate</span>::math::ff::const_modint::<span class="kw-2">*</span>;
-
-    <span class="kw">type </span>Mint = ConstModInt&lt;<span class="number">1000000007</span>&gt;;
+    <span class="kw">use </span><span class="kw">crate</span>::num::modint::<span class="kw-2">*</span>;
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {
-        <span class="kw">let </span>ft = FactorialTable::&lt;Mint&gt;::new(<span class="number">2000000</span>);
+        <span class="kw">let </span>modulo = ModIntBuilder::new(<span class="number">1000000007</span>);
+        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">2000000</span>, modulo.clone());
 
         <span class="comment">// https://yukicoder.me/problems/no/117
-        </span><span class="macro">assert_eq!</span>(ft.comb(<span class="number">1</span>, <span class="number">1000000</span>), Mint::from(<span class="number">0</span>));
-        <span class="macro">assert_eq!</span>(ft.comb(<span class="number">0</span>, <span class="number">0</span>), Mint::from(<span class="number">1</span>));
-        <span class="macro">assert_eq!</span>(ft.perm(<span class="number">1000000</span>, <span class="number">1000000</span>), Mint::from(<span class="number">641102369</span>));
-        <span class="macro">assert_eq!</span>(ft.perm(<span class="number">1</span>, <span class="number">10</span>), Mint::from(<span class="number">0</span>));
+        </span><span class="macro">assert_eq!</span>(ft.comb(<span class="number">1</span>, <span class="number">1000000</span>), modulo.from_u64(<span class="number">0</span>));
+        <span class="macro">assert_eq!</span>(ft.comb(<span class="number">0</span>, <span class="number">0</span>), modulo.from_u64(<span class="number">1</span>));
+        <span class="macro">assert_eq!</span>(ft.perm(<span class="number">1000000</span>, <span class="number">1000000</span>), modulo.from_u64(<span class="number">641102369</span>));
+        <span class="macro">assert_eq!</span>(ft.perm(<span class="number">1</span>, <span class="number">10</span>), modulo.from_u64(<span class="number">0</span>));
     }
 }
 </code></pre></div></section></main></body></html>
