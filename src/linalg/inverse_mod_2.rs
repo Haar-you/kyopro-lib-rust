@@ -1,4 +1,4 @@
-use crate::utils::bitset::*;
+use crate::ds::bitset::*;
 
 pub fn inverse_mod_2(mut b: Vec<Bitset>) -> Option<Vec<Bitset>> {
     let n = b.len();

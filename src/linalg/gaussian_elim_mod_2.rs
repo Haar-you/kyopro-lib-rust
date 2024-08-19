@@ -1,4 +1,4 @@
-use crate::utils::bitset::*;
+use crate::ds::bitset::*;
 
 pub fn gaussian_elim_mod_2(mut a: Vec<Bitset>) -> (usize, Vec<Bitset>) {
     let n = a.len();

@@ -1,5 +1,4 @@
 pub mod bits;
-pub mod bitset;
 pub mod fastio;
 pub mod join_str;
 pub mod linear;

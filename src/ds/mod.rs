@@ -53,3 +53,5 @@ pub mod multiset;
 pub mod qword_tree;
 
 pub mod palindromic_tree;
+
+pub mod bitset;

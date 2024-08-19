@@ -1,4 +1,4 @@
-use crate::utils::bitset::*;
+use crate::ds::bitset::*;
 
 pub fn determinant_mod_2(mut a: Vec<Bitset>) -> u64 {
     let n = a.len();
