@@ -26,8 +26,6 @@ pub mod totient_sum;
 
 pub mod berlekamp_massey;
 
-pub mod linalg;
-
 pub mod sum_floor_linear;
 pub mod sum_of_exponential_times_polynomial_limit;
 

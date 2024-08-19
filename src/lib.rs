@@ -17,6 +17,7 @@ pub mod flow;
 pub mod geom;
 pub mod graph;
 pub mod grid;
+pub mod linalg;
 pub mod macros;
 pub mod matching;
 pub mod math;
