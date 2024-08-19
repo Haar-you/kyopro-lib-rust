@@ -1,9 +1,12 @@
-use crate::math::{factorial::FactorialTable, ff::traits::FF};
+use crate::math::{factorial::FactorialTable, ff::traits::*};
 
-impl<T: FF + From<usize>> FactorialTable<T> {
-    pub fn catalan_number(&self, n: usize) -> T {
+impl<Modulo: FF> FactorialTable<Modulo>
+where
+    Modulo::Output: FFElem,
+{
+    pub fn catalan_number(&self, n: usize) -> Modulo::Output {
         match n {
-            0 => T::from(1),
+            0 => self.modulo.from_u64(1),
             _ => self.comb(2 * n, n) - self.comb(2 * n, n - 1),
         }
     }
@@ -14,11 +17,10 @@ mod tests {
     use super::*;
     use crate::math::ff::const_modint::*;
 
-    type Mint = ConstModInt<1000000007>;
-
     #[test]
     fn test() {
-        let ft = FactorialTable::<Mint>::new(100);
+        let modulo = ConstModIntBuilder::<1000000007>::new();
+        let ft = FactorialTable::new(100, modulo.clone());
 
         let catalans = (0..=30).map(|i| ft.catalan_number(i)).collect::<Vec<_>>();
 
@@ -56,7 +58,10 @@ mod tests {
             1002242216651368,
             3814986502092304,
         ];
-        let ans = ans.into_iter().map(|x| Mint::from(x)).collect::<Vec<_>>();
+        let ans = ans
+            .into_iter()
+            .map(|x| modulo.from_u64(x))
+            .collect::<Vec<_>>();
 
         assert_eq!(catalans, ans);
     }

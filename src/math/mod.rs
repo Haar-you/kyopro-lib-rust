@@ -40,3 +40,8 @@ pub mod count_coprime;
 pub mod enumerate_quotients;
 
 pub mod linear_congruence;
+
+pub mod multipoint_eval;
+pub mod ntt;
+pub mod polynomial;
+pub mod polynomial_taylor_shift;

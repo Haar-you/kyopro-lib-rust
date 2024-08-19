@@ -1,7 +1,4 @@
-use std::{
-    iter::Sum,
-    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
-};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 pub trait Pow {
     type Output;
@@ -13,15 +10,16 @@ pub trait Inv {
     fn inv(self) -> Self::Output;
 }
 
-pub trait Frac {
+pub trait FF: Clone {
     type Output;
-    fn frac(_: i64, _: i64) -> Self::Output;
+    fn from_u64(&self, a: u64) -> Self::Output;
+    fn from_i64(&self, a: i64) -> Self::Output;
+    fn frac(&self, a: i64, b: i64) -> Self::Output;
 }
 
-pub trait FF:
+pub trait FFElem:
     Pow<Output = Self>
     + Inv<Output = Self>
-    + Frac<Output = Self>
     + Add<Output = Self>
     + AddAssign
     + Sub<Output = Self>
@@ -31,11 +29,9 @@ pub trait FF:
     + Div<Output = Self>
     + DivAssign
     + Neg<Output = Self>
-    + Sum
     + Copy
     + Clone
     + PartialEq
-    + Default
     + Sized
 {
 }

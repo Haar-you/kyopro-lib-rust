@@ -2,55 +2,63 @@ pub mod bell;
 pub mod bernoulli;
 pub mod catalan;
 
-use crate::math::ff::traits::FF;
+use crate::math::ff::traits::*;
 
-#[derive(Clone, Debug, Default)]
-pub struct FactorialTable<T> {
-    factorial: Vec<T>,
-    invs: Vec<T>,
+#[derive(Clone, Debug)]
+pub struct FactorialTable<Modulo: FF> {
+    factorial: Vec<Modulo::Output>,
+    invs: Vec<Modulo::Output>,
+    modulo: Modulo,
 }
 
-impl<T: FF + From<usize>> FactorialTable<T> {
+impl<Modulo: FF> FactorialTable<Modulo>
+where
+    Modulo::Output: FFElem,
+{
     /// Time complexity O(n)
     ///
     /// Space complexity O(n)
-    pub fn new(n: usize) -> Self {
-        let mut factorial = vec![T::from(1); n + 1];
-        let mut invs = vec![T::from(1); n + 1];
+    pub fn new(n: usize, modulo: Modulo) -> Self {
+        let mut factorial = vec![modulo.from_u64(1); n + 1];
+        let mut invs = vec![modulo.from_u64(1); n + 1];
 
         for i in 1..=n {
-            factorial[i] = factorial[i - 1] * T::from(i);
+            factorial[i] = factorial[i - 1] * modulo.from_u64(i as u64);
         }
 
-        invs[n] = T::from(1) / factorial[n];
+        invs[n] = modulo.from_u64(1) / factorial[n];
 
         for i in (0..n).rev() {
-            invs[i] = invs[i + 1] * T::from(i + 1);
+            invs[i] = invs[i + 1] * modulo.from_u64(i as u64 + 1);
         }
 
-        Self { factorial, invs }
+        Self {
+            factorial,
+            invs,
+            modulo,
+        }
     }
 
     /// nの階乗
     ///
     /// Time complexity O(1)
-    pub fn facto(&self, n: usize) -> T {
+    pub fn facto(&self, n: usize) -> Modulo::Output {
         self.factorial[n]
     }
 
     /// nの階乗の逆元
     ///
     /// Time complexity O(1)
-    pub fn inv_facto(&self, n: usize) -> T {
+    pub fn inv_facto(&self, n: usize) -> Modulo::Output {
         self.invs[n]
     }
 
     /// n個からk個とりだす順列の個数 (nPk)
     ///
     /// Time complexity O(1)
-    pub fn perm(&self, n: usize, k: usize) -> T {
+    pub fn perm(&self, n: usize, k: usize) -> Modulo::Output {
         if n < k {
-            T::from(0)
+            self.modulo.from_u64(0)
         } else {
             self.factorial[n] * self.invs[n - k]
         }
@@ -59,17 +67,17 @@ impl<T: FF + From<usize>> FactorialTable<T> {
     /// n個からk個とりだす組み合わせの個数 (nCk)
     ///
     /// Time complexity O(1)
-    pub fn comb(&self, n: usize, k: usize) -> T {
+    pub fn comb(&self, n: usize, k: usize) -> Modulo::Output {
         if n < k {
-            T::from(0)
+            self.modulo.from_u64(0)
         } else {
             self.perm(n, k) * self.invs[k]
         }
     }
 
-    pub fn h(&self, n: usize, k: usize) -> T {
+    pub fn h(&self, n: usize, k: usize) -> Modulo::Output {
         if n == 0 && k == 0 {
-            T::from(1)
+            self.modulo.from_u64(1)
         } else {
             self.comb(n + k - 1, k)
         }
@@ -79,18 +87,17 @@ impl<T: FF + From<usize>> FactorialTable<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math::ff::const_modint::*;
-
-    type Mint = ConstModInt<1000000007>;
+    use crate::math::ff::modint::*;
 
     #[test]
     fn test() {
-        let ft = FactorialTable::<Mint>::new(2000000);
+        let modulo = ModIntBuilder::new(1000000007);
+        let ft = FactorialTable::new(2000000, modulo.clone());
 
         // https://yukicoder.me/problems/no/117
-        assert_eq!(ft.comb(1, 1000000), Mint::from(0));
-        assert_eq!(ft.comb(0, 0), Mint::from(1));
-        assert_eq!(ft.perm(1000000, 1000000), Mint::from(641102369));
-        assert_eq!(ft.perm(1, 10), Mint::from(0));
+        assert_eq!(ft.comb(1, 1000000), modulo.from_u64(0));
+        assert_eq!(ft.comb(0, 0), modulo.from_u64(1));
+        assert_eq!(ft.perm(1000000, 1000000), modulo.from_u64(641102369));
+        assert_eq!(ft.perm(1, 10), modulo.from_u64(0));
     }
 }

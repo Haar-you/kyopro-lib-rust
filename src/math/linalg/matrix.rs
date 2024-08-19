@@ -1,36 +1,53 @@
+use crate::math::ff::traits::*;
 use std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 
 #[derive(Clone, PartialEq, Eq)]
-pub struct Matrix<T> {
+pub struct Matrix<Modulo: FF> {
     h: usize,
     w: usize,
-    data: Vec<Vec<T>>,
+    modulo: Modulo,
+    data: Vec<Vec<Modulo::Output>>,
 }
 
-impl<T> Matrix<T>
+impl<Modulo: FF> Matrix<Modulo>
 where
-    T: Copy + Default,
+    Modulo::Output: FFElem,
 {
-    pub fn new(h: usize, w: usize) -> Self {
+    pub fn new(h: usize, w: usize, modulo: Modulo) -> Self {
         Self {
             h,
             w,
-            data: vec![vec![T::default(); w]; h],
+            data: vec![vec![modulo.from_u64(0); w]; h],
+            modulo,
         }
     }
 
-    pub fn from_vec(other: Vec<Vec<T>>) -> Self {
+    pub fn from_vec(other: Vec<Vec<u32>>, modulo: Modulo) -> Self {
         let h = other.len();
         assert!(h > 0);
         let w = other[0].len();
         assert!(other.iter().all(|r| r.len() == w));
 
-        Self { h, w, data: other }
+        let other = other
+            .into_iter()
+            .map(|a| {
+                a.into_iter()
+                    .map(|x| modulo.from_u64(x as u64))
+                    .collect::<Vec<_>>()
+            })
+            .collect();
+
+        Self {
+            h,
+            w,
+            data: other,
+            modulo,
+        }
     }
 
-    pub fn to_vec(&self) -> Vec<Vec<T>> {
-        self.data.clone()
-    }
+    // pub fn to_vec(&self) -> Vec<Vec<T>> {
+    //     self.data.clone()
+    // }
 
     pub fn height(&self) -> usize {
         self.h
@@ -41,7 +58,7 @@ where
     }
 
     pub fn transpose(self) -> Self {
-        let mut ret = Self::new(self.w, self.h);
+        let mut ret = Self::new(self.w, self.h, self.modulo);
         for i in 0..self.h {
             for j in 0..self.w {
                 ret.data[j][i] = self.data[i][j];
@@ -50,14 +67,14 @@ where
         ret
     }
 
-    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut T> {
+    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Output> {
         self.data.get_mut(i).and_then(|a| a.get_mut(j))
     }
 }
 
-impl<T> AddAssign for Matrix<T>
+impl<Modulo: FF> AddAssign for Matrix<Modulo>
 where
-    T: Copy + Add<Output = T>,
+    Modulo::Output: FFElem,
 {
     fn add_assign(&mut self, other: Self) {
         assert!(self.h == other.h && self.w == other.h);
@@ -69,9 +86,9 @@ where
     }
 }
 
-impl<T> SubAssign for Matrix<T>
+impl<Modulo: FF> SubAssign for Matrix<Modulo>
 where
-    T: Copy + Sub<Output = T>,
+    Modulo::Output: FFElem,
 {
     fn sub_assign(&mut self, other: Self) {
         assert!(self.h == other.h && self.w == other.h);
@@ -83,18 +100,18 @@ where
     }
 }
 
-impl<T> MulAssign for Matrix<T>
+impl<Modulo: FF> MulAssign for Matrix<Modulo>
 where
-    T: Copy + Default + Add<Output = T> + Mul<Output = T>,
+    Modulo::Output: FFElem,
 {
     fn mul_assign(&mut self, other: Self) {
         *self = self.clone() * other;
     }
 }
 
-impl<T> Add for Matrix<T>
+impl<Modulo: FF> Add for Matrix<Modulo>
 where
-    T: Copy + Add<Output = T>,
+    Modulo::Output: FFElem,
 {
     type Output = Self;
     fn add(mut self, other: Self) -> Self {
@@ -103,9 +120,9 @@ where
     }
 }
 
-impl<T> Sub for Matrix<T>
+impl<Modulo: FF> Sub for Matrix<Modulo>
 where
-    T: Copy + Sub<Output = T>,
+    Modulo::Output: FFElem,
 {
     type Output = Self;
     fn sub(mut self, other: Self) -> Self {
@@ -114,9 +131,9 @@ where
     }
 }
 
-impl<T> Mul for Matrix<T>
+impl<Modulo: FF> Mul for Matrix<Modulo>
 where
-    T: Copy + Default + Add<Output = T> + Mul<Output = T>,
+    Modulo::Output: FFElem,
 {
     type Output = Self;
     fn mul(self, other: Self) -> Self {
@@ -125,12 +142,12 @@ where
         let n = self.h;
         let l = other.w;
         let other = other.transpose();
-        let mut ret = Self::new(n, l);
+        let mut ret = Self::new(n, l, self.modulo);
 
         for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
             for (x, c) in r.iter_mut().zip(other.data.iter()) {
                 for (y, z) in r2.iter().zip(c.iter()) {
-                    *x = *x + *y * *z;
+                    *x += *y * *z;
                 }
             }
         }
@@ -139,9 +156,9 @@ where
     }
 }
 
-impl<T> Neg for Matrix<T>
+impl<Modulo: FF> Neg for Matrix<Modulo>
 where
-    T: Copy + Neg<Output = T>,
+    Modulo::Output: FFElem,
 {
     type Output = Self;
     fn neg(mut self) -> Self {
@@ -154,8 +171,11 @@ where
     }
 }
 
-impl<T> Index<usize> for Matrix<T> {
-    type Output = [T];
+impl<Modulo: FF> Index<usize> for Matrix<Modulo>
+where
+    Modulo::Output: FFElem,
+{
+    type Output = [Modulo::Output];
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[i]
     }
