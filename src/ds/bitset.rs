@@ -37,6 +37,22 @@ impl Bitset {
         self.data[n / B_SIZE] ^= 1 << (n % B_SIZE);
     }
 
+    pub fn count_ones(&self) -> u32 {
+        self.data.iter().map(|a| a.count_ones()).sum()
+    }
+
+    pub fn count_zeros(&self) -> u32 {
+        self.size as u32 - self.count_ones()
+    }
+
+    pub fn and_count_ones(&self, rhs: &Self) -> u32 {
+        self.data
+            .iter()
+            .zip(rhs.data.iter())
+            .map(|(a, b)| (a & b).count_ones())
+            .sum()
+    }
+
     pub fn len(&self) -> usize {
         self.size
     }
