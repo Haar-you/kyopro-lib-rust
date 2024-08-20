@@ -1,3 +1,5 @@
+//! 便利そうなもの置き場
+
 pub mod bits;
 pub mod fastio;
 pub mod join_str;

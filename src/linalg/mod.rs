@@ -1,3 +1,5 @@
+//!  線形代数
+
 pub mod matrix;
 pub mod square_matrix;
 

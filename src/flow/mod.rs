@@ -1,3 +1,5 @@
+//! フロー問題
+
 pub mod dinic;
 pub mod ford_fulkerson;
 
