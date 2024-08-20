@@ -55,3 +55,5 @@ pub mod qword_tree;
 pub mod palindromic_tree;
 
 pub mod bitset;
+
+pub mod splay_tree;
