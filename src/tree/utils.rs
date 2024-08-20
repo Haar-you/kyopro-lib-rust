@@ -73,7 +73,7 @@ where
     let d2 = tree_distance(tr, v);
 
     d1.into_iter()
-        .zip(d2.into_iter())
+        .zip(d2)
         .map(|(x, y)| if x > y { (x, u) } else { (y, v) })
         .collect()
 }

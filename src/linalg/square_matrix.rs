@@ -99,7 +99,7 @@ where
         for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
             for (x, c) in r.iter_mut().zip(b.data.iter()) {
                 for (y, z) in r2.iter().zip(c.iter()) {
-                    *x = *x + *y * *z;
+                    *x += *y * *z;
                 }
             }
         }
@@ -190,7 +190,7 @@ where
         assert_eq!(self.size, other.size);
         for (a, b) in self.data.iter_mut().zip(other.data.into_iter()) {
             for (x, y) in a.iter_mut().zip(b.into_iter()) {
-                *x = *x + y;
+                *x += y;
             }
         }
         self
@@ -206,7 +206,7 @@ where
         assert_eq!(self.size, other.size);
         for (a, b) in self.data.iter_mut().zip(other.data.into_iter()) {
             for (x, y) in a.iter_mut().zip(b.into_iter()) {
-                *x = *x - y;
+                *x -= y;
             }
         }
         self

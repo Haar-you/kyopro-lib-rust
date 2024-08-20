@@ -62,7 +62,7 @@ impl<const P: u32> Polynomial<P> {
     }
 
     pub fn deg(&self) -> Option<usize> {
-        if self.len() == 0 {
+        if self.is_empty() {
             return None;
         }
         if self.len() == 1 && self.data[0].to_u32() == 0 {

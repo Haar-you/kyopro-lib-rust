@@ -10,6 +10,7 @@ pub trait Inv {
     fn inv(self) -> Self::Output;
 }
 
+#[allow(clippy::wrong_self_convention)]
 pub trait FF: Clone {
     type Output;
     fn from_u64(&self, a: u64) -> Self::Output;

@@ -35,7 +35,7 @@ pub fn polynomial_taylor_shift<const P: u32>(
     let c = ntt.convolve(a, b);
     c.into_iter()
         .skip((n - 1) * 2)
-        .zip(g.into_iter())
+        .zip(g)
         .map(|(c, g)| c * g)
         .collect()
 }

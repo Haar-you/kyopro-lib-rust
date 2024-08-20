@@ -6,9 +6,8 @@ pub fn rooted_isomorphism<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> (usi
     let n = tree.len();
     let mut ret = vec![0; n];
     let mut map = HashMap::new();
-    let mut stack = vec![];
+    let mut stack = Vec::with_capacity(2 * n);
 
-    stack.reserve(2 * n);
     stack.push((false, root, None));
 
     while let Some((back, cur, par)) = stack.pop() {

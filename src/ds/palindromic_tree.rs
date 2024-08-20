@@ -1,6 +1,6 @@
 #![allow(clippy::len_without_is_empty)]
 
-use std::collections::BTreeMap;
+use std::collections::{btree_map::Entry, BTreeMap};
 
 const ODD: usize = 0;
 const EVEN: usize = 1;
@@ -66,25 +66,29 @@ impl PalindromicTree {
                     let index = list.len();
                     let t = &mut list[t];
 
-                    if !t.children.contains_key(&c) {
-                        let a = Node {
-                            length: t.length + 2,
-                            count: 1,
-                            index,
-                            parent: Some(t.index),
-                            ..Default::default()
-                        };
+                    match t.children.entry(c) {
+                        Entry::Vacant(e) => {
+                            let a = Node {
+                                length: t.length + 2,
+                                count: 1,
+                                index,
+                                parent: Some(t.index),
+                                ..Default::default()
+                            };
 
-                        sindex_list.push(a.index);
+                            sindex_list.push(a.index);
 
-                        t.children.insert(c, a.index);
-                        list.push(a);
-                    } else {
-                        let t = *t.children.get(&c).unwrap();
+                            e.insert(a.index);
+                            list.push(a);
+                        }
+                        Entry::Occupied(e) => {
+                            let t = *e.get();
 
-                        list[t].count += 1;
-                        sindex_list.push(list[t].index);
+                            list[t].count += 1;
+                            sindex_list.push(list[t].index);
+                        }
                     }
+
                     break;
                 } else {
                     t = list[t].suffix_link.unwrap();
