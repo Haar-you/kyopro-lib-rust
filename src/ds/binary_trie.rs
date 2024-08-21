@@ -1,19 +1,19 @@
+use crate::utils::nullable_usize::NullableUsize;
+
 #[derive(Debug, Clone)]
 struct Node {
-    ch: [usize; 2],
+    ch: [NullableUsize; 2],
     count: usize,
 }
 
 impl Default for Node {
     fn default() -> Self {
         Self {
-            ch: [NIL, NIL],
+            ch: [NullableUsize::NULL, NullableUsize::NULL],
             count: 0,
         }
     }
 }
-
-const NIL: usize = !0;
 
 #[derive(Debug, Clone)]
 pub struct BinaryTrie {
@@ -45,10 +45,10 @@ impl BinaryTrie {
             let b = (value >> depth) & 1;
 
             let t = self.data[node].ch[b as usize];
-            if t == NIL {
+            if t.is_null() {
                 return 0;
             }
-            node = t;
+            node = t.0;
         }
 
         self.data[node].count
@@ -65,12 +65,12 @@ impl BinaryTrie {
             let b = (value >> depth) & 1;
 
             let ch = self.data[node].ch[b as usize];
-            if ch != NIL {
-                node = ch;
+            if !ch.is_null() {
+                node = ch.0;
             } else {
                 self.data.push(Node::default());
                 let ch = self.data.len() - 1;
-                self.data[node].ch[b as usize] = ch;
+                self.data[node].ch[b as usize] = NullableUsize(ch);
                 node = ch;
             }
         }
@@ -91,12 +91,12 @@ impl BinaryTrie {
             path.push(node);
 
             let ch = self.data[node].ch[b as usize];
-            if ch != NIL {
-                node = ch;
+            if !ch.is_null() {
+                node = ch.0;
             } else {
                 self.data.push(Node::default());
                 let ch = self.data.len() - 1;
-                self.data[node].ch[b as usize] = ch;
+                self.data[node].ch[b as usize] = NullableUsize(ch);
                 node = ch;
             }
         }
@@ -127,11 +127,11 @@ impl BinaryTrie {
                 let mut b = (x >> depth) & 1;
 
                 let t = self.data[node].ch[b as usize];
-                if t == NIL || self.data[t].count == 0 {
+                if t.is_null() || self.data[t.0].count == 0 {
                     b ^= 1;
                 }
 
-                node = self.data[node].ch[b as usize];
+                node = self.data[node].ch[b as usize].0;
                 ret |= b << depth;
             }
 
@@ -153,11 +153,11 @@ impl BinaryTrie {
                 let mut b = ((x >> depth) & 1) ^ 1;
 
                 let t = self.data[node].ch[b as usize];
-                if t == NIL || self.data[t].count == 0 {
+                if t.is_null() || self.data[t.0].count == 0 {
                     b ^= 1;
                 }
 
-                node = self.data[node].ch[b as usize];
+                node = self.data[node].ch[b as usize].0;
                 ret |= b << depth;
             }
 
