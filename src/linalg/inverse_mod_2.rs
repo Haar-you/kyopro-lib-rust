@@ -21,8 +21,8 @@ pub fn inverse_mod_2(mut b: Vec<Bitset>) -> Option<Vec<Bitset>> {
 
         for (bj, cj) in b.iter_mut().zip(c.iter_mut()) {
             if bj.test(i) {
-                *bj ^= bi.clone();
-                *cj ^= ci.clone();
+                bj.same_size_xor_assign(&bi);
+                cj.same_size_xor_assign(&ci);
             }
         }
 

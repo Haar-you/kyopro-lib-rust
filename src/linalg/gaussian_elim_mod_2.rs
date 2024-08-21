@@ -26,7 +26,7 @@ pub fn gaussian_elim_mod_2(mut a: Vec<Bitset>) -> (usize, Vec<Bitset>) {
 
             for ai in a.iter_mut() {
                 if ai.test(j) {
-                    *ai ^= ar.clone();
+                    ai.same_size_xor_assign(&ar);
                 }
             }
 

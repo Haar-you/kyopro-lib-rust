@@ -17,7 +17,7 @@ pub fn determinant_mod_2(mut a: Vec<Bitset>) -> u64 {
 
         for aj in a.iter_mut().skip(i) {
             if aj.test(i) {
-                *aj ^= ai.clone();
+                aj.same_size_xor_assign(&ai);
             }
         }
 

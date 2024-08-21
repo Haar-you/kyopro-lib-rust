@@ -59,6 +59,13 @@ impl Bitset {
             .sum()
     }
 
+    pub fn same_size_xor_assign(&mut self, rhs: &Self) {
+        assert_eq!(self.size, rhs.size);
+        for (a, b) in self.data.iter_mut().zip(rhs.data.iter()) {
+            *a ^= b;
+        }
+    }
+
     pub fn len(&self) -> usize {
         self.size
     }
