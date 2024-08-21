@@ -21,20 +21,26 @@ impl Bitset {
     pub fn set(&mut self, n: usize, val: bool) {
         assert!(n < self.size);
         if val {
-            self.data[n / B_SIZE] |= 1 << (n % B_SIZE);
+            unsafe {
+                *self.data.get_unchecked_mut(n / B_SIZE) |= 1 << (n % B_SIZE);
+            }
         } else {
-            self.data[n / B_SIZE] &= !(1 << (n % B_SIZE));
+            unsafe {
+                *self.data.get_unchecked_mut(n / B_SIZE) &= !(1 << (n % B_SIZE));
+            }
         }
     }
 
     pub fn test(&self, n: usize) -> bool {
         assert!(n < self.size);
-        (self.data[n / B_SIZE] >> (n % B_SIZE)) & 1 == 1
+        unsafe { (self.data.get_unchecked(n / B_SIZE) >> (n % B_SIZE)) & 1 == 1 }
     }
 
     pub fn flip(&mut self, n: usize) {
         assert!(n < self.size);
-        self.data[n / B_SIZE] ^= 1 << (n % B_SIZE);
+        unsafe {
+            *self.data.get_unchecked_mut(n / B_SIZE) ^= 1 << (n % B_SIZE);
+        }
     }
 
     pub fn count_ones(&self) -> u32 {
