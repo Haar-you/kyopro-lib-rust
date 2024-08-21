@@ -12,6 +12,7 @@ pub mod max;
 pub mod min;
 pub mod prod;
 pub mod sum;
+pub mod transform;
 pub mod update;
 
 pub mod action;
