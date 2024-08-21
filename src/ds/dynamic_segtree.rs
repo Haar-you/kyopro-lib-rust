@@ -1,117 +1,137 @@
 use crate::algebra::traits::Monoid;
+use crate::utils::nullable_usize::NullableUsize;
 use std::ops::Range;
 
 #[derive(Debug)]
 struct Node<T> {
-    from: usize,
-    to: usize,
     value: T,
-    left: Option<Box<Node<T>>>,
-    right: Option<Box<Node<T>>>,
+    left: NullableUsize,
+    right: NullableUsize,
 }
 
 impl<T> Node<T> {
-    fn new(from: usize, to: usize, value: T) -> Self {
+    fn new(value: T) -> Self {
         Self {
-            from,
-            to,
             value,
-            left: None,
-            right: None,
+            left: NullableUsize::NULL,
+            right: NullableUsize::NULL,
         }
     }
 }
 
 #[derive(Debug)]
 pub struct DynamicSegtree<M: Monoid> {
-    root: Option<Box<Node<M::Output>>>,
+    data: Vec<Node<M::Output>>,
+    root: NullableUsize,
     monoid: M,
+    to: usize,
 }
 
-impl<T: Clone, M: Monoid<Output = T> + Clone> DynamicSegtree<M> {
+impl<T: Clone, M: Monoid<Output = T>> DynamicSegtree<M> {
     pub fn new(monoid: M) -> Self {
         Self {
-            root: Some(Box::new(Node::new(0, 1, monoid.id()))),
+            data: vec![Node::new(monoid.id())],
+            root: NullableUsize(0),
             monoid,
+            to: 1,
         }
     }
 
-    fn assign_dfs(cur: &mut Node<T>, i: usize, value: T, m: &M) {
-        if cur.to - cur.from == 1 {
-            cur.value = value;
+    fn assign_dfs(
+        &mut self,
+        cur_id: NullableUsize,
+        cur_from: usize,
+        cur_to: usize,
+        i: usize,
+        value: T,
+    ) {
+        if cur_to - cur_from == 1 {
+            self.data[cur_id.0].value = value;
         } else {
-            let mid = (cur.from + cur.to) / 2;
-            if (cur.from..mid).contains(&i) {
-                if cur.left.is_none() {
-                    cur.left = Some(Box::new(Node::new(cur.from, mid, value.clone())));
+            let mid = (cur_from + cur_to) / 2;
+            if (cur_from..mid).contains(&i) {
+                if self.data[cur_id.0].left.is_null() {
+                    let new_node = Node::new(value.clone());
+                    self.data.push(new_node);
+                    self.data[cur_id.0].left = NullableUsize(self.data.len() - 1);
                 }
-                Self::assign_dfs(cur.left.as_mut().unwrap().as_mut(), i, value, m);
+                self.assign_dfs(self.data[cur_id.0].left, cur_from, mid, i, value);
             } else {
-                if cur.right.is_none() {
-                    cur.right = Some(Box::new(Node::new(mid, cur.to, value.clone())));
+                if self.data[cur_id.0].right.is_null() {
+                    let new_node = Node::new(value.clone());
+                    self.data.push(new_node);
+                    self.data[cur_id.0].right = NullableUsize(self.data.len() - 1);
                 }
-                Self::assign_dfs(cur.right.as_mut().unwrap().as_mut(), i, value, m);
+                self.assign_dfs(self.data[cur_id.0].right, mid, cur_to, i, value);
             }
-            cur.value = m.op(
-                cur.left
-                    .as_ref()
-                    .map_or(m.id(), |a| a.as_ref().value.clone()),
-                cur.right
-                    .as_ref()
-                    .map_or(m.id(), |a| a.as_ref().value.clone()),
+
+            let left = self.data[cur_id.0].left;
+            let right = self.data[cur_id.0].right;
+
+            self.data[cur_id.0].value = self.monoid.op(
+                if left.is_null() {
+                    self.monoid.id()
+                } else {
+                    self.data[left.0].value.clone()
+                },
+                if right.is_null() {
+                    self.monoid.id()
+                } else {
+                    self.data[right.0].value.clone()
+                },
             );
         }
     }
 
     pub fn assign(&mut self, i: usize, value: T) {
         loop {
-            let cur = self.root.take().unwrap();
-
-            if (cur.from..cur.to).contains(&i) {
-                self.root = Some(cur);
+            if i < self.to {
                 break;
             }
 
-            let mut new_root = Box::new(Node::new(cur.from, cur.to * 2, cur.value.clone()));
-            new_root.left = Some(cur);
-            self.root = Some(new_root);
+            self.to *= 2;
+            let mut new_root = Node::new(self.data[self.root.0].value.clone());
+            new_root.left = self.root;
+            self.data.push(new_root);
+            self.root = NullableUsize(self.data.len() - 1);
         }
 
-        Self::assign_dfs(
-            self.root.as_mut().unwrap().as_mut(),
-            i,
-            value,
-            &self.monoid.clone(),
-        );
+        self.assign_dfs(self.root, 0, self.to, i, value);
     }
 
-    fn fold_dfs(cur: &Node<T>, from: usize, to: usize, m: &M) -> T {
-        if cur.to <= from || to <= cur.from {
-            m.id()
-        } else if from <= cur.from && cur.to <= to {
+    fn fold_dfs(
+        &self,
+        cur_id: NullableUsize,
+        cur_from: usize,
+        cur_to: usize,
+        from: usize,
+        to: usize,
+    ) -> T {
+        let cur = &self.data[cur_id.0];
+
+        if cur_to <= from || to <= cur_from {
+            self.monoid.id()
+        } else if from <= cur_from && cur_to <= to {
             cur.value.clone()
         } else {
-            let lv = cur
-                .left
-                .as_ref()
-                .map_or(m.id(), |a| Self::fold_dfs(a.as_ref(), from, to, m));
+            let mid = (cur_from + cur_to) / 2;
+            let lv = if cur.left.is_null() {
+                self.monoid.id()
+            } else {
+                self.fold_dfs(cur.left, cur_from, mid, from, to)
+            };
+            let rv = if cur.right.is_null() {
+                self.monoid.id()
+            } else {
+                self.fold_dfs(cur.right, mid, cur_to, from, to)
+            };
 
-            let rv = cur
-                .right
-                .as_ref()
-                .map_or(m.id(), |a| Self::fold_dfs(a.as_ref(), from, to, m));
-
-            m.op(lv, rv)
+            self.monoid.op(lv, rv)
         }
     }
 
     pub fn fold(&self, Range { start, end }: Range<usize>) -> T {
-        Self::fold_dfs(
-            self.root.as_ref().unwrap().as_ref(),
-            start,
-            end,
-            &self.monoid,
-        )
+        self.fold_dfs(self.root, 0, self.to, start, end)
     }
 }
 
