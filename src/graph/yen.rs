@@ -2,7 +2,7 @@ use std::ops::{Add, AddAssign};
 use std::{cmp::Reverse, collections::BinaryHeap};
 
 use crate::trait_alias;
-use crate::{graph::*, traits::one_zero::Zero};
+use crate::{graph::*, num::one_zero::Zero};
 
 trait_alias!(
     Elem,

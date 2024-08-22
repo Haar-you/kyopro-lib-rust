@@ -1,5 +1,5 @@
 pub use crate::algebra::traits::*;
-pub use crate::traits::one_zero::*;
+pub use crate::num::one_zero::*;
 use std::{
     marker::PhantomData,
     ops::{Add, Mul},

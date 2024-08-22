@@ -1,7 +1,7 @@
 //! 非負重み付き最短経路 (Dijkstra)
 
 use crate::graph::*;
-use crate::traits::{num::Unsigned, one_zero::Zero};
+use crate::num::{one_zero::Zero, traits::Unsigned};
 use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
 /// Time complexity O((E + V) log V)

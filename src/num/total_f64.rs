@@ -3,7 +3,7 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
-use crate::traits::one_zero::*;
+use crate::num::one_zero::*;
 
 #[derive(Clone, Copy, Debug, PartialOrd, PartialEq, Default)]
 pub struct Totalf64(pub f64);

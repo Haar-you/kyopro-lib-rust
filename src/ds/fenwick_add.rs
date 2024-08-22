@@ -1,6 +1,6 @@
 pub use crate::ds::traits::{Foldable, Updatable};
+use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::traits::one_zero::Zero;
 use std::ops::{Add, Range, RangeTo, Sub};
 
 trait_alias!(

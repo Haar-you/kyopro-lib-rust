@@ -3,7 +3,7 @@
 //! Problems
 //! - https://judge.yosupo.jp/problem/unionfind_with_potential
 
-use crate::traits::one_zero::Zero;
+use crate::num::one_zero::Zero;
 use std::cell::Cell;
 use std::ops::{Add, Sub};
 

@@ -1,7 +1,7 @@
 //! 遅延加算付き融合可能ヒープ
 
+use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::traits::one_zero::Zero;
 use std::{mem::swap, ops::AddAssign};
 
 trait_alias!(Elem, Ord + Copy + Zero<Output = Self> + AddAssign);

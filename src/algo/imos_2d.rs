@@ -1,4 +1,4 @@
-use crate::traits::{num::Signed, one_zero::Zero};
+use crate::num::{one_zero::Zero, traits::Signed};
 use std::ops::{Add, Range, Sub};
 
 pub struct Imos2D<T> {

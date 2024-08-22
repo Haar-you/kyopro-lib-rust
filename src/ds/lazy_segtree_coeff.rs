@@ -1,8 +1,8 @@
 //! 係数乗算付き区間加算区間総和遅延セグ木
 
 pub use crate::ds::traits::{Foldable, Updatable};
+use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::traits::one_zero::Zero;
 use std::cell::Cell;
 use std::ops::{Add, Mul, Range};
 

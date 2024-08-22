@@ -3,7 +3,7 @@
 #![allow(clippy::needless_range_loop)]
 
 use crate::graph::*;
-use crate::traits::one_zero::Zero;
+use crate::num::one_zero::Zero;
 use std::{cmp::min, ops::Add};
 
 /// Time complexity O(n ^ 3)

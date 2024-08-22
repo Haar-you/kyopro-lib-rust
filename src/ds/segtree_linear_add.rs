@@ -5,8 +5,8 @@
 //! - [HUPC 2020 B 三角形足し算](https://onlinejudge.u-aizu.ac.jp/challenges/sources/VPC/HUPC/3165?year=2020)
 
 pub use crate::ds::traits::Indexable;
+use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::traits::one_zero::Zero;
 use crate::utils::linear::*;
 use std::{
     cell::Cell,
