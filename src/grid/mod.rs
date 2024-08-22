@@ -64,6 +64,10 @@ impl<T> Grid<T> {
         &self.grid[p.x][p.y]
     }
 
+    pub fn get_mut(&mut self, p: Position) -> &mut T {
+        &mut self.grid[p.x][p.y]
+    }
+
     pub fn iter(&self) -> impl Iterator<Item = (Position, &T)> {
         self.grid.iter().enumerate().flat_map(|(i, v)| {
             v.iter()
