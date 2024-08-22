@@ -1,5 +1,4 @@
 use crate::algebra::action::Action;
-pub use crate::ds::traits::Updatable;
 use std::ops::Range;
 
 pub struct LazySegtree<T, U, A> {
@@ -91,13 +90,8 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Lazy
 
         self.action.fold(ret_l, ret_r)
     }
-}
 
-impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Updatable<Range<usize>>
-    for LazySegtree<T, U, A>
-{
-    type Value = U;
-    fn update(&mut self, Range { start: l, end: r }: Range<usize>, x: U) {
+    pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, x: U) {
         self.propagate_top_down(l + self.size / 2);
         if r < self.size / 2 {
             self.propagate_top_down(r + self.size / 2);

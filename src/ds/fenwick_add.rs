@@ -1,4 +1,3 @@
-pub use crate::ds::traits::{Foldable, Updatable};
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
 use std::ops::{Add, Range, RangeTo, Sub};
@@ -36,12 +35,8 @@ impl<T: Elem> FenwickTreeAdd<T> {
             i += i & (!i + 1);
         }
     }
-}
 
-impl<T: Elem> Foldable<RangeTo<usize>> for FenwickTreeAdd<T> {
-    type Output = T;
-
-    fn fold(&self, RangeTo { end: mut i }: RangeTo<usize>) -> Self::Output {
+    pub fn fold_to(&self, RangeTo { end: mut i }: RangeTo<usize>) -> T {
         let mut ret = T::zero();
 
         while i > 0 {
@@ -51,12 +46,8 @@ impl<T: Elem> Foldable<RangeTo<usize>> for FenwickTreeAdd<T> {
 
         ret
     }
-}
 
-impl<T: Elem> Foldable<Range<usize>> for FenwickTreeAdd<T> {
-    type Output = T;
-
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
-        self.fold(..r) - self.fold(..l)
+    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> T {
+        self.fold_to(..r) - self.fold_to(..l)
     }
 }

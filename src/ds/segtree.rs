@@ -1,5 +1,5 @@
 pub use crate::algebra::traits::Monoid;
-pub use crate::ds::traits::{Assignable, Foldable, Updatable};
+use crate::utils::range::range_bounds_to_range;
 use std::ops::{Index, RangeBounds};
 
 #[derive(Clone)]
@@ -20,25 +20,9 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
             monoid,
         }
     }
-}
 
-impl<T: Clone, M: Monoid<Output = T>, R: RangeBounds<usize>> Foldable<R> for Segtree<M> {
-    type Output = T;
-
-    fn fold(&self, range: R) -> Self::Output {
-        use std::ops::Bound::*;
-
-        let l = match range.start_bound() {
-            Included(&l) => l,
-            Excluded(&l) => l + 1,
-            Unbounded => 0,
-        };
-
-        let r = match range.end_bound() {
-            Included(&r) => r + 1,
-            Excluded(&r) => r,
-            Unbounded => self.size / 2,
-        };
+    pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> T {
+        let (l, r) = range_bounds_to_range(range, 0, self.size / 2);
 
         let mut ret_l = self.monoid.id();
         let mut ret_r = self.monoid.id();
@@ -61,12 +45,8 @@ impl<T: Clone, M: Monoid<Output = T>, R: RangeBounds<usize>> Foldable<R> for Seg
 
         self.monoid.op(ret_l, ret_r)
     }
-}
 
-impl<T: Clone, M: Monoid<Output = T>> Assignable<usize> for Segtree<M> {
-    type Value = T;
-
-    fn assign(&mut self, i: usize, value: T) {
+    pub fn assign(&mut self, i: usize, value: T) {
         let mut i = i + self.size / 2;
         self.data[i] = value;
 
@@ -77,12 +57,8 @@ impl<T: Clone, M: Monoid<Output = T>> Assignable<usize> for Segtree<M> {
                 .op(self.data[i << 1].clone(), self.data[i << 1 | 1].clone());
         }
     }
-}
 
-impl<T: Clone, M: Monoid<Output = T>> Updatable<usize> for Segtree<M> {
-    type Value = T;
-
-    fn update(&mut self, i: usize, value: T) {
+    pub fn update(&mut self, i: usize, value: T) {
         self.assign(
             i,
             self.monoid.op(self.data[i + self.size / 2].clone(), value),

@@ -1,6 +1,6 @@
 //! 冪等性と結合性をもつ列の区間取得(O(1))
 
-use crate::{algebra::traits::*, ds::traits::Foldable};
+use crate::algebra::traits::*;
 use std::{cmp::min, ops::Range};
 
 pub struct SparseTable<A: BinaryOp + Associative + Idempotence> {
@@ -38,14 +38,8 @@ impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> Sp
             semilattice: a,
         }
     }
-}
 
-impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> Foldable<Range<usize>>
-    for SparseTable<A>
-{
-    type Output = Option<T>;
-
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
+    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Option<T> {
         if l >= r {
             None
         } else {

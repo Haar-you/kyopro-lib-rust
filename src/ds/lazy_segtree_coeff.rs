@@ -1,6 +1,5 @@
 //! 係数乗算付き区間加算区間総和遅延セグ木
 
-pub use crate::ds::traits::{Foldable, Updatable};
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
 use std::cell::Cell;
@@ -90,18 +89,12 @@ impl<T: Elem> LazySegtreeCoeff<T> {
         self.get_internal(i << 1, l, (l + r) / 2, x, y)
             + self.get_internal(i << 1 | 1, (l + r) / 2, r, x, y)
     }
-}
 
-impl<T: Elem> Updatable<Range<usize>> for LazySegtreeCoeff<T> {
-    type Value = T;
-    fn update(&mut self, Range { start, end }: Range<usize>, value: T) {
+    pub fn update(&mut self, Range { start, end }: Range<usize>, value: T) {
         self.update_internal(1, 0, self.size / 2, start, end, value);
     }
-}
 
-impl<T: Elem> Foldable<Range<usize>> for LazySegtreeCoeff<T> {
-    type Output = T;
-    fn fold(&self, Range { start, end }: Range<usize>) -> T {
+    pub fn fold(&self, Range { start, end }: Range<usize>) -> T {
         self.get_internal(1, 0, self.size / 2, start, end)
     }
 }
