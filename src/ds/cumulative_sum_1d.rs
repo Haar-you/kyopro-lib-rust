@@ -37,6 +37,10 @@ impl<T: Copy, G: Group<Output = T>> CumulativeSum1DBuilder<G> {
         }
     }
 
+    pub fn assign(&mut self, i: usize, value: T) {
+        self.data[i + 1] = value;
+    }
+
     pub fn update(&mut self, i: usize, value: T) {
         self.data[i + 1] = self.group.op(self.data[i + 1], value);
     }

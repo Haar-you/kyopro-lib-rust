@@ -50,6 +50,10 @@ impl<T: Copy, G: Group<Output = T>> CumulativeSum2DBuilder<G> {
         }
     }
 
+    pub fn assign(&mut self, i: usize, j: usize, value: T) {
+        self.data[i + 1][j + 1] = value;
+    }
+
     pub fn update(&mut self, i: usize, j: usize, value: T) {
         self.data[i + 1][j + 1] = self.group.op(self.data[i + 1][j + 1], value);
     }
