@@ -1,9 +1,9 @@
+pub mod one_zero;
+
 use std::{
     cmp::Ordering,
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
-
-use crate::num::one_zero::*;
 
 #[derive(Clone, Copy, Debug, PartialOrd, PartialEq, Default)]
 pub struct Totalf64(pub f64);
@@ -50,19 +50,5 @@ impl Neg for Totalf64 {
     type Output = Self;
     fn neg(self) -> Self::Output {
         Self(-self.0)
-    }
-}
-
-impl Zero for Totalf64 {
-    type Output = Self;
-    fn zero() -> Self::Output {
-        Totalf64(0.0)
-    }
-}
-
-impl One for Totalf64 {
-    type Output = Self;
-    fn one() -> Self::Output {
-        Totalf64(1.0)
     }
 }
