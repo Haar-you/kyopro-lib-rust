@@ -65,12 +65,8 @@ impl<T: Clone, M: Monoid<Output = T>> DualSegtree<M> {
 
         self.data[self.size / 2..self.size / 2 + self.original_size].to_vec()
     }
-}
 
-impl<T: Clone, M: Monoid<Output = T>> Updatable<Range<usize>> for DualSegtree<M> {
-    type Value = T;
-
-    fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: Self::Value) {
+    pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
         let mut l = l + self.size / 2;
         let mut r = r + self.size / 2;
 

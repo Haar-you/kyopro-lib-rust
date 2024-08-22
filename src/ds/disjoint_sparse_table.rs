@@ -1,7 +1,6 @@
 //! 半群の列の区間演算を行う(O(1))
 
 pub use crate::algebra::traits::Semigroup;
-pub use crate::ds::traits::Foldable;
 use std::{iter::repeat, ops::Range};
 
 pub struct DisjointSparseTable<S: Semigroup> {
@@ -66,12 +65,8 @@ impl<T: Clone, S: Semigroup<Output = T>> DisjointSparseTable<S> {
             self.build(m, r, d - 1);
         }
     }
-}
 
-impl<T: Clone, S: Semigroup<Output = T>> Foldable<Range<usize>> for DisjointSparseTable<S> {
-    type Output = Option<T>;
-
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
+    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Option<T> {
         if l == r {
             None
         } else {

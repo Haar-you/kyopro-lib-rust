@@ -4,7 +4,6 @@
 //!
 //! - [HUPC 2020 B 三角形足し算](https://onlinejudge.u-aizu.ac.jp/challenges/sources/VPC/HUPC/3165?year=2020)
 
-pub use crate::ds::traits::Indexable;
 use crate::trait_alias;
 use crate::traits::one_zero::Zero;
 use crate::utils::linear::*;
@@ -104,12 +103,8 @@ impl<T: Elem> SegtreeLinearAdd<T> {
             self.propagate(i);
         }
     }
-}
 
-impl<T: Elem> Indexable<usize> for SegtreeLinearAdd<T> {
-    type Output = T;
-
-    fn get(&self, i: usize) -> Self::Output {
+    pub fn get(&self, i: usize) -> T {
         self.propagate_top_down(i + self.hsize);
         self.data[i + self.hsize].get().0
     }

@@ -1,6 +1,5 @@
 //! 区間加算・区間Max(Min)
 
-pub use crate::ds::traits::{Foldable, Updatable};
 use crate::trait_alias;
 use crate::traits::one_zero::Zero;
 use std::{
@@ -106,20 +105,12 @@ impl<T: Elem> StarrySkyTree<T> {
         bottom_up(l + hsize);
         bottom_up(r + hsize);
     }
-}
 
-impl<T: Elem> Foldable<Range<usize>> for StarrySkyTree<T> {
-    type Output = Option<T>;
-
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
+    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Option<T> {
         self._fold(l, r)
     }
-}
 
-impl<T: Elem> Updatable<Range<usize>> for StarrySkyTree<T> {
-    type Value = T;
-
-    fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
+    pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
         self._update(l, r, value);
     }
 }

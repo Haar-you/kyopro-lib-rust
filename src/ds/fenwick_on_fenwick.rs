@@ -84,17 +84,21 @@ impl<T: Copy + std::ops::Add<Output = T> + std::ops::Sub<Output = T>> FenwickOnF
     }
 
     /// Time Complexity $O(\log ^ 2 n)$
-    pub fn fold(
+    pub fn fold_2d(
         &self,
         Range { start: x1, end: x2 }: Range<i64>,
         Range { start: y1, end: y2 }: Range<i64>,
     ) -> T {
-        self.fold_to(..x2, ..y2) - self.fold_to(..x1, ..y2) - self.fold_to(..x2, ..y1)
-            + self.fold_to(..x1, ..y1)
+        self.fold_to_2d(..x2, ..y2) - self.fold_to_2d(..x1, ..y2) - self.fold_to_2d(..x2, ..y1)
+            + self.fold_to_2d(..x1, ..y1)
     }
 
     /// Time Complexity $O(\log ^ 2 n)$
-    pub fn fold_to(&self, RangeTo { end: x }: RangeTo<i64>, RangeTo { end: y }: RangeTo<i64>) -> T {
+    pub fn fold_to_2d(
+        &self,
+        RangeTo { end: x }: RangeTo<i64>,
+        RangeTo { end: y }: RangeTo<i64>,
+    ) -> T {
         let mut ret = self.zero;
         let mut x = lower_bound(&self.c_xs, &x);
 

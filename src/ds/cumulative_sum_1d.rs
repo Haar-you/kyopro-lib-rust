@@ -1,7 +1,6 @@
 //! 1次元累積和
 
 pub use crate::algebra::traits::Group;
-pub use crate::ds::traits::Foldable;
 use std::ops::{Index, Range};
 
 #[derive(Debug, Clone)]
@@ -15,11 +14,9 @@ pub struct CumulativeSum1DBuilder<G: Group> {
     group: G,
 }
 
-impl<T: Copy, G: Group<Output = T>> Foldable<Range<usize>> for CumulativeSum1D<G> {
-    type Output = T;
-
+impl<T: Copy, G: Group<Output = T>> CumulativeSum1D<G> {
     /// Time complexity O(1)
-    fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Self::Output {
+    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> T {
         self.group.op(self.data[r], self.group.inv(self.data[l]))
     }
 }

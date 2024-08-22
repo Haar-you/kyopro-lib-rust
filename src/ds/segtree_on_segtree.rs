@@ -90,7 +90,7 @@ impl<T: Clone, M: Monoid<Output = T>> SegtreeOnSegtree<M> {
         self.segs[i].as_ref().unwrap().fold(l..r)
     }
 
-    pub fn fold(
+    pub fn fold_2d(
         &self,
         Range { start: x1, end: x2 }: Range<i64>,
         Range { start: y1, end: y2 }: Range<i64>,
