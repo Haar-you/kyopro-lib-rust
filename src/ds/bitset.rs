@@ -1,10 +1,10 @@
-use std::fmt::Debug;
+use std::fmt::Display;
 use std::ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign};
 
 type B = u64;
 const B_SIZE: usize = 64;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Bitset {
     data: Vec<B>,
     size: usize,
@@ -134,11 +134,15 @@ impl BitXorAssign for Bitset {
     }
 }
 
-impl Debug for Bitset {
+impl Display for Bitset {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str("0b")?;
-        for a in self.data.iter().rev() {
-            f.write_fmt(format_args!("{:064b} ", a))?
+        if let Some(a) = self.data.last() {
+            let w = self.len() % B_SIZE;
+            let w = if w == 0 { B_SIZE } else { w };
+            f.write_fmt(format_args!("{:0width$b}", a, width = w))?
+        }
+        for a in self.data.iter().rev().skip(1) {
+            f.write_fmt(format_args!("{:0width$b}", a, width = B_SIZE))?
         }
         Ok(())
     }
