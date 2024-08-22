@@ -1,4 +1,5 @@
 pub use crate::algebra::traits::Monoid;
+use crate::utils::range::range_bounds_to_range;
 use std::ops::{Index, RangeBounds};
 
 #[derive(Clone)]
@@ -21,19 +22,7 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
     }
 
     pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> T {
-        use std::ops::Bound::*;
-
-        let l = match range.start_bound() {
-            Included(&l) => l,
-            Excluded(&l) => l + 1,
-            Unbounded => 0,
-        };
-
-        let r = match range.end_bound() {
-            Included(&r) => r + 1,
-            Excluded(&r) => r,
-            Unbounded => self.size / 2,
-        };
+        let (l, r) = range_bounds_to_range(range, 0, self.size / 2);
 
         let mut ret_l = self.monoid.id();
         let mut ret_r = self.monoid.id();
