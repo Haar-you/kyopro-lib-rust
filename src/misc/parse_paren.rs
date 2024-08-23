@@ -50,13 +50,13 @@ fn _parse<T: Copy + Eq + std::fmt::Debug>(
 }
 
 pub fn parse_paren<T: Copy + Eq + std::fmt::Debug>(
-    s: impl Iterator<Item = T>,
+    s: impl IntoIterator<Item = T>,
     open: T,
     close: T,
 ) -> Option<ParseResult<T>> {
     assert_ne!(open, close);
 
-    let mut s = s.peekable();
+    let mut s = s.into_iter().peekable();
     let res = _parse(&mut s, open, close);
 
     if s.peek().is_none() {
