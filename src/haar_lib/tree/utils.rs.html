@@ -233,7 +233,7 @@
     <span class="kw">let </span>d2 = tree_distance(tr, v);
 
     d1.into_iter()
-        .zip(d2.into_iter())
+        .zip(d2)
         .map(|(x, y)| <span class="kw">if </span>x &gt; y { (x, u) } <span class="kw">else </span>{ (y, v) })
         .collect()
 }

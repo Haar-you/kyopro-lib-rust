@@ -160,14 +160,7 @@
 <a href="#160" id="160">160</a>
 <a href="#161" id="161">161</a>
 <a href="#162" id="162">162</a>
-<a href="#163" id="163">163</a>
-<a href="#164" id="164">164</a>
-<a href="#165" id="165">165</a>
-<a href="#166" id="166">166</a>
-<a href="#167" id="167">167</a>
-<a href="#168" id="168">168</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::algebra::action::Action;
-<span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::Updatable;
 <span class="kw">use </span>std::ops::Range;
 
 <span class="kw">pub struct </span>LazySegtree&lt;T, U, A&gt; {
@@ -259,13 +252,8 @@
 
         <span class="self">self</span>.action.fold(ret_l, ret_r)
     }
-}
 
-<span class="kw">impl</span>&lt;T: Clone + Eq, U: Clone + Eq, A: Clone + Action&lt;FType = T, UType = U&gt;&gt; Updatable&lt;Range&lt;usize&gt;&gt;
-    <span class="kw">for </span>LazySegtree&lt;T, U, A&gt;
-{
-    <span class="kw">type </span>Value = U;
-    <span class="kw">fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, x: U) {
+    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, x: U) {
         <span class="self">self</span>.propagate_top_down(l + <span class="self">self</span>.size / <span class="number">2</span>);
         <span class="kw">if </span>r &lt; <span class="self">self</span>.size / <span class="number">2 </span>{
             <span class="self">self</span>.propagate_top_down(r + <span class="self">self</span>.size / <span class="number">2</span>);

@@ -40,7 +40,6 @@
 <a href="#40" id="40">40</a>
 <a href="#41" id="41">41</a>
 <a href="#42" id="42">42</a>
-<a href="#43" id="43">43</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::tree::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::collections::{hash_map::DefaultHasher, HashMap};
 <span class="kw">use </span>std::hash::{Hash, Hasher};
@@ -49,9 +48,8 @@
     <span class="kw">let </span>n = tree.len();
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="number">0</span>; n];
     <span class="kw">let </span><span class="kw-2">mut </span>map = HashMap::new();
-    <span class="kw">let </span><span class="kw-2">mut </span>stack = <span class="macro">vec!</span>[];
+    <span class="kw">let </span><span class="kw-2">mut </span>stack = Vec::with_capacity(<span class="number">2 </span>* n);
 
-    stack.reserve(<span class="number">2 </span>* n);
     stack.push((<span class="bool-val">false</span>, root, <span class="prelude-val">None</span>));
 
     <span class="kw">while let </span><span class="prelude-val">Some</span>((back, cur, par)) = stack.pop() {

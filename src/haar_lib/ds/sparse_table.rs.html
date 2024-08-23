@@ -112,15 +112,9 @@
 <a href="#112" id="112">112</a>
 <a href="#113" id="113">113</a>
 <a href="#114" id="114">114</a>
-<a href="#115" id="115">115</a>
-<a href="#116" id="116">116</a>
-<a href="#117" id="117">117</a>
-<a href="#118" id="118">118</a>
-<a href="#119" id="119">119</a>
-<a href="#120" id="120">120</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 冪等性と結合性をもつ列の区間取得(O(1))
 
-</span><span class="kw">use crate</span>::{algebra::traits::<span class="kw-2">*</span>, ds::traits::Foldable};
+</span><span class="kw">use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::{cmp::min, ops::Range};
 
 <span class="kw">pub struct </span>SparseTable&lt;A: BinaryOp + Associative + Idempotence&gt; {
@@ -158,14 +152,8 @@
             semilattice: a,
         }
     }
-}
 
-<span class="kw">impl</span>&lt;T: Clone + Default, A: BinaryOp&lt;Output = T&gt; + Associative + Idempotence&gt; Foldable&lt;Range&lt;usize&gt;&gt;
-    <span class="kw">for </span>SparseTable&lt;A&gt;
-{
-    <span class="kw">type </span>Output = <span class="prelude-ty">Option</span>&lt;T&gt;;
-
-    <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="self">Self</span>::Output {
+    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="kw">if </span>l &gt;= r {
             <span class="prelude-val">None
         </span>} <span class="kw">else </span>{

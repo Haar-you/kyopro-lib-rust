@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["ConstModInt","ConstModIntBuilder"]};
+window.SIDEBAR_ITEMS = {"mod":["one_zero"],"struct":["ConstModInt","ConstModIntBuilder"]};

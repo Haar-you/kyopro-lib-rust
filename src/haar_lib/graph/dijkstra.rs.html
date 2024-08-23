@@ -91,7 +91,7 @@
 </pre></div><pre class="rust"><code><span class="doccomment">//! 非負重み付き最短経路 (Dijkstra)
 
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
-<span class="kw">use </span><span class="kw">crate</span>::traits::{num::Unsigned, one_zero::Zero};
+<span class="kw">use </span><span class="kw">crate</span>::num::{one_zero::Zero, traits::Unsigned};
 <span class="kw">use </span>std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
 <span class="doccomment">/// Time complexity O((E + V) log V)

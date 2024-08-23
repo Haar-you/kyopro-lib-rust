@@ -121,10 +121,10 @@
 <a href="#121" id="121">121</a>
 <a href="#122" id="122">122</a>
 <a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 2次元累積和
 
 </span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::Group;
-<span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::Foldable2D;
 <span class="kw">use </span>std::ops::{Index, Range};
 
 <span class="attr">#[derive(Debug, Clone)]
@@ -140,15 +140,13 @@
     m: usize,
 }
 
-<span class="kw">impl</span>&lt;T: Copy, G: Group&lt;Output = T&gt;&gt; Foldable2D&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>CumulativeSum2D&lt;G&gt; {
-    <span class="kw">type </span>Output = T;
-
+<span class="kw">impl</span>&lt;T: Copy, G: Group&lt;Output = T&gt;&gt; CumulativeSum2D&lt;G&gt; {
     <span class="doccomment">/// Time Complexity O(1)
-    </span><span class="kw">fn </span>fold(
+    </span><span class="kw">pub fn </span>fold_2d(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         Range { start: l, end: r }: Range&lt;usize&gt;,
         Range { start: d, end: u }: Range&lt;usize&gt;,
-    ) -&gt; <span class="self">Self</span>::Output {
+    ) -&gt; T {
         <span class="kw">let </span>a = <span class="self">self</span>.group.inv(<span class="self">self</span>.data[l][u]);
         <span class="kw">let </span>b = <span class="self">self</span>.group.inv(<span class="self">self</span>.data[r][d]);
         <span class="kw">let </span>c = <span class="self">self</span>.data[l][d];
@@ -174,6 +172,10 @@
             n,
             m,
         }
+    }
+
+    <span class="kw">pub fn </span>assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize, value: T) {
+        <span class="self">self</span>.data[i + <span class="number">1</span>][j + <span class="number">1</span>] = value;
     }
 
     <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize, value: T) {
@@ -240,7 +242,7 @@
                 }
             }
 
-            <span class="macro">assert_eq!</span>(cs.fold(lr, du), ans);
+            <span class="macro">assert_eq!</span>(cs.fold_2d(lr, du), ans);
         }
     }
 }

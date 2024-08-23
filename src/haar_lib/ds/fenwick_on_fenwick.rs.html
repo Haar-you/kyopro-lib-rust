@@ -112,6 +112,10 @@
 <a href="#112" id="112">112</a>
 <a href="#113" id="113">113</a>
 <a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
 <span class="kw">use </span>std::ops::{Range, RangeTo};
 
@@ -198,17 +202,21 @@
     }
 
     <span class="doccomment">/// Time Complexity $O(\log ^ 2 n)$
-    </span><span class="kw">pub fn </span>fold(
+    </span><span class="kw">pub fn </span>fold_2d(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         Range { start: x1, end: x2 }: Range&lt;i64&gt;,
         Range { start: y1, end: y2 }: Range&lt;i64&gt;,
     ) -&gt; T {
-        <span class="self">self</span>.fold_to(..x2, ..y2) - <span class="self">self</span>.fold_to(..x1, ..y2) - <span class="self">self</span>.fold_to(..x2, ..y1)
-            + <span class="self">self</span>.fold_to(..x1, ..y1)
+        <span class="self">self</span>.fold_to_2d(..x2, ..y2) - <span class="self">self</span>.fold_to_2d(..x1, ..y2) - <span class="self">self</span>.fold_to_2d(..x2, ..y1)
+            + <span class="self">self</span>.fold_to_2d(..x1, ..y1)
     }
 
     <span class="doccomment">/// Time Complexity $O(\log ^ 2 n)$
-    </span><span class="kw">pub fn </span>fold_to(<span class="kw-2">&amp;</span><span class="self">self</span>, RangeTo { end: x }: RangeTo&lt;i64&gt;, RangeTo { end: y }: RangeTo&lt;i64&gt;) -&gt; T {
+    </span><span class="kw">pub fn </span>fold_to_2d(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        RangeTo { end: x }: RangeTo&lt;i64&gt;,
+        RangeTo { end: y }: RangeTo&lt;i64&gt;,
+    ) -&gt; T {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">self</span>.zero;
         <span class="kw">let </span><span class="kw-2">mut </span>x = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.c_xs, <span class="kw-2">&amp;</span>x);
 

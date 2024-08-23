@@ -443,7 +443,7 @@
         <span class="kw">for </span>(r, r2) <span class="kw">in </span>ret.data.iter_mut().zip(<span class="self">self</span>.data.iter()) {
             <span class="kw">for </span>(x, c) <span class="kw">in </span>r.iter_mut().zip(b.data.iter()) {
                 <span class="kw">for </span>(y, z) <span class="kw">in </span>r2.iter().zip(c.iter()) {
-                    <span class="kw-2">*</span>x = <span class="kw-2">*</span>x + <span class="kw-2">*</span>y * <span class="kw-2">*</span>z;
+                    <span class="kw-2">*</span>x += <span class="kw-2">*</span>y * <span class="kw-2">*</span>z;
                 }
             }
         }
@@ -534,7 +534,7 @@
         <span class="macro">assert_eq!</span>(<span class="self">self</span>.size, other.size);
         <span class="kw">for </span>(a, b) <span class="kw">in </span><span class="self">self</span>.data.iter_mut().zip(other.data.into_iter()) {
             <span class="kw">for </span>(x, y) <span class="kw">in </span>a.iter_mut().zip(b.into_iter()) {
-                <span class="kw-2">*</span>x = <span class="kw-2">*</span>x + y;
+                <span class="kw-2">*</span>x += y;
             }
         }
         <span class="self">self
@@ -550,7 +550,7 @@
         <span class="macro">assert_eq!</span>(<span class="self">self</span>.size, other.size);
         <span class="kw">for </span>(a, b) <span class="kw">in </span><span class="self">self</span>.data.iter_mut().zip(other.data.into_iter()) {
             <span class="kw">for </span>(x, y) <span class="kw">in </span>a.iter_mut().zip(b.into_iter()) {
-                <span class="kw-2">*</span>x = <span class="kw-2">*</span>x - y;
+                <span class="kw-2">*</span>x -= y;
             }
         }
         <span class="self">self

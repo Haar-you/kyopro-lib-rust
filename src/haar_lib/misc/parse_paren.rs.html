@@ -143,13 +143,13 @@
 }
 
 <span class="kw">pub fn </span>parse_paren&lt;T: Copy + Eq + std::fmt::Debug&gt;(
-    s: <span class="kw">impl </span>Iterator&lt;Item = T&gt;,
+    s: <span class="kw">impl </span>IntoIterator&lt;Item = T&gt;,
     open: T,
     close: T,
 ) -&gt; <span class="prelude-ty">Option</span>&lt;ParseResult&lt;T&gt;&gt; {
     <span class="macro">assert_ne!</span>(open, close);
 
-    <span class="kw">let </span><span class="kw-2">mut </span>s = s.peekable();
+    <span class="kw">let </span><span class="kw-2">mut </span>s = s.into_iter().peekable();
     <span class="kw">let </span>res = _parse(<span class="kw-2">&amp;mut </span>s, open, close);
 
     <span class="kw">if </span>s.peek().is_none() {

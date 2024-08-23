@@ -51,18 +51,8 @@
 <a href="#51" id="51">51</a>
 <a href="#52" id="52">52</a>
 <a href="#53" id="53">53</a>
-<a href="#54" id="54">54</a>
-<a href="#55" id="55">55</a>
-<a href="#56" id="56">56</a>
-<a href="#57" id="57">57</a>
-<a href="#58" id="58">58</a>
-<a href="#59" id="59">59</a>
-<a href="#60" id="60">60</a>
-<a href="#61" id="61">61</a>
-<a href="#62" id="62">62</a>
-</pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::{Foldable, Updatable};
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
 <span class="kw">use </span><span class="kw">crate</span>::trait_alias;
-<span class="kw">use </span><span class="kw">crate</span>::traits::one_zero::Zero;
 <span class="kw">use </span>std::ops::{Add, Range, RangeTo, Sub};
 
 <span class="macro">trait_alias!</span>(
@@ -98,12 +88,8 @@
             i += i &amp; (!i + <span class="number">1</span>);
         }
     }
-}
 
-<span class="kw">impl</span>&lt;T: Elem&gt; Foldable&lt;RangeTo&lt;usize&gt;&gt; <span class="kw">for </span>FenwickTreeAdd&lt;T&gt; {
-    <span class="kw">type </span>Output = T;
-
-    <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, RangeTo { end: <span class="kw-2">mut </span>i }: RangeTo&lt;usize&gt;) -&gt; <span class="self">Self</span>::Output {
+    <span class="kw">pub fn </span>fold_to(<span class="kw-2">&amp;</span><span class="self">self</span>, RangeTo { end: <span class="kw-2">mut </span>i }: RangeTo&lt;usize&gt;) -&gt; T {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = T::zero();
 
         <span class="kw">while </span>i &gt; <span class="number">0 </span>{
@@ -113,13 +99,9 @@
 
         ret
     }
-}
 
-<span class="kw">impl</span>&lt;T: Elem&gt; Foldable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>FenwickTreeAdd&lt;T&gt; {
-    <span class="kw">type </span>Output = T;
-
-    <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="self">Self</span>::Output {
-        <span class="self">self</span>.fold(..r) - <span class="self">self</span>.fold(..l)
+    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; T {
+        <span class="self">self</span>.fold_to(..r) - <span class="self">self</span>.fold_to(..l)
     }
 }
 </code></pre></div></section></main></body></html>

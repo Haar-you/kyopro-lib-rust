@@ -46,7 +46,7 @@
 
         <span class="kw">for </span>aj <span class="kw">in </span>a.iter_mut().skip(i) {
             <span class="kw">if </span>aj.test(i) {
-                <span class="kw-2">*</span>aj ^= ai.clone();
+                aj.same_size_xor_assign(<span class="kw-2">&amp;</span>ai);
             }
         }
 

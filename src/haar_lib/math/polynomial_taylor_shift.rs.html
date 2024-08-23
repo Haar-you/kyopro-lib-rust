@@ -76,7 +76,7 @@
     <span class="kw">let </span>c = ntt.convolve(a, b);
     c.into_iter()
         .skip((n - <span class="number">1</span>) * <span class="number">2</span>)
-        .zip(g.into_iter())
+        .zip(g)
         .map(|(c, g)| c * g)
         .collect()
 }

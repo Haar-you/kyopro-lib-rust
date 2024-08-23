@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Totalf64"]};
+window.SIDEBAR_ITEMS = {"mod":["one_zero"],"struct":["Totalf64"]};

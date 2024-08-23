@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["dice","paren","parse_paren"]};
+window.SIDEBAR_ITEMS = {"mod":["closed_interval","dice","paren","parse_paren"]};

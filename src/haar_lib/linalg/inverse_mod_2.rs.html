@@ -57,8 +57,8 @@
 
         <span class="kw">for </span>(bj, cj) <span class="kw">in </span>b.iter_mut().zip(c.iter_mut()) {
             <span class="kw">if </span>bj.test(i) {
-                <span class="kw-2">*</span>bj ^= bi.clone();
-                <span class="kw-2">*</span>cj ^= ci.clone();
+                bj.same_size_xor_assign(<span class="kw-2">&amp;</span>bi);
+                cj.same_size_xor_assign(<span class="kw-2">&amp;</span>ci);
             }
         }
 

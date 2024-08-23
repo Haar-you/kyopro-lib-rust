@@ -99,10 +99,10 @@
 <a href="#99" id="99">99</a>
 <a href="#100" id="100">100</a>
 <a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 1次元累積和
 
 </span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::Group;
-<span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::Foldable;
 <span class="kw">use </span>std::ops::{Index, Range};
 
 <span class="attr">#[derive(Debug, Clone)]
@@ -116,11 +116,9 @@
     group: G,
 }
 
-<span class="kw">impl</span>&lt;T: Copy, G: Group&lt;Output = T&gt;&gt; Foldable&lt;Range&lt;usize&gt;&gt; <span class="kw">for </span>CumulativeSum1D&lt;G&gt; {
-    <span class="kw">type </span>Output = T;
-
+<span class="kw">impl</span>&lt;T: Copy, G: Group&lt;Output = T&gt;&gt; CumulativeSum1D&lt;G&gt; {
     <span class="doccomment">/// Time complexity O(1)
-    </span><span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="self">Self</span>::Output {
+    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; T {
         <span class="self">self</span>.group.op(<span class="self">self</span>.data[r], <span class="self">self</span>.group.inv(<span class="self">self</span>.data[l]))
     }
 }
@@ -139,6 +137,10 @@
             data: <span class="macro">vec!</span>[group.id(); n + <span class="number">1</span>],
             group,
         }
+    }
+
+    <span class="kw">pub fn </span>assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, value: T) {
+        <span class="self">self</span>.data[i + <span class="number">1</span>] = value;
     }
 
     <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, value: T) {

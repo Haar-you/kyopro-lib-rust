@@ -147,9 +147,13 @@
 <a href="#147" id="147">147</a>
 <a href="#148" id="148">148</a>
 <a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
 </pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::len_without_is_empty)]
 
-</span><span class="kw">use </span>std::collections::BTreeMap;
+</span><span class="kw">use </span>std::collections::{btree_map::Entry, BTreeMap};
 
 <span class="kw">const </span>ODD: usize = <span class="number">0</span>;
 <span class="kw">const </span>EVEN: usize = <span class="number">1</span>;
@@ -215,25 +219,29 @@
                     <span class="kw">let </span>index = list.len();
                     <span class="kw">let </span>t = <span class="kw-2">&amp;mut </span>list[t];
 
-                    <span class="kw">if </span>!t.children.contains_key(<span class="kw-2">&amp;</span>c) {
-                        <span class="kw">let </span>a = Node {
-                            length: t.length + <span class="number">2</span>,
-                            count: <span class="number">1</span>,
-                            index,
-                            parent: <span class="prelude-val">Some</span>(t.index),
-                            ..Default::default()
-                        };
+                    <span class="kw">match </span>t.children.entry(c) {
+                        Entry::Vacant(e) =&gt; {
+                            <span class="kw">let </span>a = Node {
+                                length: t.length + <span class="number">2</span>,
+                                count: <span class="number">1</span>,
+                                index,
+                                parent: <span class="prelude-val">Some</span>(t.index),
+                                ..Default::default()
+                            };
 
-                        sindex_list.push(a.index);
+                            sindex_list.push(a.index);
 
-                        t.children.insert(c, a.index);
-                        list.push(a);
-                    } <span class="kw">else </span>{
-                        <span class="kw">let </span>t = <span class="kw-2">*</span>t.children.get(<span class="kw-2">&amp;</span>c).unwrap();
+                            e.insert(a.index);
+                            list.push(a);
+                        }
+                        Entry::Occupied(e) =&gt; {
+                            <span class="kw">let </span>t = <span class="kw-2">*</span>e.get();
 
-                        list[t].count += <span class="number">1</span>;
-                        sindex_list.push(list[t].index);
+                            list[t].count += <span class="number">1</span>;
+                            sindex_list.push(list[t].index);
+                        }
                     }
+
                     <span class="kw">break</span>;
                 } <span class="kw">else </span>{
                     t = list[t].suffix_link.unwrap();

@@ -153,32 +153,8 @@
 <a href="#153" id="153">153</a>
 <a href="#154" id="154">154</a>
 <a href="#155" id="155">155</a>
-<a href="#156" id="156">156</a>
-<a href="#157" id="157">157</a>
-<a href="#158" id="158">158</a>
-<a href="#159" id="159">159</a>
-<a href="#160" id="160">160</a>
-<a href="#161" id="161">161</a>
-<a href="#162" id="162">162</a>
-<a href="#163" id="163">163</a>
-<a href="#164" id="164">164</a>
-<a href="#165" id="165">165</a>
-<a href="#166" id="166">166</a>
-<a href="#167" id="167">167</a>
-<a href="#168" id="168">168</a>
-<a href="#169" id="169">169</a>
-<a href="#170" id="170">170</a>
-<a href="#171" id="171">171</a>
-<a href="#172" id="172">172</a>
-<a href="#173" id="173">173</a>
-<a href="#174" id="174">174</a>
-<a href="#175" id="175">175</a>
-<a href="#176" id="176">176</a>
-<a href="#177" id="177">177</a>
-<a href="#178" id="178">178</a>
-<a href="#179" id="179">179</a>
 </pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::Monoid;
-<span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::{Assignable, Foldable, Updatable};
+<span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
 <span class="kw">use </span>std::ops::{Index, RangeBounds};
 
 <span class="attr">#[derive(Clone)]
@@ -199,25 +175,9 @@
             monoid,
         }
     }
-}
 
-<span class="kw">impl</span>&lt;T: Clone, M: Monoid&lt;Output = T&gt;, R: RangeBounds&lt;usize&gt;&gt; Foldable&lt;R&gt; <span class="kw">for </span>Segtree&lt;M&gt; {
-    <span class="kw">type </span>Output = T;
-
-    <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, range: R) -&gt; <span class="self">Self</span>::Output {
-        <span class="kw">use </span>std::ops::Bound::<span class="kw-2">*</span>;
-
-        <span class="kw">let </span>l = <span class="kw">match </span>range.start_bound() {
-            Included(<span class="kw-2">&amp;</span>l) =&gt; l,
-            Excluded(<span class="kw-2">&amp;</span>l) =&gt; l + <span class="number">1</span>,
-            Unbounded =&gt; <span class="number">0</span>,
-        };
-
-        <span class="kw">let </span>r = <span class="kw">match </span>range.end_bound() {
-            Included(<span class="kw-2">&amp;</span>r) =&gt; r + <span class="number">1</span>,
-            Excluded(<span class="kw-2">&amp;</span>r) =&gt; r,
-            Unbounded =&gt; <span class="self">self</span>.size / <span class="number">2</span>,
-        };
+    <span class="kw">pub fn </span>fold&lt;R: RangeBounds&lt;usize&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, range: R) -&gt; T {
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>);
 
         <span class="kw">let </span><span class="kw-2">mut </span>ret_l = <span class="self">self</span>.monoid.id();
         <span class="kw">let </span><span class="kw-2">mut </span>ret_r = <span class="self">self</span>.monoid.id();
@@ -240,12 +200,8 @@
 
         <span class="self">self</span>.monoid.op(ret_l, ret_r)
     }
-}
 
-<span class="kw">impl</span>&lt;T: Clone, M: Monoid&lt;Output = T&gt;&gt; Assignable&lt;usize&gt; <span class="kw">for </span>Segtree&lt;M&gt; {
-    <span class="kw">type </span>Value = T;
-
-    <span class="kw">fn </span>assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, value: T) {
+    <span class="kw">pub fn </span>assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, value: T) {
         <span class="kw">let </span><span class="kw-2">mut </span>i = i + <span class="self">self</span>.size / <span class="number">2</span>;
         <span class="self">self</span>.data[i] = value;
 
@@ -256,12 +212,8 @@
                 .op(<span class="self">self</span>.data[i &lt;&lt; <span class="number">1</span>].clone(), <span class="self">self</span>.data[i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>].clone());
         }
     }
-}
 
-<span class="kw">impl</span>&lt;T: Clone, M: Monoid&lt;Output = T&gt;&gt; Updatable&lt;usize&gt; <span class="kw">for </span>Segtree&lt;M&gt; {
-    <span class="kw">type </span>Value = T;
-
-    <span class="kw">fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, value: T) {
+    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, value: T) {
         <span class="self">self</span>.assign(
             i,
             <span class="self">self</span>.monoid.op(<span class="self">self</span>.data[i + <span class="self">self</span>.size / <span class="number">2</span>].clone(), value),

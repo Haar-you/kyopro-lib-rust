@@ -219,22 +219,22 @@
 <a href="#219" id="219">219</a>
 <a href="#220" id="220">220</a>
 <a href="#221" id="221">221</a>
-</pre></div><pre class="rust"><code><span class="attr">#[derive(Debug, Clone)]
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::utils::nullable_usize::NullableUsize;
+
+<span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">struct </span>Node {
-    ch: [usize; <span class="number">2</span>],
+    ch: [NullableUsize; <span class="number">2</span>],
     count: usize,
 }
 
 <span class="kw">impl </span>Default <span class="kw">for </span>Node {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            ch: [NIL, NIL],
+            ch: [NullableUsize::NULL, NullableUsize::NULL],
             count: <span class="number">0</span>,
         }
     }
 }
-
-<span class="kw">const </span>NIL: usize = !<span class="number">0</span>;
 
 <span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>BinaryTrie {
@@ -266,10 +266,10 @@
             <span class="kw">let </span>b = (value &gt;&gt; depth) &amp; <span class="number">1</span>;
 
             <span class="kw">let </span>t = <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize];
-            <span class="kw">if </span>t == NIL {
+            <span class="kw">if </span>t.is_null() {
                 <span class="kw">return </span><span class="number">0</span>;
             }
-            node = t;
+            node = t.<span class="number">0</span>;
         }
 
         <span class="self">self</span>.data[node].count
@@ -286,12 +286,12 @@
             <span class="kw">let </span>b = (value &gt;&gt; depth) &amp; <span class="number">1</span>;
 
             <span class="kw">let </span>ch = <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize];
-            <span class="kw">if </span>ch != NIL {
-                node = ch;
+            <span class="kw">if </span>!ch.is_null() {
+                node = ch.<span class="number">0</span>;
             } <span class="kw">else </span>{
                 <span class="self">self</span>.data.push(Node::default());
                 <span class="kw">let </span>ch = <span class="self">self</span>.data.len() - <span class="number">1</span>;
-                <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize] = ch;
+                <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize] = NullableUsize(ch);
                 node = ch;
             }
         }
@@ -312,12 +312,12 @@
             path.push(node);
 
             <span class="kw">let </span>ch = <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize];
-            <span class="kw">if </span>ch != NIL {
-                node = ch;
+            <span class="kw">if </span>!ch.is_null() {
+                node = ch.<span class="number">0</span>;
             } <span class="kw">else </span>{
                 <span class="self">self</span>.data.push(Node::default());
                 <span class="kw">let </span>ch = <span class="self">self</span>.data.len() - <span class="number">1</span>;
-                <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize] = ch;
+                <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize] = NullableUsize(ch);
                 node = ch;
             }
         }
@@ -348,11 +348,11 @@
                 <span class="kw">let </span><span class="kw-2">mut </span>b = (x &gt;&gt; depth) &amp; <span class="number">1</span>;
 
                 <span class="kw">let </span>t = <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize];
-                <span class="kw">if </span>t == NIL || <span class="self">self</span>.data[t].count == <span class="number">0 </span>{
+                <span class="kw">if </span>t.is_null() || <span class="self">self</span>.data[t.<span class="number">0</span>].count == <span class="number">0 </span>{
                     b ^= <span class="number">1</span>;
                 }
 
-                node = <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize];
+                node = <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize].<span class="number">0</span>;
                 ret |= b &lt;&lt; depth;
             }
 
@@ -374,11 +374,11 @@
                 <span class="kw">let </span><span class="kw-2">mut </span>b = ((x &gt;&gt; depth) &amp; <span class="number">1</span>) ^ <span class="number">1</span>;
 
                 <span class="kw">let </span>t = <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize];
-                <span class="kw">if </span>t == NIL || <span class="self">self</span>.data[t].count == <span class="number">0 </span>{
+                <span class="kw">if </span>t.is_null() || <span class="self">self</span>.data[t.<span class="number">0</span>].count == <span class="number">0 </span>{
                     b ^= <span class="number">1</span>;
                 }
 
-                node = <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize];
+                node = <span class="self">self</span>.data[node].ch[b <span class="kw">as </span>usize].<span class="number">0</span>;
                 ret |= b &lt;&lt; depth;
             }
 
