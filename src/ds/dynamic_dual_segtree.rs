@@ -141,3 +141,32 @@ impl<T: Clone, M: Monoid<Output = T>> DynamicDualSegtree<M> {
         self.get_(self.root.0, 0, self.to, i)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::algebra::sum::*;
+    use crate::testtools::*;
+    use rand::Rng;
+
+    #[test]
+    fn test() {
+        let n = 1000;
+        let m = Sum::<u32>::new();
+
+        let mut a = vec![m.id(); n];
+        let mut seg = DynamicDualSegtree::new(m.clone());
+
+        let mut rng = rand::thread_rng();
+
+        for _ in 0..100 {
+            let lr = rand_range(&mut rng, 0..n);
+            let x = rng.gen_range(0..10000);
+
+            seg.update(lr.clone(), x);
+            a[lr].iter_mut().for_each(|e| *e += x);
+
+            assert_eq!(a, (0..n).map(|i| seg.get(i)).collect::<Vec<_>>());
+        }
+    }
+}
