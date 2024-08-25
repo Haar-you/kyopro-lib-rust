@@ -1,4 +1,5 @@
 pub use crate::algebra::traits::*;
+use crate::impl_algebra;
 use std::marker::PhantomData;
 
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
@@ -14,20 +15,12 @@ impl<T> AlgeStruct for Update<T> {
     type Output = Option<T>;
 }
 
-impl<T> BinaryOp for Update<T> {
-    fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output {
-        match a {
-            Some(_) => a,
-            None => b,
-        }
-    }
-}
-
-impl<T> Identity for Update<T> {
-    fn id(&self) -> Self::Output {
-        None
-    }
-}
-
-impl<T> Associative for Update<T> {}
-impl<T> Idempotence for Update<T> {}
+impl_algebra!(T; Update<T>,
+    op: |_, a, b| match a {
+        Some(_) => a,
+        None => b
+    },
+    id: |_| None,
+    assoc: {},
+    idem: {}
+);
