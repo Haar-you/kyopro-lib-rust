@@ -13,6 +13,7 @@ pub mod min;
 pub mod prod;
 pub mod sum;
 pub mod transform;
+pub mod tuple;
 pub mod update;
 
 pub mod action;
