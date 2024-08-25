@@ -1,6 +1,6 @@
 use crate::ds::bitset::*;
 
-pub fn gaussian_elim_mod_2(mut a: Vec<Bitset>) -> (usize, Vec<Bitset>) {
+pub fn gaussian_elim(mut a: Vec<Bitset>) -> (usize, Vec<Bitset>) {
     let n = a.len();
     let Some(m) = a.first().map(|a| a.len()) else {
         return (0, a);

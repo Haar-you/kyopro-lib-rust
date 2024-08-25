@@ -3,7 +3,7 @@ use crate::math::mod_ops::inv_p::mod_inv_p;
 /// 素数mod p上での逆行列を求める。
 /// $O(n^3)$
 #[inline]
-pub fn inverse_p(mut b: Vec<Vec<u64>>, p: u64) -> Option<Vec<Vec<u64>>> {
+pub fn inverse(mut b: Vec<Vec<u64>>, p: u64) -> Option<Vec<Vec<u64>>> {
     let n = b.len();
 
     assert!(b.iter().all(|r| r.len() == n));
@@ -60,7 +60,7 @@ mod tests {
 
         let a = vec![vec![3, 1, 4], vec![1, 5, 9], vec![2, 6, 5]];
         assert_eq!(
-            inverse_p(a, p),
+            inverse(a, p),
             Some(vec![
                 vec![188557267, 255106890, 587855008],
                 vec![122007643, 987152749, 321656514],
@@ -69,9 +69,9 @@ mod tests {
         );
 
         let a = vec![vec![1, 2, 3], vec![4, 5, 6], vec![7, 8, 9]];
-        assert_eq!(inverse_p(a, p), None);
+        assert_eq!(inverse(a, p), None);
 
         let a = vec![vec![0, 1], vec![1, 0]];
-        assert_eq!(inverse_p(a, p), Some(vec![vec![0, 1], vec![1, 0]]))
+        assert_eq!(inverse(a, p), Some(vec![vec![0, 1], vec![1, 0]]))
     }
 }

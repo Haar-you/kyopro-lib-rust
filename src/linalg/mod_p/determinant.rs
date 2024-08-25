@@ -3,7 +3,7 @@ use crate::math::mod_ops::inv_p::mod_inv_p;
 /// 素数mod p上での行列式を求める。
 /// $O(n^3)$
 #[inline]
-pub fn determinant_p(mut a: Vec<Vec<u64>>, p: u64) -> u64 {
+pub fn determinant(mut a: Vec<Vec<u64>>, p: u64) -> u64 {
     let n = a.len();
 
     assert!(a.iter().all(|r| r.len() == n));
@@ -54,12 +54,12 @@ mod tests {
         let p = 998244353;
 
         let a = vec![vec![3, 1, 4], vec![1, 5, 9], vec![2, 6, 5]];
-        assert_eq!(determinant_p(a, p), 998244263);
+        assert_eq!(determinant(a, p), 998244263);
 
         let a = vec![vec![1, 2, 3], vec![4, 5, 6], vec![7, 8, 9]];
-        assert_eq!(determinant_p(a, p), 0);
+        assert_eq!(determinant(a, p), 0);
 
         let a = vec![vec![0, 1], vec![1, 0]];
-        assert_eq!(determinant_p(a, p), 998244352);
+        assert_eq!(determinant(a, p), 998244352);
     }
 }
