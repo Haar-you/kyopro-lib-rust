@@ -1,6 +1,6 @@
 use crate::ds::bitset::*;
 
-pub fn inverse_mod_2(mut b: Vec<Bitset>) -> Option<Vec<Bitset>> {
+pub fn inverse(mut b: Vec<Bitset>) -> Option<Vec<Bitset>> {
     let n = b.len();
 
     assert!(b.iter().all(|r| r.len() == n));
