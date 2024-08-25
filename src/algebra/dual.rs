@@ -1,7 +1,7 @@
 pub use crate::algebra::traits::*;
 
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
-pub struct Dual<S>(S);
+pub struct Dual<S>(pub S);
 
 impl<S: AlgeStruct> Dual<S> {
     pub fn new(s: S) -> Self {
