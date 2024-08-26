@@ -6,11 +6,13 @@ const B_SIZE: usize = 64;
 
 #[derive(Clone, Debug)]
 pub struct Bitset {
-    data: Vec<B>,
+    pub(crate) data: Vec<B>,
     size: usize,
 }
 
 impl Bitset {
+    pub const B_SIZE: usize = B_SIZE;
+
     pub fn new(n: usize) -> Self {
         Self {
             data: vec![0; (n + B_SIZE - 1) / B_SIZE],
