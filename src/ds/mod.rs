@@ -13,6 +13,7 @@ pub mod fenwick;
 pub mod fenwick_add;
 pub mod lazy_segtree;
 pub mod lazy_segtree_coeff;
+pub mod persistent_segtree;
 pub mod segtree;
 pub mod segtree_beats;
 pub mod segtree_linear_add;
