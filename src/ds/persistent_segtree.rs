@@ -1,3 +1,5 @@
+//! 永続セグメントツリー
+
 use std::cell::RefCell;
 use std::ops::Range;
 use std::rc::Rc;
