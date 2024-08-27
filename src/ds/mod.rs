@@ -15,6 +15,7 @@ pub mod lazy_segtree;
 pub mod lazy_segtree_coeff;
 pub mod persistent_segtree;
 pub mod segtree;
+pub mod segtree_2d;
 pub mod segtree_beats;
 pub mod segtree_linear_add;
 pub mod starry_sky_tree;
