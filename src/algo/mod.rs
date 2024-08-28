@@ -26,6 +26,7 @@ pub mod rolling_hash;
 pub mod sa;
 pub mod sliding_window;
 pub mod subset_sum;
+pub mod ternary_search;
 pub mod two_sat;
 pub mod zalgo;
 
