@@ -3,6 +3,7 @@ pub mod bsearch_f;
 pub mod compressor;
 pub mod edit_distance;
 pub mod enumerate_bitset;
+pub mod golden_search;
 pub mod imos_1d;
 pub mod imos_2d;
 pub mod interval_scheduling;
