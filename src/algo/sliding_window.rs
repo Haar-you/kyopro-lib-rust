@@ -4,8 +4,8 @@ use std::cmp::Reverse;
 use std::collections::VecDeque;
 
 /// 配列のすべての長さkの連続部分列について、その最小値を列挙する。
-/// # Complexity
-/// Time complexity $O(n)$
+///
+/// **Time complexity O(|a|)**
 pub fn sliding_minimum<T: Ord + Copy>(a: &[T], k: usize) -> Vec<T> {
     let n = a.len();
 
