@@ -17,6 +17,9 @@ impl<T> MergeSortTree<T>
 where
     T: Copy + Clone + Zero<Output = T> + Add<Output = T> + AddAssign + PartialOrd + Ord,
 {
+    /// **Time complexity O(n log n)**
+    ///
+    /// **Space complexity O(n log n)**
     pub fn new(mut a: Vec<T>) -> Self {
         let n = a.len();
         let size = n.next_power_of_two() * 2;
@@ -64,6 +67,8 @@ where
     }
 
     /// `ub`以下の総和を求める
+    ///
+    /// **Time complexity O(log^2 N)**
     pub fn sum_le(&self, Range { start: l, end: r }: Range<usize>, ub: T) -> T {
         let mut l = l + self.size / 2;
         let mut r = r + self.size / 2;
