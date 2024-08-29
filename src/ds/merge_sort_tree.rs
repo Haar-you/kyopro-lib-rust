@@ -11,6 +11,7 @@ pub struct MergeSortTree<T> {
     data: Vec<Vec<T>>,
     accum: Vec<Vec<T>>,
     size: usize,
+    original_size: usize,
 }
 
 impl<T> MergeSortTree<T>
@@ -28,6 +29,7 @@ where
             data: vec![vec![]; size],
             accum: vec![vec![]; size],
             size,
+            original_size: n,
         };
 
         ret._init(1, &mut a, 0, size / 2);
@@ -36,16 +38,18 @@ where
     }
 
     fn _init(&mut self, i: usize, a: &mut [T], l: usize, r: usize) {
+        if a.len() <= l {
+            return;
+        }
+
         if r - l == 1 {
-            self.data[i] = a.get(l..r).map_or(vec![], |a| a.to_vec());
+            self.data[i] = a[l..r].to_vec();
         } else {
             let mid = (l + r) / 2;
             self._init(i << 1, a, l, mid);
             self._init(i << 1 | 1, a, mid, r);
 
-            if a.len() <= l {
-                self.data[i] = vec![];
-            } else if a.len() <= mid {
+            if a.len() <= mid {
                 self.data[i] = a[l..].to_vec();
             } else {
                 let k = mid - l;
@@ -70,6 +74,8 @@ where
     ///
     /// **Time complexity O(log^2 N)**
     pub fn sum_le(&self, Range { start: l, end: r }: Range<usize>, ub: T) -> T {
+        assert!(l <= r && r <= self.original_size);
+
         let mut l = l + self.size / 2;
         let mut r = r + self.size / 2;
         let mut ret = T::zero();
