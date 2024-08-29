@@ -1,7 +1,7 @@
 //! ポテンシャル付きUnionfind
 //!
-//! Problems
-//! - https://judge.yosupo.jp/problem/unionfind_with_potential
+//! # Problems
+//! - <https://judge.yosupo.jp/problem/unionfind_with_potential>
 
 use crate::num::one_zero::Zero;
 use std::cell::Cell;
