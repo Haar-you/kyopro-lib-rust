@@ -2,8 +2,8 @@ use crate::tree::*;
 use std::ops::Add;
 
 /// rootを根としたときの根から各頂点への距離を列挙する。
-/// # Complexity
-/// Time complexity $O(n)$
+///
+/// **Time complexity O(n)**
 pub fn tree_distance<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>, root: usize) -> Vec<T>
 where
     T: Add<Output = T> + Copy + Default,
@@ -28,8 +28,8 @@ where
 }
 
 /// 木の任意の2頂点の距離の最大値を求める。
-/// # Complexity
-/// Time complexity $O(n)$
+///
+/// **Time complexity O(n)**
 pub fn tree_diameter<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>) -> (T, usize, usize)
 where
     T: Add<Output = T> + Copy + Default + Ord,
@@ -52,8 +52,8 @@ where
 }
 
 /// 木の各頂点について、そこからの距離の最大値を列挙する。
-/// # Complexity
-/// Time complexity $O(n)$
+///
+/// **Time complexity O(n)**
 pub fn tree_height<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>) -> Vec<(T, usize)>
 where
     T: Add<Output = T> + Copy + Default + Ord,
@@ -79,8 +79,8 @@ where
 }
 
 /// 木上の2頂点を結ぶパス上の頂点列を求める。
-/// # Complexity
-/// Time complexity $O(n)$
+///
+/// **Time complexity O(n)**
 pub fn tree_path<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>, u: usize, v: usize) -> Vec<usize> {
     let n = tr.len();
     let mut ret = vec![];
