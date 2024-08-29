@@ -2,10 +2,10 @@ use crate::chmax;
 use std::ops::Add;
 
 /// 容量が小さいナップサック問題
-/// # Complexity
-/// Time complexity O(n cap)
 ///
-/// Space complexity O(cap)
+/// **Time complexity O(n cap)**
+///
+/// **Space complexity O(cap)**
 pub fn knapsack_small_weight<T>(cap: usize, ws: &[usize], vs: &[T]) -> T
 where
     T: Default + Copy + Ord + Add<Output = T>,
