@@ -1,11 +1,11 @@
-//! $\sum_{i=0}^{\infty} r^ii^d$
+//! ∑{i=0 → ∞} rⁱiᵈ
 
 use crate::math::mod_ops::inv_p::mod_inv_p;
 use crate::math::mod_ops::pow::mod_pow;
 
-/// $\sum_{i=0}^{\infty} r^ii^d$
+/// ∑{i=0 → ∞} rⁱiᵈ
 ///
-/// Time Complexity $O(d log p)$
+/// **Time Complexity O(d log p)**
 #[inline]
 pub fn sum_of_exponential_times_polynomial_limit(r: u64, d: u64, p: u64) -> u64 {
     let mut ret = 0;
