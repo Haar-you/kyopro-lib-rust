@@ -1,8 +1,8 @@
 //! Boyer-Moore majority vote algorithm
-//!
-//! # Complexity
-//! Time complexity $O(n)$
 
+/// Boyer-Moore majority vote algorithm
+///
+/// **Time complexity O(n)**
 pub fn majority_vote<T: Eq>(a: &[T]) -> Option<(&T, usize)> {
     let mut candidate = None;
     let mut counter = 0;
