@@ -8,11 +8,11 @@ use std::cmp::max;
 ///
 /// | Functions | Time complexity |
 /// | ---- | ---- |
-/// | path_query_vertex | $O(\log(n))$ |
-/// | path_query_edge | $O(\log(n))$ |
-/// | subtree_query_vertex | $O(1)$ |
-/// | subtree_query_edge | $O(1)$ |
-/// | lca | $O(\log(n))$ |
+/// | path_query_vertex | **O(log n)** |
+/// | path_query_edge | **O(log n)** |
+/// | subtree_query_vertex | **O(1)** |
+/// | subtree_query_edge | **O(1)** |
+/// | lca | **O(log n)** |
 
 #[derive(Clone, Debug)]
 pub struct HLD {
