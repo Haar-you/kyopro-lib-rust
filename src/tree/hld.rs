@@ -3,17 +3,6 @@ use crate::tree::*;
 use std::cmp::max;
 
 /// 重軽分解
-///
-/// # Complexity
-///
-/// | Functions | Time complexity |
-/// | ---- | ---- |
-/// | path_query_vertex | **O(log n)** |
-/// | path_query_edge | **O(log n)** |
-/// | subtree_query_vertex | **O(1)** |
-/// | subtree_query_edge | **O(1)** |
-/// | lca | **O(log n)** |
-
 #[derive(Clone, Debug)]
 pub struct HLD {
     size: usize,
@@ -26,6 +15,9 @@ pub struct HLD {
 }
 
 impl HLD {
+    /// **Time complexity O(n)**
+    ///
+    /// **Space complexity O(n)**
     pub fn new<E: TreeEdgeTrait>(tree: Tree<E>, root: usize) -> Self {
         let size = tree.len();
         let mut ret = Self {
@@ -88,6 +80,8 @@ impl HLD {
     }
 
     /// 演算は可換性を仮定する。
+    ///
+    /// **Time complexity O(log n)**
     pub fn path_query_vertex(&self, mut x: usize, mut y: usize) -> Vec<(usize, usize)> {
         let mut ret = vec![];
         loop {
@@ -103,6 +97,7 @@ impl HLD {
         ret
     }
 
+    /// **Time complexity O(log n)**
     pub fn path_query_edge(&self, mut x: usize, mut y: usize) -> Vec<(usize, usize)> {
         let mut ret = vec![];
         loop {
@@ -121,22 +116,27 @@ impl HLD {
         ret
     }
 
+    /// **Time complexity O(1)**
     pub fn subtree_query_vertex(&self, x: usize) -> (usize, usize) {
         (self.id[x], self.end[x])
     }
 
+    /// **Time complexity O(1)**
     pub fn subtree_query_edge(&self, x: usize) -> (usize, usize) {
         (self.id[x] + 1, self.end[x])
     }
 
+    /// **Time complexity O(1)**
     pub fn parent(&self, x: usize) -> Option<usize> {
         self.par[x]
     }
 
+    /// **Time complexity O(1)**
     pub fn get_id(&self, x: usize) -> usize {
         self.id[x]
     }
 
+    /// **Time complexity O(log n)**
     pub fn lca(&self, mut u: usize, mut v: usize) -> usize {
         loop {
             if self.id[u] > self.id[v] {
