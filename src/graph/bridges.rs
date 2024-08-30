@@ -4,7 +4,7 @@ pub use crate::graph::lowlink::*;
 
 /// 橋の列挙
 ///
-/// Time complexity O(V + E)
+/// **Time complexity O(V + E)**
 pub fn bridges(ll: &Lowlink) -> Vec<(usize, usize)> {
     let Lowlink { ord, low, ch, .. } = ll;
 
