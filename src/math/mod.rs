@@ -19,7 +19,6 @@ pub mod factorial;
 pub mod montmort;
 
 pub mod convolution;
-pub mod rational;
 
 pub mod totient;
 pub mod totient_sum;
