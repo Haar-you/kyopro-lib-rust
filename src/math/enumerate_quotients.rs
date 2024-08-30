@@ -7,8 +7,7 @@ pub struct Quotient {
 
 /// 1以上N以下の自然数xについて`floor(N/x)`の取りうる値とそれを与えるxの範囲を列挙する。
 ///
-/// # Complexity
-/// Time complexity $O(\sqrt{N})$
+/// **Time complexity O(√N)**
 pub fn enumerate_quotients(n: u64) -> Vec<Quotient> {
     let mut ret = vec![];
 
