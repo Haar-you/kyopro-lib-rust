@@ -1,5 +1,7 @@
 //! 永続スタック
-
+//!
+//! # Verification
+//! - [ABC273 E - Notebook #37628467](https://atcoder.jp/contests/abc273/submissions/37628467)
 use std::{iter::from_fn, rc::Rc};
 
 #[derive(Debug, Default, Clone)]
@@ -9,9 +11,6 @@ struct Node<T> {
 }
 
 /// 永続スタック
-///
-/// # Verification
-/// - [ABC273 E - Notebook #37628467](https://atcoder.jp/contests/abc273/submissions/37628467)
 #[derive(Debug, Default, Clone)]
 pub struct PersistentStack<T> {
     root: Option<Rc<Node<T>>>,
