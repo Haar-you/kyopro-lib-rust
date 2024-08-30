@@ -1,5 +1,6 @@
 //! Run Length Encoding
 
+/// **Time Complexity O(|a|)**
 pub fn rle<T: PartialEq>(a: &[T]) -> Vec<(&T, usize)> {
     let mut ret = vec![];
 

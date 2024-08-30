@@ -1,3 +1,4 @@
+//! Mo's algorithm
 pub struct Mo<'a> {
     append_left: Box<dyn 'a + Fn(usize)>,
     append_right: Box<dyn 'a + Fn(usize)>,

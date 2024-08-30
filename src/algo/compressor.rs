@@ -61,6 +61,7 @@ impl<T: Clone + Ord + Eq> CompressorBuilder<T> {
         self.data.extend(values);
     }
 
+    /// **Time complexity O(n log n)**
     pub fn build(mut self) -> Compressor<T> {
         self.data.sort();
         self.data.dedup();

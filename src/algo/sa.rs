@@ -1,3 +1,4 @@
+//! Suffix Array
 use std::collections::VecDeque;
 
 #[derive(Clone, Copy, Eq, PartialEq, Debug)]

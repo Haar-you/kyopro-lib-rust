@@ -1,3 +1,4 @@
+//! 2-SAT
 use crate::graph::{scc::*, *};
 
 pub struct TwoSat {
@@ -6,6 +7,7 @@ pub struct TwoSat {
 }
 
 impl TwoSat {
+    /// **Time complexity O(size)**
     pub fn new(size: usize) -> Self {
         Self {
             size,
@@ -24,19 +26,23 @@ impl TwoSat {
         }
     }
 
+    /// a → b
     pub fn add_if(&mut self, a: isize, b: isize) {
         self.g.add(Edge::new(self.check(a), self.check(b), (), ()));
     }
 
+    /// a ∨ b
     pub fn add_or(&mut self, a: isize, b: isize) {
         self.add_if(-a, b);
         self.add_if(-b, a);
     }
 
+    /// ¬(a ∧ b)
     pub fn not_coexist(&mut self, a: isize, b: isize) {
         self.add_or(-a, -b);
     }
 
+    /// **Time complexity O(size + E)**
     pub fn solve(&self) -> Option<Vec<bool>> {
         let s = SCC::new(&self.g).to_vec();
 
