@@ -1,3 +1,5 @@
+pub mod algebra;
+
 pub use crate::num::ff::*;
 use std::{
     fmt,

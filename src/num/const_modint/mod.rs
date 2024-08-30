@@ -1,3 +1,4 @@
+pub mod algebra;
 pub mod one_zero;
 
 pub use crate::num::ff::*;
