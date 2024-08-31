@@ -12,6 +12,7 @@ pub struct DualSegtree<M: Monoid> {
 }
 
 impl<T: Clone, M: Monoid<Output = T>> DualSegtree<M> {
+    /// **Time complexity O(n)**
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
         DualSegtree {
@@ -46,6 +47,7 @@ impl<T: Clone, M: Monoid<Output = T>> DualSegtree<M> {
         }
     }
 
+    /// **Time complexity O(log n)**
     pub fn get(&mut self, i: usize) -> T {
         self.propagate_top_down(i + self.size / 2);
         self.data[i + self.size / 2].clone()
@@ -66,6 +68,7 @@ impl<T: Clone, M: Monoid<Output = T>> DualSegtree<M> {
         self.data[self.size / 2..self.size / 2 + self.original_size].to_vec()
     }
 
+    /// **Time complexity O(log n)**
     pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
         let mut l = l + self.size / 2;
         let mut r = r + self.size / 2;
