@@ -2,6 +2,7 @@
 
 use crate::{ds::unionfind::UnionFind, graph::*};
 
+/// **Time complexity O(E log E)**
 pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> Vec<&E> {
     let n = g.len();
     let mut edges = vec![];
