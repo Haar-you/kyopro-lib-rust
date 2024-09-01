@@ -10,7 +10,6 @@ use std::collections::HashMap;
 ///
 /// # Complexity
 /// Time Complexity $(\sqrt{m})$
-#[inline]
 pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
     if b == 1 {
         return Some(0);

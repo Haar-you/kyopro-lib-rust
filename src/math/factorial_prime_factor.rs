@@ -4,7 +4,6 @@
 ///
 /// # Complexity
 /// Time Complexity $O(\log a)$
-#[inline]
 pub fn factorial_prime_factor(a: u64, p: u64) -> u64 {
     let mut ret = 0;
     let mut q = p;
