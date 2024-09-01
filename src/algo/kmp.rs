@@ -6,7 +6,7 @@ pub struct KMP<T> {
     table: Vec<isize>,
 }
 
-impl<T: PartialEq + Clone> KMP<T> {
+impl<T: PartialEq> KMP<T> {
     /// **Time complexity O(|pat|)**
     pub fn new(pat: Vec<T>) -> Self {
         let m = pat.len();

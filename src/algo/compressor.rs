@@ -11,10 +11,7 @@ pub struct CompressorBuilder<T> {
     data: Vec<T>,
 }
 
-impl<T> Compressor<T>
-where
-    T: Clone + Ord + Eq,
-{
+impl<T: Ord + Eq> Compressor<T> {
     /// `value`が何番目の値(0-index)かを返す。
     ///
     /// **Time complexity O(log n)**
@@ -48,7 +45,7 @@ where
     }
 }
 
-impl<T: Clone + Ord + Eq> CompressorBuilder<T> {
+impl<T: Ord + Eq> CompressorBuilder<T> {
     pub fn new() -> Self {
         CompressorBuilder { data: vec![] }
     }
