@@ -39,7 +39,7 @@ where
                 root: None,
             }
         } else {
-            let depth = usize::BITS - (size - 1 as usize).leading_zeros() + 1;
+            let depth = usize::BITS - (size - 1_usize).leading_zeros() + 1;
             let values = vec![value; size];
             let root = Self::_init(0, size, &values, depth);
 
@@ -174,7 +174,7 @@ impl<T: Clone> From<Vec<T>> for PersistentArray<T> {
                 root: None,
             }
         } else {
-            let depth = usize::BITS - (size - 1 as usize).leading_zeros() + 1;
+            let depth = usize::BITS - (size - 1_usize).leading_zeros() + 1;
             let root = Self::_init(0, size, &value, depth);
 
             Self { size, root }
