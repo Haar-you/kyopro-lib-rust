@@ -3,7 +3,7 @@
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
 use crate::utils::linear::*;
-use std::ops::{Add, AddAssign, Div, Mul, Range};
+use std::ops::{Add, AddAssign, Mul, Range};
 
 trait_alias!(
     Elem,
@@ -11,7 +11,6 @@ trait_alias!(
         + Zero<Output = Self>
         + Add<Output = Self>
         + Mul<Output = Self>
-        + Div<Output = Self>
         + AddAssign
         + PartialEq
         + From<u32>
@@ -53,8 +52,8 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
         }
         let len = r - l;
         let (s, d) = self.lazy[i];
-        self.data[i] +=
-            T::from(len as u32) * (s * T::from(2) + d * T::from(len as u32 - 1)) / T::from(2);
+
+        self.data[i] += s * T::from(len as u32) + d * T::from(((len - 1) * len / 2) as u32);
         self.lazy[i] = (T::zero(), T::zero());
     }
 
