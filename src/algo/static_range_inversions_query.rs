@@ -10,6 +10,7 @@ pub struct StaticRangeInversionsQuery {
 }
 
 impl StaticRangeInversionsQuery {
+    /// **Time complexity O(n log n)**
     pub fn new<T: Clone + Ord>(data: &[T]) -> Self {
         let mut a = data.to_vec();
         a.sort();

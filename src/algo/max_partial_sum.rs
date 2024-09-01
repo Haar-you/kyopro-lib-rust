@@ -4,8 +4,7 @@ use std::ops::Range;
 
 /// 空でない連続する部分列の和で最大のものを返す。
 ///
-/// # Complexity
-/// Time Complexity $O(|a|)$
+/// **Time Complexity O(|a|)**
 pub fn max_partial_sum<T>(a: &[T]) -> Option<(T, Range<usize>)>
 where
     T: Copy + Ord + Add<Output = T>,

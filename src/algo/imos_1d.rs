@@ -6,12 +6,14 @@ pub struct Imos1D<T> {
 }
 
 impl<T: Copy + Signed + Zero<Output = T> + Add<Output = T> + Sub<Output = T>> Imos1D<T> {
+    /// **Time complexity O(n)**
     pub fn new(n: usize) -> Self {
         Self {
             data: vec![T::zero(); n],
         }
     }
 
+    /// **Time complexity O(1)**
     pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
         self.data[l] = self.data[l] + value;
         if let Some(x) = self.data.get_mut(r) {
@@ -19,6 +21,7 @@ impl<T: Copy + Signed + Zero<Output = T> + Add<Output = T> + Sub<Output = T>> Im
         }
     }
 
+    /// **Time complexity O(n)**
     pub fn build(mut self) -> Vec<T> {
         for i in 1..self.data.len() {
             self.data[i] = self.data[i] + self.data[i - 1];

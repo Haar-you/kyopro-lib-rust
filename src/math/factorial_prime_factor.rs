@@ -1,9 +1,8 @@
-//! $a!$の素因数pの個数を求める。
+//! a!の素因数pの個数を求める。
 
-/// $a!$の素因数pの個数を求める。
+/// a!の素因数pの個数を求める。
 ///
-/// # Complexity
-/// Time Complexity $O(\log a)$
+/// **Time Complexity O(log a)**
 pub fn factorial_prime_factor(a: u64, p: u64) -> u64 {
     let mut ret = 0;
     let mut q = p;

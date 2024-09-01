@@ -6,7 +6,7 @@ use crate::graph::*;
 use crate::num::one_zero::Zero;
 use std::{cmp::min, ops::Add};
 
-/// Time complexity O(V ^ 2 * 2 ^ V)
+/// **Time complexity O(V²2ⱽ)**
 pub fn chinese_postman_problem<T, E: EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> T
 where
     T: Zero<Output = T> + Copy + Ord + Add<Output = T>,

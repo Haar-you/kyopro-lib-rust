@@ -9,6 +9,8 @@ pub enum SearchResult<T> {
 /// 二分探索
 ///
 /// `f`は、`lower..=upper`の範囲で、ある値を境界にそれ未満では常に`false`、それ以上では常に`true`となる関数
+///
+/// **Time complexity O(log n)**
 pub fn bsearch_ng_ok<
     T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Div<Output = T> + From<u8>,
 >(

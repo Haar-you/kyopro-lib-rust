@@ -1,15 +1,13 @@
 //! 有向グラフで単一始点の最短サイクルを求める。
+//! # Problems
+//! - [ABC 142 F - Pure](https://atcoder.jp/contests/abc142/tasks/abc142_f)
 
 use crate::graph::*;
 use std::collections::VecDeque;
 
 /// 有向グラフで単一始点の最短サイクルを求める。
 ///
-/// # Complexity
-/// Time Complexity $O(V + E)$
-///
-/// # Problems
-/// - [ABC 142 F - Pure](https://atcoder.jp/contests/abc142/tasks/abc142_f)
+/// **Time Complexity O(V + E)**
 pub fn directed_shortest_cycle<E: EdgeTrait>(
     g: &Graph<Directed, E>,
     src: usize,

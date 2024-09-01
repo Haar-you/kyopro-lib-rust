@@ -4,8 +4,7 @@ use crate::algo::bsearch::lower_bound;
 
 /// 列の最長増加部分列の一つを求める。
 ///
-/// # Complexity
-/// Time complexity $O(n \log(n))$
+/// **Time complexity O(|a| log |a|)**
 pub fn lis<T>(a: &[T]) -> Vec<usize>
 where
     T: Ord + Copy,

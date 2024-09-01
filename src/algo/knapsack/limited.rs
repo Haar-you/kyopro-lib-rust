@@ -5,10 +5,10 @@ use std::{
 };
 
 /// 個数制限付きナップサック問題
-/// # Complexity
-/// Time complexity O(n cap log(max(ms)))
 ///
-/// Space complexity O(cap)
+/// **Time complexity O(n cap log(max(ms)))**
+///
+/// **Space complexity O(cap)**
 pub fn knapsack_limited<T>(cap: usize, ws: &[usize], vs: &[T], ms: &[usize]) -> T
 where
     T: Default + From<usize> + Copy + Ord + Add<Output = T> + Mul<Output = T>,

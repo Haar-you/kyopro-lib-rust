@@ -3,7 +3,9 @@
 use crate::graph::*;
 use std::collections::VecDeque;
 
-/// Time complexity O(N)
+/// トポロジカルソート
+///
+/// **Time complexity O(V)**
 ///
 /// gがDAGのとき、トポロジカルソートした結果をSomeに包んで返す。
 /// そうでなければ、Noneを返す。

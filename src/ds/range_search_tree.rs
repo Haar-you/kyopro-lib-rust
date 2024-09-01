@@ -1,9 +1,7 @@
-/*!
-領域内の点を列挙する
-
-# Problems
-- [AOJ DSL 2_C: Range Search(kD Tree)](https://onlinejudge.u-aizu.ac.jp/courses/library/3/DSL/2/DSL_2_C)
-*/
+//! 領域内の点を列挙する
+//!
+//! # Problems
+//! - [AOJ DSL 2_C: Range Search(kD Tree)](https://onlinejudge.u-aizu.ac.jp/courses/library/3/DSL/2/DSL_2_C)
 
 use crate::algo::{bsearch::lower_bound, merge::merge};
 

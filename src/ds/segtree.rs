@@ -11,6 +11,7 @@ pub struct Segtree<M: Monoid> {
 }
 
 impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
+    /// **Time complexity O(n)**
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
         Segtree {
@@ -21,6 +22,7 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
         }
     }
 
+    /// **Time complexity O(log n)**
     pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> T {
         let (l, r) = range_bounds_to_range(range, 0, self.size / 2);
 
@@ -46,6 +48,7 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
         self.monoid.op(ret_l, ret_r)
     }
 
+    /// **Time complexity O(log n)**
     pub fn assign(&mut self, i: usize, value: T) {
         let mut i = i + self.size / 2;
         self.data[i] = value;
@@ -58,6 +61,7 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
         }
     }
 
+    /// **Time complexity O(log n)**
     pub fn update(&mut self, i: usize, value: T) {
         self.assign(
             i,

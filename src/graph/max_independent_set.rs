@@ -1,4 +1,7 @@
 //! 最大独立集合
+//!
+//! # Verifications
+//! - [Maximum Independent Set](https://judge.yosupo.jp/problem/maximum_independent_set) [#142761](https://judge.yosupo.jp/submission/142761) (n <= 40)
 use crate::graph::*;
 use std::collections::HashSet;
 
@@ -6,9 +9,6 @@ use std::collections::HashSet;
 ///
 /// nは64以下に制限している。
 /// 最大独立集合の補集合は最小頂点被覆集合になる。
-///
-/// # Verifications
-/// Library Checker [Maximum Independent Set](https://judge.yosupo.jp/problem/maximum_independent_set) [#142761](https://judge.yosupo.jp/submission/142761) (n <= 40)
 pub fn max_independent_set<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Vec<usize> {
     let n = g.len();
     assert!(n <= 64);

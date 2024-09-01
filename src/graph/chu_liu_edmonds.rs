@@ -1,4 +1,6 @@
 //! 有向グラフ上の最小有向全域木を求める
+//! # Problems
+//! - [AOJ GRL_2_B](https://onlinejudge.u-aizu.ac.jp/problems/GRL_2_B)
 
 use crate::graph::*;
 use std::collections::VecDeque;
@@ -8,11 +10,7 @@ type Edge_<'a, T, E> = (usize, usize, T, &'a E);
 
 /// 有向グラフ上の最小有向全域木を求める
 ///
-/// # Complexity
-/// Time Complexity $O(VE)$
-///
-/// # Problems
-/// - [AOJ GRL_2_B](https://onlinejudge.u-aizu.ac.jp/problems/GRL_2_B)
+/// **Time Complexity O(VE)**
 pub fn chu_liu_edmonds<T, E>(g: &Graph<Directed, E>, root: usize) -> Vec<&E>
 where
     T: Ord + Copy + Sub<Output = T>,

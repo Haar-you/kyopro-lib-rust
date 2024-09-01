@@ -4,8 +4,7 @@ use std::mem::swap;
 
 /// 素数mod pでの逆元
 ///
-/// # Complexity
-/// Time Complexity $O(\log p)$
+/// **Time Complexity O(log p)**
 #[inline]
 pub fn mod_inv_p(mut a: u64, p: u64) -> u64 {
     let mut b = p;

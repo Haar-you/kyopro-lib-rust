@@ -7,6 +7,7 @@ pub struct KMP<T> {
 }
 
 impl<T: PartialEq + Clone> KMP<T> {
+    /// **Time complexity O(|pat|)**
     pub fn new(pat: Vec<T>) -> Self {
         let m = pat.len();
         let mut table: Vec<isize> = vec![0; m + 1];
@@ -33,6 +34,7 @@ impl<T: PartialEq + Clone> KMP<T> {
         Self { pat, table }
     }
 
+    /// **Time complexity O(|s|)**
     pub fn matches(&self, s: &[T]) -> Vec<usize> {
         let mut ret = vec![];
         let n = s.len();

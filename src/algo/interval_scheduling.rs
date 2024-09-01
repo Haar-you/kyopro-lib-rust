@@ -1,8 +1,8 @@
 //! 区間スケジューリング問題
 
 /// 半開区間の集合から共通部分を含まないような部分集合のうち、要素数が最大となるものを求める。
-/// # Complexity
-/// Time complexity $O(n \log(n))$
+///
+/// **Time complexity O(n log n)**
 pub fn interval_scheduling<T: Ord + Copy>(intervals: &[(T, T)]) -> Vec<usize> {
     let n = intervals.len();
     let mut ret = vec![];

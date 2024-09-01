@@ -6,7 +6,7 @@ use crate::graph::*;
 use crate::num::one_zero::Zero;
 use std::{cmp::min, ops::Add};
 
-/// Time complexity O(n ^ 3)
+/// **Time complexity O(n³)**
 pub fn warshall_floyd<D: Direction, T, E: EdgeTrait<Weight = T>>(
     g: &Graph<D, E>,
 ) -> Option<Vec<Vec<Option<T>>>>

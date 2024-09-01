@@ -9,6 +9,9 @@ pub struct Segtree2D<M: Monoid + Commutative> {
 }
 
 impl<T: Clone, M: Monoid<Output = T> + Commutative> Segtree2D<M> {
+    /// **Time complexity O(wh)**
+    ///
+    /// **Space complexity O(wh)**
     pub fn new(w: usize, h: usize, monoid: M) -> Self {
         let w = w.next_power_of_two() * 2;
         let h = h.next_power_of_two() * 2;
@@ -44,6 +47,7 @@ impl<T: Clone, M: Monoid<Output = T> + Commutative> Segtree2D<M> {
         ret
     }
 
+    /// **Time complexity O(log w log h)**
     pub fn fold_2d(
         &self,
         Range { start: x1, end: x2 }: Range<usize>,
@@ -70,10 +74,12 @@ impl<T: Clone, M: Monoid<Output = T> + Commutative> Segtree2D<M> {
         ret
     }
 
+    /// **Time complexity O(1)**
     pub fn get(&self, i: usize, j: usize) -> T {
         self.data[i + self.w / 2][j + self.h / 2].clone()
     }
 
+    /// **Time complexity O(log w log h)**
     pub fn assign(&mut self, i: usize, j: usize, value: T) {
         let i = i + self.w / 2;
         let j = j + self.h / 2;
@@ -103,6 +109,7 @@ impl<T: Clone, M: Monoid<Output = T> + Commutative> Segtree2D<M> {
         }
     }
 
+    /// **Time complexity O(log w log h)**
     pub fn update(&mut self, i: usize, j: usize, value: T) {
         let value = self.monoid.op(value, self.get(i, j));
         self.assign(i, j, value);

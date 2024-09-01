@@ -1,12 +1,12 @@
 //! ナップサック問題
 //!
-//! | function |time complexity | space complexity |
+//! | function | time complexity | space complexity |
 //! | ---- | ---- | ---- |
-//! | knapsack_small_weight | $O(n \sdot cap)$ | $O(cap)$ |
-//! | knapsack_small_value | $O(n \sum_{v \in vs} v)$ | $O(\sum_{v \in vs} v)$ |
-//! | knapsack_small_quantity | $O(n 2 ^ {n / 2})$ | $O(2 ^ {n / 2})$ |
-//! | knapsack_limited | $O(n \cdot cap \log(\max(ms)))$ | $O(cap)$ |
-//! | knapsack_unlimited | $O(n \cdot cap)$ | $O(cap)$ |
+//! | knapsack_small_weight | **O(n cap)** | **O(cap)** |
+//! | knapsack_small_value | **O(n Σ(vs))** | **O(Σ(vs))** |
+//! | knapsack_small_quantity | **O(n 2^{n / 2})** | **O(2^{n / 2})** |
+//! | knapsack_limited | **O(n cap log(max(ms)))** | **O(cap)** |
+//! | knapsack_unlimited | **O(n cap)** | **O(cap)** |
 
 pub mod limited;
 pub mod small_quantity;

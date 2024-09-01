@@ -15,9 +15,9 @@ impl<Modulo: FF> FactorialTable<Modulo>
 where
     Modulo::Output: FFElem,
 {
-    /// Time complexity O(n)
+    /// **Time complexity O(n)**
     ///
-    /// Space complexity O(n)
+    /// **Space complexity O(n)**
     pub fn new(n: usize, modulo: Modulo) -> Self {
         let mut factorial = vec![modulo.from_u64(1); n + 1];
         let mut invs = vec![modulo.from_u64(1); n + 1];
@@ -41,21 +41,21 @@ where
 
     /// nの階乗
     ///
-    /// Time complexity O(1)
+    /// **Time complexity O(1)**
     pub fn facto(&self, n: usize) -> Modulo::Output {
         self.factorial[n]
     }
 
     /// nの階乗の逆元
     ///
-    /// Time complexity O(1)
+    /// **Time complexity O(1)**
     pub fn inv_facto(&self, n: usize) -> Modulo::Output {
         self.invs[n]
     }
 
     /// n個からk個とりだす順列の個数 (nPk)
     ///
-    /// Time complexity O(1)
+    /// **Time complexity O(1)**
     pub fn perm(&self, n: usize, k: usize) -> Modulo::Output {
         if n < k {
             self.modulo.from_u64(0)
@@ -66,7 +66,7 @@ where
 
     /// n個からk個とりだす組み合わせの個数 (nCk)
     ///
-    /// Time complexity O(1)
+    /// **Time complexity O(1)**
     pub fn comb(&self, n: usize, k: usize) -> Modulo::Output {
         if n < k {
             self.modulo.from_u64(0)

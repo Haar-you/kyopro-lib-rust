@@ -1,3 +1,4 @@
+//! 黄金分割探索
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Convex {
     Upwards,

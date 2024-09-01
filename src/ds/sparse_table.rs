@@ -10,6 +10,9 @@ pub struct SparseTable<A: BinaryOp + Associative + Idempotence> {
 }
 
 impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> SparseTable<A> {
+    /// **Time complexity O(n log n)**
+    ///
+    /// **Space complexity O(n log n)**
     pub fn new(s: Vec<T>, a: A) -> Self {
         let n = s.len();
         let logn = n.next_power_of_two().trailing_zeros() as usize + 1;
@@ -39,6 +42,7 @@ impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> Sp
         }
     }
 
+    /// **Time complexity O(1)**
     pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Option<T> {
         if l >= r {
             None

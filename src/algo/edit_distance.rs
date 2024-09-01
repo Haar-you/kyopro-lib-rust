@@ -1,8 +1,13 @@
+//! 編集距離
+
 #![allow(clippy::needless_range_loop)]
 
 use crate::chmin;
 use std::cmp::min;
 
+/// 編集距離
+///
+/// **Time complexity O(nm)**
 pub fn edit_distance<T: PartialEq>(a: &[T], b: &[T]) -> usize {
     let n = a.len();
     let m = b.len();
