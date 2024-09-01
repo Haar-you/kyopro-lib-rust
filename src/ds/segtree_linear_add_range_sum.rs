@@ -1,3 +1,5 @@
+//! 区間一次関数加算区間総和セグメントツリー
+
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
 use crate::utils::linear::*;
@@ -22,6 +24,9 @@ pub struct SegtreeLinearAddRangeSum<T> {
 }
 
 impl<T: Elem> SegtreeLinearAddRangeSum<T> {
+    /// **Time complexity O(n)**
+    ///
+    /// **Space complexity O(n)**
     pub fn new(n: usize) -> Self {
         let n = n.next_power_of_two();
 
@@ -69,6 +74,7 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
         }
     }
 
+    /// **Time complexity O(log n)**
     pub fn update(&mut self, Range { start, end }: Range<usize>, linear: Linear<T>) {
         self._update(1, 0, self.hsize, start, end, linear.a, linear.b);
     }
@@ -85,6 +91,7 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
         }
     }
 
+    /// **Time complexity O(log n)**
     pub fn fold(&mut self, Range { start, end }: Range<usize>) -> T {
         self._fold(1, 0, self.hsize, start, end)
     }
