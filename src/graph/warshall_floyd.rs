@@ -4,14 +4,14 @@
 
 use crate::graph::*;
 use crate::num::one_zero::Zero;
-use std::{cmp::min, ops::Add};
+use std::ops::Add;
 
 /// **Time complexity O(n³)**
 pub fn warshall_floyd<D: Direction, T, E: EdgeTrait<Weight = T>>(
     g: &Graph<D, E>,
 ) -> Option<Vec<Vec<Option<T>>>>
 where
-    T: Add<Output = T> + Copy + Ord + Zero<Output = T>,
+    T: Copy + Ord + Add<Output = T> + Zero<Output = T>,
 {
     let zero = T::zero();
     let n = g.len();
@@ -27,9 +27,12 @@ where
     for k in 0..n {
         for i in 0..n {
             for j in 0..n {
-                if dist[i][k].is_some() && dist[k][j].is_some() {
-                    let s = dist[i][k].unwrap() + dist[k][j].unwrap();
-                    dist[i][j] = Some(dist[i][j].map_or(s, |x| min(x, s)));
+                match (dist[i][k], dist[k][j]) {
+                    (Some(a), Some(b)) => {
+                        let s = a + b;
+                        dist[i][j] = dist[i][j].map(|x| x.min(s)).or(Some(s));
+                    }
+                    _ => {}
                 }
             }
         }
