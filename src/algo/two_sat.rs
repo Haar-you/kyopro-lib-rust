@@ -46,12 +46,11 @@ impl TwoSat {
     pub fn solve(&self) -> Option<Vec<bool>> {
         let s = SCC::new(&self.g).to_vec();
 
-        for i in 0..self.size {
-            if s[i] == s[i + self.size] {
-                return None;
-            }
+        let (a, b) = s.split_at(self.size);
+        if a.iter().zip(b).find(|(a, b)| a == b).is_some() {
+            return None;
         }
 
-        Some((0..self.size).map(|i| s[i] > s[i + self.size]).collect())
+        Some(a.iter().zip(b).map(|(a, b)| a > b).collect())
     }
 }
