@@ -3,7 +3,11 @@
 use crate::graph::*;
 use std::{cmp::Reverse, collections::BinaryHeap};
 
-pub fn prim<T: Ord, E: EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> Vec<&E> {
+/// Prim法
+///
+/// グラフが連結ならばSomeに包んで最小全域木の辺集合を返す。
+/// 非連結ならばNoneを返す。
+pub fn prim<T: Ord, E: EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> Option<Vec<&E>> {
     let n = g.len();
     let mut visit = vec![false; n];
     let mut ret = vec![];
@@ -30,7 +34,7 @@ pub fn prim<T: Ord, E: EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> Vec<&
         ret.push(e);
     }
 
-    ret
+    (ret.len() == n - 1).then_some(ret)
 }
 
 #[cfg(test)]
@@ -56,7 +60,7 @@ mod tests {
             .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
 
-        let ans = prim(&g).iter().map(|e| e.weight).sum::<i32>();
+        let ans = prim(&g).unwrap().iter().map(|e| e.weight).sum::<i32>();
 
         assert_eq!(ans, 5);
     }

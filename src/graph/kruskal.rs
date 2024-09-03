@@ -2,8 +2,15 @@
 
 use crate::{ds::unionfind::UnionFind, graph::*};
 
+/// Kruskal法
+///
+/// グラフが連結ならばSomeに包んで最小全域木の辺集合を返す。
+/// 非連結ならばNoneを返す。
+///
 /// **Time complexity O(E log E)**
-pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> Vec<&E> {
+pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(
+    g: &Graph<Undirected, E>,
+) -> Option<Vec<&E>> {
     let n = g.len();
     let mut edges = vec![];
     for es in &g.edges {
@@ -25,7 +32,7 @@ pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(g: &Graph<Undirected, E
         }
     }
 
-    ret
+    (ret.len() == n - 1).then_some(ret)
 }
 
 #[cfg(test)]
@@ -51,7 +58,7 @@ mod tests {
             .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
 
-        let ans = kruskal(&g).iter().map(|e| e.weight).sum::<i32>();
+        let ans = kruskal(&g).unwrap().iter().map(|e| e.weight).sum::<i32>();
 
         assert_eq!(ans, 5);
     }
