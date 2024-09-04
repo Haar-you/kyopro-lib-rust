@@ -22,10 +22,8 @@ impl SCC {
         ord.reverse();
 
         let mut rg = vec![vec![]; n];
-        for es in &g.edges {
-            for e in es {
-                rg[e.to()].push(e.from());
-            }
+        for e in g.edges.iter().flatten() {
+            rg[e.to()].push(e.from());
         }
 
         let mut ret = vec![];
@@ -35,7 +33,7 @@ impl SCC {
 
         for u in ord {
             if !check[u] {
-                ret.push(vec![]);
+                let mut temp = vec![];
                 stack.push(u);
                 while let Some(cur) = stack.pop() {
                     check[cur] = true;
@@ -44,9 +42,9 @@ impl SCC {
                             stack.push(to);
                         }
                     }
-
-                    ret.last_mut().unwrap().push(cur);
+                    temp.push(cur);
                 }
+                ret.push(temp);
             }
         }
 
