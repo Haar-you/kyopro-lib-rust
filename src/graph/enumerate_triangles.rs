@@ -1,9 +1,7 @@
 use crate::graph::*;
 use std::collections::HashSet;
 
-pub fn enumerate_triangles<T, E: EdgeTrait>(
-    g: &Graph<Undirected, E>,
-) -> Vec<(usize, usize, usize)> {
+pub fn enumerate_triangles<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Vec<(usize, usize, usize)> {
     let n = g.len();
     let mut ret = vec![];
     let mut adjacent = vec![HashSet::new(); n];
