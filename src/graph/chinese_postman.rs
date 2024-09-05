@@ -20,11 +20,9 @@ where
         dist[i][i] = Some(zero);
     }
 
-    for i in 0..n {
-        for e in &g.edges[i] {
-            let (from, to, cost) = (e.from(), e.to(), e.weight());
-            dist[from][to] = dist[from][to].map(|x| x.min(cost)).or(Some(cost));
-        }
+    for e in g.edges.iter().flatten() {
+        let (from, to, cost) = (e.from(), e.to(), e.weight());
+        dist[from][to] = dist[from][to].map(|x| x.min(cost)).or(Some(cost));
     }
 
     for k in 0..n {
@@ -41,8 +39,7 @@ where
         .edges
         .iter()
         .enumerate()
-        .filter(|(_, es)| es.len() % 2 == 1)
-        .map(|(i, _)| i)
+        .filter_map(|(i, es)| (es.len() % 2 == 1).then_some(i))
         .collect();
     let m = odd.len();
 
@@ -66,7 +63,10 @@ where
 
     g.edges
         .iter()
-        .flat_map(|es| es.iter().filter(|e| e.from() <= e.to()).map(|e| e.weight()))
+        .flat_map(|es| {
+            es.iter()
+                .filter_map(|e| (e.from() <= e.to()).then_some(e.weight()))
+        })
         .fold(dp[(1 << m) - 1].unwrap(), |x, y| x + y)
 }
 
