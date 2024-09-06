@@ -167,6 +167,9 @@
 <a href="#167" id="167">167</a>
 <a href="#168" id="168">168</a>
 <a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 区間加算・区間Max(Min)
 
 </span><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
@@ -203,7 +206,8 @@
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; StarrySkyTree&lt;T&gt; {
-    <span class="kw">pub fn </span>new(n: usize, mode: Mode) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// **Time complexity O(n)**
+    </span><span class="kw">pub fn </span>new(n: usize, mode: Mode) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
         <span class="kw">let </span>zero = T::zero();
         StarrySkyTree {
@@ -231,11 +235,13 @@
         }
     }
 
-    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="doccomment">/// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="self">self</span>.rec(l, r, <span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, T::zero())
     }
 
-    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, value: T) {
+    <span class="doccomment">/// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, value: T) {
         <span class="kw">let </span>hsize = <span class="self">self</span>.size / <span class="number">2</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>ll = l + <span class="self">self</span>.size / <span class="number">2</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>rr = r + <span class="self">self</span>.size / <span class="number">2</span>;

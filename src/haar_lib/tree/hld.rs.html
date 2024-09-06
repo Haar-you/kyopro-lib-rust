@@ -154,17 +154,6 @@
 <span class="kw">use </span>std::cmp::max;
 
 <span class="doccomment">/// 重軽分解
-///
-/// # Complexity
-///
-/// | Functions | Time complexity |
-/// | ---- | ---- |
-/// | path_query_vertex | $O(\log(n))$ |
-/// | path_query_edge | $O(\log(n))$ |
-/// | subtree_query_vertex | $O(1)$ |
-/// | subtree_query_edge | $O(1)$ |
-/// | lca | $O(\log(n))$ |
-
 </span><span class="attr">#[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>HLD {
     size: usize,
@@ -177,7 +166,10 @@
 }
 
 <span class="kw">impl </span>HLD {
-    <span class="kw">pub fn </span>new&lt;E: TreeEdgeTrait&gt;(tree: Tree&lt;E&gt;, root: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// **Time complexity O(n)**
+    ///
+    /// **Space complexity O(n)**
+    </span><span class="kw">pub fn </span>new&lt;E: TreeEdgeTrait&gt;(tree: Tree&lt;E&gt;, root: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = tree.len();
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self </span>{
             size,
@@ -239,6 +231,8 @@
     }
 
     <span class="doccomment">/// 演算は可換性を仮定する。
+    ///
+    /// **Time complexity O(log n)**
     </span><span class="kw">pub fn </span>path_query_vertex(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>x: usize, <span class="kw-2">mut </span>y: usize) -&gt; Vec&lt;(usize, usize)&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
         <span class="kw">loop </span>{
@@ -254,7 +248,8 @@
         ret
     }
 
-    <span class="kw">pub fn </span>path_query_edge(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>x: usize, <span class="kw-2">mut </span>y: usize) -&gt; Vec&lt;(usize, usize)&gt; {
+    <span class="doccomment">/// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>path_query_edge(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>x: usize, <span class="kw-2">mut </span>y: usize) -&gt; Vec&lt;(usize, usize)&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
         <span class="kw">loop </span>{
             <span class="kw">if </span><span class="self">self</span>.id[x] &gt; <span class="self">self</span>.id[y] {
@@ -272,23 +267,28 @@
         ret
     }
 
-    <span class="kw">pub fn </span>subtree_query_vertex(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; (usize, usize) {
+    <span class="doccomment">/// **Time complexity O(1)**
+    </span><span class="kw">pub fn </span>subtree_query_vertex(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; (usize, usize) {
         (<span class="self">self</span>.id[x], <span class="self">self</span>.end[x])
     }
 
-    <span class="kw">pub fn </span>subtree_query_edge(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; (usize, usize) {
+    <span class="doccomment">/// **Time complexity O(1)**
+    </span><span class="kw">pub fn </span>subtree_query_edge(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; (usize, usize) {
         (<span class="self">self</span>.id[x] + <span class="number">1</span>, <span class="self">self</span>.end[x])
     }
 
-    <span class="kw">pub fn </span>parent(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
+    <span class="doccomment">/// **Time complexity O(1)**
+    </span><span class="kw">pub fn </span>parent(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="self">self</span>.par[x]
     }
 
-    <span class="kw">pub fn </span>get_id(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; usize {
+    <span class="doccomment">/// **Time complexity O(1)**
+    </span><span class="kw">pub fn </span>get_id(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; usize {
         <span class="self">self</span>.id[x]
     }
 
-    <span class="kw">pub fn </span>lca(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>u: usize, <span class="kw-2">mut </span>v: usize) -&gt; usize {
+    <span class="doccomment">/// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>lca(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>u: usize, <span class="kw-2">mut </span>v: usize) -&gt; usize {
         <span class="kw">loop </span>{
             <span class="kw">if </span><span class="self">self</span>.id[u] &gt; <span class="self">self</span>.id[v] {
                 std::mem::swap(<span class="kw-2">&amp;mut </span>u, <span class="kw-2">&amp;mut </span>v);

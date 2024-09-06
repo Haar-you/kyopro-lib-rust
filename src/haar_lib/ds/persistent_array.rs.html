@@ -174,13 +174,49 @@
 <a href="#174" id="174">174</a>
 <a href="#175" id="175">175</a>
 <a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 永続配列
 
 </span><span class="kw">use </span>std::rc::Rc;
 
-<span class="kw">enum </span>Node&lt;T&gt; {
+<span class="attr">#[derive(Clone)]
+</span><span class="kw">enum </span>Node&lt;T&gt; {
     Terminal {
-        value: T,
+        value: Rc&lt;T&gt;,
     },
     Internal {
         size: usize,
@@ -189,15 +225,16 @@
     },
 }
 
-<span class="kw">pub struct </span>PersistentArray&lt;T&gt; {
+<span class="attr">#[derive(Clone)]
+</span><span class="kw">pub struct </span>PersistentArray&lt;T&gt; {
     size: usize,
     root: <span class="prelude-ty">Option</span>&lt;Rc&lt;Node&lt;T&gt;&gt;&gt;,
 }
 
-<span class="kw">fn </span>get_size&lt;T&gt;(node: <span class="prelude-ty">Option</span>&lt;Rc&lt;Node&lt;T&gt;&gt;&gt;) -&gt; usize {
-    node.map_or(<span class="number">0</span>, |node| <span class="kw">match </span><span class="kw-2">*</span>node {
-        Node::&lt;T&gt;::Terminal { .. } =&gt; <span class="number">1</span>,
-        Node::&lt;T&gt;::Internal { size, .. } =&gt; size,
+<span class="kw">fn </span>get_size&lt;T&gt;(node: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span>&lt;Rc&lt;Node&lt;T&gt;&gt;&gt;) -&gt; usize {
+    node.as_ref().map_or(<span class="number">0</span>, |node| <span class="kw">match </span>node.as_ref() {
+        Node::Terminal { .. } =&gt; <span class="number">1</span>,
+        Node::Internal { size, .. } =&gt; <span class="kw-2">*</span>size,
     })
 }
 
@@ -205,115 +242,128 @@
 <span class="kw">where
     </span>T: Clone,
 {
-    <span class="kw">pub fn </span>new(size: usize, value: T) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span>depth = {
-            <span class="kw">let </span><span class="kw-2">mut </span>t = <span class="number">1</span>;
-            <span class="kw">while </span>size &gt; (<span class="number">1 </span>&lt;&lt; t) {
-                t += <span class="number">1</span>;
+    <span class="doccomment">/// **Time complexity O(n)**
+    </span><span class="kw">pub fn </span>new(size: usize, value: T) -&gt; <span class="self">Self </span>{
+        <span class="kw">if </span>size == <span class="number">0 </span>{
+            <span class="self">Self </span>{
+                size: <span class="number">0</span>,
+                root: <span class="prelude-val">None</span>,
             }
-            t + <span class="number">1
-        </span>};
+        } <span class="kw">else </span>{
+            <span class="kw">let </span>depth = usize::BITS - (size - <span class="number">1_usize</span>).leading_zeros() + <span class="number">1</span>;
+            <span class="kw">let </span>values = <span class="macro">vec!</span>[value; size];
+            <span class="kw">let </span>root = <span class="self">Self</span>::_init(<span class="number">0</span>, size, <span class="kw-2">&amp;</span>values, depth);
 
-        <span class="kw">let </span>root = <span class="self">Self</span>::init(size, value, <span class="number">1</span>, depth);
-
-        <span class="self">Self </span>{ size, root }
+            <span class="self">Self </span>{ size, root }
+        }
     }
 
-    <span class="kw">fn </span>init(s: usize, value: T, d: usize, depth: usize) -&gt; <span class="prelude-ty">Option</span>&lt;Rc&lt;Node&lt;T&gt;&gt;&gt; {
-        <span class="kw">if </span>s == <span class="number">0 </span>{
+    <span class="kw">fn </span>_init(l: usize, r: usize, values: <span class="kw-2">&amp;</span>[T], depth: u32) -&gt; <span class="prelude-ty">Option</span>&lt;Rc&lt;Node&lt;T&gt;&gt;&gt; {
+        <span class="kw">if </span>l == r {
             <span class="kw">return </span><span class="prelude-val">None</span>;
         }
-        <span class="kw">if </span>d == depth {
-            <span class="prelude-val">Some</span>(Rc::new(Node::&lt;T&gt;::Terminal { value }))
+        <span class="kw">if </span>depth == <span class="number">1 </span>{
+            <span class="prelude-val">Some</span>(Rc::new(Node::Terminal {
+                value: Rc::new(values[l].clone()),
+            }))
         } <span class="kw">else </span>{
-            <span class="kw">let </span>l = <span class="self">Self</span>::init(s / <span class="number">2</span>, value.clone(), d + <span class="number">1</span>, depth);
-            <span class="kw">let </span>r = <span class="self">Self</span>::init(s - s / <span class="number">2</span>, value, d + <span class="number">1</span>, depth);
+            <span class="kw">let </span>mid = (l + r) / <span class="number">2</span>;
+            <span class="kw">let </span>l_ch = <span class="self">Self</span>::_init(l, mid, values, depth - <span class="number">1</span>);
+            <span class="kw">let </span>r_ch = <span class="self">Self</span>::_init(mid, r, values, depth - <span class="number">1</span>);
 
-            <span class="kw">let </span>t = Node::&lt;T&gt;::Internal {
-                size: get_size(l.clone()) + get_size(r.clone()),
-                l_ch: l,
-                r_ch: r,
+            <span class="kw">let </span>t = Node::Internal {
+                size: get_size(<span class="kw-2">&amp;</span>l_ch) + get_size(<span class="kw-2">&amp;</span>r_ch),
+                l_ch,
+                r_ch,
             };
 
             <span class="prelude-val">Some</span>(Rc::new(t))
         }
     }
 
-    <span class="kw">fn </span>_traverse(node: <span class="prelude-ty">Option</span>&lt;Rc&lt;Node&lt;T&gt;&gt;&gt;, ret: <span class="kw-2">&amp;mut </span>Vec&lt;T&gt;) {
+    <span class="kw">fn </span>_traverse(node: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span>&lt;Rc&lt;Node&lt;T&gt;&gt;&gt;, ret: <span class="kw-2">&amp;mut </span>Vec&lt;T&gt;) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(node) = node {
-            <span class="kw">match </span><span class="kw-2">*</span>node {
-                Node::&lt;T&gt;::Terminal { <span class="kw-2">ref </span>value } =&gt; {
-                    ret.push(value.clone());
+            <span class="kw">match </span>node.as_ref() {
+                Node::Terminal { value } =&gt; {
+                    ret.push(value.as_ref().clone());
                 }
-                Node::&lt;T&gt;::Internal {
-                    <span class="kw-2">ref </span>l_ch, <span class="kw-2">ref </span>r_ch, ..
-                } =&gt; {
-                    <span class="self">Self</span>::_traverse(l_ch.clone(), ret);
-                    <span class="self">Self</span>::_traverse(r_ch.clone(), ret);
+                Node::Internal { l_ch, r_ch, .. } =&gt; {
+                    <span class="self">Self</span>::_traverse(l_ch, ret);
+                    <span class="self">Self</span>::_traverse(r_ch, ret);
                 }
             }
         }
     }
 
-    <span class="kw">fn </span>_set(prev: Rc&lt;Node&lt;T&gt;&gt;, i: usize, value: T) -&gt; Rc&lt;Node&lt;T&gt;&gt; {
-        <span class="kw">match </span><span class="kw-2">*</span>prev {
-            Node::&lt;T&gt;::Terminal { .. } =&gt; Rc::new(Node::&lt;T&gt;::Terminal { value }),
-            Node::&lt;T&gt;::Internal {
-                <span class="kw-2">ref </span>l_ch, <span class="kw-2">ref </span>r_ch, ..
-            } =&gt; {
-                <span class="kw">let </span>k = get_size(l_ch.clone());
-                <span class="kw">let </span>(l, r) = {
+    <span class="kw">fn </span>_set(prev: <span class="kw-2">&amp;</span>Rc&lt;Node&lt;T&gt;&gt;, i: usize, value: T) -&gt; Rc&lt;Node&lt;T&gt;&gt; {
+        <span class="kw">match </span>prev.as_ref() {
+            Node::Terminal { .. } =&gt; Rc::new(Node::Terminal {
+                value: Rc::new(value),
+            }),
+            Node::Internal { l_ch, r_ch, .. } =&gt; {
+                <span class="kw">let </span>(l_ch, r_ch) = {
+                    <span class="kw">let </span>k = get_size(l_ch);
                     <span class="kw">if </span>i &lt; k {
                         (
-                            <span class="prelude-val">Some</span>(<span class="self">Self</span>::_set(Rc::clone(l_ch.as_ref().unwrap()), i, value)),
+                            <span class="prelude-val">Some</span>(<span class="self">Self</span>::_set(l_ch.as_ref().unwrap(), i, value)),
                             r_ch.clone(),
                         )
                     } <span class="kw">else </span>{
                         (
                             l_ch.clone(),
-                            <span class="prelude-val">Some</span>(<span class="self">Self</span>::_set(Rc::clone(r_ch.as_ref().unwrap()), i - k, value)),
+                            <span class="prelude-val">Some</span>(<span class="self">Self</span>::_set(r_ch.as_ref().unwrap(), i - k, value)),
                         )
                     }
                 };
 
-                Rc::new(Node::&lt;T&gt;::Internal {
-                    size: get_size(l.clone()) + get_size(r.clone()),
-                    l_ch: l,
-                    r_ch: r,
+                Rc::new(Node::Internal {
+                    size: get_size(<span class="kw-2">&amp;</span>l_ch) + get_size(<span class="kw-2">&amp;</span>r_ch),
+                    l_ch,
+                    r_ch,
                 })
             }
         }
     }
 
-    <span class="kw">pub fn </span>set(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, value: T) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>set(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, value: T) -&gt; <span class="self">Self </span>{
+        <span class="macro">assert!</span>(
+            i &lt; <span class="self">self</span>.size,
+            <span class="string">&quot;index out of bounds: the len is {} but the index is {}&quot;</span>,
+            <span class="self">self</span>.size,
+            i
+        );
         <span class="self">Self </span>{
             size: <span class="self">self</span>.size,
-            root: <span class="prelude-val">Some</span>(<span class="self">Self</span>::_set(<span class="self">self</span>.root.clone().unwrap(), i, value)),
+            root: <span class="prelude-val">Some</span>(<span class="self">Self</span>::_set(<span class="self">self</span>.root.as_ref().unwrap(), i, value)),
         }
     }
 
-    <span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; T {
-        <span class="kw">fn </span>_get&lt;T&gt;(node: Rc&lt;Node&lt;T&gt;&gt;, i: usize) -&gt; Rc&lt;Node&lt;T&gt;&gt; {
-            <span class="kw">match </span><span class="kw-2">*</span>node {
-                Node::&lt;T&gt;::Terminal { .. } =&gt; node,
-                Node::&lt;T&gt;::Internal {
-                    <span class="kw-2">ref </span>l_ch, <span class="kw-2">ref </span>r_ch, ..
-                } =&gt; {
-                    <span class="kw">let </span>k = get_size(l_ch.clone());
-                    <span class="kw">if </span>i &lt; k {
-                        _get(Rc::clone(l_ch.as_ref().unwrap()), i)
-                    } <span class="kw">else </span>{
-                        _get(Rc::clone(r_ch.as_ref().unwrap()), i - k)
-                    }
+    <span class="kw">fn </span>_get(node: <span class="kw-2">&amp;</span>Rc&lt;Node&lt;T&gt;&gt;, i: usize) -&gt; Rc&lt;Node&lt;T&gt;&gt; {
+        <span class="kw">match </span>node.as_ref() {
+            Node::Terminal { .. } =&gt; Rc::clone(node),
+            Node::Internal { l_ch, r_ch, .. } =&gt; {
+                <span class="kw">let </span>k = get_size(l_ch);
+                <span class="kw">if </span>i &lt; k {
+                    <span class="self">Self</span>::_get(l_ch.as_ref().unwrap(), i)
+                } <span class="kw">else </span>{
+                    <span class="self">Self</span>::_get(r_ch.as_ref().unwrap(), i - k)
                 }
             }
         }
+    }
 
-        <span class="kw">match </span><span class="kw-2">*</span>_get(Rc::clone(<span class="self">self</span>.root.as_ref().unwrap()), i) {
-            Node::&lt;T&gt;::Terminal { <span class="kw-2">ref </span>value } =&gt; value.clone(),
-            <span class="kw">_ </span>=&gt; {
-                <span class="macro">unreachable!</span>();
-            }
+    <span class="doccomment">/// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; Rc&lt;T&gt; {
+        <span class="macro">assert!</span>(
+            i &lt; <span class="self">self</span>.size,
+            <span class="string">&quot;index out of bounds: the len is {} but the index is {}&quot;</span>,
+            <span class="self">self</span>.size,
+            i
+        );
+        <span class="kw">match </span><span class="self">Self</span>::_get(<span class="self">self</span>.root.as_ref().unwrap(), i).as_ref() {
+            Node::Terminal { value } =&gt; Rc::clone(value),
+            <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
         }
     }
 }
@@ -321,8 +371,25 @@
 <span class="kw">impl</span>&lt;T: Clone&gt; From&lt;<span class="kw-2">&amp;</span>PersistentArray&lt;T&gt;&gt; <span class="kw">for </span>Vec&lt;T&gt; {
     <span class="kw">fn </span>from(from: <span class="kw-2">&amp;</span>PersistentArray&lt;T&gt;) -&gt; Vec&lt;T&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
-        PersistentArray::&lt;T&gt;::_traverse(from.root.clone(), <span class="kw-2">&amp;mut </span>ret);
+        PersistentArray::&lt;T&gt;::_traverse(<span class="kw-2">&amp;</span>from.root, <span class="kw-2">&amp;mut </span>ret);
         ret
+    }
+}
+
+<span class="kw">impl</span>&lt;T: Clone&gt; From&lt;Vec&lt;T&gt;&gt; <span class="kw">for </span>PersistentArray&lt;T&gt; {
+    <span class="kw">fn </span>from(value: Vec&lt;T&gt;) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>size = value.len();
+        <span class="kw">if </span>size == <span class="number">0 </span>{
+            <span class="self">Self </span>{
+                size: <span class="number">0</span>,
+                root: <span class="prelude-val">None</span>,
+            }
+        } <span class="kw">else </span>{
+            <span class="kw">let </span>depth = usize::BITS - (size - <span class="number">1_usize</span>).leading_zeros() + <span class="number">1</span>;
+            <span class="kw">let </span>root = <span class="self">Self</span>::_init(<span class="number">0</span>, size, <span class="kw-2">&amp;</span>value, depth);
+
+            <span class="self">Self </span>{ size, root }
+        }
     }
 }
 
@@ -332,22 +399,25 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {
-        <span class="kw">let </span>a = PersistentArray::&lt;i32&gt;::new(<span class="number">5</span>, <span class="number">0</span>);
-        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>a), [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]);
+        <span class="kw">let </span>a = PersistentArray::&lt;i32&gt;::from(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]);
+        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>a), [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]);
 
         <span class="kw">let </span>b = a.set(<span class="number">0</span>, <span class="number">4</span>);
-        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>b), [<span class="number">4</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]);
+        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>b), [<span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]);
 
         <span class="kw">let </span>c = b.set(<span class="number">2</span>, <span class="number">6</span>);
-        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>c), [<span class="number">4</span>, <span class="number">0</span>, <span class="number">6</span>, <span class="number">0</span>, <span class="number">0</span>]);
+        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>c), [<span class="number">4</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">5</span>]);
 
         <span class="kw">let </span>d = b.set(<span class="number">2</span>, <span class="number">9</span>);
-        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>d), [<span class="number">4</span>, <span class="number">0</span>, <span class="number">9</span>, <span class="number">0</span>, <span class="number">0</span>]);
+        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>d), [<span class="number">4</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">4</span>, <span class="number">5</span>]);
 
-        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>a), [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]);
-        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>b), [<span class="number">4</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]);
-        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>c), [<span class="number">4</span>, <span class="number">0</span>, <span class="number">6</span>, <span class="number">0</span>, <span class="number">0</span>]);
-        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>d), [<span class="number">4</span>, <span class="number">0</span>, <span class="number">9</span>, <span class="number">0</span>, <span class="number">0</span>]);
+        <span class="kw">let </span>e = c.set(<span class="number">4</span>, -<span class="number">3</span>);
+
+        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>a), [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]);
+        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>b), [<span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]);
+        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>c), [<span class="number">4</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">5</span>]);
+        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>d), [<span class="number">4</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">4</span>, <span class="number">5</span>]);
+        <span class="macro">assert_eq!</span>(Vec::&lt;i32&gt;::from(<span class="kw-2">&amp;</span>e), [<span class="number">4</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">4</span>, -<span class="number">3</span>]);
     }
 }
 </code></pre></div></section></main></body></html>

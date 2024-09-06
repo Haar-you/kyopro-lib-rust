@@ -73,10 +73,10 @@
 <span class="kw">use </span>std::ops::Add;
 
 <span class="doccomment">/// 要素数が小さいナップサック問題
-/// # Complexity
-/// Time complexity O(n * 2 ^ (n / 2))
 ///
-/// Space complexity O(2 ^ (n / 2))
+/// **Time complexity O(n 2 ^ (n / 2))**
+///
+/// **Space complexity O(2 ^ (n / 2))**
 </span><span class="kw">pub fn </span>knapsack_small_quantity&lt;W, V&gt;(cap: W, ws: <span class="kw-2">&amp;</span>[W], vs: <span class="kw-2">&amp;</span>[V]) -&gt; V
 <span class="kw">where
     </span>W: Default + Copy + Add&lt;Output = W&gt; + Ord,

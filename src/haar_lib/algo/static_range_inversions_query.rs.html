@@ -81,6 +81,7 @@
 <a href="#81" id="81">81</a>
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 範囲転倒数取得クエリ
 
 </span><span class="kw">use crate</span>::{algo::bsearch::<span class="kw-2">*</span>, ds::fenwick_add::<span class="kw-2">*</span>};
@@ -93,7 +94,8 @@
 }
 
 <span class="kw">impl </span>StaticRangeInversionsQuery {
-    <span class="kw">pub fn </span>new&lt;T: Clone + Ord&gt;(data: <span class="kw-2">&amp;</span>[T]) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// **Time complexity O(n log n)**
+    </span><span class="kw">pub fn </span>new&lt;T: Clone + Ord&gt;(data: <span class="kw-2">&amp;</span>[T]) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>a = data.to_vec();
         a.sort();
         a.dedup();

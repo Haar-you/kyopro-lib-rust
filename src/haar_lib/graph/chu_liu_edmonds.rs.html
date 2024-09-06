@@ -166,9 +166,9 @@
 <a href="#166" id="166">166</a>
 <a href="#167" id="167">167</a>
 <a href="#168" id="168">168</a>
-<a href="#169" id="169">169</a>
-<a href="#170" id="170">170</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 有向グラフ上の最小有向全域木を求める
+//! # Problems
+//! - [AOJ GRL_2_B](https://onlinejudge.u-aizu.ac.jp/problems/GRL_2_B)
 
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::collections::VecDeque;
@@ -178,11 +178,7 @@
 
 <span class="doccomment">/// 有向グラフ上の最小有向全域木を求める
 ///
-/// # Complexity
-/// Time Complexity $O(VE)$
-///
-/// # Problems
-/// - [AOJ GRL_2_B](https://onlinejudge.u-aizu.ac.jp/problems/GRL_2_B)
+/// **Time Complexity O(VE)**
 </span><span class="kw">pub fn </span>chu_liu_edmonds&lt;T, E&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Directed, E&gt;, root: usize) -&gt; Vec&lt;<span class="kw-2">&amp;</span>E&gt;
 <span class="kw">where
     </span>T: Ord + Copy + Sub&lt;Output = T&gt;,

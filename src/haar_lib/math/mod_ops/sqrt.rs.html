@@ -77,14 +77,12 @@
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
 <a href="#79" id="79">79</a>
-<a href="#80" id="80">80</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! $x^2 = a \bmod p$を満たすxを一つ求める。
+</pre></div><pre class="rust"><code><span class="doccomment">//! x² = a (mod p)を満たすxを一つ求める。
 
 </span><span class="kw">use </span><span class="kw">crate</span>::math::mod_ops::pow::<span class="kw-2">*</span>;
 <span class="kw">use </span>rand::Rng;
 
-<span class="doccomment">/// $x^2 = a \bmod p$を満たすxを一つ求める。
-</span><span class="attr">#[inline]
+<span class="doccomment">/// x² = a (mod p)を満たすxを一つ求める。
 </span><span class="kw">pub fn </span>mod_sqrt(a: u64, p: u64) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
     <span class="kw">if </span>p == <span class="number">2 </span>{
         <span class="kw">return </span><span class="prelude-val">Some</span>(a % <span class="number">2</span>);

@@ -49,20 +49,16 @@
 <a href="#49" id="49">49</a>
 <a href="#50" id="50">50</a>
 <a href="#51" id="51">51</a>
-<a href="#52" id="52">52</a>
-<a href="#53" id="53">53</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 有向グラフで単一始点の最短サイクルを求める。
+//! # Problems
+//! - [ABC 142 F - Pure](https://atcoder.jp/contests/abc142/tasks/abc142_f)
 
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::collections::VecDeque;
 
 <span class="doccomment">/// 有向グラフで単一始点の最短サイクルを求める。
 ///
-/// # Complexity
-/// Time Complexity $O(V + E)$
-///
-/// # Problems
-/// - [ABC 142 F - Pure](https://atcoder.jp/contests/abc142/tasks/abc142_f)
+/// **Time Complexity O(V + E)**
 </span><span class="kw">pub fn </span>directed_shortest_cycle&lt;E: EdgeTrait&gt;(
     g: <span class="kw-2">&amp;</span>Graph&lt;Directed, E&gt;,
     src: usize,

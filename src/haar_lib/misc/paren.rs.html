@@ -23,11 +23,9 @@
 <a href="#23" id="23">23</a>
 <a href="#24" id="24">24</a>
 <a href="#25" id="25">25</a>
-<a href="#26" id="26">26</a>
 </pre></div><pre class="rust"><code><span class="doccomment">/// 括弧列が対応が取れているかを調べる
 ///
-/// # Complexity
-/// Time Complexity $O(N)$
+/// **Time Complexity O(N)**
 
 </span><span class="kw">pub fn </span>check_paren&lt;T: Copy + Eq&gt;(s: <span class="kw">impl </span>IntoIterator&lt;Item = T&gt;, open: T, close: T) -&gt; bool {
     <span class="kw">let </span><span class="kw-2">mut </span>stack = <span class="macro">vec!</span>[];

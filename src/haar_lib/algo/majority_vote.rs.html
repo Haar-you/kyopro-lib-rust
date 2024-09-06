@@ -66,10 +66,10 @@
 <a href="#66" id="66">66</a>
 <a href="#67" id="67">67</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Boyer-Moore majority vote algorithm
-//!
-//! # Complexity
-//! Time complexity $O(n)$
 
+/// Boyer-Moore majority vote algorithm
+///
+/// **Time complexity O(n)**
 </span><span class="kw">pub fn </span>majority_vote&lt;T: Eq&gt;(a: <span class="kw-2">&amp;</span>[T]) -&gt; <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span>T, usize)&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>candidate = <span class="prelude-val">None</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>counter = <span class="number">0</span>;

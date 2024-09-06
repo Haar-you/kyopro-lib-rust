@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Tuple2","Tuple3","Tuple4","Tuple5"]};

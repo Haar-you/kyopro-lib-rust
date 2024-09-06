@@ -147,6 +147,28 @@
 <a href="#147" id="147">147</a>
 <a href="#148" id="148">148</a>
 <a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt::Display;
 <span class="kw">use </span>std::ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign};
 
@@ -155,11 +177,13 @@
 
 <span class="attr">#[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>Bitset {
-    data: Vec&lt;B&gt;,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) data: Vec&lt;B&gt;,
     size: usize,
 }
 
 <span class="kw">impl </span>Bitset {
+    <span class="kw">pub const </span>B_SIZE: usize = B_SIZE;
+
     <span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             data: <span class="macro">vec!</span>[<span class="number">0</span>; (n + B_SIZE - <span class="number">1</span>) / B_SIZE],
@@ -217,6 +241,26 @@
 
     <span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.size
+    }
+}
+
+<span class="kw">impl </span>From&lt;Vec&lt;bool&gt;&gt; <span class="kw">for </span>Bitset {
+    <span class="kw">fn </span>from(value: Vec&lt;bool&gt;) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self</span>::new(value.len());
+
+        <span class="kw">for </span>(i, x) <span class="kw">in </span>value.chunks(B_SIZE).enumerate() {
+            <span class="kw">let </span><span class="kw-2">mut </span>a = <span class="number">0</span>;
+
+            <span class="kw">for </span>(j, y) <span class="kw">in </span>x.into_iter().enumerate() {
+                <span class="kw">if </span><span class="kw-2">*</span>y {
+                    a |= <span class="number">1 </span>&lt;&lt; j;
+                }
+            }
+
+            ret.data[i] = a;
+        }
+
+        ret
     }
 }
 

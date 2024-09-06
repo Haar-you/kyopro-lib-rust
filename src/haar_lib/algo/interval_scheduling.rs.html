@@ -23,8 +23,8 @@
 </pre></div><pre class="rust"><code><span class="doccomment">//! 区間スケジューリング問題
 
 /// 半開区間の集合から共通部分を含まないような部分集合のうち、要素数が最大となるものを求める。
-/// # Complexity
-/// Time complexity $O(n \log(n))$
+///
+/// **Time complexity O(n log n)**
 </span><span class="kw">pub fn </span>interval_scheduling&lt;T: Ord + Copy&gt;(intervals: <span class="kw-2">&amp;</span>[(T, T)]) -&gt; Vec&lt;usize&gt; {
     <span class="kw">let </span>n = intervals.len();
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];

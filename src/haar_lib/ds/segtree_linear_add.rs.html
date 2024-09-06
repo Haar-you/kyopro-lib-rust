@@ -140,6 +140,10 @@
 <a href="#140" id="140">140</a>
 <a href="#141" id="141">141</a>
 <a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 区間一次関数加算セグメントツリー
 //!
 //! # Problems
@@ -171,7 +175,8 @@
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; SegtreeLinearAdd&lt;T&gt; {
-    <span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// **Time complexity O(n)**
+    </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
         <span class="kw">let </span>hsize = size / <span class="number">2</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>from = <span class="macro">vec!</span>[<span class="number">0</span>; size];
@@ -194,6 +199,8 @@
     }
 
     <span class="doccomment">/// 範囲`l..r`に一次関数`ax + b`の値を加算する。(`x`の値は`l..r`の範囲)
+    ///
+    /// **Time complexity O(log n)**
     </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, linear: Linear&lt;T&gt;) {
         <span class="kw">let </span><span class="kw-2">mut </span>l_ = l + <span class="self">self</span>.hsize;
         <span class="kw">let </span><span class="kw-2">mut </span>r_ = r + <span class="self">self</span>.hsize;
@@ -246,7 +253,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; T {
+    <span class="doccomment">/// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; T {
         <span class="self">self</span>.propagate_top_down(i + <span class="self">self</span>.hsize);
         <span class="self">self</span>.data[i + <span class="self">self</span>.hsize].get().<span class="number">0
     </span>}

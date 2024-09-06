@@ -77,6 +77,8 @@
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
 <a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::{Add, Div, Sub};
 
 <span class="kw">pub enum </span>SearchResult&lt;T&gt; {
@@ -88,6 +90,8 @@
 <span class="doccomment">/// 二分探索
 ///
 /// `f`は、`lower..=upper`の範囲で、ある値を境界にそれ未満では常に`false`、それ以上では常に`true`となる関数
+///
+/// **Time complexity O(log n)**
 </span><span class="kw">pub fn </span>bsearch_ng_ok&lt;
     T: Copy + PartialOrd + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt; + Div&lt;Output = T&gt; + From&lt;u8&gt;,
 &gt;(

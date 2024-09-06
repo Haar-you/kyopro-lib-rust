@@ -109,8 +109,6 @@
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
 <a href="#111" id="111">111</a>
-<a href="#112" id="112">112</a>
-<a href="#113" id="113">113</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 座標圧縮
 </span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
 
@@ -124,20 +122,17 @@
     data: Vec&lt;T&gt;,
 }
 
-<span class="kw">impl</span>&lt;T&gt; Compressor&lt;T&gt;
-<span class="kw">where
-    </span>T: Clone + Ord + Eq,
-{
+<span class="kw">impl</span>&lt;T: Ord + Eq&gt; Compressor&lt;T&gt; {
     <span class="doccomment">/// `value`が何番目の値(0-index)かを返す。
-    /// # Complexity
-    /// Time complexity $O(\log(n))$
+    ///
+    /// **Time complexity O(log n)**
     </span><span class="kw">pub fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="kw-2">&amp;</span>T) -&gt; usize {
         lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.data, value)
     }
 
     <span class="doccomment">/// `i`番目の値を返す。
-    /// # Complexity
-    /// Time complexity $O(1)$
+    ///
+    /// **Time complexity O(1)**
     </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; <span class="kw-2">&amp;</span>T {
         <span class="kw-2">&amp;</span><span class="self">self</span>.data[i]
     }
@@ -161,7 +156,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T: Clone + Ord + Eq&gt; CompressorBuilder&lt;T&gt; {
+<span class="kw">impl</span>&lt;T: Ord + Eq&gt; CompressorBuilder&lt;T&gt; {
     <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         CompressorBuilder { data: <span class="macro">vec!</span>[] }
     }
@@ -174,7 +169,8 @@
         <span class="self">self</span>.data.extend(values);
     }
 
-    <span class="kw">pub fn </span>build(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Compressor&lt;T&gt; {
+    <span class="doccomment">/// **Time complexity O(n log n)**
+    </span><span class="kw">pub fn </span>build(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Compressor&lt;T&gt; {
         <span class="self">self</span>.data.sort();
         <span class="self">self</span>.data.dedup();
         Compressor { data: <span class="self">self</span>.data }

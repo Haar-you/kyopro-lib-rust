@@ -116,6 +116,9 @@
 <a href="#116" id="116">116</a>
 <a href="#117" id="117">117</a>
 <a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
 </pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::wrong_self_convention)]
 
 </span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::Monoid;
@@ -130,7 +133,8 @@
 }
 
 <span class="kw">impl</span>&lt;T: Clone, M: Monoid&lt;Output = T&gt;&gt; DualSegtree&lt;M&gt; {
-    <span class="kw">pub fn </span>new(n: usize, monoid: M) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// **Time complexity O(n)**
+    </span><span class="kw">pub fn </span>new(n: usize, monoid: M) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
         DualSegtree {
             original_size: n,
@@ -164,7 +168,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>get(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize) -&gt; T {
+    <span class="doccomment">/// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize) -&gt; T {
         <span class="self">self</span>.propagate_top_down(i + <span class="self">self</span>.size / <span class="number">2</span>);
         <span class="self">self</span>.data[i + <span class="self">self</span>.size / <span class="number">2</span>].clone()
     }
@@ -184,7 +189,8 @@
         <span class="self">self</span>.data[<span class="self">self</span>.size / <span class="number">2</span>..<span class="self">self</span>.size / <span class="number">2 </span>+ <span class="self">self</span>.original_size].to_vec()
     }
 
-    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, value: T) {
+    <span class="doccomment">/// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, value: T) {
         <span class="kw">let </span><span class="kw-2">mut </span>l = l + <span class="self">self</span>.size / <span class="number">2</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>r = r + <span class="self">self</span>.size / <span class="number">2</span>;
 

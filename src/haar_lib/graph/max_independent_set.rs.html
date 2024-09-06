@@ -72,6 +72,9 @@
 <a href="#72" id="72">72</a>
 <a href="#73" id="73">73</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 最大独立集合
+//!
+//! # Verifications
+//! - [Maximum Independent Set](https://judge.yosupo.jp/problem/maximum_independent_set) [#142761](https://judge.yosupo.jp/submission/142761) (n &lt;= 40)
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::collections::HashSet;
 
@@ -79,9 +82,6 @@
 ///
 /// nは64以下に制限している。
 /// 最大独立集合の補集合は最小頂点被覆集合になる。
-///
-/// # Verifications
-/// Library Checker [Maximum Independent Set](https://judge.yosupo.jp/problem/maximum_independent_set) [#142761](https://judge.yosupo.jp/submission/142761) (n &lt;= 40)
 </span><span class="kw">pub fn </span>max_independent_set&lt;E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; Vec&lt;usize&gt; {
     <span class="kw">let </span>n = g.len();
     <span class="macro">assert!</span>(n &lt;= <span class="number">64</span>);

@@ -49,7 +49,14 @@
 <a href="#49" id="49">49</a>
 <a href="#50" id="50">50</a>
 <a href="#51" id="51">51</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::graph::{scc::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 2-SAT
+</span><span class="kw">use </span><span class="kw">crate</span>::graph::{scc::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
 
 <span class="kw">pub struct </span>TwoSat {
     size: usize,
@@ -57,7 +64,8 @@
 }
 
 <span class="kw">impl </span>TwoSat {
-    <span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// **Time complexity O(size)**
+    </span><span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             size,
             g: Graph::new(<span class="number">2 </span>* size),
@@ -75,20 +83,24 @@
         </span>}
     }
 
-    <span class="kw">pub fn </span>add_if(<span class="kw-2">&amp;mut </span><span class="self">self</span>, a: isize, b: isize) {
+    <span class="doccomment">/// a → b
+    </span><span class="kw">pub fn </span>add_if(<span class="kw-2">&amp;mut </span><span class="self">self</span>, a: isize, b: isize) {
         <span class="self">self</span>.g.add(Edge::new(<span class="self">self</span>.check(a), <span class="self">self</span>.check(b), (), ()));
     }
 
-    <span class="kw">pub fn </span>add_or(<span class="kw-2">&amp;mut </span><span class="self">self</span>, a: isize, b: isize) {
+    <span class="doccomment">/// a ∨ b
+    </span><span class="kw">pub fn </span>add_or(<span class="kw-2">&amp;mut </span><span class="self">self</span>, a: isize, b: isize) {
         <span class="self">self</span>.add_if(-a, b);
         <span class="self">self</span>.add_if(-b, a);
     }
 
-    <span class="kw">pub fn </span>not_coexist(<span class="kw-2">&amp;mut </span><span class="self">self</span>, a: isize, b: isize) {
+    <span class="doccomment">/// ¬(a ∧ b)
+    </span><span class="kw">pub fn </span>not_coexist(<span class="kw-2">&amp;mut </span><span class="self">self</span>, a: isize, b: isize) {
         <span class="self">self</span>.add_or(-a, -b);
     }
 
-    <span class="kw">pub fn </span>solve(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;bool&gt;&gt; {
+    <span class="doccomment">/// **Time complexity O(size + E)**
+    </span><span class="kw">pub fn </span>solve(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;bool&gt;&gt; {
         <span class="kw">let </span>s = SCC::new(<span class="kw-2">&amp;</span><span class="self">self</span>.g).to_vec();
 
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.size {

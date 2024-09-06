@@ -61,8 +61,8 @@
 <span class="kw">use </span>std::collections::VecDeque;
 
 <span class="doccomment">/// 配列のすべての長さkの連続部分列について、その最小値を列挙する。
-/// # Complexity
-/// Time complexity $O(n)$
+///
+/// **Time complexity O(|a|)**
 </span><span class="kw">pub fn </span>sliding_minimum&lt;T: Ord + Copy&gt;(a: <span class="kw-2">&amp;</span>[T], k: usize) -&gt; Vec&lt;T&gt; {
     <span class="kw">let </span>n = a.len();
 

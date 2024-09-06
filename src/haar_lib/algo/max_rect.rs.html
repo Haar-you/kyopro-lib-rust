@@ -123,8 +123,6 @@
 <a href="#123" id="123">123</a>
 <a href="#124" id="124">124</a>
 <a href="#125" id="125">125</a>
-<a href="#126" id="126">126</a>
-<a href="#127" id="127">127</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::chmax;
 <span class="kw">use </span>std::{
     cmp::Ordering,
@@ -133,8 +131,7 @@
 
 <span class="doccomment">/// ヒストグラム中の最大面積長方形の面積を計算する。
 ///
-/// # Complexity
-/// Time complexity $O(|h|)$
+/// **Time complexity O(|h|)**
 </span><span class="kw">pub fn </span>max_rect_in_histogram&lt;T&gt;(h: <span class="kw-2">&amp;</span>[T]) -&gt; (T, Range&lt;usize&gt;)
 <span class="kw">where
     </span>T: From&lt;usize&gt; + Mul&lt;Output = T&gt; + Ord + Copy,
@@ -187,8 +184,7 @@
 
 <span class="doccomment">/// グリッド上の最大面積長方形の面積を計算する。
 ///
-/// # Complexity
-/// Time complexity $O(hw)$
+/// **Time complexity O(hw)**
 </span><span class="kw">pub fn </span>max_rect&lt;T: Copy + PartialEq&gt;(d: <span class="kw-2">&amp;</span>[Vec&lt;T&gt;], value: T) -&gt; usize {
     <span class="kw">let </span>h = d.len();
     <span class="kw">let </span>w = d[<span class="number">0</span>].len();

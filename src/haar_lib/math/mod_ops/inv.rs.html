@@ -35,7 +35,6 @@
 <a href="#35" id="35">35</a>
 <a href="#36" id="36">36</a>
 <a href="#37" id="37">37</a>
-<a href="#38" id="38">38</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! mod mでの逆元
 
 </span><span class="kw">use </span><span class="kw">crate</span>::math::gcd_lcm::GcdLcm;
@@ -43,8 +42,7 @@
 
 <span class="doccomment">/// mod mでの逆元
 ///
-/// # Complexity
-/// Time Complexity $O(\log m)$
+/// **Time Complexity O(log m)**
 </span><span class="attr">#[inline]
 </span><span class="kw">pub fn </span>mod_inv(<span class="kw-2">mut </span>a: u64, m: u64) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
     <span class="kw">if </span>a.gcd(m) != <span class="number">1 </span>{

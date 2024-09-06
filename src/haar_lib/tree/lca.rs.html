@@ -92,6 +92,17 @@
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
 <a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 最小共通祖先
 
 </span><span class="kw">use </span><span class="kw">crate</span>::tree::<span class="kw-2">*</span>;
@@ -103,7 +114,10 @@
 }
 
 <span class="kw">impl </span>DoublingLCA {
-    <span class="kw">pub fn </span>new&lt;E: TreeEdgeTrait&gt;(tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// **Time complexity O(n log n)**
+    ///
+    /// **Space complexity O(n log n)**
+    </span><span class="kw">pub fn </span>new&lt;E: TreeEdgeTrait&gt;(tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = tree.len();
         <span class="kw">let </span>log2n = ((n <span class="kw">as </span>f64).log2().ceil() + <span class="number">1.0</span>) <span class="kw">as </span>usize;
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self </span>{
@@ -136,7 +150,10 @@
         }
     }
 
-    <span class="kw">pub fn </span>ancestor(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>a: usize, <span class="kw-2">mut </span>n: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
+    <span class="doccomment">/// `a`の`n`個上の祖先を求める。
+    ///
+    /// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>ancestor(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>a: usize, <span class="kw-2">mut </span>n: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="kw">let </span>bits = std::mem::size_of::&lt;usize&gt;() * <span class="number">8</span>;
         <span class="kw">while </span>n != <span class="number">0 </span>{
             <span class="kw">let </span>m1 = bits - n.leading_zeros() <span class="kw">as </span>usize - <span class="number">1</span>;
@@ -151,7 +168,10 @@
         <span class="prelude-val">Some</span>(a)
     }
 
-    <span class="kw">pub fn </span>get_lca(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>a: usize, <span class="kw-2">mut </span>b: usize) -&gt; usize {
+    <span class="doccomment">/// `a`と`b`の最小共通祖先を求める。
+    ///
+    /// **Time complexity O(log n)**
+    </span><span class="kw">pub fn </span>get_lca(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>a: usize, <span class="kw-2">mut </span>b: usize) -&gt; usize {
         <span class="kw">if </span><span class="self">self</span>.depth[a] &gt;= <span class="self">self</span>.depth[b] {
             std::mem::swap(<span class="kw-2">&amp;mut </span>a, <span class="kw-2">&amp;mut </span>b);
         }
@@ -175,6 +195,8 @@
     }
 
     <span class="doccomment">/// s-t最短パス上で、sから見てd番目の頂点を返す。
+    ///
+    /// **Time complexity O(log n)**
     </span><span class="kw">pub fn </span>jump(<span class="kw-2">&amp;</span><span class="self">self</span>, s: usize, t: usize, d: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="kw">let </span>a = <span class="self">self</span>.get_lca(s, t);
         <span class="kw">if </span><span class="self">self</span>.depth[s] - <span class="self">self</span>.depth[a] &gt;= d {

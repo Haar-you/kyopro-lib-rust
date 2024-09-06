@@ -36,10 +36,10 @@
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::chmin;
 
 <span class="doccomment">/// 価値の総和が小さいナップサック問題
-/// # Complexity
-/// Time complexity O(n sum(vs))
 ///
-/// Space complexity O(sum(vs))
+/// **Time complexity O(n Σ(vs))**
+///
+/// **Space complexity O(Σ(vs))**
 </span><span class="kw">pub fn </span>knapsack_small_value(cap: u64, ws: <span class="kw-2">&amp;</span>[u64], vs: <span class="kw-2">&amp;</span>[usize]) -&gt; usize {
     <span class="kw">let </span>n = ws.len();
     <span class="macro">assert_eq!</span>(ws.len(), vs.len());

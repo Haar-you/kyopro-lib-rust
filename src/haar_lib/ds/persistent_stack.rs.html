@@ -74,9 +74,10 @@
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
 <a href="#76" id="76">76</a>
-<a href="#77" id="77">77</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 永続スタック
-
+//!
+//! # Verification
+//! - [ABC273 E - Notebook #37628467](https://atcoder.jp/contests/abc273/submissions/37628467)
 </span><span class="kw">use </span>std::{iter::from_fn, rc::Rc};
 
 <span class="attr">#[derive(Debug, Default, Clone)]
@@ -86,9 +87,6 @@
 }
 
 <span class="doccomment">/// 永続スタック
-///
-/// # Verification
-/// - [ABC273 E - Notebook #37628467](https://atcoder.jp/contests/abc273/submissions/37628467)
 </span><span class="attr">#[derive(Debug, Default, Clone)]
 </span><span class="kw">pub struct </span>PersistentStack&lt;T&gt; {
     root: <span class="prelude-ty">Option</span>&lt;Rc&lt;Node&lt;T&gt;&gt;&gt;,

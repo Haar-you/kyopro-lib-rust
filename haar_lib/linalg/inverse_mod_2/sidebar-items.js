@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["inverse_mod_2"]};

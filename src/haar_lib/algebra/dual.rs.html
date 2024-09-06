@@ -31,7 +31,7 @@
 </pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 
 <span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
-</span><span class="kw">pub struct </span>Dual&lt;S&gt;(S);
+</span><span class="kw">pub struct </span>Dual&lt;S&gt;(<span class="kw">pub </span>S);
 
 <span class="kw">impl</span>&lt;S: AlgeStruct&gt; Dual&lt;S&gt; {
     <span class="kw">pub fn </span>new(s: S) -&gt; <span class="self">Self </span>{

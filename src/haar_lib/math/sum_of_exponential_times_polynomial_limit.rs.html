@@ -38,16 +38,14 @@
 <a href="#38" id="38">38</a>
 <a href="#39" id="39">39</a>
 <a href="#40" id="40">40</a>
-<a href="#41" id="41">41</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! $\sum_{i=0}^{\infty} r^ii^d$
+</pre></div><pre class="rust"><code><span class="doccomment">//! ∑{i=0 → ∞} rⁱiᵈ
 
 </span><span class="kw">use </span><span class="kw">crate</span>::math::mod_ops::inv_p::mod_inv_p;
 <span class="kw">use </span><span class="kw">crate</span>::math::mod_ops::pow::mod_pow;
 
-<span class="doccomment">/// $\sum_{i=0}^{\infty} r^ii^d$
+<span class="doccomment">/// ∑{i=0 → ∞} rⁱiᵈ
 ///
-/// Time Complexity $O(d log p)$
-</span><span class="attr">#[inline]
+/// **Time Complexity O(d log p)**
 </span><span class="kw">pub fn </span>sum_of_exponential_times_polynomial_limit(r: u64, d: u64, p: u64) -&gt; u64 {
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="number">0</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>r_pow = <span class="number">1</span>;

@@ -43,10 +43,10 @@
 };
 
 <span class="doccomment">/// 個数制限付きナップサック問題
-/// # Complexity
-/// Time complexity O(n cap log(max(ms)))
 ///
-/// Space complexity O(cap)
+/// **Time complexity O(n cap log(max(ms)))**
+///
+/// **Space complexity O(cap)**
 </span><span class="kw">pub fn </span>knapsack_limited&lt;T&gt;(cap: usize, ws: <span class="kw-2">&amp;</span>[usize], vs: <span class="kw-2">&amp;</span>[T], ms: <span class="kw-2">&amp;</span>[usize]) -&gt; T
 <span class="kw">where
     </span>T: Default + From&lt;usize&gt; + Copy + Ord + Add&lt;Output = T&gt; + Mul&lt;Output = T&gt;,

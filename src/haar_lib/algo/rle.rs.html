@@ -43,8 +43,10 @@
 <a href="#43" id="43">43</a>
 <a href="#44" id="44">44</a>
 <a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Run Length Encoding
 
+/// **Time Complexity O(|a|)**
 </span><span class="kw">pub fn </span>rle&lt;T: PartialEq&gt;(a: <span class="kw-2">&amp;</span>[T]) -&gt; Vec&lt;(<span class="kw-2">&amp;</span>T, usize)&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
 

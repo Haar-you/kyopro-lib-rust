@@ -45,15 +45,13 @@
 <a href="#45" id="45">45</a>
 <a href="#46" id="46">46</a>
 <a href="#47" id="47">47</a>
-<a href="#48" id="48">48</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 最長増加部分列
 
 </span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
 
 <span class="doccomment">/// 列の最長増加部分列の一つを求める。
 ///
-/// # Complexity
-/// Time complexity $O(n \log(n))$
+/// **Time complexity O(|a| log |a|)**
 </span><span class="kw">pub fn </span>lis&lt;T&gt;(a: <span class="kw-2">&amp;</span>[T]) -&gt; Vec&lt;usize&gt;
 <span class="kw">where
     </span>T: Ord + Copy,

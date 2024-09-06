@@ -47,13 +47,13 @@
 <a href="#47" id="47">47</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! ナップサック問題
 //!
-//! | function |time complexity | space complexity |
+//! | function | time complexity | space complexity |
 //! | ---- | ---- | ---- |
-//! | knapsack_small_weight | $O(n \sdot cap)$ | $O(cap)$ |
-//! | knapsack_small_value | $O(n \sum_{v \in vs} v)$ | $O(\sum_{v \in vs} v)$ |
-//! | knapsack_small_quantity | $O(n 2 ^ {n / 2})$ | $O(2 ^ {n / 2})$ |
-//! | knapsack_limited | $O(n \cdot cap \log(\max(ms)))$ | $O(cap)$ |
-//! | knapsack_unlimited | $O(n \cdot cap)$ | $O(cap)$ |
+//! | knapsack_small_weight | **O(n cap)** | **O(cap)** |
+//! | knapsack_small_value | **O(n Σ(vs))** | **O(Σ(vs))** |
+//! | knapsack_small_quantity | **O(n 2^{n / 2})** | **O(2^{n / 2})** |
+//! | knapsack_limited | **O(n cap log(max(ms)))** | **O(cap)** |
+//! | knapsack_unlimited | **O(n cap)** | **O(cap)** |
 
 </span><span class="kw">pub mod </span>limited;
 <span class="kw">pub mod </span>small_quantity;

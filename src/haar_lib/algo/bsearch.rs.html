@@ -114,9 +114,6 @@
 <a href="#114" id="114">114</a>
 <a href="#115" id="115">115</a>
 <a href="#116" id="116">116</a>
-<a href="#117" id="117">117</a>
-<a href="#118" id="118">118</a>
-<a href="#119" id="119">119</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 二分探索
 
 </span><span class="macro">macro_rules! </span>bsearch_impl {
@@ -143,8 +140,7 @@
 
 <span class="doccomment">/// x以上となる最小のindexを求める。
 ///
-/// # Complexity
-/// Time complexity $O(\log(n))$
+/// **Time complexity O(log n)**
 </span><span class="attr">#[inline]
 </span><span class="kw">pub fn </span>lower_bound&lt;T: Ord&gt;(a: <span class="kw-2">&amp;</span>[T], value: <span class="kw-2">&amp;</span>T) -&gt; usize {
     <span class="macro">bsearch_impl!</span>(&lt;, a, value)
@@ -152,8 +148,7 @@
 
 <span class="doccomment">/// xを超える最小のindexを求める。
 ///
-/// # Complexity
-/// Time complexity $O(\log(n))$
+/// **Time complexity O(log n)**
 </span><span class="attr">#[inline]
 </span><span class="kw">pub fn </span>upper_bound&lt;T: Ord&gt;(a: <span class="kw-2">&amp;</span>[T], value: <span class="kw-2">&amp;</span>T) -&gt; usize {
     <span class="macro">bsearch_impl!</span>(&lt;=, a, value)
@@ -161,8 +156,7 @@
 
 <span class="doccomment">/// lower_bound, upper_boundの組を求める。
 ///
-/// # Complexity
-/// Time complexity $O(\log(n))$
+/// **Time complexity O(log n)**
 </span><span class="attr">#[inline]
 </span><span class="kw">pub fn </span>equal_range&lt;T: Ord&gt;(a: <span class="kw-2">&amp;</span>[T], value: <span class="kw-2">&amp;</span>T) -&gt; (usize, usize) {
     (lower_bound(a, value), upper_bound(a, value))

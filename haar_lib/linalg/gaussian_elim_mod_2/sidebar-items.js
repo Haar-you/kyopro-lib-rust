@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["gaussian_elim_mod_2"]};

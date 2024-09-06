@@ -88,6 +88,9 @@
 <a href="#88" id="88">88</a>
 <a href="#89" id="89">89</a>
 <a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::num::{one_zero::Zero, traits::Signed};
 <span class="kw">use </span>std::ops::{Add, Range, Sub};
 
@@ -98,7 +101,8 @@
 }
 
 <span class="kw">impl</span>&lt;T: Copy + Signed + Zero&lt;Output = T&gt; + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt;&gt; Imos2D&lt;T&gt; {
-    <span class="kw">pub fn </span>new(n: usize, m: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// **Time complexity O(nm)**
+    </span><span class="kw">pub fn </span>new(n: usize, m: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             data: <span class="macro">vec!</span>[<span class="macro">vec!</span>[T::zero(); m]; n],
             n,
@@ -106,7 +110,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>update(
+    <span class="doccomment">/// **Time complexity O(1)**
+    </span><span class="kw">pub fn </span>update(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         Range { start: l, end: r }: Range&lt;usize&gt;,
         Range { start: u, end: d }: Range&lt;usize&gt;,
@@ -127,7 +132,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>build(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Vec&lt;Vec&lt;T&gt;&gt; {
+    <span class="doccomment">/// **Time complexity O(nm)**
+    </span><span class="kw">pub fn </span>build(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Vec&lt;Vec&lt;T&gt;&gt; {
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..<span class="self">self</span>.n {
             <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.m {
                 <span class="self">self</span>.data[i][j] = <span class="self">self</span>.data[i][j] + <span class="self">self</span>.data[i - <span class="number">1</span>][j];
@@ -162,8 +168,8 @@
         <span class="kw">let </span><span class="kw-2">mut </span>ans = <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="number">0</span>; m]; n];
 
         <span class="kw">for _ in </span><span class="number">0</span>..t {
-            <span class="kw">let </span>lr = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n + <span class="number">1</span>);
-            <span class="kw">let </span>ud = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..m + <span class="number">1</span>);
+            <span class="kw">let </span>lr = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
+            <span class="kw">let </span>ud = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..m);
             <span class="kw">let </span>x = rng.gen_range(-<span class="number">100</span>..=<span class="number">100</span>);
 
             a.update(lr.clone(), ud.clone(), x);

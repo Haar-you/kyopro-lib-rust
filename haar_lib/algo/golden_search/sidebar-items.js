@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Convex"],"fn":["golden_search"]};

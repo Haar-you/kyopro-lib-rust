@@ -63,9 +63,7 @@
 <a href="#63" id="63">63</a>
 <a href="#64" id="64">64</a>
 <a href="#65" id="65">65</a>
-<a href="#66" id="66">66</a>
-<a href="#67" id="67">67</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! $a^x = b \bmod m$を満たすxを求める。
+</pre></div><pre class="rust"><code><span class="doccomment">//! aˣ = b (mod m)を満たすxを求める。
 
 </span><span class="kw">use </span><span class="kw">crate</span>::math::{
     gcd_lcm::GcdLcm,
@@ -73,11 +71,9 @@
 };
 <span class="kw">use </span>std::collections::HashMap;
 
-<span class="doccomment">/// $a^x = b \bmod m$を満たすxを求める。
+<span class="doccomment">/// aˣ = b (mod m)を満たすxを求める。
 ///
-/// # Complexity
-/// Time Complexity $(\sqrt{m})$
-</span><span class="attr">#[inline]
+/// **Time Complexity O(√m)**
 </span><span class="kw">pub fn </span>mod_log(a: u64, <span class="kw-2">mut </span>b: u64, <span class="kw-2">mut </span>m: u64) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
     <span class="kw">if </span>b == <span class="number">1 </span>{
         <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="number">0</span>);

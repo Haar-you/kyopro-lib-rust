@@ -118,7 +118,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
 <span class="kw">use </span>std::{cmp::min, ops::Add};
 
-<span class="doccomment">/// Time complexity O(V ^ 2 * 2 ^ V)
+<span class="doccomment">/// **Time complexity O(V²2ⱽ)**
 </span><span class="kw">pub fn </span>chinese_postman_problem&lt;T, E: EdgeTrait&lt;Weight = T&gt;&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; T
 <span class="kw">where
     </span>T: Zero&lt;Output = T&gt; + Copy + Ord + Add&lt;Output = T&gt;,
