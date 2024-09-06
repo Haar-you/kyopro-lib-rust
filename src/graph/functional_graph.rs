@@ -32,27 +32,22 @@ impl FunctionalGraphBuilder {
     pub fn build(self) -> FunctionalGraph {
         assert!(self.next.iter().all(|a| a.is_some()));
 
-        let next = self
-            .next
-            .into_iter()
-            .map(|a| a.unwrap())
-            .collect::<Vec<_>>();
-
+        let next = self.next.into_iter().flatten().collect::<Vec<_>>();
         let n = next.len();
 
         let mut uf = UnionFind::new(n);
-        let mut index = vec![0; n];
         for (cur, &next) in next.iter().enumerate() {
             uf.merge(cur, next);
         }
 
-        let mut g_num = 0;
-        for (i, index) in index.iter_mut().enumerate() {
-            if uf.root_of(i) == i {
-                *index = g_num;
-                g_num += 1;
-            }
-        }
+        let mut index = vec![0; n];
+        let g_num = index
+            .iter_mut()
+            .enumerate()
+            .filter_map(|(i, index)| (uf.root_of(i) == i).then_some(index))
+            .enumerate()
+            .map(|(i, index)| *index = i)
+            .count();
 
         let mut in_deg = vec![0; n];
         for &next in &next {
@@ -60,13 +55,12 @@ impl FunctionalGraphBuilder {
         }
 
         let mut v_kind = vec![None; n];
-        let mut stack = vec![];
-        for (i, &d) in in_deg.iter().enumerate() {
-            if d == 0 {
-                stack.push(i);
-                v_kind[i] = Some(Kind::Leaf(index[uf.root_of(i)]));
-            }
-        }
+        let mut stack = in_deg
+            .iter()
+            .enumerate()
+            .filter_map(|(i, &d)| (d == 0).then_some(i))
+            .inspect(|&i| v_kind[i] = Some(Kind::Leaf(index[uf.root_of(i)])))
+            .collect::<Vec<_>>();
 
         while let Some(cur) = stack.pop() {
             if v_kind[cur].is_none() {
@@ -88,7 +82,7 @@ impl FunctionalGraphBuilder {
 
         FunctionalGraph {
             next,
-            v_kind: v_kind.into_iter().map(|a| a.unwrap()).collect(),
+            v_kind: v_kind.into_iter().flatten().collect(),
             g_num,
         }
     }
