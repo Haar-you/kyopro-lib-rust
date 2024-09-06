@@ -117,16 +117,45 @@ impl From<UsizeSet> for Vec<usize> {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeSet;
+    use std::iter::FromIterator;
+
     use super::*;
+    use rand::{seq::SliceRandom, Rng};
 
     #[test]
     fn test() {
-        let a = UsizeSet(0b0010010101);
-        assert_eq!(
-            (0..64).filter(|&i| a.contains(i)).collect::<Vec<_>>(),
-            vec![0, 2, 4, 7]
-        );
+        let mut rng = rand::thread_rng();
 
-        let b = UsizeSet::fill(10);
+        #[allow(non_snake_case)]
+        let U: Vec<usize> = (0..usize::BITS as usize).collect();
+
+        for _ in 0..100 {
+            let count = rng.gen::<usize>() % 65;
+            let a: Vec<_> = U.choose_multiple(&mut rng, count).cloned().collect();
+            let b: Vec<_> = U.choose_multiple(&mut rng, count).cloned().collect();
+
+            let a_ans = BTreeSet::from_iter(a.clone());
+            let b_ans = BTreeSet::from_iter(b.clone());
+
+            let a_res = UsizeSet::from(a);
+            let b_res = UsizeSet::from(b);
+
+            let c_ans = &a_ans & &b_ans;
+            let c_res = a_res & b_res;
+            assert_eq!(BTreeSet::from_iter(Vec::from(c_res)), c_ans);
+
+            let c_ans = &a_ans | &b_ans;
+            let c_res = a_res | b_res;
+            assert_eq!(BTreeSet::from_iter(Vec::from(c_res)), c_ans);
+
+            let c_ans = &a_ans ^ &b_ans;
+            let c_res = a_res ^ b_res;
+            assert_eq!(BTreeSet::from_iter(Vec::from(c_res)), c_ans);
+
+            let c_ans = &a_ans - &b_ans;
+            let c_res = a_res - b_res;
+            assert_eq!(BTreeSet::from_iter(Vec::from(c_res)), c_ans);
+        }
     }
 }
