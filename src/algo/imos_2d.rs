@@ -75,8 +75,8 @@ mod tests {
         let mut ans = vec![vec![0; m]; n];
 
         for _ in 0..t {
-            let lr = rand_range(&mut rng, 0..n + 1);
-            let ud = rand_range(&mut rng, 0..m + 1);
+            let lr = rand_range(&mut rng, 0..n);
+            let ud = rand_range(&mut rng, 0..m);
             let x = rng.gen_range(-100..=100);
 
             a.update(lr.clone(), ud.clone(), x);
