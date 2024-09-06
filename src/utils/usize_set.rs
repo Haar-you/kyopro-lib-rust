@@ -97,6 +97,24 @@ impl Sub for UsizeSet {
     }
 }
 
+impl From<Vec<usize>> for UsizeSet {
+    fn from(value: Vec<usize>) -> Self {
+        let mut ret = Self(0);
+        for a in value {
+            ret = ret.set(a);
+        }
+        ret
+    }
+}
+
+impl From<UsizeSet> for Vec<usize> {
+    fn from(value: UsizeSet) -> Self {
+        (0..usize::BITS as usize)
+            .filter(|i| value.contains(*i))
+            .collect()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
