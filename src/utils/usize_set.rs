@@ -1,3 +1,7 @@
+//! `usize`を用いた集合表現
+//!
+//! # Problems
+//! - <https://atcoder.jp/contests/abc142/tasks/abc142_e>
 use std::ops::{BitAnd, BitOr, BitXor, Sub};
 
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -90,5 +94,21 @@ impl Sub for UsizeSet {
     type Output = Self;
     fn sub(self, rhs: Self) -> Self::Output {
         self.difference(rhs)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let a = UsizeSet(0b0010010101);
+        assert_eq!(
+            (0..64).filter(|&i| a.contains(i)).collect::<Vec<_>>(),
+            vec![0, 2, 4, 7]
+        );
+
+        let b = UsizeSet::fill(10);
     }
 }
