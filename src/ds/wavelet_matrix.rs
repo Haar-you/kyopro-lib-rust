@@ -1,5 +1,5 @@
-use crate::ds::succinct_dict::SuccinctDict;
-use std::ops::{Bound, RangeBounds};
+use crate::{ds::succinct_dict::SuccinctDict, utils::range::range_bounds_to_range};
+use std::ops::RangeBounds;
 
 const BIT_SIZE: usize = 64;
 
@@ -45,22 +45,6 @@ impl WaveletMatrix {
         }
     }
 
-    fn get_half_open_range(&self, r: impl RangeBounds<usize>) -> (usize, usize) {
-        let l = match r.start_bound() {
-            Bound::Unbounded => 0,
-            Bound::Included(&x) => x,
-            Bound::Excluded(&x) => x + 1,
-        };
-        let r = match r.end_bound() {
-            Bound::Unbounded => self.size,
-            Bound::Included(&x) => x + 1,
-            Bound::Excluded(&x) => x,
-        };
-        assert!(l <= r && r <= self.size);
-
-        (l, r)
-    }
-
     /// `index`番目の値を得る。
     pub fn access(&self, index: usize) -> u64 {
         let mut ret = 0;
@@ -97,7 +81,7 @@ impl WaveletMatrix {
 
     /// `range`に含まれる`value`の個数。
     pub fn count(&self, range: impl RangeBounds<usize>, value: u64) -> usize {
-        let (l, r) = self.get_half_open_range(range);
+        let (l, r) = range_bounds_to_range(range, 0, self.size);
         self.rank(r, value) - self.rank(l, value)
     }
 
@@ -125,7 +109,7 @@ impl WaveletMatrix {
 
     /// `range`でk(0-indexed)番目に小さい値。
     pub fn quantile(&self, range: impl RangeBounds<usize>, nth: usize) -> Option<u64> {
-        let (mut l, mut r) = self.get_half_open_range(range);
+        let (mut l, mut r) = range_bounds_to_range(range, 0, self.size);
         if nth >= r - l {
             return None;
         }
@@ -154,7 +138,7 @@ impl WaveletMatrix {
 
     /// `range`での最大値
     pub fn maximum(&self, range: impl RangeBounds<usize>) -> Option<u64> {
-        let (l, r) = self.get_half_open_range(range);
+        let (l, r) = range_bounds_to_range(range, 0, self.size);
         if r > l {
             self.quantile(l..r, r - l - 1)
         } else {
@@ -168,7 +152,7 @@ impl WaveletMatrix {
     }
 
     fn range_freq_lt(&self, range: impl RangeBounds<usize>, ub: u64) -> usize {
-        let (mut l, mut r) = self.get_half_open_range(range);
+        let (mut l, mut r) = range_bounds_to_range(range, 0, self.size);
         let mut ret = 0;
         for i in 0..BIT_SIZE {
             let t = (ub >> (BIT_SIZE - i - 1)) & 1;
