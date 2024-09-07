@@ -38,11 +38,7 @@ impl<T: Clone, M: Monoid<Output = T> + Clone> PersistenSegtree<M> {
 
     pub fn from_vec(a: Vec<T>, monoid: M) -> Self {
         let n = a.len();
-        let to = if n.is_power_of_two() {
-            n
-        } else {
-            n.next_power_of_two()
-        };
+        let to = n.next_power_of_two();
         let root = Some(Self::__init(0, to, &a, &monoid));
         Self { root, monoid, to }
     }
