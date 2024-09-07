@@ -8,12 +8,12 @@ pub struct EulerTour {
 impl EulerTour {
     pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
         let n = tree.len();
-        let mut ret = Self {
+        let mut this = Self {
             begin: vec![0; n],
             end: vec![0; n],
         };
-        ret.dfs(tree, root, None, &mut 0);
-        ret
+        this.dfs(tree, root, None, &mut 0);
+        this
     }
 
     fn dfs<E: TreeEdgeTrait>(
