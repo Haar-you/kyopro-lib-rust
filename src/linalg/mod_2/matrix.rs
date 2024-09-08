@@ -19,7 +19,7 @@ impl MatrixMod2 {
         }
     }
 
-    pub fn from_vec(other: Vec<Bitset>) -> Self {
+    pub fn from_vec_bitset(other: Vec<Bitset>) -> Self {
         let h = other.len();
         assert!(h > 0);
         let w = other[0].len();
