@@ -13,3 +13,6 @@ rustdoc-args = [
     "--html-in-header",
     "katex.html",
 ]
+
+[lints.rust]
+missing_docs = "warn"
