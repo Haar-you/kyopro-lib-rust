@@ -38,7 +38,7 @@ impl<T: Elem> StarrySkyTree<T> {
     pub fn new(n: usize, mode: Mode) -> Self {
         let size = n.next_power_of_two() * 2;
         let zero = T::zero();
-        StarrySkyTree {
+        Self {
             size,
             data: vec![zero; size],
             mode,
@@ -68,6 +68,24 @@ impl<T: Elem> StarrySkyTree<T> {
         self.rec(l, r, 1, 0, self.size / 2, T::zero())
     }
 
+    fn bottom_up(&mut self, mut i: usize) {
+        if i > self.size {
+            return;
+        }
+
+        while i >= 1 {
+            if i < self.size / 2 {
+                let d = self.mode.op(self.data[i << 1], self.data[i << 1 | 1]);
+
+                self.data[i << 1] = self.data[i << 1] - d;
+                self.data[i << 1 | 1] = self.data[i << 1 | 1] - d;
+                self.data[i] = self.data[i] + d;
+            }
+
+            i >>= 1;
+        }
+    }
+
     /// **Time complexity O(log n)**
     pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
         let hsize = self.size / 2;
@@ -87,26 +105,8 @@ impl<T: Elem> StarrySkyTree<T> {
             rr >>= 1;
         }
 
-        let mut bottom_up = |mut i: usize| {
-            if i > self.size {
-                return;
-            }
-
-            while i >= 1 {
-                if i < self.size / 2 {
-                    let d = self.mode.op(self.data[i << 1], self.data[i << 1 | 1]);
-
-                    self.data[i << 1] = self.data[i << 1] - d;
-                    self.data[i << 1 | 1] = self.data[i << 1 | 1] - d;
-                    self.data[i] = self.data[i] + d;
-                }
-
-                i >>= 1;
-            }
-        };
-
-        bottom_up(l + hsize);
-        bottom_up(r + hsize);
+        self.bottom_up(l + hsize);
+        self.bottom_up(r + hsize);
     }
 }
 
