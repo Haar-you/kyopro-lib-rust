@@ -15,7 +15,7 @@ pub fn multipoint_eval<const P: u32>(
 
     let mut f = vec![Polynomial::constant(ConstModInt::new(1)); k * 2];
     for i in 0..m {
-        f[i + k] = Polynomial::from_vec(vec![-p[i], ConstModInt::new(1)]);
+        f[i + k] = Polynomial::from(vec![-p[i], ConstModInt::new(1)]);
     }
     for i in (1..k).rev() {
         f[i] = po.mul(f[i << 1].clone(), f[i << 1 | 1].clone());
@@ -57,7 +57,7 @@ mod tests {
         let a = (0..n)
             .map(|_| ff.from_u64(rng.gen_range(0..M) as u64))
             .collect::<Vec<_>>();
-        let a = Polynomial::from_vec(a);
+        let a = Polynomial::from(a);
 
         let m = 100;
         let p = (0..m)

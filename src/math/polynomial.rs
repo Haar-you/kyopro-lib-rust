@@ -35,12 +35,6 @@ impl<const P: u32> Polynomial<P> {
         ret
     }
 
-    pub fn from_vec(data: Vec<ConstModInt<P>>) -> Self {
-        let mut ret = Self { data };
-        ret.shrink();
-        ret
-    }
-
     pub fn len(&self) -> usize {
         self.data.len()
     }
@@ -69,6 +63,14 @@ impl<const P: u32> Polynomial<P> {
             return None;
         }
         Some(self.len() - 1)
+    }
+}
+
+impl<const P: u32> From<Vec<ConstModInt<P>>> for Polynomial<P> {
+    fn from(data: Vec<ConstModInt<P>>) -> Self {
+        let mut this = Self { data };
+        this.shrink();
+        this
     }
 }
 
@@ -195,13 +197,13 @@ mod tests {
             .into_iter()
             .map(|x| ff.from_u64(x))
             .collect();
-        let a = Polynomial::from_vec(a);
+        let a = Polynomial::from(a);
 
         let b: Vec<_> = vec![1, 2, 3, 4, 5]
             .into_iter()
             .map(|x| ff.from_u64(x))
             .collect();
-        let b = Polynomial::from_vec(b);
+        let b = Polynomial::from(b);
 
         let (q, r) = po.divmod(a.clone(), b.clone());
 
