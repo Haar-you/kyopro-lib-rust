@@ -54,7 +54,7 @@ impl<T: Ord + Eq> CompressorBuilder<T> {
         self.data.push(value);
     }
 
-    pub fn add_vec(&mut self, values: impl IntoIterator<Item = T>) {
+    pub fn extend(&mut self, values: impl IntoIterator<Item = T>) {
         self.data.extend(values);
     }
 
@@ -76,7 +76,7 @@ mod tests {
     fn test() {
         let data = vec![1, 3, 2, 4, 5, 9, 0, -1, 3];
         let mut builder = CompressorBuilder::<_>::new();
-        builder.add_vec(data.clone());
+        builder.extend(data.clone());
         let compressor = builder.build();
 
         assert_eq!(
@@ -93,7 +93,7 @@ mod tests {
 
         let data = hashset![1, 3, 2, 4, 5, 9, 0, -1, 3];
         let mut builder = CompressorBuilder::<_>::new();
-        builder.add_vec(data.clone());
+        builder.extend(data.clone());
         let compressor = builder.build();
 
         assert_eq!(

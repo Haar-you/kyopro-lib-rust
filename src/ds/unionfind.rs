@@ -25,7 +25,7 @@ impl<'a> UnionFind<'a, ()> {
 }
 
 impl<'a, T> UnionFind<'a, T> {
-    pub fn new_with_values(n: usize, values: Vec<T>, merge: Box<impl 'a + Fn(T, T) -> T>) -> Self {
+    pub fn with_values(n: usize, values: Vec<T>, merge: Box<impl 'a + Fn(T, T) -> T>) -> Self {
         UnionFind {
             n,
             count: n,

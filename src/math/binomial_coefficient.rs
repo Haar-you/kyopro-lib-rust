@@ -31,7 +31,7 @@ impl ExtLucas {
         Self { prod, inv, p, q, m }
     }
 
-    pub fn get(&self, mut n: u64, mut k: u64) -> u64 {
+    pub fn calc(&self, mut n: u64, mut k: u64) -> u64 {
         assert!(n >= k);
 
         let mut r = n - k;
@@ -119,11 +119,11 @@ impl BinomialCoefficient {
         Self { lu, ms }
     }
 
-    pub fn get(&self, n: u64, k: u64) -> u64 {
+    pub fn calc(&self, n: u64, k: u64) -> u64 {
         if n < k {
             0
         } else {
-            let bs = self.lu.iter().map(|lu| lu.get(n, k));
+            let bs = self.lu.iter().map(|lu| lu.calc(n, k));
             let a = bs
                 .zip(self.ms.iter())
                 .map(|(a, &b)| (a as i64, b))
@@ -140,13 +140,13 @@ mod tests {
     #[test]
     fn test() {
         let c = BinomialCoefficient::new(10007);
-        assert_eq!(c.get(4, 2), 6);
-        assert_eq!(c.get(0, 0), 1);
-        assert_eq!(c.get(1000000007, 998244353), 0);
+        assert_eq!(c.calc(4, 2), 6);
+        assert_eq!(c.calc(0, 0), 1);
+        assert_eq!(c.calc(1000000007, 998244353), 0);
 
         let c = BinomialCoefficient::new(60);
         assert_eq!(
-            (0..=10).map(|i| c.get(20, i)).collect::<Vec<_>>(),
+            (0..=10).map(|i| c.calc(20, i)).collect::<Vec<_>>(),
             [1, 20, 10, 0, 45, 24, 0, 0, 30, 20, 16]
         );
     }

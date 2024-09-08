@@ -49,7 +49,7 @@ impl<const P: u32> Polynomial<P> {
         }
     }
 
-    pub fn get_to(&self, t: usize) -> Self {
+    pub fn get_until(&self, t: usize) -> Self {
         Self {
             data: self.data[..t.min(self.len())].to_vec(),
         }
@@ -139,7 +139,7 @@ impl<'a, const P: u32> PolynomialOperator<'a, P> {
         while t <= n * 2 {
             ret = self.sub(
                 self.scale(ret.clone(), ConstModInt::new(2)),
-                self.mul(self.sq(ret).get_to(t), a.clone().get_to(t)),
+                self.mul(self.sq(ret).get_until(t), a.clone().get_until(t)),
             );
             ret.data.truncate(t);
             t *= 2;
