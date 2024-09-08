@@ -47,7 +47,7 @@ impl TwoSat {
         let s = SCC::new(&self.g).to_vec();
 
         let (a, b) = s.split_at(self.size);
-        if a.iter().zip(b).find(|(a, b)| a == b).is_some() {
+        if a.iter().zip(b).any(|(a, b)| a == b) {
             return None;
         }
 

@@ -66,7 +66,7 @@ impl Mul for MatrixMod2 {
             for (i, c) in rhs.data.chunks(Bitset::B_SIZE).enumerate() {
                 let mut a = 0;
 
-                for (j, x) in c.into_iter().enumerate() {
+                for (j, x) in c.iter().enumerate() {
                     let t = r2.and_count_ones(x) & 1;
 
                     if t != 0 {

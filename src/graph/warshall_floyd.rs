@@ -27,12 +27,9 @@ where
     for k in 0..n {
         for i in 0..n {
             for j in 0..n {
-                match (dist[i][k], dist[k][j]) {
-                    (Some(a), Some(b)) => {
-                        let s = a + b;
-                        dist[i][j] = dist[i][j].map(|x| x.min(s)).or(Some(s));
-                    }
-                    _ => {}
+                if let (Some(a), Some(b)) = (dist[i][k], dist[k][j]) {
+                    let s = a + b;
+                    dist[i][j] = dist[i][j].map(|x| x.min(s)).or(Some(s));
                 }
             }
         }

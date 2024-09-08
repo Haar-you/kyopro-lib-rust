@@ -141,7 +141,7 @@ where
             let c = groups[i]
                 .iter()
                 .flat_map(|&x| g[x].iter())
-                .filter_map(|e| (s[e.1] == p).then_some(e));
+                .filter(|e| s[e.1] == p);
 
             let &res @ (from, ..) = c.min_by(|x, y| x.2.cmp(&y.2)).unwrap();
 
