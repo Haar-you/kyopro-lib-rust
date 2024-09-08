@@ -24,13 +24,13 @@ impl<T> Node<T> {
 }
 
 #[derive(Clone, Debug)]
-pub struct PersistenSegtree<M: Monoid> {
+pub struct PersistentSegtree<M: Monoid> {
     root: Option<Rc<RefCell<Node<M::Output>>>>,
     monoid: M,
     to: usize,
 }
 
-impl<T: Clone, M: Monoid<Output = T> + Clone> PersistenSegtree<M> {
+impl<T: Clone, M: Monoid<Output = T> + Clone> PersistentSegtree<M> {
     pub fn new(n: usize, monoid: M) -> Self {
         let seq = vec![monoid.id(); n];
         Self::from_vec(seq, monoid)
@@ -180,7 +180,7 @@ mod tests {
     #[test]
     fn test() {
         let a = vec![0, 1, 3, 9, 4, 8, 2];
-        let seg = PersistenSegtree::from_vec(a, Sum::<u64>::new());
+        let seg = PersistentSegtree::from_vec(a, Sum::<u64>::new());
 
         dbg!(seg.fold(0..5));
 
