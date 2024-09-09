@@ -51,7 +51,7 @@ pub fn check_bipartite<E: EdgeTrait>(
             true
         })();
 
-        ret.push(if res { Some((a, b)) } else { None });
+        ret.push(res.then_some((a, b)));
     }
 
     ret

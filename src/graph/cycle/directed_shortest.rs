@@ -32,11 +32,11 @@ pub fn directed_shortest_cycle<E: EdgeTrait>(
                 loop {
                     if let Some(e) = pre[cur] {
                         ret.push(e);
+                        cur = e.from();
                     } else {
                         ret.reverse();
                         return Some(ret);
                     }
-                    cur = pre[cur].unwrap().from();
                 }
             }
 

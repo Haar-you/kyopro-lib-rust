@@ -23,7 +23,7 @@ pub enum Mode {
 }
 
 impl Mode {
-    pub(self) fn cmp<T: PartialOrd + Copy>(self, a: T, b: T) -> bool {
+    fn cmp<T: PartialOrd + Copy>(self, a: T, b: T) -> bool {
         match self {
             Mode::Max => a <= b,
             Mode::Min => a >= b,

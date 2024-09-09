@@ -30,16 +30,16 @@ impl<T> PersistentQueue<T> {
         let p = Rc::new(Node::new(value));
 
         Self {
-            front_back_node: Some((p.clone(), p)),
+            front_back_node: Some((Rc::clone(&p), p)),
         }
     }
 
     pub fn push(&self, value: T) -> Self {
-        match self.front_back_node.clone() {
+        match self.front_back_node.as_ref() {
             None => {
                 let p = Rc::new(Node::new(value));
                 Self {
-                    front_back_node: Some((p.clone(), p)),
+                    front_back_node: Some((Rc::clone(&p), p)),
                 }
             }
             Some((front_node, back_node)) => {
@@ -48,15 +48,15 @@ impl<T> PersistentQueue<T> {
                 t.depth = back_node.depth + 1;
 
                 t.ancestors.reserve(back_node.ancestors.len() + 1);
-                t.ancestors.push(back_node);
+                t.ancestors.push(Rc::clone(back_node));
                 for i in 1.. {
-                    match t.ancestors.get(i - 1).cloned() {
+                    match t.ancestors.get(i - 1) {
                         None => {
                             break;
                         }
                         Some(s) => {
-                            if let Some(x) = s.ancestors.get(i - 1).cloned() {
-                                t.ancestors.push(x);
+                            if let Some(x) = s.ancestors.get(i - 1) {
+                                t.ancestors.push(Rc::clone(x));
                             } else {
                                 break;
                             }
@@ -66,7 +66,7 @@ impl<T> PersistentQueue<T> {
                 t.ancestors.shrink_to_fit();
 
                 Self {
-                    front_back_node: Some((front_node, Rc::new(t))),
+                    front_back_node: Some((Rc::clone(front_node), Rc::new(t))),
                 }
             }
         }
@@ -82,12 +82,12 @@ impl<T> PersistentQueue<T> {
                     }
                 } else {
                     let mut d = back_node.depth - front_node.depth - 1;
-                    let mut t = back_node.clone();
+                    let mut t = back_node;
 
                     for i in (0..t.ancestors.len()).rev() {
                         if d >= (1 << i) {
                             d -= 1 << i;
-                            t = t.ancestors[i].clone();
+                            t = &t.ancestors[i];
                         }
                         if d == 0 {
                             break;
@@ -95,7 +95,7 @@ impl<T> PersistentQueue<T> {
                     }
 
                     Self {
-                        front_back_node: Some((t, back_node.clone())),
+                        front_back_node: Some((Rc::clone(t), Rc::clone(back_node))),
                     }
                 }
             })

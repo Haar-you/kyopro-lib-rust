@@ -25,16 +25,16 @@ where
         let n = a.len();
         let size = n.next_power_of_two() * 2;
 
-        let mut ret = Self {
+        let mut this = Self {
             data: vec![vec![]; size],
             accum: vec![vec![]; size],
             size,
             original_size: n,
         };
 
-        ret._init(1, &mut a, 0, size / 2);
+        this._init(1, &mut a, 0, size / 2);
 
-        ret
+        this
     }
 
     fn _init(&mut self, i: usize, a: &mut [T], l: usize, r: usize) {

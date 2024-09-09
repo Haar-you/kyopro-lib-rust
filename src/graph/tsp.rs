@@ -1,18 +1,21 @@
 //! 巡回セールスマン問題
+//!
+//! # Problems
+//! - <https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_2_A>
 
 use crate::graph::*;
-use std::{cmp::min, ops::Add};
+use std::ops::Add;
 
 pub fn tsp<T, E: EdgeTrait<Weight = T>>(g: &Graph<Directed, E>, src: usize) -> Option<T>
 where
     T: Copy + Ord + Add<Output = T>,
 {
     let n = g.len();
-    let mut dp = vec![vec![None; 1 << n]; n];
+    let mut dp: Vec<Vec<Option<T>>> = vec![vec![None; 1 << n]; n];
 
     for e in &g.edges[src] {
         let (to, cost) = (e.to(), e.weight());
-        dp[to][1 << to] = Some(dp[to][1 << to].map_or(cost, |x| min(x, cost)));
+        dp[to][1 << to] = dp[to][1 << to].map(|x| x.min(cost)).or(Some(cost));
     }
 
     for s in 1..1 << n {
@@ -28,8 +31,8 @@ where
                 }
 
                 if let Some(x) = dp[i][s] {
-                    dp[to][s | (1 << to)] =
-                        Some(dp[to][s | (1 << to)].map_or(x + cost, |y| min(y, x + cost)));
+                    let t = s | (1 << to);
+                    dp[to][t] = dp[to][t].map(|y| y.min(x + cost)).or(Some(x + cost));
                 }
             }
         }

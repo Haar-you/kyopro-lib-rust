@@ -13,14 +13,12 @@ where
     let mut dp = vec![];
     let mut pos = vec![];
     let mut prev = vec![None; n];
-    let mut ret = vec![];
 
-    for i in 0..n {
-        let x = a[i];
+    for (i, x) in a.iter().enumerate() {
         if dp.is_empty() || dp.last().unwrap() < &x {
             dp.push(x);
-            if !pos.is_empty() {
-                prev[i] = Some(*pos.last().unwrap());
+            if let Some(&last) = pos.last() {
+                prev[i] = Some(last);
             }
             pos.push(i);
         } else {
@@ -33,6 +31,7 @@ where
         }
     }
 
+    let mut ret = vec![];
     let mut i = Some(*pos.last().unwrap());
     while let Some(j) = i {
         ret.push(j);

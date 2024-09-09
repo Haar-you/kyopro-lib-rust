@@ -21,11 +21,7 @@ impl Position {
         let x = self.x.checked_add_signed(d.dx)?;
         let y = self.y.checked_add_signed(d.dy)?;
 
-        if x >= h || y >= w {
-            None
-        } else {
-            Some(Self::new(x, y))
-        }
+        (x < h && y < w).then_some(Self::new(x, y))
     }
 }
 

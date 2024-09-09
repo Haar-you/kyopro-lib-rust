@@ -19,7 +19,7 @@ impl MatrixMod2 {
         }
     }
 
-    pub fn from_vec(other: Vec<Bitset>) -> Self {
+    pub fn from_vec_bitset(other: Vec<Bitset>) -> Self {
         let h = other.len();
         assert!(h > 0);
         let w = other[0].len();
@@ -66,7 +66,7 @@ impl Mul for MatrixMod2 {
             for (i, c) in rhs.data.chunks(Bitset::B_SIZE).enumerate() {
                 let mut a = 0;
 
-                for (j, x) in c.into_iter().enumerate() {
+                for (j, x) in c.iter().enumerate() {
                     let t = r2.and_count_ones(x) & 1;
 
                     if t != 0 {
