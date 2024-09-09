@@ -25,6 +25,7 @@ pub mod psp;
 pub mod rle;
 pub mod rolling_hash;
 pub mod sa;
+pub mod shakutori;
 pub mod sliding_window;
 pub mod subset_sum;
 pub mod ternary_search;
