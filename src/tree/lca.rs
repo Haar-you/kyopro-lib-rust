@@ -14,44 +14,44 @@ impl DoublingLCA {
     /// **Space complexity O(n log n)**
     pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
         let n = tree.len();
-        let log2n = ((n as f64).log2().ceil() + 1.0) as usize;
-        let mut ret = Self {
+        let log2n = n.next_power_of_two().trailing_zeros() as usize + 1;
+        let mut this = Self {
             log2n,
             parent: vec![vec![None; log2n]; n],
             depth: vec![0; n],
         };
 
-        ret.dfs(tree, root, None, 0);
-        for k in 0..log2n - 1 {
-            for v in 0..n {
-                match ret.parent[v][k] {
-                    Some(p) => ret.parent[v][k + 1] = ret.parent[p][k],
-                    None => ret.parent[v][k + 1] = None,
+        let mut stack = vec![];
+        stack.push((root, None, 0));
+
+        while let Some((cur, par, d)) = stack.pop() {
+            this.parent[cur][0] = par;
+            this.depth[cur] = d;
+
+            tree.nodes[cur]
+                .neighbors()
+                .filter(|e| par != Some(e.to()))
+                .for_each(|e| stack.push((e.to(), Some(cur), d + 1)));
+        }
+
+        for v in 0..n {
+            for k in 0..log2n - 1 {
+                match this.parent[v][k] {
+                    Some(p) => this.parent[v][k + 1] = this.parent[p][k],
+                    None => this.parent[v][k + 1] = None,
                 }
             }
         }
 
-        ret
-    }
-
-    fn dfs<E: TreeEdgeTrait>(&mut self, tree: &Tree<E>, cur: usize, par: Option<usize>, d: usize) {
-        self.parent[cur][0] = par;
-        self.depth[cur] = d;
-
-        for e in tree.nodes[cur].neighbors() {
-            if Some(e.to()) != par {
-                self.dfs(tree, e.to(), Some(cur), d + 1);
-            }
-        }
+        this
     }
 
     /// `a`の`n`個上の祖先を求める。
     ///
     /// **Time complexity O(log n)**
     pub fn ancestor(&self, mut a: usize, mut n: usize) -> Option<usize> {
-        let bits = std::mem::size_of::<usize>() * 8;
         while n != 0 {
-            let m1 = bits - n.leading_zeros() as usize - 1;
+            let m1 = usize::BITS as usize - n.leading_zeros() as usize - 1;
             if let Some(&Some(b)) = self.parent[a].get(m1) {
                 a = b;
                 n ^= 1 << m1;

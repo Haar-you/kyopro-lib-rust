@@ -31,18 +31,16 @@ where
 
         for e in &g.edges[u] {
             let (to, cost) = (e.to(), e.weight());
-            if let Some(ref d2) = ret[to] {
-                if *d2 > d + cost {
+
+            match ret[to] {
+                Some(d2) if d2 <= d + cost => {}
+                _ => {
                     let d = d + cost;
                     ret[to] = Some(d);
                     if !check[to] {
                         heap.push(Reverse((d, to)));
                     }
                 }
-            } else {
-                let d = d + cost;
-                ret[to] = Some(d);
-                heap.push(Reverse((d, to)));
             }
         }
     }

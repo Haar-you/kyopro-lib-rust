@@ -19,14 +19,11 @@ where
     let n = g.len();
     let mut rg = vec![vec![]; n];
 
-    for es in &g.edges {
-        for e in es {
-            rg[e.to()].push((e.to(), e.from(), e.weight(), e));
-        }
+    for e in g.edges.iter().flatten() {
+        rg[e.to()].push((e.to(), e.from(), e.weight(), e));
     }
 
     let res = rec(rg, root);
-
     res.into_iter().filter_map(|e| e.map(|e| e.3)).collect()
 }
 
@@ -42,19 +39,18 @@ where
 
     for (i, es) in g.iter().enumerate() {
         if i != root {
-            let &(from, to, weight, e) = es.iter().min_by(|x, y| x.2.cmp(&y.2)).unwrap();
+            let &res @ (from, to, ..) = es.iter().min_by(|x, y| x.2.cmp(&y.2)).unwrap();
 
-            in_edges[from] = Some((from, to, weight, e));
+            in_edges[from] = Some(res);
             out_count[to] += 1;
         }
     }
 
-    let mut q = VecDeque::new();
-    for (i, &x) in out_count.iter().enumerate() {
-        if x == 0 {
-            q.push_back(i);
-        }
-    }
+    let mut q: VecDeque<_> = out_count
+        .iter()
+        .enumerate()
+        .filter_map(|(i, &x)| (x == 0).then_some(i))
+        .collect();
 
     while let Some(i) = q.pop_front() {
         if let Some((_, to, ..)) = in_edges[i] {
@@ -70,8 +66,7 @@ where
         let temp = out_count
             .into_iter()
             .enumerate()
-            .filter(|&(_, c)| c != 0)
-            .map(|(i, _)| i);
+            .filter_map(|(i, c)| (c != 0).then_some(i));
 
         let mut ret = vec![];
         let mut check = vec![false; n];
@@ -108,9 +103,7 @@ where
                 for e in g[i].iter_mut() {
                     e.2 = e.2 - c.2;
                 }
-            }
 
-            for &i in &cycle {
                 in_cycle[i] = true;
             }
 
@@ -134,11 +127,9 @@ where
         let mut sg = vec![vec![]; size];
         let root = s[root];
 
-        for es in &g {
-            for &(from, to, weight, e) in es {
-                if s[from] != s[to] {
-                    sg[s[from]].push((s[from], s[to], weight, e));
-                }
+        for &(from, to, weight, e) in g.iter().flatten() {
+            if s[from] != s[to] {
+                sg[s[from]].push((s[from], s[to], weight, e));
             }
         }
 
@@ -147,20 +138,14 @@ where
         for (i, e) in res.into_iter().enumerate() {
             let p = if let Some(e) = e { e.1 } else { continue };
 
-            let mut c = vec![];
+            let c = groups[i]
+                .iter()
+                .flat_map(|&x| g[x].iter())
+                .filter(|e| s[e.1] == p);
 
-            for &x in &groups[i] {
-                for &e in &g[x] {
-                    let to = e.1;
-                    if s[to] == p {
-                        c.push(e);
-                    }
-                }
-            }
+            let &res @ (from, ..) = c.min_by(|x, y| x.2.cmp(&y.2)).unwrap();
 
-            let &(from, to, weight, e) = c.iter().min_by(|x, y| x.2.cmp(&y.2)).unwrap();
-
-            in_edges[from] = Some((from, to, weight, e));
+            in_edges[from] = Some(res);
         }
     }
 

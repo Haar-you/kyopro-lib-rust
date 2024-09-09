@@ -113,7 +113,7 @@ impl BinaryTrie {
         }
     }
 
-    pub fn min(&mut self, x: u64) -> Option<u64> {
+    pub fn min(&mut self, xor: u64) -> Option<u64> {
         if self.data[0].count == 0 {
             None
         } else {
@@ -124,7 +124,7 @@ impl BinaryTrie {
             while depth > 0 {
                 depth -= 1;
 
-                let mut b = (x >> depth) & 1;
+                let mut b = (xor >> depth) & 1;
 
                 let t = self.data[node].ch[b as usize];
                 if t.is_null() || self.data[t.0].count == 0 {
@@ -139,7 +139,7 @@ impl BinaryTrie {
         }
     }
 
-    pub fn max(&mut self, x: u64) -> Option<u64> {
+    pub fn max(&mut self, xor: u64) -> Option<u64> {
         if self.data[0].count == 0 {
             None
         } else {
@@ -150,7 +150,7 @@ impl BinaryTrie {
             while depth > 0 {
                 depth -= 1;
 
-                let mut b = ((x >> depth) & 1) ^ 1;
+                let mut b = ((xor >> depth) & 1) ^ 1;
 
                 let t = self.data[node].ch[b as usize];
                 if t.is_null() || self.data[t.0].count == 0 {

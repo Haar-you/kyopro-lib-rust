@@ -16,12 +16,13 @@ where
     while let Some(cur) = stack.pop() {
         check[cur] = true;
 
-        for e in tr.nodes[cur].neighbors() {
-            if !check[e.to()] {
+        tr.nodes[cur]
+            .neighbors()
+            .filter(|e| !check[e.to()])
+            .for_each(|e| {
                 ret[e.to()] = ret[cur] + e.weight();
                 stack.push(e.to());
-            }
-        }
+            });
     }
 
     ret
@@ -90,23 +91,26 @@ pub fn tree_path<T, E: TreeEdgeTrait<Weight = T>>(tr: &Tree<E>, u: usize, v: usi
     stack.push((u, 0));
 
     while let Some((i, st)) = stack.pop() {
-        if st == 1 {
-            ret.pop();
-        } else {
-            stack.push((i, 1));
-            ret.push(i);
+        match st {
+            0 => {
+                stack.push((i, 1));
+                ret.push(i);
 
-            if i == v {
-                break;
-            }
-
-            check[i] = true;
-
-            for e in tr.nodes[i].neighbors() {
-                if !check[e.to()] {
-                    stack.push((e.to(), 0));
+                if i == v {
+                    break;
                 }
+
+                check[i] = true;
+
+                tr.nodes[i]
+                    .neighbors()
+                    .filter(|e| !check[e.to()])
+                    .for_each(|e| stack.push((e.to(), 0)));
             }
+            1 => {
+                ret.pop();
+            }
+            _ => unreachable!(),
         }
     }
 

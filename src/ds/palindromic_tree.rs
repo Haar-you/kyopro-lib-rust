@@ -133,12 +133,12 @@ impl PalindromicTree {
         self.list.len()
     }
 
-    pub fn get_node(&self, index: usize) -> Option<&Node> {
+    pub fn node_of(&self, index: usize) -> Option<&Node> {
         self.list.get(index)
     }
 
-    pub fn get_from_strpos(&self, pos: usize) -> Option<&Node> {
-        self.get_node(self.sindex_list[pos])
+    pub fn node_from_strpos(&self, pos: usize) -> Option<&Node> {
+        self.node_of(self.sindex_list[pos])
     }
 
     pub fn parent_of(&self, index: usize) -> Option<&Node> {

@@ -119,17 +119,16 @@ impl<T: Clone, S: Semigroup<Output = T>> FoldableDeque<S> {
         self.front_stack.is_empty() && self.back_stack.is_empty()
     }
 }
-/*
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{algebra::affine::*, math::ff::modint::*, modulo};
+    use crate::{algebra::affine::*, num::const_modint::ConstModInt};
     use rand::Rng;
     use std::collections::VecDeque;
 
     const M: u32 = 998244353;
-    modulo!(Mod, M);
-    type Mint = ModInt<Mod>;
+    type Mint = ConstModInt<M>;
 
     #[test]
     fn test() {
@@ -149,14 +148,14 @@ mod tests {
 
             match ty {
                 0 => {
-                    let a = rng.gen_range(0..M).into();
-                    let b = rng.gen_range(0..M).into();
+                    let a = Mint::new(rng.gen_range(0..M));
+                    let b = Mint::new(rng.gen_range(0..M));
                     deq.push_front((a, b));
                     swag.push_front((a, b));
                 }
                 1 => {
-                    let a = rng.gen_range(0..M).into();
-                    let b = rng.gen_range(0..M).into();
+                    let a = Mint::new(rng.gen_range(0..M));
+                    let b = Mint::new(rng.gen_range(0..M));
                     deq.push_back((a, b));
                     swag.push_back((a, b));
                 }
@@ -169,7 +168,7 @@ mod tests {
                 4 => {
                     assert_eq!(
                         deq.iter()
-                            .fold((1.into(), 0.into()), |acc, &x| monoid.op(acc, x)),
+                            .fold((Mint::new(1), Mint::new(0)), |acc, &x| monoid.op(acc, x)),
                         swag.fold().unwrap_or(monoid.id())
                     );
                 }
@@ -178,4 +177,3 @@ mod tests {
         }
     }
 }
-*/

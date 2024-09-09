@@ -35,12 +35,6 @@ impl<const P: u32> Polynomial<P> {
         ret
     }
 
-    pub fn from_vec(data: Vec<ConstModInt<P>>) -> Self {
-        let mut ret = Self { data };
-        ret.shrink();
-        ret
-    }
-
     pub fn len(&self) -> usize {
         self.data.len()
     }
@@ -55,7 +49,7 @@ impl<const P: u32> Polynomial<P> {
         }
     }
 
-    pub fn get_to(&self, t: usize) -> Self {
+    pub fn get_until(&self, t: usize) -> Self {
         Self {
             data: self.data[..t.min(self.len())].to_vec(),
         }
@@ -69,6 +63,14 @@ impl<const P: u32> Polynomial<P> {
             return None;
         }
         Some(self.len() - 1)
+    }
+}
+
+impl<const P: u32> From<Vec<ConstModInt<P>>> for Polynomial<P> {
+    fn from(data: Vec<ConstModInt<P>>) -> Self {
+        let mut this = Self { data };
+        this.shrink();
+        this
     }
 }
 
@@ -137,7 +139,7 @@ impl<'a, const P: u32> PolynomialOperator<'a, P> {
         while t <= n * 2 {
             ret = self.sub(
                 self.scale(ret.clone(), ConstModInt::new(2)),
-                self.mul(self.sq(ret).get_to(t), a.clone().get_to(t)),
+                self.mul(self.sq(ret).get_until(t), a.clone().get_until(t)),
             );
             ret.data.truncate(t);
             t *= 2;
@@ -195,13 +197,13 @@ mod tests {
             .into_iter()
             .map(|x| ff.from_u64(x))
             .collect();
-        let a = Polynomial::from_vec(a);
+        let a = Polynomial::from(a);
 
         let b: Vec<_> = vec![1, 2, 3, 4, 5]
             .into_iter()
             .map(|x| ff.from_u64(x))
             .collect();
-        let b = Polynomial::from_vec(b);
+        let b = Polynomial::from(b);
 
         let (q, r) = po.divmod(a.clone(), b.clone());
 

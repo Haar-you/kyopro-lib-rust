@@ -22,7 +22,7 @@ where
         }
     }
 
-    pub fn from_vec(other: Vec<Vec<u32>>, modulo: Modulo) -> Self {
+    pub fn from_vec_2d(other: Vec<Vec<u32>>, modulo: Modulo) -> Self {
         let h = other.len();
         assert!(h > 0);
         let w = other[0].len();

@@ -27,14 +27,14 @@ impl<T: Clone, S: Semigroup<Output = T>> DisjointSparseTable<S> {
             data[0][i] = x.clone();
         }
 
-        let mut ret = Self {
+        let mut this = Self {
             data,
             seq,
             semigroup,
         };
-        ret.build(0, 1 << log_size, log_size - 1);
+        this.build(0, 1 << log_size, log_size - 1);
 
-        ret
+        this
     }
 
     fn build(&mut self, l: usize, r: usize, d: usize) {

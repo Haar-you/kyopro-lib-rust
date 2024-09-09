@@ -23,7 +23,7 @@ pub struct TreeDepthQuery {
 impl TreeDepthQuery {
     pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
         let size = tree.len();
-        let mut ret = Self {
+        let mut this = Self {
             par: vec![None; size],
             depth: vec![0; size],
             left: vec![0; size],
@@ -33,28 +33,28 @@ impl TreeDepthQuery {
             ord: vec![0; size],
         };
 
-        ret.dfs(tree, root, None, 0, &mut 0);
+        this.dfs(tree, root, None, 0, &mut 0);
 
         let mut q = VecDeque::new();
         q.push_back((root, 0));
         let mut ord = 0;
 
         while let Some((i, d)) = q.pop_front() {
-            if ret.bfs_ord.len() <= d {
-                ret.bfs_ord.push(vec![]);
+            if this.bfs_ord.len() <= d {
+                this.bfs_ord.push(vec![]);
             }
-            ret.bfs_ord[d].push(ord);
-            ret.ord[i] = ord;
+            this.bfs_ord[d].push(ord);
+            this.ord[i] = ord;
             ord += 1;
 
             for e in tree.nodes[i].neighbors() {
-                if Some(e.to()) != ret.par[i] {
+                if Some(e.to()) != this.par[i] {
                     q.push_back((e.to(), d + 1));
                 }
             }
         }
 
-        ret
+        this
     }
 
     fn dfs<E: TreeEdgeTrait>(

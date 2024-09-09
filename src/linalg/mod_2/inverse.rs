@@ -6,8 +6,9 @@ pub fn inverse(mut b: Vec<Bitset>) -> Option<Vec<Bitset>> {
     assert!(b.iter().all(|r| r.len() == n));
 
     let mut c = vec![Bitset::new(n); n];
-    for i in 0..n {
-        c[i].set(i, true);
+
+    for (i, c) in c.iter_mut().enumerate() {
+        c.set(i, true);
     }
 
     for i in 0..n {

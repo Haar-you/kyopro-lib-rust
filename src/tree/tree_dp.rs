@@ -2,58 +2,63 @@
 
 use crate::tree::*;
 
-pub struct TreeDP<'a, Weight, T> {
-    id: T,
-    merge: Box<dyn 'a + Fn(T, T) -> T>,
-    up: Box<dyn 'a + Fn(T, (usize, Weight)) -> T>,
-    apply: Box<dyn 'a + Fn(T, usize) -> T>,
+/// 木DP
+///
+/// # Problems
+/// - <https://atcoder.jp/contests/dp/tasks/dp_p>
+/// - <https://yukicoder.me/problems/no/763>
+pub struct TreeDP<'a, Weight, T, U> {
+    init: U,
+    up: Box<dyn 'a + Fn(T, (usize, Weight)) -> U>,
+    merge: Box<dyn 'a + Fn(U, U) -> U>,
+    apply: Box<dyn 'a + Fn(U, usize) -> T>,
 }
 
-impl<'a, Weight, T> TreeDP<'a, Weight, T>
+impl<'a, Weight, T, U> TreeDP<'a, Weight, T, U>
 where
     Weight: Copy,
     T: Clone,
+    U: Clone,
 {
     pub fn new(
-        id: T,
-        merge: Box<impl 'a + Fn(T, T) -> T>,
-        up: Box<impl 'a + Fn(T, (usize, Weight)) -> T>,
-        apply: Box<impl 'a + Fn(T, usize) -> T>,
+        init: U,
+        up: Box<impl 'a + Fn(T, (usize, Weight)) -> U>,
+        merge: Box<impl 'a + Fn(U, U) -> U>,
+        apply: Box<impl 'a + Fn(U, usize) -> T>,
     ) -> Self {
         Self {
-            id,
-            merge,
+            init,
             up,
+            merge,
             apply,
         }
     }
 
     pub fn run<E: TreeEdgeTrait<Weight = Weight>>(&self, tree: &Tree<E>, root: usize) -> Vec<T> {
         let size = tree.len();
-        let mut ret = vec![self.id.clone(); size];
+        let mut ret = vec![None; size];
 
-        self.internal(tree, root, None, &mut ret);
+        self.__dfs(tree, root, None, &mut ret);
 
-        ret
+        ret.into_iter().flatten().collect()
     }
 
-    fn internal<E: TreeEdgeTrait<Weight = Weight>>(
+    fn __dfs<E: TreeEdgeTrait<Weight = Weight>>(
         &self,
         tree: &Tree<E>,
         cur: usize,
         par: Option<usize>,
-        ret: &mut Vec<T>,
-    ) {
-        for e in tree.nodes[cur].neighbors() {
-            if Some(e.to()) == par {
-                continue;
-            }
-
-            self.internal(tree, e.to(), Some(cur), ret);
-
-            let temp = (self.up)(ret[e.to()].clone(), (e.to(), e.weight()));
-            ret[cur] = (self.merge)(ret[cur].clone(), temp);
-        }
-        ret[cur] = (self.apply)(ret[cur].clone(), cur);
+        ret: &mut Vec<Option<T>>,
+    ) -> T {
+        let acc = tree.nodes[cur]
+            .neighbors()
+            .filter(|e| par != Some(e.to()))
+            .map(|e| {
+                let a = self.__dfs(tree, e.to(), Some(cur), ret);
+                (self.up)(a, (e.to(), e.weight()))
+            })
+            .fold(self.init.clone(), |a, b| (self.merge)(a, b));
+        ret[cur] = Some((self.apply)(acc, cur));
+        ret[cur].clone().unwrap()
     }
 }

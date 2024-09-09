@@ -80,7 +80,7 @@ impl From<Vec<bool>> for Bitset {
         for (i, x) in value.chunks(B_SIZE).enumerate() {
             let mut a = 0;
 
-            for (j, y) in x.into_iter().enumerate() {
+            for (j, y) in x.iter().enumerate() {
                 if *y {
                     a |= 1 << j;
                 }

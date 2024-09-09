@@ -1,71 +1,98 @@
-use crate::graph::*;
 use std::collections::VecDeque;
 
+pub struct PseudoTreeBuilder {
+    g: Vec<Vec<usize>>,
+    edge_num: usize,
+}
+
 pub struct PseudoTree {
-    pub group: Vec<usize>,
-    pub in_loop: Vec<bool>,
+    group: Vec<usize>,
+    in_loop: Vec<bool>,
 }
 
-pub fn pseudo_tree<E: EdgeTrait>(g: &Graph<Undirected, E>) -> PseudoTree {
-    let n = g.len();
-    let mut indeg = vec![0; n];
-    let mut queue = VecDeque::new();
-    let mut visit = vec![false; n];
-    let mut in_loop = vec![true; n];
-
-    for es in &g.edges {
-        for e in es {
-            indeg[e.to()] += 1;
+impl PseudoTreeBuilder {
+    pub fn new(n: usize) -> Self {
+        Self {
+            g: vec![vec![]; n],
+            edge_num: 0,
         }
     }
 
-    for (i, &deg) in indeg.iter().enumerate() {
-        if deg == 1 {
-            queue.push_back(i);
-        }
+    pub fn add(&mut self, u: usize, v: usize) {
+        self.g[u].push(v);
+        self.g[v].push(u);
+        self.edge_num += 1;
     }
 
-    while let Some(cur) = queue.pop_front() {
-        in_loop[cur] = false;
+    pub fn build(self) -> PseudoTree {
+        assert_eq!(self.edge_num, self.g.len());
+        let n = self.g.len();
+        let mut indeg = vec![0; n];
+        let mut visit = vec![false; n];
+        let mut in_loop = vec![true; n];
 
-        if visit[cur] {
-            continue;
+        for &to in self.g.iter().flatten() {
+            indeg[to] += 1;
         }
-        visit[cur] = true;
 
-        for e in &g.edges[cur] {
-            if !visit[e.to()] {
-                indeg[e.to()] -= 1;
+        let mut queue: VecDeque<_> = indeg
+            .iter()
+            .enumerate()
+            .filter_map(|(i, &deg)| (deg == 1).then_some(i))
+            .collect();
 
-                if indeg[e.to()] == 1 {
-                    queue.push_back(e.to());
+        while let Some(cur) = queue.pop_front() {
+            in_loop[cur] = false;
+
+            if visit[cur] {
+                continue;
+            }
+            visit[cur] = true;
+
+            for &to in &self.g[cur] {
+                if !visit[to] {
+                    indeg[to] -= 1;
+
+                    if indeg[to] == 1 {
+                        queue.push_back(to);
+                    }
                 }
             }
         }
-    }
 
-    let mut group = vec![0; n];
+        let mut group = vec![0; n];
 
-    for i in 0..n {
-        if in_loop[i] {
-            group[i] = i;
-            for e in &g.edges[i] {
-                if !in_loop[e.to()] {
-                    dfs(g, e.to(), i, &mut group);
+        for i in 0..n {
+            if in_loop[i] {
+                group[i] = i;
+                for &to in &self.g[i] {
+                    if !in_loop[to] {
+                        self.__dfs(to, i, &mut group);
+                    }
                 }
             }
         }
+
+        PseudoTree { group, in_loop }
     }
 
-    PseudoTree { group, in_loop }
+    fn __dfs(&self, cur: usize, par: usize, group: &mut [usize]) {
+        group[cur] = group[par];
+
+        for &to in &self.g[cur] {
+            if to != par {
+                self.__dfs(to, cur, group);
+            }
+        }
+    }
 }
 
-fn dfs<E: EdgeTrait>(g: &Graph<Undirected, E>, cur: usize, par: usize, group: &mut [usize]) {
-    group[cur] = group[par];
+impl PseudoTree {
+    pub fn group_of(&self, i: usize) -> usize {
+        self.group[i]
+    }
 
-    for e in &g.edges[cur] {
-        if e.to() != par {
-            dfs(g, e.to(), cur, group);
-        }
+    pub fn is_in_loop(&self, i: usize) -> bool {
+        self.in_loop[i]
     }
 }
