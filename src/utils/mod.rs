@@ -2,7 +2,6 @@
 
 pub mod bits;
 pub mod fastio;
-pub mod join_str;
 pub mod linear;
 pub mod nullable_usize;
 pub mod range;
