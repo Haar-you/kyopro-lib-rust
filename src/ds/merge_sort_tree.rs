@@ -7,6 +7,7 @@ use crate::algo::{bsearch::upper_bound, merge::inplace_merge};
 use crate::num::one_zero::Zero;
 use std::ops::{Add, AddAssign, Range};
 
+/// Merge-sort Tree
 pub struct MergeSortTree<T> {
     data: Vec<Vec<T>>,
     accum: Vec<Vec<T>>,

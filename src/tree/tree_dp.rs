@@ -20,6 +20,7 @@ where
     T: Clone,
     U: Clone,
 {
+    /// **Time complexity O(1)**
     pub fn new(
         init: U,
         up: Box<impl 'a + Fn(T, (usize, Weight)) -> U>,
@@ -34,6 +35,7 @@ where
         }
     }
 
+    /// **Time complexity O(n)**
     pub fn run<E: TreeEdgeTrait<Weight = Weight>>(&self, tree: &Tree<E>, root: usize) -> Vec<T> {
         let size = tree.len();
         let mut ret = vec![None; size];

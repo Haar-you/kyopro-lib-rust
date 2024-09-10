@@ -1,12 +1,16 @@
 /// 加算についての単位元をもつ
 pub trait Zero {
+    /// 加法単位元の型
     type Output;
+    /// 加法単位元を返す
     fn zero() -> Self::Output;
 }
 
 /// 乗算についての単位元をもつ
 pub trait One {
+    /// 乗法単位元の型
     type Output;
+    /// 乗法単位元を返す
     fn one() -> Self::Output;
 }
 

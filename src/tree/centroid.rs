@@ -2,6 +2,7 @@
 
 use crate::tree::*;
 
+/// 木の重心を列挙する
 pub fn centroids<E: TreeEdgeTrait>(tree: &Tree<E>) -> Vec<usize> {
     let n = tree.len();
     let mut sub = vec![0; n];
