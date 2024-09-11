@@ -66,7 +66,7 @@ impl DoublingLCA {
     /// `a`と`b`の最小共通祖先を求める。
     ///
     /// **Time complexity O(log n)**
-    pub fn get_lca(&self, mut a: usize, mut b: usize) -> usize {
+    pub fn lca(&self, mut a: usize, mut b: usize) -> usize {
         if self.depth[a] >= self.depth[b] {
             std::mem::swap(&mut a, &mut b);
         }
@@ -93,7 +93,7 @@ impl DoublingLCA {
     ///
     /// **Time complexity O(log n)**
     pub fn jump(&self, s: usize, t: usize, d: usize) -> Option<usize> {
-        let a = self.get_lca(s, t);
+        let a = self.lca(s, t);
         if self.depth[s] - self.depth[a] >= d {
             self.ancestor(s, d)
         } else if self.depth[s] + self.depth[t] - self.depth[a] * 2 >= d {
