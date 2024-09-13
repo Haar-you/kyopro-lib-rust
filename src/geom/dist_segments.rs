@@ -5,6 +5,7 @@ use crate::{
     min,
 };
 
+/// 2つの線分間の距離を求める
 pub fn dist_segments(l1: Line, l2: Line) -> f64 {
     let cr = l1.cross(l2);
     let t1 = (l2.from - l1.from).cross(l2.diff()) / cr;

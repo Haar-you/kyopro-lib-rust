@@ -3,26 +3,34 @@
 use crate::geom::{ccw::*, *};
 use std::f64::consts::PI;
 
+/// 点と多角形の位置関係
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[allow(non_camel_case_types)]
 pub enum PointPolygon {
+    /// 点が多角形の内部にある
     INCLUSION,
+    /// 点が多角形上にある
     ON_SEGMENT,
+    /// 点が多角形の外部にある
     EXCLUSION,
 }
 
 impl PointPolygon {
+    /// `INCLUSION`かを判定
     pub fn inclusion(self) -> bool {
         self == Self::INCLUSION
     }
+    /// `ON_SEGMENT`かを判定
     pub fn on_segment(self) -> bool {
         self == Self::ON_SEGMENT
     }
+    /// `EXCLUSION`かを判定
     pub fn exclusion(self) -> bool {
         self == Self::EXCLUSION
     }
 }
 
+/// 点と多角形の位置関係を求める
 pub fn point_in_polygon(p: Vector, pl: &[Vector], eps: Eps) -> PointPolygon {
     use self::PointPolygon::*;
 

@@ -2,6 +2,7 @@
 
 use crate::geom::*;
 
+/// 点`p`を通る円`c`の接線を求める
 pub fn tangent_circle(c: Circle, p: Vector, eps: Eps) -> Vec<Vector> {
     let d = (p - c.center).abs();
 

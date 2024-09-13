@@ -2,6 +2,7 @@
 
 use crate::geom::*;
 
+/// 三角形(△abc)の外接円を求める
 pub fn circumcircle(a: Vector, b: Vector, c: Vector) -> Circle {
     let a_ = (b - c).abs_sq();
     let b_ = (a - c).abs_sq();

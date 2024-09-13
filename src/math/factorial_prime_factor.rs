@@ -1,4 +1,10 @@
 //! a!の素因数pの個数を求める。
+//!
+//! # References
+//! - <https://ja.wikipedia.org/wiki/%E3%83%AB%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%89%E3%83%AB%E3%81%AE%E5%85%AC%E5%BC%8F>
+//!
+//! # Problems
+//! - <https://yukicoder.me/problems/no/2380>
 
 /// a!の素因数pの個数を求める。
 ///

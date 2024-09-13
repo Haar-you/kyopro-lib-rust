@@ -2,6 +2,7 @@
 
 use crate::geom::{ccw::*, intersect_line_segment::*, *};
 
+/// 凸多角形`ps`を直線`l`で切断して、その切断後の2つの多角形を返す
 pub fn convex_cut(ps: &[Vector], l: Line, eps: Eps) -> (Vec<Vector>, Vec<Vector>) {
     use self::IntersectLineSegment::*;
 
