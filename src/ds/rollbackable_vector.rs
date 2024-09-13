@@ -1,4 +1,7 @@
 //! ロールバック可能Vec
+//!
+//! # Problems
+//! - <https://atcoder.jp/contests/abc165/tasks/abc165_f>
 
 use std::{
     fmt,
@@ -40,13 +43,9 @@ where
 
     /// 末尾の要素を削除して返す
     pub fn pop(&mut self) -> Option<T> {
-        if self.data.is_empty() {
-            None
-        } else {
-            let x = self.data.pop();
-            self.history.push(History::Pop(x.as_ref().unwrap().clone()));
-            x
-        }
+        let x = self.data.pop()?;
+        self.history.push(History::Pop(x.clone()));
+        Some(x)
     }
 
     /// `index`番目の要素を`value`に変更する
@@ -58,22 +57,22 @@ where
 
     /// 直前の`push` / `pop` / `assign`操作を取り消す
     pub fn rollback(&mut self) -> bool {
-        if self.history.is_empty() {
-            false
-        } else {
-            match self.history.pop().unwrap() {
-                History::Update(value, index) => {
-                    self.data[index] = value;
+        match self.history.pop() {
+            None => false,
+            Some(x) => {
+                match x {
+                    History::Update(value, index) => {
+                        self.data[index] = value;
+                    }
+                    History::Push => {
+                        self.data.pop();
+                    }
+                    History::Pop(value) => {
+                        self.data.push(value);
+                    }
                 }
-                History::Push => {
-                    self.data.pop();
-                }
-                History::Pop(value) => {
-                    self.data.push(value);
-                }
+                true
             }
-
-            true
         }
     }
 
@@ -85,6 +84,21 @@ where
     /// 要素が存在しないかを判定する
     pub fn is_empty(&self) -> bool {
         self.data.is_empty()
+    }
+
+    /// スライスを返す
+    pub fn as_slice(&self) -> &[T] {
+        &self.data
+    }
+
+    /// 先頭の要素を返す
+    pub fn first(&self) -> Option<&T> {
+        self.data.first()
+    }
+
+    /// 末尾の要素を返す
+    pub fn last(&self) -> Option<&T> {
+        self.data.last()
     }
 }
 
@@ -114,5 +128,35 @@ impl<T> From<Vec<T>> for RollbackableVec<T> {
             data: from,
             history: vec![],
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let mut a = RollbackableVec::from(vec![1, 2, 3, 4]);
+
+        assert_eq!(a.as_slice(), &[1, 2, 3, 4]);
+
+        a.push(5);
+        assert_eq!(a.as_slice(), &[1, 2, 3, 4, 5]);
+
+        a.rollback();
+        assert_eq!(a.as_slice(), &[1, 2, 3, 4]);
+
+        a.pop();
+        assert_eq!(a.as_slice(), &[1, 2, 3]);
+
+        a.rollback();
+        assert_eq!(a.as_slice(), &[1, 2, 3, 4]);
+
+        a.assign(2, 9);
+        assert_eq!(a.as_slice(), &[1, 2, 9, 4]);
+
+        a.rollback();
+        assert_eq!(a.as_slice(), &[1, 2, 3, 4]);
     }
 }
