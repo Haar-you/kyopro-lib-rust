@@ -1,7 +1,5 @@
 //! 有理数
 
-#![allow(clippy::suspicious_arithmetic_impl)]
-
 use crate::math::gcd_lcm::GcdLcm;
 use std::{
     cmp::Ordering,
@@ -35,6 +33,50 @@ impl Rational {
             denominator,
         }
     }
+
+    /// 分子を返す
+    pub fn numerator(self) -> i64 {
+        self.numerator
+    }
+
+    /// 分母を返す
+    pub fn denominator(self) -> i64 {
+        self.denominator
+    }
+
+    #[inline]
+    fn __add(self, other: Self) -> Self {
+        let l = self.denominator.lcm(other.denominator);
+        Self::new(
+            l / self.denominator * self.numerator + l / other.denominator * other.numerator,
+            l,
+        )
+    }
+
+    #[inline]
+    fn __sub(self, other: Self) -> Self {
+        let l = self.denominator.lcm(other.denominator);
+        Self::new(
+            l / self.denominator * self.numerator - l / other.denominator * other.numerator,
+            l,
+        )
+    }
+
+    #[inline]
+    fn __mul(self, other: Self) -> Self {
+        Self::new(
+            self.numerator * other.numerator,
+            self.denominator * other.denominator,
+        )
+    }
+
+    #[inline]
+    fn __div(self, other: Self) -> Self {
+        Self::new(
+            self.numerator * other.denominator,
+            self.denominator * other.numerator,
+        )
+    }
 }
 
 impl Debug for Rational {
@@ -58,78 +100,30 @@ impl From<i64> for Rational {
     }
 }
 
-impl Add for Rational {
-    type Output = Self;
+macro_rules! impl_arith {
+    ($tr:ident, $f:ident, $fi:ident, $tr_a:ident, $f_a:ident, $op:tt) => {
+        impl $tr for Rational {
+            type Output = Self;
+            fn $f(self, other: Self) -> Self {
+                self.$fi(other)
+            }
+        }
 
-    fn add(self, other: Self) -> Self {
-        let l = self.denominator.lcm(other.denominator);
-        Self::new(
-            l / self.denominator * self.numerator + l / other.denominator * other.numerator,
-            l,
-        )
+        impl $tr_a for Rational {
+            fn $f_a(&mut self, other: Self) {
+                *self = *self $op other;
+            }
+        }
     }
 }
 
-impl AddAssign for Rational {
-    fn add_assign(&mut self, other: Rational) {
-        *self = *self + other;
-    }
-}
-
-impl Sub for Rational {
-    type Output = Self;
-
-    fn sub(self, other: Self) -> Self {
-        let l = self.denominator.lcm(other.denominator);
-        Self::new(
-            l / self.denominator * self.numerator - l / other.denominator * other.numerator,
-            l,
-        )
-    }
-}
-
-impl SubAssign for Rational {
-    fn sub_assign(&mut self, other: Rational) {
-        *self = *self - other;
-    }
-}
-
-impl Mul for Rational {
-    type Output = Self;
-
-    fn mul(self, other: Self) -> Self {
-        Self::new(
-            self.numerator * other.numerator,
-            self.denominator * other.denominator,
-        )
-    }
-}
-
-impl MulAssign for Rational {
-    fn mul_assign(&mut self, other: Self) {
-        *self = *self * other
-    }
-}
-
-impl Div for Rational {
-    type Output = Self;
-    fn div(self, other: Self) -> Self {
-        Self::new(
-            self.numerator * other.denominator,
-            self.denominator * other.numerator,
-        )
-    }
-}
-
-impl DivAssign for Rational {
-    fn div_assign(&mut self, other: Self) {
-        *self = *self / other;
-    }
-}
+impl_arith!(Add, add, __add, AddAssign, add_assign, +);
+impl_arith!(Sub, sub, __sub, SubAssign, sub_assign, -);
+impl_arith!(Mul, mul, __mul, MulAssign, mul_assign, *);
+impl_arith!(Div, div, __div, DivAssign, div_assign, /);
 
 impl Neg for Rational {
     type Output = Self;
-
     fn neg(self) -> Self {
         Self::new(-self.numerator, self.denominator)
     }
@@ -141,8 +135,36 @@ impl PartialOrd for Rational {
     }
 }
 
+impl Ord for Rational {
+    fn cmp(&self, other: &Self) -> Ordering {
+        (self.numerator * other.denominator).cmp(&(other.numerator * self.denominator))
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
-    fn test() {}
+    fn test() {
+        assert_eq!(
+            Rational::new(2, 3) + Rational::new(4, 5),
+            Rational::new(22, 15)
+        );
+
+        assert_eq!(
+            Rational::new(3, 4) - Rational::new(2, 3),
+            Rational::new(1, 12)
+        );
+
+        assert_eq!(
+            Rational::new(8, 9) * Rational::new(3, 4),
+            Rational::new(2, 3)
+        );
+
+        assert_eq!(
+            Rational::new(1, 3) / Rational::new(7, 6),
+            Rational::new(2, 7)
+        );
+    }
 }
