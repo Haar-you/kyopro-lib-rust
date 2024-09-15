@@ -128,7 +128,7 @@ mod tests {
         const MOD: u32 = 998244353;
 
         let ntt = NTT::<MOD>::new(3, 1 << 20);
-        let ff = ConstModIntBuilder::<MOD>::new();
+        let ff = ConstModIntBuilder::<MOD>;
 
         let mut rng = rand::thread_rng();
 

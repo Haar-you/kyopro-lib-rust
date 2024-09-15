@@ -31,8 +31,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let modulo = ConstModIntBuilder::<1000000007>::new();
-        let ft = FactorialTable::new(100, modulo.clone());
+        let modulo = ConstModIntBuilder::<1000000007>;
+        let ft = FactorialTable::new(100, modulo);
 
         assert_eq!(
             ft.bernoulli_number(5),

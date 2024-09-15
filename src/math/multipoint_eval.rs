@@ -47,7 +47,7 @@ mod tests {
 
         let size = 1 << 20;
 
-        let ff = ConstModIntBuilder::<M>::new();
+        let ff = ConstModIntBuilder::<M>;
         let ntt = NTT::<M>::new(3, size);
         let po = PolynomialOperator::<M>::new(&ntt);
 
