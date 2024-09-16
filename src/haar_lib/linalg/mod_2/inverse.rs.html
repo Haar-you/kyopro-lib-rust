@@ -34,6 +34,7 @@
 <a href="#34" id="34">34</a>
 <a href="#35" id="35">35</a>
 <a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::ds::bitset::<span class="kw-2">*</span>;
 
 <span class="kw">pub fn </span>inverse(<span class="kw-2">mut </span>b: Vec&lt;Bitset&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;Bitset&gt;&gt; {
@@ -42,8 +43,9 @@
     <span class="macro">assert!</span>(b.iter().all(|r| r.len() == n));
 
     <span class="kw">let </span><span class="kw-2">mut </span>c = <span class="macro">vec!</span>[Bitset::new(n); n];
-    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-        c[i].set(i, <span class="bool-val">true</span>);
+
+    <span class="kw">for </span>(i, c) <span class="kw">in </span>c.iter_mut().enumerate() {
+        c.set(i, <span class="bool-val">true</span>);
     }
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {

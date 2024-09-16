@@ -158,6 +158,10 @@
 <a href="#158" id="158">158</a>
 <a href="#159" id="159">159</a>
 <a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::tree::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::ops::Add;
 
@@ -176,12 +180,13 @@
     <span class="kw">while let </span><span class="prelude-val">Some</span>(cur) = stack.pop() {
         check[cur] = <span class="bool-val">true</span>;
 
-        <span class="kw">for </span>e <span class="kw">in </span>tr.nodes[cur].neighbors() {
-            <span class="kw">if </span>!check[e.to()] {
+        tr.nodes[cur]
+            .neighbors()
+            .filter(|e| !check[e.to()])
+            .for_each(|e| {
                 ret[e.to()] = ret[cur] + e.weight();
                 stack.push(e.to());
-            }
-        }
+            });
     }
 
     ret
@@ -250,23 +255,26 @@
     stack.push((u, <span class="number">0</span>));
 
     <span class="kw">while let </span><span class="prelude-val">Some</span>((i, st)) = stack.pop() {
-        <span class="kw">if </span>st == <span class="number">1 </span>{
-            ret.pop();
-        } <span class="kw">else </span>{
-            stack.push((i, <span class="number">1</span>));
-            ret.push(i);
+        <span class="kw">match </span>st {
+            <span class="number">0 </span>=&gt; {
+                stack.push((i, <span class="number">1</span>));
+                ret.push(i);
 
-            <span class="kw">if </span>i == v {
-                <span class="kw">break</span>;
-            }
-
-            check[i] = <span class="bool-val">true</span>;
-
-            <span class="kw">for </span>e <span class="kw">in </span>tr.nodes[i].neighbors() {
-                <span class="kw">if </span>!check[e.to()] {
-                    stack.push((e.to(), <span class="number">0</span>));
+                <span class="kw">if </span>i == v {
+                    <span class="kw">break</span>;
                 }
+
+                check[i] = <span class="bool-val">true</span>;
+
+                tr.nodes[i]
+                    .neighbors()
+                    .filter(|e| !check[e.to()])
+                    .for_each(|e| stack.push((e.to(), <span class="number">0</span>)));
             }
+            <span class="number">1 </span>=&gt; {
+                ret.pop();
+            }
+            <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
         }
     }
 

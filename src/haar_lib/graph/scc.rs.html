@@ -107,8 +107,6 @@
 <a href="#107" id="107">107</a>
 <a href="#108" id="108">108</a>
 <a href="#109" id="109">109</a>
-<a href="#110" id="110">110</a>
-<a href="#111" id="111">111</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 強連結成分分解
 
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
@@ -133,10 +131,8 @@
         ord.reverse();
 
         <span class="kw">let </span><span class="kw-2">mut </span>rg = <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; n];
-        <span class="kw">for </span>es <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges {
-            <span class="kw">for </span>e <span class="kw">in </span>es {
-                rg[e.to()].push(e.from());
-            }
+        <span class="kw">for </span>e <span class="kw">in </span>g.edges.iter().flatten() {
+            rg[e.to()].push(e.from());
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
@@ -146,7 +142,7 @@
 
         <span class="kw">for </span>u <span class="kw">in </span>ord {
             <span class="kw">if </span>!check[u] {
-                ret.push(<span class="macro">vec!</span>[]);
+                <span class="kw">let </span><span class="kw-2">mut </span>temp = <span class="macro">vec!</span>[];
                 stack.push(u);
                 <span class="kw">while let </span><span class="prelude-val">Some</span>(cur) = stack.pop() {
                     check[cur] = <span class="bool-val">true</span>;
@@ -155,9 +151,9 @@
                             stack.push(to);
                         }
                     }
-
-                    ret.last_mut().unwrap().push(cur);
+                    temp.push(cur);
                 }
+                ret.push(temp);
             }
         }
 

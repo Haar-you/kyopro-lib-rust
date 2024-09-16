@@ -129,7 +129,7 @@
 }
 
 <span class="kw">impl </span>Mode {
-    <span class="kw">pub</span>(<span class="self">self</span>) <span class="kw">fn </span>cmp&lt;T: PartialOrd + Copy&gt;(<span class="self">self</span>, a: T, b: T) -&gt; bool {
+    <span class="kw">fn </span>cmp&lt;T: PartialOrd + Copy&gt;(<span class="self">self</span>, a: T, b: T) -&gt; bool {
         <span class="kw">match </span><span class="self">self </span>{
             Mode::Max =&gt; a &lt;= b,
             Mode::Min =&gt; a &gt;= b,

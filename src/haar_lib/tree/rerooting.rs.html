@@ -137,6 +137,11 @@
 <a href="#137" id="137">137</a>
 <a href="#138" id="138">138</a>
 <a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 全方位木DP
 
 </span><span class="kw">use </span><span class="kw">crate</span>::tree::<span class="kw-2">*</span>;
@@ -146,81 +151,81 @@
 /// # References
 /// - &lt;https://null-mn.hatenablog.com/entry/2020/04/14/124151&gt;
 ///
-/// # Verification
-/// - [EDPC V - Subtree #26944740](https://atcoder.jp/contests/dp/submissions/26944740)
+/// # Problems
+/// - [EDPC V - Subtree](https://atcoder.jp/contests/dp/submissions/57560435)
+/// - &lt;https://atcoder.jp/contests/abc160/tasks/abc160_f&gt;
 
-</span><span class="kw">pub struct </span>RerootingDP&lt;<span class="lifetime">&#39;a</span>, Weight, T&gt; {
-    id: T,
-    merge: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(T, T) -&gt; T&gt;,
-    up: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(T, (usize, Weight)) -&gt; T&gt;,
-    apply: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(T, usize) -&gt; T&gt;,
+</span><span class="kw">pub struct </span>RerootingDP&lt;<span class="lifetime">&#39;a</span>, Weight, T, U&gt; {
+    init: U,
+    up: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(T, (usize, Weight)) -&gt; U&gt;,
+    merge: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(U, U) -&gt; U&gt;,
+    apply: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(U, usize) -&gt; T&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, Weight, T&gt; RerootingDP&lt;<span class="lifetime">&#39;a</span>, Weight, T&gt;
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, Weight, T, U&gt; RerootingDP&lt;<span class="lifetime">&#39;a</span>, Weight, T, U&gt;
 <span class="kw">where
     </span>Weight: Copy,
     T: Clone,
+    U: Clone,
 {
     <span class="kw">pub fn </span>new(
-        id: T,
-        merge: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(T, T) -&gt; T&gt;,
-        up: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(T, (usize, Weight)) -&gt; T&gt;,
-        apply: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(T, usize) -&gt; T&gt;,
+        init: U,
+        up: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(T, (usize, Weight)) -&gt; U&gt;,
+        merge: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(U, U) -&gt; U&gt;,
+        apply: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(U, usize) -&gt; T&gt;,
     ) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            id,
-            merge,
+            init,
             up,
+            merge,
             apply,
         }
     }
 
     <span class="kw">pub fn </span>run&lt;E: TreeEdgeTrait&lt;Weight = Weight&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;) -&gt; Vec&lt;T&gt; {
         <span class="kw">let </span>size = tree.len();
-
-        <span class="kw">let </span><span class="kw-2">mut </span>dp = <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; size];
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="self">self</span>.id.clone(); size];
-
-        <span class="kw">for </span>(i, x) <span class="kw">in </span>dp.iter_mut().enumerate() {
-            <span class="kw-2">*</span>x = <span class="macro">vec!</span>[<span class="self">self</span>.id.clone(); tree.nodes[i].neighbors_size()];
-        }
+        <span class="kw">let </span><span class="kw-2">mut </span>dp = (<span class="number">0</span>..size)
+            .map(|i| <span class="macro">vec!</span>[<span class="prelude-val">None</span>; tree.nodes[i].neighbors_size()])
+            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
         <span class="self">self</span>.rec1(tree, <span class="kw-2">&amp;mut </span>dp, <span class="number">0</span>, <span class="prelude-val">None</span>);
-        <span class="self">self</span>.rec2(tree, <span class="kw-2">&amp;mut </span>dp, <span class="number">0</span>, <span class="prelude-val">None</span>, <span class="self">self</span>.id.clone());
-        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..size {
-            <span class="kw">for </span>(j, e) <span class="kw">in </span>tree.nodes[i].neighbors().enumerate() {
-                ret[i] = (<span class="self">self</span>.merge)(
-                    ret[i].clone(),
-                    (<span class="self">self</span>.up)(dp[i][j].clone(), (e.to(), e.weight())),
-                );
-            }
+        <span class="self">self</span>.rec2(tree, <span class="kw-2">&amp;mut </span>dp, <span class="number">0</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
 
-            ret[i] = (<span class="self">self</span>.apply)(ret[i].clone(), i);
-        }
-
-        ret
+        tree.nodes
+            .iter()
+            .enumerate()
+            .map(|(i, nodes)| {
+                <span class="kw">let </span>acc = nodes
+                    .neighbors()
+                    .enumerate()
+                    .filter_map(|(j, e)| {
+                        dp[i][j]
+                            .as_ref()
+                            .map(|res| (<span class="self">self</span>.up)(res.clone(), (e.to(), e.weight())))
+                    })
+                    .fold(<span class="self">self</span>.init.clone(), |x, y| (<span class="self">self</span>.merge)(x, y));
+                (<span class="self">self</span>.apply)(acc, i)
+            })
+            .collect()
     }
 
     <span class="kw">fn </span>rec1&lt;E: TreeEdgeTrait&lt;Weight = Weight&gt;&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;,
-        dp: <span class="kw-2">&amp;mut </span>Vec&lt;Vec&lt;T&gt;&gt;,
+        dp: <span class="kw-2">&amp;mut </span>Vec&lt;Vec&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;&gt;,
         cur: usize,
         par: <span class="prelude-ty">Option</span>&lt;usize&gt;,
     ) -&gt; T {
-        <span class="kw">let </span><span class="kw-2">mut </span>acc = <span class="self">self</span>.id.clone();
-
-        <span class="kw">for </span>(i, e) <span class="kw">in </span>tree.nodes[cur].neighbors().enumerate() {
-            <span class="kw">if </span>par.map_or(<span class="bool-val">false</span>, |u| u == e.to()) {
-                <span class="kw">continue</span>;
-            }
-
-            dp[cur][i] = <span class="self">self</span>.rec1(tree, dp, e.to(), <span class="prelude-val">Some</span>(cur));
-            acc = (<span class="self">self</span>.merge)(
-                acc.clone(),
-                (<span class="self">self</span>.up)(dp[cur][i].clone(), (e.to(), e.weight())),
-            );
-        }
+        <span class="kw">let </span>acc = tree.nodes[cur]
+            .neighbors()
+            .enumerate()
+            .filter(|(<span class="kw">_</span>, e)| par.map_or(<span class="bool-val">true</span>, |u| u != e.to()))
+            .map(|(i, e)| {
+                <span class="kw">let </span>res = <span class="self">self</span>.rec1(tree, dp, e.to(), <span class="prelude-val">Some</span>(cur));
+                dp[cur][i] = <span class="prelude-val">Some</span>(res.clone());
+                (<span class="self">self</span>.up)(res, (e.to(), e.weight()))
+            })
+            .fold(<span class="self">self</span>.init.clone(), |x, y| (<span class="self">self</span>.merge)(x, y));
 
         (<span class="self">self</span>.apply)(acc, cur)
     }
@@ -228,10 +233,10 @@
     <span class="kw">fn </span>rec2&lt;E: TreeEdgeTrait&lt;Weight = Weight&gt;&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;,
-        dp: <span class="kw-2">&amp;mut </span>Vec&lt;Vec&lt;T&gt;&gt;,
+        dp: <span class="kw-2">&amp;mut </span>Vec&lt;Vec&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;&gt;,
         cur: usize,
         par: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-        value: T,
+        value: <span class="prelude-ty">Option</span>&lt;T&gt;,
     ) {
         <span class="kw">let </span>len = tree.nodes[cur].neighbors_size();
 
@@ -241,23 +246,25 @@
             }
         }
 
-        <span class="kw">let </span><span class="kw-2">mut </span>left = <span class="macro">vec!</span>[<span class="self">self</span>.id.clone(); len + <span class="number">1</span>];
-        <span class="kw">let </span><span class="kw-2">mut </span>right = <span class="macro">vec!</span>[<span class="self">self</span>.id.clone(); len + <span class="number">1</span>];
+        <span class="kw">let </span><span class="kw-2">mut </span>left = <span class="macro">vec!</span>[<span class="self">self</span>.init.clone(); len + <span class="number">1</span>];
+        <span class="kw">let </span><span class="kw-2">mut </span>right = <span class="macro">vec!</span>[<span class="self">self</span>.init.clone(); len + <span class="number">1</span>];
 
         <span class="kw">if </span>len &gt; <span class="number">1 </span>{
             <span class="kw">for </span>(i, e) <span class="kw">in </span>tree.nodes[cur].neighbors().take(len - <span class="number">1</span>).enumerate() {
-                left[i + <span class="number">1</span>] = (<span class="self">self</span>.merge)(
-                    left[i].clone(),
-                    (<span class="self">self</span>.up)(dp[cur][i].clone(), (e.to(), e.weight())),
-                );
+                left[i + <span class="number">1</span>] = <span class="kw">if let </span><span class="prelude-val">Some</span>(res) = dp[cur][i].clone() {
+                    (<span class="self">self</span>.merge)(left[i].clone(), (<span class="self">self</span>.up)(res, (e.to(), e.weight())))
+                } <span class="kw">else </span>{
+                    left[i].clone()
+                };
             }
 
             <span class="kw">for </span>(i, e) <span class="kw">in </span>tree.nodes[cur].neighbors().rev().take(len - <span class="number">1</span>).enumerate() {
                 <span class="kw">let </span>i = len - i - <span class="number">1</span>;
-                right[i - <span class="number">1</span>] = (<span class="self">self</span>.merge)(
-                    right[i].clone(),
-                    (<span class="self">self</span>.up)(dp[cur][i].clone(), (e.to(), e.weight())),
-                );
+                right[i - <span class="number">1</span>] = <span class="kw">if let </span><span class="prelude-val">Some</span>(res) = dp[cur][i].clone() {
+                    (<span class="self">self</span>.merge)(right[i].clone(), (<span class="self">self</span>.up)(res, (e.to(), e.weight())))
+                } <span class="kw">else </span>{
+                    right[i].clone()
+                };
             }
         }
 
@@ -271,7 +278,10 @@
                 dp,
                 e.to(),
                 <span class="prelude-val">Some</span>(cur),
-                (<span class="self">self</span>.apply)((<span class="self">self</span>.merge)(left[i].clone(), right[i].clone()), cur),
+                <span class="prelude-val">Some</span>((<span class="self">self</span>.apply)(
+                    (<span class="self">self</span>.merge)(left[i].clone(), right[i].clone()),
+                    cur,
+                )),
             );
         }
     }

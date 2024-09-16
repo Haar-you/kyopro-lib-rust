@@ -286,12 +286,12 @@
         <span class="self">self</span>.list.len()
     }
 
-    <span class="kw">pub fn </span>get_node(<span class="kw-2">&amp;</span><span class="self">self</span>, index: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Node&gt; {
+    <span class="kw">pub fn </span>node_of(<span class="kw-2">&amp;</span><span class="self">self</span>, index: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Node&gt; {
         <span class="self">self</span>.list.get(index)
     }
 
-    <span class="kw">pub fn </span>get_from_strpos(<span class="kw-2">&amp;</span><span class="self">self</span>, pos: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Node&gt; {
-        <span class="self">self</span>.get_node(<span class="self">self</span>.sindex_list[pos])
+    <span class="kw">pub fn </span>node_from_strpos(<span class="kw-2">&amp;</span><span class="self">self</span>, pos: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Node&gt; {
+        <span class="self">self</span>.node_of(<span class="self">self</span>.sindex_list[pos])
     }
 
     <span class="kw">pub fn </span>parent_of(<span class="kw-2">&amp;</span><span class="self">self</span>, index: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Node&gt; {

@@ -57,63 +57,73 @@
 <a href="#57" id="57">57</a>
 <a href="#58" id="58">58</a>
 <a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 木DP
 
 </span><span class="kw">use </span><span class="kw">crate</span>::tree::<span class="kw-2">*</span>;
 
-<span class="kw">pub struct </span>TreeDP&lt;<span class="lifetime">&#39;a</span>, Weight, T&gt; {
-    id: T,
-    merge: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(T, T) -&gt; T&gt;,
-    up: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(T, (usize, Weight)) -&gt; T&gt;,
-    apply: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(T, usize) -&gt; T&gt;,
+<span class="doccomment">/// 木DP
+///
+/// # Problems
+/// - &lt;https://atcoder.jp/contests/dp/tasks/dp_p&gt;
+/// - &lt;https://yukicoder.me/problems/no/763&gt;
+</span><span class="kw">pub struct </span>TreeDP&lt;<span class="lifetime">&#39;a</span>, Weight, T, U&gt; {
+    init: U,
+    up: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(T, (usize, Weight)) -&gt; U&gt;,
+    merge: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(U, U) -&gt; U&gt;,
+    apply: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(U, usize) -&gt; T&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, Weight, T&gt; TreeDP&lt;<span class="lifetime">&#39;a</span>, Weight, T&gt;
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, Weight, T, U&gt; TreeDP&lt;<span class="lifetime">&#39;a</span>, Weight, T, U&gt;
 <span class="kw">where
     </span>Weight: Copy,
     T: Clone,
+    U: Clone,
 {
     <span class="kw">pub fn </span>new(
-        id: T,
-        merge: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(T, T) -&gt; T&gt;,
-        up: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(T, (usize, Weight)) -&gt; T&gt;,
-        apply: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(T, usize) -&gt; T&gt;,
+        init: U,
+        up: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(T, (usize, Weight)) -&gt; U&gt;,
+        merge: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(U, U) -&gt; U&gt;,
+        apply: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(U, usize) -&gt; T&gt;,
     ) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            id,
-            merge,
+            init,
             up,
+            merge,
             apply,
         }
     }
 
     <span class="kw">pub fn </span>run&lt;E: TreeEdgeTrait&lt;Weight = Weight&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; Vec&lt;T&gt; {
         <span class="kw">let </span>size = tree.len();
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="self">self</span>.id.clone(); size];
+        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="prelude-val">None</span>; size];
 
-        <span class="self">self</span>.internal(tree, root, <span class="prelude-val">None</span>, <span class="kw-2">&amp;mut </span>ret);
+        <span class="self">self</span>.__dfs(tree, root, <span class="prelude-val">None</span>, <span class="kw-2">&amp;mut </span>ret);
 
-        ret
+        ret.into_iter().flatten().collect()
     }
 
-    <span class="kw">fn </span>internal&lt;E: TreeEdgeTrait&lt;Weight = Weight&gt;&gt;(
+    <span class="kw">fn </span>__dfs&lt;E: TreeEdgeTrait&lt;Weight = Weight&gt;&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;,
         cur: usize,
         par: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-        ret: <span class="kw-2">&amp;mut </span>Vec&lt;T&gt;,
-    ) {
-        <span class="kw">for </span>e <span class="kw">in </span>tree.nodes[cur].neighbors() {
-            <span class="kw">if </span><span class="prelude-val">Some</span>(e.to()) == par {
-                <span class="kw">continue</span>;
-            }
-
-            <span class="self">self</span>.internal(tree, e.to(), <span class="prelude-val">Some</span>(cur), ret);
-
-            <span class="kw">let </span>temp = (<span class="self">self</span>.up)(ret[e.to()].clone(), (e.to(), e.weight()));
-            ret[cur] = (<span class="self">self</span>.merge)(ret[cur].clone(), temp);
-        }
-        ret[cur] = (<span class="self">self</span>.apply)(ret[cur].clone(), cur);
+        ret: <span class="kw-2">&amp;mut </span>Vec&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;,
+    ) -&gt; T {
+        <span class="kw">let </span>acc = tree.nodes[cur]
+            .neighbors()
+            .filter(|e| par != <span class="prelude-val">Some</span>(e.to()))
+            .map(|e| {
+                <span class="kw">let </span>a = <span class="self">self</span>.__dfs(tree, e.to(), <span class="prelude-val">Some</span>(cur), ret);
+                (<span class="self">self</span>.up)(a, (e.to(), e.weight()))
+            })
+            .fold(<span class="self">self</span>.init.clone(), |a, b| (<span class="self">self</span>.merge)(a, b));
+        ret[cur] = <span class="prelude-val">Some</span>((<span class="self">self</span>.apply)(acc, cur));
+        ret[cur].clone().unwrap()
     }
 }
 </code></pre></div></section></main></body></html>

@@ -61,12 +61,20 @@
 <a href="#61" id="61">61</a>
 <a href="#62" id="62">62</a>
 <a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 最小全域木 (Prim)
 
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::{cmp::Reverse, collections::BinaryHeap};
 
-<span class="kw">pub fn </span>prim&lt;T: Ord, E: EdgeTrait&lt;Weight = T&gt;&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; Vec&lt;<span class="kw-2">&amp;</span>E&gt; {
+<span class="doccomment">/// Prim法
+///
+/// グラフが連結ならばSomeに包んで最小全域木の辺集合を返す。
+/// 非連結ならばNoneを返す。
+</span><span class="kw">pub fn </span>prim&lt;T: Ord, E: EdgeTrait&lt;Weight = T&gt;&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;<span class="kw-2">&amp;</span>E&gt;&gt; {
     <span class="kw">let </span>n = g.len();
     <span class="kw">let </span><span class="kw-2">mut </span>visit = <span class="macro">vec!</span>[<span class="bool-val">false</span>; n];
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
@@ -93,7 +101,7 @@
         ret.push(e);
     }
 
-    ret
+    (ret.len() == n - <span class="number">1</span>).then_some(ret)
 }
 
 <span class="attr">#[cfg(test)]
@@ -119,7 +127,7 @@
             .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
 
-        <span class="kw">let </span>ans = prim(<span class="kw-2">&amp;</span>g).iter().map(|e| e.weight).sum::&lt;i32&gt;();
+        <span class="kw">let </span>ans = prim(<span class="kw-2">&amp;</span>g).unwrap().iter().map(|e| e.weight).sum::&lt;i32&gt;();
 
         <span class="macro">assert_eq!</span>(ans, <span class="number">5</span>);
     }

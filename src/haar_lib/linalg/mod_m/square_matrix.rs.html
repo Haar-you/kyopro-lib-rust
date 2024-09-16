@@ -629,7 +629,7 @@
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {
         <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;::new();
+        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;;
 
         <span class="kw">let </span>size = <span class="number">300</span>;
 
@@ -643,7 +643,7 @@
             }
         }
 
-        <span class="kw">let </span>a = SquareMatrix::from_vec(a, modulo.clone());
+        <span class="kw">let </span>a = SquareMatrix::from_vec(a, modulo);
         <span class="kw">let </span>b = SquareMatrix::from_vec(b, modulo);
 
         <span class="macro">assert!</span>(a.clone().straight_mul(b.clone()) == a.strassen_mul(b));
@@ -655,7 +655,7 @@
         <span class="kw">use </span><span class="kw">crate</span>::get_time;
 
         <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;::new();
+        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;;
 
         <span class="kw">let </span><span class="kw-2">mut </span>straight = <span class="macro">vec!</span>[];
         <span class="kw">let </span><span class="kw-2">mut </span>strassen = <span class="macro">vec!</span>[];
@@ -671,8 +671,8 @@
                 }
             }
 
-            <span class="kw">let </span>a = SquareMatrix::from_vec(a, modulo.clone());
-            <span class="kw">let </span>b = SquareMatrix::from_vec(b, modulo.clone());
+            <span class="kw">let </span>a = SquareMatrix::from_vec(a, modulo);
+            <span class="kw">let </span>b = SquareMatrix::from_vec(b, modulo);
 
             straight.push(<span class="macro">get_time!</span>({
                 a.clone().straight_mul(b.clone());

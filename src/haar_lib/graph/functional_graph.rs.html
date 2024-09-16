@@ -115,12 +115,6 @@
 <a href="#115" id="115">115</a>
 <a href="#116" id="116">116</a>
 <a href="#117" id="117">117</a>
-<a href="#118" id="118">118</a>
-<a href="#119" id="119">119</a>
-<a href="#120" id="120">120</a>
-<a href="#121" id="121">121</a>
-<a href="#122" id="122">122</a>
-<a href="#123" id="123">123</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::ds::unionfind::UnionFind;
 
 <span class="kw">pub struct </span>FunctionalGraphBuilder {
@@ -155,27 +149,22 @@
     <span class="kw">pub fn </span>build(<span class="self">self</span>) -&gt; FunctionalGraph {
         <span class="macro">assert!</span>(<span class="self">self</span>.next.iter().all(|a| a.is_some()));
 
-        <span class="kw">let </span>next = <span class="self">self
-            </span>.next
-            .into_iter()
-            .map(|a| a.unwrap())
-            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-
+        <span class="kw">let </span>next = <span class="self">self</span>.next.into_iter().flatten().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
         <span class="kw">let </span>n = next.len();
 
         <span class="kw">let </span><span class="kw-2">mut </span>uf = UnionFind::new(n);
-        <span class="kw">let </span><span class="kw-2">mut </span>index = <span class="macro">vec!</span>[<span class="number">0</span>; n];
         <span class="kw">for </span>(cur, <span class="kw-2">&amp;</span>next) <span class="kw">in </span>next.iter().enumerate() {
             uf.merge(cur, next);
         }
 
-        <span class="kw">let </span><span class="kw-2">mut </span>g_num = <span class="number">0</span>;
-        <span class="kw">for </span>(i, index) <span class="kw">in </span>index.iter_mut().enumerate() {
-            <span class="kw">if </span>uf.root_of(i) == i {
-                <span class="kw-2">*</span>index = g_num;
-                g_num += <span class="number">1</span>;
-            }
-        }
+        <span class="kw">let </span><span class="kw-2">mut </span>index = <span class="macro">vec!</span>[<span class="number">0</span>; n];
+        <span class="kw">let </span>g_num = index
+            .iter_mut()
+            .enumerate()
+            .filter_map(|(i, index)| (uf.root_of(i) == i).then_some(index))
+            .enumerate()
+            .map(|(i, index)| <span class="kw-2">*</span>index = i)
+            .count();
 
         <span class="kw">let </span><span class="kw-2">mut </span>in_deg = <span class="macro">vec!</span>[<span class="number">0</span>; n];
         <span class="kw">for </span><span class="kw-2">&amp;</span>next <span class="kw">in </span><span class="kw-2">&amp;</span>next {
@@ -183,13 +172,12 @@
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>v_kind = <span class="macro">vec!</span>[<span class="prelude-val">None</span>; n];
-        <span class="kw">let </span><span class="kw-2">mut </span>stack = <span class="macro">vec!</span>[];
-        <span class="kw">for </span>(i, <span class="kw-2">&amp;</span>d) <span class="kw">in </span>in_deg.iter().enumerate() {
-            <span class="kw">if </span>d == <span class="number">0 </span>{
-                stack.push(i);
-                v_kind[i] = <span class="prelude-val">Some</span>(Kind::Leaf(index[uf.root_of(i)]));
-            }
-        }
+        <span class="kw">let </span><span class="kw-2">mut </span>stack = in_deg
+            .iter()
+            .enumerate()
+            .filter_map(|(i, <span class="kw-2">&amp;</span>d)| (d == <span class="number">0</span>).then_some(i))
+            .inspect(|<span class="kw-2">&amp;</span>i| v_kind[i] = <span class="prelude-val">Some</span>(Kind::Leaf(index[uf.root_of(i)])))
+            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
         <span class="kw">while let </span><span class="prelude-val">Some</span>(cur) = stack.pop() {
             <span class="kw">if </span>v_kind[cur].is_none() {
@@ -211,7 +199,7 @@
 
         FunctionalGraph {
             next,
-            v_kind: v_kind.into_iter().map(|a| a.unwrap()).collect(),
+            v_kind: v_kind.into_iter().flatten().collect(),
             g_num,
         }
     }

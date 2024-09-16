@@ -147,7 +147,7 @@
 <span class="kw">impl </span>TreeDepthQuery {
     <span class="kw">pub fn </span>new&lt;E: TreeEdgeTrait&gt;(tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = tree.len();
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>this = <span class="self">Self </span>{
             par: <span class="macro">vec!</span>[<span class="prelude-val">None</span>; size],
             depth: <span class="macro">vec!</span>[<span class="number">0</span>; size],
             left: <span class="macro">vec!</span>[<span class="number">0</span>; size],
@@ -157,28 +157,28 @@
             ord: <span class="macro">vec!</span>[<span class="number">0</span>; size],
         };
 
-        ret.dfs(tree, root, <span class="prelude-val">None</span>, <span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="number">0</span>);
+        this.dfs(tree, root, <span class="prelude-val">None</span>, <span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="number">0</span>);
 
         <span class="kw">let </span><span class="kw-2">mut </span>q = VecDeque::new();
         q.push_back((root, <span class="number">0</span>));
         <span class="kw">let </span><span class="kw-2">mut </span>ord = <span class="number">0</span>;
 
         <span class="kw">while let </span><span class="prelude-val">Some</span>((i, d)) = q.pop_front() {
-            <span class="kw">if </span>ret.bfs_ord.len() &lt;= d {
-                ret.bfs_ord.push(<span class="macro">vec!</span>[]);
+            <span class="kw">if </span>this.bfs_ord.len() &lt;= d {
+                this.bfs_ord.push(<span class="macro">vec!</span>[]);
             }
-            ret.bfs_ord[d].push(ord);
-            ret.ord[i] = ord;
+            this.bfs_ord[d].push(ord);
+            this.ord[i] = ord;
             ord += <span class="number">1</span>;
 
             <span class="kw">for </span>e <span class="kw">in </span>tree.nodes[i].neighbors() {
-                <span class="kw">if </span><span class="prelude-val">Some</span>(e.to()) != ret.par[i] {
+                <span class="kw">if </span><span class="prelude-val">Some</span>(e.to()) != this.par[i] {
                     q.push_back((e.to(), d + <span class="number">1</span>));
                 }
             }
         }
 
-        ret
+        this
     }
 
     <span class="kw">fn </span>dfs&lt;E: TreeEdgeTrait&gt;(

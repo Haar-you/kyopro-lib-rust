@@ -151,16 +151,16 @@
         <span class="kw">let </span>p = Rc::new(Node::new(value));
 
         <span class="self">Self </span>{
-            front_back_node: <span class="prelude-val">Some</span>((p.clone(), p)),
+            front_back_node: <span class="prelude-val">Some</span>((Rc::clone(<span class="kw-2">&amp;</span>p), p)),
         }
     }
 
     <span class="kw">pub fn </span>push(<span class="kw-2">&amp;</span><span class="self">self</span>, value: T) -&gt; <span class="self">Self </span>{
-        <span class="kw">match </span><span class="self">self</span>.front_back_node.clone() {
+        <span class="kw">match </span><span class="self">self</span>.front_back_node.as_ref() {
             <span class="prelude-val">None </span>=&gt; {
                 <span class="kw">let </span>p = Rc::new(Node::new(value));
                 <span class="self">Self </span>{
-                    front_back_node: <span class="prelude-val">Some</span>((p.clone(), p)),
+                    front_back_node: <span class="prelude-val">Some</span>((Rc::clone(<span class="kw-2">&amp;</span>p), p)),
                 }
             }
             <span class="prelude-val">Some</span>((front_node, back_node)) =&gt; {
@@ -169,15 +169,15 @@
                 t.depth = back_node.depth + <span class="number">1</span>;
 
                 t.ancestors.reserve(back_node.ancestors.len() + <span class="number">1</span>);
-                t.ancestors.push(back_node);
+                t.ancestors.push(Rc::clone(back_node));
                 <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>.. {
-                    <span class="kw">match </span>t.ancestors.get(i - <span class="number">1</span>).cloned() {
+                    <span class="kw">match </span>t.ancestors.get(i - <span class="number">1</span>) {
                         <span class="prelude-val">None </span>=&gt; {
                             <span class="kw">break</span>;
                         }
                         <span class="prelude-val">Some</span>(s) =&gt; {
-                            <span class="kw">if let </span><span class="prelude-val">Some</span>(x) = s.ancestors.get(i - <span class="number">1</span>).cloned() {
-                                t.ancestors.push(x);
+                            <span class="kw">if let </span><span class="prelude-val">Some</span>(x) = s.ancestors.get(i - <span class="number">1</span>) {
+                                t.ancestors.push(Rc::clone(x));
                             } <span class="kw">else </span>{
                                 <span class="kw">break</span>;
                             }
@@ -187,7 +187,7 @@
                 t.ancestors.shrink_to_fit();
 
                 <span class="self">Self </span>{
-                    front_back_node: <span class="prelude-val">Some</span>((front_node, Rc::new(t))),
+                    front_back_node: <span class="prelude-val">Some</span>((Rc::clone(front_node), Rc::new(t))),
                 }
             }
         }
@@ -203,12 +203,12 @@
                     }
                 } <span class="kw">else </span>{
                     <span class="kw">let </span><span class="kw-2">mut </span>d = back_node.depth - front_node.depth - <span class="number">1</span>;
-                    <span class="kw">let </span><span class="kw-2">mut </span>t = back_node.clone();
+                    <span class="kw">let </span><span class="kw-2">mut </span>t = back_node;
 
                     <span class="kw">for </span>i <span class="kw">in </span>(<span class="number">0</span>..t.ancestors.len()).rev() {
                         <span class="kw">if </span>d &gt;= (<span class="number">1 </span>&lt;&lt; i) {
                             d -= <span class="number">1 </span>&lt;&lt; i;
-                            t = t.ancestors[i].clone();
+                            t = <span class="kw-2">&amp;</span>t.ancestors[i];
                         }
                         <span class="kw">if </span>d == <span class="number">0 </span>{
                             <span class="kw">break</span>;
@@ -216,7 +216,7 @@
                     }
 
                     <span class="self">Self </span>{
-                        front_back_node: <span class="prelude-val">Some</span>((t, back_node.clone())),
+                        front_back_node: <span class="prelude-val">Some</span>((Rc::clone(t), Rc::clone(back_node))),
                     }
                 }
             })

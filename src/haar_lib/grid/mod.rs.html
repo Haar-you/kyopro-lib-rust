@@ -80,10 +80,6 @@
 <a href="#80" id="80">80</a>
 <a href="#81" id="81">81</a>
 <a href="#82" id="82">82</a>
-<a href="#83" id="83">83</a>
-<a href="#84" id="84">84</a>
-<a href="#85" id="85">85</a>
-<a href="#86" id="86">86</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>to_graph;
 
 <span class="attr">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -107,11 +103,7 @@
         <span class="kw">let </span>x = <span class="self">self</span>.x.checked_add_signed(d.dx)<span class="question-mark">?</span>;
         <span class="kw">let </span>y = <span class="self">self</span>.y.checked_add_signed(d.dy)<span class="question-mark">?</span>;
 
-        <span class="kw">if </span>x &gt;= h || y &gt;= w {
-            <span class="prelude-val">None
-        </span>} <span class="kw">else </span>{
-            <span class="prelude-val">Some</span>(<span class="self">Self</span>::new(x, y))
-        }
+        (x &lt; h &amp;&amp; y &lt; w).then_some(<span class="self">Self</span>::new(x, y))
     }
 }
 

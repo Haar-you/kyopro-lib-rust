@@ -26,27 +26,19 @@
 <a href="#26" id="26">26</a>
 <a href="#27" id="27">27</a>
 <a href="#28" id="28">28</a>
-<a href="#29" id="29">29</a>
-<a href="#30" id="30">30</a>
-<a href="#31" id="31">31</a>
-<a href="#32" id="32">32</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::collections::HashSet;
 
-<span class="kw">pub fn </span>enumerate_triangles&lt;T, E: EdgeTrait&gt;(
-    g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;,
-) -&gt; Vec&lt;(usize, usize, usize)&gt; {
+<span class="kw">pub fn </span>enumerate_triangles&lt;E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; Vec&lt;(usize, usize, usize)&gt; {
     <span class="kw">let </span>n = g.len();
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
     <span class="kw">let </span><span class="kw-2">mut </span>adjacent = <span class="macro">vec!</span>[HashSet::new(); n];
 
-    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-        <span class="kw">for </span>e <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges[i] {
-            <span class="kw">if </span>g.edges[e.from()].len() &lt; g.edges[e.to()].len()
-                || (g.edges[e.from()].len() == g.edges[e.to()].len() &amp;&amp; e.from() &lt; e.to())
-            {
-                adjacent[e.from()].insert(e.to());
-            }
+    <span class="kw">for </span>e <span class="kw">in </span>g.edges.iter().flatten() {
+        <span class="kw">if </span>g.edges[e.from()].len() &lt; g.edges[e.to()].len()
+            || (g.edges[e.from()].len() == g.edges[e.to()].len() &amp;&amp; e.from() &lt; e.to())
+        {
+            adjacent[e.from()].insert(e.to());
         }
     }
 

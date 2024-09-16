@@ -153,16 +153,16 @@
         <span class="kw">let </span>n = a.len();
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
 
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>this = <span class="self">Self </span>{
             data: <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; size],
             accum: <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; size],
             size,
             original_size: n,
         };
 
-        ret._init(<span class="number">1</span>, <span class="kw-2">&amp;mut </span>a, <span class="number">0</span>, size / <span class="number">2</span>);
+        this._init(<span class="number">1</span>, <span class="kw-2">&amp;mut </span>a, <span class="number">0</span>, size / <span class="number">2</span>);
 
-        ret
+        this
     }
 
     <span class="kw">fn </span>_init(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, a: <span class="kw-2">&amp;mut </span>[T], l: usize, r: usize) {

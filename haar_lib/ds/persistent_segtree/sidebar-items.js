@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["PersistenSegtree"]};
+window.SIDEBAR_ITEMS = {"struct":["PersistentSegtree"]};

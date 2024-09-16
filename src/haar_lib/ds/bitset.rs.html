@@ -251,7 +251,7 @@
         <span class="kw">for </span>(i, x) <span class="kw">in </span>value.chunks(B_SIZE).enumerate() {
             <span class="kw">let </span><span class="kw-2">mut </span>a = <span class="number">0</span>;
 
-            <span class="kw">for </span>(j, y) <span class="kw">in </span>x.into_iter().enumerate() {
+            <span class="kw">for </span>(j, y) <span class="kw">in </span>x.iter().enumerate() {
                 <span class="kw">if </span><span class="kw-2">*</span>y {
                     a |= <span class="number">1 </span>&lt;&lt; j;
                 }

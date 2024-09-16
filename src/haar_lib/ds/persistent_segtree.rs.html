@@ -196,10 +196,6 @@
 <a href="#196" id="196">196</a>
 <a href="#197" id="197">197</a>
 <a href="#198" id="198">198</a>
-<a href="#199" id="199">199</a>
-<a href="#200" id="200">200</a>
-<a href="#201" id="201">201</a>
-<a href="#202" id="202">202</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 永続セグメントツリー
 
 </span><span class="kw">use </span>std::cell::RefCell;
@@ -226,13 +222,13 @@
 }
 
 <span class="attr">#[derive(Clone, Debug)]
-</span><span class="kw">pub struct </span>PersistenSegtree&lt;M: Monoid&gt; {
+</span><span class="kw">pub struct </span>PersistentSegtree&lt;M: Monoid&gt; {
     root: <span class="prelude-ty">Option</span>&lt;Rc&lt;RefCell&lt;Node&lt;M::Output&gt;&gt;&gt;&gt;,
     monoid: M,
     to: usize,
 }
 
-<span class="kw">impl</span>&lt;T: Clone, M: Monoid&lt;Output = T&gt; + Clone&gt; PersistenSegtree&lt;M&gt; {
+<span class="kw">impl</span>&lt;T: Clone, M: Monoid&lt;Output = T&gt; + Clone&gt; PersistentSegtree&lt;M&gt; {
     <span class="kw">pub fn </span>new(n: usize, monoid: M) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>seq = <span class="macro">vec!</span>[monoid.id(); n];
         <span class="self">Self</span>::from_vec(seq, monoid)
@@ -240,11 +236,7 @@
 
     <span class="kw">pub fn </span>from_vec(a: Vec&lt;T&gt;, monoid: M) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = a.len();
-        <span class="kw">let </span>to = <span class="kw">if </span>n.is_power_of_two() {
-            n
-        } <span class="kw">else </span>{
-            n.next_power_of_two()
-        };
+        <span class="kw">let </span>to = n.next_power_of_two();
         <span class="kw">let </span>root = <span class="prelude-val">Some</span>(<span class="self">Self</span>::__init(<span class="number">0</span>, to, <span class="kw-2">&amp;</span>a, <span class="kw-2">&amp;</span>monoid));
         <span class="self">Self </span>{ root, monoid, to }
     }
@@ -386,7 +378,7 @@
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {
         <span class="kw">let </span>a = <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">2</span>];
-        <span class="kw">let </span>seg = PersistenSegtree::from_vec(a, Sum::&lt;u64&gt;::new());
+        <span class="kw">let </span>seg = PersistentSegtree::from_vec(a, Sum::&lt;u64&gt;::new());
 
         <span class="macro">dbg!</span>(seg.fold(<span class="number">0</span>..<span class="number">5</span>));
 

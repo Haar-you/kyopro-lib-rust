@@ -119,44 +119,44 @@
     /// **Space complexity O(n log n)**
     </span><span class="kw">pub fn </span>new&lt;E: TreeEdgeTrait&gt;(tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = tree.len();
-        <span class="kw">let </span>log2n = ((n <span class="kw">as </span>f64).log2().ceil() + <span class="number">1.0</span>) <span class="kw">as </span>usize;
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self </span>{
+        <span class="kw">let </span>log2n = n.next_power_of_two().trailing_zeros() <span class="kw">as </span>usize + <span class="number">1</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>this = <span class="self">Self </span>{
             log2n,
             parent: <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="prelude-val">None</span>; log2n]; n],
             depth: <span class="macro">vec!</span>[<span class="number">0</span>; n],
         };
 
-        ret.dfs(tree, root, <span class="prelude-val">None</span>, <span class="number">0</span>);
-        <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..log2n - <span class="number">1 </span>{
-            <span class="kw">for </span>v <span class="kw">in </span><span class="number">0</span>..n {
-                <span class="kw">match </span>ret.parent[v][k] {
-                    <span class="prelude-val">Some</span>(p) =&gt; ret.parent[v][k + <span class="number">1</span>] = ret.parent[p][k],
-                    <span class="prelude-val">None </span>=&gt; ret.parent[v][k + <span class="number">1</span>] = <span class="prelude-val">None</span>,
+        <span class="kw">let </span><span class="kw-2">mut </span>stack = <span class="macro">vec!</span>[];
+        stack.push((root, <span class="prelude-val">None</span>, <span class="number">0</span>));
+
+        <span class="kw">while let </span><span class="prelude-val">Some</span>((cur, par, d)) = stack.pop() {
+            this.parent[cur][<span class="number">0</span>] = par;
+            this.depth[cur] = d;
+
+            tree.nodes[cur]
+                .neighbors()
+                .filter(|e| par != <span class="prelude-val">Some</span>(e.to()))
+                .for_each(|e| stack.push((e.to(), <span class="prelude-val">Some</span>(cur), d + <span class="number">1</span>)));
+        }
+
+        <span class="kw">for </span>v <span class="kw">in </span><span class="number">0</span>..n {
+            <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..log2n - <span class="number">1 </span>{
+                <span class="kw">match </span>this.parent[v][k] {
+                    <span class="prelude-val">Some</span>(p) =&gt; this.parent[v][k + <span class="number">1</span>] = this.parent[p][k],
+                    <span class="prelude-val">None </span>=&gt; this.parent[v][k + <span class="number">1</span>] = <span class="prelude-val">None</span>,
                 }
             }
         }
 
-        ret
-    }
-
-    <span class="kw">fn </span>dfs&lt;E: TreeEdgeTrait&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, cur: usize, par: <span class="prelude-ty">Option</span>&lt;usize&gt;, d: usize) {
-        <span class="self">self</span>.parent[cur][<span class="number">0</span>] = par;
-        <span class="self">self</span>.depth[cur] = d;
-
-        <span class="kw">for </span>e <span class="kw">in </span>tree.nodes[cur].neighbors() {
-            <span class="kw">if </span><span class="prelude-val">Some</span>(e.to()) != par {
-                <span class="self">self</span>.dfs(tree, e.to(), <span class="prelude-val">Some</span>(cur), d + <span class="number">1</span>);
-            }
-        }
+        this
     }
 
     <span class="doccomment">/// `a`の`n`個上の祖先を求める。
     ///
     /// **Time complexity O(log n)**
     </span><span class="kw">pub fn </span>ancestor(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>a: usize, <span class="kw-2">mut </span>n: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
-        <span class="kw">let </span>bits = std::mem::size_of::&lt;usize&gt;() * <span class="number">8</span>;
         <span class="kw">while </span>n != <span class="number">0 </span>{
-            <span class="kw">let </span>m1 = bits - n.leading_zeros() <span class="kw">as </span>usize - <span class="number">1</span>;
+            <span class="kw">let </span>m1 = usize::BITS <span class="kw">as </span>usize - n.leading_zeros() <span class="kw">as </span>usize - <span class="number">1</span>;
             <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(b)) = <span class="self">self</span>.parent[a].get(m1) {
                 a = b;
                 n ^= <span class="number">1 </span>&lt;&lt; m1;
@@ -171,7 +171,7 @@
     <span class="doccomment">/// `a`と`b`の最小共通祖先を求める。
     ///
     /// **Time complexity O(log n)**
-    </span><span class="kw">pub fn </span>get_lca(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>a: usize, <span class="kw-2">mut </span>b: usize) -&gt; usize {
+    </span><span class="kw">pub fn </span>lca(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>a: usize, <span class="kw-2">mut </span>b: usize) -&gt; usize {
         <span class="kw">if </span><span class="self">self</span>.depth[a] &gt;= <span class="self">self</span>.depth[b] {
             std::mem::swap(<span class="kw-2">&amp;mut </span>a, <span class="kw-2">&amp;mut </span>b);
         }
@@ -198,7 +198,7 @@
     ///
     /// **Time complexity O(log n)**
     </span><span class="kw">pub fn </span>jump(<span class="kw-2">&amp;</span><span class="self">self</span>, s: usize, t: usize, d: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
-        <span class="kw">let </span>a = <span class="self">self</span>.get_lca(s, t);
+        <span class="kw">let </span>a = <span class="self">self</span>.lca(s, t);
         <span class="kw">if </span><span class="self">self</span>.depth[s] - <span class="self">self</span>.depth[a] &gt;= d {
             <span class="self">self</span>.ancestor(s, d)
         } <span class="kw">else if </span><span class="self">self</span>.depth[s] + <span class="self">self</span>.depth[t] - <span class="self">self</span>.depth[a] * <span class="number">2 </span>&gt;= d {

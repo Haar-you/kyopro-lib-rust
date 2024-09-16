@@ -44,7 +44,6 @@
 <a href="#44" id="44">44</a>
 <a href="#45" id="45">45</a>
 <a href="#46" id="46">46</a>
-<a href="#47" id="47">47</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 最長増加部分列
 
 </span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
@@ -60,14 +59,12 @@
     <span class="kw">let </span><span class="kw-2">mut </span>dp = <span class="macro">vec!</span>[];
     <span class="kw">let </span><span class="kw-2">mut </span>pos = <span class="macro">vec!</span>[];
     <span class="kw">let </span><span class="kw-2">mut </span>prev = <span class="macro">vec!</span>[<span class="prelude-val">None</span>; n];
-    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
 
-    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-        <span class="kw">let </span>x = a[i];
+    <span class="kw">for </span>(i, x) <span class="kw">in </span>a.iter().enumerate() {
         <span class="kw">if </span>dp.is_empty() || dp.last().unwrap() &lt; <span class="kw-2">&amp;</span>x {
             dp.push(x);
-            <span class="kw">if </span>!pos.is_empty() {
-                prev[i] = <span class="prelude-val">Some</span>(<span class="kw-2">*</span>pos.last().unwrap());
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>last) = pos.last() {
+                prev[i] = <span class="prelude-val">Some</span>(last);
             }
             pos.push(i);
         } <span class="kw">else </span>{
@@ -80,6 +77,7 @@
         }
     }
 
+    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
     <span class="kw">let </span><span class="kw-2">mut </span>i = <span class="prelude-val">Some</span>(<span class="kw-2">*</span>pos.last().unwrap());
     <span class="kw">while let </span><span class="prelude-val">Some</span>(j) = i {
         ret.push(j);

@@ -377,24 +377,8 @@
 <a href="#377" id="377">377</a>
 <a href="#378" id="378">378</a>
 <a href="#379" id="379">379</a>
-<a href="#380" id="380">380</a>
-<a href="#381" id="381">381</a>
-<a href="#382" id="382">382</a>
-<a href="#383" id="383">383</a>
-<a href="#384" id="384">384</a>
-<a href="#385" id="385">385</a>
-<a href="#386" id="386">386</a>
-<a href="#387" id="387">387</a>
-<a href="#388" id="388">388</a>
-<a href="#389" id="389">389</a>
-<a href="#390" id="390">390</a>
-<a href="#391" id="391">391</a>
-<a href="#392" id="392">392</a>
-<a href="#393" id="393">393</a>
-<a href="#394" id="394">394</a>
-<a href="#395" id="395">395</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::ds::succinct_dict::SuccinctDict;
-<span class="kw">use </span>std::ops::{Bound, RangeBounds};
+</pre></div><pre class="rust"><code><span class="kw">use crate</span>::{ds::succinct_dict::SuccinctDict, utils::range::range_bounds_to_range};
+<span class="kw">use </span>std::ops::RangeBounds;
 
 <span class="kw">const </span>BIT_SIZE: usize = <span class="number">64</span>;
 
@@ -440,22 +424,6 @@
         }
     }
 
-    <span class="kw">fn </span>get_half_open_range(<span class="kw-2">&amp;</span><span class="self">self</span>, r: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; (usize, usize) {
-        <span class="kw">let </span>l = <span class="kw">match </span>r.start_bound() {
-            Bound::Unbounded =&gt; <span class="number">0</span>,
-            Bound::Included(<span class="kw-2">&amp;</span>x) =&gt; x,
-            Bound::Excluded(<span class="kw-2">&amp;</span>x) =&gt; x + <span class="number">1</span>,
-        };
-        <span class="kw">let </span>r = <span class="kw">match </span>r.end_bound() {
-            Bound::Unbounded =&gt; <span class="self">self</span>.size,
-            Bound::Included(<span class="kw-2">&amp;</span>x) =&gt; x + <span class="number">1</span>,
-            Bound::Excluded(<span class="kw-2">&amp;</span>x) =&gt; x,
-        };
-        <span class="macro">assert!</span>(l &lt;= r &amp;&amp; r &lt;= <span class="self">self</span>.size);
-
-        (l, r)
-    }
-
     <span class="doccomment">/// `index`番目の値を得る。
     </span><span class="kw">pub fn </span>access(<span class="kw-2">&amp;</span><span class="self">self</span>, index: usize) -&gt; u64 {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="number">0</span>;
@@ -492,7 +460,7 @@
 
     <span class="doccomment">/// `range`に含まれる`value`の個数。
     </span><span class="kw">pub fn </span>count(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, value: u64) -&gt; usize {
-        <span class="kw">let </span>(l, r) = <span class="self">self</span>.get_half_open_range(range);
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.size);
         <span class="self">self</span>.rank(r, value) - <span class="self">self</span>.rank(l, value)
     }
 
@@ -520,7 +488,7 @@
 
     <span class="doccomment">/// `range`でk(0-indexed)番目に小さい値。
     </span><span class="kw">pub fn </span>quantile(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, nth: usize) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
-        <span class="kw">let </span>(<span class="kw-2">mut </span>l, <span class="kw-2">mut </span>r) = <span class="self">self</span>.get_half_open_range(range);
+        <span class="kw">let </span>(<span class="kw-2">mut </span>l, <span class="kw-2">mut </span>r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.size);
         <span class="kw">if </span>nth &gt;= r - l {
             <span class="kw">return </span><span class="prelude-val">None</span>;
         }
@@ -549,7 +517,7 @@
 
     <span class="doccomment">/// `range`での最大値
     </span><span class="kw">pub fn </span>maximum(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
-        <span class="kw">let </span>(l, r) = <span class="self">self</span>.get_half_open_range(range);
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.size);
         <span class="kw">if </span>r &gt; l {
             <span class="self">self</span>.quantile(l..r, r - l - <span class="number">1</span>)
         } <span class="kw">else </span>{
@@ -563,7 +531,7 @@
     }
 
     <span class="kw">fn </span>range_freq_lt(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, ub: u64) -&gt; usize {
-        <span class="kw">let </span>(<span class="kw-2">mut </span>l, <span class="kw-2">mut </span>r) = <span class="self">self</span>.get_half_open_range(range);
+        <span class="kw">let </span>(<span class="kw-2">mut </span>l, <span class="kw-2">mut </span>r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.size);
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="number">0</span>;
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..BIT_SIZE {
             <span class="kw">let </span>t = (ub &gt;&gt; (BIT_SIZE - i - <span class="number">1</span>)) &amp; <span class="number">1</span>;

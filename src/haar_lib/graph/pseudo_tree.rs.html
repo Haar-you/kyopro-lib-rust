@@ -69,75 +69,129 @@
 <a href="#69" id="69">69</a>
 <a href="#70" id="70">70</a>
 <a href="#71" id="71">71</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
-<span class="kw">use </span>std::collections::VecDeque;
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::VecDeque;
+
+<span class="kw">pub struct </span>PseudoTreeBuilder {
+    g: Vec&lt;Vec&lt;usize&gt;&gt;,
+    edge_num: usize,
+}
 
 <span class="kw">pub struct </span>PseudoTree {
-    <span class="kw">pub </span>group: Vec&lt;usize&gt;,
-    <span class="kw">pub </span>in_loop: Vec&lt;bool&gt;,
+    group: Vec&lt;usize&gt;,
+    in_loop: Vec&lt;bool&gt;,
 }
 
-<span class="kw">pub fn </span>pseudo_tree&lt;E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; PseudoTree {
-    <span class="kw">let </span>n = g.len();
-    <span class="kw">let </span><span class="kw-2">mut </span>indeg = <span class="macro">vec!</span>[<span class="number">0</span>; n];
-    <span class="kw">let </span><span class="kw-2">mut </span>queue = VecDeque::new();
-    <span class="kw">let </span><span class="kw-2">mut </span>visit = <span class="macro">vec!</span>[<span class="bool-val">false</span>; n];
-    <span class="kw">let </span><span class="kw-2">mut </span>in_loop = <span class="macro">vec!</span>[<span class="bool-val">true</span>; n];
-
-    <span class="kw">for </span>es <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges {
-        <span class="kw">for </span>e <span class="kw">in </span>es {
-            indeg[e.to()] += <span class="number">1</span>;
+<span class="kw">impl </span>PseudoTreeBuilder {
+    <span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            g: <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; n],
+            edge_num: <span class="number">0</span>,
         }
     }
 
-    <span class="kw">for </span>(i, <span class="kw-2">&amp;</span>deg) <span class="kw">in </span>indeg.iter().enumerate() {
-        <span class="kw">if </span>deg == <span class="number">1 </span>{
-            queue.push_back(i);
-        }
+    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize, v: usize) {
+        <span class="self">self</span>.g[u].push(v);
+        <span class="self">self</span>.g[v].push(u);
+        <span class="self">self</span>.edge_num += <span class="number">1</span>;
     }
 
-    <span class="kw">while let </span><span class="prelude-val">Some</span>(cur) = queue.pop_front() {
-        in_loop[cur] = <span class="bool-val">false</span>;
+    <span class="kw">pub fn </span>build(<span class="self">self</span>) -&gt; PseudoTree {
+        <span class="macro">assert_eq!</span>(<span class="self">self</span>.edge_num, <span class="self">self</span>.g.len());
+        <span class="kw">let </span>n = <span class="self">self</span>.g.len();
+        <span class="kw">let </span><span class="kw-2">mut </span>indeg = <span class="macro">vec!</span>[<span class="number">0</span>; n];
+        <span class="kw">let </span><span class="kw-2">mut </span>visit = <span class="macro">vec!</span>[<span class="bool-val">false</span>; n];
+        <span class="kw">let </span><span class="kw-2">mut </span>in_loop = <span class="macro">vec!</span>[<span class="bool-val">true</span>; n];
 
-        <span class="kw">if </span>visit[cur] {
-            <span class="kw">continue</span>;
+        <span class="kw">for </span><span class="kw-2">&amp;</span>to <span class="kw">in </span><span class="self">self</span>.g.iter().flatten() {
+            indeg[to] += <span class="number">1</span>;
         }
-        visit[cur] = <span class="bool-val">true</span>;
 
-        <span class="kw">for </span>e <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges[cur] {
-            <span class="kw">if </span>!visit[e.to()] {
-                indeg[e.to()] -= <span class="number">1</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>queue: VecDeque&lt;<span class="kw">_</span>&gt; = indeg
+            .iter()
+            .enumerate()
+            .filter_map(|(i, <span class="kw-2">&amp;</span>deg)| (deg == <span class="number">1</span>).then_some(i))
+            .collect();
 
-                <span class="kw">if </span>indeg[e.to()] == <span class="number">1 </span>{
-                    queue.push_back(e.to());
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(cur) = queue.pop_front() {
+            in_loop[cur] = <span class="bool-val">false</span>;
+
+            <span class="kw">if </span>visit[cur] {
+                <span class="kw">continue</span>;
+            }
+            visit[cur] = <span class="bool-val">true</span>;
+
+            <span class="kw">for </span><span class="kw-2">&amp;</span>to <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.g[cur] {
+                <span class="kw">if </span>!visit[to] {
+                    indeg[to] -= <span class="number">1</span>;
+
+                    <span class="kw">if </span>indeg[to] == <span class="number">1 </span>{
+                        queue.push_back(to);
+                    }
                 }
             }
         }
-    }
 
-    <span class="kw">let </span><span class="kw-2">mut </span>group = <span class="macro">vec!</span>[<span class="number">0</span>; n];
+        <span class="kw">let </span><span class="kw-2">mut </span>group = <span class="macro">vec!</span>[<span class="number">0</span>; n];
 
-    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-        <span class="kw">if </span>in_loop[i] {
-            group[i] = i;
-            <span class="kw">for </span>e <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges[i] {
-                <span class="kw">if </span>!in_loop[e.to()] {
-                    dfs(g, e.to(), i, <span class="kw-2">&amp;mut </span>group);
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
+            <span class="kw">if </span>in_loop[i] {
+                group[i] = i;
+                <span class="kw">for </span><span class="kw-2">&amp;</span>to <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.g[i] {
+                    <span class="kw">if </span>!in_loop[to] {
+                        <span class="self">self</span>.__dfs(to, i, <span class="kw-2">&amp;mut </span>group);
+                    }
                 }
             }
         }
+
+        PseudoTree { group, in_loop }
     }
 
-    PseudoTree { group, in_loop }
+    <span class="kw">fn </span>__dfs(<span class="kw-2">&amp;</span><span class="self">self</span>, cur: usize, par: usize, group: <span class="kw-2">&amp;mut </span>[usize]) {
+        group[cur] = group[par];
+
+        <span class="kw">for </span><span class="kw-2">&amp;</span>to <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.g[cur] {
+            <span class="kw">if </span>to != par {
+                <span class="self">self</span>.__dfs(to, cur, group);
+            }
+        }
+    }
 }
 
-<span class="kw">fn </span>dfs&lt;E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;, cur: usize, par: usize, group: <span class="kw-2">&amp;mut </span>[usize]) {
-    group[cur] = group[par];
+<span class="kw">impl </span>PseudoTree {
+    <span class="kw">pub fn </span>group_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
+        <span class="self">self</span>.group[i]
+    }
 
-    <span class="kw">for </span>e <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges[cur] {
-        <span class="kw">if </span>e.to() != par {
-            dfs(g, e.to(), cur, group);
-        }
+    <span class="kw">pub fn </span>is_in_loop(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; bool {
+        <span class="self">self</span>.in_loop[i]
     }
 }
 </code></pre></div></section></main></body></html>

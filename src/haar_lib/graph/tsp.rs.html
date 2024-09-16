@@ -70,21 +70,27 @@
 <a href="#70" id="70">70</a>
 <a href="#71" id="71">71</a>
 <a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 巡回セールスマン問題
+//!
+//! # Problems
+//! - &lt;https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_2_A&gt;
 
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
-<span class="kw">use </span>std::{cmp::min, ops::Add};
+<span class="kw">use </span>std::ops::Add;
 
 <span class="kw">pub fn </span>tsp&lt;T, E: EdgeTrait&lt;Weight = T&gt;&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Directed, E&gt;, src: usize) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt;
 <span class="kw">where
     </span>T: Copy + Ord + Add&lt;Output = T&gt;,
 {
     <span class="kw">let </span>n = g.len();
-    <span class="kw">let </span><span class="kw-2">mut </span>dp = <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="prelude-val">None</span>; <span class="number">1 </span>&lt;&lt; n]; n];
+    <span class="kw">let </span><span class="kw-2">mut </span>dp: Vec&lt;Vec&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;&gt; = <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="prelude-val">None</span>; <span class="number">1 </span>&lt;&lt; n]; n];
 
     <span class="kw">for </span>e <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges[src] {
         <span class="kw">let </span>(to, cost) = (e.to(), e.weight());
-        dp[to][<span class="number">1 </span>&lt;&lt; to] = <span class="prelude-val">Some</span>(dp[to][<span class="number">1 </span>&lt;&lt; to].map_or(cost, |x| min(x, cost)));
+        dp[to][<span class="number">1 </span>&lt;&lt; to] = dp[to][<span class="number">1 </span>&lt;&lt; to].map(|x| x.min(cost)).or(<span class="prelude-val">Some</span>(cost));
     }
 
     <span class="kw">for </span>s <span class="kw">in </span><span class="number">1</span>..<span class="number">1 </span>&lt;&lt; n {
@@ -100,8 +106,8 @@
                 }
 
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(x) = dp[i][s] {
-                    dp[to][s | (<span class="number">1 </span>&lt;&lt; to)] =
-                        <span class="prelude-val">Some</span>(dp[to][s | (<span class="number">1 </span>&lt;&lt; to)].map_or(x + cost, |y| min(y, x + cost)));
+                    <span class="kw">let </span>t = s | (<span class="number">1 </span>&lt;&lt; to);
+                    dp[to][t] = dp[to][t].map(|y| y.min(x + cost)).or(<span class="prelude-val">Some</span>(x + cost));
                 }
             }
         }

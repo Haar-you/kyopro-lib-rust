@@ -80,8 +80,8 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {
-        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;::new();
-        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">100</span>, modulo.clone());
+        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;;
+        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">100</span>, modulo);
 
         <span class="macro">assert_eq!</span>(
             ft.bernoulli_number(<span class="number">5</span>),

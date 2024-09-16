@@ -56,12 +56,26 @@
 <a href="#56" id="56">56</a>
 <a href="#57" id="57">57</a>
 <a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 最小全域木 (Kruskal)
 
 </span><span class="kw">use crate</span>::{ds::unionfind::UnionFind, graph::<span class="kw-2">*</span>};
 
-<span class="doccomment">/// **Time complexity O(E log E)**
-</span><span class="kw">pub fn </span>kruskal&lt;T: Ord, E: Clone + EdgeTrait&lt;Weight = T&gt;&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; Vec&lt;<span class="kw-2">&amp;</span>E&gt; {
+<span class="doccomment">/// Kruskal法
+///
+/// グラフが連結ならばSomeに包んで最小全域木の辺集合を返す。
+/// 非連結ならばNoneを返す。
+///
+/// **Time complexity O(E log E)**
+</span><span class="kw">pub fn </span>kruskal&lt;T: Ord, E: Clone + EdgeTrait&lt;Weight = T&gt;&gt;(
+    g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;,
+) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;<span class="kw-2">&amp;</span>E&gt;&gt; {
     <span class="kw">let </span>n = g.len();
     <span class="kw">let </span><span class="kw-2">mut </span>edges = <span class="macro">vec!</span>[];
     <span class="kw">for </span>es <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges {
@@ -83,7 +97,7 @@
         }
     }
 
-    ret
+    (ret.len() == n - <span class="number">1</span>).then_some(ret)
 }
 
 <span class="attr">#[cfg(test)]
@@ -109,7 +123,7 @@
             .map(|(u, v, w)| Edge::new(u, v, w, ())),
         );
 
-        <span class="kw">let </span>ans = kruskal(<span class="kw-2">&amp;</span>g).iter().map(|e| e.weight).sum::&lt;i32&gt;();
+        <span class="kw">let </span>ans = kruskal(<span class="kw-2">&amp;</span>g).unwrap().iter().map(|e| e.weight).sum::&lt;i32&gt;();
 
         <span class="macro">assert_eq!</span>(ans, <span class="number">5</span>);
     }

@@ -88,7 +88,7 @@
 <span class="kw">impl </span>Lowlink {
     <span class="kw">pub fn </span>new&lt;E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = g.len();
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>this = <span class="self">Self </span>{
             size: n,
             ord: <span class="macro">vec!</span>[<span class="number">0</span>; n],
             low: <span class="macro">vec!</span>[<span class="number">0</span>; n],
@@ -100,10 +100,10 @@
         <span class="kw">let </span><span class="kw-2">mut </span>index = <span class="number">0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>check = <span class="macro">vec!</span>[<span class="bool-val">false</span>; n];
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-            ret.dfs(g, i, <span class="prelude-val">None</span>, <span class="kw-2">&amp;mut </span>index, <span class="kw-2">&amp;mut </span>check);
+            this.dfs(g, i, <span class="prelude-val">None</span>, <span class="kw-2">&amp;mut </span>index, <span class="kw-2">&amp;mut </span>check);
         }
 
-        ret
+        this
     }
 
     <span class="kw">fn </span>dfs&lt;E: EdgeTrait&gt;(

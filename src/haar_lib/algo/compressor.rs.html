@@ -165,7 +165,7 @@
         <span class="self">self</span>.data.push(value);
     }
 
-    <span class="kw">pub fn </span>add_vec(<span class="kw-2">&amp;mut </span><span class="self">self</span>, values: <span class="kw">impl </span>IntoIterator&lt;Item = T&gt;) {
+    <span class="kw">pub fn </span>extend(<span class="kw-2">&amp;mut </span><span class="self">self</span>, values: <span class="kw">impl </span>IntoIterator&lt;Item = T&gt;) {
         <span class="self">self</span>.data.extend(values);
     }
 
@@ -187,7 +187,7 @@
     </span><span class="kw">fn </span>test() {
         <span class="kw">let </span>data = <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">9</span>, <span class="number">0</span>, -<span class="number">1</span>, <span class="number">3</span>];
         <span class="kw">let </span><span class="kw-2">mut </span>builder = CompressorBuilder::&lt;<span class="kw">_</span>&gt;::new();
-        builder.add_vec(data.clone());
+        builder.extend(data.clone());
         <span class="kw">let </span>compressor = builder.build();
 
         <span class="macro">assert_eq!</span>(
@@ -204,7 +204,7 @@
 
         <span class="kw">let </span>data = <span class="macro">hashset!</span>[<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">9</span>, <span class="number">0</span>, -<span class="number">1</span>, <span class="number">3</span>];
         <span class="kw">let </span><span class="kw-2">mut </span>builder = CompressorBuilder::&lt;<span class="kw">_</span>&gt;::new();
-        builder.add_vec(data.clone());
+        builder.extend(data.clone());
         <span class="kw">let </span>compressor = builder.build();
 
         <span class="macro">assert_eq!</span>(

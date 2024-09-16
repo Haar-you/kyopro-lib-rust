@@ -53,12 +53,12 @@
 <span class="kw">impl </span>EulerTour {
     <span class="kw">pub fn </span>new&lt;E: TreeEdgeTrait&gt;(tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = tree.len();
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>this = <span class="self">Self </span>{
             begin: <span class="macro">vec!</span>[<span class="number">0</span>; n],
             end: <span class="macro">vec!</span>[<span class="number">0</span>; n],
         };
-        ret.dfs(tree, root, <span class="prelude-val">None</span>, <span class="kw-2">&amp;mut </span><span class="number">0</span>);
-        ret
+        this.dfs(tree, root, <span class="prelude-val">None</span>, <span class="kw-2">&amp;mut </span><span class="number">0</span>);
+        this
     }
 
     <span class="kw">fn </span>dfs&lt;E: TreeEdgeTrait&gt;(

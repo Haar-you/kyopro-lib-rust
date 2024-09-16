@@ -89,8 +89,8 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {
-        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;::new();
-        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">100</span>, modulo.clone());
+        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;;
+        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">100</span>, modulo);
 
         <span class="kw">let </span>catalans = (<span class="number">0</span>..=<span class="number">30</span>).map(|i| ft.catalan_number(i)).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
