@@ -20,8 +20,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let modulo = ConstModIntBuilder::<1000000007>::new();
-        let ft = FactorialTable::new(100, modulo.clone());
+        let modulo = ConstModIntBuilder::<1000000007>;
+        let ft = FactorialTable::new(100, modulo);
 
         let catalans = (0..=30).map(|i| ft.catalan_number(i)).collect::<Vec<_>>();
 
