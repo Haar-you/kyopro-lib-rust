@@ -61,3 +61,5 @@ pub mod palindromic_tree;
 pub mod bitset;
 
 pub mod merge_sort_tree;
+
+pub mod linked_list;
