@@ -28,4 +28,6 @@ pub mod traits;
 pub mod tree;
 pub mod utils;
 
+pub mod typical;
+
 pub mod testtools;
