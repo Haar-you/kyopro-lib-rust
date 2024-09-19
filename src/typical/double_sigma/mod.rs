@@ -81,9 +81,8 @@ mod tests {
             .map(|_| rng.gen::<u64>() % 2_u64.pow(32))
             .collect::<Vec<_>>();
 
-        let res =
-            super::range_xor::sum_of_sum_of_range_xor(a.clone()) as u64 - a.iter().sum::<u64>();
-        let ans = solve(a, 0, |a, i, j| a[i..=j].iter().fold(0, |x, y| x ^ y));
+        let res = super::range_xor::sum_of_sum_of_range_xor(a.clone()) as u64;
+        let ans = solve_range(a, 0, |a, i, j| a[i..j].iter().fold(0, |x, y| x ^ y));
 
         assert_eq!(res, ans);
     }
