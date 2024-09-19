@@ -1,4 +1,5 @@
 pub mod difference;
+pub mod prod;
 pub mod range_xor;
 pub mod sum;
 pub mod xor;
@@ -73,6 +74,18 @@ mod tests {
 
         let res = super::sum::sum_of_sum_of_sum(a.clone());
         let ans = solve(a, 0, |a, i, j| a[i] + a[j]);
+
+        assert_eq!(res, ans);
+    }
+
+    #[test]
+    fn test_prod() {
+        let mut rng = rand::thread_rng();
+        let n = 300;
+        let a = (0..n).map(|_| rng.gen::<i16>() as i64).collect::<Vec<_>>();
+
+        let res = super::prod::sum_of_sum_of_prod(a.clone());
+        let ans = solve(a, 0, |a, i, j| a[i] * a[j]);
 
         assert_eq!(res, ans);
     }
