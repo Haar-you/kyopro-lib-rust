@@ -10,6 +10,10 @@ mod tests {
 
     use rand::Rng;
 
+    use crate::num::const_modint::*;
+
+    const M998244353: u32 = 998244353;
+
     fn solve<T, U, F>(a: Vec<T>, init: U, mut f: F) -> U
     where
         U: AddAssign,
@@ -82,10 +86,13 @@ mod tests {
     fn test_prod() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let a = (0..n).map(|_| rng.gen::<i16>() as i64).collect::<Vec<_>>();
+        let modulo = ConstModIntBuilder::<M998244353>;
+        let a = (0..n)
+            .map(|_| modulo.from_i64(rng.gen::<i64>()))
+            .collect::<Vec<_>>();
 
         let res = super::prod::sum_of_sum_of_prod(a.clone());
-        let ans = solve(a, 0, |a, i, j| a[i] * a[j]);
+        let ans = solve(a, modulo.from_u64(0), |a, i, j| a[i] * a[j]);
 
         assert_eq!(res, ans);
     }
