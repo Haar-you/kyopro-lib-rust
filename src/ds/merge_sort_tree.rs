@@ -2,6 +2,7 @@
 //!
 //! # Problems
 //! - <https://atcoder.jp/contests/abc339/tasks/abc339_g>
+//! - <https://atcoder.jp/contests/abc351/tasks/abc351_f>
 
 use crate::algo::{bsearch::upper_bound, merge::inplace_merge};
 use crate::num::one_zero::Zero;
@@ -73,29 +74,32 @@ where
     /// `ub`以下の総和を求める
     ///
     /// **Time complexity O(log^2 N)**
-    pub fn sum_le(&self, Range { start: l, end: r }: Range<usize>, ub: T) -> T {
+    pub fn sum_count_le(&self, Range { start: l, end: r }: Range<usize>, ub: T) -> (T, usize) {
         assert!(l <= r && r <= self.original_size);
 
         let mut l = l + self.size / 2;
         let mut r = r + self.size / 2;
-        let mut ret = T::zero();
+        let mut sum = T::zero();
+        let mut count = 0;
 
         while l < r {
             if r & 1 == 1 {
                 r -= 1;
                 let i = upper_bound(&self.data[r], &ub);
-                ret += self.accum[r][i];
+                count += i;
+                sum += self.accum[r][i];
             }
             if l & 1 == 1 {
                 let i = upper_bound(&self.data[l], &ub);
-                ret += self.accum[l][i];
+                count += i;
+                sum += self.accum[l][i];
                 l += 1;
             }
             r >>= 1;
             l >>= 1;
         }
 
-        ret
+        (sum, count)
     }
 }
 
@@ -119,10 +123,12 @@ mod tests {
             let Range { start: l, end: r } = rand_range(&mut rng, 0..n);
             let x = rng.gen::<u64>() % 10000;
 
-            let res = s.sum_le(l..r, x);
-            let ans = a[l..r].iter().filter(|&&y| y <= x).sum::<u64>();
+            let (res_sum, res_count) = s.sum_count_le(l..r, x);
+            let ans_sum = a[l..r].iter().filter(|&&y| y <= x).sum::<u64>();
+            let ans_count = a[l..r].iter().filter(|&&y| y <= x).count();
 
-            assert_eq!(res, ans);
+            assert_eq!(res_sum, ans_sum);
+            assert_eq!(res_count, ans_count);
         }
     }
 }
