@@ -1,5 +1,6 @@
 pub mod difference;
 pub mod range_xor;
+pub mod xor;
 
 #[cfg(test)]
 mod tests {
@@ -32,6 +33,18 @@ mod tests {
 
         let res = super::difference::sum_of_sum_of_difference(a.clone());
         let ans = solve(a, 0, |a, i, j| (a[i] - a[j]).abs());
+
+        assert_eq!(res, ans);
+    }
+
+    #[test]
+    fn test_xor() {
+        let mut rng = rand::thread_rng();
+        let n = 300;
+        let a = (0..n).map(|_| rng.gen::<u32>() as u64).collect::<Vec<_>>();
+
+        let res = super::xor::sum_of_sum_of_xor(a.clone()) as u64;
+        let ans = solve(a, 0, |a, i, j| a[i] ^ a[j]);
 
         assert_eq!(res, ans);
     }
