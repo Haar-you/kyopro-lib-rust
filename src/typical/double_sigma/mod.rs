@@ -1,5 +1,6 @@
 pub mod difference;
 pub mod prod;
+pub mod range_sum;
 pub mod range_xor;
 pub mod sum;
 pub mod xor;
@@ -24,6 +25,23 @@ mod tests {
 
         for i in 0..n {
             for j in i + 1..n {
+                ans += f(&a, i, j);
+            }
+        }
+
+        ans
+    }
+
+    fn solve_range<T, U, F>(a: Vec<T>, init: U, mut f: F) -> U
+    where
+        U: AddAssign,
+        F: FnMut(&[T], usize, usize) -> U,
+    {
+        let mut ans = init;
+        let n = a.len();
+
+        for i in 0..n {
+            for j in i + 1..=n {
                 ans += f(&a, i, j);
             }
         }
@@ -93,6 +111,18 @@ mod tests {
 
         let res = super::prod::sum_of_sum_of_prod(a.clone());
         let ans = solve(a, modulo.from_u64(0), |a, i, j| a[i] * a[j]);
+
+        assert_eq!(res, ans);
+    }
+
+    #[test]
+    fn test_range_sum() {
+        let mut rng = rand::thread_rng();
+        let n = 100;
+        let a = (0..n).map(|_| rng.gen::<i32>() as i64).collect::<Vec<_>>();
+
+        let res = super::range_sum::sum_of_sum_of_range_sum(a.clone());
+        let ans = solve_range(a, 0, |a, i, j| a[i..j].iter().sum());
 
         assert_eq!(res, ans);
     }
