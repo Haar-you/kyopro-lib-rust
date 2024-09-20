@@ -1,6 +1,7 @@
 pub mod difference;
 pub mod max;
 pub mod prod;
+pub mod range_prod;
 pub mod range_sum;
 pub mod range_xor;
 pub mod sum;
@@ -135,6 +136,23 @@ mod tests {
 
         let res = super::max::sum_of_sum_of_max(a.clone());
         let ans = solve(a, 0, |a, i, j| a[i].max(a[j]));
+
+        assert_eq!(res, ans);
+    }
+
+    #[test]
+    fn test_range_prod() {
+        let mut rng = rand::thread_rng();
+        let n = 100;
+        let modulo = ConstModIntBuilder::<M998244353>;
+        let a = (0..n)
+            .map(|_| modulo.from_i64(rng.gen::<i64>()))
+            .collect::<Vec<_>>();
+
+        let res = super::range_prod::sum_of_sum_of_range_prod(a.clone());
+        let ans = solve_range(a, modulo.from_u64(0), |a, i, j| {
+            a[i..j].iter().fold(modulo.from_u64(1), |x, &y| x * y)
+        });
 
         assert_eq!(res, ans);
     }
