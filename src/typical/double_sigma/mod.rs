@@ -1,4 +1,5 @@
 pub mod difference;
+pub mod max;
 pub mod prod;
 pub mod range_sum;
 pub mod range_xor;
@@ -122,6 +123,18 @@ mod tests {
 
         let res = super::range_sum::sum_of_sum_of_range_sum(a.clone());
         let ans = solve_range(a, 0, |a, i, j| a[i..j].iter().sum());
+
+        assert_eq!(res, ans);
+    }
+
+    #[test]
+    fn test_max() {
+        let mut rng = rand::thread_rng();
+        let n = 300;
+        let a = (0..n).map(|_| rng.gen::<i32>() as i64).collect::<Vec<_>>();
+
+        let res = super::max::sum_of_sum_of_max(a.clone());
+        let ans = solve(a, 0, |a, i, j| a[i].max(a[j]));
 
         assert_eq!(res, ans);
     }
