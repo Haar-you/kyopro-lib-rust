@@ -189,7 +189,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let ff = ConstModIntBuilder::<M>::new();
+        let ff = ConstModIntBuilder::<M>;
         let ntt = NTT::<M>::new(3, 1 << 20);
         let po = PolynomialOperator::<M>::new(&ntt);
 

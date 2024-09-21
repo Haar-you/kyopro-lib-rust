@@ -285,7 +285,7 @@ mod tests {
     #[test]
     fn test() {
         let mut rng = rand::thread_rng();
-        let modulo = ConstModIntBuilder::<1000000007>::new();
+        let modulo = ConstModIntBuilder::<1000000007>;
 
         let size = 300;
 
@@ -299,7 +299,7 @@ mod tests {
             }
         }
 
-        let a = SquareMatrix::from_vec(a, modulo.clone());
+        let a = SquareMatrix::from_vec(a, modulo);
         let b = SquareMatrix::from_vec(b, modulo);
 
         assert!(a.clone().straight_mul(b.clone()) == a.strassen_mul(b));
@@ -311,7 +311,7 @@ mod tests {
         use crate::get_time;
 
         let mut rng = rand::thread_rng();
-        let modulo = ConstModIntBuilder::<1000000007>::new();
+        let modulo = ConstModIntBuilder::<1000000007>;
 
         let mut straight = vec![];
         let mut strassen = vec![];
@@ -327,8 +327,8 @@ mod tests {
                 }
             }
 
-            let a = SquareMatrix::from_vec(a, modulo.clone());
-            let b = SquareMatrix::from_vec(b, modulo.clone());
+            let a = SquareMatrix::from_vec(a, modulo);
+            let b = SquareMatrix::from_vec(b, modulo);
 
             straight.push(get_time!({
                 a.clone().straight_mul(b.clone());

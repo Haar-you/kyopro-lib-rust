@@ -8,14 +8,8 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
-#[derive(Clone, Default, PartialEq, Eq)]
-pub struct ConstModIntBuilder<const M: u32> {}
-
-impl<const M: u32> ConstModIntBuilder<M> {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
+#[derive(Copy, Clone, Default, PartialEq, Eq)]
+pub struct ConstModIntBuilder<const M: u32>;
 
 impl<const M: u32> FF for ConstModIntBuilder<M> {
     type Output = ConstModInt<M>;

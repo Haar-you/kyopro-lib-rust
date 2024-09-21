@@ -4,6 +4,7 @@ pub mod traits;
 
 pub mod partially_persistent_unionfind;
 pub mod potential_unionfind;
+pub mod rollbackable_unionfind;
 pub mod unionfind;
 
 pub mod dual_segtree;
@@ -61,3 +62,5 @@ pub mod palindromic_tree;
 pub mod bitset;
 
 pub mod merge_sort_tree;
+
+pub mod linked_list;
