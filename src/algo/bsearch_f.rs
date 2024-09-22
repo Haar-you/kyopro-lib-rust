@@ -1,8 +1,17 @@
 use std::ops::{Add, Div, Sub};
 
+/// [`bsearch_ng_ok`]の返り値
 pub enum SearchResult<T> {
-    NgOk { ng: T, ok: T },
+    /// `ng`以下で条件を満たさず、`ok`以上で条件を満たす。
+    NgOk {
+        /// 条件を満たさない最大値
+        ng: T,
+        /// 条件を満たす最小値
+        ok: T,
+    },
+    /// 全体で条件を満たす。
     AllOk,
+    /// 全体で条件を満たさない。
     AllNg,
 }
 

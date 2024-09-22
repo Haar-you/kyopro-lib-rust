@@ -3,12 +3,14 @@
 pub use crate::algebra::traits::Group;
 use std::ops::{Index, Range};
 
+/// 1次元の累積和を扱う
 #[derive(Debug, Clone)]
 pub struct CumulativeSum1D<G: Group> {
     data: Vec<G::Output>,
     group: G,
 }
 
+/// [`CumulativeSum1D`]を構築する
 pub struct CumulativeSum1DBuilder<G: Group> {
     data: Vec<G::Output>,
     group: G,
@@ -30,6 +32,7 @@ impl<T, G: Group<Output = T>> Index<usize> for CumulativeSum1D<G> {
 }
 
 impl<T: Copy, G: Group<Output = T>> CumulativeSum1DBuilder<G> {
+    /// `CumulativeSum1DBuilder`を生成する
     pub fn new(n: usize, group: G) -> Self {
         CumulativeSum1DBuilder {
             data: vec![group.id(); n + 1],
@@ -37,14 +40,17 @@ impl<T: Copy, G: Group<Output = T>> CumulativeSum1DBuilder<G> {
         }
     }
 
+    /// `i`番目に`value`を代入する
     pub fn assign(&mut self, i: usize, value: T) {
         self.data[i + 1] = value;
     }
 
+    /// 群`G`の演算に`i`番目の値と`value`を適用して`i`番目の値を更新する。
     pub fn update(&mut self, i: usize, value: T) {
         self.data[i + 1] = self.group.op(self.data[i + 1], value);
     }
 
+    /// [`CumulativeSum1D`]を構築する
     pub fn build(self) -> CumulativeSum1D<G> {
         let data = self
             .data

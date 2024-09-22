@@ -1,10 +1,13 @@
+//! 排他的論理和を演算とする代数的構造
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use std::marker::PhantomData;
 
+/// 排他的論理和を演算とする代数的構造
 #[derive(Clone, Default, Debug, PartialEq, Eq)]
 pub struct BitXor<T>(PhantomData<T>);
 impl<T> BitXor<T> {
+    /// `BitXor<T>`を生成する。
     pub fn new() -> Self {
         Self(PhantomData)
     }

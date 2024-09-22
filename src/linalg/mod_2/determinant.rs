@@ -1,3 +1,4 @@
+//! 行列式 (mod 2)
 use crate::ds::bitset::*;
 
 /// mod 2上で行列式を求める

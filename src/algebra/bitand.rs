@@ -1,10 +1,13 @@
+//! 論理積を演算とする代数的構造
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use std::marker::PhantomData;
 
+/// 論理積を演算とする代数的構造
 #[derive(Clone, Default, Debug, PartialEq, Eq)]
 pub struct BitAnd<T>(PhantomData<T>);
 impl<T> BitAnd<T> {
+    /// `BitAnd<T>`を生成する。
     pub fn new() -> Self {
         Self(PhantomData)
     }
