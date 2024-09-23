@@ -93,10 +93,13 @@ mod tests {
     fn test_sum() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let a = (0..n).map(|_| rng.gen::<i32>() as i64).collect::<Vec<_>>();
+        let modulo = ConstModIntBuilder::<M998244353>;
+        let a = (0..n)
+            .map(|_| modulo.from_i64(rng.gen::<i64>()))
+            .collect::<Vec<_>>();
 
         let res = super::sum::sum_of_sum_of_sum(a.clone());
-        let ans = solve(a, 0, |a, i, j| a[i] + a[j]);
+        let ans = solve(a, modulo.from_i64(0), |a, i, j| a[i] + a[j]);
 
         assert_eq!(res, ans);
     }
