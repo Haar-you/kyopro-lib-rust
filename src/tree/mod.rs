@@ -152,6 +152,10 @@ impl<E> Tree<E> {
         self.nodes.iter()
     }
 
+    pub fn nodes(&self, i: usize) -> &TreeNode<E> {
+        &self.nodes[i]
+    }
+
     pub fn len(&self) -> usize {
         self.nodes.len()
     }
