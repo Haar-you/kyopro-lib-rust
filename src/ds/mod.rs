@@ -64,3 +64,5 @@ pub mod bitset;
 pub mod merge_sort_tree;
 
 pub mod linked_list;
+
+pub mod splay_tree;
