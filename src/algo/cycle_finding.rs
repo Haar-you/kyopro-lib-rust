@@ -5,6 +5,7 @@
 //!
 //! # Problems
 //! - <https://atcoder.jp/contests/abc179/tasks/abc179_e>
+//! - <https://atcoder.jp/contests/typical90/tasks/typical90_bf>
 
 /// 循環検出法
 ///

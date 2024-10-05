@@ -34,8 +34,8 @@ impl DoublingLCA {
                 .for_each(|e| stack.push((e.to(), Some(cur), d + 1)));
         }
 
-        for v in 0..n {
-            for k in 0..log2n - 1 {
+        for k in 0..log2n - 1 {
+            for v in 0..n {
                 match this.parent[v][k] {
                     Some(p) => this.parent[v][k + 1] = this.parent[p][k],
                     None => this.parent[v][k + 1] = None,

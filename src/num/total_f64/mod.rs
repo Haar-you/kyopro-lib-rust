@@ -5,8 +5,14 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
-#[derive(Clone, Copy, Debug, PartialOrd, PartialEq, Default)]
+#[derive(Clone, Copy, Debug, PartialEq, Default)]
 pub struct Totalf64(pub f64);
+
+impl PartialOrd for Totalf64 {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
 
 impl Eq for Totalf64 {}
 impl Ord for Totalf64 {

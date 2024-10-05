@@ -33,8 +33,8 @@ impl<T: Monoid + Inverse> Group for T {}
 pub trait AbelianGroup: Group + Commutative {}
 impl<T: Group + Commutative> AbelianGroup for T {}
 
-pub trait Exponential<T: Clone>: BinaryOp<Output = T> + Identity {
-    fn exp(&self, mut a: Self::Output, mut n: u64) -> Self::Output {
+pub trait Times<T: Clone>: BinaryOp<Output = T> + Identity {
+    fn times(&self, mut a: Self::Output, mut n: u64) -> Self::Output {
         let mut ret = self.id();
 
         while n > 0 {
@@ -48,4 +48,4 @@ pub trait Exponential<T: Clone>: BinaryOp<Output = T> + Identity {
         ret
     }
 }
-impl<T: Clone, A: BinaryOp<Output = T> + Identity> Exponential<T> for A {}
+impl<T: Clone, A: BinaryOp<Output = T> + Identity> Times<T> for A {}

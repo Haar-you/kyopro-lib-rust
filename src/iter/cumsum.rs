@@ -1,37 +1,54 @@
-use std::ops::Add;
-
-pub struct _CumSum<I, T> {
+pub struct CumSum<I, St, F> {
     iter: I,
-    st: T,
+    st: St,
     is_first: bool,
+    f: F,
 }
 
-impl<I: Iterator<Item = T>, T: Add<Output = T> + Clone> Iterator for _CumSum<I, T> {
-    type Item = T;
+impl<I, St, F> Iterator for CumSum<I, St, F>
+where
+    I: Iterator,
+    St: Copy,
+    F: FnMut(&mut St, I::Item),
+{
+    type Item = St;
     fn next(&mut self) -> Option<Self::Item> {
         if self.is_first {
             self.is_first = false;
-            Some(self.st.clone())
         } else {
-            let t = self.st.clone() + self.iter.next()?;
-            self.st = t;
-            Some(self.st.clone())
+            (self.f)(&mut self.st, self.iter.next()?);
         }
+        Some(self.st)
     }
 }
 
-pub trait CumSum: Iterator {
-    fn cumsum(self, init: Self::Item) -> _CumSum<Self, Self::Item>
+pub trait IterCumSum: Iterator {
+    fn cumsum<St, F>(self, init: St, f: F) -> CumSum<Self, St, F>
     where
         Self: Sized,
-        Self::Item: Add<Output = Self::Item> + Clone,
+        St: Copy,
+        F: FnMut(&mut St, Self::Item),
     {
-        _CumSum {
+        CumSum {
             iter: self,
             st: init,
             is_first: true,
+            f,
         }
     }
 }
 
-impl<I> CumSum for I where I: Iterator + ?Sized {}
+impl<I> IterCumSum for I where I: Iterator + ?Sized {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let a = vec![1, 2, 3, 4, 5];
+        let b = a.iter().cumsum(0, |acc, x| *acc += x).collect::<Vec<_>>();
+
+        assert_eq!(b, vec![0, 1, 3, 6, 10, 15]);
+    }
+}
