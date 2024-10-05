@@ -139,8 +139,8 @@
                 .for_each(|e| stack.push((e.to(), <span class="prelude-val">Some</span>(cur), d + <span class="number">1</span>)));
         }
 
-        <span class="kw">for </span>v <span class="kw">in </span><span class="number">0</span>..n {
-            <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..log2n - <span class="number">1 </span>{
+        <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..log2n - <span class="number">1 </span>{
+            <span class="kw">for </span>v <span class="kw">in </span><span class="number">0</span>..n {
                 <span class="kw">match </span>this.parent[v][k] {
                     <span class="prelude-val">Some</span>(p) =&gt; this.parent[v][k + <span class="number">1</span>] = this.parent[p][k],
                     <span class="prelude-val">None </span>=&gt; this.parent[v][k + <span class="number">1</span>] = <span class="prelude-val">None</span>,

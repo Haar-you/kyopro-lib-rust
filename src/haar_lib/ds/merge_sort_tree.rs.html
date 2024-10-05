@@ -126,10 +126,17 @@
 <a href="#126" id="126">126</a>
 <a href="#127" id="127">127</a>
 <a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Merge-sort Tree
 //!
 //! # Problems
 //! - &lt;https://atcoder.jp/contests/abc339/tasks/abc339_g&gt;
+//! - &lt;https://atcoder.jp/contests/abc351/tasks/abc351_f&gt;
 
 </span><span class="kw">use </span><span class="kw">crate</span>::algo::{bsearch::upper_bound, merge::inplace_merge};
 <span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
@@ -201,29 +208,32 @@
     <span class="doccomment">/// `ub`以下の総和を求める
     ///
     /// **Time complexity O(log^2 N)**
-    </span><span class="kw">pub fn </span>sum_le(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, ub: T) -&gt; T {
+    </span><span class="kw">pub fn </span>sum_count_le(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, ub: T) -&gt; (T, usize) {
         <span class="macro">assert!</span>(l &lt;= r &amp;&amp; r &lt;= <span class="self">self</span>.original_size);
 
         <span class="kw">let </span><span class="kw-2">mut </span>l = l + <span class="self">self</span>.size / <span class="number">2</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>r = r + <span class="self">self</span>.size / <span class="number">2</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = T::zero();
+        <span class="kw">let </span><span class="kw-2">mut </span>sum = T::zero();
+        <span class="kw">let </span><span class="kw-2">mut </span>count = <span class="number">0</span>;
 
         <span class="kw">while </span>l &lt; r {
             <span class="kw">if </span>r &amp; <span class="number">1 </span>== <span class="number">1 </span>{
                 r -= <span class="number">1</span>;
                 <span class="kw">let </span>i = upper_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.data[r], <span class="kw-2">&amp;</span>ub);
-                ret += <span class="self">self</span>.accum[r][i];
+                count += i;
+                sum += <span class="self">self</span>.accum[r][i];
             }
             <span class="kw">if </span>l &amp; <span class="number">1 </span>== <span class="number">1 </span>{
                 <span class="kw">let </span>i = upper_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.data[l], <span class="kw-2">&amp;</span>ub);
-                ret += <span class="self">self</span>.accum[l][i];
+                count += i;
+                sum += <span class="self">self</span>.accum[l][i];
                 l += <span class="number">1</span>;
             }
             r &gt;&gt;= <span class="number">1</span>;
             l &gt;&gt;= <span class="number">1</span>;
         }
 
-        ret
+        (sum, count)
     }
 }
 
@@ -247,10 +257,12 @@
             <span class="kw">let </span>Range { start: l, end: r } = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
             <span class="kw">let </span>x = rng.gen::&lt;u64&gt;() % <span class="number">10000</span>;
 
-            <span class="kw">let </span>res = s.sum_le(l..r, x);
-            <span class="kw">let </span>ans = a[l..r].iter().filter(|&amp;&amp;y| y &lt;= x).sum::&lt;u64&gt;();
+            <span class="kw">let </span>(res_sum, res_count) = s.sum_count_le(l..r, x);
+            <span class="kw">let </span>ans_sum = a[l..r].iter().filter(|&amp;&amp;y| y &lt;= x).sum::&lt;u64&gt;();
+            <span class="kw">let </span>ans_count = a[l..r].iter().filter(|&amp;&amp;y| y &lt;= x).count();
 
-            <span class="macro">assert_eq!</span>(res, ans);
+            <span class="macro">assert_eq!</span>(res_sum, ans_sum);
+            <span class="macro">assert_eq!</span>(res_count, ans_count);
         }
     }
 }
