@@ -1,8 +1,10 @@
 use crate::algebra::action::Action;
-use std::ops::Range;
+use crate::utils::range::range_bounds_to_range;
+use std::ops::RangeBounds;
 
 pub struct LazySegtree<T, U, A> {
     size: usize,
+    original_size: usize,
     data: Vec<T>,
     lazy: Vec<U>,
     action: A,
@@ -13,6 +15,7 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Lazy
         let size = n.next_power_of_two() * 2;
         Self {
             size,
+            original_size: n,
             data: vec![a.fold_id(); size],
             lazy: vec![a.update_id(); size],
             action: a,
@@ -61,7 +64,9 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Lazy
         }
     }
 
-    pub fn fold(&mut self, Range { start: l, end: r }: Range<usize>) -> T {
+    pub fn fold(&mut self, range: impl RangeBounds<usize>) -> T {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
+
         self.propagate_top_down(l + self.size / 2);
         if r < self.size / 2 {
             self.propagate_top_down(r + self.size / 2);
@@ -91,7 +96,9 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Lazy
         self.action.fold(ret_l, ret_r)
     }
 
-    pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, x: U) {
+    pub fn update(&mut self, range: impl RangeBounds<usize>, x: U) {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
+
         self.propagate_top_down(l + self.size / 2);
         if r < self.size / 2 {
             self.propagate_top_down(r + self.size / 2);

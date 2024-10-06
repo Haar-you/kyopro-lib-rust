@@ -2,8 +2,8 @@
 
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::utils::linear::*;
-use std::ops::{Add, AddAssign, Mul, Range};
+use crate::utils::{linear::*, range::range_bounds_to_range};
+use std::ops::{Add, AddAssign, Mul, RangeBounds};
 
 trait_alias!(
     Elem,
@@ -20,6 +20,7 @@ pub struct SegtreeLinearAddRangeSum<T> {
     data: Vec<T>,
     lazy: Vec<(T, T)>,
     hsize: usize,
+    original_size: usize,
 }
 
 impl<T: Elem> SegtreeLinearAddRangeSum<T> {
@@ -27,12 +28,13 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
     ///
     /// **Space complexity O(n)**
     pub fn new(n: usize) -> Self {
-        let n = n.next_power_of_two();
+        let hsize = n.next_power_of_two();
 
         Self {
-            data: vec![T::zero(); n * 2],
-            lazy: vec![(T::zero(), T::zero()); n * 2],
-            hsize: n,
+            data: vec![T::zero(); hsize * 2],
+            lazy: vec![(T::zero(), T::zero()); hsize * 2],
+            hsize,
+            original_size: n,
         }
     }
 
@@ -74,7 +76,8 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn update(&mut self, Range { start, end }: Range<usize>, linear: Linear<T>) {
+    pub fn update(&mut self, range: impl RangeBounds<usize>, linear: Linear<T>) {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self._update(1, 0, self.hsize, start, end, linear.a, linear.b);
     }
 
@@ -91,7 +94,8 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn fold(&mut self, Range { start, end }: Range<usize>) -> T {
+    pub fn fold(&mut self, range: impl RangeBounds<usize>) -> T {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self._fold(1, 0, self.hsize, start, end)
     }
 }
@@ -101,6 +105,7 @@ mod tests {
     use super::*;
     use crate::testtools::*;
     use rand::Rng;
+    use std::ops::Range;
 
     #[test]
     fn test() {

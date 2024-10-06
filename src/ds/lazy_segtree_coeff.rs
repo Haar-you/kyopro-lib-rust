@@ -2,8 +2,9 @@
 
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
+use crate::utils::range::range_bounds_to_range;
 use std::cell::Cell;
-use std::ops::{Add, Mul, Range};
+use std::ops::{Add, Mul, RangeBounds};
 
 trait_alias!(
     Elem,
@@ -12,6 +13,7 @@ trait_alias!(
 
 pub struct LazySegtreeCoeff<T> {
     size: usize,
+    original_size: usize,
     data: Vec<Cell<T>>,
     lazy: Vec<Cell<T>>,
     coeff: Vec<T>,
@@ -32,6 +34,7 @@ impl<T: Elem> LazySegtreeCoeff<T> {
 
         Self {
             size,
+            original_size: n,
             data: vec![Cell::new(T::zero()); size],
             lazy: vec![Cell::new(T::zero()); size],
             coeff,
@@ -90,11 +93,13 @@ impl<T: Elem> LazySegtreeCoeff<T> {
             + self.get_internal(i << 1 | 1, (l + r) / 2, r, x, y)
     }
 
-    pub fn update(&mut self, Range { start, end }: Range<usize>, value: T) {
+    pub fn update(&mut self, range: impl RangeBounds<usize>, value: T) {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.update_internal(1, 0, self.size / 2, start, end, value);
     }
 
-    pub fn fold(&self, Range { start, end }: Range<usize>) -> T {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> T {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.get_internal(1, 0, self.size / 2, start, end)
     }
 }

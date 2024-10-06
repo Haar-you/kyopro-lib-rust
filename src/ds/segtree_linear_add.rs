@@ -6,11 +6,11 @@
 
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::utils::linear::*;
+use crate::utils::{linear::*, range::range_bounds_to_range};
 use std::{
     cell::Cell,
     mem::size_of,
-    ops::{Add, Mul, Range},
+    ops::{Add, Mul, RangeBounds},
 };
 
 trait_alias!(
@@ -20,6 +20,7 @@ trait_alias!(
 
 pub struct SegtreeLinearAdd<T> {
     hsize: usize,
+    original_size: usize,
     data: Vec<Cell<(T, T)>>,
     from: Vec<usize>,
 }
@@ -47,6 +48,7 @@ impl<T: Elem> SegtreeLinearAdd<T> {
 
         Self {
             hsize,
+            original_size: n,
             data: vec![Cell::new((T::zero(), T::zero())); size],
             from,
         }
@@ -55,28 +57,30 @@ impl<T: Elem> SegtreeLinearAdd<T> {
     /// 範囲`l..r`に一次関数`ax + b`の値を加算する。(`x`の値は`l..r`の範囲)
     ///
     /// **Time complexity O(log n)**
-    pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, linear: Linear<T>) {
-        let mut l_ = l + self.hsize;
-        let mut r_ = r + self.hsize;
+    pub fn update(&mut self, range: impl RangeBounds<usize>, linear: Linear<T>) {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
-        while l_ < r_ {
-            if r_ & 1 == 1 {
-                r_ -= 1;
-                self.data[r_].set(add(
-                    self.data[r_].get(),
-                    (linear.apply(T::from(self.from[r_] as u32)), linear.a),
+        let mut l = l + self.hsize;
+        let mut r = r + self.hsize;
+
+        while l < r {
+            if r & 1 == 1 {
+                r -= 1;
+                self.data[r].set(add(
+                    self.data[r].get(),
+                    (linear.apply(T::from(self.from[r] as u32)), linear.a),
                 ));
             }
-            if l_ & 1 == 1 {
-                self.data[l_].set(add(
-                    self.data[l_].get(),
-                    (linear.apply(T::from(self.from[l_] as u32)), linear.a),
+            if l & 1 == 1 {
+                self.data[l].set(add(
+                    self.data[l].get(),
+                    (linear.apply(T::from(self.from[l] as u32)), linear.a),
                 ));
-                l_ += 1;
+                l += 1;
             }
 
-            l_ >>= 1;
-            r_ >>= 1;
+            l >>= 1;
+            r >>= 1;
         }
     }
 

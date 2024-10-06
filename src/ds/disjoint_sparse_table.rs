@@ -1,12 +1,14 @@
 //! 半群の列の区間演算を行う(O(1))
 
 pub use crate::algebra::traits::Semigroup;
-use std::{iter::repeat, ops::Range};
+use crate::utils::range::range_bounds_to_range;
+use std::{iter::repeat, ops::RangeBounds};
 
 pub struct DisjointSparseTable<S: Semigroup> {
     data: Vec<Vec<Option<S::Output>>>,
     seq: Vec<Option<S::Output>>,
     semigroup: S,
+    size: usize,
 }
 
 impl<T: Clone, S: Semigroup<Output = T>> DisjointSparseTable<S> {
@@ -31,6 +33,7 @@ impl<T: Clone, S: Semigroup<Output = T>> DisjointSparseTable<S> {
             data,
             seq,
             semigroup,
+            size,
         };
         this.build(0, 1 << log_size, log_size - 1);
 
@@ -66,7 +69,9 @@ impl<T: Clone, S: Semigroup<Output = T>> DisjointSparseTable<S> {
         }
     }
 
-    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Option<T> {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<T> {
+        let (l, r) = range_bounds_to_range(range, 0, self.size);
+
         if l == r {
             None
         } else {

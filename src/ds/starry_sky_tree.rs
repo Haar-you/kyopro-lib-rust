@@ -2,9 +2,10 @@
 
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
+use crate::utils::range::range_bounds_to_range;
 use std::{
     cmp::{max, min},
-    ops::{Add, Range, Sub},
+    ops::{Add, RangeBounds, Sub},
 };
 
 trait_alias!(
@@ -29,6 +30,7 @@ impl Mode {
 
 pub struct StarrySkyTree<T> {
     size: usize,
+    original_size: usize,
     data: Vec<T>,
     mode: Mode,
 }
@@ -40,6 +42,7 @@ impl<T: Elem> StarrySkyTree<T> {
         let zero = T::zero();
         Self {
             size,
+            original_size: n,
             data: vec![zero; size],
             mode,
         }
@@ -64,7 +67,8 @@ impl<T: Elem> StarrySkyTree<T> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Option<T> {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<T> {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
         self.rec(l, r, 1, 0, self.size / 2, T::zero())
     }
 
@@ -87,10 +91,12 @@ impl<T: Elem> StarrySkyTree<T> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
+    pub fn update(&mut self, range: impl RangeBounds<usize>, value: T) {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
+
         let hsize = self.size / 2;
-        let mut ll = l + self.size / 2;
-        let mut rr = r + self.size / 2;
+        let mut ll = l + hsize;
+        let mut rr = r + hsize;
 
         while ll < rr {
             if (rr & 1) != 0 {
