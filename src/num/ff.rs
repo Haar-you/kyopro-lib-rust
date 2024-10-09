@@ -1,4 +1,6 @@
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+use std::ops::Neg;
+
+use crate::num::arithmetic::Arithmetic;
 
 pub trait Pow {
     type Output;
@@ -21,14 +23,7 @@ pub trait FF: Clone {
 pub trait FFElem:
     Pow<Output = Self>
     + Inv<Output = Self>
-    + Add<Output = Self>
-    + AddAssign
-    + Sub<Output = Self>
-    + SubAssign
-    + Mul<Output = Self>
-    + MulAssign
-    + Div<Output = Self>
-    + DivAssign
+    + Arithmetic
     + Neg<Output = Self>
     + Copy
     + Clone
