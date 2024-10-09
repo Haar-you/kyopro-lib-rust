@@ -7,13 +7,7 @@ use std::ops::{Add, AddAssign, Mul, RangeBounds};
 
 trait_alias!(
     Elem,
-    Copy
-        + Zero<Output = Self>
-        + Add<Output = Self>
-        + Mul<Output = Self>
-        + AddAssign
-        + PartialEq
-        + From<u32>
+    Copy + Zero + Add<Output = Self> + Mul<Output = Self> + AddAssign + PartialEq + From<u32>
 );
 
 pub struct SegtreeLinearAddRangeSum<T> {

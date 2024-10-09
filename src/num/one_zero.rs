@@ -1,26 +1,22 @@
 /// 加算についての単位元をもつ
 pub trait Zero {
-    type Output;
-    fn zero() -> Self::Output;
+    fn zero() -> Self;
 }
 
 /// 乗算についての単位元をもつ
 pub trait One {
-    type Output;
-    fn one() -> Self::Output;
+    fn one() -> Self;
 }
 
 macro_rules! impl_one_zero {
     ($($t:ty),*) => {
         $(
             impl Zero for $t {
-                type Output = $t;
-                fn zero() -> Self::Output { 0 as $t }
+                fn zero() -> Self { 0 as $t }
             }
 
             impl One for $t {
-                type Output = $t;
-                fn one() -> Self::Output { 1 as $t }
+                fn one() -> Self { 1 as $t }
             }
         )*
     }

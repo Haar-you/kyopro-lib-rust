@@ -6,7 +6,7 @@ use crate::{graph::*, num::one_zero::Zero};
 
 trait_alias!(
     Elem,
-    Zero<Output = Self> + Add<Output = Self> + AddAssign + Ord + Eq + Copy
+    Zero + Add<Output = Self> + AddAssign + Ord + Eq + Copy
 );
 
 type Path = Vec<usize>;

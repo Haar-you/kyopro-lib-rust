@@ -9,7 +9,7 @@ use crate::num::one_zero::Zero;
 /// **Time complexity O(|a|)**
 pub fn sum_of_sum_of_range_prod<T>(a: Vec<T>) -> T
 where
-    T: Copy + Mul<Output = T> + Zero<Output = T> + Add<Output = T> + AddAssign,
+    T: Copy + Mul<Output = T> + Zero + Add<Output = T> + AddAssign,
 {
     let mut ret = T::zero();
     let mut s = T::zero();

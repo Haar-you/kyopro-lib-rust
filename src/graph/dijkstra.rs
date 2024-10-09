@@ -10,7 +10,7 @@ pub fn dijkstra<D: Direction, T, E: EdgeTrait<Weight = T>>(
     src: &[usize],
 ) -> Vec<Option<T>>
 where
-    T: Add<Output = T> + Copy + Ord + Zero<Output = T> + Unsigned,
+    T: Add<Output = T> + Copy + Ord + Zero + Unsigned,
 {
     let zero = T::zero();
     let n = g.len();

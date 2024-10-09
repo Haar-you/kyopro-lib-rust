@@ -11,7 +11,7 @@ pub fn warshall_floyd<D: Direction, T, E: EdgeTrait<Weight = T>>(
     g: &Graph<D, E>,
 ) -> Option<Vec<Vec<Option<T>>>>
 where
-    T: Copy + Ord + Add<Output = T> + Zero<Output = T>,
+    T: Copy + Ord + Add<Output = T> + Zero,
 {
     let zero = T::zero();
     let n = g.len();
