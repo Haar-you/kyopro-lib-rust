@@ -8,7 +8,7 @@ use std::ops::{Add, Mul, RangeBounds};
 
 trait_alias!(
     Elem,
-    Copy + Zero<Output = Self> + Add<Output = Self> + Mul<Output = Self> + PartialEq
+    Copy + Zero + Add<Output = Self> + Mul<Output = Self> + PartialEq
 );
 
 pub struct LazySegtreeCoeff<T> {

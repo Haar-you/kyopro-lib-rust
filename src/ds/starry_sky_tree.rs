@@ -10,7 +10,7 @@ use std::{
 
 trait_alias!(
     Elem,
-    Add<Output = Self> + Sub<Output = Self> + Ord + Copy + Zero<Output = Self>
+    Add<Output = Self> + Sub<Output = Self> + Ord + Copy + Zero
 );
 
 #[derive(Copy, Clone)]

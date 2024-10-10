@@ -18,7 +18,7 @@ pub struct MergeSortTree<T> {
 
 impl<T> MergeSortTree<T>
 where
-    T: Copy + Clone + Zero<Output = T> + Add<Output = T> + AddAssign + PartialOrd + Ord,
+    T: Copy + Clone + Zero + Add<Output = T> + AddAssign + PartialOrd + Ord,
 {
     /// **Time complexity O(n log n)**
     ///

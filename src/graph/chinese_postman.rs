@@ -9,7 +9,7 @@ use std::ops::Add;
 /// **Time complexity O(V²2ⱽ)**
 pub fn chinese_postman_problem<T, E: EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> T
 where
-    T: Copy + Ord + Add<Output = T> + Zero<Output = T>,
+    T: Copy + Ord + Add<Output = T> + Zero,
 {
     let n = g.len();
     let zero = T::zero();

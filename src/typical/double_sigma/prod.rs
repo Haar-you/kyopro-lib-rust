@@ -11,7 +11,7 @@ use crate::num::one_zero::Zero;
 /// **Time complexity O(|a|)**
 pub fn sum_of_sum_of_prod<T>(a: Vec<T>) -> T
 where
-    T: Copy + Mul<Output = T> + AddAssign + Zero<Output = T>,
+    T: Copy + Mul<Output = T> + AddAssign + Zero,
 {
     let mut ret = T::zero();
     let mut acc = T::zero();

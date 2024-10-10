@@ -5,7 +5,7 @@ pub struct Imos1D<T> {
     data: Vec<T>,
 }
 
-impl<T: Copy + Signed + Zero<Output = T> + Add<Output = T> + Sub<Output = T>> Imos1D<T> {
+impl<T: Copy + Signed + Zero + Add<Output = T> + Sub<Output = T>> Imos1D<T> {
     /// **Time complexity O(n)**
     pub fn new(n: usize) -> Self {
         Self {
