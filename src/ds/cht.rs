@@ -58,7 +58,7 @@ impl<T: Elem> ConvexHullTrick<T> {
     pub fn add(&mut self, line @ Linear { a, b }: Linear<T>) {
         if let Some(p) = self.last_slope {
             if !self.mode.cmp(p, a) {
-                panic!("`a` must be monotonic increasing / decreasing if `mode` is Max / Min");
+                panic!("`mode`が`Max`/`Min`ならば、`a`は単調増加/減少でなければならない。");
             }
         }
         self.last_slope = Some(a);
@@ -88,7 +88,7 @@ impl<T: Elem> ConvexHullTrick<T> {
     pub fn query(&mut self, x: T) -> T {
         if let Some(p) = self.last_query {
             if x < p {
-                panic!("x must be monotonic increasing.");
+                panic!("`x`はクエリ全体を通して単調増加でなければならない。");
             }
         }
         self.last_query = Some(x);

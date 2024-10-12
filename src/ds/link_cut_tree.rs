@@ -257,9 +257,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> LinkCutTree<M> {
 
         assert!(
             Node::is_conencted(u, v),
-            "`cut`操作では頂点`{}`と`{}`は隣接して連結されねばならない。",
-            i,
-            j
+            "`cut`操作では頂点`{i}`と`{j}`は隣接して連結されねばならない。",
         );
 
         if Node::is_root(u) {
@@ -285,9 +283,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> LinkCutTree<M> {
 
         assert!(
             !Node::same_group(u, v),
-            "`link`操作では頂点`{}`と`{}`は同一の木に属してはならない。",
-            i,
-            j
+            "`link`操作では頂点`{i}`と`{j}`は同一の木に属してはならない。",
         );
 
         Node::set_par(u, v);
@@ -323,7 +319,10 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> LinkCutTree<M> {
         let u = &self.nodes[i] as *const _ as *mut Node<M, M::Output>;
         let v = &self.nodes[j] as *const _ as *mut Node<M, M::Output>;
 
-        assert!(Node::same_group(u, v));
+        assert!(
+            Node::same_group(u, v),
+            "頂点`{i}`と`{j}`は同一の木に属していなければならない。",
+        );
 
         Node::evert(u);
         Node::expose(v);
