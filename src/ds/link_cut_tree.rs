@@ -339,7 +339,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let monoid = Trivial::<()>::new();
+        let monoid = Trivial;
         let n = 10;
 
         let mut lct = LinkCutTree::new(monoid, n);
