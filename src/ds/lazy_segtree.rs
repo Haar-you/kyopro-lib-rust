@@ -2,19 +2,19 @@ use crate::algebra::action::Action;
 use crate::utils::range::range_bounds_to_range;
 use std::ops::RangeBounds;
 
-pub struct LazySegtree<T, U, A> {
+pub struct LazySegtree<A: Action> {
     size: usize,
     original_size: usize,
-    data: Vec<T>,
-    lazy: Vec<U>,
+    data: Vec<A::Output>,
+    lazy: Vec<A::Lazy>,
     action: A,
 }
 
-impl<T, U, A> LazySegtree<T, U, A>
+impl<A> LazySegtree<A>
 where
-    T: Clone + PartialEq,
-    U: Clone + PartialEq,
-    A: Copy + Action<Output = T, Lazy = U>,
+    A: Copy + Action,
+    A::Output: Clone + PartialEq,
+    A::Lazy: Clone + PartialEq,
 {
     pub fn new(n: usize, a: A) -> Self {
         let size = n.next_power_of_two() * 2;
@@ -27,17 +27,42 @@ where
         }
     }
 
+    pub fn new_with_vec(s: Vec<A::Output>, a: A) -> Self {
+        let n = s.len();
+        let size = n.next_power_of_two() * 2;
+        let mut this = Self {
+            size,
+            original_size: n,
+            data: vec![a.fold_id(); size],
+            lazy: vec![a.update_id(); size],
+            action: a,
+        };
+
+        for (i, x) in s.into_iter().enumerate() {
+            this.data[size / 2 + i] = x;
+        }
+
+        for i in (1..size / 2).rev() {
+            this.data[i] = a.fold(this.data[i << 1].clone(), this.data[i << 1 | 1].clone());
+        }
+
+        this
+    }
+
     fn propagate(&mut self, i: usize) {
         if self.lazy[i] == self.action.update_id() {
             return;
         }
         if i < self.size / 2 {
-            self.lazy[i << 1] = self
+            let l = i << 1;
+            let r = i << 1 | 1;
+
+            self.lazy[l] = self
                 .action
-                .update(self.lazy[i].clone(), self.lazy[i << 1].clone());
-            self.lazy[i << 1 | 1] = self
+                .update(self.lazy[i].clone(), self.lazy[l].clone());
+            self.lazy[r] = self
                 .action
-                .update(self.lazy[i].clone(), self.lazy[i << 1 | 1].clone());
+                .update(self.lazy[i].clone(), self.lazy[r].clone());
         }
         let len = (self.size / 2) >> (31 - (i as u32).leading_zeros());
         self.data[i] = self
@@ -53,7 +78,7 @@ where
             temp.push(i);
         }
 
-        for &i in temp.iter().rev() {
+        for i in temp.into_iter().rev() {
             self.propagate(i);
         }
     }
@@ -69,7 +94,7 @@ where
         }
     }
 
-    pub fn fold(&mut self, range: impl RangeBounds<usize>) -> T {
+    pub fn fold(&mut self, range: impl RangeBounds<usize>) -> A::Output {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
         self.propagate_top_down(l + self.size / 2);
@@ -101,7 +126,7 @@ where
         self.action.fold(ret_l, ret_r)
     }
 
-    pub fn update(&mut self, range: impl RangeBounds<usize>, x: U) {
+    pub fn update(&mut self, range: impl RangeBounds<usize>, x: A::Lazy) {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
         self.propagate_top_down(l + self.size / 2);
@@ -117,11 +142,9 @@ where
                 if r & 1 == 1 {
                     r -= 1;
                     self.lazy[r] = self.action.update(x.clone(), self.lazy[r].clone());
-                    self.propagate(r);
                 }
                 if l & 1 == 1 {
                     self.lazy[l] = self.action.update(x.clone(), self.lazy[l].clone());
-                    self.propagate(l);
                     l += 1;
                 }
                 r >>= 1;
