@@ -7,7 +7,7 @@ pub struct Imos2D<T> {
     m: usize,
 }
 
-impl<T: Copy + Signed + Zero<Output = T> + Add<Output = T> + Sub<Output = T>> Imos2D<T> {
+impl<T: Copy + Signed + Zero + Add<Output = T> + Sub<Output = T>> Imos2D<T> {
     /// **Time complexity O(nm)**
     pub fn new(n: usize, m: usize) -> Self {
         Self {

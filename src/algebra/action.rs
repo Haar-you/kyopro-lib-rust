@@ -1,9 +1,9 @@
 pub trait Action {
-    type FType;
-    type UType;
-    fn fold_id(&self) -> Self::FType;
-    fn fold(&self, x: Self::FType, y: Self::FType) -> Self::FType;
-    fn update_id(&self) -> Self::UType;
-    fn update(&self, next: Self::UType, cur: Self::UType) -> Self::UType;
-    fn convert(&self, x: Self::FType, y: Self::UType, l: usize) -> Self::FType;
+    type Output;
+    type Lazy;
+    fn fold_id(&self) -> Self::Output;
+    fn fold(&self, left: Self::Output, right: Self::Output) -> Self::Output;
+    fn update_id(&self) -> Self::Lazy;
+    fn update(&self, next: Self::Lazy, cur: Self::Lazy) -> Self::Lazy;
+    fn convert(&self, value: Self::Output, lazy: Self::Lazy, len: usize) -> Self::Output;
 }

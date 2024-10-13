@@ -11,7 +11,7 @@ use crate::num::one_zero::Zero;
 /// **Time complexity O(|a|)**
 pub fn sum_of_sum_of_sum<T>(a: Vec<T>) -> T
 where
-    T: Copy + Add<Output = T> + Zero<Output = T>,
+    T: Copy + Add<Output = T> + Zero,
 {
     let n = a.len();
     let s = a.into_iter().fold(T::zero(), |x, y| x + y);

@@ -5,22 +5,23 @@ use std::{
     ops::{Add, Mul},
 };
 
+/// Range Affine Range Sum用の代数構造
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
-pub struct AddSum<T, U>(PhantomData<T>, PhantomData<U>);
+pub struct AffineSum<T>(PhantomData<T>);
 
-impl<T, U> AddSum<T, U> {
+impl<T> AffineSum<T> {
+    /// `AffineSum<T>`を生成する。
     pub fn new() -> Self {
-        Self(PhantomData, PhantomData)
+        Self(PhantomData)
     }
 }
 
-impl<T, U> Action for AddSum<T, U>
+impl<T> Action for AffineSum<T>
 where
-    T: Add<Output = T> + Zero + From<U>,
-    U: Add<Output = U> + Mul<Output = U> + Zero + From<u64>,
+    T: Add<Output = T> + Mul<Output = T> + Zero + One + Copy + From<usize>,
 {
     type Output = T;
-    type Lazy = U;
+    type Lazy = (T, T);
     fn fold_id(&self) -> Self::Output {
         T::zero()
     }
@@ -28,12 +29,12 @@ where
         left + right
     }
     fn update_id(&self) -> Self::Lazy {
-        U::zero()
+        (T::one(), T::zero())
     }
     fn update(&self, next: Self::Lazy, cur: Self::Lazy) -> Self::Lazy {
-        next + cur
+        (next.0 * cur.0, next.0 * cur.1 + next.1)
     }
     fn convert(&self, value: Self::Output, lazy: Self::Lazy, len: usize) -> Self::Output {
-        value + T::from(lazy * U::from(len as u64))
+        lazy.0 * value + lazy.1 * T::from(len)
     }
 }

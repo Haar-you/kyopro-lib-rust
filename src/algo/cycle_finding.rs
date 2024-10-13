@@ -7,10 +7,19 @@
 //! - <https://atcoder.jp/contests/abc179/tasks/abc179_e>
 //! - <https://atcoder.jp/contests/typical90/tasks/typical90_bf>
 
+/// [`cycle_finding`]の結果
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Rho {
+    /// 先頭の非循環部の長さ
+    pub tail: u64,
+    /// 循環部の長さ
+    pub cycle: u64,
+}
+
 /// 循環検出法
 ///
 /// **Space complexity O(1)**
-pub fn cycle_finding<T>(init: T, f: impl Fn(T) -> T) -> (u64, u64)
+pub fn cycle_finding<T>(init: T, f: impl Fn(T) -> T) -> Rho
 where
     T: Copy + Eq,
 {
@@ -44,5 +53,5 @@ where
         }
     }
 
-    (tail, cycle)
+    Rho { tail, cycle }
 }

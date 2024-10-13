@@ -2,7 +2,8 @@
 
 pub use crate::algebra::traits::Monoid;
 pub use crate::ds::traits::Updatable;
-use std::ops::Range;
+use crate::utils::range::range_bounds_to_range;
+use std::ops::RangeBounds;
 
 pub struct DualSegtree<M: Monoid> {
     original_size: usize,
@@ -69,7 +70,9 @@ impl<T: Clone, M: Monoid<Output = T>> DualSegtree<M> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, value: T) {
+    pub fn update(&mut self, range: impl RangeBounds<usize>, value: T) {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
+
         let mut l = l + self.size / 2;
         let mut r = r + self.size / 2;
 

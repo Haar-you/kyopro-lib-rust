@@ -11,7 +11,7 @@ pub fn warshall_floyd<D: Direction, T, E: EdgeTrait<Weight = T>>(
     g: &Graph<D, E>,
 ) -> Option<Vec<Vec<Option<T>>>>
 where
-    T: Copy + Ord + Add<Output = T> + Zero<Output = T>,
+    T: Copy + Ord + Add<Output = T> + Zero,
 {
     let zero = T::zero();
     let n = g.len();
@@ -19,9 +19,9 @@ where
 
     for i in 0..n {
         dist[i][i] = Some(zero);
-        for e in &g.edges[i] {
-            dist[e.from()][e.to()] = Some(e.weight());
-        }
+    }
+    for e in g.edges.iter().flatten() {
+        dist[e.from()][e.to()] = Some(e.weight());
     }
 
     for k in 0..n {

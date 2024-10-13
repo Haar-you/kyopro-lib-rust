@@ -24,7 +24,7 @@ impl<T: Add<Output = T> + Mul<Output = T> + Copy> BinaryOp for Affine<T> {
     }
 }
 
-impl<T: One<Output = T> + Zero<Output = T> + Copy> Identity for Affine<T> {
+impl<T: One + Zero + Copy> Identity for Affine<T> {
     fn id(&self) -> Self::Output {
         (T::one(), T::zero())
     }

@@ -2,15 +2,13 @@ pub use crate::num::const_modint::*;
 use crate::num::one_zero::*;
 
 impl<const M: u32> Zero for ConstModInt<M> {
-    type Output = Self;
-    fn zero() -> Self::Output {
+    fn zero() -> Self {
         Self(0)
     }
 }
 
 impl<const M: u32> One for ConstModInt<M> {
-    type Output = Self;
-    fn one() -> Self::Output {
+    fn one() -> Self {
         Self(1)
     }
 }

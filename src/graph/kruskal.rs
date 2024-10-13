@@ -8,23 +8,22 @@ use crate::{ds::unionfind::UnionFind, graph::*};
 /// 非連結ならばNoneを返す。
 ///
 /// **Time complexity O(E log E)**
-pub fn kruskal<T: Ord, E: Clone + EdgeTrait<Weight = T>>(
+pub fn kruskal<T: Ord + Copy, E: EdgeTrait<Weight = T>>(
     g: &Graph<Undirected, E>,
 ) -> Option<Vec<&E>> {
     let n = g.len();
-    let mut edges = vec![];
-    for es in &g.edges {
-        for e in es {
-            edges.push(e);
-        }
-    }
-
-    edges.sort_by_key(|a| a.weight());
+    let mut edges = g
+        .edges
+        .iter()
+        .flatten()
+        .map(|e| (e, e.weight()))
+        .collect::<Vec<_>>();
+    edges.sort_unstable_by_key(|&(_, c)| c);
 
     let mut uf = UnionFind::new(n);
     let mut ret = vec![];
 
-    for e in edges {
+    for (e, _) in edges {
         let (u, v) = (e.from(), e.to());
         if !uf.is_same(u, v) {
             uf.merge(u, v);

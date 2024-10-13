@@ -1,12 +1,14 @@
 //! 冪等性と結合性をもつ列の区間取得(O(1))
 
 use crate::algebra::traits::*;
-use std::{cmp::min, ops::Range};
+use crate::utils::range::range_bounds_to_range;
+use std::{cmp::min, ops::RangeBounds};
 
 pub struct SparseTable<A: BinaryOp + Associative + Idempotence> {
     data: Vec<Vec<A::Output>>,
     log_table: Vec<usize>,
     semilattice: A,
+    original_size: usize,
 }
 
 impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> SparseTable<A> {
@@ -39,11 +41,14 @@ impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> Sp
             data,
             log_table,
             semilattice: a,
+            original_size: n,
         }
     }
 
     /// **Time complexity O(1)**
-    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Option<T> {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<T> {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
+
         if l >= r {
             None
         } else {
