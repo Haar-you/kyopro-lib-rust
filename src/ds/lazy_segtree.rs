@@ -10,7 +10,12 @@ pub struct LazySegtree<T, U, A> {
     action: A,
 }
 
-impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> LazySegtree<T, U, A> {
+impl<T, U, A> LazySegtree<T, U, A>
+where
+    T: Clone + PartialEq,
+    U: Clone + PartialEq,
+    A: Copy + Action<Output = T, Lazy = U>,
+{
     pub fn new(n: usize, a: A) -> Self {
         let size = n.next_power_of_two() * 2;
         Self {

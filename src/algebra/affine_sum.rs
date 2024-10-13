@@ -20,21 +20,21 @@ impl<T> Action for AffineSum<T>
 where
     T: Add<Output = T> + Mul<Output = T> + Zero + One + Copy + From<usize>,
 {
-    type FType = T;
-    type UType = (T, T);
-    fn fold_id(&self) -> Self::FType {
+    type Output = T;
+    type Lazy = (T, T);
+    fn fold_id(&self) -> Self::Output {
         T::zero()
     }
-    fn fold(&self, x: Self::FType, y: Self::FType) -> Self::FType {
-        x + y
+    fn fold(&self, left: Self::Output, right: Self::Output) -> Self::Output {
+        left + right
     }
-    fn update_id(&self) -> Self::UType {
+    fn update_id(&self) -> Self::Lazy {
         (T::one(), T::zero())
     }
-    fn update(&self, a: Self::UType, b: Self::UType) -> Self::UType {
-        (a.0 * b.0, a.0 * b.1 + a.1)
+    fn update(&self, next: Self::Lazy, cur: Self::Lazy) -> Self::Lazy {
+        (next.0 * cur.0, next.0 * cur.1 + next.1)
     }
-    fn convert(&self, a: Self::FType, b: Self::UType, l: usize) -> Self::FType {
-        b.0 * a + b.1 * T::from(l)
+    fn convert(&self, value: Self::Output, lazy: Self::Lazy, len: usize) -> Self::Output {
+        lazy.0 * value + lazy.1 * T::from(len)
     }
 }
