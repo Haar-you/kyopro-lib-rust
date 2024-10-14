@@ -8,12 +8,12 @@
 <a href="#8" id="8">8</a>
 <a href="#9" id="9">9</a>
 </pre></div><pre class="rust"><code><span class="kw">pub trait </span>Action {
-    <span class="kw">type </span>FType;
-    <span class="kw">type </span>UType;
-    <span class="kw">fn </span>fold_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::FType;
-    <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, x: <span class="self">Self</span>::FType, y: <span class="self">Self</span>::FType) -&gt; <span class="self">Self</span>::FType;
-    <span class="kw">fn </span>update_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::UType;
-    <span class="kw">fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, next: <span class="self">Self</span>::UType, cur: <span class="self">Self</span>::UType) -&gt; <span class="self">Self</span>::UType;
-    <span class="kw">fn </span>convert(<span class="kw-2">&amp;</span><span class="self">self</span>, x: <span class="self">Self</span>::FType, y: <span class="self">Self</span>::UType, l: usize) -&gt; <span class="self">Self</span>::FType;
+    <span class="kw">type </span>Output;
+    <span class="kw">type </span>Lazy;
+    <span class="kw">fn </span>fold_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Output;
+    <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, left: <span class="self">Self</span>::Output, right: <span class="self">Self</span>::Output) -&gt; <span class="self">Self</span>::Output;
+    <span class="kw">fn </span>update_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Lazy;
+    <span class="kw">fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, next: <span class="self">Self</span>::Lazy, cur: <span class="self">Self</span>::Lazy) -&gt; <span class="self">Self</span>::Lazy;
+    <span class="kw">fn </span>convert(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="self">Self</span>::Output, lazy: <span class="self">Self</span>::Lazy, len: usize) -&gt; <span class="self">Self</span>::Output;
 }
 </code></pre></div></section></main></body></html>

@@ -21,6 +21,8 @@
 <a href="#21" id="21">21</a>
 <a href="#22" id="22">22</a>
 <a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::RangeBounds;
 
 <span class="kw">pub fn </span>range_bounds_to_range&lt;R: RangeBounds&lt;usize&gt;&gt;(
@@ -34,13 +36,15 @@
         Included(<span class="kw-2">&amp;</span>l) =&gt; l,
         Excluded(<span class="kw-2">&amp;</span>l) =&gt; l + <span class="number">1</span>,
         Unbounded =&gt; start,
-    };
+    }
+    .max(start);
 
     <span class="kw">let </span>r = <span class="kw">match </span>r.end_bound() {
         Included(<span class="kw-2">&amp;</span>r) =&gt; r + <span class="number">1</span>,
         Excluded(<span class="kw-2">&amp;</span>r) =&gt; r,
         Unbounded =&gt; end,
-    };
+    }
+    .min(end);
 
     (l, r)
 }

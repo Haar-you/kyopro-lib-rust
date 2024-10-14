@@ -116,15 +116,22 @@
 <a href="#116" id="116">116</a>
 <a href="#117" id="117">117</a>
 <a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 冪等性と結合性をもつ列の区間取得(O(1))
 
 </span><span class="kw">use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
-<span class="kw">use </span>std::{cmp::min, ops::Range};
+<span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
+<span class="kw">use </span>std::{cmp::min, ops::RangeBounds};
 
 <span class="kw">pub struct </span>SparseTable&lt;A: BinaryOp + Associative + Idempotence&gt; {
     data: Vec&lt;Vec&lt;A::Output&gt;&gt;,
     log_table: Vec&lt;usize&gt;,
     semilattice: A,
+    original_size: usize,
 }
 
 <span class="kw">impl</span>&lt;T: Clone + Default, A: BinaryOp&lt;Output = T&gt; + Associative + Idempotence&gt; SparseTable&lt;A&gt; {
@@ -157,11 +164,14 @@
             data,
             log_table,
             semilattice: a,
+            original_size: n,
         }
     }
 
     <span class="doccomment">/// **Time complexity O(1)**
-    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
+
         <span class="kw">if </span>l &gt;= r {
             <span class="prelude-val">None
         </span>} <span class="kw">else </span>{

@@ -100,7 +100,7 @@
     m: usize,
 }
 
-<span class="kw">impl</span>&lt;T: Copy + Signed + Zero&lt;Output = T&gt; + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt;&gt; Imos2D&lt;T&gt; {
+<span class="kw">impl</span>&lt;T: Copy + Signed + Zero + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt;&gt; Imos2D&lt;T&gt; {
     <span class="doccomment">/// **Time complexity O(nm)**
     </span><span class="kw">pub fn </span>new(n: usize, m: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{

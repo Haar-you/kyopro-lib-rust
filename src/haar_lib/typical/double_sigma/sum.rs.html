@@ -30,7 +30,7 @@
 /// **Time complexity O(|a|)**
 </span><span class="kw">pub fn </span>sum_of_sum_of_sum&lt;T&gt;(a: Vec&lt;T&gt;) -&gt; T
 <span class="kw">where
-    </span>T: Copy + Add&lt;Output = T&gt; + Zero&lt;Output = T&gt;,
+    </span>T: Copy + Add&lt;Output = T&gt; + Zero,
 {
     <span class="kw">let </span>n = a.len();
     <span class="kw">let </span>s = a.into_iter().fold(T::zero(), |x, y| x + y);

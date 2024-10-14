@@ -113,7 +113,7 @@
 <span class="doccomment">/// **Time complexity O(V²2ⱽ)**
 </span><span class="kw">pub fn </span>chinese_postman_problem&lt;T, E: EdgeTrait&lt;Weight = T&gt;&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; T
 <span class="kw">where
-    </span>T: Copy + Ord + Add&lt;Output = T&gt; + Zero&lt;Output = T&gt;,
+    </span>T: Copy + Ord + Add&lt;Output = T&gt; + Zero,
 {
     <span class="kw">let </span>n = g.len();
     <span class="kw">let </span>zero = T::zero();

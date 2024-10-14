@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["cycle_finding"]};
+window.SIDEBAR_ITEMS = {"fn":["cycle_finding"],"struct":["Rho"]};

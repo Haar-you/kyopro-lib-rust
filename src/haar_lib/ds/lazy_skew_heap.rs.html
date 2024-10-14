@@ -179,7 +179,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::trait_alias;
 <span class="kw">use </span>std::{mem::swap, ops::AddAssign};
 
-<span class="macro">trait_alias!</span>(Elem, Ord + Copy + Zero&lt;Output = <span class="self">Self</span>&gt; + AddAssign);
+<span class="macro">trait_alias!</span>(Elem, Ord + Copy + Zero + AddAssign);
 
 <span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">struct </span>Node&lt;T&gt; {

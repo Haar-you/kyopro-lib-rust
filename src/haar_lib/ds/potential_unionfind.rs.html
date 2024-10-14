@@ -129,7 +129,7 @@
 
 <span class="kw">impl</span>&lt;T&gt; PotentialUnionFind&lt;T&gt;
 <span class="kw">where
-    </span>T: Zero&lt;Output = T&gt; + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt; + Copy,
+    </span>T: Zero + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt; + Copy,
 {
     <span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{

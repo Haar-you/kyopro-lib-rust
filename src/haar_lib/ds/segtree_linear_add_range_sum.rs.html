@@ -130,29 +130,23 @@
 <a href="#130" id="130">130</a>
 <a href="#131" id="131">131</a>
 <a href="#132" id="132">132</a>
-<a href="#133" id="133">133</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 区間一次関数加算区間総和セグメントツリー
 
 </span><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
 <span class="kw">use </span><span class="kw">crate</span>::trait_alias;
-<span class="kw">use </span><span class="kw">crate</span>::utils::linear::<span class="kw-2">*</span>;
-<span class="kw">use </span>std::ops::{Add, AddAssign, Mul, Range};
+<span class="kw">use </span><span class="kw">crate</span>::utils::{linear::<span class="kw-2">*</span>, range::range_bounds_to_range};
+<span class="kw">use </span>std::ops::{Add, AddAssign, Mul, RangeBounds};
 
 <span class="macro">trait_alias!</span>(
     Elem,
-    Copy
-        + Zero&lt;Output = <span class="self">Self</span>&gt;
-        + Add&lt;Output = <span class="self">Self</span>&gt;
-        + Mul&lt;Output = <span class="self">Self</span>&gt;
-        + AddAssign
-        + PartialEq
-        + From&lt;u32&gt;
+    Copy + Zero + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt; + AddAssign + PartialEq + From&lt;u32&gt;
 );
 
 <span class="kw">pub struct </span>SegtreeLinearAddRangeSum&lt;T&gt; {
     data: Vec&lt;T&gt;,
     lazy: Vec&lt;(T, T)&gt;,
     hsize: usize,
+    original_size: usize,
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; SegtreeLinearAddRangeSum&lt;T&gt; {
@@ -160,12 +154,13 @@
     ///
     /// **Space complexity O(n)**
     </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span>n = n.next_power_of_two();
+        <span class="kw">let </span>hsize = n.next_power_of_two();
 
         <span class="self">Self </span>{
-            data: <span class="macro">vec!</span>[T::zero(); n * <span class="number">2</span>],
-            lazy: <span class="macro">vec!</span>[(T::zero(), T::zero()); n * <span class="number">2</span>],
-            hsize: n,
+            data: <span class="macro">vec!</span>[T::zero(); hsize * <span class="number">2</span>],
+            lazy: <span class="macro">vec!</span>[(T::zero(), T::zero()); hsize * <span class="number">2</span>],
+            hsize,
+            original_size: n,
         }
     }
 
@@ -207,7 +202,8 @@
     }
 
     <span class="doccomment">/// **Time complexity O(log n)**
-    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;, linear: Linear&lt;T&gt;) {
+    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, linear: Linear&lt;T&gt;) {
+        <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>._update(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end, linear.a, linear.b);
     }
 
@@ -224,7 +220,8 @@
     }
 
     <span class="doccomment">/// **Time complexity O(log n)**
-    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;) -&gt; T {
+    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; T {
+        <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>._fold(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end)
     }
 }
@@ -234,6 +231,7 @@
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="kw">use </span><span class="kw">crate</span>::testtools::<span class="kw-2">*</span>;
     <span class="kw">use </span>rand::Rng;
+    <span class="kw">use </span>std::ops::Range;
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {

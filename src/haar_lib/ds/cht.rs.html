@@ -164,7 +164,7 @@
     </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, line @ Linear { a, b }: Linear&lt;T&gt;) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.last_slope {
             <span class="kw">if </span>!<span class="self">self</span>.mode.cmp(p, a) {
-                <span class="macro">panic!</span>(<span class="string">&quot;`a` must be monotonic increasing / decreasing if `mode` is Max / Min&quot;</span>);
+                <span class="macro">panic!</span>(<span class="string">&quot;`mode`が`Max`/`Min`ならば、`a`は単調増加/減少でなければならない。&quot;</span>);
             }
         }
         <span class="self">self</span>.last_slope = <span class="prelude-val">Some</span>(a);
@@ -194,7 +194,7 @@
     </span><span class="kw">pub fn </span>query(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: T) -&gt; T {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.last_query {
             <span class="kw">if </span>x &lt; p {
-                <span class="macro">panic!</span>(<span class="string">&quot;x must be monotonic increasing.&quot;</span>);
+                <span class="macro">panic!</span>(<span class="string">&quot;`x`はクエリ全体を通して単調増加でなければならない。&quot;</span>);
             }
         }
         <span class="self">self</span>.last_query = <span class="prelude-val">Some</span>(x);

@@ -68,7 +68,7 @@
     data: Vec&lt;T&gt;,
 }
 
-<span class="kw">impl</span>&lt;T: Copy + Signed + Zero&lt;Output = T&gt; + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt;&gt; Imos1D&lt;T&gt; {
+<span class="kw">impl</span>&lt;T: Copy + Signed + Zero + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt;&gt; Imos1D&lt;T&gt; {
     <span class="doccomment">/// **Time complexity O(n)**
     </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{

@@ -132,6 +132,9 @@
 <a href="#132" id="132">132</a>
 <a href="#133" id="133">133</a>
 <a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Merge-sort Tree
 //!
 //! # Problems
@@ -140,7 +143,8 @@
 
 </span><span class="kw">use </span><span class="kw">crate</span>::algo::{bsearch::upper_bound, merge::inplace_merge};
 <span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
-<span class="kw">use </span>std::ops::{Add, AddAssign, Range};
+<span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
+<span class="kw">use </span>std::ops::{Add, AddAssign, RangeBounds};
 
 <span class="kw">pub struct </span>MergeSortTree&lt;T&gt; {
     data: Vec&lt;Vec&lt;T&gt;&gt;,
@@ -151,7 +155,7 @@
 
 <span class="kw">impl</span>&lt;T&gt; MergeSortTree&lt;T&gt;
 <span class="kw">where
-    </span>T: Copy + Clone + Zero&lt;Output = T&gt; + Add&lt;Output = T&gt; + AddAssign + PartialOrd + Ord,
+    </span>T: Copy + Clone + Zero + Add&lt;Output = T&gt; + AddAssign + PartialOrd + Ord,
 {
     <span class="doccomment">/// **Time complexity O(n log n)**
     ///
@@ -208,7 +212,8 @@
     <span class="doccomment">/// `ub`以下の総和を求める
     ///
     /// **Time complexity O(log^2 N)**
-    </span><span class="kw">pub fn </span>sum_count_le(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, ub: T) -&gt; (T, usize) {
+    </span><span class="kw">pub fn </span>sum_count_le(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, ub: T) -&gt; (T, usize) {
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="macro">assert!</span>(l &lt;= r &amp;&amp; r &lt;= <span class="self">self</span>.original_size);
 
         <span class="kw">let </span><span class="kw-2">mut </span>l = l + <span class="self">self</span>.size / <span class="number">2</span>;
@@ -242,6 +247,7 @@
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="kw">use </span><span class="kw">crate</span>::testtools::<span class="kw-2">*</span>;
     <span class="kw">use </span>rand::Rng;
+    <span class="kw">use </span>std::ops::Range;
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test() {

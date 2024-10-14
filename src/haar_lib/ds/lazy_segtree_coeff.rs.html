@@ -98,20 +98,27 @@
 <a href="#98" id="98">98</a>
 <a href="#99" id="99">99</a>
 <a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 係数乗算付き区間加算区間総和遅延セグ木
 
 </span><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
 <span class="kw">use </span><span class="kw">crate</span>::trait_alias;
+<span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
 <span class="kw">use </span>std::cell::Cell;
-<span class="kw">use </span>std::ops::{Add, Mul, Range};
+<span class="kw">use </span>std::ops::{Add, Mul, RangeBounds};
 
 <span class="macro">trait_alias!</span>(
     Elem,
-    Copy + Zero&lt;Output = <span class="self">Self</span>&gt; + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt; + PartialEq
+    Copy + Zero + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt; + PartialEq
 );
 
 <span class="kw">pub struct </span>LazySegtreeCoeff&lt;T&gt; {
     size: usize,
+    original_size: usize,
     data: Vec&lt;Cell&lt;T&gt;&gt;,
     lazy: Vec&lt;Cell&lt;T&gt;&gt;,
     coeff: Vec&lt;T&gt;,
@@ -132,6 +139,7 @@
 
         <span class="self">Self </span>{
             size,
+            original_size: n,
             data: <span class="macro">vec!</span>[Cell::new(T::zero()); size],
             lazy: <span class="macro">vec!</span>[Cell::new(T::zero()); size],
             coeff,
@@ -190,11 +198,13 @@
             + <span class="self">self</span>.get_internal(i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>, (l + r) / <span class="number">2</span>, r, x, y)
     }
 
-    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;, value: T) {
+    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, value: T) {
+        <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.update_internal(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, start, end, value);
     }
 
-    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;) -&gt; T {
+    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; T {
+        <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.get_internal(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, start, end)
     }
 }

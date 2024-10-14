@@ -57,7 +57,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T: One&lt;Output = T&gt; + Zero&lt;Output = T&gt; + Copy&gt; Identity <span class="kw">for </span>Affine&lt;T&gt; {
+<span class="kw">impl</span>&lt;T: One + Zero + Copy&gt; Identity <span class="kw">for </span>Affine&lt;T&gt; {
     <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Output {
         (T::one(), T::zero())
     }

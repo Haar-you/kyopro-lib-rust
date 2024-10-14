@@ -119,11 +119,15 @@
 <a href="#119" id="119">119</a>
 <a href="#120" id="120">120</a>
 <a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
 </pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::wrong_self_convention)]
 
 </span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::Monoid;
 <span class="kw">pub use </span><span class="kw">crate</span>::ds::traits::Updatable;
-<span class="kw">use </span>std::ops::Range;
+<span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
+<span class="kw">use </span>std::ops::RangeBounds;
 
 <span class="kw">pub struct </span>DualSegtree&lt;M: Monoid&gt; {
     original_size: usize,
@@ -190,7 +194,9 @@
     }
 
     <span class="doccomment">/// **Time complexity O(log n)**
-    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, value: T) {
+    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, value: T) {
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
+
         <span class="kw">let </span><span class="kw-2">mut </span>l = l + <span class="self">self</span>.size / <span class="number">2</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>r = r + <span class="self">self</span>.size / <span class="number">2</span>;
 

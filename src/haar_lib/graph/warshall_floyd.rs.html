@@ -129,7 +129,7 @@
     g: <span class="kw-2">&amp;</span>Graph&lt;D, E&gt;,
 ) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;Vec&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;&gt;&gt;
 <span class="kw">where
-    </span>T: Copy + Ord + Add&lt;Output = T&gt; + Zero&lt;Output = T&gt;,
+    </span>T: Copy + Ord + Add&lt;Output = T&gt; + Zero,
 {
     <span class="kw">let </span>zero = T::zero();
     <span class="kw">let </span>n = g.len();
@@ -137,9 +137,9 @@
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
         dist[i][i] = <span class="prelude-val">Some</span>(zero);
-        <span class="kw">for </span>e <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges[i] {
-            dist[e.from()][e.to()] = <span class="prelude-val">Some</span>(e.weight());
-        }
+    }
+    <span class="kw">for </span>e <span class="kw">in </span>g.edges.iter().flatten() {
+        dist[e.from()][e.to()] = <span class="prelude-val">Some</span>(e.weight());
     }
 
     <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..n {

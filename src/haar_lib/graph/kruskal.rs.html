@@ -62,7 +62,6 @@
 <a href="#62" id="62">62</a>
 <a href="#63" id="63">63</a>
 <a href="#64" id="64">64</a>
-<a href="#65" id="65">65</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 最小全域木 (Kruskal)
 
 </span><span class="kw">use crate</span>::{ds::unionfind::UnionFind, graph::<span class="kw-2">*</span>};
@@ -73,23 +72,22 @@
 /// 非連結ならばNoneを返す。
 ///
 /// **Time complexity O(E log E)**
-</span><span class="kw">pub fn </span>kruskal&lt;T: Ord, E: Clone + EdgeTrait&lt;Weight = T&gt;&gt;(
+</span><span class="kw">pub fn </span>kruskal&lt;T: Ord + Copy, E: EdgeTrait&lt;Weight = T&gt;&gt;(
     g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;,
 ) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;<span class="kw-2">&amp;</span>E&gt;&gt; {
     <span class="kw">let </span>n = g.len();
-    <span class="kw">let </span><span class="kw-2">mut </span>edges = <span class="macro">vec!</span>[];
-    <span class="kw">for </span>es <span class="kw">in </span><span class="kw-2">&amp;</span>g.edges {
-        <span class="kw">for </span>e <span class="kw">in </span>es {
-            edges.push(e);
-        }
-    }
-
-    edges.sort_by_key(|a| a.weight());
+    <span class="kw">let </span><span class="kw-2">mut </span>edges = g
+        .edges
+        .iter()
+        .flatten()
+        .map(|e| (e, e.weight()))
+        .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+    edges.sort_unstable_by_key(|<span class="kw-2">&amp;</span>(<span class="kw">_</span>, c)| c);
 
     <span class="kw">let </span><span class="kw-2">mut </span>uf = UnionFind::new(n);
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
 
-    <span class="kw">for </span>e <span class="kw">in </span>edges {
+    <span class="kw">for </span>(e, <span class="kw">_</span>) <span class="kw">in </span>edges {
         <span class="kw">let </span>(u, v) = (e.from(), e.to());
         <span class="kw">if </span>!uf.is_same(u, v) {
             uf.merge(u, v);

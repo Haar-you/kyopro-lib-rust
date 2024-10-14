@@ -32,7 +32,7 @@
 /// **Time complexity O(|a|)**
 </span><span class="kw">pub fn </span>sum_of_sum_of_range_prod&lt;T&gt;(a: Vec&lt;T&gt;) -&gt; T
 <span class="kw">where
-    </span>T: Copy + Mul&lt;Output = T&gt; + Zero&lt;Output = T&gt; + Add&lt;Output = T&gt; + AddAssign,
+    </span>T: Copy + Mul&lt;Output = T&gt; + Zero + Add&lt;Output = T&gt; + AddAssign,
 {
     <span class="kw">let </span><span class="kw-2">mut </span>ret = T::zero();
     <span class="kw">let </span><span class="kw-2">mut </span>s = T::zero();

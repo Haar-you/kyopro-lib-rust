@@ -170,18 +170,25 @@
 <a href="#170" id="170">170</a>
 <a href="#171" id="171">171</a>
 <a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 区間加算・区間Max(Min)
 
 </span><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
 <span class="kw">use </span><span class="kw">crate</span>::trait_alias;
+<span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
 <span class="kw">use </span>std::{
     cmp::{max, min},
-    ops::{Add, Range, Sub},
+    ops::{Add, RangeBounds, Sub},
 };
 
 <span class="macro">trait_alias!</span>(
     Elem,
-    Add&lt;Output = <span class="self">Self</span>&gt; + Sub&lt;Output = <span class="self">Self</span>&gt; + Ord + Copy + Zero&lt;Output = <span class="self">Self</span>&gt;
+    Add&lt;Output = <span class="self">Self</span>&gt; + Sub&lt;Output = <span class="self">Self</span>&gt; + Ord + Copy + Zero
 );
 
 <span class="attr">#[derive(Copy, Clone)]
@@ -201,6 +208,7 @@
 
 <span class="kw">pub struct </span>StarrySkyTree&lt;T&gt; {
     size: usize,
+    original_size: usize,
     data: Vec&lt;T&gt;,
     mode: Mode,
 }
@@ -212,6 +220,7 @@
         <span class="kw">let </span>zero = T::zero();
         <span class="self">Self </span>{
             size,
+            original_size: n,
             data: <span class="macro">vec!</span>[zero; size],
             mode,
         }
@@ -236,7 +245,8 @@
     }
 
     <span class="doccomment">/// **Time complexity O(log n)**
-    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.rec(l, r, <span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, T::zero())
     }
 
@@ -259,10 +269,12 @@
     }
 
     <span class="doccomment">/// **Time complexity O(log n)**
-    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, value: T) {
+    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, value: T) {
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
+
         <span class="kw">let </span>hsize = <span class="self">self</span>.size / <span class="number">2</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>ll = l + <span class="self">self</span>.size / <span class="number">2</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>rr = r + <span class="self">self</span>.size / <span class="number">2</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>ll = l + hsize;
+        <span class="kw">let </span><span class="kw-2">mut </span>rr = r + hsize;
 
         <span class="kw">while </span>ll &lt; rr {
             <span class="kw">if </span>(rr &amp; <span class="number">1</span>) != <span class="number">0 </span>{

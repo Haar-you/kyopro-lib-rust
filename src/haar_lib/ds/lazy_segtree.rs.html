@@ -160,25 +160,90 @@
 <a href="#160" id="160">160</a>
 <a href="#161" id="161">161</a>
 <a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::algebra::action::Action;
-<span class="kw">use </span>std::ops::Range;
+<span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
+<span class="kw">use </span>std::ops::RangeBounds;
 
-<span class="kw">pub struct </span>LazySegtree&lt;T, U, A&gt; {
+<span class="kw">pub struct </span>LazySegtree&lt;A: Action&gt; {
     size: usize,
-    data: Vec&lt;T&gt;,
-    lazy: Vec&lt;U&gt;,
+    original_size: usize,
+    data: Vec&lt;A::Output&gt;,
+    lazy: Vec&lt;A::Lazy&gt;,
     action: A,
 }
 
-<span class="kw">impl</span>&lt;T: Clone + Eq, U: Clone + Eq, A: Clone + Action&lt;FType = T, UType = U&gt;&gt; LazySegtree&lt;T, U, A&gt; {
+<span class="kw">impl</span>&lt;A&gt; LazySegtree&lt;A&gt;
+<span class="kw">where
+    </span>A: Copy + Action,
+    A::Output: Clone + PartialEq,
+    A::Lazy: Clone + PartialEq,
+{
     <span class="kw">pub fn </span>new(n: usize, a: A) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
         <span class="self">Self </span>{
             size,
+            original_size: n,
             data: <span class="macro">vec!</span>[a.fold_id(); size],
             lazy: <span class="macro">vec!</span>[a.update_id(); size],
             action: a,
         }
+    }
+
+    <span class="kw">pub fn </span>new_with_vec(s: Vec&lt;A::Output&gt;, a: A) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>n = s.len();
+        <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>this = <span class="self">Self </span>{
+            size,
+            original_size: n,
+            data: <span class="macro">vec!</span>[a.fold_id(); size],
+            lazy: <span class="macro">vec!</span>[a.update_id(); size],
+            action: a,
+        };
+
+        <span class="kw">for </span>(i, x) <span class="kw">in </span>s.into_iter().enumerate() {
+            this.data[size / <span class="number">2 </span>+ i] = x;
+        }
+
+        <span class="kw">for </span>i <span class="kw">in </span>(<span class="number">1</span>..size / <span class="number">2</span>).rev() {
+            this.data[i] = a.fold(this.data[i &lt;&lt; <span class="number">1</span>].clone(), this.data[i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>].clone());
+        }
+
+        this
     }
 
     <span class="kw">fn </span>propagate(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize) {
@@ -186,12 +251,15 @@
             <span class="kw">return</span>;
         }
         <span class="kw">if </span>i &lt; <span class="self">self</span>.size / <span class="number">2 </span>{
-            <span class="self">self</span>.lazy[i &lt;&lt; <span class="number">1</span>] = <span class="self">self
+            <span class="kw">let </span>l = i &lt;&lt; <span class="number">1</span>;
+            <span class="kw">let </span>r = i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>;
+
+            <span class="self">self</span>.lazy[l] = <span class="self">self
                 </span>.action
-                .update(<span class="self">self</span>.lazy[i].clone(), <span class="self">self</span>.lazy[i &lt;&lt; <span class="number">1</span>].clone());
-            <span class="self">self</span>.lazy[i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>] = <span class="self">self
+                .update(<span class="self">self</span>.lazy[i].clone(), <span class="self">self</span>.lazy[l].clone());
+            <span class="self">self</span>.lazy[r] = <span class="self">self
                 </span>.action
-                .update(<span class="self">self</span>.lazy[i].clone(), <span class="self">self</span>.lazy[i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>].clone());
+                .update(<span class="self">self</span>.lazy[i].clone(), <span class="self">self</span>.lazy[r].clone());
         }
         <span class="kw">let </span>len = (<span class="self">self</span>.size / <span class="number">2</span>) &gt;&gt; (<span class="number">31 </span>- (i <span class="kw">as </span>u32).leading_zeros());
         <span class="self">self</span>.data[i] = <span class="self">self
@@ -207,7 +275,7 @@
             temp.push(i);
         }
 
-        <span class="kw">for </span><span class="kw-2">&amp;</span>i <span class="kw">in </span>temp.iter().rev() {
+        <span class="kw">for </span>i <span class="kw">in </span>temp.into_iter().rev() {
             <span class="self">self</span>.propagate(i);
         }
     }
@@ -223,7 +291,9 @@
         }
     }
 
-    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; T {
+    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; A::Output {
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
+
         <span class="self">self</span>.propagate_top_down(l + <span class="self">self</span>.size / <span class="number">2</span>);
         <span class="kw">if </span>r &lt; <span class="self">self</span>.size / <span class="number">2 </span>{
             <span class="self">self</span>.propagate_top_down(r + <span class="self">self</span>.size / <span class="number">2</span>);
@@ -253,7 +323,9 @@
         <span class="self">self</span>.action.fold(ret_l, ret_r)
     }
 
-    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, x: U) {
+    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, x: A::Lazy) {
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
+
         <span class="self">self</span>.propagate_top_down(l + <span class="self">self</span>.size / <span class="number">2</span>);
         <span class="kw">if </span>r &lt; <span class="self">self</span>.size / <span class="number">2 </span>{
             <span class="self">self</span>.propagate_top_down(r + <span class="self">self</span>.size / <span class="number">2</span>);
@@ -267,11 +339,9 @@
                 <span class="kw">if </span>r &amp; <span class="number">1 </span>== <span class="number">1 </span>{
                     r -= <span class="number">1</span>;
                     <span class="self">self</span>.lazy[r] = <span class="self">self</span>.action.update(x.clone(), <span class="self">self</span>.lazy[r].clone());
-                    <span class="self">self</span>.propagate(r);
                 }
                 <span class="kw">if </span>l &amp; <span class="number">1 </span>== <span class="number">1 </span>{
                     <span class="self">self</span>.lazy[l] = <span class="self">self</span>.action.update(x.clone(), <span class="self">self</span>.lazy[l].clone());
-                    <span class="self">self</span>.propagate(l);
                     l += <span class="number">1</span>;
                 }
                 r &gt;&gt;= <span class="number">1</span>;

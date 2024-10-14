@@ -117,15 +117,22 @@
 <a href="#117" id="117">117</a>
 <a href="#118" id="118">118</a>
 <a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 半群の列の区間演算を行う(O(1))
 
 </span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::Semigroup;
-<span class="kw">use </span>std::{iter::repeat, ops::Range};
+<span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
+<span class="kw">use </span>std::{iter::repeat, ops::RangeBounds};
 
 <span class="kw">pub struct </span>DisjointSparseTable&lt;S: Semigroup&gt; {
     data: Vec&lt;Vec&lt;<span class="prelude-ty">Option</span>&lt;S::Output&gt;&gt;&gt;,
     seq: Vec&lt;<span class="prelude-ty">Option</span>&lt;S::Output&gt;&gt;,
     semigroup: S,
+    size: usize,
 }
 
 <span class="kw">impl</span>&lt;T: Clone, S: Semigroup&lt;Output = T&gt;&gt; DisjointSparseTable&lt;S&gt; {
@@ -150,6 +157,7 @@
             data,
             seq,
             semigroup,
+            size,
         };
         this.build(<span class="number">0</span>, <span class="number">1 </span>&lt;&lt; log_size, log_size - <span class="number">1</span>);
 
@@ -185,7 +193,9 @@
         }
     }
 
-    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.size);
+
         <span class="kw">if </span>l == r {
             <span class="prelude-val">None
         </span>} <span class="kw">else </span>{

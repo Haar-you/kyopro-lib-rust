@@ -36,13 +36,15 @@
 <a href="#36" id="36">36</a>
 <a href="#37" id="37">37</a>
 <a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::algebra::action::Action;
+<span class="kw">use </span><span class="kw">crate</span>::num::one_zero::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::{
     marker::PhantomData,
     ops::{Add, Mul},
 };
 
-<span class="attr">#[derive(Clone, Default)]
+<span class="attr">#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>AddSum&lt;T, U&gt;(PhantomData&lt;T&gt;, PhantomData&lt;U&gt;);
 
 <span class="kw">impl</span>&lt;T, U&gt; AddSum&lt;T, U&gt; {
@@ -53,25 +55,25 @@
 
 <span class="kw">impl</span>&lt;T, U&gt; Action <span class="kw">for </span>AddSum&lt;T, U&gt;
 <span class="kw">where
-    </span>T: Add&lt;Output = T&gt; + Default + From&lt;U&gt;,
-    U: Add&lt;Output = U&gt; + Mul&lt;Output = U&gt; + Default + From&lt;u64&gt;,
+    </span>T: Add&lt;Output = T&gt; + Zero + From&lt;U&gt;,
+    U: Add&lt;Output = U&gt; + Mul&lt;Output = U&gt; + Zero + From&lt;u64&gt;,
 {
-    <span class="kw">type </span>FType = T;
-    <span class="kw">type </span>UType = U;
-    <span class="kw">fn </span>fold_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T {
-        T::default()
+    <span class="kw">type </span>Output = T;
+    <span class="kw">type </span>Lazy = U;
+    <span class="kw">fn </span>fold_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Output {
+        T::zero()
     }
-    <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, x: T, y: T) -&gt; T {
-        x + y
+    <span class="kw">fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, left: <span class="self">Self</span>::Output, right: <span class="self">Self</span>::Output) -&gt; <span class="self">Self</span>::Output {
+        left + right
     }
-    <span class="kw">fn </span>update_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; U {
-        U::default()
+    <span class="kw">fn </span>update_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Lazy {
+        U::zero()
     }
-    <span class="kw">fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, x: U, y: U) -&gt; U {
-        x + y
+    <span class="kw">fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, next: <span class="self">Self</span>::Lazy, cur: <span class="self">Self</span>::Lazy) -&gt; <span class="self">Self</span>::Lazy {
+        next + cur
     }
-    <span class="kw">fn </span>convert(<span class="kw-2">&amp;</span><span class="self">self</span>, x: T, y: U, l: usize) -&gt; T {
-        x + T::from(y * U::from(l <span class="kw">as </span>u64))
+    <span class="kw">fn </span>convert(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="self">Self</span>::Output, lazy: <span class="self">Self</span>::Lazy, len: usize) -&gt; <span class="self">Self</span>::Output {
+        value + T::from(lazy * U::from(len <span class="kw">as </span>u64))
     }
 }
 </code></pre></div></section></main></body></html>

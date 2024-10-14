@@ -341,10 +341,31 @@
 <a href="#341" id="341">341</a>
 <a href="#342" id="342">342</a>
 <a href="#343" id="343">343</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::utils::bits::highest_one;
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Segment Tree Beats
+//!
+//! # Problems
+//! - &lt;https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum&gt;
 
+</span><span class="kw">use </span><span class="kw">crate</span>::utils::bits::highest_one;
+<span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
 <span class="kw">use </span>std::cmp::{max, min, Ordering};
-<span class="kw">use </span>std::ops::Range;
+<span class="kw">use </span>std::ops::RangeBounds;
 
 <span class="attr">#[inline]
 </span><span class="kw">fn </span>lc(i: usize) -&gt; usize {
@@ -356,9 +377,13 @@
     i &lt;&lt; <span class="number">1 </span>| <span class="number">1
 </span>}
 
-<span class="attr">#[derive(Clone, Debug)]
+<span class="doccomment">/// Segment Tree Beats
+///
+/// 値を区間加算・区間を最小値で更新・区間を最大値で更新、区間総和・区間最小値・区間最大値をとる操作が可能なデータ構造
+</span><span class="attr">#[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>SegtreeBeats {
     hsize: usize,
+    original_size: usize,
 
     fst_max: Vec&lt;i64&gt;,
     snd_max: Vec&lt;i64&gt;,
@@ -378,6 +403,7 @@
 
         <span class="self">Self </span>{
             hsize: size / <span class="number">2</span>,
+            original_size: n,
             fst_max: <span class="macro">vec!</span>[i64::MIN; size],
             snd_max: <span class="macro">vec!</span>[i64::MIN; size],
             max_count: <span class="macro">vec!</span>[<span class="number">0</span>; size],
@@ -512,7 +538,8 @@
         <span class="self">self</span>.bottom_up(i);
     }
 
-    <span class="kw">pub fn </span>chmin(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;, x: i64) {
+    <span class="kw">pub fn </span>chmin(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, x: i64) {
+        <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.chmin_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end, x);
     }
 
@@ -530,7 +557,8 @@
         <span class="self">self</span>.bottom_up(i);
     }
 
-    <span class="kw">pub fn </span>chmax(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;, x: i64) {
+    <span class="kw">pub fn </span>chmax(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, x: i64) {
+        <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.chmax_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end, x);
     }
 
@@ -548,7 +576,8 @@
         <span class="self">self</span>.bottom_up(i);
     }
 
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;, x: i64) {
+    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, x: i64) {
+        <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.add_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end, x);
     }
 
@@ -564,7 +593,8 @@
         <span class="self">self</span>.get_sum_(lc(i), l, (l + r) / <span class="number">2</span>, s, t) + <span class="self">self</span>.get_sum_(rc(i), (l + r) / <span class="number">2</span>, r, s, t)
     }
 
-    <span class="kw">pub fn </span>get_sum(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;) -&gt; i64 {
+    <span class="kw">pub fn </span>sum(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; i64 {
+        <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.get_sum_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end)
     }
 
@@ -582,7 +612,8 @@
         )
     }
 
-    <span class="kw">pub fn </span>get_max(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;) -&gt; i64 {
+    <span class="kw">pub fn </span>max(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; i64 {
+        <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.get_max_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end)
     }
 
@@ -600,7 +631,8 @@
         )
     }
 
-    <span class="kw">pub fn </span>get_min(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;) -&gt; i64 {
+    <span class="kw">pub fn </span>min(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; i64 {
+        <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.get_min_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end)
     }
 
@@ -662,19 +694,19 @@
                 }
                 <span class="number">3 </span>=&gt; {
                     <span class="kw">let </span>lr = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
-                    <span class="macro">assert_eq!</span>(seg.get_sum(lr.clone()), a[lr].iter().sum());
+                    <span class="macro">assert_eq!</span>(seg.sum(lr.clone()), a[lr].iter().sum());
                 }
                 <span class="number">4 </span>=&gt; {
                     <span class="kw">let </span>lr = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
                     <span class="macro">assert_eq!</span>(
-                        seg.get_max(lr.clone()),
+                        seg.max(lr.clone()),
                         a[lr].iter().max().copied().unwrap_or(std::i64::MIN)
                     );
                 }
                 <span class="number">5 </span>=&gt; {
                     <span class="kw">let </span>lr = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
                     <span class="macro">assert_eq!</span>(
-                        seg.get_min(lr.clone()),
+                        seg.min(lr.clone()),
                         a[lr].iter().min().copied().unwrap_or(std::i64::MAX)
                     );
                 }

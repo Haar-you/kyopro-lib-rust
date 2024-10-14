@@ -98,7 +98,7 @@
     src: <span class="kw-2">&amp;</span>[usize],
 ) -&gt; Vec&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;
 <span class="kw">where
-    </span>T: Add&lt;Output = T&gt; + Copy + Ord + Zero&lt;Output = T&gt; + Unsigned,
+    </span>T: Add&lt;Output = T&gt; + Copy + Ord + Zero + Unsigned,
 {
     <span class="kw">let </span>zero = T::zero();
     <span class="kw">let </span>n = g.len();
