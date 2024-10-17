@@ -1,16 +1,7 @@
 use std::ops::Neg;
 
 use crate::num::arithmetic::Arithmetic;
-
-pub trait Pow {
-    type Output;
-    fn pow(self, p: u64) -> Self::Output;
-}
-
-pub trait Inv {
-    type Output;
-    fn inv(self) -> Self::Output;
-}
+pub use crate::num::ops::{Inv, Pow};
 
 #[allow(clippy::wrong_self_convention)]
 pub trait FF: Clone {
