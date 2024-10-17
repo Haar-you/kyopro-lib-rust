@@ -7,13 +7,13 @@ use crate::num::one_zero::Zero;
 use std::ops::Add;
 
 /// **Time complexity O(n³)**
-pub fn warshall_floyd<D: Direction, T, E: EdgeTrait<Weight = T>>(
+pub fn warshall_floyd<D: Direction, E: EdgeTrait>(
     g: &Graph<D, E>,
-) -> Option<Vec<Vec<Option<T>>>>
+) -> Option<Vec<Vec<Option<E::Weight>>>>
 where
-    T: Copy + Ord + Add<Output = T> + Zero,
+    E::Weight: Copy + Ord + Add<Output = E::Weight> + Zero,
 {
-    let zero = T::zero();
+    let zero = E::Weight::zero();
     let n = g.len();
     let mut dist = vec![vec![None; n]; n];
 

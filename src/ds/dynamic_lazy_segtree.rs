@@ -30,9 +30,8 @@ pub struct DynamicLazySegtree<A: Action> {
     to: usize,
 }
 
-impl<A> DynamicLazySegtree<A>
+impl<A: Action + Copy> DynamicLazySegtree<A>
 where
-    A: Action + Copy,
     A::Output: Clone + PartialEq,
     A::Lazy: Clone + PartialEq,
 {

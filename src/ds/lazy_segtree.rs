@@ -10,9 +10,8 @@ pub struct LazySegtree<A: Action> {
     action: A,
 }
 
-impl<A> LazySegtree<A>
+impl<A: Action + Copy> LazySegtree<A>
 where
-    A: Copy + Action,
     A::Output: Clone + PartialEq,
     A::Lazy: Clone + PartialEq,
 {

@@ -11,21 +11,24 @@ trait_alias!(
 
 type Path = Vec<usize>;
 
-fn shortest_path<D: Direction, T: Elem, E: EdgeTrait<Weight = T>>(
+fn shortest_path<D: Direction, E: EdgeTrait>(
     g: &Graph<D, E>,
     from: usize,
     t: usize,
     usable: &[bool],
     valid: &[Vec<bool>],
-) -> Option<(T, Path)> {
+) -> Option<(E::Weight, Path)>
+where
+    E::Weight: Elem,
+{
     let n = g.len();
     let mut visited = vec![false; n];
     let mut dist = vec![None; n];
     let mut restore = vec![(0, 0); n];
-    let mut pq = BinaryHeap::<Reverse<(T, usize)>>::new();
+    let mut pq = BinaryHeap::new();
 
-    dist[from] = Some(T::zero());
-    pq.push(Reverse((T::zero(), from)));
+    dist[from] = Some(E::Weight::zero());
+    pq.push(Reverse((E::Weight::zero(), from)));
 
     while let Some(Reverse((d, i))) = pq.pop() {
         if visited[i] {
@@ -66,15 +69,18 @@ fn shortest_path<D: Direction, T: Elem, E: EdgeTrait<Weight = T>>(
     }
 }
 
-pub fn yen_algorithm<D: Direction, T: Elem, E: EdgeTrait<Weight = T>>(
+pub fn yen_algorithm<D: Direction, E: EdgeTrait>(
     g: &Graph<D, E>,
     from: usize,
     to: usize,
     k: usize,
-) -> Vec<Option<(T, Path)>> {
+) -> Vec<Option<(E::Weight, Path)>>
+where
+    E::Weight: Elem,
+{
     let n = g.len();
-    let mut result: Vec<Option<(T, Path)>> = vec![None; k];
-    let mut stock = BinaryHeap::<Reverse<(T, Path)>>::new();
+    let mut result: Vec<Option<(E::Weight, Path)>> = vec![None; k];
+    let mut stock = BinaryHeap::new();
     let mut valid = (0..n)
         .map(|i| vec![true; g.edges[i].len()])
         .collect::<Vec<_>>();

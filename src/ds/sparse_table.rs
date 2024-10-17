@@ -11,15 +11,18 @@ pub struct SparseTable<A: BinaryOp + Associative + Idempotence> {
     original_size: usize,
 }
 
-impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> SparseTable<A> {
+impl<A: BinaryOp + Associative + Idempotence> SparseTable<A>
+where
+    A::Output: Clone + Default,
+{
     /// **Time complexity O(n log n)**
     ///
     /// **Space complexity O(n log n)**
-    pub fn new(s: Vec<T>, a: A) -> Self {
+    pub fn new(s: Vec<A::Output>, a: A) -> Self {
         let n = s.len();
         let logn = n.next_power_of_two().trailing_zeros() as usize + 1;
 
-        let mut data = vec![vec![T::default(); n]; logn];
+        let mut data = vec![vec![A::Output::default(); n]; logn];
 
         data[0] = s;
 
@@ -46,7 +49,7 @@ impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> Sp
     }
 
     /// **Time complexity O(1)**
-    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<T> {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<A::Output> {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
         if l >= r {

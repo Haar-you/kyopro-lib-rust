@@ -8,9 +8,10 @@ use crate::{ds::unionfind::UnionFind, graph::*};
 /// 非連結ならばNoneを返す。
 ///
 /// **Time complexity O(E log E)**
-pub fn kruskal<T: Ord + Copy, E: EdgeTrait<Weight = T>>(
-    g: &Graph<Undirected, E>,
-) -> Option<Vec<&E>> {
+pub fn kruskal<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Option<Vec<&E>>
+where
+    E::Weight: Ord + Copy,
+{
     let n = g.len();
     let mut edges = g
         .edges

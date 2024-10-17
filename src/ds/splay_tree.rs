@@ -14,19 +14,22 @@ use std::ptr;
 
 use crate::algebra::traits::Monoid;
 
-struct Node<M, T> {
-    value: T,
-    sum: T,
+struct Node<M: Monoid> {
+    value: M::Output,
+    sum: M::Output,
     monoid: M,
     size: usize,
     rev: bool,
-    lc: *mut Node<M, T>,
-    rc: *mut Node<M, T>,
-    par: *mut Node<M, T>,
+    lc: *mut Node<M>,
+    rc: *mut Node<M>,
+    par: *mut Node<M>,
 }
 
-impl<M: Monoid<Output = T> + Copy, T: Clone> Node<M, T> {
-    fn new(monoid: M, value: T) -> Self {
+impl<M: Monoid + Copy> Node<M>
+where
+    M::Output: Clone,
+{
+    fn new(monoid: M, value: M::Output) -> Self {
         Self {
             value,
             sum: monoid.id(),
@@ -39,12 +42,12 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> Node<M, T> {
         }
     }
 
-    fn get_sum(this: *mut Self) -> T {
+    fn get_sum(this: *mut Self) -> M::Output {
         assert!(!this.is_null());
         unsafe { (*this).sum.clone() }
     }
 
-    fn set_value(this: *mut Self, value: T) {
+    fn set_value(this: *mut Self, value: M::Output) {
         assert!(!this.is_null());
         unsafe {
             (*this).value = value;
@@ -228,7 +231,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> Node<M, T> {
         (left, cur)
     }
 
-    fn traverse(cur: *mut Self, f: &mut impl FnMut(&T)) {
+    fn traverse(cur: *mut Self, f: &mut impl FnMut(&M::Output)) {
         if !cur.is_null() {
             Self::pushdown(cur);
             Self::traverse(Self::left_of(cur).unwrap(), f);
@@ -238,7 +241,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> Node<M, T> {
     }
 }
 
-impl<M: Monoid, T> Node<M, T> {
+impl<M: Monoid> Node<M> {
     fn set_left(this: *mut Self, left: *mut Self) {
         assert!(!this.is_null());
         unsafe {
@@ -295,10 +298,13 @@ impl<M: Monoid, T> Node<M, T> {
 /// スプレーツリー
 pub struct SplayTree<M: Monoid> {
     monoid: M,
-    root: Cell<*mut Node<M, M::Output>>,
+    root: Cell<*mut Node<M>>,
 }
 
-impl<M: Monoid<Output = T> + Copy, T: Clone> SplayTree<M> {
+impl<M: Monoid + Copy> SplayTree<M>
+where
+    M::Output: Clone,
+{
     /// モノイド`m`をもつ`SplayTree<M>`を生成
     pub fn new(monoid: M) -> Self {
         Self {
@@ -308,7 +314,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> SplayTree<M> {
     }
 
     /// 値`value`をもつノード一つのみからなる`SplayTree<M>`を生成
-    pub fn singleton(monoid: M, value: T) -> Self {
+    pub fn singleton(monoid: M, value: M::Output) -> Self {
         let root = Box::new(Node::new(monoid, value));
 
         Self {
@@ -328,7 +334,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> SplayTree<M> {
     }
 
     /// `index`番目の要素の参照を返す
-    pub fn get(&self, index: usize) -> Option<&T> {
+    pub fn get(&self, index: usize) -> Option<&M::Output> {
         self.root.set(Node::get(self.root.get(), index));
         let node = self.root.get();
 
@@ -340,7 +346,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> SplayTree<M> {
     }
 
     /// `index`番目の要素を`value`に変更する
-    pub fn set(&mut self, index: usize, value: T) {
+    pub fn set(&mut self, index: usize, value: M::Output) {
         let root = Node::get(self.root.get(), index);
         Node::set_value(root, value);
         Node::update(root);
@@ -378,7 +384,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> SplayTree<M> {
     }
 
     /// 要素を`index`番目になるように挿入する
-    pub fn insert(&mut self, index: usize, value: T) {
+    pub fn insert(&mut self, index: usize, value: M::Output) {
         let (l, r) = Node::split(self.root.get(), index);
         let node = Box::into_raw(Box::new(Node::new(self.monoid, value)));
         let root = Node::merge(l, Node::merge(node, r));
@@ -386,7 +392,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> SplayTree<M> {
     }
 
     /// `index`番目の要素を削除して、値を返す
-    pub fn remove(&mut self, index: usize) -> Option<T> {
+    pub fn remove(&mut self, index: usize) -> Option<M::Output> {
         let (l, r) = Node::split(self.root.get(), index);
         let (m, r) = Node::split(r, 1);
 
@@ -417,7 +423,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> SplayTree<M> {
     }
 
     /// `start..end`の範囲でのモノイドの演算の結果を返す
-    pub fn fold(&self, Range { start, end }: Range<usize>) -> T {
+    pub fn fold(&self, Range { start, end }: Range<usize>) -> M::Output {
         let (m, r) = Node::split(self.root.get(), end);
         let (l, m) = Node::split(m, start);
 
@@ -435,21 +441,21 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> SplayTree<M> {
     }
 
     /// 先頭に値を追加する
-    pub fn push_first(&mut self, value: T) {
+    pub fn push_first(&mut self, value: M::Output) {
         let left = Self::singleton(self.monoid, value);
         self.merge_left(left);
     }
     /// 末尾に値を追加する
-    pub fn push_last(&mut self, value: T) {
+    pub fn push_last(&mut self, value: M::Output) {
         let right = Self::singleton(self.monoid, value);
         self.merge_right(right);
     }
     /// 先頭の値を削除する
-    pub fn pop_first(&mut self) -> Option<T> {
+    pub fn pop_first(&mut self) -> Option<M::Output> {
         self.remove(0)
     }
     /// 末尾の値を削除する
-    pub fn pop_last(&mut self) -> Option<T> {
+    pub fn pop_last(&mut self) -> Option<M::Output> {
         if self.is_empty() {
             None
         } else {
@@ -457,7 +463,7 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> SplayTree<M> {
         }
     }
 
-    pub fn for_each(&self, mut f: impl FnMut(&T)) {
+    pub fn for_each(&self, mut f: impl FnMut(&M::Output)) {
         Node::traverse(self.root.get(), &mut f);
     }
 }

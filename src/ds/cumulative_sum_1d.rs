@@ -14,22 +14,28 @@ pub struct CumulativeSum1DBuilder<G: Group> {
     group: G,
 }
 
-impl<T: Copy, G: Group<Output = T>> CumulativeSum1D<G> {
+impl<G: Group> CumulativeSum1D<G>
+where
+    G::Output: Copy,
+{
     /// Time complexity O(1)
-    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> T {
+    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> G::Output {
         self.group.op(self.data[r], self.group.inv(self.data[l]))
     }
 }
 
-impl<T, G: Group<Output = T>> Index<usize> for CumulativeSum1D<G> {
-    type Output = T;
+impl<G: Group> Index<usize> for CumulativeSum1D<G> {
+    type Output = G::Output;
 
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[i]
     }
 }
 
-impl<T: Copy, G: Group<Output = T>> CumulativeSum1DBuilder<G> {
+impl<G: Group> CumulativeSum1DBuilder<G>
+where
+    G::Output: Copy,
+{
     pub fn new(n: usize, group: G) -> Self {
         CumulativeSum1DBuilder {
             data: vec![group.id(); n + 1],
@@ -37,11 +43,11 @@ impl<T: Copy, G: Group<Output = T>> CumulativeSum1DBuilder<G> {
         }
     }
 
-    pub fn assign(&mut self, i: usize, value: T) {
+    pub fn assign(&mut self, i: usize, value: G::Output) {
         self.data[i + 1] = value;
     }
 
-    pub fn update(&mut self, i: usize, value: T) {
+    pub fn update(&mut self, i: usize, value: G::Output) {
         self.data[i + 1] = self.group.op(self.data[i + 1], value);
     }
 
