@@ -8,4 +8,5 @@ pub mod total_f64;
 
 pub mod arithmetic;
 pub mod one_zero;
+pub mod ops;
 pub mod traits;
