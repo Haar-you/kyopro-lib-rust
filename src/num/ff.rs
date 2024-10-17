@@ -12,13 +12,6 @@ pub trait FF: Clone {
 }
 
 pub trait FFElem:
-    Pow<Output = Self>
-    + Inv<Output = Self>
-    + Arithmetic
-    + Neg<Output = Self>
-    + Copy
-    + Clone
-    + PartialEq
-    + Sized
+    Sized + Neg<Output = Self> + PartialEq + Arithmetic + Pow<Output = Self> + Inv<Output = Self>
 {
 }

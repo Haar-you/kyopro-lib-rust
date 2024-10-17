@@ -2,7 +2,7 @@ use crate::num::ff::*;
 
 pub fn berlekamp_massey<Modulo: FF>(s: Vec<u32>, modulo: Modulo) -> Vec<Modulo::Element>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     let len = s.len();
     let mut c_ = vec![modulo.from_u64(1)];

@@ -11,7 +11,7 @@ pub struct Matrix<Modulo: FF> {
 
 impl<Modulo: FF> Matrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     pub fn new(h: usize, w: usize, modulo: Modulo) -> Self {
         Self {
@@ -74,7 +74,7 @@ where
 
 impl<Modulo: FF> AddAssign for Matrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     fn add_assign(&mut self, other: Self) {
         assert!(self.h == other.h && self.w == other.h);
@@ -88,7 +88,7 @@ where
 
 impl<Modulo: FF> SubAssign for Matrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     fn sub_assign(&mut self, other: Self) {
         assert!(self.h == other.h && self.w == other.h);
@@ -102,7 +102,7 @@ where
 
 impl<Modulo: FF> MulAssign for Matrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     fn mul_assign(&mut self, other: Self) {
         *self = self.clone() * other;
@@ -111,7 +111,7 @@ where
 
 impl<Modulo: FF> Add for Matrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     type Output = Self;
     fn add(mut self, other: Self) -> Self {
@@ -122,7 +122,7 @@ where
 
 impl<Modulo: FF> Sub for Matrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     type Output = Self;
     fn sub(mut self, other: Self) -> Self {
@@ -133,7 +133,7 @@ where
 
 impl<Modulo: FF> Mul for Matrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     type Output = Self;
     fn mul(self, other: Self) -> Self {
@@ -158,7 +158,7 @@ where
 
 impl<Modulo: FF> Neg for Matrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     type Output = Self;
     fn neg(mut self) -> Self {
@@ -173,7 +173,7 @@ where
 
 impl<Modulo: FF> Index<usize> for Matrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     type Output = [Modulo::Element];
     fn index(&self, i: usize) -> &Self::Output {

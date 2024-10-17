@@ -4,7 +4,7 @@ use crate::num::ff::*;
 
 pub fn bell_number_table<Modulo: FF>(n: usize, modulo: Modulo) -> Vec<Vec<Modulo::Element>>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     let mut ret = vec![vec![modulo.from_u64(0); n + 1]; n + 1];
     ret[0][0] = modulo.from_u64(1);

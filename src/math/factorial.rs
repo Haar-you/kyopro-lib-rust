@@ -13,7 +13,7 @@ pub struct FactorialTable<Modulo: FF> {
 
 impl<Modulo: FF> FactorialTable<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     /// **Time complexity O(n)**
     ///

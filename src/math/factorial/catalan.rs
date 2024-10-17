@@ -3,7 +3,7 @@ use crate::num::ff::*;
 
 impl<Modulo: FF> FactorialTable<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     pub fn catalan_number(&self, n: usize) -> Modulo::Element {
         match n {

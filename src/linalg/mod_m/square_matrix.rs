@@ -13,7 +13,7 @@ where
 
 impl<Modulo: FF> SquareMatrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     pub fn new(size: usize, modulo: Modulo) -> Self {
         Self {
@@ -215,7 +215,7 @@ where
 
 impl<Modulo: FF> Mul for SquareMatrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     type Output = Self;
     fn mul(self, other: Self) -> Self {
@@ -225,7 +225,7 @@ where
 
 impl<Modulo: FF> AddAssign for SquareMatrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     fn add_assign(&mut self, other: Self) {
         *self = self.clone() + other;
@@ -234,7 +234,7 @@ where
 
 impl<Modulo: FF> SubAssign for SquareMatrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     fn sub_assign(&mut self, other: Self) {
         *self = self.clone() - other;
@@ -243,7 +243,7 @@ where
 
 impl<Modulo: FF> MulAssign for SquareMatrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     fn mul_assign(&mut self, other: Self) {
         *self = self.clone() * other;
@@ -252,7 +252,7 @@ where
 
 impl<Modulo: FF> Neg for SquareMatrix<Modulo>
 where
-    Modulo::Element: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
     type Output = Self;
     fn neg(mut self) -> Self {
