@@ -12,19 +12,19 @@ use std::{
 pub struct ConstModIntBuilder<const M: u32>;
 
 impl<const M: u32> FF for ConstModIntBuilder<M> {
-    type Output = ConstModInt<M>;
-    fn from_u64(&self, a: u64) -> Self::Output {
-        Self::Output::new_unchecked(if a < M as u64 {
+    type Element = ConstModInt<M>;
+    fn from_u64(&self, a: u64) -> Self::Element {
+        Self::Element::new_unchecked(if a < M as u64 {
             a as u32
         } else {
             (a % M as u64) as u32
         })
     }
-    fn from_i64(&self, value: i64) -> Self::Output {
+    fn from_i64(&self, value: i64) -> Self::Element {
         let value = ((value % M as i64) + M as i64) as u32;
-        Self::Output::new(value)
+        Self::Element::new(value)
     }
-    fn frac(&self, numerator: i64, denominator: i64) -> Self::Output {
+    fn frac(&self, numerator: i64, denominator: i64) -> Self::Element {
         self.from_i64(numerator) * self.from_i64(denominator).inv()
     }
 }

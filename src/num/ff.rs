@@ -14,10 +14,10 @@ pub trait Inv {
 
 #[allow(clippy::wrong_self_convention)]
 pub trait FF: Clone {
-    type Output;
-    fn from_u64(&self, a: u64) -> Self::Output;
-    fn from_i64(&self, a: i64) -> Self::Output;
-    fn frac(&self, a: i64, b: i64) -> Self::Output;
+    type Element;
+    fn from_u64(&self, a: u64) -> Self::Element;
+    fn from_i64(&self, a: i64) -> Self::Element;
+    fn frac(&self, a: i64, b: i64) -> Self::Element;
 }
 
 pub trait FFElem:

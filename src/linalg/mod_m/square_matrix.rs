@@ -4,16 +4,16 @@ use std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 #[derive(Clone, PartialEq, Eq)]
 pub struct SquareMatrix<Modulo: FF>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     size: usize,
     modulo: Modulo,
-    data: Vec<Vec<Modulo::Output>>,
+    data: Vec<Vec<Modulo::Element>>,
 }
 
 impl<Modulo: FF> SquareMatrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     pub fn new(size: usize, modulo: Modulo) -> Self {
         Self {
@@ -86,7 +86,7 @@ where
         ret
     }
 
-    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Output> {
+    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Element> {
         self.data.get_mut(i).and_then(|a| a.get_mut(j))
     }
 
@@ -183,7 +183,7 @@ where
 
 impl<Modulo: FF> Add for SquareMatrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     type Output = Self;
     fn add(mut self, other: Self) -> Self {
@@ -199,7 +199,7 @@ where
 
 impl<Modulo: FF> Sub for SquareMatrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     type Output = Self;
     fn sub(mut self, other: Self) -> Self {
@@ -215,7 +215,7 @@ where
 
 impl<Modulo: FF> Mul for SquareMatrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     type Output = Self;
     fn mul(self, other: Self) -> Self {
@@ -225,7 +225,7 @@ where
 
 impl<Modulo: FF> AddAssign for SquareMatrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     fn add_assign(&mut self, other: Self) {
         *self = self.clone() + other;
@@ -234,7 +234,7 @@ where
 
 impl<Modulo: FF> SubAssign for SquareMatrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     fn sub_assign(&mut self, other: Self) {
         *self = self.clone() - other;
@@ -243,7 +243,7 @@ where
 
 impl<Modulo: FF> MulAssign for SquareMatrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     fn mul_assign(&mut self, other: Self) {
         *self = self.clone() * other;
@@ -252,7 +252,7 @@ where
 
 impl<Modulo: FF> Neg for SquareMatrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     type Output = Self;
     fn neg(mut self) -> Self {
@@ -267,9 +267,9 @@ where
 
 impl<Modulo: FF> Index<usize> for SquareMatrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
-    type Output = [Modulo::Output];
+    type Output = [Modulo::Element];
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[i]
     }

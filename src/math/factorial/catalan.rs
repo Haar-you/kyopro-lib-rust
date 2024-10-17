@@ -3,9 +3,9 @@ use crate::num::ff::*;
 
 impl<Modulo: FF> FactorialTable<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
-    pub fn catalan_number(&self, n: usize) -> Modulo::Output {
+    pub fn catalan_number(&self, n: usize) -> Modulo::Element {
         match n {
             0 => self.modulo.from_u64(1),
             _ => self.comb(2 * n, n) - self.comb(2 * n, n - 1),

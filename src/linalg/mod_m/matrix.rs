@@ -6,12 +6,12 @@ pub struct Matrix<Modulo: FF> {
     h: usize,
     w: usize,
     modulo: Modulo,
-    data: Vec<Vec<Modulo::Output>>,
+    data: Vec<Vec<Modulo::Element>>,
 }
 
 impl<Modulo: FF> Matrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     pub fn new(h: usize, w: usize, modulo: Modulo) -> Self {
         Self {
@@ -67,14 +67,14 @@ where
         ret
     }
 
-    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Output> {
+    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Element> {
         self.data.get_mut(i).and_then(|a| a.get_mut(j))
     }
 }
 
 impl<Modulo: FF> AddAssign for Matrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     fn add_assign(&mut self, other: Self) {
         assert!(self.h == other.h && self.w == other.h);
@@ -88,7 +88,7 @@ where
 
 impl<Modulo: FF> SubAssign for Matrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     fn sub_assign(&mut self, other: Self) {
         assert!(self.h == other.h && self.w == other.h);
@@ -102,7 +102,7 @@ where
 
 impl<Modulo: FF> MulAssign for Matrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     fn mul_assign(&mut self, other: Self) {
         *self = self.clone() * other;
@@ -111,7 +111,7 @@ where
 
 impl<Modulo: FF> Add for Matrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     type Output = Self;
     fn add(mut self, other: Self) -> Self {
@@ -122,7 +122,7 @@ where
 
 impl<Modulo: FF> Sub for Matrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     type Output = Self;
     fn sub(mut self, other: Self) -> Self {
@@ -133,7 +133,7 @@ where
 
 impl<Modulo: FF> Mul for Matrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     type Output = Self;
     fn mul(self, other: Self) -> Self {
@@ -158,7 +158,7 @@ where
 
 impl<Modulo: FF> Neg for Matrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     type Output = Self;
     fn neg(mut self) -> Self {
@@ -173,9 +173,9 @@ where
 
 impl<Modulo: FF> Index<usize> for Matrix<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
-    type Output = [Modulo::Output];
+    type Output = [Modulo::Element];
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[i]
     }

@@ -19,17 +19,17 @@ impl ModIntBuilder {
 }
 
 impl FF for ModIntBuilder {
-    type Output = ModInt;
-    fn from_u64(&self, value: u64) -> Self::Output {
+    type Element = ModInt;
+    fn from_u64(&self, value: u64) -> Self::Element {
         ModInt::new((value % self.modulo as u64) as u32, self.modulo)
     }
 
-    fn from_i64(&self, value: i64) -> Self::Output {
+    fn from_i64(&self, value: i64) -> Self::Element {
         let value = ((value % self.modulo as i64) + self.modulo as i64) as u32;
         ModInt::new(value, self.modulo)
     }
 
-    fn frac(&self, numerator: i64, denominator: i64) -> Self::Output {
+    fn frac(&self, numerator: i64, denominator: i64) -> Self::Element {
         self.from_i64(numerator) * self.from_i64(denominator).inv()
     }
 }

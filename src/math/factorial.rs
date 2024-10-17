@@ -6,14 +6,14 @@ use crate::num::ff::*;
 
 #[derive(Clone, Debug)]
 pub struct FactorialTable<Modulo: FF> {
-    factorial: Vec<Modulo::Output>,
-    invs: Vec<Modulo::Output>,
+    factorial: Vec<Modulo::Element>,
+    invs: Vec<Modulo::Element>,
     modulo: Modulo,
 }
 
 impl<Modulo: FF> FactorialTable<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
     /// **Time complexity O(n)**
     ///
@@ -42,21 +42,21 @@ where
     /// nの階乗
     ///
     /// **Time complexity O(1)**
-    pub fn facto(&self, n: usize) -> Modulo::Output {
+    pub fn facto(&self, n: usize) -> Modulo::Element {
         self.factorial[n]
     }
 
     /// nの階乗の逆元
     ///
     /// **Time complexity O(1)**
-    pub fn inv_facto(&self, n: usize) -> Modulo::Output {
+    pub fn inv_facto(&self, n: usize) -> Modulo::Element {
         self.invs[n]
     }
 
     /// n個からk個とりだす順列の個数 (nPk)
     ///
     /// **Time complexity O(1)**
-    pub fn perm(&self, n: usize, k: usize) -> Modulo::Output {
+    pub fn perm(&self, n: usize, k: usize) -> Modulo::Element {
         if n < k {
             self.modulo.from_u64(0)
         } else {
@@ -67,7 +67,7 @@ where
     /// n個からk個とりだす組み合わせの個数 (nCk)
     ///
     /// **Time complexity O(1)**
-    pub fn comb(&self, n: usize, k: usize) -> Modulo::Output {
+    pub fn comb(&self, n: usize, k: usize) -> Modulo::Element {
         if n < k {
             self.modulo.from_u64(0)
         } else {
@@ -75,7 +75,7 @@ where
         }
     }
 
-    pub fn h(&self, n: usize, k: usize) -> Modulo::Output {
+    pub fn h(&self, n: usize, k: usize) -> Modulo::Element {
         if n == 0 && k == 0 {
             self.modulo.from_u64(1)
         } else {

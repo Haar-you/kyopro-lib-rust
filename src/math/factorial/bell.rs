@@ -4,9 +4,9 @@ use std::cmp::min;
 
 impl<Modulo: FF> FactorialTable<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem,
 {
-    pub fn bell_number(&self, n: usize, k: usize) -> Modulo::Output {
+    pub fn bell_number(&self, n: usize, k: usize) -> Modulo::Element {
         match n {
             0 => self.modulo.from_u64(1),
             _ => {
