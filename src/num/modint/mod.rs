@@ -44,18 +44,16 @@ impl FFElem for ModInt {}
 
 impl ModInt {
     pub fn new(value: u32, modulo: u32) -> Self {
-        Self {
-            value: if value < modulo {
-                value
-            } else {
-                value % modulo
-            },
-            modulo,
-        }
+        let value = if value < modulo {
+            value
+        } else {
+            value % modulo
+        };
+        Self { value, modulo }
     }
 
     #[inline]
-    pub fn to_u32(self) -> u32 {
+    pub fn value(self) -> u32 {
         self.value
     }
 
@@ -65,7 +63,7 @@ impl ModInt {
     }
 
     #[inline]
-    fn add_internal(self, other: Self) -> Self {
+    fn __add(self, other: Self) -> Self {
         assert_eq!(self.modulo, other.modulo);
         let a = self.value + other.value;
         Self::new_unchecked(
@@ -75,7 +73,7 @@ impl ModInt {
     }
 
     #[inline]
-    fn sub_internal(self, other: Self) -> Self {
+    fn __sub(self, other: Self) -> Self {
         assert_eq!(self.modulo, other.modulo);
         let a = if self.value < other.value {
             self.value + self.modulo - other.value
@@ -87,7 +85,7 @@ impl ModInt {
     }
 
     #[inline]
-    fn mul_internal(self, other: Self) -> Self {
+    fn __mul(self, other: Self) -> Self {
         assert_eq!(self.modulo, other.modulo);
         let a = self.value as u64 * other.value as u64;
         let value = if a < self.modulo as u64 {
@@ -100,17 +98,17 @@ impl ModInt {
     }
 
     #[inline]
-    fn div_internal(self, other: Self) -> Self {
-        self * other.inv_internal()
+    fn __div(self, other: Self) -> Self {
+        self * other.__inv()
     }
 
     #[inline]
-    fn inv_internal(self) -> Self {
-        self.pow_internal(self.modulo as u64 - 2)
+    fn __inv(self) -> Self {
+        self.__pow(self.modulo as u64 - 2)
     }
 
     #[inline]
-    fn pow_internal(self, mut p: u64) -> Self {
+    fn __pow(self, mut p: u64) -> Self {
         let mut ret: u64 = 1;
         let mut a = self.value as u64;
 
@@ -133,14 +131,14 @@ impl ModInt {
 impl Pow for ModInt {
     type Output = Self;
     fn pow(self, p: u64) -> Self::Output {
-        self.pow_internal(p)
+        self.__pow(p)
     }
 }
 
 impl Inv for ModInt {
     type Output = Self;
     fn inv(self) -> Self::Output {
-        self.inv_internal()
+        self.__inv()
     }
 }
 
@@ -175,14 +173,13 @@ macro_rules! impl_modint_arith {
     }
 }
 
-impl_modint_arith!(Add, add, add_internal, AddAssign, add_assign, +);
-impl_modint_arith!(Sub, sub, sub_internal, SubAssign, sub_assign, -);
-impl_modint_arith!(Mul, mul, mul_internal, MulAssign, mul_assign, *);
-impl_modint_arith!(Div, div, div_internal, DivAssign, div_assign, /);
+impl_modint_arith!(Add, add, __add, AddAssign, add_assign, +);
+impl_modint_arith!(Sub, sub, __sub, SubAssign, sub_assign, -);
+impl_modint_arith!(Mul, mul, __mul, MulAssign, mul_assign, *);
+impl_modint_arith!(Div, div, __div, DivAssign, div_assign, /);
 
 impl Neg for ModInt {
     type Output = Self;
-
     fn neg(self) -> Self {
         Self::new_unchecked(
             if self.value == 0 {
@@ -192,5 +189,11 @@ impl Neg for ModInt {
             },
             self.modulo,
         )
+    }
+}
+
+impl From<ModInt> for u32 {
+    fn from(value: ModInt) -> Self {
+        value.value
     }
 }
