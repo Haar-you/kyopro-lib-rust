@@ -8,8 +8,8 @@ use std::{mem::swap, ptr};
 use crate::algebra::traits::Monoid;
 
 struct Node<M: Monoid> {
-    value: M::Output,
-    result: M::Output,
+    value: M::Element,
+    result: M::Element,
     monoid: M,
     subsize: usize,
     _index: usize,
@@ -21,7 +21,7 @@ struct Node<M: Monoid> {
 
 impl<M: Monoid + Copy> Node<M>
 where
-    M::Output: Clone,
+    M::Element: Clone,
 {
     fn new(monoid: M, _index: usize) -> Self {
         Self {
@@ -235,7 +235,7 @@ pub struct LinkCutTree<M: Monoid> {
 
 impl<M: Monoid + Copy> LinkCutTree<M>
 where
-    M::Output: Clone,
+    M::Element: Clone,
 {
     /// `LinkCutTree<M>`を生成する。
     pub fn new(monoid: M, n: usize) -> Self {
@@ -300,19 +300,19 @@ where
     }
 
     /// 頂点`k`の値を`x`に変更する。
-    pub fn set(&mut self, k: usize, x: M::Output) {
+    pub fn set(&mut self, k: usize, x: M::Element) {
         Node::evert(&mut self.nodes[k]);
         self.nodes[k].value = x;
         Node::pushdown(&mut self.nodes[k]);
     }
 
     /// 頂点`k`の値をモノイドの演算と値`x`で更新する。
-    pub fn update(&mut self, k: usize, x: M::Output) {
+    pub fn update(&mut self, k: usize, x: M::Element) {
         self.set(k, self.monoid.op(self.get(k), x));
     }
 
     /// 頂点`k`の値を返す。
-    pub fn get(&self, k: usize) -> M::Output {
+    pub fn get(&self, k: usize) -> M::Element {
         self.nodes[k].value.clone()
     }
 
@@ -321,7 +321,7 @@ where
     /// # Panics
     ///
     /// 頂点`i`と`j`が同一の木に属していないときパニックする。
-    pub fn fold(&self, i: usize, j: usize) -> M::Output {
+    pub fn fold(&self, i: usize, j: usize) -> M::Element {
         let u = &self.nodes[i] as *const _ as *mut Node<M>;
         let v = &self.nodes[j] as *const _ as *mut Node<M>;
 

@@ -3,14 +3,14 @@ use std::ops::{Range, RangeTo};
 
 #[derive(Clone, Default)]
 pub struct FenwickTree<G: AbelianGroup> {
-    data: Vec<G::Output>,
+    data: Vec<G::Element>,
     size: usize,
     group: G,
 }
 
 impl<G: AbelianGroup> FenwickTree<G>
 where
-    G::Output: Clone,
+    G::Element: Clone,
 {
     pub fn new(size: usize, group: G) -> Self {
         Self {
@@ -20,7 +20,7 @@ where
         }
     }
 
-    pub fn update(&mut self, mut i: usize, value: G::Output) {
+    pub fn update(&mut self, mut i: usize, value: G::Element) {
         i += 1;
         while i <= self.size {
             self.data[i] = self.group.op(self.data[i].clone(), value.clone());
@@ -28,7 +28,7 @@ where
         }
     }
 
-    pub fn fold_to(&self, RangeTo { end: mut i }: RangeTo<usize>) -> G::Output {
+    pub fn fold_to(&self, RangeTo { end: mut i }: RangeTo<usize>) -> G::Element {
         let mut ret = self.group.id();
 
         while i > 0 {
@@ -39,7 +39,7 @@ where
         ret
     }
 
-    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> G::Output {
+    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> G::Element {
         self.group
             .op(self.fold_to(..r), self.group.inv(self.fold_to(..l)))
     }

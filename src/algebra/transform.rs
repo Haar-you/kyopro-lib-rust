@@ -56,8 +56,8 @@ impl<T> Composition<T> {
     }
 }
 
-impl<T> AlgeStruct for Composition<T> {
-    type Output = T;
+impl<T> Set for Composition<T> {
+    type Element = T;
 }
 
 impl_algebra!(Composition<Transformation>, 

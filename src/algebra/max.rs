@@ -10,8 +10,8 @@ impl<T> Max<T> {
     }
 }
 
-impl<T> AlgeStruct for Max<T> {
-    type Output = T;
+impl<T> Set for Max<T> {
+    type Element = T;
 }
 
 impl_algebra!(Max<i8>, op: |_, a: i8, b| a.max(b), id: |_| i8::MIN, commu: {}, assoc: {}, idem: {});

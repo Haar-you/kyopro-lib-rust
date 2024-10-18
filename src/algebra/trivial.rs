@@ -4,8 +4,8 @@ use crate::impl_algebra;
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Trivial;
 
-impl AlgeStruct for Trivial {
-    type Output = ();
+impl Set for Trivial {
+    type Element = ();
 }
 
 impl_algebra!(Trivial, op: |_, _, _| (), id: |_| (), inv: |_, _| (),

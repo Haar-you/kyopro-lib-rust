@@ -2,14 +2,14 @@
 macro_rules! impl_algebra {
     (@bound $t:ty, op: $f:expr; $($bound:tt)+) => {
         impl <$($bound)+> BinaryOp for $t {
-            fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output {
+            fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
                 $f(&self, a, b)
             }
         }
     };
     (@nobound $t:ty, op: $f:expr) => {
         impl BinaryOp for $t {
-            fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output {
+            fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
                 $f(&self, a, b)
             }
         }
@@ -17,14 +17,14 @@ macro_rules! impl_algebra {
 
     (@bound $t:ty, id: $f:expr; $($bound:tt)+) => {
         impl<$($bound)+> Identity for $t {
-            fn id(&self) -> Self::Output {
+            fn id(&self) -> Self::Element {
                 $f(&self)
             }
         }
     };
     (@nobound $t:ty, id: $f:expr) => {
         impl Identity for $t {
-            fn id(&self) -> Self::Output {
+            fn id(&self) -> Self::Element {
                 $f(&self)
             }
         }
@@ -32,14 +32,14 @@ macro_rules! impl_algebra {
 
     (@bound $t:ty, inv: $f:expr; $($bound:tt)+) => {
         impl<$($bound)+> Inverse for $t {
-            fn inv(&self, a: Self::Output) -> Self::Output {
+            fn inv(&self, a: Self::Element) -> Self::Element {
                 $f(self, a)
             }
         }
     };
     (@nobound $t:ty, inv: $f:expr) => {
         impl Inverse for $t {
-            fn inv(&self, a: Self::Output) -> Self::Output {
+            fn inv(&self, a: Self::Element) -> Self::Element {
                 $f(self, a)
             }
         }

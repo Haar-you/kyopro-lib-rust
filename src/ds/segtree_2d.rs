@@ -2,7 +2,7 @@ use crate::algebra::traits::*;
 use std::ops::Range;
 
 pub struct Segtree2D<M: Monoid + Commutative> {
-    data: Vec<Vec<M::Output>>,
+    data: Vec<Vec<M::Element>>,
     w: usize,
     h: usize,
     monoid: M,
@@ -10,7 +10,7 @@ pub struct Segtree2D<M: Monoid + Commutative> {
 
 impl<M: Monoid + Commutative> Segtree2D<M>
 where
-    M::Output: Clone,
+    M::Element: Clone,
 {
     /// **Time complexity O(wh)**
     ///
@@ -27,7 +27,7 @@ where
         }
     }
 
-    fn __fold(&self, l: usize, r: usize, x: usize) -> M::Output {
+    fn __fold(&self, l: usize, r: usize, x: usize) -> M::Element {
         let mut l = l + self.h / 2;
         let mut r = r + self.h / 2;
 
@@ -55,7 +55,7 @@ where
         &self,
         Range { start: x1, end: x2 }: Range<usize>,
         Range { start: y1, end: y2 }: Range<usize>,
-    ) -> M::Output {
+    ) -> M::Element {
         let mut l = x1 + self.w / 2;
         let mut r = x2 + self.w / 2;
 
@@ -78,12 +78,12 @@ where
     }
 
     /// **Time complexity O(1)**
-    pub fn get(&self, i: usize, j: usize) -> M::Output {
+    pub fn get(&self, i: usize, j: usize) -> M::Element {
         self.data[i + self.w / 2][j + self.h / 2].clone()
     }
 
     /// **Time complexity O(log w log h)**
-    pub fn assign(&mut self, i: usize, j: usize, value: M::Output) {
+    pub fn assign(&mut self, i: usize, j: usize, value: M::Element) {
         let i = i + self.w / 2;
         let j = j + self.h / 2;
 
@@ -113,7 +113,7 @@ where
     }
 
     /// **Time complexity O(log w log h)**
-    pub fn update(&mut self, i: usize, j: usize, value: M::Output) {
+    pub fn update(&mut self, i: usize, j: usize, value: M::Element) {
         let value = self.monoid.op(value, self.get(i, j));
         self.assign(i, j, value);
     }

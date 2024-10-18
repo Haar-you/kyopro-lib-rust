@@ -10,14 +10,14 @@ impl Sum {
         Self { m }
     }
 }
-impl AlgeStruct for Sum {
-    type Output = ModInt;
+impl Set for Sum {
+    type Element = ModInt;
 }
 
 impl_algebra!(Sum,
     op: |_, a, b| a + b,
     id: |s: &Self| ModInt::new(0, s.m),
-    inv: |_, a: Self::Output| -a,
+    inv: |_, a: Self::Element| -a,
     assoc: {},
     commu: {}
 );
@@ -31,8 +31,8 @@ impl Prod {
         Self { m }
     }
 }
-impl AlgeStruct for Prod {
-    type Output = ModInt;
+impl Set for Prod {
+    type Element = ModInt;
 }
 
 impl_algebra!(Prod,

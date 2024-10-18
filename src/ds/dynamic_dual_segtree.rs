@@ -21,7 +21,7 @@ impl<T> Node<T> {
 
 #[derive(Clone, Debug)]
 pub struct DynamicDualSegtree<M: Monoid> {
-    data: Vec<Node<M::Output>>,
+    data: Vec<Node<M::Element>>,
     root: NullableUsize,
     monoid: M,
     to: usize,
@@ -29,7 +29,7 @@ pub struct DynamicDualSegtree<M: Monoid> {
 
 impl<M: Monoid> DynamicDualSegtree<M>
 where
-    M::Output: Clone,
+    M::Element: Clone,
 {
     pub fn new(monoid: M) -> Self {
         Self {
@@ -68,15 +68,7 @@ where
         }
     }
 
-    fn update_(
-        &mut self,
-        cur: usize,
-        from: usize,
-        to: usize,
-        s: usize,
-        t: usize,
-        value: &M::Output,
-    ) {
+    fn update_(&mut self, cur: usize, from: usize, to: usize, s: usize, t: usize, value: &M::Element) {
         if to - from == 1 {
             if s <= from && to <= t {
                 let cur_value = unsafe { self.data.get_unchecked(cur).value.clone() };
@@ -108,7 +100,7 @@ where
         }
     }
 
-    pub fn update(&mut self, Range { start: s, end: t }: Range<usize>, value: M::Output) {
+    pub fn update(&mut self, Range { start: s, end: t }: Range<usize>, value: M::Element) {
         loop {
             let root = self.root.0;
 
@@ -127,7 +119,7 @@ where
         self.update_(self.root.0, 0, self.to, s, t, &value);
     }
 
-    fn get_(&mut self, cur: usize, from: usize, to: usize, i: usize) -> M::Output {
+    fn get_(&mut self, cur: usize, from: usize, to: usize, i: usize) -> M::Element {
         if !(from..to).contains(&i) {
             return self.monoid.id();
         }
@@ -148,7 +140,7 @@ where
         }
     }
 
-    pub fn get(&mut self, i: usize) -> M::Output {
+    pub fn get(&mut self, i: usize) -> M::Element {
         self.get_(self.root.0, 0, self.to, i)
     }
 }

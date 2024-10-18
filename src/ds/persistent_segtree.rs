@@ -26,7 +26,7 @@ impl<T> Node<T> {
 
 #[derive(Clone, Debug)]
 pub struct PersistentSegtree<M: Monoid> {
-    root: Option<Rc<RefCell<Node<M::Output>>>>,
+    root: Option<Rc<RefCell<Node<M::Element>>>>,
     monoid: M,
     to: usize,
     original_size: usize,
@@ -34,14 +34,14 @@ pub struct PersistentSegtree<M: Monoid> {
 
 impl<M: Monoid + Clone> PersistentSegtree<M>
 where
-    M::Output: Clone,
+    M::Element: Clone,
 {
     pub fn new(n: usize, monoid: M) -> Self {
         let seq = vec![monoid.id(); n];
         Self::from_vec(seq, monoid)
     }
 
-    pub fn from_vec(a: Vec<M::Output>, monoid: M) -> Self {
+    pub fn from_vec(a: Vec<M::Element>, monoid: M) -> Self {
         let n = a.len();
         let to = n.next_power_of_two();
         let root = Some(Self::__init(0, to, &a, &monoid));
@@ -56,9 +56,9 @@ where
     fn __init(
         from: usize,
         to: usize,
-        seq: &[M::Output],
+        seq: &[M::Element],
         monoid: &M,
-    ) -> Rc<RefCell<Node<M::Output>>> {
+    ) -> Rc<RefCell<Node<M::Element>>> {
         if to - from == 1 {
             Rc::new(RefCell::new(Node::new(seq[from].clone())))
         } else {
@@ -90,13 +90,13 @@ where
     }
 
     fn __set(
-        node: Rc<RefCell<Node<M::Output>>>,
+        node: Rc<RefCell<Node<M::Element>>>,
         from: usize,
         to: usize,
         pos: usize,
-        value: &M::Output,
+        value: &M::Element,
         monoid: &M,
-    ) -> Rc<RefCell<Node<M::Output>>> {
+    ) -> Rc<RefCell<Node<M::Element>>> {
         if to <= pos || pos + 1 <= from {
             node
         } else if pos <= from && to <= pos + 1 {
@@ -131,7 +131,7 @@ where
         }
     }
 
-    pub fn assign(&self, i: usize, value: M::Output) -> Self {
+    pub fn assign(&self, i: usize, value: M::Element) -> Self {
         let new_root = Self::__set(
             self.root.clone().unwrap(),
             0,
@@ -150,13 +150,13 @@ where
     }
 
     fn __fold(
-        node: Rc<RefCell<Node<M::Output>>>,
+        node: Rc<RefCell<Node<M::Element>>>,
         from: usize,
         to: usize,
         l: usize,
         r: usize,
         monoid: &M,
-    ) -> M::Output {
+    ) -> M::Element {
         if l <= from && to <= r {
             node.borrow().value.clone()
         } else if to <= l || r <= from {
@@ -176,7 +176,7 @@ where
         }
     }
 
-    pub fn fold(&self, range: impl RangeBounds<usize>) -> M::Output {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> M::Element {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         Self::__fold(
             self.root.clone().unwrap(),

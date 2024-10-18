@@ -2,7 +2,7 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use std::marker::PhantomData;
 
-#[derive(Clone, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct BitOr<T>(PhantomData<T>);
 impl<T> BitOr<T> {
     pub fn new() -> Self {
@@ -10,8 +10,8 @@ impl<T> BitOr<T> {
     }
 }
 
-impl<T> AlgeStruct for BitOr<T> {
-    type Output = T;
+impl<T> Set for BitOr<T> {
+    type Element = T;
 }
 
 impl_algebra!(BitOr<u8>, op: |_, a, b| a | b, id: |_| 0, commu: {}, assoc: {}, idem: {});

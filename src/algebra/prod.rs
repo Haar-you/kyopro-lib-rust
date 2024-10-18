@@ -10,8 +10,8 @@ impl<T> Prod<T> {
     }
 }
 
-impl<T> AlgeStruct for Prod<T> {
-    type Output = T;
+impl<T> Set for Prod<T> {
+    type Element = T;
 }
 
 impl_algebra!(Prod<i8>, op: |_, a, b| a * b, id: |_| 1, commu: {}, assoc: {});

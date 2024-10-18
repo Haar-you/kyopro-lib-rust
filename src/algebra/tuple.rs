@@ -5,24 +5,24 @@ macro_rules! impl_tuple {
         #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
         pub struct $a<$($t),*>($(pub $t),*);
 
-        impl<$($t:AlgeStruct),*> AlgeStruct for $a<$($t),*> {
-            type Output = ($($t::Output),*);
+        impl<$($t:Set),*> Set for $a<$($t),*> {
+            type Element = ($($t::Element),*);
         }
 
         impl<$($t:BinaryOp),*> BinaryOp for $a<$($t),*> {
-            fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output {
+            fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
                 ($(self.$i.op(a.$i, b.$i)),*)
             }
         }
 
         impl<$($t:Identity),*> Identity for $a<$($t),*> {
-            fn id(&self) -> Self::Output {
+            fn id(&self) -> Self::Element {
                 ($(self.$i.id()),*)
             }
         }
 
         impl<$($t:Inverse),*> Inverse for $a<$($t),*> {
-            fn inv(&self, a: Self::Output) -> Self::Output {
+            fn inv(&self, a: Self::Element) -> Self::Element {
                 ($(self.$i.inv(a.$i)),*)
             }
         }

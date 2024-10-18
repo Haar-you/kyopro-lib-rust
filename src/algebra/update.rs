@@ -11,8 +11,8 @@ impl<T> Update<T> {
     }
 }
 
-impl<T> AlgeStruct for Update<T> {
-    type Output = Option<T>;
+impl<T> Set for Update<T> {
+    type Element = Option<T>;
 }
 
 impl_algebra!(T; Update<T>,

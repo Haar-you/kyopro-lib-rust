@@ -6,13 +6,13 @@ use std::ops::{Index, RangeBounds};
 pub struct Segtree<M: Monoid> {
     original_size: usize,
     size: usize,
-    data: Vec<M::Output>,
+    data: Vec<M::Element>,
     monoid: M,
 }
 
 impl<M: Monoid> Segtree<M>
 where
-    M::Output: Clone,
+    M::Element: Clone,
 {
     /// **Time complexity O(n)**
     pub fn new(n: usize, monoid: M) -> Self {
@@ -26,7 +26,7 @@ where
     }
 
     /// **Time complexity O(log n)**
-    pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> M::Output {
+    pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> M::Element {
         let (l, r) = range_bounds_to_range(range, 0, self.size / 2);
 
         let mut ret_l = self.monoid.id();
@@ -52,7 +52,7 @@ where
     }
 
     /// **Time complexity O(log n)**
-    pub fn assign(&mut self, i: usize, value: M::Output) {
+    pub fn assign(&mut self, i: usize, value: M::Element) {
         let mut i = i + self.size / 2;
         self.data[i] = value;
 
@@ -65,7 +65,7 @@ where
     }
 
     /// **Time complexity O(log n)**
-    pub fn update(&mut self, i: usize, value: M::Output) {
+    pub fn update(&mut self, i: usize, value: M::Element) {
         self.assign(
             i,
             self.monoid.op(self.data[i + self.size / 2].clone(), value),
@@ -73,9 +73,9 @@ where
     }
 }
 
-impl<M: Monoid> From<&Segtree<M>> for Vec<M::Output>
+impl<M: Monoid> From<&Segtree<M>> for Vec<M::Element>
 where
-    M::Output: Clone,
+    M::Element: Clone,
 {
     fn from(from: &Segtree<M>) -> Self {
         from.data[from.size / 2..from.size / 2 + from.original_size].to_vec()
@@ -83,7 +83,7 @@ where
 }
 
 impl<M: Monoid> Index<usize> for Segtree<M> {
-    type Output = M::Output;
+    type Output = M::Element;
 
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[self.size / 2 + i]
@@ -99,7 +99,7 @@ mod tests {
     fn random_test_helper<T, M, F>(size: usize, m: M, mut gen_value: F)
     where
         T: Clone + Eq + std::fmt::Debug,
-        M: Monoid<Output = T> + Clone,
+        M: Monoid<Element = T> + Clone,
         F: FnMut() -> T,
     {
         let mut rng = rand::thread_rng();

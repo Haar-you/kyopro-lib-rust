@@ -5,17 +5,17 @@ use crate::utils::range::range_bounds_to_range;
 use std::{iter::repeat, ops::RangeBounds};
 
 pub struct DisjointSparseTable<S: Semigroup> {
-    data: Vec<Vec<Option<S::Output>>>,
-    seq: Vec<Option<S::Output>>,
+    data: Vec<Vec<Option<S::Element>>>,
+    seq: Vec<Option<S::Element>>,
     semigroup: S,
     size: usize,
 }
 
 impl<S: Semigroup> DisjointSparseTable<S>
 where
-    S::Output: Clone,
+    S::Element: Clone,
 {
-    pub fn new(seq: Vec<S::Output>, semigroup: S) -> Self {
+    pub fn new(seq: Vec<S::Element>, semigroup: S) -> Self {
         assert!(!seq.is_empty());
 
         let size = seq.len();
@@ -72,7 +72,7 @@ where
         }
     }
 
-    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<S::Output> {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<S::Element> {
         let (l, r) = range_bounds_to_range(range, 0, self.size);
 
         if l == r {

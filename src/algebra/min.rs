@@ -10,8 +10,8 @@ impl<T> Min<T> {
     }
 }
 
-impl<T> AlgeStruct for Min<T> {
-    type Output = T;
+impl<T> Set for Min<T> {
+    type Element = T;
 }
 
 impl_algebra!(Min<i8>, op: |_, a: i8, b| a.min(b), id: |_| i8::MAX, commu: {}, assoc: {}, idem: {});

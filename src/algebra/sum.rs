@@ -10,8 +10,8 @@ impl<T> Sum<T> {
     }
 }
 
-impl<T> AlgeStruct for Sum<T> {
-    type Output = T;
+impl<T> Set for Sum<T> {
+    type Element = T;
 }
 
 impl_algebra!(Sum<i8>, op: |_, a, b| a + b, id: |_| 0, inv: |_, a: i8| -a, commu: {}, assoc: {});
