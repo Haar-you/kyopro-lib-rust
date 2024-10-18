@@ -1,23 +1,28 @@
 //! 冪等性と結合性をもつ列の区間取得(O(1))
 
 use crate::algebra::traits::*;
-use std::{cmp::min, ops::Range};
+use crate::utils::range::range_bounds_to_range;
+use std::{cmp::min, ops::RangeBounds};
 
 pub struct SparseTable<A: BinaryOp + Associative + Idempotence> {
     data: Vec<Vec<A::Output>>,
     log_table: Vec<usize>,
     semilattice: A,
+    original_size: usize,
 }
 
-impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> SparseTable<A> {
+impl<A: BinaryOp + Associative + Idempotence> SparseTable<A>
+where
+    A::Output: Clone + Default,
+{
     /// **Time complexity O(n log n)**
     ///
     /// **Space complexity O(n log n)**
-    pub fn new(s: Vec<T>, a: A) -> Self {
+    pub fn new(s: Vec<A::Output>, a: A) -> Self {
         let n = s.len();
         let logn = n.next_power_of_two().trailing_zeros() as usize + 1;
 
-        let mut data = vec![vec![T::default(); n]; logn];
+        let mut data = vec![vec![A::Output::default(); n]; logn];
 
         data[0] = s;
 
@@ -39,11 +44,14 @@ impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> Sp
             data,
             log_table,
             semilattice: a,
+            original_size: n,
         }
     }
 
     /// **Time complexity O(1)**
-    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> Option<T> {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<A::Output> {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
+
         if l >= r {
             None
         } else {

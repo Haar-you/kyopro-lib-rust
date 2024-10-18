@@ -2,21 +2,22 @@
 
 use crate::graph::*;
 pub use crate::num::num_inf::NumInf;
+use crate::num::one_zero::Zero;
 use std::{cmp::min, ops::Add};
 
-pub fn bellman_ford<D: Direction, T, E: EdgeTrait<Weight = T>>(
+pub fn bellman_ford<D: Direction, E: EdgeTrait>(
     g: &Graph<D, E>,
     src: usize,
-) -> Vec<NumInf<T>>
+) -> Vec<NumInf<E::Weight>>
 where
-    T: Copy + Ord + Default + Add<Output = T>,
+    E::Weight: Copy + Ord + Zero + Add<Output = E::Weight>,
 {
     use self::NumInf::*;
 
     let n = g.len();
     let mut ret = vec![Inf; n];
 
-    ret[src] = Value(T::default());
+    ret[src] = Value(E::Weight::zero());
 
     for i in 0..n {
         for s in 0..n {

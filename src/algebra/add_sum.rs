@@ -1,10 +1,11 @@
 use crate::algebra::action::Action;
+use crate::num::one_zero::*;
 use std::{
     marker::PhantomData,
     ops::{Add, Mul},
 };
 
-#[derive(Clone, Default)]
+#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
 pub struct AddSum<T, U>(PhantomData<T>, PhantomData<U>);
 
 impl<T, U> AddSum<T, U> {
@@ -15,24 +16,24 @@ impl<T, U> AddSum<T, U> {
 
 impl<T, U> Action for AddSum<T, U>
 where
-    T: Add<Output = T> + Default + From<U>,
-    U: Add<Output = U> + Mul<Output = U> + Default + From<u64>,
+    T: Add<Output = T> + Zero + From<U>,
+    U: Add<Output = U> + Mul<Output = U> + Zero + From<u64>,
 {
-    type FType = T;
-    type UType = U;
-    fn fold_id(&self) -> T {
-        T::default()
+    type Output = T;
+    type Lazy = U;
+    fn fold_id(&self) -> Self::Output {
+        T::zero()
     }
-    fn fold(&self, x: T, y: T) -> T {
-        x + y
+    fn fold(&self, left: Self::Output, right: Self::Output) -> Self::Output {
+        left + right
     }
-    fn update_id(&self) -> U {
-        U::default()
+    fn update_id(&self) -> Self::Lazy {
+        U::zero()
     }
-    fn update(&self, x: U, y: U) -> U {
-        x + y
+    fn update(&self, next: Self::Lazy, cur: Self::Lazy) -> Self::Lazy {
+        next + cur
     }
-    fn convert(&self, x: T, y: U, l: usize) -> T {
-        x + T::from(y * U::from(l as u64))
+    fn convert(&self, value: Self::Output, lazy: Self::Lazy, len: usize) -> Self::Output {
+        value + T::from(lazy * U::from(len as u64))
     }
 }

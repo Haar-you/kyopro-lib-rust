@@ -16,22 +16,28 @@ pub struct CumulativeSum1DBuilder<G: Group> {
     group: G,
 }
 
-impl<T: Copy, G: Group<Output = T>> CumulativeSum1D<G> {
+impl<G: Group> CumulativeSum1D<G>
+where
+    G::Output: Copy,
+{
     /// Time complexity O(1)
-    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> T {
+    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> G::Output {
         self.group.op(self.data[r], self.group.inv(self.data[l]))
     }
 }
 
-impl<T, G: Group<Output = T>> Index<usize> for CumulativeSum1D<G> {
-    type Output = T;
+impl<G: Group> Index<usize> for CumulativeSum1D<G> {
+    type Output = G::Output;
 
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[i]
     }
 }
 
-impl<T: Copy, G: Group<Output = T>> CumulativeSum1DBuilder<G> {
+impl<G: Group> CumulativeSum1DBuilder<G>
+where
+    G::Output: Copy,
+{
     /// `CumulativeSum1DBuilder`を生成する
     pub fn new(n: usize, group: G) -> Self {
         CumulativeSum1DBuilder {
@@ -41,12 +47,12 @@ impl<T: Copy, G: Group<Output = T>> CumulativeSum1DBuilder<G> {
     }
 
     /// `i`番目に`value`を代入する
-    pub fn assign(&mut self, i: usize, value: T) {
+    pub fn assign(&mut self, i: usize, value: G::Output) {
         self.data[i + 1] = value;
     }
 
     /// 群`G`の演算に`i`番目の値と`value`を適用して`i`番目の値を更新する。
-    pub fn update(&mut self, i: usize, value: T) {
+    pub fn update(&mut self, i: usize, value: G::Output) {
         self.data[i + 1] = self.group.op(self.data[i + 1], value);
     }
 

@@ -9,6 +9,7 @@ pub mod unionfind;
 
 pub mod dual_segtree;
 pub mod dynamic_dual_segtree;
+pub mod dynamic_lazy_segtree;
 pub mod dynamic_segtree;
 pub mod fenwick;
 pub mod fenwick_add;
@@ -64,3 +65,8 @@ pub mod bitset;
 pub mod merge_sort_tree;
 
 pub mod linked_list;
+
+pub mod link_cut_tree;
+pub mod splay_tree;
+
+pub mod integer_set;

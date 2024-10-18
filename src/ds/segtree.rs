@@ -10,7 +10,10 @@ pub struct Segtree<M: Monoid> {
     monoid: M,
 }
 
-impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
+impl<M: Monoid> Segtree<M>
+where
+    M::Output: Clone,
+{
     /// **Time complexity O(n)**
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
@@ -23,7 +26,7 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> T {
+    pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> M::Output {
         let (l, r) = range_bounds_to_range(range, 0, self.size / 2);
 
         let mut ret_l = self.monoid.id();
@@ -49,7 +52,7 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn assign(&mut self, i: usize, value: T) {
+    pub fn assign(&mut self, i: usize, value: M::Output) {
         let mut i = i + self.size / 2;
         self.data[i] = value;
 
@@ -62,7 +65,7 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn update(&mut self, i: usize, value: T) {
+    pub fn update(&mut self, i: usize, value: M::Output) {
         self.assign(
             i,
             self.monoid.op(self.data[i + self.size / 2].clone(), value),
@@ -70,8 +73,11 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
     }
 }
 
-impl<T: Clone, M: Monoid<Output = T>> From<&Segtree<M>> for Vec<T> {
-    fn from(from: &Segtree<M>) -> Vec<T> {
+impl<M: Monoid> From<&Segtree<M>> for Vec<M::Output>
+where
+    M::Output: Clone,
+{
+    fn from(from: &Segtree<M>) -> Self {
         from.data[from.size / 2..from.size / 2 + from.original_size].to_vec()
     }
 }

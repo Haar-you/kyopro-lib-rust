@@ -1,7 +1,12 @@
-use crate::utils::bits::highest_one;
+//! Segment Tree Beats
+//!
+//! # Problems
+//! - <https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum>
 
+use crate::utils::bits::highest_one;
+use crate::utils::range::range_bounds_to_range;
 use std::cmp::{max, min, Ordering};
-use std::ops::Range;
+use std::ops::RangeBounds;
 
 #[inline]
 fn lc(i: usize) -> usize {
@@ -13,9 +18,13 @@ fn rc(i: usize) -> usize {
     i << 1 | 1
 }
 
+/// Segment Tree Beats
+///
+/// 値を区間加算・区間を最小値で更新・区間を最大値で更新、区間総和・区間最小値・区間最大値をとる操作が可能なデータ構造
 #[derive(Clone, Debug)]
 pub struct SegtreeBeats {
     hsize: usize,
+    original_size: usize,
 
     fst_max: Vec<i64>,
     snd_max: Vec<i64>,
@@ -35,6 +44,7 @@ impl SegtreeBeats {
 
         Self {
             hsize: size / 2,
+            original_size: n,
             fst_max: vec![i64::MIN; size],
             snd_max: vec![i64::MIN; size],
             max_count: vec![0; size],
@@ -169,7 +179,8 @@ impl SegtreeBeats {
         self.bottom_up(i);
     }
 
-    pub fn chmin(&mut self, Range { start, end }: Range<usize>, x: i64) {
+    pub fn chmin(&mut self, range: impl RangeBounds<usize>, x: i64) {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.chmin_(1, 0, self.hsize, start, end, x);
     }
 
@@ -187,7 +198,8 @@ impl SegtreeBeats {
         self.bottom_up(i);
     }
 
-    pub fn chmax(&mut self, Range { start, end }: Range<usize>, x: i64) {
+    pub fn chmax(&mut self, range: impl RangeBounds<usize>, x: i64) {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.chmax_(1, 0, self.hsize, start, end, x);
     }
 
@@ -205,7 +217,8 @@ impl SegtreeBeats {
         self.bottom_up(i);
     }
 
-    pub fn add(&mut self, Range { start, end }: Range<usize>, x: i64) {
+    pub fn add(&mut self, range: impl RangeBounds<usize>, x: i64) {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.add_(1, 0, self.hsize, start, end, x);
     }
 
@@ -221,7 +234,8 @@ impl SegtreeBeats {
         self.get_sum_(lc(i), l, (l + r) / 2, s, t) + self.get_sum_(rc(i), (l + r) / 2, r, s, t)
     }
 
-    pub fn get_sum(&mut self, Range { start, end }: Range<usize>) -> i64 {
+    pub fn sum(&mut self, range: impl RangeBounds<usize>) -> i64 {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.get_sum_(1, 0, self.hsize, start, end)
     }
 
@@ -239,7 +253,8 @@ impl SegtreeBeats {
         )
     }
 
-    pub fn get_max(&mut self, Range { start, end }: Range<usize>) -> i64 {
+    pub fn max(&mut self, range: impl RangeBounds<usize>) -> i64 {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.get_max_(1, 0, self.hsize, start, end)
     }
 
@@ -257,7 +272,8 @@ impl SegtreeBeats {
         )
     }
 
-    pub fn get_min(&mut self, Range { start, end }: Range<usize>) -> i64 {
+    pub fn min(&mut self, range: impl RangeBounds<usize>) -> i64 {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.get_min_(1, 0, self.hsize, start, end)
     }
 
@@ -319,19 +335,19 @@ mod test {
                 }
                 3 => {
                     let lr = rand_range(&mut rng, 0..n);
-                    assert_eq!(seg.get_sum(lr.clone()), a[lr].iter().sum());
+                    assert_eq!(seg.sum(lr.clone()), a[lr].iter().sum());
                 }
                 4 => {
                     let lr = rand_range(&mut rng, 0..n);
                     assert_eq!(
-                        seg.get_max(lr.clone()),
+                        seg.max(lr.clone()),
                         a[lr].iter().max().copied().unwrap_or(std::i64::MIN)
                     );
                 }
                 5 => {
                     let lr = rand_range(&mut rng, 0..n);
                     assert_eq!(
-                        seg.get_min(lr.clone()),
+                        seg.min(lr.clone()),
                         a[lr].iter().min().copied().unwrap_or(std::i64::MAX)
                     );
                 }

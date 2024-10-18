@@ -5,7 +5,7 @@ use std::cmp::max;
 /// 重軽分解
 #[derive(Clone, Debug)]
 pub struct HLD {
-    size: usize,
+    _size: usize,
     par: Vec<Option<usize>>,
     head: Vec<usize>,
     id: Vec<usize>,
@@ -18,10 +18,10 @@ impl HLD {
     /// **Time complexity O(n)**
     ///
     /// **Space complexity O(n)**
-    pub fn new<E: TreeEdgeTrait>(tree: Tree<E>, root: usize) -> Self {
+    pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
         let size = tree.len();
         let mut ret = Self {
-            size,
+            _size: size,
             par: vec![None; size],
             head: vec![0; size],
             id: vec![0; size],
@@ -134,6 +134,17 @@ impl HLD {
     /// **Time complexity O(1)**
     pub fn get_id(&self, x: usize) -> usize {
         self.id[x]
+    }
+
+    /// **Time complexity O(1)**
+    pub fn get_edge_id(&self, u: usize, v: usize) -> Option<usize> {
+        if self.par[u] == Some(v) {
+            Some(self.id[u])
+        } else if self.par[v] == Some(u) {
+            Some(self.id[v])
+        } else {
+            None
+        }
     }
 
     /// **Time complexity O(log n)**

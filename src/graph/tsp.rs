@@ -6,12 +6,12 @@
 use crate::graph::*;
 use std::ops::Add;
 
-pub fn tsp<T, E: EdgeTrait<Weight = T>>(g: &Graph<Directed, E>, src: usize) -> Option<T>
+pub fn tsp<E: EdgeTrait>(g: &Graph<Directed, E>, src: usize) -> Option<E::Weight>
 where
-    T: Copy + Ord + Add<Output = T>,
+    E::Weight: Copy + Ord + Add<Output = E::Weight>,
 {
     let n = g.len();
-    let mut dp: Vec<Vec<Option<T>>> = vec![vec![None; 1 << n]; n];
+    let mut dp: Vec<Vec<Option<E::Weight>>> = vec![vec![None; 1 << n]; n];
 
     for e in &g.edges[src] {
         let (to, cost) = (e.to(), e.weight());

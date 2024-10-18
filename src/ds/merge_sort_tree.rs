@@ -6,7 +6,8 @@
 
 use crate::algo::{bsearch::upper_bound, merge::inplace_merge};
 use crate::num::one_zero::Zero;
-use std::ops::{Add, AddAssign, Range};
+use crate::utils::range::range_bounds_to_range;
+use std::ops::{Add, AddAssign, RangeBounds};
 
 /// Merge-sort Tree
 pub struct MergeSortTree<T> {
@@ -18,7 +19,7 @@ pub struct MergeSortTree<T> {
 
 impl<T> MergeSortTree<T>
 where
-    T: Copy + Clone + Zero<Output = T> + Add<Output = T> + AddAssign + PartialOrd + Ord,
+    T: Copy + Clone + Zero + Add<Output = T> + AddAssign + PartialOrd + Ord,
 {
     /// **Time complexity O(n log n)**
     ///
@@ -75,7 +76,8 @@ where
     /// `ub`以下の総和を求める
     ///
     /// **Time complexity O(log^2 N)**
-    pub fn sum_count_le(&self, Range { start: l, end: r }: Range<usize>, ub: T) -> (T, usize) {
+    pub fn sum_count_le(&self, range: impl RangeBounds<usize>, ub: T) -> (T, usize) {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
         assert!(l <= r && r <= self.original_size);
 
         let mut l = l + self.size / 2;
@@ -109,6 +111,7 @@ mod tests {
     use super::*;
     use crate::testtools::*;
     use rand::Rng;
+    use std::ops::Range;
 
     #[test]
     fn test() {

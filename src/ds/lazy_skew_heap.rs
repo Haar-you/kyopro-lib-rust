@@ -4,7 +4,7 @@ use crate::num::one_zero::Zero;
 use crate::trait_alias;
 use std::{mem::swap, ops::AddAssign};
 
-trait_alias!(Elem, Ord + Copy + Zero<Output = Self> + AddAssign);
+trait_alias!(Elem, Ord + Copy + Zero + AddAssign);
 
 #[derive(Debug, Clone)]
 struct Node<T> {

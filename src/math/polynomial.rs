@@ -12,7 +12,7 @@ impl<const P: u32> Polynomial<P> {
     }
 
     pub fn constant(a: ConstModInt<P>) -> Self {
-        if a.to_u32() == 0 {
+        if a.value() == 0 {
             Self::zero()
         } else {
             Self { data: vec![a] }
@@ -44,7 +44,7 @@ impl<const P: u32> Polynomial<P> {
     }
 
     pub fn shrink(&mut self) {
-        while self.data.last().map_or(false, |x| x.to_u32() == 0) {
+        while self.data.last().map_or(false, |x| x.value() == 0) {
             self.data.pop();
         }
     }
@@ -59,7 +59,7 @@ impl<const P: u32> Polynomial<P> {
         if self.is_empty() {
             return None;
         }
-        if self.len() == 1 && self.data[0].to_u32() == 0 {
+        if self.len() == 1 && self.data[0].value() == 0 {
             return None;
         }
         Some(self.len() - 1)

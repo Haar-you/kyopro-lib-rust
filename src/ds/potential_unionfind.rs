@@ -18,7 +18,7 @@ pub struct PotentialUnionFind<T> {
 
 impl<T> PotentialUnionFind<T>
 where
-    T: Zero<Output = T> + Add<Output = T> + Sub<Output = T> + Copy,
+    T: Zero + Add<Output = T> + Sub<Output = T> + Copy,
 {
     pub fn new(n: usize) -> Self {
         Self {

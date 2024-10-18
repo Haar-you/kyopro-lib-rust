@@ -1,22 +1,51 @@
 use crate::algebra::action::Action;
-use std::ops::Range;
+use crate::utils::range::range_bounds_to_range;
+use std::ops::RangeBounds;
 
-pub struct LazySegtree<T, U, A> {
+pub struct LazySegtree<A: Action> {
     size: usize,
-    data: Vec<T>,
-    lazy: Vec<U>,
+    original_size: usize,
+    data: Vec<A::Output>,
+    lazy: Vec<A::Lazy>,
     action: A,
 }
 
-impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> LazySegtree<T, U, A> {
+impl<A: Action + Copy> LazySegtree<A>
+where
+    A::Output: Clone + PartialEq,
+    A::Lazy: Clone + PartialEq,
+{
     pub fn new(n: usize, a: A) -> Self {
         let size = n.next_power_of_two() * 2;
         Self {
             size,
+            original_size: n,
             data: vec![a.fold_id(); size],
             lazy: vec![a.update_id(); size],
             action: a,
         }
+    }
+
+    pub fn new_with_vec(s: Vec<A::Output>, a: A) -> Self {
+        let n = s.len();
+        let size = n.next_power_of_two() * 2;
+        let mut this = Self {
+            size,
+            original_size: n,
+            data: vec![a.fold_id(); size],
+            lazy: vec![a.update_id(); size],
+            action: a,
+        };
+
+        for (i, x) in s.into_iter().enumerate() {
+            this.data[size / 2 + i] = x;
+        }
+
+        for i in (1..size / 2).rev() {
+            this.data[i] = a.fold(this.data[i << 1].clone(), this.data[i << 1 | 1].clone());
+        }
+
+        this
     }
 
     fn propagate(&mut self, i: usize) {
@@ -24,12 +53,15 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Lazy
             return;
         }
         if i < self.size / 2 {
-            self.lazy[i << 1] = self
+            let l = i << 1;
+            let r = i << 1 | 1;
+
+            self.lazy[l] = self
                 .action
-                .update(self.lazy[i].clone(), self.lazy[i << 1].clone());
-            self.lazy[i << 1 | 1] = self
+                .update(self.lazy[i].clone(), self.lazy[l].clone());
+            self.lazy[r] = self
                 .action
-                .update(self.lazy[i].clone(), self.lazy[i << 1 | 1].clone());
+                .update(self.lazy[i].clone(), self.lazy[r].clone());
         }
         let len = (self.size / 2) >> (31 - (i as u32).leading_zeros());
         self.data[i] = self
@@ -45,7 +77,7 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Lazy
             temp.push(i);
         }
 
-        for &i in temp.iter().rev() {
+        for i in temp.into_iter().rev() {
             self.propagate(i);
         }
     }
@@ -61,7 +93,9 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Lazy
         }
     }
 
-    pub fn fold(&mut self, Range { start: l, end: r }: Range<usize>) -> T {
+    pub fn fold(&mut self, range: impl RangeBounds<usize>) -> A::Output {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
+
         self.propagate_top_down(l + self.size / 2);
         if r < self.size / 2 {
             self.propagate_top_down(r + self.size / 2);
@@ -91,7 +125,9 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Lazy
         self.action.fold(ret_l, ret_r)
     }
 
-    pub fn update(&mut self, Range { start: l, end: r }: Range<usize>, x: U) {
+    pub fn update(&mut self, range: impl RangeBounds<usize>, x: A::Lazy) {
+        let (l, r) = range_bounds_to_range(range, 0, self.original_size);
+
         self.propagate_top_down(l + self.size / 2);
         if r < self.size / 2 {
             self.propagate_top_down(r + self.size / 2);
@@ -105,11 +141,9 @@ impl<T: Clone + Eq, U: Clone + Eq, A: Clone + Action<FType = T, UType = U>> Lazy
                 if r & 1 == 1 {
                     r -= 1;
                     self.lazy[r] = self.action.update(x.clone(), self.lazy[r].clone());
-                    self.propagate(r);
                 }
                 if l & 1 == 1 {
                     self.lazy[l] = self.action.update(x.clone(), self.lazy[l].clone());
-                    self.propagate(l);
                     l += 1;
                 }
                 r >>= 1;

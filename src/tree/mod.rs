@@ -1,5 +1,6 @@
 //! 木に関するもの
 
+pub mod auxiliary_tree;
 pub mod centroid;
 pub mod depth_query;
 pub mod euler_tour;
@@ -150,6 +151,10 @@ pub struct Tree<E> {
 impl<E> Tree<E> {
     pub fn nodes_iter(&self) -> impl Iterator<Item = &TreeNode<E>> {
         self.nodes.iter()
+    }
+
+    pub fn nodes(&self, i: usize) -> &TreeNode<E> {
+        &self.nodes[i]
     }
 
     pub fn len(&self) -> usize {

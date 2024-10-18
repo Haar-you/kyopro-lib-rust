@@ -1,10 +1,11 @@
 //! 永続セグメントツリー
 
 use std::cell::RefCell;
-use std::ops::Range;
+use std::ops::RangeBounds;
 use std::rc::Rc;
 
 use crate::algebra::traits::Monoid;
+use crate::utils::range::range_bounds_to_range;
 
 #[derive(Clone, Debug)]
 struct Node<T> {
@@ -28,22 +29,36 @@ pub struct PersistentSegtree<M: Monoid> {
     root: Option<Rc<RefCell<Node<M::Output>>>>,
     monoid: M,
     to: usize,
+    original_size: usize,
 }
 
-impl<T: Clone, M: Monoid<Output = T> + Clone> PersistentSegtree<M> {
+impl<M: Monoid + Clone> PersistentSegtree<M>
+where
+    M::Output: Clone,
+{
     pub fn new(n: usize, monoid: M) -> Self {
         let seq = vec![monoid.id(); n];
         Self::from_vec(seq, monoid)
     }
 
-    pub fn from_vec(a: Vec<T>, monoid: M) -> Self {
+    pub fn from_vec(a: Vec<M::Output>, monoid: M) -> Self {
         let n = a.len();
         let to = n.next_power_of_two();
         let root = Some(Self::__init(0, to, &a, &monoid));
-        Self { root, monoid, to }
+        Self {
+            root,
+            monoid,
+            to,
+            original_size: n,
+        }
     }
 
-    fn __init(from: usize, to: usize, seq: &[T], monoid: &M) -> Rc<RefCell<Node<T>>> {
+    fn __init(
+        from: usize,
+        to: usize,
+        seq: &[M::Output],
+        monoid: &M,
+    ) -> Rc<RefCell<Node<M::Output>>> {
         if to - from == 1 {
             Rc::new(RefCell::new(Node::new(seq[from].clone())))
         } else {
@@ -75,13 +90,13 @@ impl<T: Clone, M: Monoid<Output = T> + Clone> PersistentSegtree<M> {
     }
 
     fn __set(
-        node: Rc<RefCell<Node<T>>>,
+        node: Rc<RefCell<Node<M::Output>>>,
         from: usize,
         to: usize,
         pos: usize,
-        value: &T,
+        value: &M::Output,
         monoid: &M,
-    ) -> Rc<RefCell<Node<T>>> {
+    ) -> Rc<RefCell<Node<M::Output>>> {
         if to <= pos || pos + 1 <= from {
             node
         } else if pos <= from && to <= pos + 1 {
@@ -116,7 +131,7 @@ impl<T: Clone, M: Monoid<Output = T> + Clone> PersistentSegtree<M> {
         }
     }
 
-    pub fn assign(&self, i: usize, value: T) -> Self {
+    pub fn assign(&self, i: usize, value: M::Output) -> Self {
         let new_root = Self::__set(
             self.root.clone().unwrap(),
             0,
@@ -130,17 +145,18 @@ impl<T: Clone, M: Monoid<Output = T> + Clone> PersistentSegtree<M> {
             root: Some(new_root),
             monoid: self.monoid.clone(),
             to: self.to,
+            original_size: self.original_size,
         }
     }
 
     fn __fold(
-        node: Rc<RefCell<Node<T>>>,
+        node: Rc<RefCell<Node<M::Output>>>,
         from: usize,
         to: usize,
         l: usize,
         r: usize,
         monoid: &M,
-    ) -> T {
+    ) -> M::Output {
         if l <= from && to <= r {
             node.borrow().value.clone()
         } else if to <= l || r <= from {
@@ -160,7 +176,8 @@ impl<T: Clone, M: Monoid<Output = T> + Clone> PersistentSegtree<M> {
         }
     }
 
-    pub fn fold(&self, Range { start, end }: Range<usize>) -> T {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> M::Output {
+        let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         Self::__fold(
             self.root.clone().unwrap(),
             0,

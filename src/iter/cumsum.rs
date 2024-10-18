@@ -1,37 +1,39 @@
-use std::ops::AddAssign;
-
-pub struct CumSum<I, T> {
+pub struct CumSum<I, St, F> {
     iter: I,
-    st: T,
+    st: St,
     is_first: bool,
+    f: F,
 }
 
-impl<I> Iterator for CumSum<I, I::Item>
+impl<I, St, F> Iterator for CumSum<I, St, F>
 where
     I: Iterator,
-    I::Item: AddAssign + Copy,
+    St: Copy,
+    F: FnMut(&mut St, I::Item),
 {
-    type Item = I::Item;
+    type Item = St;
     fn next(&mut self) -> Option<Self::Item> {
         if self.is_first {
             self.is_first = false;
         } else {
-            self.st += self.iter.next()?;
+            (self.f)(&mut self.st, self.iter.next()?);
         }
         Some(self.st)
     }
 }
 
 pub trait IterCumSum: Iterator {
-    fn cumsum(self, init: Self::Item) -> CumSum<Self, Self::Item>
+    fn cumsum<St, F>(self, init: St, f: F) -> CumSum<Self, St, F>
     where
         Self: Sized,
-        Self::Item: AddAssign + Copy,
+        St: Copy,
+        F: FnMut(&mut St, Self::Item),
     {
         CumSum {
             iter: self,
             st: init,
             is_first: true,
+            f,
         }
     }
 }
@@ -45,7 +47,7 @@ mod tests {
     #[test]
     fn test() {
         let a = vec![1, 2, 3, 4, 5];
-        let b = a.into_iter().cumsum(0).collect::<Vec<_>>();
+        let b = a.iter().cumsum(0, |acc, x| *acc += x).collect::<Vec<_>>();
 
         assert_eq!(b, vec![0, 1, 3, 6, 10, 15]);
     }

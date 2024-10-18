@@ -3,9 +3,9 @@ use crate::num::ff::*;
 
 impl<Modulo: FF> FactorialTable<Modulo>
 where
-    Modulo::Output: FFElem,
+    Modulo::Element: FFElem + Copy,
 {
-    pub fn bernoulli_number(&self, n: usize) -> Vec<Modulo::Output> {
+    pub fn bernoulli_number(&self, n: usize) -> Vec<Modulo::Element> {
         let mut ret = vec![self.modulo.from_u64(0); n + 1];
 
         ret[0] = self.modulo.from_u64(1);

@@ -7,12 +7,12 @@ use crate::num::one_zero::Zero;
 use std::ops::Add;
 
 /// **Time complexity O(V²2ⱽ)**
-pub fn chinese_postman_problem<T, E: EdgeTrait<Weight = T>>(g: &Graph<Undirected, E>) -> T
+pub fn chinese_postman_problem<E: EdgeTrait>(g: &Graph<Undirected, E>) -> E::Weight
 where
-    T: Copy + Ord + Add<Output = T> + Zero<Output = T>,
+    E::Weight: Copy + Ord + Add<Output = E::Weight> + Zero,
 {
     let n = g.len();
-    let zero = T::zero();
+    let zero = E::Weight::zero();
 
     let mut dist = vec![vec![None; n]; n];
 
