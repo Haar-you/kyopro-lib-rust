@@ -49,7 +49,9 @@ impl<T: Monoid + Inverse> Group for T {}
 pub trait AbelianGroup: Group + Commutative {}
 impl<T: Group + Commutative> AbelianGroup for T {}
 
+/// 値に二項演算を複数回適用する。
 pub trait Times<T: Clone>: BinaryOp<Output = T> + Identity {
+    /// `n`個の値`a`に二項演算を適用する。
     fn times(&self, mut a: Self::Output, mut n: u64) -> Self::Output {
         let mut ret = self.id();
 
