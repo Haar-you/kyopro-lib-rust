@@ -9,8 +9,8 @@ use std::{
 };
 
 trait_alias!(
-    Elem,
-    Add<Output = Self> + Sub<Output = Self> + Ord + Copy + Zero
+    /// [`StarrySkyTree<T>`]が扱える型
+    Elem: Add<Output = Self> + Sub<Output = Self> + Ord + Copy + Zero
 );
 
 #[derive(Copy, Clone)]

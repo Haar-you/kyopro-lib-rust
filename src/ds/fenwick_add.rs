@@ -2,7 +2,10 @@ use crate::num::one_zero::Zero;
 use crate::trait_alias;
 use std::ops::{Add, Range, RangeTo, Sub};
 
-trait_alias!(Elem, Copy + Zero + Add<Output = Self> + Sub<Output = Self>);
+trait_alias!(
+    /// [`FenwickTreeAdd<T>`]が扱える型
+    Elem: Copy + Zero + Add<Output = Self> + Sub<Output = Self>
+);
 
 pub struct FenwickTreeAdd<T> {
     data: Vec<T>,

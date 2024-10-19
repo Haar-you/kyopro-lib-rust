@@ -1,3 +1,5 @@
+use crate::trait_alias;
+
 /// 代数構造
 pub trait Set {
     /// 演算の対象の型
@@ -29,25 +31,11 @@ pub trait Associative {}
 /// 冪等性をもつ
 pub trait Idempotence {}
 
-/// 半群
-pub trait Semigroup: BinaryOp + Associative {}
-impl<T: BinaryOp + Associative> Semigroup for T {}
-
-/// モノイド
-pub trait Monoid: Semigroup + Identity {}
-impl<T: Semigroup + Identity> Monoid for T {}
-
-/// 可換モノイド
-pub trait AbelianMonoid: Monoid + Commutative {}
-impl<T: Monoid + Commutative> AbelianMonoid for T {}
-
-/// 群
-pub trait Group: Monoid + Inverse {}
-impl<T: Monoid + Inverse> Group for T {}
-
-/// 可換群
-pub trait AbelianGroup: Group + Commutative {}
-impl<T: Group + Commutative> AbelianGroup for T {}
+trait_alias!(#[doc = "半群"] Semigroup: BinaryOp + Associative);
+trait_alias!(#[doc = "モノイド"] Monoid: Semigroup + Identity);
+trait_alias!(#[doc = "可換モノイド"] AbelianMonoid: Monoid + Commutative);
+trait_alias!(#[doc = "群"] Group: Monoid + Inverse);
+trait_alias!(#[doc = "可換群"] AbelianGroup: Group + Commutative);
 
 /// 値に二項演算を複数回適用する。
 pub trait Times: BinaryOp + Identity

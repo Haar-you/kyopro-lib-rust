@@ -7,8 +7,8 @@ use std::cell::Cell;
 use std::ops::{Add, Mul, RangeBounds};
 
 trait_alias!(
-    Elem,
-    Copy + Zero + Add<Output = Self> + Mul<Output = Self> + PartialEq
+    /// [`LazySegtreeCoeff<T>`]が扱える型
+    Elem: Copy + Zero + Add<Output = Self> + Mul<Output = Self> + PartialEq
 );
 
 pub struct LazySegtreeCoeff<T> {

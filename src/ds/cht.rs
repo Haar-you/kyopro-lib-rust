@@ -12,8 +12,8 @@ use std::{
 };
 
 trait_alias!(
-    Elem,
-    Copy + PartialEq + PartialOrd + Sub<Output = Self> + Mul<Output = Self> + Add<Output = Self>
+    /// [`ConvexHullTrick<T>`]がt扱える型
+    Elem: Copy + PartialEq + PartialOrd + Sub<Output = Self> + Mul<Output = Self> + Add<Output = Self>
 );
 
 /// 最大値クエリか最小値クエリかを表す

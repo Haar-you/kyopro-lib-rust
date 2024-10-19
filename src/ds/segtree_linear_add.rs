@@ -14,8 +14,8 @@ use std::{
 };
 
 trait_alias!(
-    Elem,
-    Copy + Add<Output = Self> + Mul<Output = Self> + Zero + From<u32>
+    /// [`SegtreeLinearAdd<T>`]が扱える型
+    Elem: Copy + Add<Output = Self> + Mul<Output = Self> + Zero + From<u32>
 );
 
 pub struct SegtreeLinearAdd<T> {
