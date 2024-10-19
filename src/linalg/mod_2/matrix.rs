@@ -3,6 +3,7 @@ use std::ops::Mul;
 
 use crate::ds::bitset::Bitset;
 
+/// 行列 (mod 2)
 #[derive(Clone)]
 pub struct MatrixMod2 {
     h: usize,
@@ -11,6 +12,7 @@ pub struct MatrixMod2 {
 }
 
 impl MatrixMod2 {
+    /// `h`行`w`列の`MatrixMod2`を生成
     pub fn new(h: usize, w: usize) -> Self {
         Self {
             h,
@@ -19,6 +21,7 @@ impl MatrixMod2 {
         }
     }
 
+    /// [`Bitset`]の`Vec`から`MatrixMod2`を生成する
     pub fn from_vec_bitset(other: Vec<Bitset>) -> Self {
         let h = other.len();
         assert!(h > 0);
@@ -28,6 +31,7 @@ impl MatrixMod2 {
         Self { h, w, data: other }
     }
 
+    /// 行列の転置を得る
     pub fn transpose(self) -> Self {
         let mut ret = Self::new(self.w, self.h);
         for i in 0..self.h {
@@ -40,6 +44,7 @@ impl MatrixMod2 {
         ret
     }
 
+    /// `i`行`j`列の成分を返す
     pub fn get(&self, i: usize, j: usize) -> Option<u32> {
         let a = self.data.get(i)?;
         if j < a.len() {

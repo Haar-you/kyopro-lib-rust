@@ -1,3 +1,4 @@
+//! 逆行列 (mod 素数)
 use crate::math::mod_ops::inv_p::mod_inv_p;
 
 /// 素数mod p上での逆行列を求める。

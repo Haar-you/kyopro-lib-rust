@@ -4,30 +4,38 @@
 //! - <https://atcoder.jp/contests/abc142/tasks/abc142_e>
 use std::ops::{BitAnd, BitOr, BitXor, Sub};
 
+/// `usize`のビット数個の要素をもつ集合を表す。
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct UsizeSet(pub usize);
 
 impl UsizeSet {
+    /// `i`を追加した集合を返す。
     #[inline]
     pub fn set(self, i: usize) -> Self {
         Self(self.0 | (1 << i))
     }
 
+    /// `i`を削除した集合を返す。
     #[inline]
     pub fn reset(self, i: usize) -> Self {
         Self(self.0 & !(1 << i))
     }
 
+    /// `i`が集合に含まれていなければ、`i`を追加した集合を返す。
+    ///
+    /// `i`が集合に含まれていれば、`i`を削除した集合を返す。
     #[inline]
     pub fn flip(self, i: usize) -> Self {
         Self(self.0 ^ (1 << i))
     }
 
+    /// `i`が集合に含まれているかを判定する。
     #[inline]
     pub fn contains(self, i: usize) -> bool {
         (self.0 >> i) & 1 == 1
     }
 
+    /// `0`から`n`までを要素に含む集合を得る。
     #[inline]
     pub fn fill(n: usize) -> Self {
         assert!(n <= usize::BITS as usize);
@@ -38,31 +46,37 @@ impl UsizeSet {
         }
     }
 
+    /// `self`から`rhs`を引いた差集合を返す。
     #[inline]
     pub fn difference(self, rhs: Self) -> Self {
         Self(self.0 & !rhs.0)
     }
 
+    /// 2つの集合の和集合を返す。
     #[inline]
     pub fn union(self, rhs: Self) -> Self {
         Self(self.0 | rhs.0)
     }
 
+    /// 2つの集合の共通部分を返す。
     #[inline]
     pub fn intersection(self, rhs: Self) -> Self {
         Self(self.0 & rhs.0)
     }
 
+    /// 2つの集合の対象差を返す。
     #[inline]
     pub fn symmetric_difference(self, rhs: Self) -> Self {
         Self(self.0 ^ rhs.0)
     }
 
+    /// 集合が空かを判定する。
     #[inline]
     pub fn is_empty(self) -> bool {
         self.0 == 0
     }
 
+    /// 集合の大きさを返す。
     #[inline]
     pub fn len(self) -> usize {
         self.0.count_ones() as usize

@@ -105,27 +105,35 @@ impl std::ops::Div<f64> for Vector {
 }
 
 impl Vector {
+    /// 絶対値を計算する
     pub fn abs(self) -> f64 {
         (self.0 * self.0 + self.1 * self.1).sqrt()
     }
+    /// 絶対値の2乗を計算する
     pub fn abs_sq(self) -> f64 {
         self.0 * self.0 + self.1 * self.1
     }
+    /// 内積を計算する
     pub fn dot(self, other: Self) -> f64 {
         self.0 * other.0 + self.1 * other.1
     }
+    /// 外積を計算する
     pub fn cross(self, other: Self) -> f64 {
         self.0 * other.1 - self.1 * other.0
     }
+    /// 長さを`1`にしたベクトルを返す
     pub fn unit(self) -> Self {
         self / self.abs()
     }
+    /// 直行するベクトルを返す
     pub fn normal(self) -> Self {
         Self(-self.1, self.0)
     }
+    /// ベクトルのなす角度を返す
     pub fn angle(self, other: Self) -> f64 {
         (other.1 - self.1).atan2(other.0 - self.0)
     }
+    /// 極座標形式で`Vector`を生成する
     pub fn polar(r: f64, ang: f64) -> Self {
         Vector(r * ang.cos(), r * ang.sin())
     }
@@ -145,6 +153,7 @@ impl Vector {
     }
 }
 
+/// 直線
 #[derive(Copy, Clone, Debug, Default)]
 pub struct Line {
     pub from: Vector,
@@ -194,17 +203,22 @@ impl Line {
     }
 }
 
+/// 円
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Circle {
+    /// 円の中心
     pub center: Vector,
+    /// 円の半径
     pub radius: f64,
 }
 
 impl Circle {
+    /// 中心`center`、半径`radius`の`Circle`を生成する
     pub fn new(center: Vector, radius: f64) -> Self {
         Circle { center, radius }
     }
 
+    /// 円が等しいかを判定する
     pub fn eq(self, other: Self, eps: Eps) -> bool {
         self.center.eq(other.center, eps) && eps.eq(self.radius, other.radius)
     }

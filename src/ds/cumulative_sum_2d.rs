@@ -3,12 +3,14 @@
 pub use crate::algebra::traits::Group;
 use std::ops::{Index, Range};
 
+/// 2次元の累積和を扱う
 #[derive(Debug, Clone)]
 pub struct CumulativeSum2D<G: Group> {
     data: Vec<Vec<G::Element>>,
     group: G,
 }
 
+/// [`CumulativeSum2D`]を構築する
 pub struct CumulativeSum2DBuilder<G: Group> {
     data: Vec<Vec<G::Element>>,
     group: G,
@@ -47,6 +49,7 @@ impl<G: Group> CumulativeSum2DBuilder<G>
 where
     G::Element: Copy,
 {
+    /// `CumulativeSum2DBuilder`を生成する
     pub fn new(n: usize, m: usize, group: G) -> Self {
         CumulativeSum2DBuilder {
             data: vec![vec![group.id(); m + 1]; n + 1],
@@ -56,14 +59,17 @@ where
         }
     }
 
+    /// `[i][j]`番目に`value`を代入する
     pub fn assign(&mut self, i: usize, j: usize, value: G::Element) {
         self.data[i + 1][j + 1] = value;
     }
 
+    /// 群`G`の演算に`[i][j]`番目の値と`value`を適用して`[i][j]`番目の値を更新する。
     pub fn update(&mut self, i: usize, j: usize, value: G::Element) {
         self.data[i + 1][j + 1] = self.group.op(self.data[i + 1][j + 1], value);
     }
 
+    /// [`CumulativeSum2D`]を構築する
     pub fn build(self) -> CumulativeSum2D<G> {
         let mut data = self.data;
 

@@ -2,6 +2,7 @@
 
 use crate::geom::*;
 
+/// 凸多角形の直径を求める
 pub fn convex_diameter(ps: &[Vector]) -> f64 {
     let n = ps.len();
 

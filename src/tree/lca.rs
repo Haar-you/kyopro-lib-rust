@@ -2,6 +2,7 @@
 
 use crate::tree::*;
 
+/// ダブリングによる最小共通祖先
 pub struct DoublingLCA {
     log2n: usize,
     parent: Vec<Vec<Option<usize>>>,

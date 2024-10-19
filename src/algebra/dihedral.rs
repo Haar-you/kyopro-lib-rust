@@ -1,3 +1,4 @@
+//! 二面体群
 pub use crate::algebra::traits::*;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -6,12 +7,14 @@ pub enum DihedralValue {
     S(usize),
 }
 
+/// 二面体群
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Dihedral {
     k: usize,
 }
 
 impl Dihedral {
+    /// `Dihedral`を生成する。
     pub fn new(k: usize) -> Self {
         Self { k }
     }

@@ -1,10 +1,13 @@
+//! 最大値を演算とする代数的構造
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use std::marker::PhantomData;
 
+/// 最大値を演算とする代数的構造
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Max<T>(PhantomData<T>);
 impl<T> Max<T> {
+    /// `Max<T>`を生成する。
     pub fn new() -> Self {
         Self(PhantomData)
     }

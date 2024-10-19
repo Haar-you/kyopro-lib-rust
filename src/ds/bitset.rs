@@ -11,6 +11,7 @@ pub struct Bitset {
 }
 
 impl Bitset {
+    /// `Bitset`内部で扱う型のBit数
     pub const B_SIZE: usize = B_SIZE;
 
     pub fn new(n: usize) -> Self {

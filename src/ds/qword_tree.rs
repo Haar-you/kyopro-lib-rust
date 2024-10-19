@@ -1,5 +1,6 @@
 //! 64分木
 
+/// `QwordTree`で扱える最大値
 pub const MAX: u32 = (1 << 24) - 1;
 
 ///　0 ~ 16777215 (2²⁴ - 1) の値の集合を管理する
@@ -18,6 +19,7 @@ impl Default for QwordTree {
 }
 
 impl QwordTree {
+    /// 64分木を生成
     pub fn new() -> Self {
         Self {
             v0: 0,

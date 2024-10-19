@@ -1,11 +1,13 @@
 //! 座標圧縮
 use crate::algo::bsearch::lower_bound;
 
+/// 座標圧縮のための構造体
 #[derive(Clone)]
 pub struct Compressor<T> {
     data: Vec<T>,
 }
 
+/// [`Compressor<T>`]を生成する
 #[derive(Clone, Default)]
 pub struct CompressorBuilder<T> {
     data: Vec<T>,
@@ -26,6 +28,7 @@ impl<T: Ord + Eq> Compressor<T> {
         &self.data[i]
     }
 
+    /// `values`の要素をすべて座標圧縮する。
     pub fn compress<'a>(
         &'a self,
         values: impl IntoIterator<Item = T> + 'a,
@@ -33,6 +36,7 @@ impl<T: Ord + Eq> Compressor<T> {
         values.into_iter().map(move |x| self.index(&x))
     }
 
+    /// `values`の要素をすべて復元する。
     pub fn decompress<'a>(
         &'a self,
         indices: impl IntoIterator<Item = usize> + 'a,
@@ -40,20 +44,24 @@ impl<T: Ord + Eq> Compressor<T> {
         indices.into_iter().map(move |i| self.get(i))
     }
 
+    /// 座標圧縮後の要素の種類数
     pub fn size(&self) -> usize {
         self.data.len()
     }
 }
 
 impl<T: Ord + Eq> CompressorBuilder<T> {
+    /// `CompressorBuilder<T>`を生成する。
     pub fn new() -> Self {
         CompressorBuilder { data: vec![] }
     }
 
+    /// 座標圧縮対象に`value`を追加する。
     pub fn add(&mut self, value: T) {
         self.data.push(value);
     }
 
+    /// 座標圧縮対象に`values`の要素を追加する。
     pub fn extend(&mut self, values: impl IntoIterator<Item = T>) {
         self.data.extend(values);
     }

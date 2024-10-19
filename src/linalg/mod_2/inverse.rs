@@ -1,5 +1,6 @@
 use crate::ds::bitset::*;
 
+/// mod 2上で逆行列を求める
 pub fn inverse(mut b: Vec<Bitset>) -> Option<Vec<Bitset>> {
     let n = b.len();
 

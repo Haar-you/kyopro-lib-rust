@@ -16,9 +16,12 @@ trait_alias!(
     Copy + PartialEq + PartialOrd + Sub<Output = Self> + Mul<Output = Self> + Add<Output = Self>
 );
 
+/// 最大値クエリか最小値クエリかを表す
 #[derive(PartialEq, Eq, Copy, Clone, Debug)]
 pub enum Mode {
+    /// 最大値クエリ
     Max,
+    /// 最小値クエリ
     Min,
 }
 

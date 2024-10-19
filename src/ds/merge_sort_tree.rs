@@ -9,6 +9,7 @@ use crate::num::one_zero::Zero;
 use crate::utils::range::range_bounds_to_range;
 use std::ops::{Add, AddAssign, RangeBounds};
 
+/// Merge-sort Tree
 pub struct MergeSortTree<T> {
     data: Vec<Vec<T>>,
     accum: Vec<Vec<T>>,

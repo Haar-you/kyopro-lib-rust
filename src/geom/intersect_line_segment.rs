@@ -3,30 +3,40 @@
 use crate::geom::*;
 use std::cmp::Ordering::*;
 
+/// 直線と線分の位置関係
 #[derive(Clone, Copy, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 pub enum IntersectLineSegment {
+    /// 線分が直線の左側にある
     LEFTSIDE,
+    /// 線分が直線の右側にある
     RIGHTSIDE,
+    /// 線分が直線上にある
     OVERLAPPED,
+    /// 線分が直線と交差している
     CROSSED,
 }
 
 impl IntersectLineSegment {
+    /// `LEFTSIDE`かを判定
     pub fn leftside(self) -> bool {
         self == Self::LEFTSIDE
     }
+    /// `RIGHTSIDE`かを判定
     pub fn rightside(self) -> bool {
         self == Self::RIGHTSIDE
     }
+    /// `OVERLAPPED`かを判定
     pub fn overlapped(self) -> bool {
         self == Self::OVERLAPPED
     }
+    /// `CROSSED`かを判定
     pub fn crossed(self) -> bool {
         self == Self::CROSSED
     }
 }
 
+/// 直線と線分の位置関係と交点を求める
 pub fn intersect_line_segment(
     l: Line,
     s: Line,

@@ -1,10 +1,13 @@
+//! 乗算を演算とする代数的構造
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use std::marker::PhantomData;
 
+/// 乗算を演算とする代数的構造
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Prod<T>(PhantomData<T>);
 impl<T> Prod<T> {
+    /// `Prod<T>`を生成する。
     pub fn new() -> Self {
         Self(PhantomData)
     }

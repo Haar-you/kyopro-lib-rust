@@ -8,6 +8,7 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
+/// 有理数
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Rational {
     numerator: i64,
@@ -15,6 +16,7 @@ pub struct Rational {
 }
 
 impl Rational {
+    /// `numerator / denominator`を表す有理数を生成する
     pub fn new(mut numerator: i64, mut denominator: i64) -> Self {
         if denominator == 0 {
             panic!("denominator must not be 0.");

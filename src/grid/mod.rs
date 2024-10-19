@@ -6,9 +6,12 @@ pub struct Position {
     pub y: usize,
 }
 
+/// 移動方向
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Dir {
+    /// x方向の移動量
     pub dx: isize,
+    /// y方向の移動量
     pub dy: isize,
 }
 
