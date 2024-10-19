@@ -1,16 +1,16 @@
 pub use crate::algebra::traits::*;
 
 pub struct FoldableDeque<S: Semigroup> {
-    front_stack: Vec<S::Output>,
-    back_stack: Vec<S::Output>,
-    front_sum: Vec<S::Output>,
-    back_sum: Vec<S::Output>,
+    front_stack: Vec<S::Element>,
+    back_stack: Vec<S::Element>,
+    front_sum: Vec<S::Element>,
+    back_sum: Vec<S::Element>,
     semigroup: S,
 }
 
 impl<S: Semigroup> FoldableDeque<S>
 where
-    S::Output: Clone,
+    S::Element: Clone,
 {
     pub fn new(semigroup: S) -> Self {
         FoldableDeque {
@@ -22,7 +22,7 @@ where
         }
     }
 
-    fn f(&self, a: Option<S::Output>, b: Option<S::Output>) -> Option<S::Output> {
+    fn f(&self, a: Option<S::Element>, b: Option<S::Element>) -> Option<S::Element> {
         match (a, b) {
             (Some(a), Some(b)) => Some(self.semigroup.op(a, b)),
             (x @ Some(_), _) => x,
@@ -31,20 +31,20 @@ where
         }
     }
 
-    pub fn fold(&self) -> Option<S::Output> {
+    pub fn fold(&self) -> Option<S::Element> {
         self.f(
             self.front_sum.last().cloned(),
             self.back_sum.last().cloned(),
         )
     }
 
-    pub fn push_back(&mut self, value: S::Output) {
+    pub fn push_back(&mut self, value: S::Element) {
         self.back_stack.push(value.clone());
         self.back_sum
             .push(self.f(self.back_sum.last().cloned(), Some(value)).unwrap());
     }
 
-    pub fn push_front(&mut self, value: S::Output) {
+    pub fn push_front(&mut self, value: S::Element) {
         self.front_stack.push(value.clone());
         self.front_sum
             .push(self.f(Some(value), self.front_sum.last().cloned()).unwrap());
@@ -66,7 +66,7 @@ where
         }
     }
 
-    pub fn pop_front(&mut self) -> Option<S::Output> {
+    pub fn pop_front(&mut self) -> Option<S::Element> {
         if self.front_stack.is_empty() {
             self.back_sum.clear();
 
@@ -86,7 +86,7 @@ where
         self.front_stack.pop()
     }
 
-    pub fn pop_back(&mut self) -> Option<S::Output> {
+    pub fn pop_back(&mut self) -> Option<S::Element> {
         if self.back_stack.is_empty() {
             self.front_sum.clear();
 
@@ -106,11 +106,11 @@ where
         self.back_stack.pop()
     }
 
-    pub fn front(&self) -> Option<&S::Output> {
+    pub fn front(&self) -> Option<&S::Element> {
         self.front_stack.last().or_else(|| self.back_stack.first())
     }
 
-    pub fn back(&self) -> Option<&S::Output> {
+    pub fn back(&self) -> Option<&S::Element> {
         self.back_stack.last().or_else(|| self.front_stack.first())
     }
 

@@ -8,13 +8,13 @@ use std::ops::RangeBounds;
 pub struct DualSegtree<M: Monoid> {
     original_size: usize,
     size: usize,
-    data: Vec<M::Output>,
+    data: Vec<M::Element>,
     monoid: M,
 }
 
 impl<M: Monoid> DualSegtree<M>
 where
-    M::Output: Clone,
+    M::Element: Clone,
 {
     /// **Time complexity O(n)**
     pub fn new(n: usize, monoid: M) -> Self {
@@ -52,19 +52,19 @@ where
     }
 
     /// **Time complexity O(log n)**
-    pub fn get(&mut self, i: usize) -> M::Output {
+    pub fn get(&mut self, i: usize) -> M::Element {
         self.propagate_top_down(i + self.size / 2);
         self.data[i + self.size / 2].clone()
     }
 
-    pub fn from_vec(&mut self, a: &[M::Output]) {
+    pub fn from_vec(&mut self, a: &[M::Element]) {
         self.data = vec![self.monoid.id(); self.size];
         for (i, e) in a.iter().enumerate() {
             self.data[i + self.size / 2] = e.clone();
         }
     }
 
-    pub fn to_vec(&mut self) -> Vec<M::Output> {
+    pub fn to_vec(&mut self) -> Vec<M::Element> {
         for i in 1..self.size {
             self.propagate(i);
         }
@@ -73,7 +73,7 @@ where
     }
 
     /// **Time complexity O(log n)**
-    pub fn update(&mut self, range: impl RangeBounds<usize>, value: M::Output) {
+    pub fn update(&mut self, range: impl RangeBounds<usize>, value: M::Element) {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
         let mut l = l + self.size / 2;

@@ -17,12 +17,12 @@ impl Dihedral {
     }
 }
 
-impl AlgeStruct for Dihedral {
-    type Output = DihedralValue;
+impl Set for Dihedral {
+    type Element = DihedralValue;
 }
 
 impl BinaryOp for Dihedral {
-    fn op(&self, a: Self::Output, b: Self::Output) -> Self::Output {
+    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
         match (a, b) {
             (DihedralValue::R(x), DihedralValue::R(y)) => DihedralValue::R((x + y) % self.k),
             (DihedralValue::R(x), DihedralValue::S(y)) => {
@@ -37,13 +37,13 @@ impl BinaryOp for Dihedral {
 }
 
 impl Identity for Dihedral {
-    fn id(&self) -> Self::Output {
+    fn id(&self) -> Self::Element {
         DihedralValue::R(0)
     }
 }
 
 impl Inverse for Dihedral {
-    fn inv(&self, a: Self::Output) -> Self::Output {
+    fn inv(&self, a: Self::Element) -> Self::Element {
         match a {
             DihedralValue::R(x) => DihedralValue::R(if x == 0 { 0 } else { self.k - 1 }),
             DihedralValue::S(_) => a,

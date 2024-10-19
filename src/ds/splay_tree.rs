@@ -15,8 +15,8 @@ use std::ptr;
 use crate::algebra::traits::Monoid;
 
 struct Node<M: Monoid> {
-    value: M::Output,
-    sum: M::Output,
+    value: M::Element,
+    sum: M::Element,
     monoid: M,
     size: usize,
     rev: bool,
@@ -27,9 +27,9 @@ struct Node<M: Monoid> {
 
 impl<M: Monoid + Copy> Node<M>
 where
-    M::Output: Clone,
+    M::Element: Clone,
 {
-    fn new(monoid: M, value: M::Output) -> Self {
+    fn new(monoid: M, value: M::Element) -> Self {
         Self {
             value,
             sum: monoid.id(),
@@ -42,12 +42,12 @@ where
         }
     }
 
-    fn get_sum(this: *mut Self) -> M::Output {
+    fn get_sum(this: *mut Self) -> M::Element {
         assert!(!this.is_null());
         unsafe { (*this).sum.clone() }
     }
 
-    fn set_value(this: *mut Self, value: M::Output) {
+    fn set_value(this: *mut Self, value: M::Element) {
         assert!(!this.is_null());
         unsafe {
             (*this).value = value;
@@ -231,7 +231,7 @@ where
         (left, cur)
     }
 
-    fn traverse(cur: *mut Self, f: &mut impl FnMut(&M::Output)) {
+    fn traverse(cur: *mut Self, f: &mut impl FnMut(&M::Element)) {
         if !cur.is_null() {
             Self::pushdown(cur);
             Self::traverse(Self::left_of(cur).unwrap(), f);
@@ -303,7 +303,7 @@ pub struct SplayTree<M: Monoid> {
 
 impl<M: Monoid + Copy> SplayTree<M>
 where
-    M::Output: Clone,
+    M::Element: Clone,
 {
     /// モノイド`m`をもつ`SplayTree<M>`を生成
     pub fn new(monoid: M) -> Self {
@@ -314,7 +314,7 @@ where
     }
 
     /// 値`value`をもつノード一つのみからなる`SplayTree<M>`を生成
-    pub fn singleton(monoid: M, value: M::Output) -> Self {
+    pub fn singleton(monoid: M, value: M::Element) -> Self {
         let root = Box::new(Node::new(monoid, value));
 
         Self {
@@ -334,7 +334,7 @@ where
     }
 
     /// `index`番目の要素の参照を返す
-    pub fn get(&self, index: usize) -> Option<&M::Output> {
+    pub fn get(&self, index: usize) -> Option<&M::Element> {
         self.root.set(Node::get(self.root.get(), index));
         let node = self.root.get();
 
@@ -346,7 +346,7 @@ where
     }
 
     /// `index`番目の要素を`value`に変更する
-    pub fn set(&mut self, index: usize, value: M::Output) {
+    pub fn set(&mut self, index: usize, value: M::Element) {
         let root = Node::get(self.root.get(), index);
         Node::set_value(root, value);
         Node::update(root);
@@ -384,7 +384,7 @@ where
     }
 
     /// 要素を`index`番目になるように挿入する
-    pub fn insert(&mut self, index: usize, value: M::Output) {
+    pub fn insert(&mut self, index: usize, value: M::Element) {
         let (l, r) = Node::split(self.root.get(), index);
         let node = Box::into_raw(Box::new(Node::new(self.monoid, value)));
         let root = Node::merge(l, Node::merge(node, r));
@@ -392,7 +392,7 @@ where
     }
 
     /// `index`番目の要素を削除して、値を返す
-    pub fn remove(&mut self, index: usize) -> Option<M::Output> {
+    pub fn remove(&mut self, index: usize) -> Option<M::Element> {
         let (l, r) = Node::split(self.root.get(), index);
         let (m, r) = Node::split(r, 1);
 
@@ -423,7 +423,7 @@ where
     }
 
     /// `start..end`の範囲でのモノイドの演算の結果を返す
-    pub fn fold(&self, Range { start, end }: Range<usize>) -> M::Output {
+    pub fn fold(&self, Range { start, end }: Range<usize>) -> M::Element {
         let (m, r) = Node::split(self.root.get(), end);
         let (l, m) = Node::split(m, start);
 
@@ -441,21 +441,21 @@ where
     }
 
     /// 先頭に値を追加する
-    pub fn push_first(&mut self, value: M::Output) {
+    pub fn push_first(&mut self, value: M::Element) {
         let left = Self::singleton(self.monoid, value);
         self.merge_left(left);
     }
     /// 末尾に値を追加する
-    pub fn push_last(&mut self, value: M::Output) {
+    pub fn push_last(&mut self, value: M::Element) {
         let right = Self::singleton(self.monoid, value);
         self.merge_right(right);
     }
     /// 先頭の値を削除する
-    pub fn pop_first(&mut self) -> Option<M::Output> {
+    pub fn pop_first(&mut self) -> Option<M::Element> {
         self.remove(0)
     }
     /// 末尾の値を削除する
-    pub fn pop_last(&mut self) -> Option<M::Output> {
+    pub fn pop_last(&mut self) -> Option<M::Element> {
         if self.is_empty() {
             None
         } else {
@@ -463,7 +463,7 @@ where
         }
     }
 
-    pub fn for_each(&self, mut f: impl FnMut(&M::Output)) {
+    pub fn for_each(&self, mut f: impl FnMut(&M::Element)) {
         Node::traverse(self.root.get(), &mut f);
     }
 }

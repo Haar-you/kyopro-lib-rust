@@ -5,12 +5,12 @@ use std::ops::{Index, Range};
 
 #[derive(Debug, Clone)]
 pub struct CumulativeSum2D<G: Group> {
-    data: Vec<Vec<G::Output>>,
+    data: Vec<Vec<G::Element>>,
     group: G,
 }
 
 pub struct CumulativeSum2DBuilder<G: Group> {
-    data: Vec<Vec<G::Output>>,
+    data: Vec<Vec<G::Element>>,
     group: G,
     n: usize,
     m: usize,
@@ -18,14 +18,14 @@ pub struct CumulativeSum2DBuilder<G: Group> {
 
 impl<G: Group> CumulativeSum2D<G>
 where
-    G::Output: Copy,
+    G::Element: Copy,
 {
     /// Time Complexity O(1)
     pub fn fold_2d(
         &self,
         Range { start: l, end: r }: Range<usize>,
         Range { start: d, end: u }: Range<usize>,
-    ) -> G::Output {
+    ) -> G::Element {
         let a = self.group.inv(self.data[l][u]);
         let b = self.group.inv(self.data[r][d]);
         let c = self.data[l][d];
@@ -36,7 +36,7 @@ where
 }
 
 impl<G: Group> Index<(usize, usize)> for CumulativeSum2D<G> {
-    type Output = G::Output;
+    type Output = G::Element;
 
     fn index(&self, (i, j): (usize, usize)) -> &Self::Output {
         &self.data[i][j]
@@ -45,7 +45,7 @@ impl<G: Group> Index<(usize, usize)> for CumulativeSum2D<G> {
 
 impl<G: Group> CumulativeSum2DBuilder<G>
 where
-    G::Output: Copy,
+    G::Element: Copy,
 {
     pub fn new(n: usize, m: usize, group: G) -> Self {
         CumulativeSum2DBuilder {
@@ -56,11 +56,11 @@ where
         }
     }
 
-    pub fn assign(&mut self, i: usize, j: usize, value: G::Output) {
+    pub fn assign(&mut self, i: usize, j: usize, value: G::Element) {
         self.data[i + 1][j + 1] = value;
     }
 
-    pub fn update(&mut self, i: usize, j: usize, value: G::Output) {
+    pub fn update(&mut self, i: usize, j: usize, value: G::Element) {
         self.data[i + 1][j + 1] = self.group.op(self.data[i + 1][j + 1], value);
     }
 
