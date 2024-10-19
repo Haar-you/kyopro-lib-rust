@@ -10,11 +10,9 @@ impl Sum {
         Self { m }
     }
 }
-impl Set for Sum {
-    type Element = ModInt;
-}
 
 impl_algebra!(Sum,
+    set: ModInt,
     op: |_, a, b| a + b,
     id: |s: &Self| ModInt::new(0, s.m),
     inv: |_, a: Self::Element| -a,
@@ -31,11 +29,9 @@ impl Prod {
         Self { m }
     }
 }
-impl Set for Prod {
-    type Element = ModInt;
-}
 
 impl_algebra!(Prod,
+    set: ModInt,
     op: |_, a, b| a * b,
     id: |s: &Self| ModInt::new(1, s.m),
     assoc: {},

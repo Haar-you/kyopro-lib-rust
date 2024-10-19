@@ -10,20 +10,16 @@ impl<T> BitXor<T> {
     }
 }
 
-impl<T> Set for BitXor<T> {
-    type Element = T;
-}
+impl_algebra!(BitXor<i8>, set: i8, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<i16>, set: i16, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<i32>, set: i32, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<i64>, set: i64, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<i128>, set: i128, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<isize>, set: isize, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
 
-impl_algebra!(BitXor<i8>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-impl_algebra!(BitXor<i16>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-impl_algebra!(BitXor<i32>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-impl_algebra!(BitXor<i64>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-impl_algebra!(BitXor<i128>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-impl_algebra!(BitXor<isize>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-
-impl_algebra!(BitXor<u8>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-impl_algebra!(BitXor<u16>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-impl_algebra!(BitXor<u32>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-impl_algebra!(BitXor<u64>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-impl_algebra!(BitXor<u128>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
-impl_algebra!(BitXor<usize>, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<u8>, set: u8, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<u16>, set: u16, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<u32>, set: u32, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<u64>, set: u64, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<u128>, set: u128, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});
+impl_algebra!(BitXor<usize>, set: usize, op: |_, a, b| a ^ b, id: |_| 0, inv: |_, a| a, commu: {}, assoc: {});

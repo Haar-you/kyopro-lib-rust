@@ -11,11 +11,8 @@ impl<T> Update<T> {
     }
 }
 
-impl<T> Set for Update<T> {
-    type Element = Option<T>;
-}
-
-impl_algebra!(T; Update<T>,
+impl_algebra!(<T>; Update<T>,
+    set: Option<T>,
     op: |_, a, b| match a {
         Some(_) => a,
         None => b
