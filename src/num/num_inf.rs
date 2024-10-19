@@ -2,26 +2,38 @@
 
 use std::ops::{Add, Neg, Sub};
 
+/// 正の無限大、負の無限大をもつ数
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub enum NumInf<T> {
+    /// 負の無限大
     NegInf,
+    /// 有限の値
     Value(T),
+    /// 正の無限大
     Inf,
 }
 
 impl<T: Copy> NumInf<T> {
+    /// `self`が`Value(T)`かを判定する。
     pub fn is_value(self) -> bool {
         matches!(self, NumInf::Value(_))
     }
 
+    /// `self`が`Inf`かを判定する。
     pub fn is_inf(self) -> bool {
         matches!(self, NumInf::Inf)
     }
 
+    /// `self`が`NegInf`かを判定する。
     pub fn is_neg_inf(self) -> bool {
         matches!(self, NumInf::NegInf)
     }
 
+    /// `self`が`Value`ならばその中身を取り出す。
+    ///
+    /// # Panics
+    ///
+    /// `self`が`Inf`か`NegInf`のときパニックする。
     pub fn unwrap(self) -> T {
         match self {
             NumInf::Value(x) => x,

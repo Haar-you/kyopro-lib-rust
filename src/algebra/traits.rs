@@ -1,8 +1,8 @@
 use crate::trait_alias;
 
-/// 代数構造
+/// 集合
 pub trait Set {
-    /// 演算の対象の型
+    /// 集合の要素の型
     type Element;
 }
 
