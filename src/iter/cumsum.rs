@@ -1,11 +1,14 @@
-pub struct CumSum<I, St, F> {
+//! `cumsum`を提供する。
+
+/// 累積和を返すイテレータ。
+pub struct _CumSum<I, St, F> {
     iter: I,
     st: St,
     is_first: bool,
     f: F,
 }
 
-impl<I, St, F> Iterator for CumSum<I, St, F>
+impl<I, St, F> Iterator for _CumSum<I, St, F>
 where
     I: Iterator,
     St: Copy,
@@ -22,14 +25,16 @@ where
     }
 }
 
-pub trait IterCumSum: Iterator {
-    fn cumsum<St, F>(self, init: St, f: F) -> CumSum<Self, St, F>
+/// `cumsum`を提供する。
+pub trait CumSum: Iterator {
+    /// 累積和を返すイテレータを生成する。
+    fn cumsum<St, F>(self, init: St, f: F) -> _CumSum<Self, St, F>
     where
         Self: Sized,
         St: Copy,
         F: FnMut(&mut St, Self::Item),
     {
-        CumSum {
+        _CumSum {
             iter: self,
             st: init,
             is_first: true,
@@ -38,7 +43,7 @@ pub trait IterCumSum: Iterator {
     }
 }
 
-impl<I> IterCumSum for I where I: Iterator + ?Sized {}
+impl<I> CumSum for I where I: Iterator + ?Sized {}
 
 #[cfg(test)]
 mod tests {
