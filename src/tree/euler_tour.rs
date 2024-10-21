@@ -1,4 +1,9 @@
-use crate::tree::*;
+//! Euler tour
+//!
+//! # Problems
+//! - <https://judge.yosupo.jp/problem/vertex_add_subtree_sum>
+
+use crate::{tree::*, utils::is_none_or::IsNoneOr};
 
 pub struct EulerTour {
     begin: Vec<usize>,
@@ -27,7 +32,7 @@ impl EulerTour {
         *pos += 1;
 
         for e in tree.nodes[cur].neighbors() {
-            if !par.is_some_and(|p| p == e.to()) {
+            if par.is_none_or(|p| p != e.to()) {
                 self.dfs(tree, e.to(), Some(cur), pos);
             }
         }

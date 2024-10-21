@@ -1,6 +1,7 @@
 //! 木DP
 
 use crate::tree::*;
+use crate::utils::is_none_or::IsNoneOr;
 
 /// 木DP
 ///
@@ -54,7 +55,7 @@ where
     ) -> T {
         let acc = tree.nodes[cur]
             .neighbors()
-            .filter(|e| !par.is_some_and(|p| p == e.to()))
+            .filter(|e| par.is_none_or(|p| p != e.to()))
             .map(|e| {
                 let a = self.__dfs(tree, e.to(), Some(cur), ret);
                 (self.up)(a, (e.to(), e.weight()))

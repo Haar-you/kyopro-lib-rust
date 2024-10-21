@@ -1,4 +1,4 @@
-use crate::tree::*;
+use crate::{tree::*, utils::is_none_or::IsNoneOr};
 use std::collections::VecDeque;
 
 /// Tree depth query
@@ -48,7 +48,7 @@ impl TreeDepthQuery {
             ord += 1;
 
             for e in tree.nodes[i].neighbors() {
-                if !this.par[i].is_some_and(|p| p == e.to()) {
+                if this.par[i].is_none_or(|p| p != e.to()) {
                     q.push_back((e.to(), d + 1));
                 }
             }
@@ -76,7 +76,7 @@ impl TreeDepthQuery {
         *ord += 1;
 
         for e in tree.nodes[cur].neighbors() {
-            if !par.is_some_and(|p| p == e.to()) {
+            if par.is_none_or(|p| p != e.to()) {
                 self.dfs(tree, e.to(), Some(cur), d + 1, ord);
             }
         }

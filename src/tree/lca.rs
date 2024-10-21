@@ -1,6 +1,6 @@
 //! 最小共通祖先
 
-use crate::tree::*;
+use crate::{tree::*, utils::is_none_or::IsNoneOr};
 
 /// ダブリングによる最小共通祖先
 pub struct DoublingLCA {
@@ -31,7 +31,7 @@ impl DoublingLCA {
 
             tree.nodes[cur]
                 .neighbors()
-                .filter(|e| !par.is_some_and(|p| p == e.to()))
+                .filter(|e| par.is_none_or(|p| p != e.to()))
                 .for_each(|e| stack.push((e.to(), Some(cur), d + 1)));
         }
 

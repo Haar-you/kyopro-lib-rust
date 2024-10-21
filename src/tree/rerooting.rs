@@ -1,6 +1,6 @@
 //! 全方位木DP
 
-use crate::tree::*;
+use crate::{tree::*, utils::is_none_or::IsNoneOr};
 
 /// 全方位木DP
 ///
@@ -75,7 +75,7 @@ where
         let acc = tree.nodes[cur]
             .neighbors()
             .enumerate()
-            .filter(|(_, e)| !par.is_some_and(|u| u == e.to()))
+            .filter(|(_, e)| par.is_none_or(|u| u != e.to()))
             .map(|(i, e)| {
                 let res = self.rec1(tree, dp, e.to(), Some(cur));
                 dp[cur][i] = Some(res.clone());

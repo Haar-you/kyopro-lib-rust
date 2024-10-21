@@ -3,7 +3,7 @@
 //! # References
 //! - <https://noshi91.github.io/algorithm-encyclopedia/auxiliary-tree>
 
-use crate::tree::*;
+use crate::{tree::*, utils::is_none_or::IsNoneOr};
 
 /// Auxiliary Tree
 ///
@@ -34,7 +34,7 @@ impl AuxiliaryTree {
         *i += 1;
 
         for e in tree.nodes[cur].neighbors() {
-            if !par.is_some_and(|p| p == e.to()) {
+            if par.is_none_or(|p| p != e.to()) {
                 self.dfs(tree, e.to(), Some(cur), i);
             }
         }
