@@ -25,26 +25,19 @@ impl FastIO {
 
     #[inline]
     pub fn getc(&mut self) -> Option<u8> {
-        if self.in_cur < self.in_bytes.len() {
-            self.in_cur += 1;
-            Some(self.in_bytes[self.in_cur])
-        } else {
-            None
-        }
+        let c = *self.in_bytes.get(self.in_cur)?;
+        self.in_cur += 1;
+        Some(c)
     }
 
     #[inline]
     pub fn peek(&self) -> Option<u8> {
-        if self.in_cur < self.in_bytes.len() {
-            Some(self.in_bytes[self.in_cur])
-        } else {
-            None
-        }
+        Some(*self.in_bytes.get(self.in_cur)?)
     }
 
     #[inline]
     pub fn skip(&mut self) {
-        while self.peek().map_or(false, |c| c.is_ascii_whitespace()) {
+        while self.peek().is_some_and(|c| c.is_ascii_whitespace()) {
             self.in_cur += 1;
         }
     }
@@ -53,9 +46,8 @@ impl FastIO {
         self.skip();
         let mut ret: u64 = 0;
 
-        while self.peek().map_or(false, |c| c.is_ascii_digit()) {
+        while self.peek().is_some_and(|c| c.is_ascii_digit()) {
             ret = ret * 10 + (self.in_bytes[self.in_cur] - b'0') as u64;
-
             self.in_cur += 1;
         }
 
@@ -81,7 +73,7 @@ impl FastIO {
             false
         };
 
-        while self.peek().map_or(false, |c| c.is_ascii_digit()) {
+        while self.peek().is_some_and(|c| c.is_ascii_digit()) {
             ret = ret * 10 + (self.in_bytes[self.in_cur] - b'0') as i64;
             self.in_cur += 1;
         }
@@ -113,7 +105,7 @@ impl FastIO {
         self.skip();
         let mut ret = vec![];
 
-        while self.peek().map_or(false, |c| c.is_ascii_graphic()) {
+        while self.peek().is_some_and(|c| c.is_ascii_graphic()) {
             ret.push(self.in_bytes[self.in_cur] as char);
             self.in_cur += 1;
         }
