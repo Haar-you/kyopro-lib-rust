@@ -54,7 +54,7 @@ where
     ) -> T {
         let acc = tree.nodes[cur]
             .neighbors()
-            .filter(|e| par != Some(e.to()))
+            .filter(|e| !par.is_some_and(|p| p == e.to()))
             .map(|e| {
                 let a = self.__dfs(tree, e.to(), Some(cur), ret);
                 (self.up)(a, (e.to(), e.weight()))

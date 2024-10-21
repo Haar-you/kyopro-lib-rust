@@ -34,7 +34,7 @@ impl AuxiliaryTree {
         *i += 1;
 
         for e in tree.nodes[cur].neighbors() {
-            if Some(e.to()) != par {
+            if !par.is_some_and(|p| p == e.to()) {
                 self.dfs(tree, e.to(), Some(cur), i);
             }
         }

@@ -31,7 +31,7 @@ impl DoublingLCA {
 
             tree.nodes[cur]
                 .neighbors()
-                .filter(|e| par != Some(e.to()))
+                .filter(|e| !par.is_some_and(|p| p == e.to()))
                 .for_each(|e| stack.push((e.to(), Some(cur), d + 1)));
         }
 

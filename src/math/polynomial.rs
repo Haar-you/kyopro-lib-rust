@@ -44,7 +44,7 @@ impl<const P: u32> Polynomial<P> {
     }
 
     pub fn shrink(&mut self) {
-        while self.data.last().map_or(false, |x| x.value() == 0) {
+        while self.data.last().is_some_and(|x| x.value() == 0) {
             self.data.pop();
         }
     }

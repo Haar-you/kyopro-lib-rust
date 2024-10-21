@@ -23,11 +23,10 @@ fn dfs<E: TreeEdgeTrait>(
 
     let mut check = true;
 
-    for e in tree.nodes[cur].neighbors() {
-        if Some(e.to()) == par {
-            continue;
-        }
-
+    for e in tree.nodes[cur]
+        .neighbors()
+        .filter(|e| !par.is_some_and(|p| p == e.to()))
+    {
         dfs(tree, sub, ret, size, e.to(), Some(cur));
 
         if sub[e.to()] > size / 2 {

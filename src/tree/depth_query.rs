@@ -48,7 +48,7 @@ impl TreeDepthQuery {
             ord += 1;
 
             for e in tree.nodes[i].neighbors() {
-                if Some(e.to()) != this.par[i] {
+                if !this.par[i].is_some_and(|p| p == e.to()) {
                     q.push_back((e.to(), d + 1));
                 }
             }
@@ -76,7 +76,7 @@ impl TreeDepthQuery {
         *ord += 1;
 
         for e in tree.nodes[cur].neighbors() {
-            if Some(e.to()) != par {
+            if !par.is_some_and(|p| p == e.to()) {
                 self.dfs(tree, e.to(), Some(cur), d + 1, ord);
             }
         }

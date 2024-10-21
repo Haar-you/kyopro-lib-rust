@@ -75,7 +75,7 @@ where
         let acc = tree.nodes[cur]
             .neighbors()
             .enumerate()
-            .filter(|(_, e)| par.map_or(true, |u| u != e.to()))
+            .filter(|(_, e)| !par.is_some_and(|u| u == e.to()))
             .map(|(i, e)| {
                 let res = self.rec1(tree, dp, e.to(), Some(cur));
                 dp[cur][i] = Some(res.clone());
@@ -97,7 +97,7 @@ where
         let len = tree.nodes[cur].neighbors_size();
 
         for (i, e) in tree.nodes[cur].neighbors().enumerate() {
-            if par.map_or(false, |u| u == e.to()) {
+            if par.is_some_and(|u| u == e.to()) {
                 dp[cur][i] = value.clone();
             }
         }
@@ -125,7 +125,7 @@ where
         }
 
         for (i, e) in tree.nodes[cur].neighbors().enumerate() {
-            if par.map_or(false, |u| u == e.to()) {
+            if par.is_some_and(|u| u == e.to()) {
                 continue;
             }
 
