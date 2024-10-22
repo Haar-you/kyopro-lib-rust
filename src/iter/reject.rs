@@ -13,12 +13,7 @@ where
 {
     type Item = I::Item;
     fn next(&mut self) -> Option<Self::Item> {
-        while let Some(a) = self.iter.next() {
-            if !(self.predicate)(&a) {
-                return Some(a);
-            }
-        }
-        None
+        self.iter.by_ref().find(|a| !(self.predicate)(a))
     }
 }
 

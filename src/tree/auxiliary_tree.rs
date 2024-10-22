@@ -19,7 +19,7 @@ impl AuxiliaryTree {
         let mut this = Self {
             preorder: vec![0; n],
         };
-        this.dfs(&tree, root, None, &mut 0);
+        this.dfs(tree, root, None, &mut 0);
         this
     }
 
