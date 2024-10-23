@@ -1,6 +1,7 @@
 //! 二面体群
 pub use crate::algebra::traits::*;
 
+/// 二面体群の元
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DihedralValue {
     R(usize),

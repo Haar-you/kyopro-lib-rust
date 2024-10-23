@@ -1,9 +1,12 @@
+//! 演算の順序を逆にした代数的構造
 pub use crate::algebra::traits::*;
 
+/// 演算の順序を逆にした代数的構造
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Dual<S>(pub S);
 
 impl<S: Set> Dual<S> {
+    /// `Dual<S>`を生成する。
     pub fn new(s: S) -> Self {
         Self(s)
     }

@@ -2,9 +2,11 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use std::marker::PhantomData;
 
+/// 変換操作
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Transformation(Vec<usize>);
 
+/// 置換操作
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Permutation(Vec<usize>);
 
@@ -41,6 +43,7 @@ impl Permutation {
     }
 }
 
+/// 置換や変換の合成を演算とする代数的構造
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Composition<T> {
     len: usize,
@@ -48,6 +51,7 @@ pub struct Composition<T> {
 }
 
 impl<T> Composition<T> {
+    /// `Composition<T>`を生成する。
     pub fn new(len: usize) -> Self {
         Self {
             len,
