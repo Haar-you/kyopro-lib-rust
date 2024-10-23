@@ -8,12 +8,12 @@ use std::{
 
 /// Range Add Range Sum用の代数的構造
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
-pub struct AddSum<T, U>(PhantomData<T>, PhantomData<U>);
+pub struct AddSum<T, U = T>(PhantomData<(T, U)>);
 
 impl<T, U> AddSum<T, U> {
     /// `AddSum<T, U>`を生成する。
     pub fn new() -> Self {
-        Self(PhantomData, PhantomData)
+        Self(PhantomData)
     }
 }
 

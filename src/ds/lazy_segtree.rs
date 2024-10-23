@@ -171,7 +171,7 @@ mod tests {
         let q = 100;
         let range = 1000;
 
-        let mut seg = LazySegtree::new(n, AddSum::<u64, u64>::new());
+        let mut seg = LazySegtree::new(n, AddSum::<u64>::new());
         let mut vec = vec![0; n];
 
         let mut rng = rand::thread_rng();
