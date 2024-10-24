@@ -4,14 +4,14 @@ use crate::algebra::traits::*;
 use crate::utils::range::range_bounds_to_range;
 use std::{cmp::min, ops::RangeBounds};
 
-pub struct SparseTable<A: BinaryOp + Associative + Idempotence> {
+pub struct SparseTable<A: Semigroup + Idempotence> {
     data: Vec<Vec<A::Element>>,
     log_table: Vec<usize>,
     semilattice: A,
     original_size: usize,
 }
 
-impl<A: BinaryOp + Associative + Idempotence> SparseTable<A>
+impl<A: Semigroup + Idempotence> SparseTable<A>
 where
     A::Element: Clone + Default,
 {
@@ -75,7 +75,7 @@ mod tests {
 
     fn test<A>(s: Vec<A::Element>, a: A)
     where
-        A: BinaryOp + Associative + Idempotence + Identity + Copy,
+        A: Semigroup + Idempotence + Identity + Copy,
         A::Element: Clone + Default + PartialEq + Debug + Copy,
     {
         let st = SparseTable::new(s.clone(), a);
