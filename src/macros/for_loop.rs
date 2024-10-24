@@ -1,3 +1,6 @@
+//! C言語風のfor文
+
+/// C言語風のfor文
 #[macro_export]
 macro_rules! for_loop {
     ($init:stmt;  $end:expr; $update:stmt; $b:block) => {
