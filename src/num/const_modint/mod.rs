@@ -181,3 +181,9 @@ impl<const M: u32> From<usize> for ConstModInt<M> {
         ConstModIntBuilder.from_u64(value as u64)
     }
 }
+
+impl<const M: u32> From<u64> for ConstModInt<M> {
+    fn from(value: u64) -> Self {
+        ConstModIntBuilder.from_u64(value)
+    }
+}
