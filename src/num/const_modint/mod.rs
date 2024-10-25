@@ -3,11 +3,11 @@
 pub mod algebra;
 pub mod one_zero;
 
+pub use crate::impl_ops;
 pub use crate::num::ff::*;
 use std::{
     fmt,
     fmt::{Debug, Display, Formatter},
-    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
 /// [`ConstModInt<M>`]を生成するための構造体。
@@ -139,36 +139,17 @@ impl<const M: u32> Debug for ConstModInt<M> {
     }
 }
 
-macro_rules! impl_modint_arith {
-    ($tr:ident, $f:ident, $fi:ident, $tr_a:ident, $f_a:ident, $op:tt) => {
-        impl<const M: u32> $tr for ConstModInt<M> {
-            type Output = Self;
-            #[inline]
-            fn $f(self, other: Self) -> Self {
-                self.$fi(other)
-            }
-        }
+impl_ops!(<const M: u32>; Add, ConstModInt<M>, |x: Self, y| x.__add(y));
+impl_ops!(<const M: u32>; Sub, ConstModInt<M>, |x: Self, y| x.__sub(y));
+impl_ops!(<const M: u32>; Mul, ConstModInt<M>, |x: Self, y| x.__mul(y));
+impl_ops!(<const M: u32>; Div, ConstModInt<M>, |x: Self, y| x.__div(y));
 
-        impl<const M: u32> $tr_a for ConstModInt<M> {
-            #[inline]
-            fn $f_a(&mut self, other: Self) {
-                *self = *self $op other;
-            }
-        }
-    }
-}
+impl_ops!(<const M: u32>; AddAssign, ConstModInt<M>, |x: &mut Self, y| *x = *x + y);
+impl_ops!(<const M: u32>; SubAssign, ConstModInt<M>, |x: &mut Self, y| *x = *x - y);
+impl_ops!(<const M: u32>; MulAssign, ConstModInt<M>, |x: &mut Self, y| *x = *x * y);
+impl_ops!(<const M: u32>; DivAssign, ConstModInt<M>, |x: &mut Self, y| *x = *x / y);
 
-impl_modint_arith!(Add, add, __add, AddAssign, add_assign, +);
-impl_modint_arith!(Sub, sub, __sub, SubAssign, sub_assign, -);
-impl_modint_arith!(Mul, mul, __mul, MulAssign, mul_assign, *);
-impl_modint_arith!(Div, div, __div, DivAssign, div_assign, /);
-
-impl<const M: u32> Neg for ConstModInt<M> {
-    type Output = Self;
-    fn neg(self) -> Self {
-        Self::new_unchecked(if self.0 == 0 { 0 } else { M - self.0 })
-    }
-}
+impl_ops!(<const M: u32>; Neg, ConstModInt<M>, |x: Self| Self::new_unchecked(if x.0 == 0 { 0 } else { M - x.0 }));
 
 impl<const M: u32> From<ConstModInt<M>> for u32 {
     fn from(from: ConstModInt<M>) -> Self {

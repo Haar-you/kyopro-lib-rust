@@ -2,10 +2,9 @@
 
 pub mod one_zero;
 
-use std::{
-    cmp::Ordering,
-    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
-};
+use crate::impl_ops;
+
+use std::cmp::Ordering;
 
 /// 全順序を実装した`f64`
 #[derive(Clone, Copy, Debug, PartialEq, Default)]
@@ -24,40 +23,14 @@ impl Ord for Totalf64 {
     }
 }
 
-macro_rules! impl_ops {
-    ($tr:tt, $f:tt, $ops:tt) => {
-        impl $tr for Totalf64 {
-            type Output = Self;
-            fn $f(self, rhs: Self) -> Self::Output {
-                Self(self.0 $ops rhs.0)
-            }
-        }
-    };
-}
+impl_ops!(Add, Totalf64, |s: Self, rhs: Self| Self(s.0 + rhs.0));
+impl_ops!(Sub, Totalf64, |s: Self, rhs: Self| Self(s.0 - rhs.0));
+impl_ops!(Mul, Totalf64, |s: Self, rhs: Self| Self(s.0 * rhs.0));
+impl_ops!(Div, Totalf64, |s: Self, rhs: Self| Self(s.0 / rhs.0));
 
-impl_ops!(Add, add, +);
-impl_ops!(Sub, sub, -);
-impl_ops!(Mul, mul, *);
-impl_ops!(Div, div, /);
+impl_ops!(AddAssign, Totalf64, |s: &mut Self, rhs: Self| s.0 += rhs.0);
+impl_ops!(SubAssign, Totalf64, |s: &mut Self, rhs: Self| s.0 -= rhs.0);
+impl_ops!(MulAssign, Totalf64, |s: &mut Self, rhs: Self| s.0 *= rhs.0);
+impl_ops!(DivAssign, Totalf64, |s: &mut Self, rhs: Self| s.0 /= rhs.0);
 
-macro_rules! impl_ops_assign {
-    ($tr:tt, $f:tt, $ops:tt) => {
-        impl $tr for Totalf64 {
-            fn $f(&mut self, rhs: Self) {
-                self.0 $ops rhs.0;
-            }
-        }
-    };
-}
-
-impl_ops_assign!(AddAssign, add_assign, +=);
-impl_ops_assign!(SubAssign, sub_assign, -=);
-impl_ops_assign!(MulAssign, mul_assign, *=);
-impl_ops_assign!(DivAssign, div_assign, /=);
-
-impl Neg for Totalf64 {
-    type Output = Self;
-    fn neg(self) -> Self::Output {
-        Self(-self.0)
-    }
-}
+impl_ops!(Neg, Totalf64, |s: Self| Self(-s.0));

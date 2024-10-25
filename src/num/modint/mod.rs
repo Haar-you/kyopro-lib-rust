@@ -2,11 +2,12 @@
 
 pub mod algebra;
 
+pub use crate::impl_ops;
 pub use crate::num::ff::*;
 use std::{
     fmt,
     fmt::{Debug, Display, Formatter},
-    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
+    ops::Neg,
 };
 
 /// [`ModInt`]を生成するための構造体。
@@ -161,29 +162,15 @@ impl Debug for ModInt {
     }
 }
 
-macro_rules! impl_modint_arith {
-    ($tr:ident, $f:ident, $fi:ident, $tr_a:ident, $f_a:ident, $op:tt) => {
-        impl $tr for ModInt {
-            type Output = Self;
-            #[inline]
-            fn $f(self, other: Self) -> Self {
-                self.$fi(other)
-            }
-        }
+impl_ops!(Add, ModInt, |x: Self, y| x.__add(y));
+impl_ops!(Sub, ModInt, |x: Self, y| x.__sub(y));
+impl_ops!(Mul, ModInt, |x: Self, y| x.__mul(y));
+impl_ops!(Div, ModInt, |x: Self, y| x.__div(y));
 
-        impl $tr_a for ModInt {
-            #[inline]
-            fn $f_a(&mut self, other: Self) {
-                *self = *self $op other;
-            }
-        }
-    }
-}
-
-impl_modint_arith!(Add, add, __add, AddAssign, add_assign, +);
-impl_modint_arith!(Sub, sub, __sub, SubAssign, sub_assign, -);
-impl_modint_arith!(Mul, mul, __mul, MulAssign, mul_assign, *);
-impl_modint_arith!(Div, div, __div, DivAssign, div_assign, /);
+impl_ops!(AddAssign, ModInt, |x: &mut Self, y| *x = *x + y);
+impl_ops!(SubAssign, ModInt, |x: &mut Self, y| *x = *x - y);
+impl_ops!(MulAssign, ModInt, |x: &mut Self, y| *x = *x * y);
+impl_ops!(DivAssign, ModInt, |x: &mut Self, y| *x = *x / y);
 
 impl Neg for ModInt {
     type Output = Self;

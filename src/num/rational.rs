@@ -1,11 +1,11 @@
 //! 有理数
 
+use crate::impl_ops;
 use crate::math::gcd_lcm::GcdLcm;
 use std::{
     cmp::Ordering,
     fmt,
     fmt::{Debug, Formatter},
-    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
 /// 有理数
@@ -102,34 +102,20 @@ impl From<i64> for Rational {
     }
 }
 
-macro_rules! impl_arith {
-    ($tr:ident, $f:ident, $fi:ident, $tr_a:ident, $f_a:ident, $op:tt) => {
-        impl $tr for Rational {
-            type Output = Self;
-            fn $f(self, other: Self) -> Self {
-                self.$fi(other)
-            }
-        }
+impl_ops!(Add, Rational, |s: Self, rhs| s.__add(rhs));
+impl_ops!(Sub, Rational, |s: Self, rhs| s.__sub(rhs));
+impl_ops!(Mul, Rational, |s: Self, rhs| s.__mul(rhs));
+impl_ops!(Div, Rational, |s: Self, rhs| s.__div(rhs));
 
-        impl $tr_a for Rational {
-            fn $f_a(&mut self, other: Self) {
-                *self = *self $op other;
-            }
-        }
-    }
-}
+impl_ops!(AddAssign, Rational, |s: &mut Self, rhs| *s = *s + rhs);
+impl_ops!(SubAssign, Rational, |s: &mut Self, rhs| *s = *s - rhs);
+impl_ops!(MulAssign, Rational, |s: &mut Self, rhs| *s = *s * rhs);
+impl_ops!(DivAssign, Rational, |s: &mut Self, rhs| *s = *s / rhs);
 
-impl_arith!(Add, add, __add, AddAssign, add_assign, +);
-impl_arith!(Sub, sub, __sub, SubAssign, sub_assign, -);
-impl_arith!(Mul, mul, __mul, MulAssign, mul_assign, *);
-impl_arith!(Div, div, __div, DivAssign, div_assign, /);
-
-impl Neg for Rational {
-    type Output = Self;
-    fn neg(self) -> Self {
-        Self::new(-self.numerator, self.denominator)
-    }
-}
+impl_ops!(Neg, Rational, |s: Self| Self::new(
+    -s.numerator,
+    s.denominator
+));
 
 impl PartialOrd for Rational {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
