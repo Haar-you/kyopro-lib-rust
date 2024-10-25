@@ -1,3 +1,5 @@
+//! [`One`]と[`Zero`]を実装する。
+
 pub use crate::num::const_modint::*;
 use crate::num::one_zero::*;
 

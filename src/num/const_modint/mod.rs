@@ -1,3 +1,5 @@
+//! コンパイル時にmod Mが決まるModInt
+
 pub mod algebra;
 pub mod one_zero;
 
@@ -8,6 +10,7 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
+/// [`ConstModInt<M>`]を生成するための構造体。
 #[derive(Copy, Clone, Default, PartialEq, Eq)]
 pub struct ConstModIntBuilder<const M: u32>;
 
@@ -29,16 +32,19 @@ impl<const M: u32> FF for ConstModIntBuilder<M> {
     }
 }
 
+/// `M`で剰余をとる構造体。
 #[derive(Copy, Clone, PartialEq, Default)]
 pub struct ConstModInt<const M: u32>(u32);
 
 impl<const M: u32> FFElem for ConstModInt<M> {}
 
 impl<const M: u32> ConstModInt<M> {
+    /// `ConstModInt<M>`を生成する。
     pub fn new(n: u32) -> Self {
         Self(if n < M { n } else { n % M })
     }
 
+    /// 内部の値を取り出す。
     #[inline]
     pub fn value(self) -> u32 {
         self.0

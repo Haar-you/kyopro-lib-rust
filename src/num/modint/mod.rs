@@ -1,3 +1,5 @@
+//! 実行時にmod Mが決まるModInt
+
 pub mod algebra;
 
 pub use crate::num::ff::*;
@@ -7,12 +9,14 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
+/// [`ModInt`]を生成するための構造体。
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ModIntBuilder {
     modulo: u32,
 }
 
 impl ModIntBuilder {
+    /// `modulo`を法とする`ModIntBuilder`を生成する。
     pub fn new(modulo: u32) -> Self {
         Self { modulo }
     }
@@ -34,6 +38,7 @@ impl FF for ModIntBuilder {
     }
 }
 
+/// `modulo`を法として剰余をとる構造体。
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub struct ModInt {
     value: u32,
@@ -43,6 +48,7 @@ pub struct ModInt {
 impl FFElem for ModInt {}
 
 impl ModInt {
+    /// `value`を値にもち、`modulo`を法とする`ModInt`を生成する。
     pub fn new(value: u32, modulo: u32) -> Self {
         let value = if value < modulo {
             value
@@ -52,6 +58,7 @@ impl ModInt {
         Self { value, modulo }
     }
 
+    /// 内部の値を取り出す。
     #[inline]
     pub fn value(self) -> u32 {
         self.value

@@ -1,3 +1,5 @@
+//! 全順序を実装した`f64`
+
 pub mod one_zero;
 
 use std::{
@@ -5,6 +7,7 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
+/// 全順序を実装した`f64`
 #[derive(Clone, Copy, Debug, PartialEq, Default)]
 pub struct Totalf64(pub f64);
 

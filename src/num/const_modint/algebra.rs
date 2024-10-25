@@ -1,3 +1,5 @@
+//! [`ConstModInt<M>`]の代数的構造
+
 pub use crate::algebra::traits::*;
 use crate::{impl_algebra, num::const_modint::ConstModInt};
 

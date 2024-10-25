@@ -1,16 +1,20 @@
+//! 𝔽ₚ上の多項式
 use crate::math::ntt::NTT;
 use crate::num::const_modint::*;
 
+/// 𝔽ₚ上の多項式
 #[derive(Clone, Debug, PartialEq)]
 pub struct Polynomial<const P: u32> {
     data: Vec<ConstModInt<P>>,
 }
 
 impl<const P: u32> Polynomial<P> {
+    /// 零多項式を得る。
     pub fn zero() -> Self {
         Self { data: vec![] }
     }
 
+    /// 定数項のみをもつ多項式を生成する。
     pub fn constant(a: ConstModInt<P>) -> Self {
         if a.value() == 0 {
             Self::zero()
@@ -19,10 +23,12 @@ impl<const P: u32> Polynomial<P> {
         }
     }
 
+    /// *xⁱ*の係数を得る。
     pub fn coeff_of(&self, i: usize) -> ConstModInt<P> {
         self.data.get(i).map_or(ConstModInt::new(0), |a| *a)
     }
 
+    /// 多項式に値`p`を代入した結果を求める。
     pub fn eval(&self, p: ConstModInt<P>) -> ConstModInt<P> {
         let mut ret = ConstModInt::new(0);
         let mut x = ConstModInt::new(1);
@@ -55,6 +61,9 @@ impl<const P: u32> Polynomial<P> {
         }
     }
 
+    /// 多項式の次数を返す。
+    ///
+    /// `self`が零多項式のときは`None`を返す。
     pub fn deg(&self) -> Option<usize> {
         if self.is_empty() {
             return None;
@@ -74,15 +83,18 @@ impl<const P: u32> From<Vec<ConstModInt<P>>> for Polynomial<P> {
     }
 }
 
+/// 多項式の演算を扱う。
 pub struct PolynomialOperator<'a, const P: u32> {
     ntt: &'a NTT<P>,
 }
 
 impl<'a, const P: u32> PolynomialOperator<'a, P> {
+    /// [`NTT<P>`]を基に`PolynomialOperator<P>`を生成する。
     pub fn new(ntt: &'a NTT<P>) -> Self {
         Self { ntt }
     }
 
+    /// 多項式`a`に多項式`b`を足す。
     pub fn add_assign(&self, a: &mut Polynomial<P>, b: Polynomial<P>) {
         if a.len() < b.len() {
             a.data.resize(b.len(), ConstModInt::new(0));
@@ -92,11 +104,13 @@ impl<'a, const P: u32> PolynomialOperator<'a, P> {
         }
     }
 
+    /// 多項式`a`と多項式`b`の和を返す。
     pub fn add(&self, mut a: Polynomial<P>, b: Polynomial<P>) -> Polynomial<P> {
         self.add_assign(&mut a, b);
         a
     }
 
+    /// 多項式`a`から多項式`b`を引く。
     pub fn sub_assign(&self, a: &mut Polynomial<P>, b: Polynomial<P>) {
         if a.len() < b.len() {
             a.data.resize(b.len(), ConstModInt::new(0));
@@ -106,26 +120,31 @@ impl<'a, const P: u32> PolynomialOperator<'a, P> {
         }
     }
 
+    /// 多項式`a`と多項式`b`の差を返す。
     pub fn sub(&self, mut a: Polynomial<P>, b: Polynomial<P>) -> Polynomial<P> {
         self.sub_assign(&mut a, b);
         a
     }
 
+    /// 多項式`a`に多項式`b`を掛ける。
     pub fn mul_assign(&self, a: &mut Polynomial<P>, b: Polynomial<P>) {
         let k = a.len() + b.len() - 1;
         a.data = self.ntt.convolve(a.data.clone(), b.data);
         a.data.truncate(k);
     }
 
+    /// 多項式`a`と多項式`b`の積を返す。
     pub fn mul(&self, mut a: Polynomial<P>, b: Polynomial<P>) -> Polynomial<P> {
         self.mul_assign(&mut a, b);
         a
     }
 
+    /// 多項式`a`の2乗を返す。
     pub fn sq(&self, a: Polynomial<P>) -> Polynomial<P> {
         self.mul(a.clone(), a)
     }
 
+    /// 多項式`a`の`k`倍を返す。
     pub fn scale(&self, a: Polynomial<P>, k: ConstModInt<P>) -> Polynomial<P> {
         Polynomial {
             data: a.data.into_iter().map(|x| x * k).collect(),
@@ -148,6 +167,7 @@ impl<'a, const P: u32> PolynomialOperator<'a, P> {
         ret
     }
 
+    /// 多項式`a`の多項式`b`による商と剰余を返す。
     pub fn divmod(&self, a: Polynomial<P>, b: Polynomial<P>) -> (Polynomial<P>, Polynomial<P>) {
         if a.len() < b.len() {
             return (Polynomial::zero(), a);
