@@ -6,11 +6,11 @@ use std::mem::swap;
 pub trait GcdLcm {
     type Output;
     /// 最大公約数を求める。
-    fn gcd(&self, _: Self::Output) -> Self::Output;
+    fn gcd(self, _: Self::Output) -> Self::Output;
     /// 最小公倍数を求める。
-    fn lcm(&self, _: Self::Output) -> Self::Output;
+    fn lcm(self, _: Self::Output) -> Self::Output;
     /// 最大公約数と最小公倍数を求める。
-    fn gcd_lcm(&self, _: Self::Output) -> (Self::Output, Self::Output);
+    fn gcd_lcm(self, _: Self::Output) -> (Self::Output, Self::Output);
 }
 
 macro_rules! gcd_lcm_impl_all {
@@ -18,8 +18,8 @@ macro_rules! gcd_lcm_impl_all {
         $(
             impl GcdLcm for $t {
                 type Output = $t;
-                fn gcd(&self, mut b: Self::Output) -> Self::Output {
-                    let mut a = *self;
+                fn gcd(self, mut b: Self::Output) -> Self::Output {
+                    let mut a = self;
 
                     if a < b {
                         swap(&mut a, &mut b);
@@ -32,11 +32,11 @@ macro_rules! gcd_lcm_impl_all {
                     b.gcd(a % b)
                 }
 
-                fn lcm(&self, b: Self::Output) -> Self::Output {
+                fn lcm(self, b: Self::Output) -> Self::Output {
                     self / self.gcd(b) * b
                 }
 
-                fn gcd_lcm(&self, b: Self::Output) -> (Self::Output, Self::Output) {
+                fn gcd_lcm(self, b: Self::Output) -> (Self::Output, Self::Output) {
                     let g = self.gcd(b);
                     (g, self / g * b)
                 }
