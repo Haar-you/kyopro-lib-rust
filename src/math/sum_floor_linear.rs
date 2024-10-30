@@ -1,5 +1,6 @@
-//! ∑{i=0 → n-1} ⌊(ai+b)/m⌋
+//! $\sum_{i=0}^{n-1} \lfloor \frac{ai+b}{m} \rfloor$
 
+/// $\sum_{i=0}^{n-1} \lfloor \frac{ai+b}{m} \rfloor$
 pub fn sum_floor_linear(n: u64, m: u64, mut a: u64, mut b: u64) -> u64 {
     let mut ret = 0;
 
