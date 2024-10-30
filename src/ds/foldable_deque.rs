@@ -1,5 +1,7 @@
+//! 半群で畳み込み可能なdeque
 pub use crate::algebra::traits::*;
 
+/// 半群で畳み込み可能なdeque
 pub struct FoldableDeque<S: Semigroup> {
     front_stack: Vec<S::Element>,
     back_stack: Vec<S::Element>,
@@ -12,6 +14,7 @@ impl<S: Semigroup> FoldableDeque<S>
 where
     S::Element: Clone,
 {
+    /// 空の`FoldableDeque<S>`を生成する。
     pub fn new(semigroup: S) -> Self {
         FoldableDeque {
             front_stack: vec![],
@@ -31,6 +34,7 @@ where
         }
     }
 
+    /// すべての要素を`S`の演算で畳み込んだ結果を返す。
     pub fn fold(&self) -> Option<S::Element> {
         self.f(
             self.front_sum.last().cloned(),
@@ -38,12 +42,14 @@ where
         )
     }
 
+    /// 末尾に`value`を追加する。
     pub fn push_back(&mut self, value: S::Element) {
         self.back_stack.push(value.clone());
         self.back_sum
             .push(self.f(self.back_sum.last().cloned(), Some(value)).unwrap());
     }
 
+    /// 先頭に`value`を追加する。
     pub fn push_front(&mut self, value: S::Element) {
         self.front_stack.push(value.clone());
         self.front_sum
@@ -66,6 +72,7 @@ where
         }
     }
 
+    /// 先頭の要素を削除して返す。
     pub fn pop_front(&mut self) -> Option<S::Element> {
         if self.front_stack.is_empty() {
             self.back_sum.clear();
@@ -86,6 +93,7 @@ where
         self.front_stack.pop()
     }
 
+    /// 末尾の要素を削除して返す。
     pub fn pop_back(&mut self) -> Option<S::Element> {
         if self.back_stack.is_empty() {
             self.front_sum.clear();
@@ -106,18 +114,22 @@ where
         self.back_stack.pop()
     }
 
+    /// 先頭の要素への参照を返す。
     pub fn front(&self) -> Option<&S::Element> {
         self.front_stack.last().or_else(|| self.back_stack.first())
     }
 
+    /// 末尾の要素への参照を返す。
     pub fn back(&self) -> Option<&S::Element> {
         self.back_stack.last().or_else(|| self.front_stack.first())
     }
 
+    /// 要素数を返す。
     pub fn len(&self) -> usize {
         self.front_stack.len() + self.back_stack.len()
     }
 
+    /// 要素数が`0`なら`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.front_stack.is_empty() && self.back_stack.is_empty()
     }

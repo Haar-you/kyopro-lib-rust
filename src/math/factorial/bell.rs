@@ -6,6 +6,11 @@ impl<Modulo: FF> FactorialTable<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
+    /// ベル数
+    ///
+    /// # References
+    /// - <https://ja.wikipedia.org/wiki/%E3%83%99%E3%83%AB%E6%95%B0>
+    /// - <https://manabitimes.jp/math/892>
     pub fn bell_number(&self, n: usize, k: usize) -> Modulo::Element {
         match n {
             0 => self.modulo.from_u64(1),

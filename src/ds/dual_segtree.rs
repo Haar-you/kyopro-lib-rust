@@ -1,10 +1,11 @@
+//! モノイド列の区間更新・点取得(*O*(log n), *O*(log n))ができる。
 #![allow(clippy::wrong_self_convention)]
 
 pub use crate::algebra::traits::Monoid;
-pub use crate::ds::traits::Updatable;
 use crate::utils::range::range_bounds_to_range;
 use std::ops::RangeBounds;
 
+/// モノイド列の区間更新・点取得(*O*(log n), *O*(log n))ができる。
 pub struct DualSegtree<M: Monoid> {
     original_size: usize,
     size: usize,

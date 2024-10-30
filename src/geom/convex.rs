@@ -2,6 +2,7 @@
 
 use crate::geom::{ccw::*, *};
 
+/// 多角形`ps`が凸多角形であれば`true`を返す。
 pub fn is_convex(ps: &[Vector], eps: Eps) -> bool {
     let n = ps.len();
     let mut temp = None;

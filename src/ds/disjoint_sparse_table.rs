@@ -1,9 +1,10 @@
-//! 半群の列の区間演算を行う(O(1))
+//! 半群の列の区間取得(*O*(1))ができる。
 
 pub use crate::algebra::traits::Semigroup;
 use crate::utils::range::range_bounds_to_range;
 use std::{iter::repeat, ops::RangeBounds};
 
+/// 半群の列の区間取得(*O*(1))ができる。
 pub struct DisjointSparseTable<S: Semigroup> {
     data: Vec<Vec<Option<S::Element>>>,
     seq: Vec<Option<S::Element>>,
@@ -72,6 +73,7 @@ where
         }
     }
 
+    /// **Time complexity O(1)**
     pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<S::Element> {
         let (l, r) = range_bounds_to_range(range, 0, self.size);
 

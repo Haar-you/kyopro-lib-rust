@@ -1,9 +1,11 @@
+//! 階乗
 pub mod bell;
 pub mod bernoulli;
 pub mod catalan;
 
 use crate::num::ff::*;
 
+/// 有限体上での階乗の計算を行う構造体。
 #[derive(Clone, Debug)]
 pub struct FactorialTable<Modulo: FF> {
     factorial: Vec<Modulo::Element>,
@@ -75,6 +77,9 @@ where
         }
     }
 
+    /// n個から重複を許してk個選ぶ場合の数
+    ///
+    /// **Time complexity O(1)**
     pub fn h(&self, n: usize, k: usize) -> Modulo::Element {
         if n == 0 && k == 0 {
             self.modulo.from_u64(1)

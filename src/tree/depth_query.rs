@@ -1,15 +1,16 @@
+//! Tree depth query
+//!
+//! # References
+//! - [https://niuez.github.io/posts/entry/2019/10/05/002503/](https://niuez.github.io/posts/entry/2019/10/05/002503/)
+//! - [https://niuez.github.io/posts/dfs_bfs_et/](https://niuez.github.io/posts/dfs_bfs_et/)
+//!
+//! # Problems
+//! - [yukicoder No.899 γatheree](https://yukicoder.me/problems/no/899)
+
 use crate::{tree::*, utils::is_none_or::IsNoneOr};
 use std::collections::VecDeque;
 
-/// Tree depth query
-///
-/// # References
-/// - [https://niuez.github.io/posts/entry/2019/10/05/002503/](https://niuez.github.io/posts/entry/2019/10/05/002503/)
-/// - [https://niuez.github.io/posts/dfs_bfs_et/](https://niuez.github.io/posts/dfs_bfs_et/)
-///
-/// # Problems
-/// - [yukicoder No.899 γatheree](https://yukicoder.me/problems/no/899)
-
+/// 根付き木において、同一の深さの頂点の区間に対して区間クエリができる。
 pub struct TreeDepthQuery {
     par: Vec<Option<usize>>,
     depth: Vec<usize>,
@@ -21,6 +22,7 @@ pub struct TreeDepthQuery {
 }
 
 impl TreeDepthQuery {
+    /// 根を`root`とする`tree`を基に、`TreeDepthQuery`を構築する。
     pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
         let size = tree.len();
         let mut this = Self {
@@ -84,6 +86,9 @@ impl TreeDepthQuery {
         self.right[cur] = *ord;
     }
 
+    /// 頂点`i`から深さ`d`の子孫頂点に対応する区間を返す。
+    ///
+    /// **Time complexity O(log n)**
     pub fn children_query(&self, i: usize, d: usize) -> Option<(usize, usize)> {
         let d = d + self.depth[i];
         if self.bfs_ord.len() > d {
@@ -107,10 +112,14 @@ impl TreeDepthQuery {
         }
     }
 
+    /// 頂点`i`に対応する区間を返す。
     pub fn me_query(&self, i: usize) -> (usize, usize) {
         (self.ord[i], self.ord[i] + 1)
     }
 
+    /// 頂点`i`の`k`個遡った祖先の頂点を返す。
+    ///
+    /// **Time complexity O(k)**
     pub fn ancestor(&self, i: usize, k: usize) -> Option<usize> {
         let mut p = i;
         for _ in 0..k {

@@ -1,9 +1,11 @@
+//! 任意サイズのbit列を扱う。
 use std::fmt::Display;
 use std::ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign};
 
 type B = u64;
 const B_SIZE: usize = 64;
 
+/// 任意サイズのbit列を扱う。
 #[derive(Clone, Debug)]
 pub struct Bitset {
     pub(crate) data: Vec<B>,
@@ -14,6 +16,7 @@ impl Bitset {
     /// `Bitset`内部で扱う型のBit数
     pub const B_SIZE: usize = B_SIZE;
 
+    /// 長さ`n`の`Bitset`を構築する。
     pub fn new(n: usize) -> Self {
         Self {
             data: vec![0; (n + B_SIZE - 1) / B_SIZE],
@@ -21,6 +24,7 @@ impl Bitset {
         }
     }
 
+    /// `n`番目のbitを`val`で設定する。
     pub fn set(&mut self, n: usize, val: bool) {
         assert!(n < self.size);
         if val {
@@ -34,11 +38,13 @@ impl Bitset {
         }
     }
 
+    /// `n`番目のbitが`1`ならば`true`を返す。
     pub fn test(&self, n: usize) -> bool {
         assert!(n < self.size);
         unsafe { (self.data.get_unchecked(n / B_SIZE) >> (n % B_SIZE)) & 1 == 1 }
     }
 
+    /// `n`番目のbitを反転させる。
     pub fn flip(&mut self, n: usize) {
         assert!(n < self.size);
         unsafe {
@@ -46,10 +52,16 @@ impl Bitset {
         }
     }
 
+    /// `1`が設定されているbitの個数を数える。
+    ///
+    /// **Time complexity O(n)**
     pub fn count_ones(&self) -> u32 {
         self.data.iter().map(|a| a.count_ones()).sum()
     }
 
+    /// `0`が設定されているbitの個数を数える。
+    ///
+    /// **Time complexity O(n)**
     pub fn count_zeros(&self) -> u32 {
         self.size as u32 - self.count_ones()
     }
@@ -69,6 +81,9 @@ impl Bitset {
         }
     }
 
+    /// bit列の長さを返す。
+    ///
+    /// **Time complexity O(1)**
     pub fn len(&self) -> usize {
         self.size
     }

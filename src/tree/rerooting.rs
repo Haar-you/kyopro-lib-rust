@@ -10,7 +10,6 @@ use crate::{tree::*, utils::is_none_or::IsNoneOr};
 /// # Problems
 /// - [EDPC V - Subtree](https://atcoder.jp/contests/dp/submissions/57560435)
 /// - <https://atcoder.jp/contests/abc160/tasks/abc160_f>
-
 pub struct RerootingDP<'a, Weight, T, U> {
     init: U,
     up: Box<dyn 'a + Fn(T, (usize, Weight)) -> U>,
@@ -24,6 +23,7 @@ where
     T: Clone,
     U: Clone,
 {
+    /// `RerootingDP`を構築する。
     pub fn new(
         init: U,
         up: Box<impl 'a + Fn(T, (usize, Weight)) -> U>,
@@ -38,6 +38,7 @@ where
         }
     }
 
+    /// `tree`上で、全方位DPを実行する。
     pub fn run<E: TreeEdgeTrait<Weight = Weight>>(&self, tree: &Tree<E>) -> Vec<T> {
         let size = tree.len();
         let mut dp = (0..size)
