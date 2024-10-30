@@ -5,17 +5,17 @@ use crate::num::{one_zero::Zero, traits::Unsigned};
 use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
 /// **Time complexity O((E + V) log V)**
-pub fn dijkstra<D: Direction, T, E: EdgeTrait<Weight = T>>(
+pub fn dijkstra<D: Direction, E: EdgeTrait>(
     g: &Graph<D, E>,
     src: &[usize],
-) -> Vec<Option<T>>
+) -> Vec<Option<E::Weight>>
 where
-    T: Add<Output = T> + Copy + Ord + Zero + Unsigned,
+    E::Weight: Add<Output = E::Weight> + Copy + Ord + Zero + Unsigned,
 {
-    let zero = T::zero();
+    let zero = E::Weight::zero();
     let n = g.len();
     let mut ret = vec![None; n];
-    let mut heap: BinaryHeap<Reverse<(T, usize)>> = BinaryHeap::new();
+    let mut heap = BinaryHeap::new();
     let mut check = vec![false; n];
 
     for &u in src {

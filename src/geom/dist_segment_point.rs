@@ -2,6 +2,7 @@
 
 use crate::geom::*;
 
+/// 線分と点の距離を求める
 pub fn dist_segment_point(l: Line, p: Vector) -> f64 {
     if l.diff().dot(p - l.from) < 0.0 {
         (p - l.from).abs()

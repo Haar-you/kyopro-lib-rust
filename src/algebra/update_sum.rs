@@ -1,3 +1,4 @@
+//! Range Update Range Sum用の代数的構造
 use crate::algebra::action::Action;
 use crate::num::one_zero::Zero;
 use std::{
@@ -5,12 +6,14 @@ use std::{
     ops::{Add, Mul},
 };
 
+/// Range Update Range Sum用の代数的構造
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
-pub struct UpdateSum<T, U>(PhantomData<T>, PhantomData<U>);
+pub struct UpdateSum<T, U = T>(PhantomData<(T, U)>);
 
 impl<T, U> UpdateSum<T, U> {
+    /// `UpdateSum<T,U>`を生成する。
     pub fn new() -> Self {
-        Self(PhantomData, PhantomData)
+        Self(PhantomData)
     }
 }
 

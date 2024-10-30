@@ -1,4 +1,5 @@
 use crate::tree::*;
+use crate::utils::is_none_or::IsNoneOr;
 use std::collections::{hash_map::DefaultHasher, HashMap};
 use std::hash::{Hash, Hasher};
 
@@ -15,7 +16,7 @@ pub fn rooted_isomorphism<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> (usi
             let mut children = vec![];
 
             for e in tree.nodes[cur].neighbors() {
-                if Some(e.to()) != par {
+                if par.is_none_or(|p| p != e.to()) {
                     children.push(ret[e.to()]);
                 }
             }
@@ -31,7 +32,7 @@ pub fn rooted_isomorphism<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> (usi
         } else {
             stack.push((true, cur, par));
             for e in tree.nodes[cur].neighbors() {
-                if Some(e.to()) != par {
+                if par.is_none_or(|p| p != e.to()) {
                     stack.push((false, e.to(), Some(cur)));
                 }
             }

@@ -1,16 +1,21 @@
+//! モノイド列の点更新・区間取得(*O*(log n), *O*(log n))ができる。
 pub use crate::algebra::traits::Monoid;
 use crate::utils::range::range_bounds_to_range;
 use std::ops::{Index, RangeBounds};
 
+/// モノイド列の点更新・区間取得(*O*(log n), *O*(log n))ができる。
 #[derive(Clone)]
 pub struct Segtree<M: Monoid> {
     original_size: usize,
     size: usize,
-    data: Vec<M::Output>,
+    data: Vec<M::Element>,
     monoid: M,
 }
 
-impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
+impl<M: Monoid> Segtree<M>
+where
+    M::Element: Clone,
+{
     /// **Time complexity O(n)**
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
@@ -23,7 +28,7 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> T {
+    pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> M::Element {
         let (l, r) = range_bounds_to_range(range, 0, self.size / 2);
 
         let mut ret_l = self.monoid.id();
@@ -49,7 +54,7 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn assign(&mut self, i: usize, value: T) {
+    pub fn assign(&mut self, i: usize, value: M::Element) {
         let mut i = i + self.size / 2;
         self.data[i] = value;
 
@@ -62,7 +67,7 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
     }
 
     /// **Time complexity O(log n)**
-    pub fn update(&mut self, i: usize, value: T) {
+    pub fn update(&mut self, i: usize, value: M::Element) {
         self.assign(
             i,
             self.monoid.op(self.data[i + self.size / 2].clone(), value),
@@ -70,14 +75,17 @@ impl<T: Clone, M: Monoid<Output = T>> Segtree<M> {
     }
 }
 
-impl<T: Clone, M: Monoid<Output = T>> From<&Segtree<M>> for Vec<T> {
-    fn from(from: &Segtree<M>) -> Vec<T> {
+impl<M: Monoid> From<&Segtree<M>> for Vec<M::Element>
+where
+    M::Element: Clone,
+{
+    fn from(from: &Segtree<M>) -> Self {
         from.data[from.size / 2..from.size / 2 + from.original_size].to_vec()
     }
 }
 
 impl<M: Monoid> Index<usize> for Segtree<M> {
-    type Output = M::Output;
+    type Output = M::Element;
 
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[self.size / 2 + i]
@@ -93,7 +101,7 @@ mod tests {
     fn random_test_helper<T, M, F>(size: usize, m: M, mut gen_value: F)
     where
         T: Clone + Eq + std::fmt::Debug,
-        M: Monoid<Output = T> + Clone,
+        M: Monoid<Element = T> + Clone,
         F: FnMut() -> T,
     {
         let mut rng = rand::thread_rng();

@@ -11,6 +11,7 @@ pub struct WaveletMatrix {
 }
 
 impl WaveletMatrix {
+    /// `WaveletMatrix`を生成
     pub fn new(mut data: Vec<u64>) -> Self {
         let size = data.len();
 

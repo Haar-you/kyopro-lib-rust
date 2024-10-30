@@ -1,7 +1,9 @@
+//! モノイド列の区間更新・区間取得(*O*(log n), *O*(log n))ができる。
 use crate::algebra::action::Action;
 use crate::utils::range::range_bounds_to_range;
 use std::ops::RangeBounds;
 
+/// モノイド列の区間更新・区間取得(*O*(log n), *O*(log n))ができる。
 pub struct LazySegtree<A: Action> {
     size: usize,
     original_size: usize,
@@ -10,9 +12,8 @@ pub struct LazySegtree<A: Action> {
     action: A,
 }
 
-impl<A> LazySegtree<A>
+impl<A: Action + Copy> LazySegtree<A>
 where
-    A: Copy + Action,
     A::Output: Clone + PartialEq,
     A::Lazy: Clone + PartialEq,
 {
@@ -172,7 +173,7 @@ mod tests {
         let q = 100;
         let range = 1000;
 
-        let mut seg = LazySegtree::new(n, AddSum::<u64, u64>::new());
+        let mut seg = LazySegtree::new(n, AddSum::<u64>::new());
         let mut vec = vec![0; n];
 
         let mut rng = rand::thread_rng();

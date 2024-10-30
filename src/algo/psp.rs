@@ -40,6 +40,7 @@ pub struct PSP {
 }
 
 impl PSP {
+    /// `PSP`を生成する。
     pub fn new(size: usize) -> Self {
         Self {
             size,

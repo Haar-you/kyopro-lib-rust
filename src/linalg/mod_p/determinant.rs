@@ -1,9 +1,9 @@
+//! 行列式 (mod 素数)
 use crate::math::mod_ops::inv_p::mod_inv_p;
 
 /// 素数mod p上での行列式を求める。
 ///
 /// **Time complexity O(n³)**
-#[inline]
 pub fn determinant(mut a: Vec<Vec<u64>>, p: u64) -> u64 {
     let n = a.len();
 

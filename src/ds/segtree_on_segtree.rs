@@ -33,7 +33,10 @@ impl SegtreeOnSegtreeBuilder {
         self.ys.push(y);
     }
 
-    pub fn build<T: Clone, M: Monoid<Output = T> + Clone>(self, monoid: M) -> SegtreeOnSegtree<M> {
+    pub fn build<M: Monoid + Copy>(self, monoid: M) -> SegtreeOnSegtree<M>
+    where
+        M::Element: Clone,
+    {
         let n = self.xs.len();
         let mut c_xs = self.xs.clone();
         c_xs.sort_unstable();
@@ -61,7 +64,7 @@ impl SegtreeOnSegtreeBuilder {
 
         let mut segs = vec![None; x_size];
         for i in 1..x_size {
-            segs[i] = Some(Segtree::new(c_ys[i].len(), monoid.clone()));
+            segs[i] = Some(Segtree::new(c_ys[i].len(), monoid));
         }
 
         SegtreeOnSegtree {
@@ -74,8 +77,11 @@ impl SegtreeOnSegtreeBuilder {
     }
 }
 
-impl<T: Clone, M: Monoid<Output = T>> SegtreeOnSegtree<M> {
-    pub fn update(&mut self, x: i64, y: i64, value: T) {
+impl<M: Monoid> SegtreeOnSegtree<M>
+where
+    M::Element: Clone,
+{
+    pub fn update(&mut self, x: i64, y: i64, value: M::Element) {
         let mut i = lower_bound(&self.c_xs, &x) + self.x_size / 2;
         while i >= 1 {
             let j = lower_bound(&self.c_ys[i], &y);
@@ -84,7 +90,7 @@ impl<T: Clone, M: Monoid<Output = T>> SegtreeOnSegtree<M> {
         }
     }
 
-    fn fold_sub(&self, i: usize, y1: i64, y2: i64) -> T {
+    fn fold_sub(&self, i: usize, y1: i64, y2: i64) -> M::Element {
         let l = lower_bound(&self.c_ys[i], &y1);
         let r = lower_bound(&self.c_ys[i], &y2);
         self.segs[i].as_ref().unwrap().fold(l..r)
@@ -94,7 +100,7 @@ impl<T: Clone, M: Monoid<Output = T>> SegtreeOnSegtree<M> {
         &self,
         Range { start: x1, end: x2 }: Range<i64>,
         Range { start: y1, end: y2 }: Range<i64>,
-    ) -> T {
+    ) -> M::Element {
         let mut l = lower_bound(&self.c_xs, &x1) + self.x_size / 2;
         let mut r = lower_bound(&self.c_xs, &x2) + self.x_size / 2;
 

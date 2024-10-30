@@ -1,6 +1,6 @@
 //! 全方位木DP
 
-use crate::tree::*;
+use crate::{tree::*, utils::is_none_or::IsNoneOr};
 
 /// 全方位木DP
 ///
@@ -10,7 +10,6 @@ use crate::tree::*;
 /// # Problems
 /// - [EDPC V - Subtree](https://atcoder.jp/contests/dp/submissions/57560435)
 /// - <https://atcoder.jp/contests/abc160/tasks/abc160_f>
-
 pub struct RerootingDP<'a, Weight, T, U> {
     init: U,
     up: Box<dyn 'a + Fn(T, (usize, Weight)) -> U>,
@@ -24,6 +23,7 @@ where
     T: Clone,
     U: Clone,
 {
+    /// `RerootingDP`を構築する。
     pub fn new(
         init: U,
         up: Box<impl 'a + Fn(T, (usize, Weight)) -> U>,
@@ -38,6 +38,7 @@ where
         }
     }
 
+    /// `tree`上で、全方位DPを実行する。
     pub fn run<E: TreeEdgeTrait<Weight = Weight>>(&self, tree: &Tree<E>) -> Vec<T> {
         let size = tree.len();
         let mut dp = (0..size)
@@ -75,7 +76,7 @@ where
         let acc = tree.nodes[cur]
             .neighbors()
             .enumerate()
-            .filter(|(_, e)| par.map_or(true, |u| u != e.to()))
+            .filter(|(_, e)| par.is_none_or(|u| u != e.to()))
             .map(|(i, e)| {
                 let res = self.rec1(tree, dp, e.to(), Some(cur));
                 dp[cur][i] = Some(res.clone());
@@ -97,7 +98,7 @@ where
         let len = tree.nodes[cur].neighbors_size();
 
         for (i, e) in tree.nodes[cur].neighbors().enumerate() {
-            if par.map_or(false, |u| u == e.to()) {
+            if par.is_some_and(|u| u == e.to()) {
                 dp[cur][i] = value.clone();
             }
         }
@@ -125,7 +126,7 @@ where
         }
 
         for (i, e) in tree.nodes[cur].neighbors().enumerate() {
-            if par.map_or(false, |u| u == e.to()) {
+            if par.is_some_and(|u| u == e.to()) {
                 continue;
             }
 

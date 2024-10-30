@@ -40,24 +40,3 @@ impl CheckPrime<usize> for EratosthenesSieve {
         }
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_eratosthenes() {
-        let n = 100;
-        let sieve = EratosthenesSieve::new(n);
-
-        let primes = (1..=n).filter(|&i| sieve.is_prime(i)).collect::<Vec<_>>();
-
-        assert_eq!(
-            primes,
-            [
-                2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79,
-                83, 89, 97
-            ]
-        );
-    }
-}

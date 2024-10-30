@@ -53,7 +53,7 @@ impl Lowlink {
 
         for e in &g.edges[cur] {
             let to = e.to();
-            if par.map_or(false, |p| p == to) {
+            if par.is_some_and(|p| p == to) {
                 count_par += 1;
                 if count_par == 1 {
                     continue;

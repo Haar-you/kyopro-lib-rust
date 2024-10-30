@@ -11,10 +11,9 @@ type Edge_<'a, T, E> = (usize, usize, T, &'a E);
 /// 有向グラフ上の最小有向全域木を求める
 ///
 /// **Time Complexity O(VE)**
-pub fn chu_liu_edmonds<T, E>(g: &Graph<Directed, E>, root: usize) -> Vec<&E>
+pub fn chu_liu_edmonds<E: EdgeTrait>(g: &Graph<Directed, E>, root: usize) -> Vec<&E>
 where
-    T: Ord + Copy + Sub<Output = T>,
-    E: EdgeTrait<Weight = T>,
+    E::Weight: Ord + Copy + Sub<Output = E::Weight>,
 {
     let n = g.len();
     let mut rg = vec![vec![]; n];

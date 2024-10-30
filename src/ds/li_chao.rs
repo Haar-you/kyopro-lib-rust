@@ -15,8 +15,8 @@ use std::{
 };
 
 trait_alias!(
-    Elem,
-    Copy + Ord + Default + Add<Output = Self> + Mul<Output = Self>
+    /// [`LiChaoTree<T>`]が扱える型
+    Elem: Copy + Ord + Default + Add<Output = Self> + Mul<Output = Self>
 );
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug)]

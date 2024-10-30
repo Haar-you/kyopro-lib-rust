@@ -1,9 +1,9 @@
 //! 有向グラフで単一始点の最短サイクルを求める。
 //! # Problems
 //! - [ABC 142 F - Pure](https://atcoder.jp/contests/abc142/tasks/abc142_f)
+//! - <https://atcoder.jp/contests/abc376/tasks/abc376_d>
 
-use crate::graph::*;
-use std::collections::VecDeque;
+use crate::graph::{bfs::*, *};
 
 /// 有向グラフで単一始点の最短サイクルを求める。
 ///
@@ -12,40 +12,38 @@ pub fn directed_shortest_cycle<E: EdgeTrait>(
     g: &Graph<Directed, E>,
     src: usize,
 ) -> Option<Vec<&E>> {
-    let n = g.len();
-    let mut q = VecDeque::new();
-    let mut pre = vec![None; n];
-    let mut visit = vec![false; n];
-
-    q.push_back(src);
-
-    while let Some(cur) = q.pop_front() {
-        if visit[cur] {
-            continue;
-        }
-        visit[cur] = true;
-
-        for e in &g.edges[cur] {
-            if e.to() == src {
-                let mut ret = vec![e];
-                let mut cur = cur;
-                loop {
-                    if let Some(e) = pre[cur] {
-                        ret.push(e);
-                        cur = e.from();
-                    } else {
-                        ret.reverse();
-                        return Some(ret);
-                    }
-                }
+    let res = bfs(g, Some(src));
+    let p = res
+        .iter()
+        .flatten()
+        .flat_map(|(d, e)| {
+            if let Some(e) = e {
+                g.edges[e.to()]
+                    .iter()
+                    .find(|e| e.to() == src)
+                    .map(|e_src| (d, e, e_src))
+            } else {
+                None
             }
+        })
+        .min_by_key(|(d, _, _)| *d);
 
-            if !visit[e.to()] {
-                pre[e.to()] = Some(e);
-                q.push_back(e.to());
-            }
+    if let Some((_, e, e_src)) = p {
+        let mut ret = vec![];
+        let mut cur = e.to();
+
+        ret.push(e_src);
+
+        while cur != src {
+            let e = res[cur].unwrap().1.unwrap();
+            ret.push(e);
+            cur = e.from();
         }
+
+        ret.reverse();
+
+        Some(ret)
+    } else {
+        None
     }
-
-    None
 }

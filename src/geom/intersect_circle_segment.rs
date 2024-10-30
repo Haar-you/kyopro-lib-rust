@@ -2,34 +2,46 @@
 
 use crate::geom::{dist_segment_point::*, *};
 
+/// 円と線分の位置関係
 #[derive(Clone, Copy, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 pub enum IntersectCircleSegment {
+    /// 線分が円の内部にある
     INSIDE,
+    /// 線分が円の外部にある
     OUTSIDE,
+    /// 線分が円に接している
     TANGENT,
+    /// 線分が円と一つの交点をもつ
     ONE_CROSSPOINT,
+    /// 線分が円と二つの交点をもつ
     TWO_CROSSPOINTS,
 }
 
 impl IntersectCircleSegment {
+    /// `INSIDE`かを判定
     pub fn inside(self) -> bool {
         self == Self::INSIDE
     }
+    /// `OUTSIDE`かを判定
     pub fn outside(self) -> bool {
         self == Self::OUTSIDE
     }
+    /// `TANGENT`かを判定
     pub fn tangent(self) -> bool {
         self == Self::TANGENT
     }
+    /// `ONE_CROSSPOINT`かを判定
     pub fn one_crosspoint(self) -> bool {
         self == Self::ONE_CROSSPOINT
     }
+    /// `TWO_CROSSPOINT`かを判定
     pub fn two_crosspoints(self) -> bool {
         self == Self::TWO_CROSSPOINTS
     }
 }
 
+/// 円と線分の位置関係と交点を求める
 pub fn intersect_circle_segment(
     c: Circle,
     s: Line,

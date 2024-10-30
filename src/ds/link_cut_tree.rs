@@ -7,19 +7,22 @@ use std::{mem::swap, ptr};
 
 use crate::algebra::traits::Monoid;
 
-struct Node<M, T> {
-    value: T,
-    result: T,
+struct Node<M: Monoid> {
+    value: M::Element,
+    result: M::Element,
     monoid: M,
     subsize: usize,
     _index: usize,
     rev: bool,
-    lc: *mut Node<M, T>,
-    rc: *mut Node<M, T>,
-    par: *mut Node<M, T>,
+    lc: *mut Node<M>,
+    rc: *mut Node<M>,
+    par: *mut Node<M>,
 }
 
-impl<M: Monoid<Output = T> + Copy, T: Clone> Node<M, T> {
+impl<M: Monoid + Copy> Node<M>
+where
+    M::Element: Clone,
+{
     fn new(monoid: M, _index: usize) -> Self {
         Self {
             value: monoid.id(),
@@ -227,10 +230,13 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> Node<M, T> {
 /// 動的に木の辺を追加・削除可能
 pub struct LinkCutTree<M: Monoid> {
     monoid: M,
-    nodes: Vec<Node<M, M::Output>>,
+    nodes: Vec<Node<M>>,
 }
 
-impl<M: Monoid<Output = T> + Copy, T: Clone> LinkCutTree<M> {
+impl<M: Monoid + Copy> LinkCutTree<M>
+where
+    M::Element: Clone,
+{
     /// `LinkCutTree<M>`を生成する。
     pub fn new(monoid: M, n: usize) -> Self {
         Self {
@@ -294,19 +300,19 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> LinkCutTree<M> {
     }
 
     /// 頂点`k`の値を`x`に変更する。
-    pub fn set(&mut self, k: usize, x: T) {
+    pub fn set(&mut self, k: usize, x: M::Element) {
         Node::evert(&mut self.nodes[k]);
         self.nodes[k].value = x;
         Node::pushdown(&mut self.nodes[k]);
     }
 
     /// 頂点`k`の値をモノイドの演算と値`x`で更新する。
-    pub fn update(&mut self, k: usize, x: T) {
+    pub fn update(&mut self, k: usize, x: M::Element) {
         self.set(k, self.monoid.op(self.get(k), x));
     }
 
     /// 頂点`k`の値を返す。
-    pub fn get(&self, k: usize) -> T {
+    pub fn get(&self, k: usize) -> M::Element {
         self.nodes[k].value.clone()
     }
 
@@ -315,9 +321,9 @@ impl<M: Monoid<Output = T> + Copy, T: Clone> LinkCutTree<M> {
     /// # Panics
     ///
     /// 頂点`i`と`j`が同一の木に属していないときパニックする。
-    pub fn fold(&self, i: usize, j: usize) -> T {
-        let u = &self.nodes[i] as *const _ as *mut Node<M, M::Output>;
-        let v = &self.nodes[j] as *const _ as *mut Node<M, M::Output>;
+    pub fn fold(&self, i: usize, j: usize) -> M::Element {
+        let u = &self.nodes[i] as *const _ as *mut Node<M>;
+        let v = &self.nodes[j] as *const _ as *mut Node<M>;
 
         assert!(
             Node::same_group(u, v),

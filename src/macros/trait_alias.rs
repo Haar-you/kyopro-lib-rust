@@ -1,7 +1,11 @@
+//! トレイトの別名を作る。
+
+/// トレイトの別名を作る。
 #[macro_export]
 macro_rules! trait_alias {
-    ($name:ident, $($t:tt)+) => {
+    ($(#[$meta:meta])* $name:ident: $($t:tt)+) => {
+        $(#[$meta])*
         pub trait $name : $($t)+ {}
         impl<T: $($t)+> $name for T {}
-    }
+    };
 }

@@ -4,7 +4,10 @@ use crate::num::one_zero::Zero;
 use crate::trait_alias;
 use std::{mem::swap, ops::AddAssign};
 
-trait_alias!(Elem, Ord + Copy + Zero + AddAssign);
+trait_alias!(
+    /// [`LazySkewHeap<T>`]が扱える型
+    Elem: Ord + Copy + Zero + AddAssign
+);
 
 #[derive(Debug, Clone)]
 struct Node<T> {

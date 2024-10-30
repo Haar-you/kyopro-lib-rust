@@ -1,25 +1,29 @@
-//! 冪等性と結合性をもつ列の区間取得(O(1))
+//! 冪等性と結合性をもつ列の区間取得(O(1))ができる。
 
 use crate::algebra::traits::*;
 use crate::utils::range::range_bounds_to_range;
 use std::{cmp::min, ops::RangeBounds};
 
-pub struct SparseTable<A: BinaryOp + Associative + Idempotence> {
-    data: Vec<Vec<A::Output>>,
+/// 冪等性と結合性をもつ列の区間取得(O(1))ができる。
+pub struct SparseTable<A: Semigroup + Idempotence> {
+    data: Vec<Vec<A::Element>>,
     log_table: Vec<usize>,
     semilattice: A,
     original_size: usize,
 }
 
-impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> SparseTable<A> {
+impl<A: Semigroup + Idempotence> SparseTable<A>
+where
+    A::Element: Clone + Default,
+{
     /// **Time complexity O(n log n)**
     ///
     /// **Space complexity O(n log n)**
-    pub fn new(s: Vec<T>, a: A) -> Self {
+    pub fn new(s: Vec<A::Element>, a: A) -> Self {
         let n = s.len();
         let logn = n.next_power_of_two().trailing_zeros() as usize + 1;
 
-        let mut data = vec![vec![T::default(); n]; logn];
+        let mut data = vec![vec![A::Element::default(); n]; logn];
 
         data[0] = s;
 
@@ -46,7 +50,7 @@ impl<T: Clone + Default, A: BinaryOp<Output = T> + Associative + Idempotence> Sp
     }
 
     /// **Time complexity O(1)**
-    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<T> {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<A::Element> {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
         if l >= r {
@@ -70,12 +74,12 @@ mod tests {
     use super::*;
     use rand::Rng;
 
-    fn test<T, A>(s: Vec<T>, a: A)
+    fn test<A>(s: Vec<A::Element>, a: A)
     where
-        T: Clone + Default + PartialEq + Debug + Copy,
-        A: BinaryOp<Output = T> + Associative + Idempotence + Identity + Clone,
+        A: Semigroup + Idempotence + Identity + Copy,
+        A::Element: Clone + Default + PartialEq + Debug + Copy,
     {
-        let st = SparseTable::new(s.clone(), a.clone());
+        let st = SparseTable::new(s.clone(), a);
 
         for l in 0..s.len() {
             for r in l..=s.len() {

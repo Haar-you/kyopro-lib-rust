@@ -1,6 +1,7 @@
 //! 木DP
 
 use crate::tree::*;
+use crate::utils::is_none_or::IsNoneOr;
 
 /// 木DP
 ///
@@ -20,6 +21,7 @@ where
     T: Clone,
     U: Clone,
 {
+    /// `TreeDP`を構築する。
     pub fn new(
         init: U,
         up: Box<impl 'a + Fn(T, (usize, Weight)) -> U>,
@@ -34,6 +36,9 @@ where
         }
     }
 
+    /// `root`を根にして、`tree`上でDPを実行する。
+    ///
+    /// **Time complexity O(n)**
     pub fn run<E: TreeEdgeTrait<Weight = Weight>>(&self, tree: &Tree<E>, root: usize) -> Vec<T> {
         let size = tree.len();
         let mut ret = vec![None; size];
@@ -52,7 +57,7 @@ where
     ) -> T {
         let acc = tree.nodes[cur]
             .neighbors()
-            .filter(|e| par != Some(e.to()))
+            .filter(|e| par.is_none_or(|p| p != e.to()))
             .map(|e| {
                 let a = self.__dfs(tree, e.to(), Some(cur), ret);
                 (self.up)(a, (e.to(), e.weight()))

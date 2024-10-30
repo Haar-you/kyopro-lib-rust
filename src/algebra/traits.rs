@@ -1,40 +1,50 @@
-pub trait AlgeStruct {
-    type Output;
+//! 代数的構造に関するトレイトを定義する。
+use crate::trait_alias;
+
+/// 集合
+pub trait Set {
+    /// 集合の要素の型
+    type Element;
 }
 
-pub trait BinaryOp: AlgeStruct {
-    fn op(&self, _: Self::Output, _: Self::Output) -> Self::Output;
+/// 二項演算をもつ
+pub trait BinaryOp: Set {
+    /// 二項演算
+    fn op(&self, _: Self::Element, _: Self::Element) -> Self::Element;
 }
 
-pub trait Identity: AlgeStruct {
-    fn id(&self) -> Self::Output;
+/// 単位元をもつ
+pub trait Identity: Set {
+    /// 単位元
+    fn id(&self) -> Self::Element;
 }
 
-pub trait Inverse: AlgeStruct {
-    fn inv(&self, _: Self::Output) -> Self::Output;
+/// 逆元をもつ
+pub trait Inverse: Set {
+    /// 逆元
+    fn inv(&self, _: Self::Element) -> Self::Element;
 }
 
+/// 可換性をもつ
 pub trait Commutative {}
+/// 結合性をもつ
 pub trait Associative {}
+/// 冪等性をもつ
 pub trait Idempotence {}
 
-pub trait Semigroup: BinaryOp + Associative {}
-impl<T: BinaryOp + Associative> Semigroup for T {}
+trait_alias!(#[doc = "半群"] Semigroup: BinaryOp + Associative);
+trait_alias!(#[doc = "モノイド"] Monoid: Semigroup + Identity);
+trait_alias!(#[doc = "可換モノイド"] AbelianMonoid: Monoid + Commutative);
+trait_alias!(#[doc = "群"] Group: Monoid + Inverse);
+trait_alias!(#[doc = "可換群"] AbelianGroup: Group + Commutative);
 
-pub trait Monoid: Semigroup + Identity {}
-impl<T: Semigroup + Identity> Monoid for T {}
-
-pub trait AbelianMonoid: Monoid + Commutative {}
-impl<T: Monoid + Commutative> AbelianMonoid for T {}
-
-pub trait Group: Monoid + Inverse {}
-impl<T: Monoid + Inverse> Group for T {}
-
-pub trait AbelianGroup: Group + Commutative {}
-impl<T: Group + Commutative> AbelianGroup for T {}
-
-pub trait Times<T: Clone>: BinaryOp<Output = T> + Identity {
-    fn times(&self, mut a: Self::Output, mut n: u64) -> Self::Output {
+/// 値に二項演算を複数回適用する。
+pub trait Times: BinaryOp + Identity
+where
+    Self::Element: Clone,
+{
+    /// `n`個の値`a`に二項演算を適用する。
+    fn times(&self, mut a: Self::Element, mut n: u64) -> Self::Element {
         let mut ret = self.id();
 
         while n > 0 {
@@ -48,4 +58,4 @@ pub trait Times<T: Clone>: BinaryOp<Output = T> + Identity {
         ret
     }
 }
-impl<T: Clone, A: BinaryOp<Output = T> + Identity> Times<T> for A {}
+impl<A: BinaryOp + Identity> Times for A where Self::Element: Clone {}

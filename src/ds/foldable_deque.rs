@@ -1,14 +1,20 @@
+//! 半群で畳み込み可能なdeque
 pub use crate::algebra::traits::*;
 
+/// 半群で畳み込み可能なdeque
 pub struct FoldableDeque<S: Semigroup> {
-    front_stack: Vec<S::Output>,
-    back_stack: Vec<S::Output>,
-    front_sum: Vec<S::Output>,
-    back_sum: Vec<S::Output>,
+    front_stack: Vec<S::Element>,
+    back_stack: Vec<S::Element>,
+    front_sum: Vec<S::Element>,
+    back_sum: Vec<S::Element>,
     semigroup: S,
 }
 
-impl<T: Clone, S: Semigroup<Output = T>> FoldableDeque<S> {
+impl<S: Semigroup> FoldableDeque<S>
+where
+    S::Element: Clone,
+{
+    /// 空の`FoldableDeque<S>`を生成する。
     pub fn new(semigroup: S) -> Self {
         FoldableDeque {
             front_stack: vec![],
@@ -19,7 +25,7 @@ impl<T: Clone, S: Semigroup<Output = T>> FoldableDeque<S> {
         }
     }
 
-    fn f(&self, a: Option<T>, b: Option<T>) -> Option<T> {
+    fn f(&self, a: Option<S::Element>, b: Option<S::Element>) -> Option<S::Element> {
         match (a, b) {
             (Some(a), Some(b)) => Some(self.semigroup.op(a, b)),
             (x @ Some(_), _) => x,
@@ -28,20 +34,23 @@ impl<T: Clone, S: Semigroup<Output = T>> FoldableDeque<S> {
         }
     }
 
-    pub fn fold(&self) -> Option<T> {
+    /// すべての要素を`S`の演算で畳み込んだ結果を返す。
+    pub fn fold(&self) -> Option<S::Element> {
         self.f(
             self.front_sum.last().cloned(),
             self.back_sum.last().cloned(),
         )
     }
 
-    pub fn push_back(&mut self, value: T) {
+    /// 末尾に`value`を追加する。
+    pub fn push_back(&mut self, value: S::Element) {
         self.back_stack.push(value.clone());
         self.back_sum
             .push(self.f(self.back_sum.last().cloned(), Some(value)).unwrap());
     }
 
-    pub fn push_front(&mut self, value: T) {
+    /// 先頭に`value`を追加する。
+    pub fn push_front(&mut self, value: S::Element) {
         self.front_stack.push(value.clone());
         self.front_sum
             .push(self.f(Some(value), self.front_sum.last().cloned()).unwrap());
@@ -63,7 +72,8 @@ impl<T: Clone, S: Semigroup<Output = T>> FoldableDeque<S> {
         }
     }
 
-    pub fn pop_front(&mut self) -> Option<T> {
+    /// 先頭の要素を削除して返す。
+    pub fn pop_front(&mut self) -> Option<S::Element> {
         if self.front_stack.is_empty() {
             self.back_sum.clear();
 
@@ -83,7 +93,8 @@ impl<T: Clone, S: Semigroup<Output = T>> FoldableDeque<S> {
         self.front_stack.pop()
     }
 
-    pub fn pop_back(&mut self) -> Option<T> {
+    /// 末尾の要素を削除して返す。
+    pub fn pop_back(&mut self) -> Option<S::Element> {
         if self.back_stack.is_empty() {
             self.front_sum.clear();
 
@@ -103,18 +114,22 @@ impl<T: Clone, S: Semigroup<Output = T>> FoldableDeque<S> {
         self.back_stack.pop()
     }
 
-    pub fn front(&self) -> Option<&T> {
+    /// 先頭の要素への参照を返す。
+    pub fn front(&self) -> Option<&S::Element> {
         self.front_stack.last().or_else(|| self.back_stack.first())
     }
 
-    pub fn back(&self) -> Option<&T> {
+    /// 末尾の要素への参照を返す。
+    pub fn back(&self) -> Option<&S::Element> {
         self.back_stack.last().or_else(|| self.front_stack.first())
     }
 
+    /// 要素数を返す。
     pub fn len(&self) -> usize {
         self.front_stack.len() + self.back_stack.len()
     }
 
+    /// 要素数が`0`なら`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.front_stack.is_empty() && self.back_stack.is_empty()
     }

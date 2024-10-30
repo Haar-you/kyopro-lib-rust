@@ -6,8 +6,8 @@ use crate::utils::{linear::*, range::range_bounds_to_range};
 use std::ops::{Add, AddAssign, Mul, RangeBounds};
 
 trait_alias!(
-    Elem,
-    Copy + Zero + Add<Output = Self> + Mul<Output = Self> + AddAssign + PartialEq + From<u32>
+    /// [`SegtreeLinearAddRangeSum<T>`]が扱える型
+    Elem: Copy + Zero + Add<Output = Self> + Mul<Output = Self> + AddAssign + PartialEq + From<u32>
 );
 
 pub struct SegtreeLinearAddRangeSum<T> {

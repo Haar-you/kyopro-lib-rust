@@ -1,16 +1,22 @@
-use crate::graph::*;
-use std::collections::VecDeque;
+//! 幅優先探索
 
-pub fn bfs<D: Direction, T, E: EdgeTrait<Weight = T>>(
+use crate::graph::*;
+use crate::utils::is_none_or::*;
+use std::collections::VecDeque;
+use std::iter::zip;
+
+/// 幅優先探索で辺数が最小の経路を得る。
+pub fn bfs<D: Direction, E: EdgeTrait>(
     g: &Graph<D, E>,
     src: impl IntoIterator<Item = usize>,
-) -> Vec<Option<usize>> {
-    let mut ret = vec![None; g.len()];
+) -> Vec<Option<(usize, Option<&E>)>> {
+    let mut dist = vec![None; g.len()];
+    let mut prev = vec![None; g.len()];
     let mut check = vec![false; g.len()];
     let mut q = VecDeque::new();
 
     for s in src {
-        ret[s] = Some(0);
+        dist[s] = Some(0);
         q.push_back(s);
     }
 
@@ -20,13 +26,16 @@ pub fn bfs<D: Direction, T, E: EdgeTrait<Weight = T>>(
         }
         check[cur] = true;
 
+        let d_cur = dist[cur].unwrap();
         for e in &g.edges[cur] {
-            if ret[e.to()].is_none() || ret[e.to()].unwrap() > ret[e.from()].unwrap() + 1 {
-                ret[e.to()] = Some(ret[e.from()].unwrap() + 1);
-                q.push_back(e.to());
+            let to = e.to();
+            if dist[to].is_none_or(|d| d > d_cur + 1) {
+                dist[to] = Some(d_cur + 1);
+                prev[to] = Some(e);
+                q.push_back(to);
             }
         }
     }
 
-    ret
+    zip(dist, prev).map(|(a, b)| a.map(|a| (a, b))).collect()
 }

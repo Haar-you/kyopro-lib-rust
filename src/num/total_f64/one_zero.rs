@@ -1,3 +1,5 @@
+//! [`One`]と[`Zero`]を実装する。
+
 use crate::num::one_zero::*;
 pub use crate::num::total_f64::*;
 

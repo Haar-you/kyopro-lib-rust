@@ -2,9 +2,11 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use std::marker::PhantomData;
 
+/// 変換操作
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Transformation(Vec<usize>);
 
+/// 置換操作
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Permutation(Vec<usize>);
 
@@ -41,6 +43,7 @@ impl Permutation {
     }
 }
 
+/// 置換や変換の合成を演算とする代数的構造
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Composition<T> {
     len: usize,
@@ -48,6 +51,7 @@ pub struct Composition<T> {
 }
 
 impl<T> Composition<T> {
+    /// `Composition<T>`を生成する。
     pub fn new(len: usize) -> Self {
         Self {
             len,
@@ -56,11 +60,8 @@ impl<T> Composition<T> {
     }
 }
 
-impl<T> AlgeStruct for Composition<T> {
-    type Output = T;
-}
-
 impl_algebra!(Composition<Transformation>, 
+    set: Transformation,
     op: |s: &Self, a: Transformation, b: Transformation| {
         let n = s.len;
         assert_eq!(a.0.len(), n);
@@ -70,11 +71,11 @@ impl_algebra!(Composition<Transformation>,
     id: |s: &Self| Transformation((0..s.len).collect()), assoc: {});
 
 impl_algebra!(Composition<Permutation>, 
+    set: Permutation,
     op: |s: &Self, a: Permutation, b: Permutation| {
         let n = s.len;
         assert_eq!(a.0.len(), n);
         assert_eq!(b.0.len(), n);
-    
         Permutation((0..n).map(|i| a.0[b.0[i]]).collect())
     }, 
     inv: |s: &Self, a: Permutation| {

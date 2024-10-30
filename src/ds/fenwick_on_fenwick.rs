@@ -1,5 +1,5 @@
 use crate::algo::bsearch::lower_bound;
-use std::ops::{Range, RangeTo};
+use std::ops::{Add, Range, RangeTo, Sub};
 
 #[derive(Clone, Default)]
 pub struct FenwickOnFenwickBuilder {
@@ -67,7 +67,7 @@ impl FenwickOnFenwickBuilder {
     }
 }
 
-impl<T: Copy + std::ops::Add<Output = T> + std::ops::Sub<Output = T>> FenwickOnFenwick<T> {
+impl<T: Copy + Add<Output = T> + Sub<Output = T>> FenwickOnFenwick<T> {
     /// Time Complexity $O(\log ^ 2 n)$
     pub fn update(&mut self, x: i64, y: i64, value: T) {
         let mut x = self.c_xs.binary_search(&x).unwrap() + 1;

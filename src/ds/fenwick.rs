@@ -3,12 +3,15 @@ use std::ops::{Range, RangeTo};
 
 #[derive(Clone, Default)]
 pub struct FenwickTree<G: AbelianGroup> {
-    data: Vec<G::Output>,
+    data: Vec<G::Element>,
     size: usize,
     group: G,
 }
 
-impl<T: Clone, G: AbelianGroup<Output = T>> FenwickTree<G> {
+impl<G: AbelianGroup> FenwickTree<G>
+where
+    G::Element: Clone,
+{
     pub fn new(size: usize, group: G) -> Self {
         Self {
             data: vec![group.id(); size + 1],
@@ -17,7 +20,7 @@ impl<T: Clone, G: AbelianGroup<Output = T>> FenwickTree<G> {
         }
     }
 
-    pub fn update(&mut self, mut i: usize, value: T) {
+    pub fn update(&mut self, mut i: usize, value: G::Element) {
         i += 1;
         while i <= self.size {
             self.data[i] = self.group.op(self.data[i].clone(), value.clone());
@@ -25,7 +28,7 @@ impl<T: Clone, G: AbelianGroup<Output = T>> FenwickTree<G> {
         }
     }
 
-    pub fn fold_to(&self, RangeTo { end: mut i }: RangeTo<usize>) -> T {
+    pub fn fold_to(&self, RangeTo { end: mut i }: RangeTo<usize>) -> G::Element {
         let mut ret = self.group.id();
 
         while i > 0 {
@@ -36,7 +39,7 @@ impl<T: Clone, G: AbelianGroup<Output = T>> FenwickTree<G> {
         ret
     }
 
-    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> T {
+    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> G::Element {
         self.group
             .op(self.fold_to(..r), self.group.inv(self.fold_to(..l)))
     }

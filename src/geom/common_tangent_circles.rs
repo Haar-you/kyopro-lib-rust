@@ -2,6 +2,7 @@
 
 use crate::geom::*;
 
+/// 2つの円の共通接線を求める
 pub fn common_tangent_circles(a: Circle, b: Circle, eps: Eps) -> Vec<Vector> {
     let cc = b.center - a.center;
     let d = cc.abs();

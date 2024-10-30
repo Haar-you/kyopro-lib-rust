@@ -2,6 +2,7 @@
 
 use crate::geom::*;
 
+/// 三角形(△abc)の内接円を求める
 pub fn incircle(a: Vector, b: Vector, c: Vector) -> Circle {
     let a_ = (b - c).abs();
     let b_ = (a - c).abs();

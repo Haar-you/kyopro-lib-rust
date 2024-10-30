@@ -21,13 +21,16 @@ impl<T> Node<T> {
 
 #[derive(Debug)]
 pub struct DynamicSegtree<M: Monoid> {
-    data: Vec<Node<M::Output>>,
+    data: Vec<Node<M::Element>>,
     root: NullableUsize,
     monoid: M,
     to: usize,
 }
 
-impl<T: Clone, M: Monoid<Output = T>> DynamicSegtree<M> {
+impl<M: Monoid> DynamicSegtree<M>
+where
+    M::Element: Clone,
+{
     pub fn new(monoid: M) -> Self {
         Self {
             data: vec![Node::new(monoid.id())],
@@ -43,7 +46,7 @@ impl<T: Clone, M: Monoid<Output = T>> DynamicSegtree<M> {
         cur_from: usize,
         cur_to: usize,
         i: usize,
-        value: T,
+        value: M::Element,
     ) {
         if cur_to - cur_from == 1 {
             self.data[cur_id.0].value = value;
@@ -83,7 +86,7 @@ impl<T: Clone, M: Monoid<Output = T>> DynamicSegtree<M> {
         }
     }
 
-    pub fn assign(&mut self, i: usize, value: T) {
+    pub fn assign(&mut self, i: usize, value: M::Element) {
         loop {
             if i < self.to {
                 break;
@@ -106,7 +109,7 @@ impl<T: Clone, M: Monoid<Output = T>> DynamicSegtree<M> {
         cur_to: usize,
         from: usize,
         to: usize,
-    ) -> T {
+    ) -> M::Element {
         let cur = &self.data[cur_id.0];
 
         if cur_to <= from || to <= cur_from {
@@ -130,7 +133,7 @@ impl<T: Clone, M: Monoid<Output = T>> DynamicSegtree<M> {
         }
     }
 
-    pub fn fold(&self, Range { start, end }: Range<usize>) -> T {
+    pub fn fold(&self, Range { start, end }: Range<usize>) -> M::Element {
         self.fold_dfs(self.root, 0, self.to, start, end)
     }
 }

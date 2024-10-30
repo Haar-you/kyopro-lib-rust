@@ -1,7 +1,8 @@
 //! 重心列挙
 
-use crate::tree::*;
+use crate::{tree::*, utils::is_none_or::IsNoneOr};
 
+/// 木の重心を列挙する
 pub fn centroids<E: TreeEdgeTrait>(tree: &Tree<E>) -> Vec<usize> {
     let n = tree.len();
     let mut sub = vec![0; n];
@@ -22,11 +23,10 @@ fn dfs<E: TreeEdgeTrait>(
 
     let mut check = true;
 
-    for e in tree.nodes[cur].neighbors() {
-        if Some(e.to()) == par {
-            continue;
-        }
-
+    for e in tree.nodes[cur]
+        .neighbors()
+        .filter(|e| par.is_none_or(|p| p != e.to()))
+    {
         dfs(tree, sub, ret, size, e.to(), Some(cur));
 
         if sub[e.to()] > size / 2 {
