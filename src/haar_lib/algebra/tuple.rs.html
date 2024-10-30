@@ -1,4 +1,20 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/algebra/tuple.rs`."><title>tuple.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="haar_lib" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../haar_lib/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/algebra/tuple.rs`."><title>tuple.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="haar_lib" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js"                  integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js"    integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script>
+ document.addEventListener("DOMContentLoaded", function() {
+     renderMathInElement(document.body, {
+         delimiters: [
+             {left: "$$", right: "$$", display: true},
+             {left: "\\(", right: "\\)", display: false},
+             {left: "$", right: "$", display: false},
+             {left: "\\[", right: "\\]", display: true}
+         ]
+     });
+ });
+</script>
+
+</head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../haar_lib/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -37,31 +53,35 @@
 <a href="#37" id="37">37</a>
 <a href="#38" id="38">38</a>
 <a href="#39" id="39">39</a>
-</pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 直積
+</span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 
 <span class="macro">macro_rules! </span>impl_tuple {
-    (<span class="macro-nonterminal">$a</span>:tt; $(<span class="macro-nonterminal">$t</span>:tt),<span class="kw-2">*</span>; $(<span class="macro-nonterminal">$i</span>:tt),<span class="kw-2">*</span>) =&gt; {
+    ($(<span class="attr">#[<span class="macro-nonterminal">$meta</span>:meta]</span>)* <span class="macro-nonterminal">$a</span>:ident; $(<span class="macro-nonterminal">$t</span>:tt),<span class="kw-2">*</span>; $(<span class="macro-nonterminal">$i</span>:tt),<span class="kw-2">*</span>) =&gt; {
+        $(<span class="attr">#[<span class="macro-nonterminal">$meta</span>]</span>)*
         <span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
         </span><span class="kw">pub struct </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt;($(<span class="kw">pub </span><span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>);
 
-        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:AlgeStruct),<span class="kw-2">*</span>&gt; AlgeStruct <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {
-            <span class="kw">type </span>Output = ($(<span class="macro-nonterminal">$t::Output</span>),<span class="kw-2">*</span>);
+        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Set),<span class="kw-2">*</span>&gt; Set <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {
+            <span class="kw">type </span>Element = ($(<span class="macro-nonterminal">$t::Element</span>),<span class="kw-2">*</span>);
         }
 
         <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:BinaryOp),<span class="kw-2">*</span>&gt; BinaryOp <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {
-            <span class="kw">fn </span>op(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="self">Self</span>::Output, b: <span class="self">Self</span>::Output) -&gt; <span class="self">Self</span>::Output {
+            <span class="kw">fn </span>op(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="self">Self</span>::Element, b: <span class="self">Self</span>::Element) -&gt; <span class="self">Self</span>::Element {
                 ($(<span class="self">self</span>.<span class="macro-nonterminal">$i</span>.op(a.<span class="macro-nonterminal">$i</span>, b.<span class="macro-nonterminal">$i</span>)),<span class="kw-2">*</span>)
             }
         }
 
         <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Identity),<span class="kw-2">*</span>&gt; Identity <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {
-            <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Output {
+            <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Element {
                 ($(<span class="self">self</span>.<span class="macro-nonterminal">$i</span>.id()),<span class="kw-2">*</span>)
             }
         }
 
         <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Inverse),<span class="kw-2">*</span>&gt; Inverse <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {
-            <span class="kw">fn </span>inv(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="self">Self</span>::Output) -&gt; <span class="self">Self</span>::Output {
+            <span class="kw">fn </span>inv(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="self">Self</span>::Element) -&gt; <span class="self">Self</span>::Element {
                 ($(<span class="self">self</span>.<span class="macro-nonterminal">$i</span>.inv(a.<span class="macro-nonterminal">$i</span>)),<span class="kw-2">*</span>)
             }
         }
@@ -72,8 +92,8 @@
     };
 }
 
-<span class="macro">impl_tuple!</span>(Tuple2; T0, T1; <span class="number">0</span>, <span class="number">1</span>);
-<span class="macro">impl_tuple!</span>(Tuple3; T0, T1, T2; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
-<span class="macro">impl_tuple!</span>(Tuple4; T0, T1, T2, T3; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);
-<span class="macro">impl_tuple!</span>(Tuple5; T0, T1, T2, T3, T4; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);
+<span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">&quot;2つの集合の直積&quot;</span>] </span>Tuple2; T0, T1; <span class="number">0</span>, <span class="number">1</span>);
+<span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">&quot;3つの集合の直積&quot;</span>] </span>Tuple3; T0, T1, T2; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
+<span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">&quot;4つの集合の直積&quot;</span>] </span>Tuple4; T0, T1, T2, T3; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);
+<span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">&quot;5つの集合の直積&quot;</span>] </span>Tuple5; T0, T1, T2, T3, T4; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);
 </code></pre></div></section></main></body></html>

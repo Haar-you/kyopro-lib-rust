@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["CumSum"],"trait":["IterCumSum"]};
+window.SIDEBAR_ITEMS = {"struct":["_CumSum"],"trait":["CumSum"]};

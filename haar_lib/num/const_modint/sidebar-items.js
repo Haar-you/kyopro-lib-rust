@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["algebra","one_zero"],"struct":["ConstModInt","ConstModIntBuilder"]};
+window.SIDEBAR_ITEMS = {"macro":["impl_ops"],"mod":["algebra","one_zero"],"struct":["ConstModInt","ConstModIntBuilder"]};

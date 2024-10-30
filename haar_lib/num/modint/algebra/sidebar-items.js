@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Prod","Sum"]};
+window.SIDEBAR_ITEMS = {"struct":["ProdModM","SumModM"]};

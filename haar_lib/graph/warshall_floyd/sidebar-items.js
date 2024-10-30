@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["warshall_floyd"]};
+window.SIDEBAR_ITEMS = {"struct":["WarshallFloyd"]};

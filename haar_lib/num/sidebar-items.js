@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["arithmetic","const_modint","ff","modint","num_inf","one_zero","rational","total_f64","traits"]};
+window.SIDEBAR_ITEMS = {"mod":["arithmetic","const_modint","ff","modint","num_inf","one_zero","ops","rational","total_f64","traits"]};

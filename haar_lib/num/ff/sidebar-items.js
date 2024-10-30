@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":["FF","FFElem","Inv","Pow"]};
+window.SIDEBAR_ITEMS = {"trait":["FF","FFElem"]};
