@@ -17,9 +17,9 @@ impl<Modulo: FF> FactorialTable<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     ///
-    /// **Space complexity O(n)**
+    /// **Space complexity** $O(n)$
     pub fn new(n: usize, modulo: Modulo) -> Self {
         let mut factorial = vec![modulo.from_u64(1); n + 1];
         let mut invs = vec![modulo.from_u64(1); n + 1];
@@ -43,21 +43,21 @@ where
 
     /// nの階乗
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     pub fn facto(&self, n: usize) -> Modulo::Element {
         self.factorial[n]
     }
 
     /// nの階乗の逆元
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     pub fn inv_facto(&self, n: usize) -> Modulo::Element {
         self.invs[n]
     }
 
-    /// n個からk個とりだす順列の個数 (nPk)
+    /// n個からk個とりだす順列の個数 (${}_n \mathrm{ P }_k$)
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     pub fn perm(&self, n: usize, k: usize) -> Modulo::Element {
         if n < k {
             self.modulo.from_u64(0)
@@ -66,9 +66,9 @@ where
         }
     }
 
-    /// n個からk個とりだす組み合わせの個数 (nCk)
+    /// n個からk個とりだす組み合わせの個数 (${}_n \mathrm{ C }_k$)
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     pub fn comb(&self, n: usize, k: usize) -> Modulo::Element {
         if n < k {
             self.modulo.from_u64(0)
@@ -77,9 +77,9 @@ where
         }
     }
 
-    /// n個から重複を許してk個選ぶ場合の数
+    /// n個から重複を許してk個選ぶ場合の数 (${}_n \mathrm{ H }_k$)
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     pub fn h(&self, n: usize, k: usize) -> Modulo::Element {
         if n == 0 && k == 0 {
             self.modulo.from_u64(1)

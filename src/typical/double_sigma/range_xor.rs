@@ -4,7 +4,7 @@
 ///
 /// Σ{i = 1 ~ N}Σ{j = i ~ N} aᵢ ⊕ aᵢ ₊ ₁ ⊕ ... ⊕ aⱼ
 ///
-/// **Time complexity O(64 * |a|)**
+/// **Time complexity** $O(64 * |a|)$
 ///
 /// # Problems
 /// - <https://atcoder.jp/contests/abc365/tasks/abc365_e>

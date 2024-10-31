@@ -68,7 +68,15 @@ where
         }
     }
 
-    fn update_(&mut self, cur: usize, from: usize, to: usize, s: usize, t: usize, value: &M::Element) {
+    fn update_(
+        &mut self,
+        cur: usize,
+        from: usize,
+        to: usize,
+        s: usize,
+        t: usize,
+        value: &M::Element,
+    ) {
         if to - from == 1 {
             if s <= from && to <= t {
                 let cur_value = unsafe { self.data.get_unchecked(cur).value.clone() };

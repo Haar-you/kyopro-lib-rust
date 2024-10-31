@@ -7,7 +7,7 @@ use crate::{ds::unionfind::UnionFind, graph::*};
 /// グラフが連結ならばSomeに包んで最小全域木の辺集合を返す。
 /// 非連結ならばNoneを返す。
 ///
-/// **Time complexity O(E log E)**
+/// **Time complexity** $O(E \log E)$
 pub fn kruskal<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Option<Vec<&E>>
 where
     E::Weight: Ord + Copy,

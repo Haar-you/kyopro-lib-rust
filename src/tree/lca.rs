@@ -10,9 +10,9 @@ pub struct DoublingLCA {
 }
 
 impl DoublingLCA {
-    /// **Time complexity O(n log n)**
+    /// **Time complexity** $O(n \log n)$
     ///
-    /// **Space complexity O(n log n)**
+    /// **Space complexity** $O(n \log n)$
     pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
         let n = tree.len();
         let log2n = n.next_power_of_two().trailing_zeros() as usize + 1;
@@ -49,7 +49,7 @@ impl DoublingLCA {
 
     /// `a`の`n`個上の祖先を求める。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn ancestor(&self, mut a: usize, mut n: usize) -> Option<usize> {
         while n != 0 {
             let m1 = usize::BITS as usize - n.leading_zeros() as usize - 1;
@@ -66,7 +66,7 @@ impl DoublingLCA {
 
     /// `a`と`b`の最小共通祖先を求める。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn lca(&self, mut a: usize, mut b: usize) -> usize {
         if self.depth[a] >= self.depth[b] {
             std::mem::swap(&mut a, &mut b);
@@ -92,7 +92,7 @@ impl DoublingLCA {
 
     /// s-t最短パス上で、sから見てd番目の頂点を返す。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn jump(&self, s: usize, t: usize, d: usize) -> Option<usize> {
         let a = self.lca(s, t);
         if self.depth[s] - self.depth[a] >= d {

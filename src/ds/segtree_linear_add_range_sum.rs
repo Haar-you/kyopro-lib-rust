@@ -18,9 +18,9 @@ pub struct SegtreeLinearAddRangeSum<T> {
 }
 
 impl<T: Elem> SegtreeLinearAddRangeSum<T> {
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     ///
-    /// **Space complexity O(n)**
+    /// **Space complexity** $O(n)$
     pub fn new(n: usize) -> Self {
         let hsize = n.next_power_of_two();
 
@@ -69,7 +69,7 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
         }
     }
 
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn update(&mut self, range: impl RangeBounds<usize>, linear: Linear<T>) {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self._update(1, 0, self.hsize, start, end, linear.a, linear.b);
@@ -87,7 +87,7 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
         }
     }
 
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn fold(&mut self, range: impl RangeBounds<usize>) -> T {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self._fold(1, 0, self.hsize, start, end)

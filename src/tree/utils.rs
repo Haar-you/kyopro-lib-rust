@@ -4,7 +4,7 @@ use std::ops::Add;
 
 /// rootを根としたときの根から各頂点への距離を列挙する。
 ///
-/// **Time complexity O(n)**
+/// **Time complexity** $O(n)$
 pub fn tree_distance<E: TreeEdgeTrait>(tr: &Tree<E>, root: usize) -> Vec<E::Weight>
 where
     E::Weight: Add<Output = E::Weight> + Copy + Zero,
@@ -31,7 +31,7 @@ where
 
 /// 木の任意の2頂点の距離の最大値を求める。
 ///
-/// **Time complexity O(n)**
+/// **Time complexity** $O(n)$
 pub fn tree_diameter<E: TreeEdgeTrait>(tr: &Tree<E>) -> (E::Weight, usize, usize)
 where
     E::Weight: Add<Output = E::Weight> + Copy + Zero + Ord,
@@ -55,7 +55,7 @@ where
 
 /// 木の各頂点について、そこからの距離の最大値を列挙する。
 ///
-/// **Time complexity O(n)**
+/// **Time complexity** $O(n)$
 pub fn tree_height<E: TreeEdgeTrait>(tr: &Tree<E>) -> Vec<(E::Weight, usize)>
 where
     E::Weight: Add<Output = E::Weight> + Copy + Zero + Ord,
@@ -82,7 +82,7 @@ where
 
 /// 木上の2頂点を結ぶパス上の頂点列を求める。
 ///
-/// **Time complexity O(n)**
+/// **Time complexity** $O(n)$
 pub fn tree_path<E: TreeEdgeTrait>(tr: &Tree<E>, u: usize, v: usize) -> Vec<usize> {
     let n = tr.len();
     let mut ret = vec![];

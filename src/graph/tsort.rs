@@ -5,7 +5,7 @@ use std::collections::VecDeque;
 
 /// トポロジカルソート
 ///
-/// **Time complexity O(V)**
+/// **Time complexity** $O(V)$
 ///
 /// gがDAGのとき、トポロジカルソートした結果をSomeに包んで返す。
 /// そうでなければ、Noneを返す。

@@ -1,3 +1,4 @@
+//! 逆行列 (mod 2)
 use crate::ds::bitset::*;
 
 /// mod 2上で逆行列を求める

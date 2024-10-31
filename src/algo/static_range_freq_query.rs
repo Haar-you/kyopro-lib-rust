@@ -11,7 +11,7 @@ pub struct StaticRangeFreqQuery<T> {
 }
 
 impl<T: Hash + Eq> StaticRangeFreqQuery<T> {
-    /// **Time Complexity O(|a|)**
+    /// **Time complexity** $O(|a|)$
     pub fn new(a: Vec<T>) -> Self {
         let mut map = HashMap::new();
 
@@ -22,7 +22,7 @@ impl<T: Hash + Eq> StaticRangeFreqQuery<T> {
         Self { map }
     }
 
-    /// **Time Complexity O(log |a|)**
+    /// **Time complexity** $O(\log |a|)$
     pub fn query(&self, Range { start, end }: Range<usize>, value: &T) -> usize {
         if let Some(a) = self.map.get(value) {
             let lower = lower_bound(a, &start);

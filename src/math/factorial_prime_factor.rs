@@ -8,7 +8,7 @@
 
 /// a!の素因数pの個数を求める。
 ///
-/// **Time Complexity O(log a)**
+/// **Time complexity** $O(\log a)$
 pub fn factorial_prime_factor(a: u64, p: u64) -> u64 {
     let mut ret = 0;
     let mut q = p;

@@ -24,7 +24,7 @@ macro_rules! bsearch_impl {
 
 /// x以上となる最小のindexを求める。
 ///
-/// **Time complexity O(log n)**
+/// **Time complexity** $O(\log n)$
 #[inline]
 pub fn lower_bound<T: Ord>(a: &[T], value: &T) -> usize {
     bsearch_impl!(<, a, value)
@@ -32,7 +32,7 @@ pub fn lower_bound<T: Ord>(a: &[T], value: &T) -> usize {
 
 /// xを超える最小のindexを求める。
 ///
-/// **Time complexity O(log n)**
+/// **Time complexity** $O(\log n)$
 #[inline]
 pub fn upper_bound<T: Ord>(a: &[T], value: &T) -> usize {
     bsearch_impl!(<=, a, value)
@@ -40,7 +40,7 @@ pub fn upper_bound<T: Ord>(a: &[T], value: &T) -> usize {
 
 /// lower_bound, upper_boundの組を求める。
 ///
-/// **Time complexity O(log n)**
+/// **Time complexity** $O(\log n)$
 #[inline]
 pub fn equal_range<T: Ord>(a: &[T], value: &T) -> (usize, usize) {
     (lower_bound(a, value), upper_bound(a, value))

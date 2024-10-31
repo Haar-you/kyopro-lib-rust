@@ -4,6 +4,7 @@
 //!
 //! - [CODE THANKS FESTIVAL 2017 H - Union Sets](https://atcoder.jp/contests/code-thanks-festival-2017-open/submissions/55116191)
 
+/// 並列二分探索
 pub fn parallel_binary_search(
     m: usize,
     q: usize,

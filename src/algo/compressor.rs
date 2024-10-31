@@ -16,14 +16,14 @@ pub struct CompressorBuilder<T> {
 impl<T: Ord + Eq> Compressor<T> {
     /// `value`が何番目の値(0-index)かを返す。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn index(&self, value: &T) -> usize {
         lower_bound(&self.data, value)
     }
 
     /// `i`番目の値を返す。
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     pub fn get(&self, i: usize) -> &T {
         &self.data[i]
     }
@@ -66,7 +66,7 @@ impl<T: Ord + Eq> CompressorBuilder<T> {
         self.data.extend(values);
     }
 
-    /// **Time complexity O(n log n)**
+    /// **Time complexity** $O(n \log n)$
     pub fn build(mut self) -> Compressor<T> {
         self.data.sort();
         self.data.dedup();

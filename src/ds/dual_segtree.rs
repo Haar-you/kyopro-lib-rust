@@ -1,11 +1,11 @@
-//! モノイド列の区間更新・点取得(*O*(log n), *O*(log n))ができる。
+//! モノイド列の区間更新・点取得($O(\log n)$, $O(\log n)$)ができる。
 #![allow(clippy::wrong_self_convention)]
 
 pub use crate::algebra::traits::Monoid;
 use crate::utils::range::range_bounds_to_range;
 use std::ops::RangeBounds;
 
-/// モノイド列の区間更新・点取得(*O*(log n), *O*(log n))ができる。
+/// モノイド列の区間更新・点取得($O(\log n)$, $O(\log n)$)ができる。
 pub struct DualSegtree<M: Monoid> {
     original_size: usize,
     size: usize,
@@ -17,7 +17,7 @@ impl<M: Monoid> DualSegtree<M>
 where
     M::Element: Clone,
 {
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     pub fn new(n: usize, monoid: M) -> Self {
         let size = n.next_power_of_two() * 2;
         DualSegtree {
@@ -52,7 +52,7 @@ where
         }
     }
 
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn get(&mut self, i: usize) -> M::Element {
         self.propagate_top_down(i + self.size / 2);
         self.data[i + self.size / 2].clone()
@@ -73,7 +73,7 @@ where
         self.data[self.size / 2..self.size / 2 + self.original_size].to_vec()
     }
 
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn update(&mut self, range: impl RangeBounds<usize>, value: M::Element) {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 

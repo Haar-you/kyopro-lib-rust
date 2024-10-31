@@ -1,6 +1,7 @@
 use std::ops::{Add, Div, Sub};
 
 /// [`bsearch_ng_ok`]の返り値
+#[derive(Clone, Copy, Debug)]
 pub enum SearchResult<T> {
     /// `ng`以下で条件を満たさず、`ok`以上で条件を満たす。
     NgOk {
@@ -19,7 +20,7 @@ pub enum SearchResult<T> {
 ///
 /// `f`は、`lower..=upper`の範囲で、ある値を境界にそれ未満では常に`false`、それ以上では常に`true`となる関数
 ///
-/// **Time complexity O(log n)**
+/// **Time complexity** $O(\log n)$
 pub fn bsearch_ng_ok<
     T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Div<Output = T> + From<u8>,
 >(

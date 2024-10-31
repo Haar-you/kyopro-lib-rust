@@ -2,6 +2,7 @@
 
 use crate::math::{factorize::trial::*, mod_ops::pow::*};
 
+/// 原始根
 pub fn primitive_root(p: u64) -> Option<u64> {
     let pf = factorize(p - 1)
         .into_iter()

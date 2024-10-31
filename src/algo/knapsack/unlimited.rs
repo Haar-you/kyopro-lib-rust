@@ -1,10 +1,11 @@
+//! 個数制限無しナップサック問題
 use std::{cmp::max, ops::Add};
 
 /// 個数制限無しナップサック問題
 ///
-/// **Time complexity O(n cap)**
+/// **Time complexity** $O(n \cdot cap)$
 ///
-/// **Space complexity O(cap)**
+/// **Space complexity** $O(cap)$
 pub fn knapsack_unlimited<T>(cap: usize, ws: &[usize], vs: &[T]) -> T
 where
     T: Default + Copy + Ord + Add<Output = T>,

@@ -5,6 +5,7 @@ pub use crate::graph::lowlink::Lowlink;
 type Vertices = Vec<usize>;
 type Edges = Vec<(usize, usize)>;
 
+/// 二重頂点連結分解
 pub fn biconnected(ll: &Lowlink) -> Vec<(Vertices, Edges)> {
     let n = ll.size;
 

@@ -8,7 +8,7 @@ pub struct TwoSat {
 }
 
 impl TwoSat {
-    /// **Time complexity O(size)**
+    /// **Time complexity** $O(size)$
     pub fn new(size: usize) -> Self {
         Self {
             size,
@@ -27,23 +27,23 @@ impl TwoSat {
         }
     }
 
-    /// a → b
+    /// $a \Rightarrow b$
     pub fn add_if(&mut self, a: isize, b: isize) {
         self.g.add(Edge::new(self.check(a), self.check(b), (), ()));
     }
 
-    /// a ∨ b
+    /// $a \lor b$
     pub fn add_or(&mut self, a: isize, b: isize) {
         self.add_if(-a, b);
         self.add_if(-b, a);
     }
 
-    /// ¬(a ∧ b)
+    /// $\lnot (a \land b)$
     pub fn not_coexist(&mut self, a: isize, b: isize) {
         self.add_or(-a, -b);
     }
 
-    /// **Time complexity O(size + E)**
+    /// **Time complexity** $O(size + E)$
     pub fn solve(&self) -> Option<Vec<bool>> {
         let s = SCC::new(&self.g).to_vec();
 

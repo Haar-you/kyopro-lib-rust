@@ -27,7 +27,7 @@ where
 {
     /// `WarshallFloyd<T>`を生成する。
     ///
-    /// **Time complexity O(n³)**
+    /// **Time complexity** $O(n^3)$
     pub fn new<D: Direction, E: EdgeTrait<Weight = T>>(g: &Graph<D, E>) -> Self {
         let zero = E::Weight::zero();
         let n = g.len();
@@ -84,14 +84,14 @@ where
 
     /// 負の閉路があれば`true`を返す。
     ///
-    /// **Time coplexity O(1)**
+    /// **Time complexity** $O(1)$
     pub fn has_negative_loop(&self) -> bool {
         matches!(self.result, Result::NegativeLoop)
     }
 
     /// 有向辺を追加して、最短距離を再計算する。
     ///
-    /// **Time complexity O(n²)**
+    /// **Time complexity** $O(n^2)$
     pub fn add_edge(&mut self, from: usize, to: usize, d: T) {
         match &mut self.result {
             Result::NegativeLoop => {}

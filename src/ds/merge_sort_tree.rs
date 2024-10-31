@@ -21,9 +21,9 @@ impl<T> MergeSortTree<T>
 where
     T: Copy + Clone + Zero + Add<Output = T> + AddAssign + PartialOrd + Ord,
 {
-    /// **Time complexity O(n log n)**
+    /// **Time complexity** $O(n \log n)$
     ///
-    /// **Space complexity O(n log n)**
+    /// **Space complexity** $O(n \log n)$
     pub fn new(mut a: Vec<T>) -> Self {
         let n = a.len();
         let size = n.next_power_of_two() * 2;
@@ -75,7 +75,7 @@ where
 
     /// `ub`以下の総和を求める
     ///
-    /// **Time complexity O(log^2 N)**
+    /// **Time complexity** $O((\log N) ^ 2)$
     pub fn sum_count_le(&self, range: impl RangeBounds<usize>, ub: T) -> (T, usize) {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
         assert!(l <= r && r <= self.original_size);

@@ -76,7 +76,7 @@ impl<T> LinkedListPool<T> {
 
     /// `cur`が属する連結リストの先頭を返す。
     ///
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     pub fn first_of(&self, mut cur: usize) -> usize {
         while let Some(prev) = self.data[cur].prev {
             cur = prev;
@@ -86,7 +86,7 @@ impl<T> LinkedListPool<T> {
 
     /// `cur`が属する連結リストの末尾を返す。
     ///
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     pub fn last_of(&self, mut cur: usize) -> usize {
         while let Some(next) = self.data[cur].next {
             cur = next;
