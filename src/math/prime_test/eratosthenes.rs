@@ -1,10 +1,14 @@
-use crate::math::prime_test::traits::*;
+//! Eratosthenesの篩
 
+pub use crate::math::prime_test::CheckPrime;
+
+/// Eratosthenesの篩
 pub struct EratosthenesSieve {
     data: Vec<bool>,
 }
 
 impl EratosthenesSieve {
+    /// `size`までの自然数の素数判定ができる`EratosthenesSieve`を構築する。
     pub fn new(size: usize) -> Self {
         let mut data = vec![true; (size + 1) / 2];
         data[0] = false;

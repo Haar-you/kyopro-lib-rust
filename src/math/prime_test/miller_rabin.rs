@@ -1,4 +1,5 @@
-use crate::math::prime_test::traits::CheckPrime;
+//! Miller-Rabin素数判定法
+pub use crate::math::prime_test::CheckPrime;
 
 fn pow(mut a: u128, mut b: u128, p: u128) -> u128 {
     let mut ret = 1;
@@ -32,6 +33,7 @@ fn is_composite(a: u64, p: u64, s: u64, d: u64) -> bool {
     }
 }
 
+/// Miller-Rabin素数判定法
 pub struct MillerRabin;
 
 impl CheckPrime<u64> for MillerRabin {
