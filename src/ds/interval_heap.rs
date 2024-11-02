@@ -1,3 +1,6 @@
+//! 最大値と最小値を得られるヒープ
+
+/// 最大値と最小値を得られるヒープ
 #[derive(Clone, Debug, Default)]
 pub struct IntervalHeap<T> {
     data: Vec<T>,
@@ -103,23 +106,28 @@ impl<T: Ord> IntervalHeap<T> {
         }
     }
 
+    /// 空の[`IntervalHeap<T>`]を構築する。
     pub fn new() -> Self {
         Self { data: vec![] }
     }
 
+    /// 最小値の参照を返す。
     pub fn min(&self) -> Option<&T> {
         self.data.get(self.min_index())
     }
 
+    /// 最大値の参照を返す。
     pub fn max(&self) -> Option<&T> {
         self.data.get(self.max_index())
     }
 
+    /// 値`item`を挿入する。
     pub fn push(&mut self, item: T) {
         self.data.push(item);
         self.bottom_up(self.data.len() - 1);
     }
 
+    /// 最小値を削除して返す。
     pub fn pop_min(&mut self) -> Option<T> {
         if self.data.is_empty() {
             None
@@ -131,6 +139,7 @@ impl<T: Ord> IntervalHeap<T> {
         }
     }
 
+    /// 最大値を削除して返す。
     pub fn pop_max(&mut self) -> Option<T> {
         if self.data.is_empty() {
             None
@@ -142,10 +151,12 @@ impl<T: Ord> IntervalHeap<T> {
         }
     }
 
+    /// 要素数が`0`ならば`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.data.is_empty()
     }
 
+    /// 要素数を返す。
     pub fn len(&self) -> usize {
         self.data.len()
     }
