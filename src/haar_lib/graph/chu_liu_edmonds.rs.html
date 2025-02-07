@@ -178,7 +178,7 @@
 
 <span class="doccomment">/// 有向グラフ上の最小有向全域木を求める
 ///
-/// **Time Complexity O(VE)**
+/// **Time complexity** $O(VE)$
 </span><span class="kw">pub fn </span>chu_liu_edmonds&lt;E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Directed, E&gt;, root: usize) -&gt; Vec&lt;<span class="kw-2">&amp;</span>E&gt;
 <span class="kw">where
     </span>E::Weight: Ord + Copy + Sub&lt;Output = E::Weight&gt;,

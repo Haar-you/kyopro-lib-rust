@@ -75,6 +75,7 @@
 <a href="#59" id="59">59</a>
 <a href="#60" id="60">60</a>
 <a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 有向グラフの閉路検出
 
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
@@ -86,7 +87,8 @@
     Searching,
 }
 
-<span class="kw">pub fn </span>detect_cycle&lt;D: Direction, E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;D, E&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;<span class="kw-2">&amp;</span>E&gt;&gt; {
+<span class="doccomment">/// 有向グラフの閉路検出
+</span><span class="kw">pub fn </span>detect_cycle&lt;D: Direction, E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;D, E&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;<span class="kw-2">&amp;</span>E&gt;&gt; {
     <span class="kw">let </span>size = g.len();
     <span class="kw">let </span><span class="kw-2">mut </span>check = <span class="macro">vec!</span>[Status::Unchecked; size];
 

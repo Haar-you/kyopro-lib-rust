@@ -198,9 +198,9 @@
 <span class="kw">where
     </span>M::Element: Clone,
 {
-    <span class="doccomment">/// **Time complexity O(wh)**
+    <span class="doccomment">/// **Time complexity** $O(wh)$
     ///
-    /// **Space complexity O(wh)**
+    /// **Space complexity** $O(wh)$
     </span><span class="kw">pub fn </span>new(w: usize, h: usize, monoid: M) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>w = w.next_power_of_two() * <span class="number">2</span>;
         <span class="kw">let </span>h = h.next_power_of_two() * <span class="number">2</span>;
@@ -236,7 +236,7 @@
         ret
     }
 
-    <span class="doccomment">/// **Time complexity O(log w log h)**
+    <span class="doccomment">/// **Time complexity** $O(\log w \log h)$
     </span><span class="kw">pub fn </span>fold_2d(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         Range { start: x1, end: x2 }: Range&lt;usize&gt;,
@@ -263,12 +263,12 @@
         ret
     }
 
-    <span class="doccomment">/// **Time complexity O(1)**
+    <span class="doccomment">/// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, j: usize) -&gt; M::Element {
         <span class="self">self</span>.data[i + <span class="self">self</span>.w / <span class="number">2</span>][j + <span class="self">self</span>.h / <span class="number">2</span>].clone()
     }
 
-    <span class="doccomment">/// **Time complexity O(log w log h)**
+    <span class="doccomment">/// **Time complexity** $O(\log w \log h)$
     </span><span class="kw">pub fn </span>assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize, value: M::Element) {
         <span class="kw">let </span>i = i + <span class="self">self</span>.w / <span class="number">2</span>;
         <span class="kw">let </span>j = j + <span class="self">self</span>.h / <span class="number">2</span>;
@@ -298,7 +298,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(log w log h)**
+    <span class="doccomment">/// **Time complexity** $O(\log w \log h)$
     </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize, value: M::Element) {
         <span class="kw">let </span>value = <span class="self">self</span>.monoid.op(value, <span class="self">self</span>.get(i, j));
         <span class="self">self</span>.assign(i, j, value);

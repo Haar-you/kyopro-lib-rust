@@ -89,7 +89,7 @@
 
 <span class="doccomment">/// aˣ = b (mod m)を満たすxを求める。
 ///
-/// **Time Complexity O(√m)**
+/// **Time complexity** $O(\sqrt{m})$
 </span><span class="kw">pub fn </span>mod_log(a: u64, <span class="kw-2">mut </span>b: u64, <span class="kw-2">mut </span>m: u64) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
     <span class="kw">if </span>b == <span class="number">1 </span>{
         <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="number">0</span>);

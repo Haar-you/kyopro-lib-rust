@@ -97,6 +97,7 @@
 <a href="#81" id="81">81</a>
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 負閉路を持つグラフの最短経路 (Bellman-Ford)
 
 </span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
@@ -104,7 +105,8 @@
 <span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
 <span class="kw">use </span>std::{cmp::min, ops::Add};
 
-<span class="kw">pub fn </span>bellman_ford&lt;D: Direction, E: EdgeTrait&gt;(
+<span class="doccomment">/// 負閉路を持つグラフの最短経路
+</span><span class="kw">pub fn </span>bellman_ford&lt;D: Direction, E: EdgeTrait&gt;(
     g: <span class="kw-2">&amp;</span>Graph&lt;D, E&gt;,
     src: usize,
 ) -&gt; Vec&lt;NumInf&lt;E::Weight&gt;&gt;

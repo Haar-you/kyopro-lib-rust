@@ -39,11 +39,13 @@
 <a href="#23" id="23">23</a>
 <a href="#24" id="24">24</a>
 <a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 原始根
 
 </span><span class="kw">use </span><span class="kw">crate</span>::math::{factorize::trial::<span class="kw-2">*</span>, mod_ops::pow::<span class="kw-2">*</span>};
 
-<span class="kw">pub fn </span>primitive_root(p: u64) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
+<span class="doccomment">/// 原始根
+</span><span class="kw">pub fn </span>primitive_root(p: u64) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
     <span class="kw">let </span>pf = factorize(p - <span class="number">1</span>)
         .into_iter()
         .map(|(x, <span class="kw">_</span>)| x)

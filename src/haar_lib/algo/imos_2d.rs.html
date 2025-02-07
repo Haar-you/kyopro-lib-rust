@@ -117,7 +117,7 @@
 }
 
 <span class="kw">impl</span>&lt;T: Copy + Signed + Zero + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt;&gt; Imos2D&lt;T&gt; {
-    <span class="doccomment">/// **Time complexity O(nm)**
+    <span class="doccomment">/// **Time complexity** $O(nm)$
     </span><span class="kw">pub fn </span>new(n: usize, m: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             data: <span class="macro">vec!</span>[<span class="macro">vec!</span>[T::zero(); m]; n],
@@ -126,7 +126,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(1)**
+    <span class="doccomment">/// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>update(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         Range { start: l, end: r }: Range&lt;usize&gt;,
@@ -148,7 +148,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(nm)**
+    <span class="doccomment">/// **Time complexity** $O(nm)$
     </span><span class="kw">pub fn </span>build(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Vec&lt;Vec&lt;T&gt;&gt; {
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..<span class="self">self</span>.n {
             <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.m {

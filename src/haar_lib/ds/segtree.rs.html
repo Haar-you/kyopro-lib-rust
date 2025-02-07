@@ -199,7 +199,7 @@
 <span class="kw">where
     </span>M::Element: Clone,
 {
-    <span class="doccomment">/// **Time complexity O(n)**
+    <span class="doccomment">/// **Time complexity** $O(n)$
     </span><span class="kw">pub fn </span>new(n: usize, monoid: M) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
         Segtree {
@@ -210,7 +210,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>fold&lt;R: RangeBounds&lt;usize&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, range: R) -&gt; M::Element {
         <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>);
 
@@ -236,7 +236,7 @@
         <span class="self">self</span>.monoid.op(ret_l, ret_r)
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, value: M::Element) {
         <span class="kw">let </span><span class="kw-2">mut </span>i = i + <span class="self">self</span>.size / <span class="number">2</span>;
         <span class="self">self</span>.data[i] = value;
@@ -249,7 +249,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, value: M::Element) {
         <span class="self">self</span>.assign(
             i,

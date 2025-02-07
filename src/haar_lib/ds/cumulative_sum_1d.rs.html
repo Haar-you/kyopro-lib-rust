@@ -150,7 +150,7 @@
 <span class="kw">where
     </span>G::Element: Copy,
 {
-    <span class="doccomment">/// Time complexity O(1)
+    <span class="doccomment">/// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; G::Element {
         <span class="self">self</span>.group.op(<span class="self">self</span>.data[r], <span class="self">self</span>.group.inv(<span class="self">self</span>.data[l]))
     }

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["eratosthenes","miller_rabin","traits"]};
+window.SIDEBAR_ITEMS = {"mod":["eratosthenes","miller_rabin"],"trait":["CheckPrime"]};

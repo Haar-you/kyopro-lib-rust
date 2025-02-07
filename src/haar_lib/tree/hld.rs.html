@@ -193,9 +193,9 @@
 }
 
 <span class="kw">impl </span>HLD {
-    <span class="doccomment">/// **Time complexity O(n)**
+    <span class="doccomment">/// **Time complexity** $O(n)$
     ///
-    /// **Space complexity O(n)**
+    /// **Space complexity** $O(n)$
     </span><span class="kw">pub fn </span>new&lt;E: TreeEdgeTrait&gt;(tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = tree.len();
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self </span>{
@@ -259,7 +259,7 @@
 
     <span class="doccomment">/// 演算は可換性を仮定する。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>path_query_vertex(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>x: usize, <span class="kw-2">mut </span>y: usize) -&gt; Vec&lt;(usize, usize)&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
         <span class="kw">loop </span>{
@@ -275,7 +275,7 @@
         ret
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>path_query_edge(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>x: usize, <span class="kw-2">mut </span>y: usize) -&gt; Vec&lt;(usize, usize)&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
         <span class="kw">loop </span>{
@@ -294,27 +294,27 @@
         ret
     }
 
-    <span class="doccomment">/// **Time complexity O(1)**
+    <span class="doccomment">/// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>subtree_query_vertex(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; (usize, usize) {
         (<span class="self">self</span>.id[x], <span class="self">self</span>.end[x])
     }
 
-    <span class="doccomment">/// **Time complexity O(1)**
+    <span class="doccomment">/// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>subtree_query_edge(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; (usize, usize) {
         (<span class="self">self</span>.id[x] + <span class="number">1</span>, <span class="self">self</span>.end[x])
     }
 
-    <span class="doccomment">/// **Time complexity O(1)**
+    <span class="doccomment">/// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>parent(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="self">self</span>.par[x]
     }
 
-    <span class="doccomment">/// **Time complexity O(1)**
+    <span class="doccomment">/// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>get_id(<span class="kw-2">&amp;</span><span class="self">self</span>, x: usize) -&gt; usize {
         <span class="self">self</span>.id[x]
     }
 
-    <span class="doccomment">/// **Time complexity O(1)**
+    <span class="doccomment">/// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>get_edge_id(<span class="kw-2">&amp;</span><span class="self">self</span>, u: usize, v: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="kw">if </span><span class="self">self</span>.par[u] == <span class="prelude-val">Some</span>(v) {
             <span class="prelude-val">Some</span>(<span class="self">self</span>.id[u])
@@ -325,7 +325,7 @@
         </span>}
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>lca(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>u: usize, <span class="kw-2">mut </span>v: usize) -&gt; usize {
         <span class="kw">loop </span>{
             <span class="kw">if </span><span class="self">self</span>.id[u] &gt; <span class="self">self</span>.id[v] {

@@ -110,7 +110,7 @@
 }
 
 <span class="kw">impl </span>StaticRangeInversionsQuery {
-    <span class="doccomment">/// **Time complexity O(n log n)**
+    <span class="doccomment">/// **Time complexity** $O(n \log n)$
     </span><span class="kw">pub fn </span>new&lt;T: Clone + Ord&gt;(data: <span class="kw-2">&amp;</span>[T]) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>a = data.to_vec();
         a.sort();

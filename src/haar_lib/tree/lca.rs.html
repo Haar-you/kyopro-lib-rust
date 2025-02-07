@@ -132,9 +132,9 @@
 }
 
 <span class="kw">impl </span>DoublingLCA {
-    <span class="doccomment">/// **Time complexity O(n log n)**
+    <span class="doccomment">/// **Time complexity** $O(n \log n)$
     ///
-    /// **Space complexity O(n log n)**
+    /// **Space complexity** $O(n \log n)$
     </span><span class="kw">pub fn </span>new&lt;E: TreeEdgeTrait&gt;(tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = tree.len();
         <span class="kw">let </span>log2n = n.next_power_of_two().trailing_zeros() <span class="kw">as </span>usize + <span class="number">1</span>;
@@ -171,7 +171,7 @@
 
     <span class="doccomment">/// `a`の`n`個上の祖先を求める。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>ancestor(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>a: usize, <span class="kw-2">mut </span>n: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="kw">while </span>n != <span class="number">0 </span>{
             <span class="kw">let </span>m1 = usize::BITS <span class="kw">as </span>usize - n.leading_zeros() <span class="kw">as </span>usize - <span class="number">1</span>;
@@ -188,7 +188,7 @@
 
     <span class="doccomment">/// `a`と`b`の最小共通祖先を求める。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>lca(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>a: usize, <span class="kw-2">mut </span>b: usize) -&gt; usize {
         <span class="kw">if </span><span class="self">self</span>.depth[a] &gt;= <span class="self">self</span>.depth[b] {
             std::mem::swap(<span class="kw-2">&amp;mut </span>a, <span class="kw-2">&amp;mut </span>b);
@@ -214,7 +214,7 @@
 
     <span class="doccomment">/// s-t最短パス上で、sから見てd番目の頂点を返す。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>jump(<span class="kw-2">&amp;</span><span class="self">self</span>, s: usize, t: usize, d: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="kw">let </span>a = <span class="self">self</span>.lca(s, t);
         <span class="kw">if </span><span class="self">self</span>.depth[s] - <span class="self">self</span>.depth[a] &gt;= d {

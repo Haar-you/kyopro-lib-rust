@@ -45,13 +45,15 @@
 <a href="#29" id="29">29</a>
 <a href="#30" id="30">30</a>
 <a href="#31" id="31">31</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::Add;
+<a href="#32" id="32">32</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 部分和問題 (和を達成する組み合わせ数を返す)
+</span><span class="kw">use </span>std::ops::Add;
 
 <span class="doccomment">/// 部分和問題 (和を達成する組み合わせ数を返す)
 ///
-/// **Time complexity O(nk)**
+/// **Time complexity** $O(nk)$
 ///
-/// **Space complexity O(k)**
+/// **Space complexity** $O(k)$
 </span><span class="kw">pub fn </span>subset_sum&lt;T&gt;(n: usize, k: usize, a: <span class="kw-2">&amp;</span>[usize]) -&gt; Vec&lt;T&gt;
 <span class="kw">where
     </span>T: Copy + From&lt;usize&gt; + Add&lt;Output = T&gt;,

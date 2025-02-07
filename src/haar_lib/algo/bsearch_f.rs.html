@@ -104,9 +104,11 @@
 <a href="#88" id="88">88</a>
 <a href="#89" id="89">89</a>
 <a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::{Add, Div, Sub};
 
 <span class="doccomment">/// [`bsearch_ng_ok`]の返り値
+</span><span class="attr">#[derive(Clone, Copy, Debug)]
 </span><span class="kw">pub enum </span>SearchResult&lt;T&gt; {
     <span class="doccomment">/// `ng`以下で条件を満たさず、`ok`以上で条件を満たす。
     </span>NgOk {
@@ -125,7 +127,7 @@
 ///
 /// `f`は、`lower..=upper`の範囲で、ある値を境界にそれ未満では常に`false`、それ以上では常に`true`となる関数
 ///
-/// **Time complexity O(log n)**
+/// **Time complexity** $O(\log n)$
 </span><span class="kw">pub fn </span>bsearch_ng_ok&lt;
     T: Copy + PartialOrd + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt; + Div&lt;Output = T&gt; + From&lt;u8&gt;,
 &gt;(

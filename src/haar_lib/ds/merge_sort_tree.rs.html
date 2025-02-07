@@ -175,9 +175,9 @@
 <span class="kw">where
     </span>T: Copy + Clone + Zero + Add&lt;Output = T&gt; + AddAssign + PartialOrd + Ord,
 {
-    <span class="doccomment">/// **Time complexity O(n log n)**
+    <span class="doccomment">/// **Time complexity** $O(n \log n)$
     ///
-    /// **Space complexity O(n log n)**
+    /// **Space complexity** $O(n \log n)$
     </span><span class="kw">pub fn </span>new(<span class="kw-2">mut </span>a: Vec&lt;T&gt;) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = a.len();
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
@@ -229,7 +229,7 @@
 
     <span class="doccomment">/// `ub`以下の総和を求める
     ///
-    /// **Time complexity O(log^2 N)**
+    /// **Time complexity** $O((\log N) ^ 2)$
     </span><span class="kw">pub fn </span>sum_count_le(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, ub: T) -&gt; (T, usize) {
         <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="macro">assert!</span>(l &lt;= r &amp;&amp; r &lt;= <span class="self">self</span>.original_size);

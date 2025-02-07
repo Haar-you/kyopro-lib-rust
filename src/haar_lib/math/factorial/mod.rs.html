@@ -141,9 +141,9 @@
 <span class="kw">where
     </span>Modulo::Element: FFElem + Copy,
 {
-    <span class="doccomment">/// **Time complexity O(n)**
+    <span class="doccomment">/// **Time complexity** $O(n)$
     ///
-    /// **Space complexity O(n)**
+    /// **Space complexity** $O(n)$
     </span><span class="kw">pub fn </span>new(n: usize, modulo: Modulo) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>factorial = <span class="macro">vec!</span>[modulo.from_u64(<span class="number">1</span>); n + <span class="number">1</span>];
         <span class="kw">let </span><span class="kw-2">mut </span>invs = <span class="macro">vec!</span>[modulo.from_u64(<span class="number">1</span>); n + <span class="number">1</span>];
@@ -167,21 +167,21 @@
 
     <span class="doccomment">/// nの階乗
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>facto(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize) -&gt; Modulo::Element {
         <span class="self">self</span>.factorial[n]
     }
 
     <span class="doccomment">/// nの階乗の逆元
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>inv_facto(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize) -&gt; Modulo::Element {
         <span class="self">self</span>.invs[n]
     }
 
-    <span class="doccomment">/// n個からk個とりだす順列の個数 (nPk)
+    <span class="doccomment">/// n個からk個とりだす順列の個数 (${}_n \mathrm{ P }_k$)
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>perm(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; Modulo::Element {
         <span class="kw">if </span>n &lt; k {
             <span class="self">self</span>.modulo.from_u64(<span class="number">0</span>)
@@ -190,9 +190,9 @@
         }
     }
 
-    <span class="doccomment">/// n個からk個とりだす組み合わせの個数 (nCk)
+    <span class="doccomment">/// n個からk個とりだす組み合わせの個数 (${}_n \mathrm{ C }_k$)
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>comb(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; Modulo::Element {
         <span class="kw">if </span>n &lt; k {
             <span class="self">self</span>.modulo.from_u64(<span class="number">0</span>)
@@ -201,9 +201,9 @@
         }
     }
 
-    <span class="doccomment">/// n個から重複を許してk個選ぶ場合の数
+    <span class="doccomment">/// n個から重複を許してk個選ぶ場合の数 (${}_n \mathrm{ H }_k$)
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>h(<span class="kw-2">&amp;</span><span class="self">self</span>, n: usize, k: usize) -&gt; Modulo::Element {
         <span class="kw">if </span>n == <span class="number">0 </span>&amp;&amp; k == <span class="number">0 </span>{
             <span class="self">self</span>.modulo.from_u64(<span class="number">1</span>)

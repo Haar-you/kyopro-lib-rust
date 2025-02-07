@@ -212,7 +212,7 @@
 
     <span class="doccomment">/// `cur`が属する連結リストの先頭を返す。
     ///
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     </span><span class="kw">pub fn </span>first_of(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>cur: usize) -&gt; usize {
         <span class="kw">while let </span><span class="prelude-val">Some</span>(prev) = <span class="self">self</span>.data[cur].prev {
             cur = prev;
@@ -222,7 +222,7 @@
 
     <span class="doccomment">/// `cur`が属する連結リストの末尾を返す。
     ///
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     </span><span class="kw">pub fn </span>last_of(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>cur: usize) -&gt; usize {
         <span class="kw">while let </span><span class="prelude-val">Some</span>(next) = <span class="self">self</span>.data[cur].next {
             cur = next;

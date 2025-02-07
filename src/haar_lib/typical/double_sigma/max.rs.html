@@ -31,7 +31,7 @@
 ///
 /// Σ{i = 1 ~ N - 1}Σ{j = i + 1 ~ N} max(aᵢ, aⱼ)
 ///
-/// **Time complexity O(|a| log |a|)**
+/// **Time complexity** $O(|a| \log |a|)$
 </span><span class="kw">pub fn </span>sum_of_sum_of_max(<span class="kw-2">mut </span>a: Vec&lt;i64&gt;) -&gt; i64 {
     a.sort();
     a.into_iter().enumerate().map(|(i, x)| x * i <span class="kw">as </span>i64).sum()

@@ -185,7 +185,7 @@
 
 <span class="doccomment">/// rootを根としたときの根から各頂点への距離を列挙する。
 ///
-/// **Time complexity O(n)**
+/// **Time complexity** $O(n)$
 </span><span class="kw">pub fn </span>tree_distance&lt;E: TreeEdgeTrait&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; Vec&lt;E::Weight&gt;
 <span class="kw">where
     </span>E::Weight: Add&lt;Output = E::Weight&gt; + Copy + Zero,
@@ -212,7 +212,7 @@
 
 <span class="doccomment">/// 木の任意の2頂点の距離の最大値を求める。
 ///
-/// **Time complexity O(n)**
+/// **Time complexity** $O(n)$
 </span><span class="kw">pub fn </span>tree_diameter&lt;E: TreeEdgeTrait&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;E&gt;) -&gt; (E::Weight, usize, usize)
 <span class="kw">where
     </span>E::Weight: Add&lt;Output = E::Weight&gt; + Copy + Zero + Ord,
@@ -236,7 +236,7 @@
 
 <span class="doccomment">/// 木の各頂点について、そこからの距離の最大値を列挙する。
 ///
-/// **Time complexity O(n)**
+/// **Time complexity** $O(n)$
 </span><span class="kw">pub fn </span>tree_height&lt;E: TreeEdgeTrait&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;E&gt;) -&gt; Vec&lt;(E::Weight, usize)&gt;
 <span class="kw">where
     </span>E::Weight: Add&lt;Output = E::Weight&gt; + Copy + Zero + Ord,
@@ -263,7 +263,7 @@
 
 <span class="doccomment">/// 木上の2頂点を結ぶパス上の頂点列を求める。
 ///
-/// **Time complexity O(n)**
+/// **Time complexity** $O(n)$
 </span><span class="kw">pub fn </span>tree_path&lt;E: TreeEdgeTrait&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, u: usize, v: usize) -&gt; Vec&lt;usize&gt; {
     <span class="kw">let </span>n = tr.len();
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];

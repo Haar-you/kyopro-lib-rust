@@ -81,7 +81,7 @@
 }
 
 <span class="kw">impl </span>TwoSat {
-    <span class="doccomment">/// **Time complexity O(size)**
+    <span class="doccomment">/// **Time complexity** $O(size)$
     </span><span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             size,
@@ -100,23 +100,23 @@
         </span>}
     }
 
-    <span class="doccomment">/// a → b
+    <span class="doccomment">/// $a \Rightarrow b$
     </span><span class="kw">pub fn </span>add_if(<span class="kw-2">&amp;mut </span><span class="self">self</span>, a: isize, b: isize) {
         <span class="self">self</span>.g.add(Edge::new(<span class="self">self</span>.check(a), <span class="self">self</span>.check(b), (), ()));
     }
 
-    <span class="doccomment">/// a ∨ b
+    <span class="doccomment">/// $a \lor b$
     </span><span class="kw">pub fn </span>add_or(<span class="kw-2">&amp;mut </span><span class="self">self</span>, a: isize, b: isize) {
         <span class="self">self</span>.add_if(-a, b);
         <span class="self">self</span>.add_if(-b, a);
     }
 
-    <span class="doccomment">/// ¬(a ∧ b)
+    <span class="doccomment">/// $\lnot (a \land b)$
     </span><span class="kw">pub fn </span>not_coexist(<span class="kw-2">&amp;mut </span><span class="self">self</span>, a: isize, b: isize) {
         <span class="self">self</span>.add_or(-a, -b);
     }
 
-    <span class="doccomment">/// **Time complexity O(size + E)**
+    <span class="doccomment">/// **Time complexity** $O(size + E)$
     </span><span class="kw">pub fn </span>solve(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;bool&gt;&gt; {
         <span class="kw">let </span>s = SCC::new(<span class="kw-2">&amp;</span><span class="self">self</span>.g).to_vec();
 

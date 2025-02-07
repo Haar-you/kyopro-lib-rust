@@ -86,10 +86,18 @@
 <a href="#70" id="70">70</a>
 <a href="#71" id="71">71</a>
 <a href="#72" id="72">72</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::math::polynomial::{Polynomial, PolynomialOperator};
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 多項式の多点評価
+</span><span class="kw">use </span><span class="kw">crate</span>::math::polynomial::{Polynomial, PolynomialOperator};
 <span class="kw">use </span><span class="kw">crate</span>::num::const_modint::ConstModInt;
 
-<span class="kw">pub fn </span>multipoint_eval&lt;<span class="kw">const </span>P: u32&gt;(
+<span class="doccomment">/// 多項式の多点評価
+///
+/// 多項式$f(x)$に値$p_0, p_1, \cdots, p_m$を代入した結果$f(p_0), f(p_1), \cdots, f(p_m)$を求める。
+</span><span class="kw">pub fn </span>multipoint_eval&lt;<span class="kw">const </span>P: u32&gt;(
     a: Polynomial&lt;P&gt;,
     p: Vec&lt;ConstModInt&lt;P&gt;&gt;,
     po: <span class="kw-2">&amp;</span>PolynomialOperator&lt;P&gt;,

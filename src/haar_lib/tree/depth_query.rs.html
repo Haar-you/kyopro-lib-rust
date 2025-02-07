@@ -237,7 +237,7 @@
 
     <span class="doccomment">/// 頂点`i`から深さ`d`の子孫頂点に対応する区間を返す。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>children_query(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, d: usize) -&gt; <span class="prelude-ty">Option</span>&lt;(usize, usize)&gt; {
         <span class="kw">let </span>d = d + <span class="self">self</span>.depth[i];
         <span class="kw">if </span><span class="self">self</span>.bfs_ord.len() &gt; d {
@@ -268,7 +268,7 @@
 
     <span class="doccomment">/// 頂点`i`の`k`個遡った祖先の頂点を返す。
     ///
-    /// **Time complexity O(k)**
+    /// **Time complexity** $O(k)$
     </span><span class="kw">pub fn </span>ancestor(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, k: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>p = i;
         <span class="kw">for _ in </span><span class="number">0</span>..k {

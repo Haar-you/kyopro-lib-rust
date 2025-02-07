@@ -230,7 +230,7 @@
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; StarrySkyTree&lt;T&gt; {
-    <span class="doccomment">/// **Time complexity O(n)**
+    <span class="doccomment">/// **Time complexity** $O(n)$
     </span><span class="kw">pub fn </span>new(n: usize, mode: Mode) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
         <span class="kw">let </span>zero = T::zero();
@@ -260,7 +260,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.rec(l, r, <span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, T::zero())
@@ -284,7 +284,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, value: T) {
         <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
 

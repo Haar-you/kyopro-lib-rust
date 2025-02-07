@@ -71,8 +71,19 @@
 <a href="#55" id="55">55</a>
 <a href="#56" id="56">56</a>
 <a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! トーシェント関数
+//!
+//! # References
+//! - &lt;https://ja.wikipedia.org/wiki/%E3%82%AA%E3%82%A4%E3%83%A9%E3%83%BC%E3%81%AE%CF%86%E9%96%A2%E6%95%B0&gt;
 
+/// `n`と互いに素である自然数の個数を求める。
 </span><span class="kw">pub fn </span>totient(<span class="kw-2">mut </span>n: u64) -&gt; u64 {
     <span class="kw">let </span><span class="kw-2">mut </span>ret = n;
 
@@ -95,7 +106,10 @@
     ret
 }
 
-<span class="kw">pub fn </span>totient_table(n: usize) -&gt; Vec&lt;u64&gt; {
+<span class="doccomment">/// `n`までのトーシェント関数のテーブル$\varphi$を構築する。
+///
+/// nとmが互いに素のとき、$\varphi(nm) = \varphi(n) \cdot \varphi(m)$
+</span><span class="kw">pub fn </span>totient_table(n: usize) -&gt; Vec&lt;u64&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>ret = (<span class="number">0</span>..=n <span class="kw">as </span>u64).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">2</span>..=n {

@@ -123,7 +123,7 @@
 
     <span class="doccomment">/// `root`を根にして、`tree`上でDPを実行する。
     ///
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     </span><span class="kw">pub fn </span>run&lt;E: TreeEdgeTrait&lt;Weight = Weight&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; Vec&lt;T&gt; {
         <span class="kw">let </span>size = tree.len();
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="prelude-val">None</span>; size];

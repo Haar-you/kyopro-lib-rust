@@ -86,7 +86,10 @@
 <a href="#70" id="70">70</a>
 <a href="#71" id="71">71</a>
 <a href="#72" id="72">72</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::math::prime_test::traits::CheckPrime;
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Miller-Rabin素数判定法
+</span><span class="kw">pub use </span><span class="kw">crate</span>::math::prime_test::CheckPrime;
 
 <span class="kw">fn </span>pow(<span class="kw-2">mut </span>a: u128, <span class="kw-2">mut </span>b: u128, p: u128) -&gt; u128 {
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="number">1</span>;
@@ -120,7 +123,8 @@
     </span>}
 }
 
-<span class="kw">pub struct </span>MillerRabin;
+<span class="doccomment">/// Miller-Rabin素数判定法
+</span><span class="kw">pub struct </span>MillerRabin;
 
 <span class="kw">impl </span>CheckPrime&lt;u64&gt; <span class="kw">for </span>MillerRabin {
     <span class="kw">fn </span>is_prime(<span class="kw-2">&amp;</span><span class="self">self</span>, n: u64) -&gt; bool {

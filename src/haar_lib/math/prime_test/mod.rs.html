@@ -54,14 +54,26 @@
 <a href="#38" id="38">38</a>
 <a href="#39" id="39">39</a>
 <a href="#40" id="40">40</a>
-</pre></div><pre class="rust"><code><span class="kw">pub mod </span>traits;
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 素数判定
 
-<span class="kw">pub mod </span>eratosthenes;
+</span><span class="kw">pub mod </span>eratosthenes;
 <span class="kw">pub mod </span>miller_rabin;
+
+<span class="doccomment">/// 素数判定
+</span><span class="kw">pub trait </span>CheckPrime&lt;T&gt; {
+    <span class="doccomment">/// `value`が素数ならば`true`を返す。
+    </span><span class="kw">fn </span>is_prime(<span class="kw-2">&amp;</span><span class="self">self</span>, value: T) -&gt; bool;
+}
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
-    <span class="kw">use super</span>::{eratosthenes::<span class="kw-2">*</span>, miller_rabin::<span class="kw-2">*</span>, traits::CheckPrime};
+    <span class="kw">use super</span>::{eratosthenes::<span class="kw-2">*</span>, miller_rabin::<span class="kw-2">*</span>, CheckPrime};
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_eratosthenes() {

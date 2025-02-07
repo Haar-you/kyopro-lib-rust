@@ -226,7 +226,7 @@
 {
     <span class="doccomment">/// `WarshallFloyd&lt;T&gt;`を生成する。
     ///
-    /// **Time complexity O(n³)**
+    /// **Time complexity** $O(n^3)$
     </span><span class="kw">pub fn </span>new&lt;D: Direction, E: EdgeTrait&lt;Weight = T&gt;&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;D, E&gt;) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>zero = E::Weight::zero();
         <span class="kw">let </span>n = g.len();
@@ -283,14 +283,14 @@
 
     <span class="doccomment">/// 負の閉路があれば`true`を返す。
     ///
-    /// **Time coplexity O(1)**
+    /// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>has_negative_loop(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="macro">matches!</span>(<span class="self">self</span>.result, Result::NegativeLoop)
     }
 
     <span class="doccomment">/// 有向辺を追加して、最短距離を再計算する。
     ///
-    /// **Time complexity O(n²)**
+    /// **Time complexity** $O(n^2)$
     </span><span class="kw">pub fn </span>add_edge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, from: usize, to: usize, d: T) {
         <span class="kw">match </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.result {
             Result::NegativeLoop =&gt; {}

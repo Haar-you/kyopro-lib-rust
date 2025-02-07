@@ -123,6 +123,7 @@
 <a href="#107" id="107">107</a>
 <a href="#108" id="108">108</a>
 <a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Convex Hull Trick
 //!
 //! # Problems
@@ -182,6 +183,7 @@
     }
 
     <span class="doccomment">/// 最小値を求めたいならば、傾きは単調減少でなければならない。
+    ///
     /// 最大値を求めたいならば、傾きは単調増加でなければならない。
     </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, line @ Linear { a, b }: Linear&lt;T&gt;) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.last_slope {

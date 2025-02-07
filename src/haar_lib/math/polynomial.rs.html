@@ -247,11 +247,11 @@
 <a href="#231" id="231">231</a>
 <a href="#232" id="232">232</a>
 <a href="#233" id="233">233</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! 𝔽ₚ上の多項式
+</pre></div><pre class="rust"><code><span class="doccomment">//! $\mathbb{F}_p$上の多項式
 </span><span class="kw">use </span><span class="kw">crate</span>::math::ntt::NTT;
 <span class="kw">use </span><span class="kw">crate</span>::num::const_modint::<span class="kw-2">*</span>;
 
-<span class="doccomment">/// 𝔽ₚ上の多項式
+<span class="doccomment">/// $\mathbb{F}_p$上の多項式
 </span><span class="attr">#[derive(Clone, Debug, PartialEq)]
 </span><span class="kw">pub struct </span>Polynomial&lt;<span class="kw">const </span>P: u32&gt; {
     data: Vec&lt;ConstModInt&lt;P&gt;&gt;,
@@ -272,7 +272,7 @@
         }
     }
 
-    <span class="doccomment">/// *xⁱ*の係数を得る。
+    <span class="doccomment">/// $x^i$の係数を得る。
     </span><span class="kw">pub fn </span>coeff_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; ConstModInt&lt;P&gt; {
         <span class="self">self</span>.data.get(i).map_or(ConstModInt::new(<span class="number">0</span>), |a| <span class="kw-2">*</span>a)
     }

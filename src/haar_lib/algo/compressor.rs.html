@@ -151,14 +151,14 @@
 <span class="kw">impl</span>&lt;T: Ord + Eq&gt; Compressor&lt;T&gt; {
     <span class="doccomment">/// `value`が何番目の値(0-index)かを返す。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="kw-2">&amp;</span>T) -&gt; usize {
         lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.data, value)
     }
 
     <span class="doccomment">/// `i`番目の値を返す。
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; <span class="kw-2">&amp;</span>T {
         <span class="kw-2">&amp;</span><span class="self">self</span>.data[i]
     }
@@ -201,7 +201,7 @@
         <span class="self">self</span>.data.extend(values);
     }
 
-    <span class="doccomment">/// **Time complexity O(n log n)**
+    <span class="doccomment">/// **Time complexity** $O(n \log n)$
     </span><span class="kw">pub fn </span>build(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Compressor&lt;T&gt; {
         <span class="self">self</span>.data.sort();
         <span class="self">self</span>.data.dedup();

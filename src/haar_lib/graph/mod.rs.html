@@ -152,6 +152,25 @@
 <a href="#136" id="136">136</a>
 <a href="#137" id="137">137</a>
 <a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! グラフ一般に関するもの
 
 </span><span class="kw">pub mod </span>articulation_points;
@@ -190,20 +209,31 @@
 
 <span class="kw">use </span>std::marker::PhantomData;
 
-<span class="kw">pub trait </span>EdgeTrait {
-    <span class="kw">type </span>Weight;
-    <span class="kw">fn </span>from(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
-    <span class="kw">fn </span>to(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
-    <span class="kw">fn </span>weight(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Weight;
-    <span class="kw">fn </span>rev(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
+<span class="doccomment">/// [`Graph`]にもたせる辺の満たすトレイト。
+</span><span class="kw">pub trait </span>EdgeTrait {
+    <span class="doccomment">/// 辺の重みの型
+    </span><span class="kw">type </span>Weight;
+    <span class="doccomment">/// 辺の始点
+    </span><span class="kw">fn </span>from(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
+    <span class="doccomment">/// 辺の終点
+    </span><span class="kw">fn </span>to(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
+    <span class="doccomment">/// 辺の重み
+    </span><span class="kw">fn </span>weight(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Weight;
+    <span class="doccomment">/// 逆辺
+    </span><span class="kw">fn </span>rev(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
 }
 
-<span class="attr">#[derive(Debug, Clone)]
+<span class="doccomment">/// グラフの辺
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Edge&lt;T, I&gt; {
-    <span class="kw">pub </span>from: usize,
-    <span class="kw">pub </span>to: usize,
-    <span class="kw">pub </span>weight: T,
-    <span class="kw">pub </span>index: I,
+    <span class="doccomment">/// 辺の始点
+    </span><span class="kw">pub </span>from: usize,
+    <span class="doccomment">/// 辺の終点
+    </span><span class="kw">pub </span>to: usize,
+    <span class="doccomment">/// 辺の重み
+    </span><span class="kw">pub </span>weight: T,
+    <span class="doccomment">/// 辺の番号など
+    </span><span class="kw">pub </span>index: I,
 }
 
 <span class="kw">impl</span>&lt;T, I&gt; Edge&lt;T, I&gt; {
@@ -237,10 +267,13 @@
     </span>}
 }
 
-<span class="kw">pub trait </span>Direction {}
-<span class="attr">#[derive(Debug, Clone)]
+<span class="doccomment">/// グラフの辺の有向・無向の情報をもたせるためのトレイト。
+</span><span class="kw">pub trait </span>Direction {}
+<span class="doccomment">/// 有向辺をもつ。
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Directed;
-<span class="attr">#[derive(Debug, Clone)]
+<span class="doccomment">/// 無向辺をもつ。
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Undirected;
 <span class="kw">impl </span>Direction <span class="kw">for </span>Directed {}
 <span class="kw">impl </span>Direction <span class="kw">for </span>Undirected {}
@@ -252,7 +285,8 @@
 }
 
 <span class="kw">impl</span>&lt;D: Direction, E: EdgeTrait + Clone&gt; Graph&lt;D, E&gt; {
-    <span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 頂点数が`size`の空の`Graph`を構築する。
+    </span><span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
         Graph {
             edges: <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; size],
             __phantom: PhantomData,
@@ -261,7 +295,8 @@
 }
 
 <span class="kw">impl</span>&lt;E: EdgeTrait + Clone&gt; Graph&lt;Directed, E&gt; {
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, e: E) {
+    <span class="doccomment">/// 有向グラフに辺を追加する。
+    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, e: E) {
         <span class="self">self</span>.edges[e.from()].push(e);
     }
 
@@ -271,7 +306,8 @@
 }
 
 <span class="kw">impl</span>&lt;E: EdgeTrait + Clone&gt; Graph&lt;Undirected, E&gt; {
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, e: E) {
+    <span class="doccomment">/// 無向グラフに辺を追加する。
+    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, e: E) {
         <span class="self">self</span>.edges[e.from()].push(e.clone());
         <span class="self">self</span>.edges[e.to()].push(e.rev());
     }
@@ -282,11 +318,13 @@
 }
 
 <span class="kw">impl</span>&lt;D, E&gt; Graph&lt;D, E&gt; {
-    <span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="doccomment">/// グラフの頂点数を返す。
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.edges.len()
     }
 
-    <span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="doccomment">/// グラフの頂点数が`0`ならば`true`を返す。
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.edges.is_empty()
     }
 }

@@ -196,7 +196,7 @@
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; SegtreeLinearAdd&lt;T&gt; {
-    <span class="doccomment">/// **Time complexity O(n)**
+    <span class="doccomment">/// **Time complexity** $O(n)$
     </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
         <span class="kw">let </span>hsize = size / <span class="number">2</span>;
@@ -222,7 +222,7 @@
 
     <span class="doccomment">/// 範囲`l..r`に一次関数`ax + b`の値を加算する。(`x`の値は`l..r`の範囲)
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, linear: Linear&lt;T&gt;) {
         <span class="kw">let </span>(l, r) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
 
@@ -277,7 +277,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; T {
         <span class="self">self</span>.propagate_top_down(i + <span class="self">self</span>.hsize);
         <span class="self">self</span>.data[i + <span class="self">self</span>.hsize].get().<span class="number">0

@@ -189,6 +189,14 @@
 <a href="#173" id="173">173</a>
 <a href="#174" id="174">174</a>
 <a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::algebra::traits::Monoid;
 <span class="kw">use </span><span class="kw">crate</span>::utils::nullable_usize::NullableUsize;
 <span class="kw">use </span>std::ops::Range;
@@ -259,7 +267,15 @@
         }
     }
 
-    <span class="kw">fn </span>update_(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cur: usize, from: usize, to: usize, s: usize, t: usize, value: <span class="kw-2">&amp;</span>M::Element) {
+    <span class="kw">fn </span>update_(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        cur: usize,
+        from: usize,
+        to: usize,
+        s: usize,
+        t: usize,
+        value: <span class="kw-2">&amp;</span>M::Element,
+    ) {
         <span class="kw">if </span>to - from == <span class="number">1 </span>{
             <span class="kw">if </span>s &lt;= from &amp;&amp; to &lt;= t {
                 <span class="kw">let </span>cur_value = <span class="kw">unsafe </span>{ <span class="self">self</span>.data.get_unchecked(cur).value.clone() };

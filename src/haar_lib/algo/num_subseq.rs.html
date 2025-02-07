@@ -50,7 +50,7 @@
 
 <span class="doccomment">/// 返り値`ret`に対して、`ret[i]`は`a[0..i]`の相異なる部分列の総数
 ///
-/// **Time complexity O(|a|)**
+/// **Time complexity** $O(|a|)$
 </span><span class="kw">pub fn </span>num_subseq&lt;T: Hash + Eq + Copy&gt;(a: <span class="kw-2">&amp;</span>[T], m: u64) -&gt; Vec&lt;u64&gt; {
     <span class="kw">let </span>n = a.len();
     <span class="kw">let </span><span class="kw-2">mut </span>dp = <span class="macro">vec!</span>[<span class="number">0</span>; n + <span class="number">1</span>];

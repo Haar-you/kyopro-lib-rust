@@ -166,9 +166,9 @@
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; SegtreeLinearAddRangeSum&lt;T&gt; {
-    <span class="doccomment">/// **Time complexity O(n)**
+    <span class="doccomment">/// **Time complexity** $O(n)$
     ///
-    /// **Space complexity O(n)**
+    /// **Space complexity** $O(n)$
     </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>hsize = n.next_power_of_two();
 
@@ -217,7 +217,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, linear: Linear&lt;T&gt;) {
         <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>._update(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end, linear.a, linear.b);
@@ -235,7 +235,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; T {
         <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>._fold(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end)

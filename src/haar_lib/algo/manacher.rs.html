@@ -51,7 +51,7 @@
 <a href="#35" id="35">35</a>
 <a href="#36" id="36">36</a>
 <a href="#37" id="37">37</a>
-</pre></div><pre class="rust"><code><span class="doccomment">/// **Time complexity O(|s|)**
+</pre></div><pre class="rust"><code><span class="doccomment">/// **Time complexity** $O(|s|)$
 </span><span class="kw">pub fn </span>manacher&lt;T: PartialEq&gt;(s: <span class="kw-2">&amp;</span>[T]) -&gt; Vec&lt;usize&gt; {
     <span class="kw">let </span>n = s.len();
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="number">0</span>; n];

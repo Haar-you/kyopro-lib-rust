@@ -71,6 +71,9 @@
 <a href="#55" id="55">55</a>
 <a href="#56" id="56">56</a>
 <a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! スライド最小値
 
 </span><span class="kw">use </span>std::cmp::Reverse;
@@ -78,7 +81,7 @@
 
 <span class="doccomment">/// 配列のすべての長さkの連続部分列について、その最小値を列挙する。
 ///
-/// **Time complexity O(|a|)**
+/// **Time complexity** $O(|a|)$
 </span><span class="kw">pub fn </span>sliding_minimum&lt;T: Ord + Copy&gt;(a: <span class="kw-2">&amp;</span>[T], k: usize) -&gt; Vec&lt;T&gt; {
     <span class="kw">let </span>n = a.len();
 
@@ -109,7 +112,10 @@
     ret
 }
 
-<span class="kw">pub fn </span>sliding_maximum&lt;T: Ord + Copy&gt;(a: <span class="kw-2">&amp;</span>[T], k: usize) -&gt; Vec&lt;T&gt; {
+<span class="doccomment">/// 配列のすべての長さkの連続部分列について、その最大値を列挙する。
+///
+/// **Time complexity** $O(|a|)$
+</span><span class="kw">pub fn </span>sliding_maximum&lt;T: Ord + Copy&gt;(a: <span class="kw-2">&amp;</span>[T], k: usize) -&gt; Vec&lt;T&gt; {
     <span class="kw">let </span>s = a.iter().map(Reverse).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
     sliding_minimum(<span class="kw-2">&amp;</span>s, k).into_iter().map(|x| <span class="kw-2">*</span>x.<span class="number">0</span>).collect()
 }

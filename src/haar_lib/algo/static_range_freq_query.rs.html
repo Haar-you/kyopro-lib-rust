@@ -92,7 +92,7 @@
 }
 
 <span class="kw">impl</span>&lt;T: Hash + Eq&gt; StaticRangeFreqQuery&lt;T&gt; {
-    <span class="doccomment">/// **Time Complexity O(|a|)**
+    <span class="doccomment">/// **Time complexity** $O(|a|)$
     </span><span class="kw">pub fn </span>new(a: Vec&lt;T&gt;) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>map = HashMap::new();
 
@@ -103,7 +103,7 @@
         <span class="self">Self </span>{ map }
     }
 
-    <span class="doccomment">/// **Time Complexity O(log |a|)**
+    <span class="doccomment">/// **Time complexity** $O(\log |a|)$
     </span><span class="kw">pub fn </span>query(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;, value: <span class="kw-2">&amp;</span>T) -&gt; usize {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(a) = <span class="self">self</span>.map.get(value) {
             <span class="kw">let </span>lower = lower_bound(a, <span class="kw-2">&amp;</span>start);

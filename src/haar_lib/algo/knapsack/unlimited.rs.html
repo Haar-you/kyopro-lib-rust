@@ -44,13 +44,15 @@
 <a href="#28" id="28">28</a>
 <a href="#29" id="29">29</a>
 <a href="#30" id="30">30</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{cmp::max, ops::Add};
+<a href="#31" id="31">31</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 個数制限無しナップサック問題
+</span><span class="kw">use </span>std::{cmp::max, ops::Add};
 
 <span class="doccomment">/// 個数制限無しナップサック問題
 ///
-/// **Time complexity O(n cap)**
+/// **Time complexity** $O(n \cdot cap)$
 ///
-/// **Space complexity O(cap)**
+/// **Space complexity** $O(cap)$
 </span><span class="kw">pub fn </span>knapsack_unlimited&lt;T&gt;(cap: usize, ws: <span class="kw-2">&amp;</span>[usize], vs: <span class="kw-2">&amp;</span>[T]) -&gt; T
 <span class="kw">where
     </span>T: Default + Copy + Ord + Add&lt;Output = T&gt;,

@@ -85,14 +85,14 @@
 }
 
 <span class="kw">impl</span>&lt;T: Copy + Signed + Zero + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt;&gt; Imos1D&lt;T&gt; {
-    <span class="doccomment">/// **Time complexity O(n)**
+    <span class="doccomment">/// **Time complexity** $O(n)$
     </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             data: <span class="macro">vec!</span>[T::zero(); n],
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(1)**
+    <span class="doccomment">/// **Time complexity** $O(1)$
     </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;, value: T) {
         <span class="self">self</span>.data[l] = <span class="self">self</span>.data[l] + value;
         <span class="kw">if let </span><span class="prelude-val">Some</span>(x) = <span class="self">self</span>.data.get_mut(r) {
@@ -100,7 +100,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(n)**
+    <span class="doccomment">/// **Time complexity** $O(n)$
     </span><span class="kw">pub fn </span>build(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Vec&lt;T&gt; {
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..<span class="self">self</span>.data.len() {
             <span class="self">self</span>.data[i] = <span class="self">self</span>.data[i] + <span class="self">self</span>.data[i - <span class="number">1</span>];

@@ -36,7 +36,17 @@
 <a href="#20" id="20">20</a>
 <a href="#21" id="21">21</a>
 <a href="#22" id="22">22</a>
-</pre></div><pre class="rust"><code><span class="kw">pub fn </span>factorize(<span class="kw-2">mut </span>n: u64) -&gt; Vec&lt;(u64, usize)&gt; {
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 試し割り素因数分解
+
+/// 試し割り素因数分解
+///
+/// **Time comlexity** $\sqrt{n}$
+</span><span class="kw">pub fn </span>factorize(<span class="kw-2">mut </span>n: u64) -&gt; Vec&lt;(u64, usize)&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
 
     <span class="kw">let </span><span class="kw-2">mut </span>i = <span class="number">2</span>;

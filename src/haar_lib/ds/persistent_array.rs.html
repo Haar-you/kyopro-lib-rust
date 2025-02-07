@@ -225,6 +225,7 @@
 <a href="#209" id="209">209</a>
 <a href="#210" id="210">210</a>
 <a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 永続配列
 
 </span><span class="kw">use </span>std::rc::Rc;
@@ -241,7 +242,8 @@
     },
 }
 
-<span class="attr">#[derive(Clone)]
+<span class="doccomment">/// 永続配列
+</span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>PersistentArray&lt;T&gt; {
     size: usize,
     root: <span class="prelude-ty">Option</span>&lt;Rc&lt;Node&lt;T&gt;&gt;&gt;,
@@ -258,7 +260,7 @@
 <span class="kw">where
     </span>T: Clone,
 {
-    <span class="doccomment">/// **Time complexity O(n)**
+    <span class="doccomment">/// **Time complexity** $O(n)$
     </span><span class="kw">pub fn </span>new(size: usize, value: T) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>size == <span class="number">0 </span>{
             <span class="self">Self </span>{
@@ -341,7 +343,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>set(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, value: T) -&gt; <span class="self">Self </span>{
         <span class="macro">assert!</span>(
             i &lt; <span class="self">self</span>.size,
@@ -369,7 +371,7 @@
         }
     }
 
-    <span class="doccomment">/// **Time complexity O(log n)**
+    <span class="doccomment">/// **Time complexity** $O(\log n)$
     </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; Rc&lt;T&gt; {
         <span class="macro">assert!</span>(
             i &lt; <span class="self">self</span>.size,
