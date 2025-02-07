@@ -1,11 +1,12 @@
+//! 要素数が小さいナップサック問題
 use crate::{algo::merge::inplace_merge, chmax};
 use std::ops::Add;
 
 /// 要素数が小さいナップサック問題
 ///
-/// **Time complexity O(n 2 ^ (n / 2))**
+/// **Time complexity** $O(n 2 ^ {n / 2})$
 ///
-/// **Space complexity O(2 ^ (n / 2))**
+/// **Space complexity** $O(2 ^ {n / 2})$
 pub fn knapsack_small_quantity<W, V>(cap: W, ws: &[W], vs: &[V]) -> V
 where
     W: Default + Copy + Add<Output = W> + Ord,

@@ -4,7 +4,7 @@
 ///
 /// Σ{i = 1 ~ N - 1}Σ{j = i + 1 ~ N} |aᵢ - aⱼ|
 ///
-/// **Time complexity O(|a| log |a|)**
+/// **Time complexity** $O(|a| \log |a|)$
 ///
 /// # Problems
 /// - <https://atcoder.jp/contests/abc186/tasks/abc186_d>

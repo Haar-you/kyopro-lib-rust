@@ -9,6 +9,7 @@ enum Status {
     Searching,
 }
 
+/// 有向グラフの閉路検出
 pub fn detect_cycle<D: Direction, E: EdgeTrait>(g: &Graph<D, E>) -> Option<Vec<&E>> {
     let size = g.len();
     let mut check = vec![Status::Unchecked; size];

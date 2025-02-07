@@ -38,7 +38,7 @@ where
 
     /// `root`を根にして、`tree`上でDPを実行する。
     ///
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     pub fn run<E: TreeEdgeTrait<Weight = Weight>>(&self, tree: &Tree<E>, root: usize) -> Vec<T> {
         let size = tree.len();
         let mut ret = vec![None; size];

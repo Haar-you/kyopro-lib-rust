@@ -20,7 +20,7 @@ impl<G: Group> CumulativeSum1D<G>
 where
     G::Element: Copy,
 {
-    /// Time complexity O(1)
+    /// **Time complexity** $O(1)$
     pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> G::Element {
         self.group.op(self.data[r], self.group.inv(self.data[l]))
     }

@@ -8,7 +8,7 @@ use crate::num::one_zero::Zero;
 ///
 /// Σ{i = 1 ~ N - 1}Σ{j = i + 1 ~ N} aᵢ + aⱼ
 ///
-/// **Time complexity O(|a|)**
+/// **Time complexity** $O(|a|)$
 pub fn sum_of_sum_of_sum<T>(a: Vec<T>) -> T
 where
     T: Copy + Add<Output = T> + Zero,

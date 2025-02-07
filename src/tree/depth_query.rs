@@ -88,7 +88,7 @@ impl TreeDepthQuery {
 
     /// 頂点`i`から深さ`d`の子孫頂点に対応する区間を返す。
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn children_query(&self, i: usize, d: usize) -> Option<(usize, usize)> {
         let d = d + self.depth[i];
         if self.bfs_ord.len() > d {
@@ -119,7 +119,7 @@ impl TreeDepthQuery {
 
     /// 頂点`i`の`k`個遡った祖先の頂点を返す。
     ///
-    /// **Time complexity O(k)**
+    /// **Time complexity** $O(k)$
     pub fn ancestor(&self, i: usize, k: usize) -> Option<usize> {
         let mut p = i;
         for _ in 0..k {

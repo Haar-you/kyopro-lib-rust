@@ -1,5 +1,6 @@
 use crate::math::factorize::trial::factorize;
 
+/// `n`以下の自然数で、`m`と互いに素なものの個数を求める。
 pub fn count_coprime(n: u64, m: u64) -> u64 {
     let ps = factorize(m);
     let k = ps.len();

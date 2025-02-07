@@ -2,6 +2,7 @@
 
 pub use crate::graph::lowlink::*;
 
+/// 関節点の列挙
 pub fn articulation_points(ll: &Lowlink) -> Vec<usize> {
     let Lowlink {
         size,

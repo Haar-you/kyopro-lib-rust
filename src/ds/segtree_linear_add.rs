@@ -30,7 +30,7 @@ fn add<T: Add<Output = T>>((a, b): (T, T), (c, d): (T, T)) -> (T, T) {
 }
 
 impl<T: Elem> SegtreeLinearAdd<T> {
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     pub fn new(n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
         let hsize = size / 2;
@@ -56,7 +56,7 @@ impl<T: Elem> SegtreeLinearAdd<T> {
 
     /// 範囲`l..r`に一次関数`ax + b`の値を加算する。(`x`の値は`l..r`の範囲)
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn update(&mut self, range: impl RangeBounds<usize>, linear: Linear<T>) {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
@@ -111,7 +111,7 @@ impl<T: Elem> SegtreeLinearAdd<T> {
         }
     }
 
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn get(&self, i: usize) -> T {
         self.propagate_top_down(i + self.hsize);
         self.data[i + self.hsize].get().0

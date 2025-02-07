@@ -18,7 +18,7 @@ pub struct Rho {
 
 /// 循環検出法
 ///
-/// **Space complexity O(1)**
+/// **Space complexity** $O(1)$
 pub fn cycle_finding<T>(init: T, f: impl Fn(T) -> T) -> Rho
 where
     T: Copy + Eq,

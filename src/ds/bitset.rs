@@ -54,14 +54,14 @@ impl Bitset {
 
     /// `1`が設定されているbitの個数を数える。
     ///
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     pub fn count_ones(&self) -> u32 {
         self.data.iter().map(|a| a.count_ones()).sum()
     }
 
     /// `0`が設定されているbitの個数を数える。
     ///
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     pub fn count_zeros(&self) -> u32 {
         self.size as u32 - self.count_ones()
     }
@@ -83,7 +83,7 @@ impl Bitset {
 
     /// bit列の長さを返す。
     ///
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     pub fn len(&self) -> usize {
         self.size
     }

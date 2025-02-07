@@ -5,6 +5,7 @@ pub use crate::num::num_inf::NumInf;
 use crate::num::one_zero::Zero;
 use std::{cmp::min, ops::Add};
 
+/// 負閉路を持つグラフの最短経路
 pub fn bellman_ford<D: Direction, E: EdgeTrait>(
     g: &Graph<D, E>,
     src: usize,

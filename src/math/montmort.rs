@@ -1,3 +1,12 @@
+//! 完全順列の個数を列挙する。
+//!
+//! # References
+//! - <https://ja.wikipedia.org/wiki/%E5%AE%8C%E5%85%A8%E9%A0%86%E5%88%97>
+//! - <https://oeis.org/A000166>
+
+/// 長さ`0`から`n`までの完全順列の個数を列挙する。
+///
+/// **Time complexity** $O(n)$
 pub fn montmort(n: usize, m: u64) -> Vec<u64> {
     let mut ret = vec![0; n + 1];
 

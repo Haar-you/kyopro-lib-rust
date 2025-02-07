@@ -14,6 +14,7 @@ enum Node<T> {
     },
 }
 
+/// 永続配列
 #[derive(Clone)]
 pub struct PersistentArray<T> {
     size: usize,
@@ -31,7 +32,7 @@ impl<T> PersistentArray<T>
 where
     T: Clone,
 {
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     pub fn new(size: usize, value: T) -> Self {
         if size == 0 {
             Self {
@@ -114,7 +115,7 @@ where
         }
     }
 
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn set(&self, i: usize, value: T) -> Self {
         assert!(
             i < self.size,
@@ -142,7 +143,7 @@ where
         }
     }
 
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn get(&self, i: usize) -> Rc<T> {
         assert!(
             i < self.size,

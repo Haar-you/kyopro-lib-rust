@@ -24,7 +24,7 @@ impl IntegerSet {
 
     /// `x`を含む半開区間を返す
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn interval(&self, x: u64) -> Option<(u64, u64)> {
         if let Some((&k, &v)) = self.data.range(..=x).next_back() {
             if k <= x && x < v {
@@ -36,14 +36,14 @@ impl IntegerSet {
 
     /// `x`を含むかを判定
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn contains(&self, x: u64) -> bool {
         self.interval(x).is_some()
     }
 
     /// `x`を追加する
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn insert(&mut self, x: u64) {
         if let Some((&k, &v)) = self.data.range(..=x).next_back() {
             if k <= x && x < v {
@@ -69,7 +69,7 @@ impl IntegerSet {
 
     /// `x`を削除する
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn remove(&mut self, x: u64) {
         if let Some((k, v)) = self.interval(x) {
             self.data.remove(&k);
@@ -85,7 +85,7 @@ impl IntegerSet {
 
     /// `self`に含まれない数のうち`x`以上で最小のもの
     ///
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn mex(&self, x: u64) -> u64 {
         self.interval(x).map_or(x, |(_, v)| v)
     }

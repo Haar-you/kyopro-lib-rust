@@ -1,5 +1,6 @@
 //! Knuth-Morris-Pratt法
 
+/// Knuth-Morris-Pratt法
 #[derive(Clone, Debug)]
 pub struct KMP<T> {
     pat: Vec<Option<T>>,

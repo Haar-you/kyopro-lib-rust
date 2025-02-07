@@ -1,11 +1,17 @@
-pub mod traits;
+//! 素数判定
 
 pub mod eratosthenes;
 pub mod miller_rabin;
 
+/// 素数判定
+pub trait CheckPrime<T> {
+    /// `value`が素数ならば`true`を返す。
+    fn is_prime(&self, value: T) -> bool;
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{eratosthenes::*, miller_rabin::*, traits::CheckPrime};
+    use super::{eratosthenes::*, miller_rabin::*, CheckPrime};
 
     #[test]
     fn test_eratosthenes() {

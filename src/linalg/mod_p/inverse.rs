@@ -3,7 +3,7 @@ use crate::math::mod_ops::inv_p::mod_inv_p;
 
 /// 素数mod p上での逆行列を求める。
 ///
-/// **Time complexity O(n³)**
+/// **Time complexity** $O(n^3)$
 pub fn inverse(mut b: Vec<Vec<u64>>, p: u64) -> Option<Vec<Vec<u64>>> {
     let n = b.len();
 

@@ -2,11 +2,11 @@
 //!
 //! | function | time complexity | space complexity |
 //! | ---- | ---- | ---- |
-//! | knapsack_small_weight | **O(n cap)** | **O(cap)** |
-//! | knapsack_small_value | **O(n Σ(vs))** | **O(Σ(vs))** |
-//! | knapsack_small_quantity | **O(n 2^{n / 2})** | **O(2^{n / 2})** |
-//! | knapsack_limited | **O(n cap log(max(ms)))** | **O(cap)** |
-//! | knapsack_unlimited | **O(n cap)** | **O(cap)** |
+//! | knapsack_small_weight | $O(n \cdot cap)$ | $O(cap)$ |
+//! | knapsack_small_value | $O(n \sum vs)$ | $O(\sum vs)$ |
+//! | knapsack_small_quantity | $O(n 2^{n / 2})$ | $O(2^{n / 2})$ |
+//! | knapsack_limited | $O(n \cdot cap \log \max ms)$ | $O(cap)$ |
+//! | knapsack_unlimited | $O(n \cdot cap)$ | $O(cap)$ |
 
 pub mod limited;
 pub mod small_quantity;

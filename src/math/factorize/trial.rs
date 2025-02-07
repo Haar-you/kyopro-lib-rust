@@ -1,3 +1,8 @@
+//! 試し割り素因数分解
+
+/// 試し割り素因数分解
+///
+/// **Time comlexity** $\sqrt{n}$
 pub fn factorize(mut n: u64) -> Vec<(u64, usize)> {
     let mut ret = vec![];
 

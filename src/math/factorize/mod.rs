@@ -1,3 +1,5 @@
+//! 素因数分解
+
 pub mod sieve;
 pub mod trial;
 

@@ -22,7 +22,7 @@ impl<G: Group> CumulativeSum2D<G>
 where
     G::Element: Copy,
 {
-    /// Time Complexity O(1)
+    /// **Time Complexity** $O(1)$
     pub fn fold_2d(
         &self,
         Range { start: l, end: r }: Range<usize>,

@@ -4,7 +4,7 @@ use crate::graph::*;
 use crate::num::{one_zero::Zero, traits::Unsigned};
 use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
-/// **Time complexity O((E + V) log V)**
+/// **Time complexity** $O((E + V) \log V)$
 pub fn dijkstra<D: Direction, E: EdgeTrait>(
     g: &Graph<D, E>,
     src: &[usize],

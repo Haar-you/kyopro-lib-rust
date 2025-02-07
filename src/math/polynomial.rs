@@ -1,8 +1,8 @@
-//! 𝔽ₚ上の多項式
+//! $\mathbb{F}_p$上の多項式
 use crate::math::ntt::NTT;
 use crate::num::const_modint::*;
 
-/// 𝔽ₚ上の多項式
+/// $\mathbb{F}_p$上の多項式
 #[derive(Clone, Debug, PartialEq)]
 pub struct Polynomial<const P: u32> {
     data: Vec<ConstModInt<P>>,
@@ -23,7 +23,7 @@ impl<const P: u32> Polynomial<P> {
         }
     }
 
-    /// *xⁱ*の係数を得る。
+    /// $x^i$の係数を得る。
     pub fn coeff_of(&self, i: usize) -> ConstModInt<P> {
         self.data.get(i).map_or(ConstModInt::new(0), |a| *a)
     }

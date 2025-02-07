@@ -1,5 +1,9 @@
 //! トーシェント関数
+//!
+//! # References
+//! - <https://ja.wikipedia.org/wiki/%E3%82%AA%E3%82%A4%E3%83%A9%E3%83%BC%E3%81%AE%CF%86%E9%96%A2%E6%95%B0>
 
+/// `n`と互いに素である自然数の個数を求める。
 pub fn totient(mut n: u64) -> u64 {
     let mut ret = n;
 
@@ -22,6 +26,9 @@ pub fn totient(mut n: u64) -> u64 {
     ret
 }
 
+/// `n`までのトーシェント関数のテーブル$\varphi$を構築する。
+///
+/// nとmが互いに素のとき、$\varphi(nm) = \varphi(n) \cdot \varphi(m)$
 pub fn totient_table(n: usize) -> Vec<u64> {
     let mut ret = (0..=n as u64).collect::<Vec<_>>();
 

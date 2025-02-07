@@ -1,6 +1,10 @@
+//! 多項式の多点評価
 use crate::math::polynomial::{Polynomial, PolynomialOperator};
 use crate::num::const_modint::ConstModInt;
 
+/// 多項式の多点評価
+///
+/// 多項式$f(x)$に値$p_0, p_1, \cdots, p_m$を代入した結果$f(p_0), f(p_1), \cdots, f(p_m)$を求める。
 pub fn multipoint_eval<const P: u32>(
     a: Polynomial<P>,
     p: Vec<ConstModInt<P>>,

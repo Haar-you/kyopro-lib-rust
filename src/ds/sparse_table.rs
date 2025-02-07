@@ -16,9 +16,9 @@ impl<A: Semigroup + Idempotence> SparseTable<A>
 where
     A::Element: Clone + Default,
 {
-    /// **Time complexity O(n log n)**
+    /// **Time complexity** $O(n \log n)$
     ///
-    /// **Space complexity O(n log n)**
+    /// **Space complexity** $O(n \log n)$
     pub fn new(s: Vec<A::Element>, a: A) -> Self {
         let n = s.len();
         let logn = n.next_power_of_two().trailing_zeros() as usize + 1;
@@ -49,7 +49,7 @@ where
         }
     }
 
-    /// **Time complexity O(1)**
+    /// **Time complexity** $O(1)$
     pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<A::Element> {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 

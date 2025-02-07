@@ -8,7 +8,7 @@ use std::collections::HashMap;
 
 /// aˣ = b (mod m)を満たすxを求める。
 ///
-/// **Time Complexity O(√m)**
+/// **Time complexity** $O(\sqrt{m})$
 pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
     if b == 1 {
         return Some(0);

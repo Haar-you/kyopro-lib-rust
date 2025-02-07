@@ -2,6 +2,7 @@
 
 pub use crate::graph::lowlink::*;
 
+/// 二重辺連結成分分解
 pub fn two_edge_connected_components(ll: &Lowlink) -> Vec<Vec<usize>> {
     let mut ret = vec![];
 

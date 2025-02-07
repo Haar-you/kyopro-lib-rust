@@ -6,7 +6,7 @@ use crate::num::one_zero::Zero;
 ///
 /// Σ{i = 1 ~ N}Σ{j = i ~ N} aᵢ * aᵢ ₊ ₁ * ... * aⱼ
 ///
-/// **Time complexity O(|a|)**
+/// **Time complexity** $O(|a|)$
 pub fn sum_of_sum_of_range_prod<T>(a: Vec<T>) -> T
 where
     T: Copy + Mul<Output = T> + Zero + Add<Output = T> + AddAssign,

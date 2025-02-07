@@ -5,7 +5,7 @@ use std::mem::swap;
 
 /// mod mでの逆元
 ///
-/// **Time Complexity O(log m)**
+/// **Time complexity** $O(\log m)$
 #[inline]
 pub fn mod_inv(mut a: u64, m: u64) -> Option<u64> {
     if a.gcd(m) != 1 {

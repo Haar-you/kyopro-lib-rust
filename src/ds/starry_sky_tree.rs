@@ -36,7 +36,7 @@ pub struct StarrySkyTree<T> {
 }
 
 impl<T: Elem> StarrySkyTree<T> {
-    /// **Time complexity O(n)**
+    /// **Time complexity** $O(n)$
     pub fn new(n: usize, mode: Mode) -> Self {
         let size = n.next_power_of_two() * 2;
         let zero = T::zero();
@@ -66,7 +66,7 @@ impl<T: Elem> StarrySkyTree<T> {
         }
     }
 
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<T> {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
         self.rec(l, r, 1, 0, self.size / 2, T::zero())
@@ -90,7 +90,7 @@ impl<T: Elem> StarrySkyTree<T> {
         }
     }
 
-    /// **Time complexity O(log n)**
+    /// **Time complexity** $O(\log n)$
     pub fn update(&mut self, range: impl RangeBounds<usize>, value: T) {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 

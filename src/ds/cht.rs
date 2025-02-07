@@ -57,6 +57,7 @@ impl<T: Elem> ConvexHullTrick<T> {
     }
 
     /// 最小値を求めたいならば、傾きは単調減少でなければならない。
+    ///
     /// 最大値を求めたいならば、傾きは単調増加でなければならない。
     pub fn add(&mut self, line @ Linear { a, b }: Linear<T>) {
         if let Some(p) = self.last_slope {

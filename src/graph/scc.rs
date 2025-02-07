@@ -8,7 +8,7 @@ pub struct SCC {
 }
 
 impl SCC {
-    /// **Time complexity O(V + E)**
+    /// **Time complexity** $O(V + E)$
     pub fn new<E: EdgeTrait>(g: &Graph<Directed, E>) -> Self {
         let n = g.len();
 

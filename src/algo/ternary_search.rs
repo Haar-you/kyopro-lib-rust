@@ -1,10 +1,15 @@
 //! 三分探索
+
+/// [`ternary_search`]で与えられる関数が上に凸か下に凸かを指定する。
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Convex {
+    /// 上に凸
     Upwards,
+    /// 下に凸
     Downwards,
 }
 
+/// 三分探索
 pub fn ternary_search<F: Fn(f64) -> f64>(
     mut lb: f64,
     mut ub: f64,

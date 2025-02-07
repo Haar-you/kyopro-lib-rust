@@ -1,3 +1,4 @@
+//! 行列 (mod 2)
 use std::ops::Index;
 use std::ops::Mul;
 
