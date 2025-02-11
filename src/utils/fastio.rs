@@ -10,6 +10,7 @@ pub struct FastIO {
 }
 
 impl FastIO {
+    /// [`FastIO`]を生成する。
     pub fn new() -> Self {
         let mut s = vec![];
         std::io::stdin().read_to_end(&mut s).unwrap();

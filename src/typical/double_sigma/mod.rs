@@ -1,3 +1,5 @@
+//! $\sum \sum f(a_i, a_j)$の形の問題
+
 pub mod difference;
 pub mod max;
 pub mod prod;

@@ -1,5 +1,6 @@
 use std::iter::Peekable;
 
+/// 括弧列のパースの結果
 #[derive(Clone, Debug)]
 pub struct ParseResult<T> {
     pub elems: Vec<Box<Elem<T>>>,
@@ -7,10 +8,15 @@ pub struct ParseResult<T> {
 
 #[derive(Clone, Debug)]
 pub enum Elem<T> {
+    /// 括弧以外
     Value(T),
+    /// 対応のある括弧列
     Paren {
+        /// 開き括弧
         open: T,
+        /// 括弧の内部のパースの結果
         inner: ParseResult<T>,
+        /// 閉じ括弧
         close: T,
     },
 }
@@ -49,6 +55,7 @@ fn _parse<T: Copy + Eq + std::fmt::Debug>(
     Some(ParseResult { elems })
 }
 
+/// 括弧列をパースする。
 pub fn parse_paren<T: Copy + Eq + std::fmt::Debug>(
     s: impl IntoIterator<Item = T>,
     open: T,

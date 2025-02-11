@@ -37,6 +37,7 @@ impl<'a, T> UnionFind<'a, T> {
         }
     }
 
+    /// `i`の属する素集合の根を返す。
     pub fn root_of(&self, i: usize) -> usize {
         if self.parent[i].get() == i {
             return i;
@@ -46,10 +47,12 @@ impl<'a, T> UnionFind<'a, T> {
         self.parent[i].get()
     }
 
+    /// `i`と`j`が同じ素集合に属するならば`true`を返す。
     pub fn is_same(&self, i: usize, j: usize) -> bool {
         self.root_of(i) == self.root_of(j)
     }
 
+    /// `i`の属する素集合と`j`の属する素集合を統合する。
     pub fn merge(&mut self, i: usize, j: usize) -> usize {
         let i = self.root_of(i);
         let j = self.root_of(j);
@@ -92,11 +95,13 @@ impl<'a, T> UnionFind<'a, T> {
         }
     }
 
+    /// `i`の属する素集合の大きさを返す。
     pub fn size_of(&self, i: usize) -> usize {
         let i = self.root_of(i);
         self.size[i]
     }
 
+    /// 素集合の個数を返す。
     pub fn count_groups(&self) -> usize {
         self.count
     }

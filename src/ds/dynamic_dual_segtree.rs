@@ -1,3 +1,4 @@
+//! 動的双対セグメント木
 use crate::algebra::traits::Monoid;
 use crate::utils::nullable_usize::NullableUsize;
 use std::ops::Range;
@@ -19,6 +20,7 @@ impl<T> Node<T> {
     }
 }
 
+/// 動的双対セグメント木
 #[derive(Clone, Debug)]
 pub struct DynamicDualSegtree<M: Monoid> {
     data: Vec<Node<M::Element>>,
@@ -31,6 +33,7 @@ impl<M: Monoid> DynamicDualSegtree<M>
 where
     M::Element: Clone,
 {
+    /// [`DynamicDualSegtree<M>`]を生成する。
     pub fn new(monoid: M) -> Self {
         Self {
             data: vec![Node::new(monoid.id())],
@@ -108,6 +111,7 @@ where
         }
     }
 
+    /// 範囲`s..t`を`value`で更新する。
     pub fn update(&mut self, Range { start: s, end: t }: Range<usize>, value: M::Element) {
         loop {
             let root = self.root.0;
@@ -148,6 +152,7 @@ where
         }
     }
 
+    /// `i`番目の要素を取得する。
     pub fn get(&mut self, i: usize) -> M::Element {
         self.get_(self.root.0, 0, self.to, i)
     }

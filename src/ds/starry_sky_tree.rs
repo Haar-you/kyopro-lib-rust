@@ -13,9 +13,12 @@ trait_alias!(
     Elem: Add<Output = Self> + Sub<Output = Self> + Ord + Copy + Zero
 );
 
+/// 区間Max/Minを選択する。
 #[derive(Copy, Clone)]
 pub enum Mode {
+    /// 区間Max
     Max,
+    /// 区間Min
     Min,
 }
 
@@ -28,6 +31,7 @@ impl Mode {
     }
 }
 
+/// 区間加算・区間Max(Min)ができるデータ構造。
 pub struct StarrySkyTree<T> {
     size: usize,
     original_size: usize,

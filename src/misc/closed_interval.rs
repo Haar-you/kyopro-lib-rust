@@ -1,16 +1,23 @@
+/// 両端の点を含む閉区間を扱う。
 #[derive(Clone, Default, Debug, PartialEq, Eq)]
 pub struct ClosedInterval<T> {
+    /// 閉区間の開始地点
     pub start: T,
+    /// 閉区間の終了地点
     pub end: T,
 }
 
 impl<T> ClosedInterval<T> {
+    /// [`ClosedInterval<T>`]を生成する
     pub fn new(start: T, end: T) -> Self {
         Self { start, end }
     }
 }
 
 impl<T: Ord + PartialEq + Copy> ClosedInterval<T> {
+    /// 2つの閉区間に共通部分があれば、統合した結果を`Ok`に包んで返す。
+    ///
+    /// 共通部分がなければ、`Err`に元の2つの閉区間を包んで返す。
     pub fn merge(self, other: Self) -> Result<Self, (Self, Self)> {
         if self.end < other.start || other.end < self.start {
             Err((self, other))
