@@ -1,5 +1,7 @@
+//! ビット列の上位集合を昇順に列挙する
 use std::iter::successors;
 
+/// ビット列としての`a`の上位集合を昇順に列挙するイテレータを返す。
 pub fn super_asc(a: u32, n: u32) -> impl Iterator<Item = u32> {
     successors(Some(a), move |&t| {
         let t = (t + 1) | a;

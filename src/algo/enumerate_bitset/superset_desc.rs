@@ -1,5 +1,7 @@
+//! ビット列の上位集合を降順に列挙する
 use std::iter::successors;
 
+/// ビット列としての`a`の上位集合を降順に列挙するイテレータを返す。
 pub fn superset_desc(a: u32, n: u32) -> impl Iterator<Item = u32> {
     let x = (1 << n) - 1;
     let y = x ^ (a & x);

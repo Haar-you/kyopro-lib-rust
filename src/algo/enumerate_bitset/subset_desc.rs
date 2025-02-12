@@ -1,5 +1,7 @@
+//! ビット列の部分集合を降順に列挙する
 use std::iter::successors;
 
+/// ビット列としての`a`の部分集合を降順に列挙するイテレータを返す。
 pub fn subset_desc(a: u32) -> impl Iterator<Item = u32> {
     successors(Some(a), move |&t| t.checked_sub(1).map(|x| x & a))
 }

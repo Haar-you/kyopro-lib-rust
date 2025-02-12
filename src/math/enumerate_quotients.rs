@@ -1,7 +1,11 @@
+/// [`enumerate_quotients`]の結果
 #[derive(Copy, Debug, Eq, PartialEq, Clone)]
 pub struct Quotient {
+    /// `floor(N/x)`の値
     pub q: u64,
+    /// `x`の最小値
     pub from: u64,
+    /// `x`の最大値
     pub to: u64,
 }
 

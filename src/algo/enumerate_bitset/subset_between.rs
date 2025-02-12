@@ -1,5 +1,7 @@
+//! $a \subseteq x \subseteq b$を満たす`x`を列挙する
 use std::iter::successors;
 
+/// $a \subseteq x \subseteq b$を満たす`x`を列挙するイテレータを返す。
 pub fn subset_between(a: u32, b: u32) -> impl Iterator<Item = u32> {
     let x = b ^ (a & b);
 
