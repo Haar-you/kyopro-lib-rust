@@ -39,6 +39,7 @@ pub mod persistent_queue;
 
 pub mod disjoint_sparse_table;
 pub mod sparse_table;
+pub mod sparse_table_2d;
 
 pub mod interval_heap;
 pub mod lazy_skew_heap;
