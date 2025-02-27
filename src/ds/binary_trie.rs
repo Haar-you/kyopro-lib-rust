@@ -1,3 +1,4 @@
+//! 非負整数を2進数として管理する。
 use crate::utils::nullable_usize::NullableUsize;
 
 #[derive(Debug, Clone)]
@@ -15,6 +16,7 @@ impl Default for Node {
     }
 }
 
+/// 非負整数を2進数として管理する。
 #[derive(Debug, Clone)]
 pub struct BinaryTrie {
     data: Vec<Node>,
@@ -22,20 +24,24 @@ pub struct BinaryTrie {
 }
 
 impl BinaryTrie {
+    /// `bitlen`ビットの数を扱える[`BinaryTrie`]を生成する。
     pub fn new(bitlen: usize) -> Self {
         assert!(bitlen <= 64);
         let data = vec![Node::default()];
         Self { data, bitlen }
     }
 
+    /// 要素数を返す。
     pub fn len(&self) -> usize {
         self.data[0].count
     }
 
+    /// 要素数が0ならば`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.data[0].count == 0
     }
 
+    /// 値`value`の個数を返す。
     pub fn count(&self, value: u64) -> usize {
         let mut node = 0;
         let mut depth = self.bitlen;
@@ -54,6 +60,7 @@ impl BinaryTrie {
         self.data[node].count
     }
 
+    /// 値`value`を挿入して、`value`の個数を返す。
     pub fn insert(&mut self, value: u64) -> usize {
         let mut node = 0;
         let mut depth = self.bitlen;
@@ -79,6 +86,8 @@ impl BinaryTrie {
         self.data[node].count
     }
 
+    /// 値`value`が存在すれば、一つ削除して、削除後の`value`の個数を`Some`に包んで返す。
+    /// 存在しなければ、`None`を返す。
     pub fn erase(&mut self, value: u64) -> Option<usize> {
         let mut node = 0;
         let mut depth = self.bitlen;
@@ -113,6 +122,7 @@ impl BinaryTrie {
         }
     }
 
+    /// $\min_{a \in S} a \oplus xor$を求める。
     pub fn min(&mut self, xor: u64) -> Option<u64> {
         if self.data[0].count == 0 {
             None
@@ -139,6 +149,7 @@ impl BinaryTrie {
         }
     }
 
+    /// $\max_{a \in S} a \oplus xor$を求める。
     pub fn max(&mut self, xor: u64) -> Option<u64> {
         if self.data[0].count == 0 {
             None

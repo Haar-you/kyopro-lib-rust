@@ -1,3 +1,7 @@
+//! Manacher's algorithm
+
+/// `s`の各要素を中心とした奇数長の最長回文の片側の長さを求める。
+///
 /// **Time complexity** $O(|s|)$
 pub fn manacher<T: PartialEq>(s: &[T]) -> Vec<usize> {
     let n = s.len();

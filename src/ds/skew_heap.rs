@@ -34,6 +34,7 @@ impl<T: Ord> Node<T> {
     }
 }
 
+/// 融合可能ヒープ
 #[derive(Debug, Clone, Default)]
 pub struct SkewHeap<T> {
     root: Option<Box<Node<T>>>,
@@ -41,6 +42,7 @@ pub struct SkewHeap<T> {
 }
 
 impl<T: Ord> SkewHeap<T> {
+    /// 空の[`SkewHeap<T>`]を生成する。
     pub fn new() -> Self {
         Self {
             root: None,
@@ -48,6 +50,7 @@ impl<T: Ord> SkewHeap<T> {
         }
     }
 
+    /// 他の`SkewHeap<T>`を融合する。
     pub fn meld(&mut self, other: SkewHeap<T>) {
         self.size += other.size;
         match self.root.as_mut() {
@@ -56,6 +59,7 @@ impl<T: Ord> SkewHeap<T> {
         }
     }
 
+    /// 値`value`を挿入する。
     pub fn push(&mut self, value: T) {
         self.size += 1;
         let t = Some(Box::new(Node::new(value)));
@@ -65,10 +69,12 @@ impl<T: Ord> SkewHeap<T> {
         }
     }
 
+    /// ヒープの最大値を返す。
     pub fn peek(&self) -> Option<&T> {
         self.root.as_ref().map(|x| &x.value)
     }
 
+    /// 最大値をヒープから削除して、その値を返す。
     pub fn pop(&mut self) -> Option<T> {
         match self.root.take() {
             None => None,
@@ -93,10 +99,12 @@ impl<T: Ord> SkewHeap<T> {
         }
     }
 
+    /// ヒープに含まれている値の個数を返す。
     pub fn len(&self) -> usize {
         self.size
     }
 
+    /// ヒープが空ならば`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.size == 0
     }

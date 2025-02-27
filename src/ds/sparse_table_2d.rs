@@ -1,11 +1,11 @@
-//! 冪等性と結合性をもつ2次元列の区間取得(O(1))ができる。
+//! 冪等性と結合性をもつ2次元列の区間取得($O(1)$)ができる。
 use crate::algebra::traits::*;
 use std::{
     cmp::{max, min},
     ops::Range,
 };
 
-/// 冪等性と結合性をもつ2次元列の区間取得(O(1))ができる。
+/// 冪等性と結合性をもつ2次元列の区間取得($O(1)$)ができる。
 pub struct SparseTable2D<A: Semigroup + Idempotence> {
     data: Vec<Vec<Vec<Vec<A::Element>>>>,
     log_table: Vec<usize>,
