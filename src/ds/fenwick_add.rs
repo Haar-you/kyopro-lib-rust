@@ -66,3 +66,25 @@ impl<T: Elem> FenwickTreeAdd<T> {
         self.fold_to(..r) - self.fold_to(..l)
     }
 }
+
+impl<T: Elem + Ord> FenwickTreeAdd<T> {
+    pub fn lower_bound(&self, value: T) -> usize {
+        let n = self.size;
+        let mut b = 0;
+        let mut len = n;
+
+        while len > 0 {
+            let half = len / 2;
+            let mid = b + half;
+
+            if self.fold_to(..mid + 1) < value {
+                len -= half + 1;
+                b = mid + 1;
+            } else {
+                len = half;
+            }
+        }
+
+        b
+    }
+}
