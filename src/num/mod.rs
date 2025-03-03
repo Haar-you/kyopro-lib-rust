@@ -1,6 +1,7 @@
 pub mod const_modint;
 pub mod ff;
 pub mod modint;
+pub mod montgomery;
 
 pub mod num_inf;
 pub mod rational;
