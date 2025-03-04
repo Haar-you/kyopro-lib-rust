@@ -57,6 +57,7 @@ impl<T: Elem> Node<T> {
     }
 }
 
+/// 遅延加算付き融合可能ヒープ
 #[derive(Debug, Clone, Default)]
 pub struct LazySkewHeap<T> {
     root: Option<Box<Node<T>>>,
@@ -64,6 +65,7 @@ pub struct LazySkewHeap<T> {
 }
 
 impl<T: Elem> LazySkewHeap<T> {
+    /// 空の[`LazySkewHeap`]を生成する。
     pub fn new() -> Self {
         Self {
             root: None,
@@ -71,6 +73,7 @@ impl<T: Elem> LazySkewHeap<T> {
         }
     }
 
+    /// 他の[`LazySkewHeap<T>`]を融合する。
     pub fn meld(&mut self, other: LazySkewHeap<T>) {
         self.size += other.size;
         match self.root.as_mut() {
@@ -79,6 +82,7 @@ impl<T: Elem> LazySkewHeap<T> {
         }
     }
 
+    /// 値`value`を挿入する。
     pub fn push(&mut self, value: T) {
         self.size += 1;
         let t = Some(Box::new(Node::new(value)));
@@ -88,10 +92,12 @@ impl<T: Elem> LazySkewHeap<T> {
         }
     }
 
+    /// ヒープの最大値を返す。
     pub fn peek(&self) -> Option<&T> {
         self.root.as_ref().map(|x| &x.value)
     }
 
+    /// 最大値をヒープから削除して、その値を返す。
     pub fn pop(&mut self) -> Option<T> {
         match self.root.take() {
             None => None,
@@ -117,6 +123,7 @@ impl<T: Elem> LazySkewHeap<T> {
         }
     }
 
+    /// ヒープの全要素に値`value`を加算する。
     pub fn add(&mut self, value: T) {
         if let Some(root) = self.root.as_mut() {
             root.lazy += value;
@@ -124,10 +131,12 @@ impl<T: Elem> LazySkewHeap<T> {
         }
     }
 
+    /// ヒープに含まれている値の個数を返す。
     pub fn len(&self) -> usize {
         self.size
     }
 
+    /// ヒープが空ならば`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.size == 0
     }

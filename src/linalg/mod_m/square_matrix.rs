@@ -1,6 +1,8 @@
+//! 正方行列
 use crate::num::ff::*;
 use std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 
+/// 正方行列
 #[derive(Clone, PartialEq, Eq)]
 pub struct SquareMatrix<Modulo: FF>
 where
@@ -15,6 +17,7 @@ impl<Modulo: FF> SquareMatrix<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
+    /// `size`×`size`の零行列を作る。
     pub fn new(size: usize, modulo: Modulo) -> Self {
         Self {
             size,
@@ -23,6 +26,7 @@ where
         }
     }
 
+    /// `size`×`size`の単位行列を作る。
     pub fn unit(size: usize, modulo: Modulo) -> Self {
         let mut ret = Self::new(size, modulo.clone());
         for i in 0..size {
@@ -56,10 +60,12 @@ where
     //     self.data.clone()
     // }
 
+    /// 行列の行数(列数)を返す。
     pub fn size(&self) -> usize {
         self.size
     }
 
+    /// 行列の転置を求める。
     pub fn transpose(self) -> Self {
         let mut ret = Self::new(self.size, self.modulo);
         for i in 0..self.size {
@@ -70,6 +76,7 @@ where
         ret
     }
 
+    /// 行列の`p`乗を求める。
     pub fn pow(self, mut p: u64) -> Self {
         let mut ret = Self::unit(self.size, self.modulo.clone());
         let mut a = self;
@@ -86,10 +93,14 @@ where
         ret
     }
 
+    /// `i`行`j`列の要素への可変参照を返す。
     pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Element> {
         self.data.get_mut(i).and_then(|a| a.get_mut(j))
     }
 
+    /// 愚直に行列積を求める。
+    ///
+    /// **Time complexity** $O(n^3)$
     pub fn straight_mul(self, b: Self) -> Self {
         assert_eq!(self.size, b.size);
 

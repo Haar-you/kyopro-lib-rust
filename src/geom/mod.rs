@@ -33,30 +33,38 @@ pub mod closest_pair;
 
 use std::{cmp::Ordering, f64::consts::PI};
 
+/// `f64`の誤差を許容する演算を提供する。
 #[derive(Copy, Clone)]
 pub struct Eps {
     eps: f64,
 }
 
 impl Eps {
+    /// 誤差`eps`を設定して[`Eps`]を生成する。
     pub fn new(eps: f64) -> Self {
         Self { eps }
     }
+    /// 誤差を許容して`a == b`なら`true`を返す。
     pub fn eq(&self, a: f64, b: f64) -> bool {
         (a - b).abs() < self.eps
     }
+    /// 誤差を許容して`a != b`なら`true`を返す。
     pub fn ne(&self, a: f64, b: f64) -> bool {
         !self.eq(a, b)
     }
+    /// 誤差を許容して`a < b`なら`true`を返す。
     pub fn lt(&self, a: f64, b: f64) -> bool {
         a - b < -self.eps
     }
+    /// 誤差を許容して`a > b`なら`true`を返す。
     pub fn gt(&self, a: f64, b: f64) -> bool {
         a - b > self.eps
     }
+    /// 誤差を許容して`a <= b`なら`true`を返す。
     pub fn le(&self, a: f64, b: f64) -> bool {
         self.lt(a, b) || self.eq(a, b)
     }
+    /// 誤差を許容して`a >= b`なら`true`を返す。
     pub fn ge(&self, a: f64, b: f64) -> bool {
         self.gt(a, b) || self.eq(a, b)
     }
@@ -73,6 +81,7 @@ impl Eps {
     }
 }
 
+/// 二次元ベクトル
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Vector(pub f64, pub f64);
 
@@ -148,56 +157,71 @@ impl Vector {
             r
         }
     }
+    /// 2つのベクトルが等しければ`true`を返す。
     pub fn eq(self, other: Self, eps: Eps) -> bool {
         eps.eq(self.0, other.0) && eps.eq(self.1, other.1)
     }
 }
 
-/// 直線
+/// 直線 (線分)
 #[derive(Copy, Clone, Debug, Default)]
 pub struct Line {
+    /// 線分の始点
     pub from: Vector,
+    /// 線分の終点
     pub to: Vector,
 }
 
 impl Line {
+    /// 始点と終点を設定した[`Line`]を返す。
     pub fn new(from: Vector, to: Vector) -> Self {
         Self { from, to }
     }
+    /// 線分方向の単位ベクトルを返す。
     pub fn unit(self) -> Vector {
         (self.to - self.from).unit()
     }
+    /// 線分と直交するベクトルを返す。
     pub fn normal(self) -> Vector {
         (self.to - self.from).normal()
     }
+    /// 始点から終点に向かうベクトルを返す。
     pub fn diff(self) -> Vector {
         self.to - self.from
     }
+    /// 線分の大きさを返す。
     pub fn abs(self) -> f64 {
         self.diff().abs()
     }
+    /// 2つの線分の内積を求める。
     pub fn dot(self, other: Self) -> f64 {
         self.diff().dot(other.diff())
     }
+    /// 2つの線分の外積を求める。
     pub fn cross(self, other: Self) -> f64 {
         self.diff().cross(other.diff())
     }
+    /// 2つの線分が等しければ`true`を返す。
     pub fn eq(self, other: Self, eps: Eps) -> bool {
         self.from.eq(other.from, eps) && self.to.eq(other.to, eps)
     }
 
+    /// 点`p`から直線に引いた垂線と直線の交点を求める。
     pub fn projection(self, p: Vector) -> Vector {
         self.from + self.unit() * self.unit().dot(p - self.from)
     }
 
+    /// 直線を対象軸とした点`p`と線対称の位置の点を求める。
     pub fn reflection(self, p: Vector) -> Vector {
         p + (self.projection(p) - p) * 2.0
     }
 
+    /// 2つの直線が直交していれば`true`を返す。
     pub fn is_orthogonal(self, other: Self, eps: Eps) -> bool {
         eps.eq(self.dot(other).abs(), 0.0)
     }
 
+    /// 2つの直線が平行していれば`true`を返す。
     pub fn is_parallel(self, other: Self, eps: Eps) -> bool {
         eps.eq(self.cross(other).abs(), 0.0)
     }

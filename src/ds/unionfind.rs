@@ -111,6 +111,7 @@ impl<'a, T> UnionFind<'a, T> {
         self.values[i].as_ref()
     }
 
+    /// 素集合をすべて列挙する。
     pub fn get_groups(&self) -> Vec<Vec<usize>> {
         let mut ret = vec![vec![]; self.n];
 

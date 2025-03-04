@@ -1,6 +1,8 @@
+//! `h`×`w`行列
 use crate::num::ff::*;
 use std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 
+/// `h`×`w`行列
 #[derive(Clone, PartialEq, Eq)]
 pub struct Matrix<Modulo: FF> {
     h: usize,
@@ -13,6 +15,7 @@ impl<Modulo: FF> Matrix<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
+    /// `h`×`w`の零行列を作る。
     pub fn new(h: usize, w: usize, modulo: Modulo) -> Self {
         Self {
             h,
@@ -22,6 +25,7 @@ where
         }
     }
 
+    /// [`Vec<Vec<u32>>`]から[`Matrix<Modulo>`]を作る。
     pub fn from_vec_2d(other: Vec<Vec<u32>>, modulo: Modulo) -> Self {
         let h = other.len();
         assert!(h > 0);
@@ -49,14 +53,17 @@ where
     //     self.data.clone()
     // }
 
+    /// 行列の行数を返す。
     pub fn height(&self) -> usize {
         self.h
     }
 
+    /// 行列の列数を返す。
     pub fn width(&self) -> usize {
         self.w
     }
 
+    /// `w`×`h`の転置行列を作る。
     pub fn transpose(self) -> Self {
         let mut ret = Self::new(self.w, self.h, self.modulo);
         for i in 0..self.h {
@@ -67,6 +74,7 @@ where
         ret
     }
 
+    /// `i`行`j`列の要素への可変参照を返す。
     pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Element> {
         self.data.get_mut(i).and_then(|a| a.get_mut(j))
     }

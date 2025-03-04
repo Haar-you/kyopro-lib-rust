@@ -24,6 +24,7 @@ impl<T> Node<T> {
     }
 }
 
+/// 永続セグメントツリー
 #[derive(Clone, Debug)]
 pub struct PersistentSegtree<M: Monoid> {
     root: Option<Rc<RefCell<Node<M::Element>>>>,
@@ -36,11 +37,13 @@ impl<M: Monoid + Clone> PersistentSegtree<M>
 where
     M::Element: Clone,
 {
+    /// 長さ`n`の[`PersistentSegtree`]を生成する。
     pub fn new(n: usize, monoid: M) -> Self {
         let seq = vec![monoid.id(); n];
         Self::from_vec(seq, monoid)
     }
 
+    /// [`Vec`]から[`PersistentSegtree`]を構築する。
     pub fn from_vec(a: Vec<M::Element>, monoid: M) -> Self {
         let n = a.len();
         let to = n.next_power_of_two();
@@ -131,6 +134,7 @@ where
         }
     }
 
+    /// `i`番目の要素を`value`にする。
     pub fn assign(&self, i: usize, value: M::Element) -> Self {
         let new_root = Self::__set(
             self.root.clone().unwrap(),
@@ -176,6 +180,7 @@ where
         }
     }
 
+    /// 範囲`range`で計算を集約して返す。
     pub fn fold(&self, range: impl RangeBounds<usize>) -> M::Element {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         Self::__fold(

@@ -94,7 +94,7 @@ impl<T> LinkedListPool<T> {
         cur
     }
 
-    /// `cur`から`cur`の属する連結リストの終端まで走査するイテレータを返す。
+    /// `cur`から`cur`の属する連結リストの終端までの要素の参照を返すイテレータを返す。
     pub fn iter(&self, cur: usize) -> impl Iterator<Item = &T> {
         let mut cur = Some(cur);
         std::iter::from_fn(move || match cur {
@@ -106,7 +106,7 @@ impl<T> LinkedListPool<T> {
         })
     }
 
-    /// `cur`から`cur`の属する連結リストの先頭まで走査するイテレータを返す。
+    /// `cur`から`cur`の属する連結リストの先頭までの要素の参照を返すイテレータを返す。
     pub fn riter(&self, cur: usize) -> impl Iterator<Item = &T> {
         let mut cur = Some(cur);
         std::iter::from_fn(move || match cur {

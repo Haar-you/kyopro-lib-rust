@@ -17,14 +17,17 @@ pub struct PersistentStack<T> {
 }
 
 impl<T> PersistentStack<T> {
+    /// 空の[`PersistentStack`]を生成する。
     pub fn new() -> Self {
         Self { root: None }
     }
 
+    /// 末尾の要素への参照を返す。
     pub fn peek(&self) -> Option<&T> {
         self.root.as_ref().map(|x| &x.value)
     }
 
+    /// 値`value`を末尾に追加した[`PersistentStack`]を返す。
     pub fn push(&self, value: T) -> Self {
         Self {
             root: Some(Rc::new(Node {
@@ -34,12 +37,14 @@ impl<T> PersistentStack<T> {
         }
     }
 
+    /// 末尾の要素を削除した[`PersistentStack`]を返す。
     pub fn pop(&self) -> Option<Self> {
         self.root.as_ref().map(|root| Self {
             root: root.next.clone(),
         })
     }
 
+    /// スタックの末尾から先頭への要素の参照を返すイテレータを返す。
     pub fn iter(&self) -> impl Iterator<Item = &T> {
         let mut root = &self.root;
 

@@ -11,6 +11,7 @@ trait_alias!(
     Elem: Copy + Zero + Add<Output = Self> + Mul<Output = Self> + PartialEq
 );
 
+/// 係数乗算付き区間加算区間総和遅延セグ木
 pub struct LazySegtreeCoeff<T> {
     size: usize,
     original_size: usize,
@@ -20,6 +21,7 @@ pub struct LazySegtreeCoeff<T> {
 }
 
 impl<T: Elem> LazySegtreeCoeff<T> {
+    /// ‍係数`coefficients`を設定した[`LazySegtreeCoeff`]を構築する。
     pub fn new(n: usize, coefficients: Vec<T>) -> Self {
         let size = n.next_power_of_two() * 2;
 
@@ -93,11 +95,13 @@ impl<T: Elem> LazySegtreeCoeff<T> {
             + self.get_internal(i << 1 | 1, (l + r) / 2, r, x, y)
     }
 
+    /// 範囲`range`に値`value`を加算する。
     pub fn update(&mut self, range: impl RangeBounds<usize>, value: T) {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.update_internal(1, 0, self.size / 2, start, end, value);
     }
 
+    /// 範囲`range`で総和を取る。
     pub fn fold(&self, range: impl RangeBounds<usize>) -> T {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.get_internal(1, 0, self.size / 2, start, end)

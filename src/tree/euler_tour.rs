@@ -11,6 +11,7 @@ pub struct EulerTour {
 }
 
 impl EulerTour {
+    /// `root`を根として[`EulerTour`]を構築する。
     pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
         let n = tree.len();
         let mut this = Self {
@@ -40,10 +41,12 @@ impl EulerTour {
         self.end[cur] = *pos;
     }
 
+    /// 頂点`i`の部分木に対応する範囲を返す。
     pub fn subtree_query(&self, i: usize) -> (usize, usize) {
         (self.begin[i], self.end[i])
     }
 
+    /// 頂点`i`に対応する番号を返す。
     pub fn point_query(&self, i: usize) -> usize {
         self.begin[i]
     }

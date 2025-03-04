@@ -18,6 +18,7 @@ trait_alias!(
     Elem: Copy + Add<Output = Self> + Mul<Output = Self> + Zero + From<u32>
 );
 
+/// 区間一次関数加算セグメントツリー
 pub struct SegtreeLinearAdd<T> {
     hsize: usize,
     original_size: usize,
