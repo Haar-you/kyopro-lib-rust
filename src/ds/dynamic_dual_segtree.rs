@@ -71,6 +71,7 @@ where
         }
     }
 
+    #[allow(clippy::collapsible_else_if)]
     fn update_(
         &mut self,
         cur: usize,
@@ -90,7 +91,6 @@ where
             }
         } else {
             if to < s || t < from {
-                return;
             } else if s <= from && to <= t {
                 let cur_value = unsafe { self.data.get_unchecked(cur).value.clone() };
                 unsafe {

@@ -87,6 +87,11 @@ impl Bitset {
     pub fn len(&self) -> usize {
         self.size
     }
+
+    /// bit列が空ならば`true`を返す。
+    pub fn is_empty(&self) -> bool {
+        self.size == 0
+    }
 }
 
 impl From<Vec<bool>> for Bitset {

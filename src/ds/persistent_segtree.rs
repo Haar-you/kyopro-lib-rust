@@ -100,7 +100,7 @@ where
         value: &M::Element,
         monoid: &M,
     ) -> Rc<RefCell<Node<M::Element>>> {
-        if to <= pos || pos + 1 <= from {
+        if to <= pos || pos < from {
             node
         } else if pos <= from && to <= pos + 1 {
             Rc::new(RefCell::new(Node::new(value.clone())))
