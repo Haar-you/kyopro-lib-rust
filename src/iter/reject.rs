@@ -1,34 +1,14 @@
 //! `reject`を提供する。
 
-/// `predicate`に該当する要素を除外するイテレータ。
-pub struct _Reject<I, P> {
-    iter: I,
-    predicate: P,
-}
-
-impl<I, P> Iterator for _Reject<I, P>
-where
-    I: Iterator,
-    P: FnMut(&I::Item) -> bool,
-{
-    type Item = I::Item;
-    fn next(&mut self) -> Option<Self::Item> {
-        self.iter.by_ref().find(|a| !(self.predicate)(a))
-    }
-}
-
 /// `reject`を提供する。
 pub trait Reject: Iterator {
     /// `predicate`に該当する要素を除外するイテレータを生成する。
-    fn reject<P>(self, predicate: P) -> _Reject<Self, P>
+    fn reject<P>(self, mut predicate: P) -> impl Iterator<Item = Self::Item>
     where
         Self: Sized,
         P: FnMut(&Self::Item) -> bool,
     {
-        _Reject {
-            iter: self,
-            predicate,
-        }
+        self.filter(move |a| !(predicate)(a))
     }
 }
 
