@@ -1,5 +1,5 @@
 //! 要素数が小さいナップサック問題
-use crate::{algo::merge::inplace_merge, chmax};
+use crate::{algo::merge::inplace_merge, chmax, num::one_zero::Zero};
 use std::ops::Add;
 
 /// 要素数が小さいナップサック問題
@@ -9,16 +9,16 @@ use std::ops::Add;
 /// **Space complexity** $O(2 ^ {n / 2})$
 pub fn knapsack_small_quantity<W, V>(cap: W, ws: &[W], vs: &[V]) -> V
 where
-    W: Default + Copy + Add<Output = W> + Ord,
-    V: Default + Copy + Add<Output = V> + Ord,
+    W: Copy + Add<Output = W> + Ord + Zero,
+    V: Copy + Add<Output = V> + Ord + Zero,
 {
     let n = ws.len();
     assert_eq!(ws.len(), vs.len());
 
     let p = n / 2;
 
-    let zero_w = W::default();
-    let zero_v = V::default();
+    let zero_w = W::zero();
+    let zero_v = V::zero();
 
     let mut a: Vec<(W, V)> = vec![(zero_w, zero_v)];
     let mut b: Vec<(W, V)> = vec![(zero_w, zero_v)];

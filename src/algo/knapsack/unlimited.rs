@@ -1,6 +1,8 @@
 //! 個数制限無しナップサック問題
 use std::{cmp::max, ops::Add};
 
+use crate::num::one_zero::Zero;
+
 /// 個数制限無しナップサック問題
 ///
 /// **Time complexity** $O(n \cdot cap)$
@@ -8,12 +10,12 @@ use std::{cmp::max, ops::Add};
 /// **Space complexity** $O(cap)$
 pub fn knapsack_unlimited<T>(cap: usize, ws: &[usize], vs: &[T]) -> T
 where
-    T: Default + Copy + Ord + Add<Output = T>,
+    T: Copy + Ord + Add<Output = T> + Zero,
 {
     let n = ws.len();
     assert_eq!(ws.len(), vs.len());
 
-    let mut dp = vec![vec![T::default(); cap + 1]; 2];
+    let mut dp = vec![vec![T::zero(); cap + 1]; 2];
 
     for i in 0..n {
         let next = (i + 1) & 1;
