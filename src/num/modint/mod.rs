@@ -2,7 +2,7 @@
 
 pub mod algebra;
 
-pub use crate::impl_ops;
+use crate::impl_ops;
 pub use crate::num::ff::*;
 use std::{
     fmt,

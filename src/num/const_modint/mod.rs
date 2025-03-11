@@ -3,7 +3,7 @@
 pub mod algebra;
 pub mod one_zero;
 
-pub use crate::impl_ops;
+use crate::impl_ops;
 pub use crate::num::ff::*;
 use std::{
     fmt,
