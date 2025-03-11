@@ -43,31 +43,33 @@ where
         }
     }
 
-    unsafe fn propagate(&mut self, cur: usize, from: usize, to: usize) {
+    fn propagate(&mut self, cur: usize, from: usize, to: usize) {
         if to - from > 1 {
-            let value = self.data.get_unchecked(cur).value.clone();
+            let mut cur_node = self.data[cur].clone();
+            let value = cur_node.value.clone();
 
-            let left = self.data.get_unchecked(cur).left;
+            let left = cur_node.left;
             if left.is_null() {
                 let t = Node::new(self.monoid.id());
-                self.data.get_unchecked_mut(cur).left = NullableUsize(self.data.len());
+                cur_node.left = NullableUsize(self.data.len());
                 self.data.push(t);
             }
-            let left = self.data.get_unchecked(cur).left.0;
-            let lv = self.data.get_unchecked(left).value.clone();
-            self.data.get_unchecked_mut(left).value = self.monoid.op(value.clone(), lv);
+            let left = cur_node.left.0;
+            let lv = self.data[left].value.clone();
+            self.data[left].value = self.monoid.op(value.clone(), lv);
 
-            let right = self.data.get_unchecked(cur).right;
+            let right = cur_node.right;
             if right.is_null() {
                 let t = Node::new(self.monoid.id());
-                self.data.get_unchecked_mut(cur).right = NullableUsize(self.data.len());
+                cur_node.right = NullableUsize(self.data.len());
                 self.data.push(t);
             }
-            let right = self.data.get_unchecked(cur).right.0;
-            let rv = self.data.get_unchecked(right).value.clone();
-            self.data.get_unchecked_mut(right).value = self.monoid.op(value, rv);
+            let right = cur_node.right.0;
+            let rv = self.data[right].value.clone();
+            self.data[right].value = self.monoid.op(value, rv);
 
-            self.data.get_unchecked_mut(cur).value = self.monoid.id();
+            cur_node.value = self.monoid.id();
+            self.data[cur] = cur_node;
         }
     }
 
@@ -99,9 +101,7 @@ where
                 }
             } else {
                 let mid = (from + to) / 2;
-                unsafe {
-                    self.propagate(cur, from, to);
-                }
+                self.propagate(cur, from, to);
                 let cur = unsafe { self.data.get_unchecked(cur) };
                 let left = cur.left;
                 let right = cur.right;
@@ -139,9 +139,8 @@ where
         if to - from == 1 {
             unsafe { self.data.get_unchecked(cur).value.clone() }
         } else {
-            unsafe {
-                self.propagate(cur, from, to);
-            }
+            self.propagate(cur, from, to);
+
             let mid = (from + to) / 2;
             let cur = unsafe { self.data.get_unchecked(cur) };
             if i < mid {
