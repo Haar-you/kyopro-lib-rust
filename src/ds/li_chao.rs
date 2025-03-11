@@ -16,7 +16,7 @@ use std::{
 
 trait_alias!(
     /// [`LiChaoTree<T>`]が扱える型
-    Elem: Copy + Ord + Default + Add<Output = Self> + Mul<Output = Self>
+    Elem: Copy + Ord + Add<Output = Self> + Mul<Output = Self>
 );
 
 /// 最大値クエリか最小値クエリかを表す
