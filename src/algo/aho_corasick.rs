@@ -1,5 +1,6 @@
 use std::collections::{HashMap, VecDeque};
 
+/// [`AhoCorasick`]を構築するための構造体。
 pub struct AhoCorasickBuilder {
     size: usize,
     trie: Vec<HashMap<char, usize>>,
@@ -88,6 +89,7 @@ impl AhoCorasickBuilder {
     }
 }
 
+/// Aho-Corasick法
 pub struct AhoCorasick {
     trie: Vec<HashMap<char, usize>>,
     failure_edge: Vec<usize>,

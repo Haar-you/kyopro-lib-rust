@@ -1,5 +1,7 @@
+//! ビットが`1`の個数が`k`であるものを列挙する
 use std::iter::successors;
 
+/// 幅`width`のなかで、ビットが`1`の個数が`k`であるものを列挙するイテレータを返す。
 pub fn subset_size_k(width: u32, k: u32) -> impl Iterator<Item = u32> {
     successors(Some((1 << k) - 1), move |&t| {
         let x = ((t as i32) & (-(t as i32))) as u32;
