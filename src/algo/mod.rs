@@ -21,6 +21,7 @@ pub mod max_partial_sum;
 pub mod max_rect;
 pub mod merge;
 pub mod mo;
+pub mod monotone_minima;
 pub mod num_subseq;
 pub mod parallel_binary_search;
 pub mod permutation;
