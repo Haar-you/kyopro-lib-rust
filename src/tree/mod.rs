@@ -2,6 +2,7 @@
 
 pub mod auxiliary_tree;
 pub mod centroid;
+pub mod centroid_decomposition;
 pub mod depth_query;
 pub mod euler_tour;
 pub mod hld;
