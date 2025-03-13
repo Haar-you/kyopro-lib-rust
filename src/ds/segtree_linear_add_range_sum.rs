@@ -10,6 +10,7 @@ trait_alias!(
     Elem: Copy + Zero + Add<Output = Self> + Mul<Output = Self> + AddAssign + PartialEq + From<u32>
 );
 
+/// 区間一次関数加算区間総和セグメントツリー
 pub struct SegtreeLinearAddRangeSum<T> {
     data: Vec<T>,
     lazy: Vec<(T, T)>,

@@ -112,7 +112,7 @@ where
         let mid = (from + to) / 2;
         unsafe {
             (*cur).left = self._update((*cur).left, from, mid, s, t, value.clone());
-            (*cur).right = self._update((*cur).right, mid, to, s, t, value.clone());
+            (*cur).right = self._update((*cur).right, mid, to, s, t, value);
             (*cur).value = self
                 .action
                 .fold((*(*cur).left).value.clone(), (*(*cur).right).value.clone());

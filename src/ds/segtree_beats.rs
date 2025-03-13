@@ -39,6 +39,7 @@ pub struct SegtreeBeats {
 }
 
 impl SegtreeBeats {
+    /// 長さ`n`の[`SegtreeBeats`]を生成する。
     pub fn new(n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
 
@@ -179,6 +180,7 @@ impl SegtreeBeats {
         self.bottom_up(i);
     }
 
+    /// 区間`range`を値`x`との最小値をとって更新する。
     pub fn chmin(&mut self, range: impl RangeBounds<usize>, x: i64) {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.chmin_(1, 0, self.hsize, start, end, x);
@@ -198,6 +200,7 @@ impl SegtreeBeats {
         self.bottom_up(i);
     }
 
+    /// 区間`range`を値`x`との最大値をとって更新する。
     pub fn chmax(&mut self, range: impl RangeBounds<usize>, x: i64) {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.chmax_(1, 0, self.hsize, start, end, x);
@@ -217,6 +220,7 @@ impl SegtreeBeats {
         self.bottom_up(i);
     }
 
+    /// 区間`range`に値`x`を加算する。
     pub fn add(&mut self, range: impl RangeBounds<usize>, x: i64) {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.add_(1, 0, self.hsize, start, end, x);
@@ -234,6 +238,7 @@ impl SegtreeBeats {
         self.get_sum_(lc(i), l, (l + r) / 2, s, t) + self.get_sum_(rc(i), (l + r) / 2, r, s, t)
     }
 
+    /// 区間`range`の総和を返す。
     pub fn sum(&mut self, range: impl RangeBounds<usize>) -> i64 {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.get_sum_(1, 0, self.hsize, start, end)
@@ -253,6 +258,7 @@ impl SegtreeBeats {
         )
     }
 
+    /// 区間`range`の最大値を返す。
     pub fn max(&mut self, range: impl RangeBounds<usize>) -> i64 {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.get_max_(1, 0, self.hsize, start, end)
@@ -272,6 +278,7 @@ impl SegtreeBeats {
         )
     }
 
+    /// 区間`range`の最小値を返す。
     pub fn min(&mut self, range: impl RangeBounds<usize>) -> i64 {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.get_min_(1, 0, self.hsize, start, end)

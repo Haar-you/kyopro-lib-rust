@@ -6,9 +6,12 @@ pub struct Lowlink {
     pub size: usize,
     pub ord: Vec<usize>,
     pub low: Vec<usize>,
-    pub par: Vec<Option<usize>>, // DFS木での親ノード
-    pub ch: Vec<Vec<usize>>,     // DFS木での子ノード
-    pub back: Vec<Vec<usize>>,   // par, chのどちらにも属さないノード
+    /// DFS木での親ノード
+    pub par: Vec<Option<usize>>,
+    /// DFS木での子ノード
+    pub ch: Vec<Vec<usize>>,
+    /// par, chのどちらにも属さないノード
+    pub back: Vec<Vec<usize>>,
 }
 
 impl Lowlink {

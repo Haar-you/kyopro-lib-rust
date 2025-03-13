@@ -4,6 +4,7 @@
 //! - [AGC 002 D - Stamp Rally](https://atcoder.jp/contests/agc002/tasks/agc002_d)
 //! - [CODE THANKS FESTIVAL 2017 H - Union Sets](https://atcoder.jp/contests/code-thanks-festival-2017-open/tasks/code_thanks_festival_2017_h)
 
+/// 部分永続UnionFind
 pub struct PartiallyPersistentUnionFind {
     time: usize,
     p: Vec<Vec<(usize, usize)>>,
@@ -11,6 +12,7 @@ pub struct PartiallyPersistentUnionFind {
     rank: Vec<usize>,
 }
 
+/// ある時間での[`PartiallyPersistentUnionFind`]の状態を参照するための構造体。
 pub struct At<'a> {
     time: usize,
     p: &'a Vec<Vec<(usize, usize)>>,
@@ -18,6 +20,7 @@ pub struct At<'a> {
 }
 
 impl PartiallyPersistentUnionFind {
+    /// 大きさ`size`の[`PartiallyPersistentUnionFind`]を生成する。
     pub fn new(size: usize) -> Self {
         Self {
             time: 0,
@@ -42,6 +45,7 @@ impl PartiallyPersistentUnionFind {
         self.at(self.time)
     }
 
+    /// `u`を含む素集合と`v`を含む素集合を融合する。
     pub fn merge(&mut self, u: usize, v: usize) {
         let t = self.time;
         self.time += 1;
@@ -73,6 +77,7 @@ impl PartiallyPersistentUnionFind {
 }
 
 impl<'a> At<'a> {
+    /// `i`を含む素集合の代表の値を返す。
     pub fn root_of(&self, i: usize) -> usize {
         let &(t, r) = self.p[i].last().unwrap();
 
@@ -85,12 +90,14 @@ impl<'a> At<'a> {
         }
     }
 
+    /// `u`と`v`が同じ素集合に含まれていれば`true`を返す。
     pub fn is_same(&self, u: usize, v: usize) -> bool {
         self.root_of(u) == self.root_of(v)
     }
 
-    /// # Complexity
-    /// Time Complexity $(\log t)$
+    /// `u`が属する素集合の大きさを返す。
+    ///
+    /// **Time Complexity** $O(\log t)$
     pub fn size_of(&self, u: usize) -> usize {
         let u = self.root_of(u);
 

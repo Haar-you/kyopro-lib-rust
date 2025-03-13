@@ -115,11 +115,16 @@ where
                 if let Some((mut c, p)) = shortest_path(g, u, to, &usable, &valid) {
                     let mut temp = vec![];
 
-                    for j in 0..k {
+                    for (j, &p) in prev_path.iter().enumerate().take(k) {
                         let v = result[i - 1].as_ref().unwrap().1[j];
-                        c += g.edges[prev_path[j]][v].weight();
+                        c += g.edges[p][v].weight();
                         temp.push(v);
                     }
+                    // for j in 0..k {
+                    //     let v = result[i - 1].as_ref().unwrap().1[j];
+                    //     c += g.edges[prev_path[j]][v].weight();
+                    //     temp.push(v);
+                    // }
 
                     temp.extend(p.into_iter());
                     stock.push(Reverse((c, temp)));

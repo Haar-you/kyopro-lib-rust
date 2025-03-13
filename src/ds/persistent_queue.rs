@@ -19,6 +19,7 @@ impl<T> Node<T> {
     }
 }
 
+/// 永続キュー
 #[derive(Default, Debug)]
 pub struct PersistentQueue<T> {
     #[allow(clippy::type_complexity)]
@@ -26,6 +27,7 @@ pub struct PersistentQueue<T> {
 }
 
 impl<T> PersistentQueue<T> {
+    /// 値`value`をただ一つだけもつ[`PersistentQueue`]を生成する。
     pub fn new(value: T) -> Self {
         let p = Rc::new(Node::new(value));
 
@@ -34,6 +36,7 @@ impl<T> PersistentQueue<T> {
         }
     }
 
+    /// 値`value`を末尾に追加した[`PersistentQueue`]を返す。
     pub fn push(&self, value: T) -> Self {
         match self.front_back_node.as_ref() {
             None => {
@@ -72,6 +75,7 @@ impl<T> PersistentQueue<T> {
         }
     }
 
+    /// 先頭の要素を削除した[`PersistentQueue`]を返す。    
     pub fn pop(&self) -> Option<Self> {
         self.front_back_node
             .as_ref()
@@ -101,18 +105,22 @@ impl<T> PersistentQueue<T> {
             })
     }
 
+    /// 先頭の要素への参照を返す。
     pub fn front(&self) -> Option<&T> {
         self.front_back_node.as_ref().map(|(t, _)| &t.value)
     }
 
+    /// 末尾の要素への参照を返す。
     pub fn back(&self) -> Option<&T> {
         self.front_back_node.as_ref().map(|(_, t)| &t.value)
     }
 
+    /// キューが空ならば`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.front_back_node.is_none()
     }
 
+    /// キューの要素数を返す。
     pub fn len(&self) -> usize {
         self.front_back_node
             .as_ref()

@@ -1,3 +1,4 @@
+//! 動的セグメント木
 use crate::algebra::traits::Monoid;
 use crate::utils::nullable_usize::NullableUsize;
 use std::ops::Range;
@@ -19,6 +20,7 @@ impl<T> Node<T> {
     }
 }
 
+/// 動的セグメント木
 #[derive(Debug)]
 pub struct DynamicSegtree<M: Monoid> {
     data: Vec<Node<M::Element>>,
@@ -31,6 +33,7 @@ impl<M: Monoid> DynamicSegtree<M>
 where
     M::Element: Clone,
 {
+    /// [`DynamicSegtree<M>`]を生成する。
     pub fn new(monoid: M) -> Self {
         Self {
             data: vec![Node::new(monoid.id())],
@@ -86,6 +89,7 @@ where
         }
     }
 
+    /// `i`番目の要素を`value`で更新する。
     pub fn assign(&mut self, i: usize, value: M::Element) {
         loop {
             if i < self.to {
@@ -133,6 +137,7 @@ where
         }
     }
 
+    /// 範囲`start..end`で計算を集約する。
     pub fn fold(&self, Range { start, end }: Range<usize>) -> M::Element {
         self.fold_dfs(self.root, 0, self.to, start, end)
     }

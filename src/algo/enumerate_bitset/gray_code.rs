@@ -1,3 +1,8 @@
+//! Gray code
+//!
+//! <https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AC%E3%82%A4%E3%82%B3%E3%83%BC%E3%83%89>
+
+/// `n`桁のGray codeを昇順に列挙する。
 pub fn gray_code(n: u32) -> impl Iterator<Item = u32> {
     (0..1 << n).map(|i| i ^ (i >> 1))
 }

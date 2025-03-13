@@ -4,9 +4,11 @@ pub mod crt;
 pub mod divisor;
 pub mod ext_gcd;
 pub mod factorize;
+pub mod garner;
 pub mod gcd_lcm;
 pub mod mod_ops;
 pub mod nim_product;
+pub mod tetration;
 
 pub mod prime_test;
 pub mod primitive_root;

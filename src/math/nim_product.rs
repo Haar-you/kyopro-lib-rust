@@ -45,12 +45,14 @@ thread_local! {
     };
 }
 
+/// [`u8`]同士のNimber productを求める。
 pub fn nim_product_8(a: u8, b: u8) -> u8 {
     NIM_PRODUCT_TABLE_256.with(|t| t[a as usize][b as usize])
 }
 
 macro_rules! impl_nim_product {
-    ( $uint:ty, $np:ident, $uint_h:ty, $np_h:ident, $bits:expr ) => {
+    ( $(#[$meta:meta])* $uint:ty, $np:ident, $uint_h:ty, $np_h:ident, $bits:expr ) => {
+        $(#[$meta])*
         pub fn $np(a: $uint, b: $uint) -> $uint {
             let bits = $bits;
 
@@ -73,9 +75,18 @@ macro_rules! impl_nim_product {
     };
 }
 
-impl_nim_product!(u64, nim_product_64, u32, nim_product_32, 32);
-impl_nim_product!(u32, nim_product_32, u16, nim_product_16, 16);
-impl_nim_product!(u16, nim_product_16, u8, nim_product_8, 8);
+impl_nim_product!(
+    /// [`u64`]同士のNimber productを求める。
+    u64, nim_product_64, u32, nim_product_32, 32
+);
+impl_nim_product!(
+    /// [`u32`]同士のNimber productを求める。
+    u32, nim_product_32, u16, nim_product_16, 16
+);
+impl_nim_product!(
+    /// [`u16`]同士のNimber productを求める。
+    u16, nim_product_16, u8, nim_product_8, 8
+);
 
 #[cfg(test)]
 mod tests {

@@ -1,3 +1,4 @@
+//! 順列の列挙
 use std::iter::{from_fn, once};
 
 macro_rules! impl_permutation {
@@ -24,14 +25,17 @@ macro_rules! impl_permutation {
     }}
 }
 
+/// `a`を辞書式順序で次の順列にする。
 pub fn next_permutation<T: Ord + Copy>(a: &mut [T]) -> bool {
     impl_permutation!(<, >, a)
 }
 
+/// `a`を辞書式順序で前の順列にする。
 pub fn prev_permutation<T: Ord + Copy>(a: &mut [T]) -> bool {
     impl_permutation!(>, <, a)
 }
 
+/// 辞書式順序で`a`以降の順列を列挙するイテレータを返す。
 pub fn permutations<T: Ord + Copy>(mut a: Vec<T>) -> impl Iterator<Item = Vec<T>> {
     once(a.clone()).chain(from_fn(move || {
         if next_permutation(&mut a) {

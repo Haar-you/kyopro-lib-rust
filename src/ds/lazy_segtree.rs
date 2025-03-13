@@ -17,6 +17,7 @@ where
     A::Output: Clone + PartialEq,
     A::Lazy: Clone + PartialEq,
 {
+    /// 長さ`n`の[`LazySegtree`]を生成する。
     pub fn new(n: usize, a: A) -> Self {
         let size = n.next_power_of_two() * 2;
         Self {
@@ -28,6 +29,7 @@ where
         }
     }
 
+    /// [`Vec`]から[`LazySegtree`]を構築する。
     pub fn new_with_vec(s: Vec<A::Output>, a: A) -> Self {
         let n = s.len();
         let size = n.next_power_of_two() * 2;
@@ -95,6 +97,7 @@ where
         }
     }
 
+    /// 区間`range`で計算を集約して返す。
     pub fn fold(&mut self, range: impl RangeBounds<usize>) -> A::Output {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
@@ -127,6 +130,7 @@ where
         self.action.fold(ret_l, ret_r)
     }
 
+    /// 区間`range`を値`x`で更新する。
     pub fn update(&mut self, range: impl RangeBounds<usize>, x: A::Lazy) {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 

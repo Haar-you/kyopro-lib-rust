@@ -9,7 +9,7 @@ pub enum Convex {
     Downwards,
 }
 
-const PHI: f64 = 1.6180339887498949_f64;
+const PHI: f64 = 1.618_033_988_749_895_f64;
 
 /// 黄金分割探索
 pub fn golden_search<F: Fn(f64) -> f64>(
