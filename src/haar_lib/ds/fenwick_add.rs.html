@@ -67,7 +67,45 @@
 <a href="#51" id="51">51</a>
 <a href="#52" id="52">52</a>
 <a href="#53" id="53">53</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 可換な加減算に特化したFenwickTree
+</span><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
 <span class="kw">use </span><span class="kw">crate</span>::trait_alias;
 <span class="kw">use </span>std::ops::{Add, Range, RangeTo, Sub};
 
@@ -76,20 +114,25 @@
     </span>Elem: Copy + Zero + Add&lt;Output = <span class="self">Self</span>&gt; + Sub&lt;Output = <span class="self">Self</span>&gt;
 );
 
-<span class="kw">pub struct </span>FenwickTreeAdd&lt;T&gt; {
+<span class="doccomment">/// 可換な加減算に特化したFenwickTree
+</span><span class="kw">pub struct </span>FenwickTreeAdd&lt;T&gt; {
     data: Vec&lt;T&gt;,
     size: usize,
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; FenwickTreeAdd&lt;T&gt; {
-    <span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 長さ`size`の[`FenwickTreeAdd&lt;T&gt;`]を生成する。
+    </span><span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             data: <span class="macro">vec!</span>[T::zero(); size + <span class="number">1</span>],
             size,
         }
     }
 
-    <span class="kw">pub fn </span>sub(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>i: usize, value: T) {
+    <span class="doccomment">/// `i`番目の値から`value`を引く。
+    ///
+    /// **Time complexity** $O(\log n)$
+    </span><span class="kw">pub fn </span>sub(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>i: usize, value: T) {
         i += <span class="number">1</span>;
         <span class="kw">while </span>i &lt;= <span class="self">self</span>.size {
             <span class="self">self</span>.data[i] = <span class="self">self</span>.data[i] - value;
@@ -97,7 +140,10 @@
         }
     }
 
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>i: usize, value: T) {
+    <span class="doccomment">/// `i`番目の値に`value`を足す。
+    ///
+    /// **Time complexity** $O(\log n)$
+    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>i: usize, value: T) {
         i += <span class="number">1</span>;
         <span class="kw">while </span>i &lt;= <span class="self">self</span>.size {
             <span class="self">self</span>.data[i] = <span class="self">self</span>.data[i] + value;
@@ -105,7 +151,10 @@
         }
     }
 
-    <span class="kw">pub fn </span>fold_to(<span class="kw-2">&amp;</span><span class="self">self</span>, RangeTo { end: <span class="kw-2">mut </span>i }: RangeTo&lt;usize&gt;) -&gt; T {
+    <span class="doccomment">/// 範囲`0..r`の総和を返す。
+    ///
+    /// **Time complexity** $O(\log n)$
+    </span><span class="kw">pub fn </span>fold_to(<span class="kw-2">&amp;</span><span class="self">self</span>, RangeTo { end: <span class="kw-2">mut </span>i }: RangeTo&lt;usize&gt;) -&gt; T {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = T::zero();
 
         <span class="kw">while </span>i &gt; <span class="number">0 </span>{
@@ -116,8 +165,33 @@
         ret
     }
 
-    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; T {
+    <span class="doccomment">/// 範囲`l..r`の総和を返す。
+    ///
+    /// **Time complexity** $O(\log n)$
+    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) -&gt; T {
         <span class="self">self</span>.fold_to(..r) - <span class="self">self</span>.fold_to(..l)
+    }
+}
+
+<span class="kw">impl</span>&lt;T: Elem + Ord&gt; FenwickTreeAdd&lt;T&gt; {
+    <span class="kw">pub fn </span>lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>, value: T) -&gt; usize {
+        <span class="kw">let </span>n = <span class="self">self</span>.size;
+        <span class="kw">let </span><span class="kw-2">mut </span>b = <span class="number">0</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>len = n;
+
+        <span class="kw">while </span>len &gt; <span class="number">0 </span>{
+            <span class="kw">let </span>half = len / <span class="number">2</span>;
+            <span class="kw">let </span>mid = b + half;
+
+            <span class="kw">if </span><span class="self">self</span>.fold_to(..mid + <span class="number">1</span>) &lt; value {
+                len -= half + <span class="number">1</span>;
+                b = mid + <span class="number">1</span>;
+            } <span class="kw">else </span>{
+                len = half;
+            }
+        }
+
+        b
     }
 }
 </code></pre></div></section></main></body></html>

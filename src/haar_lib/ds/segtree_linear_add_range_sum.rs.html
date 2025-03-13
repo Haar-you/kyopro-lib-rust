@@ -146,6 +146,7 @@
 <a href="#130" id="130">130</a>
 <a href="#131" id="131">131</a>
 <a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 区間一次関数加算区間総和セグメントツリー
 
 </span><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
@@ -158,7 +159,8 @@
     </span>Elem: Copy + Zero + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt; + AddAssign + PartialEq + From&lt;u32&gt;
 );
 
-<span class="kw">pub struct </span>SegtreeLinearAddRangeSum&lt;T&gt; {
+<span class="doccomment">/// 区間一次関数加算区間総和セグメントツリー
+</span><span class="kw">pub struct </span>SegtreeLinearAddRangeSum&lt;T&gt; {
     data: Vec&lt;T&gt;,
     lazy: Vec&lt;(T, T)&gt;,
     hsize: usize,

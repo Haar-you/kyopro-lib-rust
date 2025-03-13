@@ -141,13 +141,13 @@
 <a href="#125" id="125">125</a>
 <a href="#126" id="126">126</a>
 <a href="#127" id="127">127</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! 冪等性と結合性をもつ列の区間取得(O(1))ができる。
+</pre></div><pre class="rust"><code><span class="doccomment">//! 冪等性と結合性をもつ列の区間取得($O(1)$)ができる。
 
 </span><span class="kw">use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 <span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
 <span class="kw">use </span>std::{cmp::min, ops::RangeBounds};
 
-<span class="doccomment">/// 冪等性と結合性をもつ列の区間取得(O(1))ができる。
+<span class="doccomment">/// 冪等性と結合性をもつ列の区間取得($O(1)$)ができる。
 </span><span class="kw">pub struct </span>SparseTable&lt;A: Semigroup + Idempotence&gt; {
     data: Vec&lt;Vec&lt;A::Element&gt;&gt;,
     log_table: Vec&lt;usize&gt;,

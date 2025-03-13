@@ -186,6 +186,12 @@
 <a href="#170" id="170">170</a>
 <a href="#171" id="171">171</a>
 <a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::Cell;
 
 <span class="kw">pub struct </span>UnionFind&lt;<span class="lifetime">&#39;a</span>, T = ()&gt; {
@@ -225,7 +231,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>root_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
+    <span class="doccomment">/// `i`の属する素集合の根を返す。
+    </span><span class="kw">pub fn </span>root_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
         <span class="kw">if </span><span class="self">self</span>.parent[i].get() == i {
             <span class="kw">return </span>i;
         }
@@ -234,11 +241,13 @@
         <span class="self">self</span>.parent[i].get()
     }
 
-    <span class="kw">pub fn </span>is_same(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, j: usize) -&gt; bool {
+    <span class="doccomment">/// `i`と`j`が同じ素集合に属するならば`true`を返す。
+    </span><span class="kw">pub fn </span>is_same(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, j: usize) -&gt; bool {
         <span class="self">self</span>.root_of(i) == <span class="self">self</span>.root_of(j)
     }
 
-    <span class="kw">pub fn </span>merge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) -&gt; usize {
+    <span class="doccomment">/// `i`の属する素集合と`j`の属する素集合を統合する。
+    </span><span class="kw">pub fn </span>merge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) -&gt; usize {
         <span class="kw">let </span>i = <span class="self">self</span>.root_of(i);
         <span class="kw">let </span>j = <span class="self">self</span>.root_of(j);
 
@@ -280,12 +289,14 @@
         }
     }
 
-    <span class="kw">pub fn </span>size_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
+    <span class="doccomment">/// `i`の属する素集合の大きさを返す。
+    </span><span class="kw">pub fn </span>size_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
         <span class="kw">let </span>i = <span class="self">self</span>.root_of(i);
         <span class="self">self</span>.size[i]
     }
 
-    <span class="kw">pub fn </span>count_groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="doccomment">/// 素集合の個数を返す。
+    </span><span class="kw">pub fn </span>count_groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.count
     }
 
@@ -294,7 +305,8 @@
         <span class="self">self</span>.values[i].as_ref()
     }
 
-    <span class="kw">pub fn </span>get_groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;Vec&lt;usize&gt;&gt; {
+    <span class="doccomment">/// 素集合をすべて列挙する。
+    </span><span class="kw">pub fn </span>get_groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;Vec&lt;usize&gt;&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; <span class="self">self</span>.n];
 
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.n {

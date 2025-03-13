@@ -157,6 +157,14 @@
 <a href="#141" id="141">141</a>
 <a href="#142" id="142">142</a>
 <a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 融合可能ヒープ
 
 </span><span class="kw">use </span>std::mem::swap;
@@ -193,21 +201,24 @@
     }
 }
 
-<span class="attr">#[derive(Debug, Clone, Default)]
+<span class="doccomment">/// 融合可能ヒープ
+</span><span class="attr">#[derive(Debug, Clone, Default)]
 </span><span class="kw">pub struct </span>SkewHeap&lt;T&gt; {
     root: <span class="prelude-ty">Option</span>&lt;Box&lt;Node&lt;T&gt;&gt;&gt;,
     size: usize,
 }
 
 <span class="kw">impl</span>&lt;T: Ord&gt; SkewHeap&lt;T&gt; {
-    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 空の[`SkewHeap&lt;T&gt;`]を生成する。
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             root: <span class="prelude-val">None</span>,
             size: <span class="number">0</span>,
         }
     }
 
-    <span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: SkewHeap&lt;T&gt;) {
+    <span class="doccomment">/// 他の`SkewHeap&lt;T&gt;`を融合する。
+    </span><span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: SkewHeap&lt;T&gt;) {
         <span class="self">self</span>.size += other.size;
         <span class="kw">match </span><span class="self">self</span>.root.as_mut() {
             <span class="prelude-val">None </span>=&gt; <span class="self">self</span>.root = other.root,
@@ -215,7 +226,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) {
+    <span class="doccomment">/// 値`value`を挿入する。
+    </span><span class="kw">pub fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) {
         <span class="self">self</span>.size += <span class="number">1</span>;
         <span class="kw">let </span>t = <span class="prelude-val">Some</span>(Box::new(Node::new(value)));
         <span class="kw">match </span><span class="self">self</span>.root.as_mut() {
@@ -224,11 +236,13 @@
         }
     }
 
-    <span class="kw">pub fn </span>peek(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
+    <span class="doccomment">/// ヒープの最大値を返す。
+    </span><span class="kw">pub fn </span>peek(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
         <span class="self">self</span>.root.as_ref().map(|x| <span class="kw-2">&amp;</span>x.value)
     }
 
-    <span class="kw">pub fn </span>pop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="doccomment">/// 最大値をヒープから削除して、その値を返す。
+    </span><span class="kw">pub fn </span>pop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="kw">match </span><span class="self">self</span>.root.take() {
             <span class="prelude-val">None </span>=&gt; <span class="prelude-val">None</span>,
             <span class="prelude-val">Some</span>(root) =&gt; {
@@ -252,11 +266,13 @@
         }
     }
 
-    <span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="doccomment">/// ヒープに含まれている値の個数を返す。
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.size
     }
 
-    <span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="doccomment">/// ヒープが空ならば`true`を返す。
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.size == <span class="number">0
     </span>}
 }

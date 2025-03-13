@@ -135,6 +135,14 @@
 <a href="#119" id="119">119</a>
 <a href="#120" id="120">120</a>
 <a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 永続キュー
 
 </span><span class="kw">use </span>std::rc::Rc;
@@ -156,14 +164,16 @@
     }
 }
 
-<span class="attr">#[derive(Default, Debug)]
+<span class="doccomment">/// 永続キュー
+</span><span class="attr">#[derive(Default, Debug)]
 </span><span class="kw">pub struct </span>PersistentQueue&lt;T&gt; {
     <span class="attr">#[allow(clippy::type_complexity)]
     </span>front_back_node: <span class="prelude-ty">Option</span>&lt;(Rc&lt;Node&lt;T&gt;&gt;, Rc&lt;Node&lt;T&gt;&gt;)&gt;,
 }
 
 <span class="kw">impl</span>&lt;T&gt; PersistentQueue&lt;T&gt; {
-    <span class="kw">pub fn </span>new(value: T) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 値`value`をただ一つだけもつ[`PersistentQueue`]を生成する。
+    </span><span class="kw">pub fn </span>new(value: T) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>p = Rc::new(Node::new(value));
 
         <span class="self">Self </span>{
@@ -171,7 +181,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>push(<span class="kw-2">&amp;</span><span class="self">self</span>, value: T) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 値`value`を末尾に追加した[`PersistentQueue`]を返す。
+    </span><span class="kw">pub fn </span>push(<span class="kw-2">&amp;</span><span class="self">self</span>, value: T) -&gt; <span class="self">Self </span>{
         <span class="kw">match </span><span class="self">self</span>.front_back_node.as_ref() {
             <span class="prelude-val">None </span>=&gt; {
                 <span class="kw">let </span>p = Rc::new(Node::new(value));
@@ -209,7 +220,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>pop(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+    <span class="doccomment">/// 先頭の要素を削除した[`PersistentQueue`]を返す。    
+    </span><span class="kw">pub fn </span>pop(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
         <span class="self">self</span>.front_back_node
             .as_ref()
             .map(|(front_node, back_node)| {
@@ -238,19 +250,23 @@
             })
     }
 
-    <span class="kw">pub fn </span>front(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
+    <span class="doccomment">/// 先頭の要素への参照を返す。
+    </span><span class="kw">pub fn </span>front(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
         <span class="self">self</span>.front_back_node.as_ref().map(|(t, <span class="kw">_</span>)| <span class="kw-2">&amp;</span>t.value)
     }
 
-    <span class="kw">pub fn </span>back(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
+    <span class="doccomment">/// 末尾の要素への参照を返す。
+    </span><span class="kw">pub fn </span>back(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
         <span class="self">self</span>.front_back_node.as_ref().map(|(<span class="kw">_</span>, t)| <span class="kw-2">&amp;</span>t.value)
     }
 
-    <span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="doccomment">/// キューが空ならば`true`を返す。
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.front_back_node.is_none()
     }
 
-    <span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="doccomment">/// キューの要素数を返す。
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.front_back_node
             .as_ref()
             .map_or(<span class="number">0</span>, |(f, b)| b.depth - f.depth + <span class="number">1</span>)

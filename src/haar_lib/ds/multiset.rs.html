@@ -108,28 +108,52 @@
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
 <a href="#94" id="94">94</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::BTreeMap;
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 同一要素を複数個挿入可能な`Set`
+//!
+//! # Problems
+//! - &lt;https://atcoder.jp/contests/abc308/tasks/abc308_f&gt;
+</span><span class="kw">use </span>std::collections::BTreeMap;
 
-<span class="attr">#[derive(Debug, Clone, Default)]
+<span class="doccomment">/// 同一要素を複数個挿入可能な`Set`
+</span><span class="attr">#[derive(Debug, Clone, Default)]
 </span><span class="kw">pub struct </span>MultiSet&lt;T&gt; {
     map: BTreeMap&lt;T, usize&gt;,
     size: usize,
 }
 
 <span class="kw">impl</span>&lt;T: Ord + Eq + Clone&gt; MultiSet&lt;T&gt; {
-    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// [`MultiSet&lt;T&gt;`]を生成する。
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             map: BTreeMap::new(),
             size: <span class="number">0</span>,
         }
     }
 
-    <span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) {
+    <span class="doccomment">/// 値`value`を挿入する。
+    </span><span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) {
         <span class="kw-2">*</span><span class="self">self</span>.map.entry(value).or_default() += <span class="number">1</span>;
         <span class="self">self</span>.size += <span class="number">1</span>;
     }
 
-    <span class="kw">pub fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) -&gt; bool {
+    <span class="doccomment">/// 値`value`を*一つだけ*削除する。
+    </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) -&gt; bool {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(count) = <span class="self">self</span>.map.get_mut(<span class="kw-2">&amp;</span>value) {
             <span class="kw-2">*</span>count -= <span class="number">1</span>;
             <span class="self">self</span>.size -= <span class="number">1</span>;
@@ -144,15 +168,18 @@
         </span>}
     }
 
-    <span class="kw">pub fn </span>first(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="doccomment">/// 先頭の要素を返す。
+    </span><span class="kw">pub fn </span>first(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="self">self</span>.map.iter().next().map(|(k, <span class="kw">_</span>)| k.clone())
     }
 
-    <span class="kw">pub fn </span>last(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="doccomment">/// 末尾の要素を返す。
+    </span><span class="kw">pub fn </span>last(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="self">self</span>.map.iter().next_back().map(|(k, <span class="kw">_</span>)| k.clone())
     }
 
-    <span class="kw">pub fn </span>pop_last(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="doccomment">/// 末尾の要素を*一つだけ*削除して返す。
+    </span><span class="kw">pub fn </span>pop_last(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>((k, v)) = <span class="self">self</span>.map.iter_mut().next_back() {
             <span class="kw-2">*</span>v -= <span class="number">1</span>;
             <span class="self">self</span>.size -= <span class="number">1</span>;
@@ -169,7 +196,8 @@
         </span>}
     }
 
-    <span class="kw">pub fn </span>pop_first(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="doccomment">/// 先頭の要素を*一つだけ*削除して返す。
+    </span><span class="kw">pub fn </span>pop_first(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>((k, v)) = <span class="self">self</span>.map.iter_mut().next() {
             <span class="kw-2">*</span>v -= <span class="number">1</span>;
             <span class="self">self</span>.size -= <span class="number">1</span>;
@@ -186,19 +214,23 @@
         </span>}
     }
 
-    <span class="kw">pub fn </span>contains(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="kw-2">&amp;</span>T) -&gt; bool {
+    <span class="doccomment">/// 値`value`が含まれていれば、`true`を返す。
+    </span><span class="kw">pub fn </span>contains(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="kw-2">&amp;</span>T) -&gt; bool {
         <span class="self">self</span>.map.contains_key(value)
     }
 
-    <span class="kw">pub fn </span>count(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="kw-2">&amp;</span>T) -&gt; usize {
+    <span class="doccomment">/// 値`value`が含まれている個数を返す。
+    </span><span class="kw">pub fn </span>count(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="kw-2">&amp;</span>T) -&gt; usize {
         <span class="self">self</span>.map.get(value).cloned().unwrap_or(<span class="number">0</span>)
     }
 
-    <span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="doccomment">/// 要素数を返す。
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.size
     }
 
-    <span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="doccomment">/// 要素数が0ならば、`true`を返す。
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.map.is_empty()
     }
 }

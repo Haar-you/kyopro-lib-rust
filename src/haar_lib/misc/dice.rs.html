@@ -130,21 +130,47 @@
 <a href="#114" id="114">114</a>
 <a href="#115" id="115">115</a>
 <a href="#116" id="116">116</a>
-</pre></div><pre class="rust"><code><span class="attr">#[derive(Clone, Debug, PartialEq, Eq)]
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 6面サイコロ
+
+/// 6面サイコロ
+</span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>Dice&lt;T&gt; {
-    <span class="kw">pub </span>top: T,
-    <span class="kw">pub </span>bottom: T,
-    <span class="kw">pub </span>front: T,
-    <span class="kw">pub </span>back: T,
-    <span class="kw">pub </span>right: T,
-    <span class="kw">pub </span>left: T,
+    <span class="doccomment">/// 上の面
+    </span><span class="kw">pub </span>top: T,
+    <span class="doccomment">/// 下の面
+    </span><span class="kw">pub </span>bottom: T,
+    <span class="doccomment">/// 前の面
+    </span><span class="kw">pub </span>front: T,
+    <span class="doccomment">/// 後ろの面
+    </span><span class="kw">pub </span>back: T,
+    <span class="doccomment">/// 右の面
+    </span><span class="kw">pub </span>right: T,
+    <span class="doccomment">/// 左の面
+    </span><span class="kw">pub </span>left: T,
 }
 
 <span class="kw">impl</span>&lt;T&gt; Dice&lt;T&gt;
 <span class="kw">where
     </span>T: Clone,
 {
-    <span class="kw">pub fn </span>new(top: T, bottom: T, front: T, back: T, right: T, left: T) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// [`Dice&lt;T&gt;`]を生成する。
+    </span><span class="kw">pub fn </span>new(top: T, bottom: T, front: T, back: T, right: T, left: T) -&gt; <span class="self">Self </span>{
         Dice {
             top,
             bottom,
@@ -155,7 +181,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>rot_left(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// サイコロを左の面が下になるように回転する。
+    </span><span class="kw">pub fn </span>rot_left(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>Dice {
             top,
             bottom,
@@ -167,7 +194,8 @@
         Dice::new(right, left, front, back, bottom, top)
     }
 
-    <span class="kw">pub fn </span>rot_right(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// サイコロを右の面が下になるように回転する。
+    </span><span class="kw">pub fn </span>rot_right(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>Dice {
             top,
             bottom,
@@ -179,7 +207,8 @@
         Dice::new(left, right, front, back, top, bottom)
     }
 
-    <span class="kw">pub fn </span>rot_front(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// サイコロを前の面が下になるように回転する。
+    </span><span class="kw">pub fn </span>rot_front(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>Dice {
             top,
             bottom,
@@ -191,7 +220,8 @@
         Dice::new(back, front, top, bottom, right, left)
     }
 
-    <span class="kw">pub fn </span>rot_back(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// サイコロを後ろの面が下になるように回転する。
+    </span><span class="kw">pub fn </span>rot_back(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>Dice {
             top,
             bottom,
@@ -203,7 +233,8 @@
         Dice::new(front, back, bottom, top, right, left)
     }
 
-    <span class="kw">pub fn </span>rot_clockwise(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// サイコロを上からみて時計回りに回転する。
+    </span><span class="kw">pub fn </span>rot_clockwise(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>Dice {
             top,
             bottom,
@@ -215,7 +246,8 @@
         Dice::new(top, bottom, right, left, back, front)
     }
 
-    <span class="kw">pub fn </span>rot_counterclockwise(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// サイコロを上からみて反時計回りに回転する。
+    </span><span class="kw">pub fn </span>rot_counterclockwise(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>Dice {
             top,
             bottom,

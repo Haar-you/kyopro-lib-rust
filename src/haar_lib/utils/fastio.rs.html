@@ -144,6 +144,20 @@
 <a href="#128" id="128">128</a>
 <a href="#129" id="129">129</a>
 <a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
 </pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::new_without_default)]
 
 </span><span class="kw">use </span>std::fmt::Display;
@@ -156,7 +170,8 @@
 }
 
 <span class="kw">impl </span>FastIO {
-    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// [`FastIO`]を生成する。
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>s = <span class="macro">vec!</span>[];
         std::io::stdin().read_to_end(<span class="kw-2">&amp;mut </span>s).unwrap();
 
@@ -169,26 +184,30 @@
         }
     }
 
-    <span class="attr">#[inline]
+    <span class="doccomment">/// 1バイトだけ読み出す。
+    </span><span class="attr">#[inline]
     </span><span class="kw">pub fn </span>getc(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;u8&gt; {
         <span class="kw">let </span>c = <span class="kw-2">*</span><span class="self">self</span>.in_bytes.get(<span class="self">self</span>.in_cur)<span class="question-mark">?</span>;
         <span class="self">self</span>.in_cur += <span class="number">1</span>;
         <span class="prelude-val">Some</span>(c)
     }
 
-    <span class="attr">#[inline]
+    <span class="doccomment">/// 1バイトだけ先読みする。
+    </span><span class="attr">#[inline]
     </span><span class="kw">pub fn </span>peek(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;u8&gt; {
         <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="self">self</span>.in_bytes.get(<span class="self">self</span>.in_cur)<span class="question-mark">?</span>)
     }
 
-    <span class="attr">#[inline]
+    <span class="doccomment">/// `is_ascii_whitespace`が`true`である間を読み飛ばす。
+    </span><span class="attr">#[inline]
     </span><span class="kw">pub fn </span>skip(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="kw">while </span><span class="self">self</span>.peek().is_some_and(|c| c.is_ascii_whitespace()) {
             <span class="self">self</span>.in_cur += <span class="number">1</span>;
         }
     }
 
-    <span class="kw">pub fn </span>read_u64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u64 {
+    <span class="doccomment">/// [`u64`]型の数値を読み出す。
+    </span><span class="kw">pub fn </span>read_u64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u64 {
         <span class="self">self</span>.skip();
         <span class="kw">let </span><span class="kw-2">mut </span>ret: u64 = <span class="number">0</span>;
 
@@ -200,15 +219,18 @@
         ret
     }
 
-    <span class="kw">pub fn </span>read_u32(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u32 {
+    <span class="doccomment">/// [`u64`]型の数値を読み出す。
+    </span><span class="kw">pub fn </span>read_u32(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u32 {
         <span class="self">self</span>.read_u64() <span class="kw">as </span>u32
     }
 
-    <span class="kw">pub fn </span>read_usize(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; usize {
+    <span class="doccomment">/// [`usize`]型の数値を読み出す。
+    </span><span class="kw">pub fn </span>read_usize(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.read_u64() <span class="kw">as </span>usize
     }
 
-    <span class="kw">pub fn </span>read_i64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; i64 {
+    <span class="doccomment">/// [`i64`]型の数値を読み出す。
+    </span><span class="kw">pub fn </span>read_i64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; i64 {
         <span class="self">self</span>.skip();
         <span class="kw">let </span><span class="kw-2">mut </span>ret: i64 = <span class="number">0</span>;
 
@@ -231,15 +253,18 @@
         ret
     }
 
-    <span class="kw">pub fn </span>read_i32(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; i32 {
+    <span class="doccomment">/// [`i32`]型の数値を読み出す。
+    </span><span class="kw">pub fn </span>read_i32(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; i32 {
         <span class="self">self</span>.read_i64() <span class="kw">as </span>i32
     }
 
-    <span class="kw">pub fn </span>read_isize(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; isize {
+    <span class="doccomment">/// [`isize`]型の数値を読み出す。
+    </span><span class="kw">pub fn </span>read_isize(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; isize {
         <span class="self">self</span>.read_i64() <span class="kw">as </span>isize
     }
 
-    <span class="kw">pub fn </span>read_f64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; f64 {
+    <span class="doccomment">/// [`f64`]型の数値を読み出す。
+    </span><span class="kw">pub fn </span>read_f64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; f64 {
         <span class="self">self</span>.read_chars()
             .into_iter()
             .collect::&lt;String&gt;()
@@ -247,7 +272,8 @@
             .unwrap()
     }
 
-    <span class="kw">pub fn </span>read_chars(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;char&gt; {
+    <span class="doccomment">/// 文字列を[`Vec&lt;char&gt;`]として読み出す。
+    </span><span class="kw">pub fn </span>read_chars(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;char&gt; {
         <span class="self">self</span>.skip();
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
 
@@ -259,11 +285,13 @@
         ret
     }
 
-    <span class="kw">pub fn </span>write&lt;T: Display&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: T) {
+    <span class="doccomment">/// `s`を標準出力に書き込む。
+    </span><span class="kw">pub fn </span>write&lt;T: Display&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: T) {
         <span class="self">self</span>.out_buf.write_all(<span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, s).as_bytes()).unwrap();
     }
 
-    <span class="kw">pub fn </span>writeln&lt;T: Display&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: T) {
+    <span class="doccomment">/// `s`と改行文字を標準出力に書き込む。
+    </span><span class="kw">pub fn </span>writeln&lt;T: Display&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: T) {
         <span class="self">self</span>.write(s);
         <span class="self">self</span>.out_buf.write_all(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\n&#39;</span>]).unwrap();
     }

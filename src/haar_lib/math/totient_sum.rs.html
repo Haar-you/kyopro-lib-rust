@@ -63,26 +63,68 @@
 <a href="#47" id="47">47</a>
 <a href="#48" id="48">48</a>
 <a href="#49" id="49">49</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::math::totient::totient_table;
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! トーシェント関数の総和
+//!
+//! # References
+//! - &lt;https://yukicoder.me/wiki/sum_totient&gt;
+//!
+//! # Problems
+//! - &lt;https://judge.yosupo.jp/problem/sum_of_totient_function&gt;
+
+</span><span class="kw">use </span><span class="kw">crate</span>::math::totient::totient_table;
+<span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::collections::HashMap;
 
-<span class="kw">pub fn </span>totient_sum(n: u64, m: u64) -&gt; u64 {
+<span class="doccomment">/// トーシェント関数の総和
+</span><span class="kw">pub fn </span>totient_sum&lt;Modulo: FF&gt;(n: u64, m: Modulo) -&gt; Modulo::Element
+<span class="kw">where
+    </span>Modulo::Element: FFElem + Copy,
+{
     <span class="kw">let </span>k = (n <span class="kw">as </span>f64).powf(<span class="number">0.66</span>) <span class="kw">as </span>u64;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>memo1 = <span class="macro">vec!</span>[<span class="number">0</span>; k <span class="kw">as </span>usize + <span class="number">1</span>];
+    <span class="kw">let </span><span class="kw-2">mut </span>memo1 = <span class="macro">vec!</span>[m.from_u64(<span class="number">0</span>); k <span class="kw">as </span>usize + <span class="number">1</span>];
     <span class="kw">let </span>table = totient_table(k <span class="kw">as </span>usize);
-    <span class="kw">let </span><span class="kw-2">mut </span>sum = <span class="number">0</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>sum = m.from_u64(<span class="number">0</span>);
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..=k <span class="kw">as </span>usize {
-        sum = (sum + table[i]) % m;
+        sum += m.from_u64(table[i]);
         memo1[i] = sum;
     }
 
     <span class="kw">let </span><span class="kw-2">mut </span>memo2 = HashMap::new();
 
-    rec(n, m, <span class="kw-2">&amp;</span>memo1, <span class="kw-2">&amp;mut </span>memo2)
+    rec(n, <span class="kw-2">&amp;</span>m, <span class="kw-2">&amp;</span>memo1, <span class="kw-2">&amp;mut </span>memo2)
 }
 
-<span class="kw">fn </span>rec(x: u64, m: u64, memo1: <span class="kw-2">&amp;</span>[u64], memo2: <span class="kw-2">&amp;mut </span>HashMap&lt;u64, u64&gt;) -&gt; u64 {
+<span class="kw">fn </span>rec&lt;Modulo: FF&gt;(
+    x: u64,
+    m: <span class="kw-2">&amp;</span>Modulo,
+    memo1: <span class="kw-2">&amp;</span>[Modulo::Element],
+    memo2: <span class="kw-2">&amp;mut </span>HashMap&lt;u64, Modulo::Element&gt;,
+) -&gt; Modulo::Element
+<span class="kw">where
+    </span>Modulo::Element: FFElem + Copy,
+{
     <span class="kw">if let </span><span class="prelude-val">Some</span>(y) = memo1.get(x <span class="kw">as </span>usize) {
         <span class="kw">return </span><span class="kw-2">*</span>y;
     }
@@ -91,22 +133,22 @@
     }
 
     <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="kw">if </span>x % <span class="number">2 </span>== <span class="number">0 </span>{
-        (x / <span class="number">2</span>) % m * (x + <span class="number">1</span>) % m
+        m.from_u64(x / <span class="number">2</span>) * m.from_u64(x + <span class="number">1</span>)
     } <span class="kw">else </span>{
-        x % m * ((x + <span class="number">1</span>) / <span class="number">2</span>) % m
+        m.from_u64(x) * m.from_u64((x + <span class="number">1</span>) / <span class="number">2</span>)
     };
 
     <span class="kw">let </span>s = (x <span class="kw">as </span>f64).sqrt() <span class="kw">as </span>u64;
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">2</span>..=s {
         <span class="kw">if </span>x / i &gt; s {
-            ret = (m + ret - rec(x / i, m, memo1, memo2)) % m;
+            ret -= rec(x / i, m, memo1, memo2);
         }
     }
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..=s {
-        <span class="kw">let </span>t = (x / i - x / (i + <span class="number">1</span>)) % m;
-        ret = (m + ret - rec(i, m, memo1, memo2) * t % m) % m;
+        <span class="kw">let </span>t = m.from_u64(x / i - x / (i + <span class="number">1</span>));
+        ret -= rec(i, m, memo1, memo2) * t;
     }
 
     memo2.insert(x, ret);

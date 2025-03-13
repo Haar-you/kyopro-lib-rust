@@ -358,10 +358,23 @@
 <a href="#342" id="342">342</a>
 <a href="#343" id="343">343</a>
 <a href="#344" id="344">344</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 正方行列
+</span><span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 
-<span class="attr">#[derive(Clone, PartialEq, Eq)]
+<span class="doccomment">/// 正方行列
+</span><span class="attr">#[derive(Clone, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>SquareMatrix&lt;Modulo: FF&gt;
 <span class="kw">where
     </span>Modulo::Element: FFElem,
@@ -375,7 +388,8 @@
 <span class="kw">where
     </span>Modulo::Element: FFElem + Copy,
 {
-    <span class="kw">pub fn </span>new(size: usize, modulo: Modulo) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// `size`×`size`の零行列を作る。
+    </span><span class="kw">pub fn </span>new(size: usize, modulo: Modulo) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             size,
             data: <span class="macro">vec!</span>[<span class="macro">vec!</span>[modulo.from_u64(<span class="number">0</span>); size]; size],
@@ -383,7 +397,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>unit(size: usize, modulo: Modulo) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// `size`×`size`の単位行列を作る。
+    </span><span class="kw">pub fn </span>unit(size: usize, modulo: Modulo) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self</span>::new(size, modulo.clone());
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..size {
             ret.data[i][i] = modulo.from_u64(<span class="number">1</span>);
@@ -416,11 +431,13 @@
     //     self.data.clone()
     // }
 
+    </span><span class="doccomment">/// 行列の行数(列数)を返す。
     </span><span class="kw">pub fn </span>size(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.size
     }
 
-    <span class="kw">pub fn </span>transpose(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 行列の転置を求める。
+    </span><span class="kw">pub fn </span>transpose(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self</span>::new(<span class="self">self</span>.size, <span class="self">self</span>.modulo);
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.size {
             <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.size {
@@ -430,7 +447,8 @@
         ret
     }
 
-    <span class="kw">pub fn </span>pow(<span class="self">self</span>, <span class="kw-2">mut </span>p: u64) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 行列の`p`乗を求める。
+    </span><span class="kw">pub fn </span>pow(<span class="self">self</span>, <span class="kw-2">mut </span>p: u64) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self</span>::unit(<span class="self">self</span>.size, <span class="self">self</span>.modulo.clone());
         <span class="kw">let </span><span class="kw-2">mut </span>a = <span class="self">self</span>;
 
@@ -446,11 +464,15 @@
         ret
     }
 
-    <span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Modulo::Element&gt; {
+    <span class="doccomment">/// `i`行`j`列の要素への可変参照を返す。
+    </span><span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Modulo::Element&gt; {
         <span class="self">self</span>.data.get_mut(i).and_then(|a| a.get_mut(j))
     }
 
-    <span class="kw">pub fn </span>straight_mul(<span class="self">self</span>, b: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 愚直に行列積を求める。
+    ///
+    /// **Time complexity** $O(n^3)$
+    </span><span class="kw">pub fn </span>straight_mul(<span class="self">self</span>, b: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
         <span class="macro">assert_eq!</span>(<span class="self">self</span>.size, b.size);
 
         <span class="kw">let </span>b = b.transpose();

@@ -164,6 +164,7 @@
 <a href="#148" id="148">148</a>
 <a href="#149" id="149">149</a>
 <a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 区間一次関数加算セグメントツリー
 //!
 //! # Problems
@@ -184,7 +185,8 @@
     </span>Elem: Copy + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt; + Zero + From&lt;u32&gt;
 );
 
-<span class="kw">pub struct </span>SegtreeLinearAdd&lt;T&gt; {
+<span class="doccomment">/// 区間一次関数加算セグメントツリー
+</span><span class="kw">pub struct </span>SegtreeLinearAdd&lt;T&gt; {
     hsize: usize,
     original_size: usize,
     data: Vec&lt;Cell&lt;(T, T)&gt;&gt;,

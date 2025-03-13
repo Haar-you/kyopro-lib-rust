@@ -192,7 +192,13 @@
 <a href="#176" id="176">176</a>
 <a href="#177" id="177">177</a>
 <a href="#178" id="178">178</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::algebra::traits::Monoid;
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 動的セグメント木
+</span><span class="kw">use </span><span class="kw">crate</span>::algebra::traits::Monoid;
 <span class="kw">use </span><span class="kw">crate</span>::utils::nullable_usize::NullableUsize;
 <span class="kw">use </span>std::ops::Range;
 
@@ -213,7 +219,8 @@
     }
 }
 
-<span class="attr">#[derive(Debug)]
+<span class="doccomment">/// 動的セグメント木
+</span><span class="attr">#[derive(Debug)]
 </span><span class="kw">pub struct </span>DynamicSegtree&lt;M: Monoid&gt; {
     data: Vec&lt;Node&lt;M::Element&gt;&gt;,
     root: NullableUsize,
@@ -225,7 +232,8 @@
 <span class="kw">where
     </span>M::Element: Clone,
 {
-    <span class="kw">pub fn </span>new(monoid: M) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// [`DynamicSegtree&lt;M&gt;`]を生成する。
+    </span><span class="kw">pub fn </span>new(monoid: M) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             data: <span class="macro">vec!</span>[Node::new(monoid.id())],
             root: NullableUsize(<span class="number">0</span>),
@@ -280,7 +288,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, value: M::Element) {
+    <span class="doccomment">/// `i`番目の要素を`value`で更新する。
+    </span><span class="kw">pub fn </span>assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, value: M::Element) {
         <span class="kw">loop </span>{
             <span class="kw">if </span>i &lt; <span class="self">self</span>.to {
                 <span class="kw">break</span>;
@@ -327,7 +336,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;) -&gt; M::Element {
+    <span class="doccomment">/// 範囲`start..end`で計算を集約する。
+    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;) -&gt; M::Element {
         <span class="self">self</span>.fold_dfs(<span class="self">self</span>.root, <span class="number">0</span>, <span class="self">self</span>.to, start, end)
     }
 }

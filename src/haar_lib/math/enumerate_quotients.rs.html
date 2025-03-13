@@ -65,11 +65,19 @@
 <a href="#49" id="49">49</a>
 <a href="#50" id="50">50</a>
 <a href="#51" id="51">51</a>
-</pre></div><pre class="rust"><code><span class="attr">#[derive(Copy, Debug, Eq, PartialEq, Clone)]
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+</pre></div><pre class="rust"><code><span class="doccomment">/// [`enumerate_quotients`]の結果
+</span><span class="attr">#[derive(Copy, Debug, Eq, PartialEq, Clone)]
 </span><span class="kw">pub struct </span>Quotient {
-    <span class="kw">pub </span>q: u64,
-    <span class="kw">pub </span>from: u64,
-    <span class="kw">pub </span>to: u64,
+    <span class="doccomment">/// `floor(N/x)`の値
+    </span><span class="kw">pub </span>q: u64,
+    <span class="doccomment">/// `x`の最小値
+    </span><span class="kw">pub </span>from: u64,
+    <span class="doccomment">/// `x`の最大値
+    </span><span class="kw">pub </span>to: u64,
 }
 
 <span class="doccomment">/// 1以上N以下の自然数xについて`floor(N/x)`の取りうる値とそれを与えるxの範囲を列挙する。

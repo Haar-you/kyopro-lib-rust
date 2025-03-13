@@ -30,7 +30,17 @@
 <a href="#14" id="14">14</a>
 <a href="#15" id="15">15</a>
 <a href="#16" id="16">16</a>
-</pre></div><pre class="rust"><code><span class="kw">pub fn </span>gray_code(n: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Gray code
+//!
+//! &lt;https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AC%E3%82%A4%E3%82%B3%E3%83%BC%E3%83%89&gt;
+
+/// `n`桁のGray codeを昇順に列挙する。
+</span><span class="kw">pub fn </span>gray_code(n: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
     (<span class="number">0</span>..<span class="number">1 </span>&lt;&lt; n).map(|i| i ^ (i &gt;&gt; <span class="number">1</span>))
 }
 

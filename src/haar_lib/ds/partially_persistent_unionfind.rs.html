@@ -115,12 +115,20 @@
 <a href="#99" id="99">99</a>
 <a href="#100" id="100">100</a>
 <a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 部分永続UnionFind
 //!
 //! # Problems
 //! - [AGC 002 D - Stamp Rally](https://atcoder.jp/contests/agc002/tasks/agc002_d)
 //! - [CODE THANKS FESTIVAL 2017 H - Union Sets](https://atcoder.jp/contests/code-thanks-festival-2017-open/tasks/code_thanks_festival_2017_h)
 
+/// 部分永続UnionFind
 </span><span class="kw">pub struct </span>PartiallyPersistentUnionFind {
     time: usize,
     p: Vec&lt;Vec&lt;(usize, usize)&gt;&gt;,
@@ -128,14 +136,16 @@
     rank: Vec&lt;usize&gt;,
 }
 
-<span class="kw">pub struct </span>At&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="doccomment">/// ある時間での[`PartiallyPersistentUnionFind`]の状態を参照するための構造体。
+</span><span class="kw">pub struct </span>At&lt;<span class="lifetime">&#39;a</span>&gt; {
     time: usize,
     p: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Vec&lt;Vec&lt;(usize, usize)&gt;&gt;,
     par: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Vec&lt;usize&gt;,
 }
 
 <span class="kw">impl </span>PartiallyPersistentUnionFind {
-    <span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 大きさ`size`の[`PartiallyPersistentUnionFind`]を生成する。
+    </span><span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             time: <span class="number">0</span>,
             p: <span class="macro">vec!</span>[<span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>)]; size],
@@ -159,7 +169,8 @@
         <span class="self">self</span>.at(<span class="self">self</span>.time)
     }
 
-    <span class="kw">pub fn </span>merge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize, v: usize) {
+    <span class="doccomment">/// `u`を含む素集合と`v`を含む素集合を融合する。
+    </span><span class="kw">pub fn </span>merge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize, v: usize) {
         <span class="kw">let </span>t = <span class="self">self</span>.time;
         <span class="self">self</span>.time += <span class="number">1</span>;
 
@@ -190,7 +201,8 @@
 }
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; At&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="kw">pub fn </span>root_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
+    <span class="doccomment">/// `i`を含む素集合の代表の値を返す。
+    </span><span class="kw">pub fn </span>root_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
         <span class="kw">let </span><span class="kw-2">&amp;</span>(t, r) = <span class="self">self</span>.p[i].last().unwrap();
 
         <span class="kw">if </span><span class="self">self</span>.par[i] == i || t == <span class="number">0 </span>|| <span class="self">self</span>.time &lt; t {
@@ -202,12 +214,14 @@
         }
     }
 
-    <span class="kw">pub fn </span>is_same(<span class="kw-2">&amp;</span><span class="self">self</span>, u: usize, v: usize) -&gt; bool {
+    <span class="doccomment">/// `u`と`v`が同じ素集合に含まれていれば`true`を返す。
+    </span><span class="kw">pub fn </span>is_same(<span class="kw-2">&amp;</span><span class="self">self</span>, u: usize, v: usize) -&gt; bool {
         <span class="self">self</span>.root_of(u) == <span class="self">self</span>.root_of(v)
     }
 
-    <span class="doccomment">/// # Complexity
-    /// Time Complexity $(\log t)$
+    <span class="doccomment">/// `u`が属する素集合の大きさを返す。
+    ///
+    /// **Time Complexity** $O(\log t)$
     </span><span class="kw">pub fn </span>size_of(<span class="kw-2">&amp;</span><span class="self">self</span>, u: usize) -&gt; usize {
         <span class="kw">let </span>u = <span class="self">self</span>.root_of(u);
 

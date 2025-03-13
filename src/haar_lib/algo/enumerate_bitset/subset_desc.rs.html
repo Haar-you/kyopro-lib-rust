@@ -40,9 +40,13 @@
 <a href="#24" id="24">24</a>
 <a href="#25" id="25">25</a>
 <a href="#26" id="26">26</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::iter::successors;
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! ビット列の部分集合を降順に列挙する
+</span><span class="kw">use </span>std::iter::successors;
 
-<span class="kw">pub fn </span>subset_desc(a: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
+<span class="doccomment">/// ビット列としての`a`の部分集合を降順に列挙するイテレータを返す。
+</span><span class="kw">pub fn </span>subset_desc(a: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
     successors(<span class="prelude-val">Some</span>(a), <span class="kw">move </span>|<span class="kw-2">&amp;</span>t| t.checked_sub(<span class="number">1</span>).map(|x| x &amp; a))
 }
 

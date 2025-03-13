@@ -105,6 +105,17 @@
 <a href="#89" id="89">89</a>
 <a href="#90" id="90">90</a>
 <a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
 </pre></div><pre class="rust"><code><span class="kw">const </span>NIM_PRODUCT_TABLE_16: [[u8; <span class="number">16</span>]; <span class="number">16</span>] = [
     [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],
     [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">13</span>, <span class="number">14</span>, <span class="number">15</span>],
@@ -152,12 +163,14 @@
     };
 }
 
-<span class="kw">pub fn </span>nim_product_8(a: u8, b: u8) -&gt; u8 {
+<span class="doccomment">/// [`u8`]同士のNimber productを求める。
+</span><span class="kw">pub fn </span>nim_product_8(a: u8, b: u8) -&gt; u8 {
     NIM_PRODUCT_TABLE_256.with(|t| t[a <span class="kw">as </span>usize][b <span class="kw">as </span>usize])
 }
 
 <span class="macro">macro_rules! </span>impl_nim_product {
-    ( <span class="macro-nonterminal">$uint</span>:ty, <span class="macro-nonterminal">$np</span>:ident, <span class="macro-nonterminal">$uint_h</span>:ty, <span class="macro-nonterminal">$np_h</span>:ident, <span class="macro-nonterminal">$bits</span>:expr ) =&gt; {
+    ( $(<span class="attr">#[<span class="macro-nonterminal">$meta</span>:meta]</span>)* <span class="macro-nonterminal">$uint</span>:ty, <span class="macro-nonterminal">$np</span>:ident, <span class="macro-nonterminal">$uint_h</span>:ty, <span class="macro-nonterminal">$np_h</span>:ident, <span class="macro-nonterminal">$bits</span>:expr ) =&gt; {
+        $(<span class="attr">#[<span class="macro-nonterminal">$meta</span>]</span>)*
         <span class="kw">pub fn </span><span class="macro-nonterminal">$np</span>(a: <span class="macro-nonterminal">$uint</span>, b: <span class="macro-nonterminal">$uint</span>) -&gt; <span class="macro-nonterminal">$uint </span>{
             <span class="kw">let </span>bits = <span class="macro-nonterminal">$bits</span>;
 
@@ -180,9 +193,18 @@
     };
 }
 
-<span class="macro">impl_nim_product!</span>(u64, nim_product_64, u32, nim_product_32, <span class="number">32</span>);
-<span class="macro">impl_nim_product!</span>(u32, nim_product_32, u16, nim_product_16, <span class="number">16</span>);
-<span class="macro">impl_nim_product!</span>(u16, nim_product_16, u8, nim_product_8, <span class="number">8</span>);
+<span class="macro">impl_nim_product!</span>(
+    <span class="doccomment">/// [`u64`]同士のNimber productを求める。
+    </span>u64, nim_product_64, u32, nim_product_32, <span class="number">32
+</span>);
+<span class="macro">impl_nim_product!</span>(
+    <span class="doccomment">/// [`u32`]同士のNimber productを求める。
+    </span>u32, nim_product_32, u16, nim_product_16, <span class="number">16
+</span>);
+<span class="macro">impl_nim_product!</span>(
+    <span class="doccomment">/// [`u16`]同士のNimber productを求める。
+    </span>u16, nim_product_16, u8, nim_product_8, <span class="number">8
+</span>);
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {

@@ -192,6 +192,15 @@
 <a href="#176" id="176">176</a>
 <a href="#177" id="177">177</a>
 <a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 遅延加算付き融合可能ヒープ
 
 </span><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
@@ -251,21 +260,24 @@
     }
 }
 
-<span class="attr">#[derive(Debug, Clone, Default)]
+<span class="doccomment">/// 遅延加算付き融合可能ヒープ
+</span><span class="attr">#[derive(Debug, Clone, Default)]
 </span><span class="kw">pub struct </span>LazySkewHeap&lt;T&gt; {
     root: <span class="prelude-ty">Option</span>&lt;Box&lt;Node&lt;T&gt;&gt;&gt;,
     size: usize,
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; LazySkewHeap&lt;T&gt; {
-    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 空の[`LazySkewHeap`]を生成する。
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             root: <span class="prelude-val">None</span>,
             size: <span class="number">0</span>,
         }
     }
 
-    <span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: LazySkewHeap&lt;T&gt;) {
+    <span class="doccomment">/// 他の[`LazySkewHeap&lt;T&gt;`]を融合する。
+    </span><span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: LazySkewHeap&lt;T&gt;) {
         <span class="self">self</span>.size += other.size;
         <span class="kw">match </span><span class="self">self</span>.root.as_mut() {
             <span class="prelude-val">None </span>=&gt; <span class="self">self</span>.root = other.root,
@@ -273,7 +285,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) {
+    <span class="doccomment">/// 値`value`を挿入する。
+    </span><span class="kw">pub fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) {
         <span class="self">self</span>.size += <span class="number">1</span>;
         <span class="kw">let </span>t = <span class="prelude-val">Some</span>(Box::new(Node::new(value)));
         <span class="kw">match </span><span class="self">self</span>.root.as_mut() {
@@ -282,11 +295,13 @@
         }
     }
 
-    <span class="kw">pub fn </span>peek(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
+    <span class="doccomment">/// ヒープの最大値を返す。
+    </span><span class="kw">pub fn </span>peek(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
         <span class="self">self</span>.root.as_ref().map(|x| <span class="kw-2">&amp;</span>x.value)
     }
 
-    <span class="kw">pub fn </span>pop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="doccomment">/// 最大値をヒープから削除して、その値を返す。
+    </span><span class="kw">pub fn </span>pop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="kw">match </span><span class="self">self</span>.root.take() {
             <span class="prelude-val">None </span>=&gt; <span class="prelude-val">None</span>,
             <span class="prelude-val">Some</span>(root) =&gt; {
@@ -311,18 +326,21 @@
         }
     }
 
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) {
+    <span class="doccomment">/// ヒープの全要素に値`value`を加算する。
+    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(root) = <span class="self">self</span>.root.as_mut() {
             root.lazy += value;
             root.propagate();
         }
     }
 
-    <span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="doccomment">/// ヒープに含まれている値の個数を返す。
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.size
     }
 
-    <span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="doccomment">/// ヒープが空ならば`true`を返す。
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.size == <span class="number">0
     </span>}
 }

@@ -43,9 +43,13 @@
 <a href="#27" id="27">27</a>
 <a href="#28" id="28">28</a>
 <a href="#29" id="29">29</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::iter::successors;
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! ビット列の上位集合を昇順に列挙する
+</span><span class="kw">use </span>std::iter::successors;
 
-<span class="kw">pub fn </span>super_asc(a: u32, n: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
+<span class="doccomment">/// ビット列としての`a`の上位集合を昇順に列挙するイテレータを返す。
+</span><span class="kw">pub fn </span>super_asc(a: u32, n: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
     successors(<span class="prelude-val">Some</span>(a), <span class="kw">move </span>|<span class="kw-2">&amp;</span>t| {
         <span class="kw">let </span>t = (t + <span class="number">1</span>) | a;
         (t &lt; <span class="number">1 </span>&lt;&lt; n).then_some(t)

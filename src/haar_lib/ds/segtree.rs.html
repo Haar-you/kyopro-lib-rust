@@ -181,12 +181,12 @@
 <a href="#165" id="165">165</a>
 <a href="#166" id="166">166</a>
 <a href="#167" id="167">167</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! モノイド列の点更新・区間取得(*O*(log n), *O*(log n))ができる。
+</pre></div><pre class="rust"><code><span class="doccomment">//! モノイド列の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 </span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::Monoid;
 <span class="kw">use </span><span class="kw">crate</span>::utils::range::range_bounds_to_range;
 <span class="kw">use </span>std::ops::{Index, RangeBounds};
 
-<span class="doccomment">/// モノイド列の点更新・区間取得(*O*(log n), *O*(log n))ができる。
+<span class="doccomment">/// モノイド列の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 </span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>Segtree&lt;M: Monoid&gt; {
     original_size: usize,

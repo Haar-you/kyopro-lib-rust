@@ -292,7 +292,7 @@
         <span class="kw">let </span>mid = (from + to) / <span class="number">2</span>;
         <span class="kw">unsafe </span>{
             (<span class="kw-2">*</span>cur).left = <span class="self">self</span>._update((<span class="kw-2">*</span>cur).left, from, mid, s, t, value.clone());
-            (<span class="kw-2">*</span>cur).right = <span class="self">self</span>._update((<span class="kw-2">*</span>cur).right, mid, to, s, t, value.clone());
+            (<span class="kw-2">*</span>cur).right = <span class="self">self</span>._update((<span class="kw-2">*</span>cur).right, mid, to, s, t, value);
             (<span class="kw-2">*</span>cur).value = <span class="self">self
                 </span>.action
                 .fold((<span class="kw-2">*</span>(<span class="kw-2">*</span>cur).left).value.clone(), (<span class="kw-2">*</span>(<span class="kw-2">*</span>cur).right).value.clone());

@@ -119,6 +119,10 @@
 <a href="#103" id="103">103</a>
 <a href="#104" id="104">104</a>
 <a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 係数乗算付き区間加算区間総和遅延セグ木
 
 </span><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
@@ -132,7 +136,8 @@
     </span>Elem: Copy + Zero + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt; + PartialEq
 );
 
-<span class="kw">pub struct </span>LazySegtreeCoeff&lt;T&gt; {
+<span class="doccomment">/// 係数乗算付き区間加算区間総和遅延セグ木
+</span><span class="kw">pub struct </span>LazySegtreeCoeff&lt;T&gt; {
     size: usize,
     original_size: usize,
     data: Vec&lt;Cell&lt;T&gt;&gt;,
@@ -141,7 +146,8 @@
 }
 
 <span class="kw">impl</span>&lt;T: Elem&gt; LazySegtreeCoeff&lt;T&gt; {
-    <span class="kw">pub fn </span>new(n: usize, coefficients: Vec&lt;T&gt;) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// ‍係数`coefficients`を設定した[`LazySegtreeCoeff`]を構築する。
+    </span><span class="kw">pub fn </span>new(n: usize, coefficients: Vec&lt;T&gt;) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>coeff = <span class="macro">vec!</span>[T::zero(); size];
@@ -214,12 +220,14 @@
             + <span class="self">self</span>.get_internal(i &lt;&lt; <span class="number">1 </span>| <span class="number">1</span>, (l + r) / <span class="number">2</span>, r, x, y)
     }
 
-    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, value: T) {
+    <span class="doccomment">/// 範囲`range`に値`value`を加算する。
+    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, value: T) {
         <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.update_internal(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, start, end, value);
     }
 
-    <span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; T {
+    <span class="doccomment">/// 範囲`range`で総和を取る。
+    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; T {
         <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.get_internal(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.size / <span class="number">2</span>, start, end)
     }

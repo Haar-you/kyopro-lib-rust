@@ -192,6 +192,10 @@
 <a href="#176" id="176">176</a>
 <a href="#177" id="177">177</a>
 <a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 区間加算・区間Max(Min)
 
 </span><span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
@@ -207,10 +211,13 @@
     </span>Elem: Add&lt;Output = <span class="self">Self</span>&gt; + Sub&lt;Output = <span class="self">Self</span>&gt; + Ord + Copy + Zero
 );
 
-<span class="attr">#[derive(Copy, Clone)]
+<span class="doccomment">/// 区間Max/Minを選択する。
+</span><span class="attr">#[derive(Copy, Clone)]
 </span><span class="kw">pub enum </span>Mode {
-    Max,
-    Min,
+    <span class="doccomment">/// 区間Max
+    </span>Max,
+    <span class="doccomment">/// 区間Min
+    </span>Min,
 }
 
 <span class="kw">impl </span>Mode {
@@ -222,7 +229,8 @@
     }
 }
 
-<span class="kw">pub struct </span>StarrySkyTree&lt;T&gt; {
+<span class="doccomment">/// 区間加算・区間Max(Min)ができるデータ構造。
+</span><span class="kw">pub struct </span>StarrySkyTree&lt;T&gt; {
     size: usize,
     original_size: usize,
     data: Vec&lt;T&gt;,

@@ -172,6 +172,11 @@
 <a href="#156" id="156">156</a>
 <a href="#157" id="157">157</a>
 <a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::{Add, AddAssign};
 <span class="kw">use </span>std::{cmp::Reverse, collections::BinaryHeap};
 
@@ -289,13 +294,18 @@
                 <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw-2">mut </span>c, p)) = shortest_path(g, u, to, <span class="kw-2">&amp;</span>usable, <span class="kw-2">&amp;</span>valid) {
                     <span class="kw">let </span><span class="kw-2">mut </span>temp = <span class="macro">vec!</span>[];
 
-                    <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..k {
+                    <span class="kw">for </span>(j, <span class="kw-2">&amp;</span>p) <span class="kw">in </span>prev_path.iter().enumerate().take(k) {
                         <span class="kw">let </span>v = result[i - <span class="number">1</span>].as_ref().unwrap().<span class="number">1</span>[j];
-                        c += g.edges[prev_path[j]][v].weight();
+                        c += g.edges[p][v].weight();
                         temp.push(v);
                     }
+                    <span class="comment">// for j in 0..k {
+                    //     let v = result[i - 1].as_ref().unwrap().1[j];
+                    //     c += g.edges[prev_path[j]][v].weight();
+                    //     temp.push(v);
+                    // }
 
-                    temp.extend(p.into_iter());
+                    </span>temp.extend(p.into_iter());
                     stock.push(Reverse((c, temp)));
                 }
 

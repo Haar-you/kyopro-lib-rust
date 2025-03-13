@@ -373,6 +373,13 @@
 <a href="#357" id="357">357</a>
 <a href="#358" id="358">358</a>
 <a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Segment Tree Beats
 //!
 //! # Problems
@@ -414,7 +421,8 @@
 }
 
 <span class="kw">impl </span>SegtreeBeats {
-    <span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 長さ`n`の[`SegtreeBeats`]を生成する。
+    </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
 
         <span class="self">Self </span>{
@@ -554,7 +562,8 @@
         <span class="self">self</span>.bottom_up(i);
     }
 
-    <span class="kw">pub fn </span>chmin(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, x: i64) {
+    <span class="doccomment">/// 区間`range`を値`x`との最小値をとって更新する。
+    </span><span class="kw">pub fn </span>chmin(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, x: i64) {
         <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.chmin_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end, x);
     }
@@ -573,7 +582,8 @@
         <span class="self">self</span>.bottom_up(i);
     }
 
-    <span class="kw">pub fn </span>chmax(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, x: i64) {
+    <span class="doccomment">/// 区間`range`を値`x`との最大値をとって更新する。
+    </span><span class="kw">pub fn </span>chmax(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, x: i64) {
         <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.chmax_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end, x);
     }
@@ -592,7 +602,8 @@
         <span class="self">self</span>.bottom_up(i);
     }
 
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, x: i64) {
+    <span class="doccomment">/// 区間`range`に値`x`を加算する。
+    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;, x: i64) {
         <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.add_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end, x);
     }
@@ -609,7 +620,8 @@
         <span class="self">self</span>.get_sum_(lc(i), l, (l + r) / <span class="number">2</span>, s, t) + <span class="self">self</span>.get_sum_(rc(i), (l + r) / <span class="number">2</span>, r, s, t)
     }
 
-    <span class="kw">pub fn </span>sum(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; i64 {
+    <span class="doccomment">/// 区間`range`の総和を返す。
+    </span><span class="kw">pub fn </span>sum(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; i64 {
         <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.get_sum_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end)
     }
@@ -628,7 +640,8 @@
         )
     }
 
-    <span class="kw">pub fn </span>max(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; i64 {
+    <span class="doccomment">/// 区間`range`の最大値を返す。
+    </span><span class="kw">pub fn </span>max(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; i64 {
         <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.get_max_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end)
     }
@@ -647,7 +660,8 @@
         )
     }
 
-    <span class="kw">pub fn </span>min(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; i64 {
+    <span class="doccomment">/// 区間`range`の最小値を返す。
+    </span><span class="kw">pub fn </span>min(<span class="kw-2">&amp;mut </span><span class="self">self</span>, range: <span class="kw">impl </span>RangeBounds&lt;usize&gt;) -&gt; i64 {
         <span class="kw">let </span>(start, end) = range_bounds_to_range(range, <span class="number">0</span>, <span class="self">self</span>.original_size);
         <span class="self">self</span>.get_min_(<span class="number">1</span>, <span class="number">0</span>, <span class="self">self</span>.hsize, start, end)
     }

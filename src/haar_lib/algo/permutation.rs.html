@@ -89,7 +89,12 @@
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::iter::{from_fn, once};
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 順列の列挙
+</span><span class="kw">use </span>std::iter::{from_fn, once};
 
 <span class="macro">macro_rules! </span>impl_permutation {
     ( <span class="macro-nonterminal">$cmp1</span>:tt, <span class="macro-nonterminal">$cmp2</span>:tt, <span class="macro-nonterminal">$a</span>: expr ) =&gt; {{
@@ -115,15 +120,18 @@
     }}
 }
 
-<span class="kw">pub fn </span>next_permutation&lt;T: Ord + Copy&gt;(a: <span class="kw-2">&amp;mut </span>[T]) -&gt; bool {
+<span class="doccomment">/// `a`を辞書式順序で次の順列にする。
+</span><span class="kw">pub fn </span>next_permutation&lt;T: Ord + Copy&gt;(a: <span class="kw-2">&amp;mut </span>[T]) -&gt; bool {
     <span class="macro">impl_permutation!</span>(&lt;, &gt;, a)
 }
 
-<span class="kw">pub fn </span>prev_permutation&lt;T: Ord + Copy&gt;(a: <span class="kw-2">&amp;mut </span>[T]) -&gt; bool {
+<span class="doccomment">/// `a`を辞書式順序で前の順列にする。
+</span><span class="kw">pub fn </span>prev_permutation&lt;T: Ord + Copy&gt;(a: <span class="kw-2">&amp;mut </span>[T]) -&gt; bool {
     <span class="macro">impl_permutation!</span>(&gt;, &lt;, a)
 }
 
-<span class="kw">pub fn </span>permutations&lt;T: Ord + Copy&gt;(<span class="kw-2">mut </span>a: Vec&lt;T&gt;) -&gt; <span class="kw">impl </span>Iterator&lt;Item = Vec&lt;T&gt;&gt; {
+<span class="doccomment">/// 辞書式順序で`a`以降の順列を列挙するイテレータを返す。
+</span><span class="kw">pub fn </span>permutations&lt;T: Ord + Copy&gt;(<span class="kw-2">mut </span>a: Vec&lt;T&gt;) -&gt; <span class="kw">impl </span>Iterator&lt;Item = Vec&lt;T&gt;&gt; {
     once(a.clone()).chain(from_fn(<span class="kw">move </span>|| {
         <span class="kw">if </span>next_permutation(<span class="kw-2">&amp;mut </span>a) {
             <span class="prelude-val">Some</span>(a.clone())

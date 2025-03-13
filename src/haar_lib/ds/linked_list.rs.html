@@ -230,7 +230,7 @@
         cur
     }
 
-    <span class="doccomment">/// `cur`から`cur`の属する連結リストの終端まで走査するイテレータを返す。
+    <span class="doccomment">/// `cur`から`cur`の属する連結リストの終端までの要素の参照を返すイテレータを返す。
     </span><span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>, cur: usize) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>T&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="prelude-val">Some</span>(cur);
         std::iter::from_fn(<span class="kw">move </span>|| <span class="kw">match </span>cur {
@@ -242,7 +242,7 @@
         })
     }
 
-    <span class="doccomment">/// `cur`から`cur`の属する連結リストの先頭まで走査するイテレータを返す。
+    <span class="doccomment">/// `cur`から`cur`の属する連結リストの先頭までの要素の参照を返すイテレータを返す。
     </span><span class="kw">pub fn </span>riter(<span class="kw-2">&amp;</span><span class="self">self</span>, cur: usize) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>T&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="prelude-val">Some</span>(cur);
         std::iter::from_fn(<span class="kw">move </span>|| <span class="kw">match </span>cur {

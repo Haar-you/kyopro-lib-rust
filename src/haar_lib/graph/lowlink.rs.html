@@ -88,6 +88,9 @@
 <a href="#72" id="72">72</a>
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::cmp::min;
 
@@ -96,10 +99,13 @@
     <span class="kw">pub </span>size: usize,
     <span class="kw">pub </span>ord: Vec&lt;usize&gt;,
     <span class="kw">pub </span>low: Vec&lt;usize&gt;,
-    <span class="kw">pub </span>par: Vec&lt;<span class="prelude-ty">Option</span>&lt;usize&gt;&gt;, <span class="comment">// DFS木での親ノード
-    </span><span class="kw">pub </span>ch: Vec&lt;Vec&lt;usize&gt;&gt;,     <span class="comment">// DFS木での子ノード
-    </span><span class="kw">pub </span>back: Vec&lt;Vec&lt;usize&gt;&gt;,   <span class="comment">// par, chのどちらにも属さないノード
-</span>}
+    <span class="doccomment">/// DFS木での親ノード
+    </span><span class="kw">pub </span>par: Vec&lt;<span class="prelude-ty">Option</span>&lt;usize&gt;&gt;,
+    <span class="doccomment">/// DFS木での子ノード
+    </span><span class="kw">pub </span>ch: Vec&lt;Vec&lt;usize&gt;&gt;,
+    <span class="doccomment">/// par, chのどちらにも属さないノード
+    </span><span class="kw">pub </span>back: Vec&lt;Vec&lt;usize&gt;&gt;,
+}
 
 <span class="kw">impl </span>Lowlink {
     <span class="kw">pub fn </span>new&lt;E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; <span class="self">Self </span>{

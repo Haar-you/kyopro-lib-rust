@@ -196,10 +196,20 @@
 <a href="#180" id="180">180</a>
 <a href="#181" id="181">181</a>
 <a href="#182" id="182">182</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! `h`×`w`行列
+</span><span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
 
-<span class="attr">#[derive(Clone, PartialEq, Eq)]
+<span class="doccomment">/// `h`×`w`行列
+</span><span class="attr">#[derive(Clone, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>Matrix&lt;Modulo: FF&gt; {
     h: usize,
     w: usize,
@@ -211,7 +221,8 @@
 <span class="kw">where
     </span>Modulo::Element: FFElem + Copy,
 {
-    <span class="kw">pub fn </span>new(h: usize, w: usize, modulo: Modulo) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// `h`×`w`の零行列を作る。
+    </span><span class="kw">pub fn </span>new(h: usize, w: usize, modulo: Modulo) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             h,
             w,
@@ -220,7 +231,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>from_vec_2d(other: Vec&lt;Vec&lt;u32&gt;&gt;, modulo: Modulo) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// [`Vec&lt;Vec&lt;u32&gt;&gt;`]から[`Matrix&lt;Modulo&gt;`]を作る。
+    </span><span class="kw">pub fn </span>from_vec_2d(other: Vec&lt;Vec&lt;u32&gt;&gt;, modulo: Modulo) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>h = other.len();
         <span class="macro">assert!</span>(h &gt; <span class="number">0</span>);
         <span class="kw">let </span>w = other[<span class="number">0</span>].len();
@@ -247,15 +259,18 @@
     //     self.data.clone()
     // }
 
+    </span><span class="doccomment">/// 行列の行数を返す。
     </span><span class="kw">pub fn </span>height(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.h
     }
 
-    <span class="kw">pub fn </span>width(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="doccomment">/// 行列の列数を返す。
+    </span><span class="kw">pub fn </span>width(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.w
     }
 
-    <span class="kw">pub fn </span>transpose(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// `w`×`h`の転置行列を作る。
+    </span><span class="kw">pub fn </span>transpose(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">Self</span>::new(<span class="self">self</span>.w, <span class="self">self</span>.h, <span class="self">self</span>.modulo);
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.h {
             <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.w {
@@ -265,7 +280,8 @@
         ret
     }
 
-    <span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Modulo::Element&gt; {
+    <span class="doccomment">/// `i`行`j`列の要素への可変参照を返す。
+    </span><span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Modulo::Element&gt; {
         <span class="self">self</span>.data.get_mut(i).and_then(|a| a.get_mut(j))
     }
 }

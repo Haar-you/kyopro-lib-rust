@@ -239,6 +239,30 @@
 <a href="#223" id="223">223</a>
 <a href="#224" id="224">224</a>
 <a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 幾何
 
 </span><span class="kw">pub mod </span>ccw;
@@ -274,31 +298,39 @@
 
 <span class="kw">use </span>std::{cmp::Ordering, f64::consts::PI};
 
-<span class="attr">#[derive(Copy, Clone)]
+<span class="doccomment">/// `f64`の誤差を許容する演算を提供する。
+</span><span class="attr">#[derive(Copy, Clone)]
 </span><span class="kw">pub struct </span>Eps {
     eps: f64,
 }
 
 <span class="kw">impl </span>Eps {
-    <span class="kw">pub fn </span>new(eps: f64) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 誤差`eps`を設定して[`Eps`]を生成する。
+    </span><span class="kw">pub fn </span>new(eps: f64) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{ eps }
     }
-    <span class="kw">pub fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
+    <span class="doccomment">/// 誤差を許容して`a == b`なら`true`を返す。
+    </span><span class="kw">pub fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
         (a - b).abs() &lt; <span class="self">self</span>.eps
     }
-    <span class="kw">pub fn </span>ne(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
+    <span class="doccomment">/// 誤差を許容して`a != b`なら`true`を返す。
+    </span><span class="kw">pub fn </span>ne(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
         !<span class="self">self</span>.eq(a, b)
     }
-    <span class="kw">pub fn </span>lt(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
+    <span class="doccomment">/// 誤差を許容して`a &lt; b`なら`true`を返す。
+    </span><span class="kw">pub fn </span>lt(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
         a - b &lt; -<span class="self">self</span>.eps
     }
-    <span class="kw">pub fn </span>gt(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
+    <span class="doccomment">/// 誤差を許容して`a &gt; b`なら`true`を返す。
+    </span><span class="kw">pub fn </span>gt(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
         a - b &gt; <span class="self">self</span>.eps
     }
-    <span class="kw">pub fn </span>le(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
+    <span class="doccomment">/// 誤差を許容して`a &lt;= b`なら`true`を返す。
+    </span><span class="kw">pub fn </span>le(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
         <span class="self">self</span>.lt(a, b) || <span class="self">self</span>.eq(a, b)
     }
-    <span class="kw">pub fn </span>ge(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
+    <span class="doccomment">/// 誤差を許容して`a &gt;= b`なら`true`を返す。
+    </span><span class="kw">pub fn </span>ge(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; bool {
         <span class="self">self</span>.gt(a, b) || <span class="self">self</span>.eq(a, b)
     }
     <span class="kw">pub fn </span>partial_cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, a: f64, b: f64) -&gt; <span class="prelude-ty">Option</span>&lt;Ordering&gt; {
@@ -314,7 +346,8 @@
     }
 }
 
-<span class="attr">#[derive(Clone, Copy, Debug, Default)]
+<span class="doccomment">/// 二次元ベクトル
+</span><span class="attr">#[derive(Clone, Copy, Debug, Default)]
 </span><span class="kw">pub struct </span>Vector(<span class="kw">pub </span>f64, <span class="kw">pub </span>f64);
 
 <span class="kw">impl </span>std::ops::Add <span class="kw">for </span>Vector {
@@ -389,57 +422,72 @@
             r
         }
     }
-    <span class="kw">pub fn </span>eq(<span class="self">self</span>, other: <span class="self">Self</span>, eps: Eps) -&gt; bool {
+    <span class="doccomment">/// 2つのベクトルが等しければ`true`を返す。
+    </span><span class="kw">pub fn </span>eq(<span class="self">self</span>, other: <span class="self">Self</span>, eps: Eps) -&gt; bool {
         eps.eq(<span class="self">self</span>.<span class="number">0</span>, other.<span class="number">0</span>) &amp;&amp; eps.eq(<span class="self">self</span>.<span class="number">1</span>, other.<span class="number">1</span>)
     }
 }
 
-<span class="doccomment">/// 直線
+<span class="doccomment">/// 直線 (線分)
 </span><span class="attr">#[derive(Copy, Clone, Debug, Default)]
 </span><span class="kw">pub struct </span>Line {
-    <span class="kw">pub </span>from: Vector,
-    <span class="kw">pub </span>to: Vector,
+    <span class="doccomment">/// 線分の始点
+    </span><span class="kw">pub </span>from: Vector,
+    <span class="doccomment">/// 線分の終点
+    </span><span class="kw">pub </span>to: Vector,
 }
 
 <span class="kw">impl </span>Line {
-    <span class="kw">pub fn </span>new(from: Vector, to: Vector) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 始点と終点を設定した[`Line`]を返す。
+    </span><span class="kw">pub fn </span>new(from: Vector, to: Vector) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{ from, to }
     }
-    <span class="kw">pub fn </span>unit(<span class="self">self</span>) -&gt; Vector {
+    <span class="doccomment">/// 線分方向の単位ベクトルを返す。
+    </span><span class="kw">pub fn </span>unit(<span class="self">self</span>) -&gt; Vector {
         (<span class="self">self</span>.to - <span class="self">self</span>.from).unit()
     }
-    <span class="kw">pub fn </span>normal(<span class="self">self</span>) -&gt; Vector {
+    <span class="doccomment">/// 線分と直交するベクトルを返す。
+    </span><span class="kw">pub fn </span>normal(<span class="self">self</span>) -&gt; Vector {
         (<span class="self">self</span>.to - <span class="self">self</span>.from).normal()
     }
-    <span class="kw">pub fn </span>diff(<span class="self">self</span>) -&gt; Vector {
+    <span class="doccomment">/// 始点から終点に向かうベクトルを返す。
+    </span><span class="kw">pub fn </span>diff(<span class="self">self</span>) -&gt; Vector {
         <span class="self">self</span>.to - <span class="self">self</span>.from
     }
-    <span class="kw">pub fn </span>abs(<span class="self">self</span>) -&gt; f64 {
+    <span class="doccomment">/// 線分の大きさを返す。
+    </span><span class="kw">pub fn </span>abs(<span class="self">self</span>) -&gt; f64 {
         <span class="self">self</span>.diff().abs()
     }
-    <span class="kw">pub fn </span>dot(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; f64 {
+    <span class="doccomment">/// 2つの線分の内積を求める。
+    </span><span class="kw">pub fn </span>dot(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; f64 {
         <span class="self">self</span>.diff().dot(other.diff())
     }
-    <span class="kw">pub fn </span>cross(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; f64 {
+    <span class="doccomment">/// 2つの線分の外積を求める。
+    </span><span class="kw">pub fn </span>cross(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; f64 {
         <span class="self">self</span>.diff().cross(other.diff())
     }
-    <span class="kw">pub fn </span>eq(<span class="self">self</span>, other: <span class="self">Self</span>, eps: Eps) -&gt; bool {
+    <span class="doccomment">/// 2つの線分が等しければ`true`を返す。
+    </span><span class="kw">pub fn </span>eq(<span class="self">self</span>, other: <span class="self">Self</span>, eps: Eps) -&gt; bool {
         <span class="self">self</span>.from.eq(other.from, eps) &amp;&amp; <span class="self">self</span>.to.eq(other.to, eps)
     }
 
-    <span class="kw">pub fn </span>projection(<span class="self">self</span>, p: Vector) -&gt; Vector {
+    <span class="doccomment">/// 点`p`から直線に引いた垂線と直線の交点を求める。
+    </span><span class="kw">pub fn </span>projection(<span class="self">self</span>, p: Vector) -&gt; Vector {
         <span class="self">self</span>.from + <span class="self">self</span>.unit() * <span class="self">self</span>.unit().dot(p - <span class="self">self</span>.from)
     }
 
-    <span class="kw">pub fn </span>reflection(<span class="self">self</span>, p: Vector) -&gt; Vector {
+    <span class="doccomment">/// 直線を対象軸とした点`p`と線対称の位置の点を求める。
+    </span><span class="kw">pub fn </span>reflection(<span class="self">self</span>, p: Vector) -&gt; Vector {
         p + (<span class="self">self</span>.projection(p) - p) * <span class="number">2.0
     </span>}
 
-    <span class="kw">pub fn </span>is_orthogonal(<span class="self">self</span>, other: <span class="self">Self</span>, eps: Eps) -&gt; bool {
+    <span class="doccomment">/// 2つの直線が直交していれば`true`を返す。
+    </span><span class="kw">pub fn </span>is_orthogonal(<span class="self">self</span>, other: <span class="self">Self</span>, eps: Eps) -&gt; bool {
         eps.eq(<span class="self">self</span>.dot(other).abs(), <span class="number">0.0</span>)
     }
 
-    <span class="kw">pub fn </span>is_parallel(<span class="self">self</span>, other: <span class="self">Self</span>, eps: Eps) -&gt; bool {
+    <span class="doccomment">/// 2つの直線が平行していれば`true`を返す。
+    </span><span class="kw">pub fn </span>is_parallel(<span class="self">self</span>, other: <span class="self">Self</span>, eps: Eps) -&gt; bool {
         eps.eq(<span class="self">self</span>.cross(other).abs(), <span class="number">0.0</span>)
     }
 }

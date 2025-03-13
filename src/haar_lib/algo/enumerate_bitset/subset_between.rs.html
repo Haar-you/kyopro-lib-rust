@@ -45,9 +45,13 @@
 <a href="#29" id="29">29</a>
 <a href="#30" id="30">30</a>
 <a href="#31" id="31">31</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::iter::successors;
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! $a \subseteq x \subseteq b$を満たす`x`を列挙する
+</span><span class="kw">use </span>std::iter::successors;
 
-<span class="kw">pub fn </span>subset_between(a: u32, b: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
+<span class="doccomment">/// $a \subseteq x \subseteq b$を満たす`x`を列挙するイテレータを返す。
+</span><span class="kw">pub fn </span>subset_between(a: u32, b: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
     <span class="kw">let </span>x = b ^ (a &amp; b);
 
     successors((a &amp; !b == <span class="number">0</span>).then_some(<span class="number">0</span>), <span class="kw">move </span>|<span class="kw-2">&amp;</span>t: <span class="kw-2">&amp;</span>u32| {
