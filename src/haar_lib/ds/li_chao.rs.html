@@ -176,6 +176,9 @@
 <a href="#160" id="160">160</a>
 <a href="#161" id="161">161</a>
 <a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Li-Chao tree
 //!
 //! # Problems
@@ -194,13 +197,16 @@
 
 <span class="macro">trait_alias!</span>(
     <span class="doccomment">/// [`LiChaoTree&lt;T&gt;`]が扱える型
-    </span>Elem: Copy + Ord + Default + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt;
+    </span>Elem: Copy + Ord + Add&lt;Output = <span class="self">Self</span>&gt; + Mul&lt;Output = <span class="self">Self</span>&gt;
 );
 
-<span class="attr">#[derive(PartialEq, Eq, Copy, Clone, Debug)]
+<span class="doccomment">/// 最大値クエリか最小値クエリかを表す
+</span><span class="attr">#[derive(PartialEq, Eq, Copy, Clone, Debug)]
 </span><span class="kw">pub enum </span>Mode {
-    Max,
-    Min,
+    <span class="doccomment">/// 最大値クエリ
+    </span>Max,
+    <span class="doccomment">/// 最小値クエリ
+    </span>Min,
 }
 
 <span class="kw">impl </span>Mode {

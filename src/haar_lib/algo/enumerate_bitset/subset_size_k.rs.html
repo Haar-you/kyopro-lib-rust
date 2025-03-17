@@ -44,9 +44,13 @@
 <a href="#28" id="28">28</a>
 <a href="#29" id="29">29</a>
 <a href="#30" id="30">30</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::iter::successors;
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! ビットが`1`の個数が`k`であるものを列挙する
+</span><span class="kw">use </span>std::iter::successors;
 
-<span class="kw">pub fn </span>subset_size_k(width: u32, k: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
+<span class="doccomment">/// 幅`width`のなかで、ビットが`1`の個数が`k`であるものを列挙するイテレータを返す。
+</span><span class="kw">pub fn </span>subset_size_k(width: u32, k: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
     successors(<span class="prelude-val">Some</span>((<span class="number">1 </span>&lt;&lt; k) - <span class="number">1</span>), <span class="kw">move </span>|<span class="kw-2">&amp;</span>t| {
         <span class="kw">let </span>x = ((t <span class="kw">as </span>i32) &amp; (-(t <span class="kw">as </span>i32))) <span class="kw">as </span>u32;
         <span class="kw">let </span>y = t + x;

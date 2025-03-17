@@ -281,9 +281,9 @@
 
     <span class="doccomment">/// 列`s`をTrie木に追加する。
     ///
-    /// `init`: ノードが新しく追加されるときの初期値を決定する。
-    /// `proc`: 行きがけ順に、ノードの値に処理をする。
-    /// `rproc`: 帰りがけ順に、ノードの値に処理をする。
+    /// - `init`: ノードが新しく追加されるときの初期値を決定する。
+    /// - `proc`: 行きがけ順に、ノードの値に処理をする。
+    /// - `rproc`: 帰りがけ順に、ノードの値に処理をする。
     </span><span class="kw">pub fn </span>add&lt;I, FI, F1, F2&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: I, init: FI, proc: F1, <span class="kw-2">mut </span>rproc: F2)
     <span class="kw">where
         </span>I: IntoIterator&lt;Item = K&gt;,

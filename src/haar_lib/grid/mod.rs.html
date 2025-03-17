@@ -99,12 +99,29 @@
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
 <a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>to_graph;
 
-<span class="attr">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+<span class="doccomment">/// グリッド上の位置を表す。
+</span><span class="attr">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>Position {
-    <span class="kw">pub </span>x: usize,
-    <span class="kw">pub </span>y: usize,
+    <span class="doccomment">/// x方向の位置
+    </span><span class="kw">pub </span>x: usize,
+    <span class="doccomment">/// y方向の位置
+    </span><span class="kw">pub </span>y: usize,
 }
 
 <span class="doccomment">/// 移動方向
@@ -134,11 +151,16 @@
         <span class="self">Self </span>{ dx, dy }
     }
 
-    <span class="kw">pub const </span>L: Dir = Dir { dx: <span class="number">0</span>, dy: -<span class="number">1 </span>};
-    <span class="kw">pub const </span>R: Dir = Dir { dx: <span class="number">0</span>, dy: <span class="number">1 </span>};
-    <span class="kw">pub const </span>U: Dir = Dir { dx: -<span class="number">1</span>, dy: <span class="number">0 </span>};
-    <span class="kw">pub const </span>D: Dir = Dir { dx: <span class="number">1</span>, dy: <span class="number">0 </span>};
-    <span class="kw">pub const </span>DIR_4: [Dir; <span class="number">4</span>] = [<span class="self">Self</span>::L, <span class="self">Self</span>::R, <span class="self">Self</span>::U, <span class="self">Self</span>::D];
+    <span class="doccomment">/// 左方向への1マス分の移動
+    </span><span class="kw">pub const </span>L: Dir = Dir { dx: <span class="number">0</span>, dy: -<span class="number">1 </span>};
+    <span class="doccomment">/// 右方向への1マス分の移動
+    </span><span class="kw">pub const </span>R: Dir = Dir { dx: <span class="number">0</span>, dy: <span class="number">1 </span>};
+    <span class="doccomment">/// 上方向への1マス分の移動
+    </span><span class="kw">pub const </span>U: Dir = Dir { dx: -<span class="number">1</span>, dy: <span class="number">0 </span>};
+    <span class="doccomment">/// 下方向への1マス分の移動
+    </span><span class="kw">pub const </span>D: Dir = Dir { dx: <span class="number">1</span>, dy: <span class="number">0 </span>};
+    <span class="doccomment">/// 上下左右4方向への1マス分の移動を格納した配列
+    </span><span class="kw">pub const </span>DIR_4: [Dir; <span class="number">4</span>] = [<span class="self">Self</span>::L, <span class="self">Self</span>::R, <span class="self">Self</span>::U, <span class="self">Self</span>::D];
 }
 
 <span class="kw">impl </span>std::ops::Add <span class="kw">for </span>Dir {
@@ -148,27 +170,32 @@
     }
 }
 
-<span class="attr">#[derive(Clone, Debug)]
+<span class="doccomment">/// 長方形型のマス目グリッドを扱う。
+</span><span class="attr">#[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>Grid&lt;T&gt; {
     grid: Vec&lt;Vec&lt;T&gt;&gt;,
 }
 
 <span class="kw">impl</span>&lt;T&gt; Grid&lt;T&gt; {
-    <span class="kw">pub fn </span>new(g: <span class="kw">impl </span>IntoIterator&lt;Item = <span class="kw">impl </span>Into&lt;Vec&lt;T&gt;&gt;&gt;) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// [`Vec&lt;Vec&lt;T&gt;&gt;`]などから[`Grid`]を構築する。
+    </span><span class="kw">pub fn </span>new(g: <span class="kw">impl </span>IntoIterator&lt;Item = <span class="kw">impl </span>Into&lt;Vec&lt;T&gt;&gt;&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             grid: g.into_iter().map(|a| a.into()).collect(),
         }
     }
 
-    <span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, p: Position) -&gt; <span class="kw-2">&amp;</span>T {
+    <span class="doccomment">/// 位置`p`の要素への参照を返す。
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, p: Position) -&gt; <span class="kw-2">&amp;</span>T {
         <span class="kw-2">&amp;</span><span class="self">self</span>.grid[p.x][p.y]
     }
 
-    <span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, p: Position) -&gt; <span class="kw-2">&amp;mut </span>T {
+    <span class="doccomment">/// 位置`p`の要素への可変参照を返す。
+    </span><span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, p: Position) -&gt; <span class="kw-2">&amp;mut </span>T {
         <span class="kw-2">&amp;mut </span><span class="self">self</span>.grid[p.x][p.y]
     }
 
-    <span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (Position, <span class="kw-2">&amp;</span>T)&gt; {
+    <span class="doccomment">/// グリッド上の位置と要素の参照のタプルへのイテレータを返す。
+    </span><span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (Position, <span class="kw-2">&amp;</span>T)&gt; {
         <span class="self">self</span>.grid.iter().enumerate().flat_map(|(i, v)| {
             v.iter()
                 .enumerate()
@@ -176,7 +203,8 @@
         })
     }
 
-    <span class="kw">pub fn </span>iter_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (Position, <span class="kw-2">&amp;mut </span>T)&gt; {
+    <span class="doccomment">/// グリッド上の位置と要素の可変参照のタプルへのイテレータを返す。
+    </span><span class="kw">pub fn </span>iter_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (Position, <span class="kw-2">&amp;mut </span>T)&gt; {
         <span class="self">self</span>.grid.iter_mut().enumerate().flat_map(|(i, v)| {
             v.iter_mut()
                 .enumerate()

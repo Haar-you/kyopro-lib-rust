@@ -201,7 +201,6 @@
 <a href="#185" id="185">185</a>
 <a href="#186" id="186">186</a>
 <a href="#187" id="187">187</a>
-<a href="#188" id="188">188</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 動的双対セグメント木
 </span><span class="kw">use </span><span class="kw">crate</span>::algebra::traits::Monoid;
 <span class="kw">use </span><span class="kw">crate</span>::utils::nullable_usize::NullableUsize;
@@ -247,31 +246,33 @@
         }
     }
 
-    <span class="kw">unsafe fn </span>propagate(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cur: usize, from: usize, to: usize) {
+    <span class="kw">fn </span>propagate(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cur: usize, from: usize, to: usize) {
         <span class="kw">if </span>to - from &gt; <span class="number">1 </span>{
-            <span class="kw">let </span>value = <span class="self">self</span>.data.get_unchecked(cur).value.clone();
+            <span class="kw">let </span><span class="kw-2">mut </span>cur_node = <span class="self">self</span>.data[cur].clone();
+            <span class="kw">let </span>value = cur_node.value.clone();
 
-            <span class="kw">let </span>left = <span class="self">self</span>.data.get_unchecked(cur).left;
+            <span class="kw">let </span>left = cur_node.left;
             <span class="kw">if </span>left.is_null() {
                 <span class="kw">let </span>t = Node::new(<span class="self">self</span>.monoid.id());
-                <span class="self">self</span>.data.get_unchecked_mut(cur).left = NullableUsize(<span class="self">self</span>.data.len());
+                cur_node.left = NullableUsize(<span class="self">self</span>.data.len());
                 <span class="self">self</span>.data.push(t);
             }
-            <span class="kw">let </span>left = <span class="self">self</span>.data.get_unchecked(cur).left.<span class="number">0</span>;
-            <span class="kw">let </span>lv = <span class="self">self</span>.data.get_unchecked(left).value.clone();
-            <span class="self">self</span>.data.get_unchecked_mut(left).value = <span class="self">self</span>.monoid.op(value.clone(), lv);
+            <span class="kw">let </span>left = cur_node.left.<span class="number">0</span>;
+            <span class="kw">let </span>lv = <span class="self">self</span>.data[left].value.clone();
+            <span class="self">self</span>.data[left].value = <span class="self">self</span>.monoid.op(value.clone(), lv);
 
-            <span class="kw">let </span>right = <span class="self">self</span>.data.get_unchecked(cur).right;
+            <span class="kw">let </span>right = cur_node.right;
             <span class="kw">if </span>right.is_null() {
                 <span class="kw">let </span>t = Node::new(<span class="self">self</span>.monoid.id());
-                <span class="self">self</span>.data.get_unchecked_mut(cur).right = NullableUsize(<span class="self">self</span>.data.len());
+                cur_node.right = NullableUsize(<span class="self">self</span>.data.len());
                 <span class="self">self</span>.data.push(t);
             }
-            <span class="kw">let </span>right = <span class="self">self</span>.data.get_unchecked(cur).right.<span class="number">0</span>;
-            <span class="kw">let </span>rv = <span class="self">self</span>.data.get_unchecked(right).value.clone();
-            <span class="self">self</span>.data.get_unchecked_mut(right).value = <span class="self">self</span>.monoid.op(value, rv);
+            <span class="kw">let </span>right = cur_node.right.<span class="number">0</span>;
+            <span class="kw">let </span>rv = <span class="self">self</span>.data[right].value.clone();
+            <span class="self">self</span>.data[right].value = <span class="self">self</span>.monoid.op(value, rv);
 
-            <span class="self">self</span>.data.get_unchecked_mut(cur).value = <span class="self">self</span>.monoid.id();
+            cur_node.value = <span class="self">self</span>.monoid.id();
+            <span class="self">self</span>.data[cur] = cur_node;
         }
     }
 
@@ -303,9 +304,7 @@
                 }
             } <span class="kw">else </span>{
                 <span class="kw">let </span>mid = (from + to) / <span class="number">2</span>;
-                <span class="kw">unsafe </span>{
-                    <span class="self">self</span>.propagate(cur, from, to);
-                }
+                <span class="self">self</span>.propagate(cur, from, to);
                 <span class="kw">let </span>cur = <span class="kw">unsafe </span>{ <span class="self">self</span>.data.get_unchecked(cur) };
                 <span class="kw">let </span>left = cur.left;
                 <span class="kw">let </span>right = cur.right;
@@ -343,9 +342,8 @@
         <span class="kw">if </span>to - from == <span class="number">1 </span>{
             <span class="kw">unsafe </span>{ <span class="self">self</span>.data.get_unchecked(cur).value.clone() }
         } <span class="kw">else </span>{
-            <span class="kw">unsafe </span>{
-                <span class="self">self</span>.propagate(cur, from, to);
-            }
+            <span class="self">self</span>.propagate(cur, from, to);
+
             <span class="kw">let </span>mid = (from + to) / <span class="number">2</span>;
             <span class="kw">let </span>cur = <span class="kw">unsafe </span>{ <span class="self">self</span>.data.get_unchecked(cur) };
             <span class="kw">if </span>i &lt; mid {

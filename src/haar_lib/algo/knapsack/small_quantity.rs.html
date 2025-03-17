@@ -87,7 +87,7 @@
 <a href="#71" id="71">71</a>
 <a href="#72" id="72">72</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 要素数が小さいナップサック問題
-</span><span class="kw">use crate</span>::{algo::merge::inplace_merge, chmax};
+</span><span class="kw">use crate</span>::{algo::merge::inplace_merge, chmax, num::one_zero::Zero};
 <span class="kw">use </span>std::ops::Add;
 
 <span class="doccomment">/// 要素数が小さいナップサック問題
@@ -97,16 +97,16 @@
 /// **Space complexity** $O(2 ^ {n / 2})$
 </span><span class="kw">pub fn </span>knapsack_small_quantity&lt;W, V&gt;(cap: W, ws: <span class="kw-2">&amp;</span>[W], vs: <span class="kw-2">&amp;</span>[V]) -&gt; V
 <span class="kw">where
-    </span>W: Default + Copy + Add&lt;Output = W&gt; + Ord,
-    V: Default + Copy + Add&lt;Output = V&gt; + Ord,
+    </span>W: Copy + Add&lt;Output = W&gt; + Ord + Zero,
+    V: Copy + Add&lt;Output = V&gt; + Ord + Zero,
 {
     <span class="kw">let </span>n = ws.len();
     <span class="macro">assert_eq!</span>(ws.len(), vs.len());
 
     <span class="kw">let </span>p = n / <span class="number">2</span>;
 
-    <span class="kw">let </span>zero_w = W::default();
-    <span class="kw">let </span>zero_v = V::default();
+    <span class="kw">let </span>zero_w = W::zero();
+    <span class="kw">let </span>zero_v = V::zero();
 
     <span class="kw">let </span><span class="kw-2">mut </span>a: Vec&lt;(W, V)&gt; = <span class="macro">vec!</span>[(zero_w, zero_v)];
     <span class="kw">let </span><span class="kw-2">mut </span>b: Vec&lt;(W, V)&gt; = <span class="macro">vec!</span>[(zero_w, zero_v)];

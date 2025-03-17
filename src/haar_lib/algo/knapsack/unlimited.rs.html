@@ -45,8 +45,12 @@
 <a href="#29" id="29">29</a>
 <a href="#30" id="30">30</a>
 <a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 個数制限無しナップサック問題
 </span><span class="kw">use </span>std::{cmp::max, ops::Add};
+
+<span class="kw">use </span><span class="kw">crate</span>::num::one_zero::Zero;
 
 <span class="doccomment">/// 個数制限無しナップサック問題
 ///
@@ -55,12 +59,12 @@
 /// **Space complexity** $O(cap)$
 </span><span class="kw">pub fn </span>knapsack_unlimited&lt;T&gt;(cap: usize, ws: <span class="kw-2">&amp;</span>[usize], vs: <span class="kw-2">&amp;</span>[T]) -&gt; T
 <span class="kw">where
-    </span>T: Default + Copy + Ord + Add&lt;Output = T&gt;,
+    </span>T: Copy + Ord + Add&lt;Output = T&gt; + Zero,
 {
     <span class="kw">let </span>n = ws.len();
     <span class="macro">assert_eq!</span>(ws.len(), vs.len());
 
-    <span class="kw">let </span><span class="kw-2">mut </span>dp = <span class="macro">vec!</span>[<span class="macro">vec!</span>[T::default(); cap + <span class="number">1</span>]; <span class="number">2</span>];
+    <span class="kw">let </span><span class="kw-2">mut </span>dp = <span class="macro">vec!</span>[<span class="macro">vec!</span>[T::zero(); cap + <span class="number">1</span>]; <span class="number">2</span>];
 
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
         <span class="kw">let </span>next = (i + <span class="number">1</span>) &amp; <span class="number">1</span>;

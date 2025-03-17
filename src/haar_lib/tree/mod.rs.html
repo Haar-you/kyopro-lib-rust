@@ -186,6 +186,30 @@
 <a href="#170" id="170">170</a>
 <a href="#171" id="171">171</a>
 <a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 木に関するもの
 
 </span><span class="kw">pub mod </span>auxiliary_tree;
@@ -202,19 +226,29 @@
 <span class="kw">pub mod </span>utils;
 
 <span class="kw">pub trait </span>TreeEdgeTrait {
-    <span class="kw">type </span>Weight;
-    <span class="kw">fn </span>from(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
-    <span class="kw">fn </span>to(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
-    <span class="kw">fn </span>weight(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Weight;
-    <span class="kw">fn </span>rev(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
+    <span class="doccomment">/// 辺の重みの型
+    </span><span class="kw">type </span>Weight;
+    <span class="doccomment">/// 辺の始点を返す。
+    </span><span class="kw">fn </span>from(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
+    <span class="doccomment">/// 辺の終点を返す。
+    </span><span class="kw">fn </span>to(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
+    <span class="doccomment">/// 辺の重みを返す。
+    </span><span class="kw">fn </span>weight(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Weight;
+    <span class="doccomment">/// 逆辺を返す。
+    </span><span class="kw">fn </span>rev(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
 }
 
-<span class="attr">#[derive(Clone, Debug)]
+<span class="doccomment">/// 始点、終点、重み、番号をもつ木の辺
+</span><span class="attr">#[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>TreeEdge&lt;T, I&gt; {
-    <span class="kw">pub </span>from: usize,
-    <span class="kw">pub </span>to: usize,
-    <span class="kw">pub </span>weight: T,
-    <span class="kw">pub </span>index: I,
+    <span class="doccomment">/// 始点
+    </span><span class="kw">pub </span>from: usize,
+    <span class="doccomment">/// 終点
+    </span><span class="kw">pub </span>to: usize,
+    <span class="doccomment">/// 重み
+    </span><span class="kw">pub </span>weight: T,
+    <span class="doccomment">/// 辺の番号
+    </span><span class="kw">pub </span>index: I,
 }
 
 <span class="kw">impl</span>&lt;T, I&gt; TreeEdge&lt;T, I&gt; {
@@ -248,28 +282,35 @@
     </span>}
 }
 
-<span class="attr">#[derive(Clone, Debug, Default)]
+<span class="doccomment">/// 木のノード
+</span><span class="attr">#[derive(Clone, Debug, Default)]
 </span><span class="kw">pub struct </span>TreeNode&lt;E&gt; {
-    <span class="kw">pub </span>parent: <span class="prelude-ty">Option</span>&lt;E&gt;,
-    <span class="kw">pub </span>children: Vec&lt;E&gt;,
+    <span class="doccomment">/// 親ノードへの辺
+    </span><span class="kw">pub </span>parent: <span class="prelude-ty">Option</span>&lt;E&gt;,
+    <span class="doccomment">/// 子ノードへの辺
+    </span><span class="kw">pub </span>children: Vec&lt;E&gt;,
 }
 
 <span class="kw">impl</span>&lt;E: TreeEdgeTrait&gt; TreeNode&lt;E&gt; {
-    <span class="kw">pub fn </span>neighbors(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>DoubleEndedIterator&lt;Item = <span class="kw-2">&amp;</span>E&gt; {
+    <span class="doccomment">/// 隣接辺を列挙するイテレータを返す。
+    </span><span class="kw">pub fn </span>neighbors(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>DoubleEndedIterator&lt;Item = <span class="kw-2">&amp;</span>E&gt; {
         <span class="self">self</span>.children.iter().chain(<span class="self">self</span>.parent.iter())
     }
 
-    <span class="kw">pub fn </span>neighbors_size(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="doccomment">/// 隣接辺の個数を返す。
+    </span><span class="kw">pub fn </span>neighbors_size(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.children.len() + <span class="self">self</span>.parent.as_ref().map_or(<span class="number">0</span>, |<span class="kw">_</span>| <span class="number">1</span>)
     }
 }
 
-<span class="kw">pub struct </span>TreeBuilder&lt;E&gt; {
+<span class="doccomment">/// 非根付き木を構築する
+</span><span class="kw">pub struct </span>TreeBuilder&lt;E&gt; {
     nodes: Vec&lt;TreeNode&lt;E&gt;&gt;,
 }
 
 <span class="kw">impl</span>&lt;E: TreeEdgeTrait + Clone&gt; TreeBuilder&lt;E&gt; {
-    <span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 頂点数`size`の[`TreeBuilder`]を生成する。
+    </span><span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             nodes: <span class="macro">vec!</span>[
                 TreeNode {
@@ -296,13 +337,15 @@
     }
 }
 
-<span class="kw">pub struct </span>RootedTreeBuilder&lt;E&gt; {
+<span class="doccomment">/// 根付き木を構築する
+</span><span class="kw">pub struct </span>RootedTreeBuilder&lt;E&gt; {
     nodes: Vec&lt;TreeNode&lt;E&gt;&gt;,
     root: usize,
 }
 
 <span class="kw">impl</span>&lt;E: TreeEdgeTrait + Clone&gt; RootedTreeBuilder&lt;E&gt; {
-    <span class="kw">pub fn </span>new(size: usize, root: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 頂点数`size`の[`TreeBuilder`]を生成する。
+    </span><span class="kw">pub fn </span>new(size: usize, root: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             nodes: <span class="macro">vec!</span>[
                 TreeNode {
@@ -338,23 +381,28 @@
 }
 
 <span class="kw">impl</span>&lt;E&gt; Tree&lt;E&gt; {
-    <span class="kw">pub fn </span>nodes_iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>TreeNode&lt;E&gt;&gt; {
+    <span class="doccomment">/// 各頂点の[`TreeNode`]への参照のイテレータを返す。
+    </span><span class="kw">pub fn </span>nodes_iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>TreeNode&lt;E&gt;&gt; {
         <span class="self">self</span>.nodes.iter()
     }
 
-    <span class="kw">pub fn </span>nodes(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; <span class="kw-2">&amp;</span>TreeNode&lt;E&gt; {
+    <span class="doccomment">/// `i`番目の頂点の[`TreeNode`]への参照を返す。
+    </span><span class="kw">pub fn </span>nodes(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; <span class="kw-2">&amp;</span>TreeNode&lt;E&gt; {
         <span class="kw-2">&amp;</span><span class="self">self</span>.nodes[i]
     }
 
-    <span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="doccomment">/// 木の頂点数を返す。
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.nodes.len()
     }
 
-    <span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="doccomment">/// 木の頂点数が`0`ならば`true`を返す。
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.nodes.is_empty()
     }
 
-    <span class="kw">pub fn </span>root(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
+    <span class="doccomment">/// 木に根があれば根を返す。
+    </span><span class="kw">pub fn </span>root(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="self">self</span>.root
     }
 }

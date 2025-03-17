@@ -164,7 +164,7 @@
 <span class="doccomment">/// 整数の追加・削除とMexを求められるデータ構造
 </span><span class="attr">#[derive(Clone, Debug, Default)]
 </span><span class="kw">pub struct </span>IntegerSet {
-    data: BTreeMap&lt;u64, u64&gt;,
+    data: BTreeMap&lt;i64, i64&gt;,
 }
 
 <span class="kw">impl </span>IntegerSet {
@@ -178,7 +178,7 @@
     <span class="doccomment">/// `x`を含む半開区間を返す
     ///
     /// **Time complexity** $O(\log n)$
-    </span><span class="kw">pub fn </span>interval(<span class="kw-2">&amp;</span><span class="self">self</span>, x: u64) -&gt; <span class="prelude-ty">Option</span>&lt;(u64, u64)&gt; {
+    </span><span class="kw">pub fn </span>interval(<span class="kw-2">&amp;</span><span class="self">self</span>, x: i64) -&gt; <span class="prelude-ty">Option</span>&lt;(i64, i64)&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw-2">&amp;</span>k, <span class="kw-2">&amp;</span>v)) = <span class="self">self</span>.data.range(..=x).next_back() {
             <span class="kw">if </span>k &lt;= x &amp;&amp; x &lt; v {
                 <span class="kw">return </span><span class="prelude-val">Some</span>((k, v));
@@ -190,14 +190,14 @@
     <span class="doccomment">/// `x`を含むかを判定
     ///
     /// **Time complexity** $O(\log n)$
-    </span><span class="kw">pub fn </span>contains(<span class="kw-2">&amp;</span><span class="self">self</span>, x: u64) -&gt; bool {
+    </span><span class="kw">pub fn </span>contains(<span class="kw-2">&amp;</span><span class="self">self</span>, x: i64) -&gt; bool {
         <span class="self">self</span>.interval(x).is_some()
     }
 
     <span class="doccomment">/// `x`を追加する
     ///
     /// **Time complexity** $O(\log n)$
-    </span><span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: u64) {
+    </span><span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: i64) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw-2">&amp;</span>k, <span class="kw-2">&amp;</span>v)) = <span class="self">self</span>.data.range(..=x).next_back() {
             <span class="kw">if </span>k &lt;= x &amp;&amp; x &lt; v {
                 <span class="kw">return</span>;
@@ -223,7 +223,7 @@
     <span class="doccomment">/// `x`を削除する
     ///
     /// **Time complexity** $O(\log n)$
-    </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: u64) {
+    </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: i64) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>((k, v)) = <span class="self">self</span>.interval(x) {
             <span class="self">self</span>.data.remove(<span class="kw-2">&amp;</span>k);
 
@@ -239,7 +239,7 @@
     <span class="doccomment">/// `self`に含まれない数のうち`x`以上で最小のもの
     ///
     /// **Time complexity** $O(\log n)$
-    </span><span class="kw">pub fn </span>mex(<span class="kw-2">&amp;</span><span class="self">self</span>, x: u64) -&gt; u64 {
+    </span><span class="kw">pub fn </span>mex(<span class="kw-2">&amp;</span><span class="self">self</span>, x: i64) -&gt; i64 {
         <span class="self">self</span>.interval(x).map_or(x, |(<span class="kw">_</span>, v)| v)
     }
 }
@@ -263,21 +263,21 @@
         <span class="kw">let </span><span class="kw-2">mut </span>a = BTreeSet::new();
 
         <span class="kw">for _ in </span><span class="number">0</span>..n {
-            <span class="kw">let </span>x = rng.gen_range(<span class="number">0</span>..=l);
+            <span class="kw">let </span>x = rng.gen_range(-l..=l);
             s.insert(x);
             a.insert(x);
         }
 
         <span class="kw">for _ in </span><span class="number">0</span>..t {
-            <span class="kw">let </span>x = rng.gen_range(<span class="number">0</span>..=l);
+            <span class="kw">let </span>x = rng.gen_range(-l..=l);
             s.insert(x);
             a.insert(x);
 
-            <span class="kw">let </span>x = rng.gen_range(<span class="number">0</span>..=l);
+            <span class="kw">let </span>x = rng.gen_range(-l..=l);
             s.remove(x);
             a.remove(<span class="kw-2">&amp;</span>x);
 
-            <span class="kw">let </span>x = rng.gen_range(<span class="number">0</span>..=l);
+            <span class="kw">let </span>x = rng.gen_range(-l..=l);
 
             <span class="kw">let </span><span class="kw-2">mut </span>mex = x;
             <span class="kw">while </span>a.contains(<span class="kw-2">&amp;</span>mex) {
