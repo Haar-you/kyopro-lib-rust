@@ -2,12 +2,15 @@
 
 use crate::graph::*;
 
+/// 強連結成分分解
 pub struct SCC {
     size: usize,
     groups: Vec<Vec<usize>>,
 }
 
 impl SCC {
+    /// グラフから[`SCC`]を構築する。
+    ///
     /// **Time complexity** $O(V + E)$
     pub fn new<E: EdgeTrait>(g: &Graph<Directed, E>) -> Self {
         let n = g.len();

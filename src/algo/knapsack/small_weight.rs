@@ -1,5 +1,5 @@
 //! 容量が小さいナップサック問題
-use crate::chmax;
+use crate::{chmax, num::one_zero::Zero};
 use std::ops::Add;
 
 /// 容量が小さいナップサック問題
@@ -9,12 +9,12 @@ use std::ops::Add;
 /// **Space complexity** $O(cap)$
 pub fn knapsack_small_weight<T>(cap: usize, ws: &[usize], vs: &[T]) -> T
 where
-    T: Default + Copy + Ord + Add<Output = T>,
+    T: Copy + Ord + Add<Output = T> + Zero,
 {
     let n = ws.len();
     assert_eq!(ws.len(), vs.len());
 
-    let mut dp = vec![vec![T::default(); cap + 1]; 2];
+    let mut dp = vec![vec![T::zero(); cap + 1]; 2];
 
     for i in 0..n {
         let next = (i + 1) & 1;

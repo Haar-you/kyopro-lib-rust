@@ -16,12 +16,15 @@ use std::{
 
 trait_alias!(
     /// [`LiChaoTree<T>`]が扱える型
-    Elem: Copy + Ord + Default + Add<Output = Self> + Mul<Output = Self>
+    Elem: Copy + Ord + Add<Output = Self> + Mul<Output = Self>
 );
 
+/// 最大値クエリか最小値クエリかを表す
 #[derive(PartialEq, Eq, Copy, Clone, Debug)]
 pub enum Mode {
+    /// 最大値クエリ
     Max,
+    /// 最小値クエリ
     Min,
 }
 

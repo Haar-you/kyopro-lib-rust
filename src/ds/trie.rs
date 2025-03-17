@@ -102,9 +102,9 @@ impl<T, K: Copy + Hash + Eq> Trie<T, K> {
 
     /// 列`s`をTrie木に追加する。
     ///
-    /// `init`: ノードが新しく追加されるときの初期値を決定する。
-    /// `proc`: 行きがけ順に、ノードの値に処理をする。
-    /// `rproc`: 帰りがけ順に、ノードの値に処理をする。
+    /// - `init`: ノードが新しく追加されるときの初期値を決定する。
+    /// - `proc`: 行きがけ順に、ノードの値に処理をする。
+    /// - `rproc`: 帰りがけ順に、ノードの値に処理をする。
     pub fn add<I, FI, F1, F2>(&mut self, s: I, init: FI, proc: F1, mut rproc: F2)
     where
         I: IntoIterator<Item = K>,

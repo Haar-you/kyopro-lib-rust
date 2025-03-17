@@ -59,6 +59,7 @@ pub mod multiset;
 
 pub mod qword_tree;
 
+pub mod aho_corasick;
 pub mod palindromic_tree;
 pub mod trie;
 

@@ -1,4 +1,3 @@
-pub mod aho_corasick;
 pub mod bsearch;
 pub mod bsearch_f;
 pub mod compressor;

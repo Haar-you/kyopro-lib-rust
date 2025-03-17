@@ -1,5 +1,5 @@
 //! 個数制限付きナップサック問題
-use crate::chmax;
+use crate::{chmax, num::one_zero::Zero};
 use std::{
     cmp::min,
     ops::{Add, Mul},
@@ -12,11 +12,11 @@ use std::{
 /// **Space complexity** $O(cap)$
 pub fn knapsack_limited<T>(cap: usize, ws: &[usize], vs: &[T], ms: &[usize]) -> T
 where
-    T: Default + From<usize> + Copy + Ord + Add<Output = T> + Mul<Output = T>,
+    T: Copy + Ord + Add<Output = T> + Mul<Output = T> + Zero + From<usize>,
 {
     let n = ws.len();
     assert!(vs.len() == n && ms.len() == n);
-    let mut dp = vec![T::default(); cap + 1];
+    let mut dp = vec![T::zero(); cap + 1];
 
     for i in 0..n {
         let mut a = 1;
