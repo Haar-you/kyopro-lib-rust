@@ -4,6 +4,7 @@ use crate::{algo::bsearch::*, ds::fenwick_add::*};
 use std::convert::TryFrom;
 use std::ops::Range;
 
+/// 範囲転倒数取得クエリ
 pub struct StaticRangeInversionsQuery {
     data: Vec<usize>,
     qs: Vec<(usize, usize)>,
@@ -20,17 +21,19 @@ impl StaticRangeInversionsQuery {
         Self { data, qs: vec![] }
     }
 
+    /// 範囲`l..r`で転倒数を求めるクエリを追加する。
     pub fn add_query(&mut self, Range { start: l, end: r }: Range<usize>) {
         self.qs.push((l, r));
     }
 
-    pub fn solve(&self) -> Vec<u64> {
+    /// クエリに対しての結果を返す。
+    pub fn solve(self) -> Vec<(Range<usize>, u64)> {
         let n = self.data.len();
         let width = (n as f64).sqrt() as usize;
 
         let mut b = FenwickTreeAdd::<i64>::new(n);
         let mut temp = 0;
-        let mut ret = vec![0; self.qs.len()];
+        let mut ret = vec![(0..0, 0); self.qs.len()];
 
         let mut ord = (0..self.qs.len()).collect::<Vec<_>>();
 
@@ -76,9 +79,39 @@ impl StaticRangeInversionsQuery {
                 }
             }
 
-            ret[id] = u64::try_from(temp).unwrap()
+            ret[id] = (self.qs[id].0..self.qs[id].1, u64::try_from(temp).unwrap());
         }
 
         ret
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{algo::inversion_number::inversion_number, testtools::rand_range};
+    use rand::Rng;
+
+    #[test]
+    fn test() {
+        let mut rng = rand::thread_rng();
+
+        let n = 100;
+        let a: Vec<u64> = std::iter::repeat_with(|| rng.gen()).take(n).collect();
+
+        let mut sriq = StaticRangeInversionsQuery::new(&a);
+
+        let q = 100;
+        for _ in 0..q {
+            let range = rand_range(&mut rng, 0..n);
+            sriq.add_query(range);
+        }
+
+        for (range, res) in sriq.solve() {
+            let mut temp = a[range].to_vec();
+            let ans = inversion_number(&mut temp);
+
+            assert_eq!(res, ans);
+        }
     }
 }
