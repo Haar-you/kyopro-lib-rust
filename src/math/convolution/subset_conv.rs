@@ -1,4 +1,4 @@
-use crate::math::convolution::{mobius_sub::*, zeta_sub::*};
+use crate::math::convolution::{mobius::*, zeta::*};
 use std::ops::{Add, Mul, Sub};
 
 #[allow(clippy::needless_range_loop, clippy::manual_memcpy)]

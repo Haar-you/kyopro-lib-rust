@@ -1,4 +1,4 @@
-use crate::math::convolution::{mobius_sub::*, zeta_sub::*};
+use crate::math::convolution::{mobius::*, zeta::*};
 use std::ops::{Add, Mul, Sub};
 
 pub fn convolution_or<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
