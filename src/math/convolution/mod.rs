@@ -3,6 +3,7 @@ pub mod zeta;
 
 pub mod conv_and;
 pub mod conv_or;
+pub mod conv_xor;
 pub mod subset_conv;
 
 #[cfg(test)]
@@ -12,6 +13,7 @@ mod tests {
 
     use super::conv_and::convolution_and;
     use super::conv_or::convolution_or;
+    use super::conv_xor::convolution_xor;
     use super::mobius::*;
     use super::subset_conv::subset_convolution;
     use super::zeta::*;
@@ -114,6 +116,32 @@ mod tests {
         }
 
         let res = convolution_and(f, g);
+
+        assert_eq!(ans, res);
+    }
+
+    #[test]
+    fn test_conv_xor() {
+        let mut rng = rand::thread_rng();
+
+        let ff = ConstModIntBuilder::<M>;
+
+        let n = 1 << 10;
+        let f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M) as u64))
+            .take(n)
+            .collect_vec();
+        let g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M) as u64))
+            .take(n)
+            .collect_vec();
+
+        let mut ans = vec![ff.from_u64(0); n];
+        for i in 0..n {
+            for j in 0..n {
+                ans[i ^ j] += f[i] * g[j];
+            }
+        }
+
+        let res = convolution_xor(f, g, ff);
 
         assert_eq!(ans, res);
     }
