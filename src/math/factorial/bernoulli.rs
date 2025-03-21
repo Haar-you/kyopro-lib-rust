@@ -1,3 +1,4 @@
+//! ベルヌーイ数
 use crate::math::factorial::FactorialTable;
 use crate::num::ff::*;
 
@@ -5,6 +6,7 @@ impl<Modulo: FF> FactorialTable<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
+    /// ベルヌーイ数
     pub fn bernoulli_number(&self, n: usize) -> Vec<Modulo::Element> {
         let mut ret = vec![self.modulo.from_u64(0); n + 1];
 

@@ -1,3 +1,4 @@
+//! ベル数
 use crate::math::factorial::FactorialTable;
 use crate::num::ff::*;
 use std::cmp::min;

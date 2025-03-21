@@ -1,3 +1,4 @@
+//! カタラン数
 use crate::math::factorial::FactorialTable;
 use crate::num::ff::*;
 
@@ -5,6 +6,7 @@ impl<Modulo: FF> FactorialTable<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
+    /// カタラン数
     pub fn catalan_number(&self, n: usize) -> Modulo::Element {
         match n {
             0 => self.modulo.from_u64(1),

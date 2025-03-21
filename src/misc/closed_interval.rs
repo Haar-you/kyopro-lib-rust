@@ -1,3 +1,5 @@
+//! 閉区間
+
 /// 両端の点を含む閉区間を扱う。
 #[derive(Clone, Default, Debug, PartialEq, Eq)]
 pub struct ClosedInterval<T> {

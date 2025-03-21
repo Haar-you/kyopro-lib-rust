@@ -1,7 +1,12 @@
+//! ベル数$B(n, n)$のテーブル
+//!
+//! # References
+//! - <https://manabitimes.jp/math/892>
 #![allow(clippy::needless_range_loop)]
 
 use crate::num::ff::*;
 
+/// ベル数$B(0, 0)$~$B(n, n)$を求める。
 pub fn bell_number_table<Modulo: FF>(n: usize, modulo: Modulo) -> Vec<Vec<Modulo::Element>>
 where
     Modulo::Element: FFElem + Copy,
