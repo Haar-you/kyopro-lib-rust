@@ -6,6 +6,7 @@
 use crate::graph::*;
 use std::ops::Add;
 
+/// 巡回セールスマン問題
 pub fn tsp<E: EdgeTrait>(g: &Graph<Directed, E>, src: usize) -> Option<E::Weight>
 where
     E::Weight: Copy + Ord + Add<Output = E::Weight>,

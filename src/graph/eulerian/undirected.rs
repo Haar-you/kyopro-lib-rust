@@ -1,5 +1,7 @@
+//! 無向グラフの(準)Eulerグラフ判定
 use crate::graph::*;
 
+/// 無向グラフでの一筆書き
 #[derive(Clone)]
 pub struct UndirectedEulerianTrail<E: EdgeTrait> {
     size: usize,
@@ -9,6 +11,7 @@ pub struct UndirectedEulerianTrail<E: EdgeTrait> {
 }
 
 impl<E: EdgeTrait + Clone> UndirectedEulerianTrail<E> {
+    /// 頂点数`size`のグラフを用意する。
     pub fn new(size: usize) -> Self {
         Self {
             size,
@@ -18,6 +21,7 @@ impl<E: EdgeTrait + Clone> UndirectedEulerianTrail<E> {
         }
     }
 
+    /// 無向辺`e`を追加する。
     pub fn add_edge(&mut self, e: E) {
         let from = e.from();
         let to = e.to();
@@ -59,6 +63,7 @@ impl<E: EdgeTrait + Clone> UndirectedEulerianTrail<E> {
         vs.push(cur);
     }
 
+    /// グラフが一筆書き可能なら、その頂点列と辺列を`Some`に包んで返す。
     pub fn solve(mut self) -> Option<(Vec<usize>, Vec<E>)> {
         let mut odd = 0;
         let mut start = None;

@@ -17,12 +17,14 @@ impl RollingHash {
         Self { m, b, pow }
     }
 
+    /// 文字列`s`のハッシュを計算する。
     pub fn hash(&self, s: &str) -> u64 {
         s.as_bytes()
             .iter()
             .fold(0, |acc, c| (acc * self.b + *c as u64) % self.m)
     }
 
+    /// 文字列`s`からハッシュ計算テーブルを作る。
     pub fn hash_table(&self, s: &str) -> Table {
         let mut ret = vec![1; s.len() + 1];
 
@@ -43,6 +45,7 @@ pub struct Table<'a> {
 }
 
 impl<'a> Table<'a> {
+    /// 範囲`l..r`でのハッシュを計算する。
     pub fn hash(&self, Range { start: l, end: r }: Range<usize>) -> u64 {
         let m = self.rh.m;
         (self.table[r] - self.table[l] * self.rh.pow[r - l] % m + m * m) % m

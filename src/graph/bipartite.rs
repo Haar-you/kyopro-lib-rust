@@ -2,6 +2,9 @@
 
 use crate::graph::*;
 
+/// 無向グラフが二部グラフであるかを判定する。
+///
+/// 連結成分ごとに、二部グラフならば`Some`に2つに分割された頂点集合を包んで、そうでなければ`None`を返す。
 pub fn check_bipartite<E: EdgeTrait>(
     g: &Graph<Undirected, E>,
 ) -> Vec<Option<(Vec<usize>, Vec<usize>)>> {

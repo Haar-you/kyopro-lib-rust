@@ -140,6 +140,7 @@ fn sa(mut s: Vec<u32>) -> Vec<usize> {
     induced_sort(&lms_sorted)
 }
 
+/// 接尾辞配列
 #[derive(Clone, Debug)]
 pub struct SuffixArray {
     data: Vec<usize>,
@@ -147,6 +148,7 @@ pub struct SuffixArray {
 }
 
 impl SuffixArray {
+    /// 文字列`s`から接尾辞配列を構築する。
     pub fn new(s: &str) -> Self {
         let mut str_data = s.as_bytes().to_vec();
         str_data.push(0);
@@ -158,6 +160,7 @@ impl SuffixArray {
         }
     }
 
+    /// 接尾辞配列への参照を返す。
     pub fn to_slice(&self) -> &[usize] {
         &self.data
     }
