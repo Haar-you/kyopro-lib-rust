@@ -1,3 +1,5 @@
+//! `rec!`
+
 /// immutableかつ引数を一つのみとる再帰クロージャ
 ///
 /// # References

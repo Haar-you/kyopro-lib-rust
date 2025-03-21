@@ -1,4 +1,4 @@
-//! C言語風のfor文
+//! `for_loop!`
 
 /// C言語風のfor文
 #[macro_export]

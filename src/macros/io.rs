@@ -1,3 +1,5 @@
+//! `get!`, `input!`
+
 #[macro_export]
 macro_rules! get {
     ( $in:ident, [$a:tt $(as $to:ty)*; $num:expr] ) => {

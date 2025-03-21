@@ -1,3 +1,5 @@
+//! `impl_algebra!`
+
 #[macro_export]
 macro_rules! impl_algebra {
     (@bound $t:ty, op: $f:expr; $($bound:tt)*) => {
