@@ -2,16 +2,19 @@ pub mod mobius;
 pub mod zeta;
 
 pub mod conv_and;
+pub mod conv_gcd;
 pub mod conv_or;
 pub mod conv_xor;
 pub mod subset_conv;
 
 #[cfg(test)]
 mod tests {
+    use crate::math::gcd_lcm::GcdLcm;
     use crate::{iter::collect::CollectVec, num::const_modint::*};
     use rand::Rng;
 
     use super::conv_and::convolution_and;
+    use super::conv_gcd::convolution_gcd;
     use super::conv_or::convolution_or;
     use super::conv_xor::convolution_xor;
     use super::mobius::*;
@@ -172,5 +175,31 @@ mod tests {
         let res = subset_convolution(f, g);
 
         assert_eq!(ans, res);
+    }
+
+    #[test]
+    fn test_conv_gcd() {
+        let mut rng = rand::thread_rng();
+
+        let ff = ConstModIntBuilder::<M>;
+
+        let n = 1000;
+        let f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M) as u64))
+            .take(n + 1)
+            .collect_vec();
+        let g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M) as u64))
+            .take(n + 1)
+            .collect_vec();
+
+        let mut ans = vec![ff.from_u64(0); n + 1];
+        for i in 1..=n {
+            for j in 1..=n {
+                ans[i.gcd(j)] += f[i] * g[j];
+            }
+        }
+
+        let res = convolution_gcd(f, g);
+
+        assert_eq!(ans[1..], res[1..]);
     }
 }
