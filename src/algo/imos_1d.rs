@@ -1,6 +1,8 @@
+//! 1次元のimos法
 use crate::num::{one_zero::Zero, traits::Signed};
 use std::ops::{Add, Range, Sub};
 
+/// 1次元のimos法
 pub struct Imos1D<T> {
     data: Vec<T>,
 }

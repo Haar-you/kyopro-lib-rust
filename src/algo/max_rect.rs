@@ -1,3 +1,4 @@
+//! 最大長方形
 use crate::chmax;
 use std::{
     cmp::Ordering,

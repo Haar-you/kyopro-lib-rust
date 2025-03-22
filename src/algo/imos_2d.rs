@@ -1,6 +1,8 @@
+//! 2次元のimos法
 use crate::num::{one_zero::Zero, traits::Signed};
 use std::ops::{Add, Range, Sub};
 
+/// 2次元のimos法
 pub struct Imos2D<T> {
     data: Vec<Vec<T>>,
     n: usize,
