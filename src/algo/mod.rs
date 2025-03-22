@@ -8,6 +8,7 @@ pub mod enum_groups;
 pub mod golden_search;
 pub mod imos_1d;
 pub mod imos_2d;
+pub mod imos_geo;
 pub mod interval_scheduling;
 pub mod inversion_number;
 pub mod kmp;
