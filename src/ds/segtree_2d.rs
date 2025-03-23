@@ -1,6 +1,8 @@
+//! 二次元のセグメント木
 use crate::algebra::traits::*;
 use std::ops::Range;
 
+/// 二次元のセグメント木
 pub struct Segtree2D<M: Monoid + Commutative> {
     data: Vec<Vec<M::Element>>,
     w: usize,
