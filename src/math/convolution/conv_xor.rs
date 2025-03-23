@@ -18,7 +18,7 @@ where
     fwt(&mut g);
 
     for (x, y) in f.iter_mut().zip(g.into_iter()) {
-        *x = *x * y;
+        *x *= y;
     }
 
     fwt(&mut f);
@@ -26,7 +26,7 @@ where
     let t = modulo.frac(1, f.len() as i64);
 
     for x in f.iter_mut() {
-        *x = *x * t;
+        *x *= t;
     }
 
     f

@@ -179,7 +179,7 @@ impl FunctionalGraph {
     }
 
     /// 閉路を切断して、根付き森として見たときの、頂点`i`の子頂点列を返す。
-    pub fn children<'a>(&'a self, i: usize) -> impl Iterator<Item = usize> + 'a {
-        self.children[i].iter().map(|&x| x)
+    pub fn children(&self, i: usize) -> impl Iterator<Item = usize> + '_ {
+        self.children[i].iter().copied()
     }
 }

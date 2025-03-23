@@ -86,6 +86,7 @@ pub struct AhoCorasickBuilder {
     nodes: Vec<*mut Node>,
 }
 
+#[allow(clippy::new_without_default)]
 impl AhoCorasickBuilder {
     /// [`AhoCorasickBuilder`]を生成する。
     pub fn new() -> Self {
@@ -180,6 +181,7 @@ pub struct AhoCorasick {
     nodes: Vec<*mut Node>,
 }
 
+#[allow(clippy::len_without_is_empty)]
 impl AhoCorasick {
     /// ノード数を返す。
     pub fn len(&self) -> usize {

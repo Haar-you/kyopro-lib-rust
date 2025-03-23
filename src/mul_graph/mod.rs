@@ -12,6 +12,7 @@ use std::collections::HashMap;
 use std::hash::Hash;
 
 /// [`MulGraph`]の辺
+#[derive(Clone, Debug)]
 pub struct Edge<V, W> {
     pub from: V,
     pub to: V,
@@ -26,6 +27,7 @@ impl<V, W> Edge<V, W> {
 }
 
 /// 頂点倍加グラフ
+#[derive(Clone, Default, Debug)]
 pub struct MulGraph<V, W> {
     edges: HashMap<V, Vec<Edge<V, W>>>,
 }
