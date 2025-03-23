@@ -64,6 +64,7 @@ pub struct Edge<T, I> {
 }
 
 impl<T, I> Edge<T, I> {
+    /// `from`から`to`への重さ`weight`、辺番号`index`をもつ有向辺を作る。
     pub fn new(from: usize, to: usize, weight: T, index: I) -> Self {
         Self {
             from,
@@ -105,9 +106,10 @@ pub struct Undirected;
 impl Direction for Directed {}
 impl Direction for Undirected {}
 
+/// グラフ
 #[derive(Debug, Clone)]
 pub struct Graph<D, E> {
-    pub edges: Vec<Vec<E>>,
+    edges: Vec<Vec<E>>,
     __phantom: PhantomData<D>,
 }
 
@@ -157,5 +159,25 @@ impl<D, E> Graph<D, E> {
     /// グラフの頂点数が`0`ならば`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.edges.is_empty()
+    }
+
+    /// 各頂点からの辺集合への参照を返す。
+    pub fn edges(&self) -> &[Vec<E>] {
+        &self.edges
+    }
+
+    /// 各頂点からの辺集合への可変参照を返す。
+    pub fn edges_mut(&mut self) -> &mut [Vec<E>] {
+        &mut self.edges
+    }
+
+    /// 頂点`i`の隣接辺へのイテレータを返す。
+    pub fn neighbours(&self, i: usize) -> impl Iterator<Item = &E> + ExactSizeIterator {
+        self.edges[i].iter()
+    }
+
+    /// 頂点`i`の隣接辺への可変参照へのイテレータを返す。
+    pub fn neighbours_mut(&mut self, i: usize) -> impl Iterator<Item = &mut E> + ExactSizeIterator {
+        self.edges[i].iter_mut()
     }
 }
