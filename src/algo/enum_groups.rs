@@ -3,7 +3,7 @@
 //! # Problems
 //! - <https://atcoder.jp/contests/abc390/tasks/abc390_d>
 
-use crate::algo::enumerate_bitset::subset_asc::*;
+use crate::algo::enum_bit::subset_asc::*;
 
 /// `n`個の区別できるものをグループ分けする方法をすべて列挙する。
 /// グループ分けの方法の個数はベル数となる。

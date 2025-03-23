@@ -1,3 +1,5 @@
+//! ビット列の列挙
+
 pub mod gray_code;
 pub mod subset_asc;
 pub mod subset_between;

@@ -1,3 +1,6 @@
+//! `hashset!`, `btreeset!`, `hashmap!`, `btreemap!`
+
+/// 引数から[`std::collections::HashSet`]を作る。
 #[macro_export]
 macro_rules! hashset {
     ($($a:expr),*) => {{
@@ -7,6 +10,7 @@ macro_rules! hashset {
     }}
 }
 
+/// 引数から[`std::collections::BTreeSet`]を作る。
 #[macro_export]
 macro_rules! btreeset {
     ($($a:expr),*) => {{
@@ -16,6 +20,7 @@ macro_rules! btreeset {
     }}
 }
 
+/// 引数から[`std::collections::HashMap`]を作る。
 #[macro_export]
 macro_rules! hashmap {
     ($($key:expr => $val:expr),*) => {{
@@ -25,6 +30,7 @@ macro_rules! hashmap {
     }}
 }
 
+/// 引数から[`std::collections::BTreeMap`]を作る。
 #[macro_export]
 macro_rules! btreemap {
     ($($key:expr => $val:expr),*) => {{

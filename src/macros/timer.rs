@@ -1,3 +1,6 @@
+//! `timer!`
+
+/// block内のコードを実行して、実行時間を計測表示し、実行結果を返す。
 #[macro_export]
 macro_rules! timer {
     ($b:block) => {{

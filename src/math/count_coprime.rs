@@ -1,3 +1,4 @@
+//! 互いに素な数を数える。
 use crate::math::factorize::trial::factorize;
 
 /// `n`以下の自然数で、`m`と互いに素なものの個数を求める。

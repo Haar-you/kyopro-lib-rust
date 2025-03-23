@@ -1,3 +1,5 @@
+//! `impl_ops!`
+
 #[macro_export]
 macro_rules! impl_ops {
     (@inner, $tr:ty, $a:ty, $f:expr, $fn:tt; $($bound:tt)*) => {

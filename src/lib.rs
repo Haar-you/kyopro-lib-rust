@@ -23,6 +23,7 @@ pub mod macros;
 pub mod matching;
 pub mod math;
 pub mod misc;
+pub mod mul_graph;
 pub mod num;
 pub mod parser;
 pub mod traits;

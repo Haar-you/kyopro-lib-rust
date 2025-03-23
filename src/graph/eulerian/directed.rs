@@ -1,5 +1,7 @@
+//! 有向グラフの(準)Eulerグラフの判定
 use crate::graph::*;
 
+/// 有向グラフでの一筆書き
 #[derive(Clone)]
 pub struct DirectedEulerianTrail<E: EdgeTrait> {
     size: usize,
@@ -10,6 +12,7 @@ pub struct DirectedEulerianTrail<E: EdgeTrait> {
 }
 
 impl<E: EdgeTrait + Clone> DirectedEulerianTrail<E> {
+    /// 頂点数`size`のグラフを用意する。
     pub fn new(size: usize) -> Self {
         Self {
             size,
@@ -20,6 +23,7 @@ impl<E: EdgeTrait + Clone> DirectedEulerianTrail<E> {
         }
     }
 
+    /// 有向辺`e`を追加する。
     pub fn add_edge(&mut self, e: E) {
         self.indeg[e.to()] += 1;
         self.outdeg[e.from()] += 1;
@@ -37,8 +41,7 @@ impl<E: EdgeTrait + Clone> DirectedEulerianTrail<E> {
         vs.push(cur);
     }
 
-    /// 有向グラフがオイラー路を持つかを判定する。
-    /// 存在する場合、オイラー路の頂点列と辺列を返す。
+    /// グラフが一筆書き可能なら、その頂点列と辺列を`Some`に包んで返す。
     pub fn solve(mut self) -> Option<(Vec<usize>, Vec<E>)> {
         let mut in_count = 0;
         let mut out_count = 0;

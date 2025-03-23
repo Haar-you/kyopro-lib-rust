@@ -44,18 +44,31 @@ where
     }
 }
 
+type Procedure<'a, S, Char, Output> = Box<dyn 'a + Fn(&S, &mut Input<Char>) -> Option<Output>>;
+type FirstChecker<'a, Char> = Box<dyn 'a + Fn(Char) -> bool>;
+
+type EmptyRule<'a, S, Char, Output> = Procedure<'a, S, Char, Output>;
+type NonEmptyRule<'a, S, Char, Output> = (FirstChecker<'a, Char>, Procedure<'a, S, Char, Output>);
+
+struct Rules<'a, S, Char, Output> {
+    empty_rule: Option<EmptyRule<'a, S, Char, Output>>,
+    non_empty_rules: Vec<NonEmptyRule<'a, S, Char, Output>>,
+}
+
+impl<S, Char, Output> Default for Rules<'_, S, Char, Output> {
+    fn default() -> Self {
+        Self {
+            empty_rule: None,
+            non_empty_rules: vec![],
+        }
+    }
+}
+
+#[allow(clippy::type_complexity)]
+#[derive(Default)]
 /// LL(1)構文解析器
 pub struct LL1Parser<'a, State, Char, Output> {
-    rules: HashMap<
-        State,
-        (
-            Option<Box<dyn 'a + Fn(&Self, &mut Input<Char>) -> Option<Output>>>,
-            Vec<(
-                Box<dyn 'a + Fn(Char) -> bool>,
-                Box<dyn 'a + Fn(&Self, &mut Input<Char>) -> Option<Output>>,
-            )>,
-        ),
-    >,
+    rules: HashMap<State, Rules<'a, Self, Char, Output>>,
 }
 
 impl<'a, State, Char, Output> LL1Parser<'a, State, Char, Output>
@@ -83,7 +96,7 @@ where
         self.rules
             .entry(state)
             .or_default()
-            .1
+            .non_empty_rules
             .push((Box::new(check_first), Box::new(proc)));
     }
 
@@ -95,13 +108,13 @@ where
         self.rules
             .entry(state)
             .or_default()
-            .0
+            .empty_rule
             .replace(Box::new(proc));
     }
 
     /// `state`を開始状態として、`input`を構文解析する。
     pub fn parse(&self, state: State, input: &mut Input<Char>) -> Option<Output> {
-        for (check_first, proc) in self.rules.get(&state)?.1.iter() {
+        for (check_first, proc) in self.rules.get(&state)?.non_empty_rules.iter() {
             if let Some(c) = input.peek() {
                 if check_first(c) {
                     return proc(self, input);
@@ -109,7 +122,7 @@ where
             }
         }
 
-        if let Some(proc) = self.rules.get(&state)?.0.as_ref() {
+        if let Some(proc) = self.rules.get(&state)?.empty_rule.as_ref() {
             return proc(self, input);
         }
 

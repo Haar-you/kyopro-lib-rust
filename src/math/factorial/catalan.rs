@@ -1,11 +1,21 @@
+//! カタラン数
 use crate::math::factorial::FactorialTable;
 use crate::num::ff::*;
 
-impl<Modulo: FF> FactorialTable<Modulo>
+/// カタラン数
+pub trait CatalanNumber {
+    /// 計算結果の型
+    type Output;
+    /// カタラン数$C_n$を計算する。
+    fn catalan_number(&self, n: usize) -> Self::Output;
+}
+
+impl<Modulo: FF> CatalanNumber for FactorialTable<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
-    pub fn catalan_number(&self, n: usize) -> Modulo::Element {
+    type Output = Modulo::Element;
+    fn catalan_number(&self, n: usize) -> Self::Output {
         match n {
             0 => self.modulo.from_u64(1),
             _ => self.comb(2 * n, n) - self.comb(2 * n, n - 1),

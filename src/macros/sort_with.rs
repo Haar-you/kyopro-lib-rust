@@ -1,3 +1,5 @@
+//! `sort_with!`
+
 #[macro_export]
 macro_rules! sort_with {
     ($cmp:expr, $($a:expr),+) => {

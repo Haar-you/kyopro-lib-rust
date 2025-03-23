@@ -44,6 +44,7 @@ impl Mode {
     }
 }
 
+/// 直線や線分を追加して、事前指定した点での最大値(/最小値)を得る。
 pub struct LiChaoTree<T> {
     xs: Vec<T>,
     size: usize,
@@ -68,6 +69,7 @@ impl<T: Elem> LiChaoTree<T> {
         }
     }
 
+    /// `query`で使用する点列`xs`と最大値クエリ/最小値クエリを指定して[`LiChaoTree`]を構築する。
     pub fn new(mut xs: Vec<T>, mode: Mode) -> Self {
         xs.sort();
         xs.dedup();
@@ -123,10 +125,12 @@ impl<T: Elem> LiChaoTree<T> {
         }
     }
 
+    /// 直線を追加する。
     pub fn add_line(&mut self, line: Linear<T>) {
         self.update(1, line, 0, self.size);
     }
 
+    /// 線分を追加する。
     pub fn add_segment(&mut self, segment: Linear<T>, range: RangeInclusive<T>) {
         let mut l = lower_bound(&self.xs, range.start()) + self.size;
         let mut r = lower_bound(&self.xs, range.end()) + self.size;
@@ -146,6 +150,7 @@ impl<T: Elem> LiChaoTree<T> {
         }
     }
 
+    /// `x`での最大値/最小値を返す。
     pub fn query(&self, x: T) -> Option<T> {
         let i = self.xs.binary_search(&x).expect("`x` must be in `xs`");
         let mut k = i + self.size;

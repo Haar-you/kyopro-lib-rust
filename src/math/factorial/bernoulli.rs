@@ -1,11 +1,22 @@
+//! ベルヌーイ数
 use crate::math::factorial::FactorialTable;
 use crate::num::ff::*;
 
-impl<Modulo: FF> FactorialTable<Modulo>
+/// ベルヌーイ数
+pub trait BernoulliNumber {
+    /// 計算結果の型
+    type Output;
+    /// ベルヌーイ数$B_0 \ldots B_n$を計算する。
+    fn bernoulli_number(&self, n: usize) -> Vec<Self::Output>;
+}
+
+impl<Modulo: FF> BernoulliNumber for FactorialTable<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
-    pub fn bernoulli_number(&self, n: usize) -> Vec<Modulo::Element> {
+    type Output = Modulo::Element;
+
+    fn bernoulli_number(&self, n: usize) -> Vec<Self::Output> {
         let mut ret = vec![self.modulo.from_u64(0); n + 1];
 
         ret[0] = self.modulo.from_u64(1);

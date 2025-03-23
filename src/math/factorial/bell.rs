@@ -1,17 +1,28 @@
+//! ベル数
+//!
+//! # References
+//! - <https://ja.wikipedia.org/wiki/%E3%83%99%E3%83%AB%E6%95%B0>
+//! - <https://manabitimes.jp/math/892>
+
 use crate::math::factorial::FactorialTable;
 use crate::num::ff::*;
 use std::cmp::min;
 
-impl<Modulo: FF> FactorialTable<Modulo>
+/// ベル数
+pub trait BellNumber {
+    /// 計算結果の型
+    type Output;
+    /// ベル数$B(n, k)$を計算する。
+    fn bell_number(&self, n: usize, k: usize) -> Self::Output;
+}
+
+impl<Modulo: FF> BellNumber for FactorialTable<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
-    /// ベル数
-    ///
-    /// # References
-    /// - <https://ja.wikipedia.org/wiki/%E3%83%99%E3%83%AB%E6%95%B0>
-    /// - <https://manabitimes.jp/math/892>
-    pub fn bell_number(&self, n: usize, k: usize) -> Modulo::Element {
+    type Output = Modulo::Element;
+
+    fn bell_number(&self, n: usize, k: usize) -> Self::Output {
         match n {
             0 => self.modulo.from_u64(1),
             _ => {

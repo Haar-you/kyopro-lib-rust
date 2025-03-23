@@ -1,8 +1,10 @@
+//! 高速な標準入出力
 #![allow(clippy::new_without_default)]
 
 use std::fmt::Display;
 use std::io::{Read, Write};
 
+/// 高速な標準入出力
 pub struct FastIO {
     in_bytes: Vec<u8>,
     in_cur: usize,

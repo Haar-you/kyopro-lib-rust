@@ -1,12 +1,15 @@
+//! Fenwick木上にFenwick木を構築する。
 use crate::algo::bsearch::lower_bound;
 use std::ops::{Add, Range, RangeTo, Sub};
 
+/// [`FenwickOnFenwick`]を構築するための構造体。
 #[derive(Clone, Default)]
 pub struct FenwickOnFenwickBuilder {
     xs: Vec<i64>,
     ys: Vec<i64>,
 }
 
+/// Fenwick木上にFenwick木を構築する。
 #[derive(Clone)]
 pub struct FenwickOnFenwick<T> {
     c_xs: Vec<i64>,
@@ -16,6 +19,7 @@ pub struct FenwickOnFenwick<T> {
 }
 
 impl FenwickOnFenwickBuilder {
+    /// 空の[`FenwickOnFenwickBuilder`]を用意する。
     pub fn new() -> Self {
         Self {
             xs: vec![],
@@ -23,12 +27,13 @@ impl FenwickOnFenwickBuilder {
         }
     }
 
-    /// 使用する点を登録する。
+    /// 点`(x, y)`を登録する。
     pub fn add(&mut self, x: i64, y: i64) {
         self.xs.push(x);
         self.ys.push(y);
     }
 
+    /// [`FenwickOnFenwick`]を構築する。
     pub fn build<T: Copy>(self, zero: T) -> FenwickOnFenwick<T> {
         let n = self.xs.len();
         let mut c_xs = self.xs.clone();
@@ -68,7 +73,7 @@ impl FenwickOnFenwickBuilder {
 }
 
 impl<T: Copy + Add<Output = T> + Sub<Output = T>> FenwickOnFenwick<T> {
-    /// Time Complexity $O(\log ^ 2 n)$
+    /// **Time Complexity** $O(\log ^ 2 n)$
     pub fn update(&mut self, x: i64, y: i64, value: T) {
         let mut x = self.c_xs.binary_search(&x).unwrap() + 1;
 
@@ -83,7 +88,7 @@ impl<T: Copy + Add<Output = T> + Sub<Output = T>> FenwickOnFenwick<T> {
         }
     }
 
-    /// Time Complexity $O(\log ^ 2 n)$
+    /// **Time Complexity** $O(\log ^ 2 n)$
     pub fn fold_2d(
         &self,
         Range { start: x1, end: x2 }: Range<i64>,
@@ -93,7 +98,7 @@ impl<T: Copy + Add<Output = T> + Sub<Output = T>> FenwickOnFenwick<T> {
             + self.fold_to_2d(..x1, ..y1)
     }
 
-    /// Time Complexity $O(\log ^ 2 n)$
+    /// **Time Complexity** $O(\log ^ 2 n)$
     pub fn fold_to_2d(
         &self,
         RangeTo { end: x }: RangeTo<i64>,

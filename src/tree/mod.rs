@@ -110,17 +110,19 @@ impl<E: TreeEdgeTrait + Clone> TreeBuilder<E> {
         }
     }
 
-    pub fn extend(&mut self, edges: impl IntoIterator<Item = E>) {
-        for e in edges {
-            self.nodes[e.from()].children.push(e.clone());
-            self.nodes[e.to()].children.push(e.rev());
-        }
-    }
-
     pub fn build(self) -> Tree<E> {
         Tree {
             nodes: self.nodes,
             root: None,
+        }
+    }
+}
+
+impl<E: TreeEdgeTrait + Clone> Extend<E> for TreeBuilder<E> {
+    fn extend<T: IntoIterator<Item = E>>(&mut self, iter: T) {
+        for e in iter {
+            self.nodes[e.from()].children.push(e.clone());
+            self.nodes[e.to()].children.push(e.rev());
         }
     }
 }
@@ -146,18 +148,20 @@ impl<E: TreeEdgeTrait + Clone> RootedTreeBuilder<E> {
         }
     }
 
-    pub fn extend(&mut self, edges: impl IntoIterator<Item = E>) {
-        for e in edges {
-            assert!(self.nodes[e.to()].parent.is_none());
-            self.nodes[e.from()].children.push(e.clone());
-            self.nodes[e.to()].parent.replace(e.rev());
-        }
-    }
-
     pub fn build(self) -> Tree<E> {
         Tree {
             nodes: self.nodes,
             root: Some(self.root),
+        }
+    }
+}
+
+impl<E: TreeEdgeTrait + Clone> Extend<E> for RootedTreeBuilder<E> {
+    fn extend<T: IntoIterator<Item = E>>(&mut self, iter: T) {
+        for e in iter {
+            assert!(self.nodes[e.to()].parent.is_none());
+            self.nodes[e.from()].children.push(e.clone());
+            self.nodes[e.to()].parent.replace(e.rev());
         }
     }
 }

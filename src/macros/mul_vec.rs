@@ -1,4 +1,4 @@
-//! 多次元の`Vec`を作る。
+//! `mul_vec!`
 
 /// 多次元の`Vec`を作る。
 #[macro_export]

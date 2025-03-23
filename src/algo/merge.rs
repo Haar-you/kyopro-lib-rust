@@ -1,3 +1,6 @@
+//! ソート済み配列のマージ
+
+/// `a[0..k]`と`a[k..]`を`cmp`で比較してマージする。
 pub fn inplace_merge_by<T: Copy>(a: &mut [T], k: usize, cmp: fn(&T, &T) -> bool) {
     let fst = &a[0..k].to_vec();
     let snd = &a[k..].to_vec();
@@ -25,10 +28,12 @@ pub fn inplace_merge_by<T: Copy>(a: &mut [T], k: usize, cmp: fn(&T, &T) -> bool)
     }
 }
 
+/// `a[0..k]`と`a[k..]`を`<`で比較してマージする。
 pub fn inplace_merge<T: Ord + Copy>(a: &mut [T], k: usize) {
     inplace_merge_by(a, k, |x, y| x < y);
 }
 
+/// 2つのソート済み`Vec`をマージした`Vec`を返す。
 pub fn merge<T: Ord + Copy>(mut a: Vec<T>, mut b: Vec<T>) -> Vec<T> {
     let n = a.len();
     a.append(&mut b);

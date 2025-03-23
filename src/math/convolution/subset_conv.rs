@@ -1,6 +1,13 @@
-use crate::math::convolution::{mobius_sub::*, zeta_sub::*};
+//! $\mathtt{a_k} = \sum_{\mathtt{i \lor j = k, i \land j = 0}} \mathtt{f_i} * \mathtt{g_j}$
+//! を満たす`a`を求める。
+//!
+//! # Problems
+//! - <https://judge.yosupo.jp/problem/subset_convolution>
+use crate::math::convolution::{mobius::*, zeta::*};
 use std::ops::{Add, Mul, Sub};
 
+/// $\mathtt{a_k} = \sum_{\mathtt{i \lor j = k, i \land j = 0}} \mathtt{f_i} * \mathtt{g_j}$
+/// を満たす`a`を求める。
 #[allow(clippy::needless_range_loop, clippy::manual_memcpy)]
 pub fn subset_convolution<T>(f: Vec<T>, g: Vec<T>) -> Vec<T>
 where

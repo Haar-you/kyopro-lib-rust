@@ -1,3 +1,5 @@
+//! `get_time!`
+
 #[macro_export]
 macro_rules! get_time {
     ($b:block) => {{

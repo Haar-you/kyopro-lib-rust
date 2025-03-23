@@ -1,8 +1,16 @@
+//! 二項係数
+//!
+//! # References
+//! - <https://ferin-tech.hatenablog.com/entry/2018/01/17/010829>
+//!
+//! # Problems
+//! - <https://judge.yosupo.jp/problem/binomial_coefficient>
 use crate::math::{
     crt::crt_vec,
     mod_ops::{inv::*, pow::*},
 };
 
+/// 二項係数$_nC_k \pmod{p^q}$($p$は素数)を計算する。
 #[derive(Clone)]
 pub struct ExtLucas {
     prod: Vec<u64>,
@@ -13,6 +21,7 @@ pub struct ExtLucas {
 }
 
 impl ExtLucas {
+    /// 素数$p$に対して$\pmod{p^q}$で[`ExtLucas`]を用意する。
     pub fn new(p: u64, q: u64) -> Self {
         let m = p.pow(q as u32);
 
@@ -31,6 +40,7 @@ impl ExtLucas {
         Self { prod, inv, p, q, m }
     }
 
+    /// $_nC_k \pmod{p^q}$を計算する。
     pub fn calc(&self, mut n: u64, mut k: u64) -> u64 {
         assert!(n >= k);
 
@@ -79,6 +89,7 @@ impl ExtLucas {
     }
 }
 
+/// 二項係数$_nC_k \pmod m$を計算する。
 #[derive(Clone)]
 pub struct BinomialCoefficient {
     lu: Vec<ExtLucas>,
@@ -86,6 +97,7 @@ pub struct BinomialCoefficient {
 }
 
 impl BinomialCoefficient {
+    /// $\pmod m$で[`BinomialCoefficient`]を用意する。
     pub fn new(mut m: u64) -> Self {
         let mut m_primes = vec![];
         let mut ms = vec![];
@@ -119,6 +131,7 @@ impl BinomialCoefficient {
         Self { lu, ms }
     }
 
+    /// $_nC_k \pmod m$を計算する。
     pub fn calc(&self, n: u64, k: u64) -> u64 {
         if n < k {
             0
