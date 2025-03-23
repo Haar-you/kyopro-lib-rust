@@ -126,9 +126,11 @@ impl<E: EdgeTrait + Clone> Graph<Directed, E> {
     pub fn add(&mut self, e: E) {
         self.edges[e.from()].push(e);
     }
+}
 
-    pub fn extend(&mut self, edges: impl IntoIterator<Item = E>) {
-        edges.into_iter().for_each(|e| self.add(e));
+impl<E: EdgeTrait + Clone> Extend<E> for Graph<Directed, E> {
+    fn extend<T: IntoIterator<Item = E>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|e| self.add(e));
     }
 }
 
@@ -138,9 +140,11 @@ impl<E: EdgeTrait + Clone> Graph<Undirected, E> {
         self.edges[e.from()].push(e.clone());
         self.edges[e.to()].push(e.rev());
     }
+}
 
-    pub fn extend(&mut self, edges: impl IntoIterator<Item = E>) {
-        edges.into_iter().for_each(|e| self.add(e));
+impl<E: EdgeTrait + Clone> Extend<E> for Graph<Undirected, E> {
+    fn extend<T: IntoIterator<Item = E>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|e| self.add(e));
     }
 }
 

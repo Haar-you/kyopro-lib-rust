@@ -61,16 +61,17 @@ impl<T: Ord + Eq> CompressorBuilder<T> {
         self.data.push(value);
     }
 
-    /// 座標圧縮対象に`values`の要素を追加する。
-    pub fn extend(&mut self, values: impl IntoIterator<Item = T>) {
-        self.data.extend(values);
-    }
-
     /// **Time complexity** $O(n \log n)$
     pub fn build(mut self) -> Compressor<T> {
         self.data.sort();
         self.data.dedup();
         Compressor { data: self.data }
+    }
+}
+
+impl<U> Extend<U> for CompressorBuilder<U> {
+    fn extend<T: IntoIterator<Item = U>>(&mut self, iter: T) {
+        self.data.extend(iter);
     }
 }
 
