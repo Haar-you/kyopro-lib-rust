@@ -226,6 +226,9 @@
 <a href="#210" id="210">210</a>
 <a href="#211" id="211">211</a>
 <a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Suffix Array
 </span><span class="kw">use </span>std::collections::VecDeque;
 
@@ -368,14 +371,16 @@
     induced_sort(<span class="kw-2">&amp;</span>lms_sorted)
 }
 
-<span class="attr">#[derive(Clone, Debug)]
+<span class="doccomment">/// 接尾辞配列
+</span><span class="attr">#[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>SuffixArray {
     data: Vec&lt;usize&gt;,
     str_data: Vec&lt;u8&gt;,
 }
 
 <span class="kw">impl </span>SuffixArray {
-    <span class="kw">pub fn </span>new(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 文字列`s`から接尾辞配列を構築する。
+    </span><span class="kw">pub fn </span>new(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>str_data = s.as_bytes().to_vec();
         str_data.push(<span class="number">0</span>);
 
@@ -386,7 +391,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>to_slice(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[usize] {
+    <span class="doccomment">/// 接尾辞配列への参照を返す。
+    </span><span class="kw">pub fn </span>to_slice(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[usize] {
         <span class="kw-2">&amp;</span><span class="self">self</span>.data
     }
 

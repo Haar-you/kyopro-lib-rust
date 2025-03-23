@@ -139,7 +139,16 @@
 <a href="#123" id="123">123</a>
 <a href="#124" id="124">124</a>
 <a href="#125" id="125">125</a>
-</pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! セグメント木上にセグメント木を構築する。
+</span><span class="kw">use crate</span>::{
     algebra::traits::<span class="kw-2">*</span>,
     algo::{bsearch::lower_bound, merge::merge},
     ds::segtree::<span class="kw-2">*</span>,
@@ -147,13 +156,15 @@
 
 <span class="kw">use </span>std::ops::Range;
 
-<span class="attr">#[derive(Clone, Default)]
+<span class="doccomment">/// [`SegtreeOnSegtree`]を構築するための構造体。
+</span><span class="attr">#[derive(Clone, Default)]
 </span><span class="kw">pub struct </span>SegtreeOnSegtreeBuilder {
     xs: Vec&lt;i64&gt;,
     ys: Vec&lt;i64&gt;,
 }
 
-<span class="kw">pub struct </span>SegtreeOnSegtree&lt;M: Monoid&gt; {
+<span class="doccomment">/// セグメント木上にセグメント木を構築する。
+</span><span class="kw">pub struct </span>SegtreeOnSegtree&lt;M: Monoid&gt; {
     c_xs: Vec&lt;i64&gt;,
     c_ys: Vec&lt;Vec&lt;i64&gt;&gt;,
     x_size: usize,
@@ -162,19 +173,22 @@
 }
 
 <span class="kw">impl </span>SegtreeOnSegtreeBuilder {
-    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 空の[`SegtreeOnSegtreeBuilder`]を用意する。
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             xs: <span class="macro">vec!</span>[],
             ys: <span class="macro">vec!</span>[],
         }
     }
 
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: i64, y: i64) {
+    <span class="doccomment">/// 点`(x, y)`を登録する。
+    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: i64, y: i64) {
         <span class="self">self</span>.xs.push(x);
         <span class="self">self</span>.ys.push(y);
     }
 
-    <span class="kw">pub fn </span>build&lt;M: Monoid + Copy&gt;(<span class="self">self</span>, monoid: M) -&gt; SegtreeOnSegtree&lt;M&gt;
+    <span class="doccomment">/// [`SegtreeOnSegtree`]を構築する。
+    </span><span class="kw">pub fn </span>build&lt;M: Monoid + Copy&gt;(<span class="self">self</span>, monoid: M) -&gt; SegtreeOnSegtree&lt;M&gt;
     <span class="kw">where
         </span>M::Element: Clone,
     {
@@ -222,7 +236,8 @@
 <span class="kw">where
     </span>M::Element: Clone,
 {
-    <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: i64, y: i64, value: M::Element) {
+    <span class="doccomment">/// 点`(x, y)`の値を`value`で更新する。
+    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: i64, y: i64, value: M::Element) {
         <span class="kw">let </span><span class="kw-2">mut </span>i = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.c_xs, <span class="kw-2">&amp;</span>x) + <span class="self">self</span>.x_size / <span class="number">2</span>;
         <span class="kw">while </span>i &gt;= <span class="number">1 </span>{
             <span class="kw">let </span>j = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.c_ys[i], <span class="kw-2">&amp;</span>y);
@@ -237,7 +252,8 @@
         <span class="self">self</span>.segs[i].as_ref().unwrap().fold(l..r)
     }
 
-    <span class="kw">pub fn </span>fold_2d(
+    <span class="doccomment">/// `[x1, x2), [y1, y2)`で計算を集約する。
+    </span><span class="kw">pub fn </span>fold_2d(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         Range { start: x1, end: x2 }: Range&lt;i64&gt;,
         Range { start: y1, end: y2 }: Range&lt;i64&gt;,

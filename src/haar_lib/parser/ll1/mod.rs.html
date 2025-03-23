@@ -135,6 +135,19 @@
 <a href="#119" id="119">119</a>
 <a href="#120" id="120">120</a>
 <a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! LL(1)構文解析
 </span><span class="kw">use </span>std::{collections::HashMap, hash::Hash};
 
@@ -181,18 +194,31 @@
     }
 }
 
-<span class="doccomment">/// LL(1)構文解析器
+<span class="kw">type </span>Procedure&lt;<span class="lifetime">&#39;a</span>, S, Char, Output&gt; = Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(<span class="kw-2">&amp;</span>S, <span class="kw-2">&amp;mut </span>Input&lt;Char&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Output&gt;&gt;;
+<span class="kw">type </span>FirstChecker&lt;<span class="lifetime">&#39;a</span>, Char&gt; = Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(Char) -&gt; bool&gt;;
+
+<span class="kw">type </span>EmptyRule&lt;<span class="lifetime">&#39;a</span>, S, Char, Output&gt; = Procedure&lt;<span class="lifetime">&#39;a</span>, S, Char, Output&gt;;
+<span class="kw">type </span>NonEmptyRule&lt;<span class="lifetime">&#39;a</span>, S, Char, Output&gt; = (FirstChecker&lt;<span class="lifetime">&#39;a</span>, Char&gt;, Procedure&lt;<span class="lifetime">&#39;a</span>, S, Char, Output&gt;);
+
+<span class="kw">struct </span>Rules&lt;<span class="lifetime">&#39;a</span>, S, Char, Output&gt; {
+    empty_rule: <span class="prelude-ty">Option</span>&lt;EmptyRule&lt;<span class="lifetime">&#39;a</span>, S, Char, Output&gt;&gt;,
+    non_empty_rules: Vec&lt;NonEmptyRule&lt;<span class="lifetime">&#39;a</span>, S, Char, Output&gt;&gt;,
+}
+
+<span class="kw">impl</span>&lt;S, Char, Output&gt; Default <span class="kw">for </span>Rules&lt;<span class="lifetime">&#39;_</span>, S, Char, Output&gt; {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            empty_rule: <span class="prelude-val">None</span>,
+            non_empty_rules: <span class="macro">vec!</span>[],
+        }
+    }
+}
+
+<span class="attr">#[allow(clippy::type_complexity)]
+#[derive(Default)]
+</span><span class="doccomment">/// LL(1)構文解析器
 </span><span class="kw">pub struct </span>LL1Parser&lt;<span class="lifetime">&#39;a</span>, State, Char, Output&gt; {
-    rules: HashMap&lt;
-        State,
-        (
-            <span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(<span class="kw-2">&amp;</span><span class="self">Self</span>, <span class="kw-2">&amp;mut </span>Input&lt;Char&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Output&gt;&gt;&gt;,
-            Vec&lt;(
-                Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(Char) -&gt; bool&gt;,
-                Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(<span class="kw-2">&amp;</span><span class="self">Self</span>, <span class="kw-2">&amp;mut </span>Input&lt;Char&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Output&gt;&gt;,
-            )&gt;,
-        ),
-    &gt;,
+    rules: HashMap&lt;State, Rules&lt;<span class="lifetime">&#39;a</span>, <span class="self">Self</span>, Char, Output&gt;&gt;,
 }
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, State, Char, Output&gt; LL1Parser&lt;<span class="lifetime">&#39;a</span>, State, Char, Output&gt;
@@ -220,8 +246,8 @@
         <span class="self">self</span>.rules
             .entry(state)
             .or_default()
-            .<span class="number">1
-            </span>.push((Box::new(check_first), Box::new(proc)));
+            .non_empty_rules
+            .push((Box::new(check_first), Box::new(proc)));
     }
 
     <span class="doccomment">/// 規則: $\mathtt{state} \rightarrow \varepsilon$ を導入する。
@@ -232,13 +258,13 @@
         <span class="self">self</span>.rules
             .entry(state)
             .or_default()
-            .<span class="number">0
-            </span>.replace(Box::new(proc));
+            .empty_rule
+            .replace(Box::new(proc));
     }
 
     <span class="doccomment">/// `state`を開始状態として、`input`を構文解析する。
     </span><span class="kw">pub fn </span>parse(<span class="kw-2">&amp;</span><span class="self">self</span>, state: State, input: <span class="kw-2">&amp;mut </span>Input&lt;Char&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Output&gt; {
-        <span class="kw">for </span>(check_first, proc) <span class="kw">in </span><span class="self">self</span>.rules.get(<span class="kw-2">&amp;</span>state)<span class="question-mark">?</span>.<span class="number">1</span>.iter() {
+        <span class="kw">for </span>(check_first, proc) <span class="kw">in </span><span class="self">self</span>.rules.get(<span class="kw-2">&amp;</span>state)<span class="question-mark">?</span>.non_empty_rules.iter() {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = input.peek() {
                 <span class="kw">if </span>check_first(c) {
                     <span class="kw">return </span>proc(<span class="self">self</span>, input);
@@ -246,7 +272,7 @@
             }
         }
 
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(proc) = <span class="self">self</span>.rules.get(<span class="kw-2">&amp;</span>state)<span class="question-mark">?</span>.<span class="number">0</span>.as_ref() {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(proc) = <span class="self">self</span>.rules.get(<span class="kw-2">&amp;</span>state)<span class="question-mark">?</span>.empty_rule.as_ref() {
             <span class="kw">return </span>proc(<span class="self">self</span>, input);
         }
 

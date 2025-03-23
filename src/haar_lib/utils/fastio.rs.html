@@ -158,12 +158,16 @@
 <a href="#142" id="142">142</a>
 <a href="#143" id="143">143</a>
 <a href="#144" id="144">144</a>
-</pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::new_without_default)]
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 高速な標準入出力
+</span><span class="attr">#![allow(clippy::new_without_default)]
 
 </span><span class="kw">use </span>std::fmt::Display;
 <span class="kw">use </span>std::io::{Read, Write};
 
-<span class="kw">pub struct </span>FastIO {
+<span class="doccomment">/// 高速な標準入出力
+</span><span class="kw">pub struct </span>FastIO {
     in_bytes: Vec&lt;u8&gt;,
     in_cur: usize,
     out_buf: std::io::BufWriter&lt;std::io::Stdout&gt;,

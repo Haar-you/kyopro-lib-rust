@@ -59,7 +59,11 @@
 <a href="#43" id="43">43</a>
 <a href="#44" id="44">44</a>
 <a href="#45" id="45">45</a>
-</pre></div><pre class="rust"><code><span class="attr">#[macro_export]
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! `impl_algebra!`
+
+</span><span class="attr">#[macro_export]
 </span><span class="macro">macro_rules! </span>impl_algebra {
     (@bound <span class="macro-nonterminal">$t</span>:ty, op: <span class="macro-nonterminal">$f</span>:expr; $(<span class="macro-nonterminal">$bound</span>:tt)<span class="kw-2">*</span>) =&gt; {
         <span class="kw">impl </span>$(<span class="macro-nonterminal">$bound</span>)* BinaryOp <span class="kw">for </span><span class="macro-nonterminal">$t </span>{

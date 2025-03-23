@@ -179,6 +179,11 @@
 <a href="#163" id="163">163</a>
 <a href="#164" id="164">164</a>
 <a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Li-Chao tree
 //!
 //! # Problems
@@ -225,7 +230,8 @@
     }
 }
 
-<span class="kw">pub struct </span>LiChaoTree&lt;T&gt; {
+<span class="doccomment">/// 直線や線分を追加して、事前指定した点での最大値(/最小値)を得る。
+</span><span class="kw">pub struct </span>LiChaoTree&lt;T&gt; {
     xs: Vec&lt;T&gt;,
     size: usize,
     data: Vec&lt;<span class="prelude-ty">Option</span>&lt;Linear&lt;T&gt;&gt;&gt;,
@@ -249,7 +255,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>new(<span class="kw-2">mut </span>xs: Vec&lt;T&gt;, mode: Mode) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// `query`で使用する点列`xs`と最大値クエリ/最小値クエリを指定して[`LiChaoTree`]を構築する。
+    </span><span class="kw">pub fn </span>new(<span class="kw-2">mut </span>xs: Vec&lt;T&gt;, mode: Mode) -&gt; <span class="self">Self </span>{
         xs.sort();
         xs.dedup();
 
@@ -304,11 +311,13 @@
         }
     }
 
-    <span class="kw">pub fn </span>add_line(<span class="kw-2">&amp;mut </span><span class="self">self</span>, line: Linear&lt;T&gt;) {
+    <span class="doccomment">/// 直線を追加する。
+    </span><span class="kw">pub fn </span>add_line(<span class="kw-2">&amp;mut </span><span class="self">self</span>, line: Linear&lt;T&gt;) {
         <span class="self">self</span>.update(<span class="number">1</span>, line, <span class="number">0</span>, <span class="self">self</span>.size);
     }
 
-    <span class="kw">pub fn </span>add_segment(<span class="kw-2">&amp;mut </span><span class="self">self</span>, segment: Linear&lt;T&gt;, range: RangeInclusive&lt;T&gt;) {
+    <span class="doccomment">/// 線分を追加する。
+    </span><span class="kw">pub fn </span>add_segment(<span class="kw-2">&amp;mut </span><span class="self">self</span>, segment: Linear&lt;T&gt;, range: RangeInclusive&lt;T&gt;) {
         <span class="kw">let </span><span class="kw-2">mut </span>l = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.xs, range.start()) + <span class="self">self</span>.size;
         <span class="kw">let </span><span class="kw-2">mut </span>r = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.xs, range.end()) + <span class="self">self</span>.size;
 
@@ -327,7 +336,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>query(<span class="kw-2">&amp;</span><span class="self">self</span>, x: T) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="doccomment">/// `x`での最大値/最小値を返す。
+    </span><span class="kw">pub fn </span>query(<span class="kw-2">&amp;</span><span class="self">self</span>, x: T) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="kw">let </span>i = <span class="self">self</span>.xs.binary_search(<span class="kw-2">&amp;</span>x).expect(<span class="string">&quot;`x` must be in `xs`&quot;</span>);
         <span class="kw">let </span><span class="kw-2">mut </span>k = i + <span class="self">self</span>.size;
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="prelude-val">None</span>;

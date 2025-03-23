@@ -112,38 +112,97 @@
 <a href="#96" id="96">96</a>
 <a href="#97" id="97">97</a>
 <a href="#98" id="98">98</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::VecDeque;
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 閉路をただ一つだけもつN辺N頂点の連結無向グラフ。
+//!
+//! # References
+//! - &lt;https://en.wikipedia.org/wiki/Pseudoforest&gt;
+//!
+//! # Problems
+//! - &lt;https://atcoder.jp/contests/abc266/tasks/abc266_f&gt;
 
-<span class="kw">pub struct </span>PseudoTreeBuilder {
-    g: Vec&lt;Vec&lt;usize&gt;&gt;,
+</span><span class="kw">use </span>std::collections::VecDeque;
+
+<span class="doccomment">/// [`PseudoTree`]を構築するための構造体。
+</span><span class="kw">pub struct </span>PseudoTreeBuilder {
     edge_num: usize,
+    g: Vec&lt;Vec&lt;usize&gt;&gt;,
 }
 
-<span class="kw">pub struct </span>PseudoTree {
-    group: Vec&lt;usize&gt;,
-    in_loop: Vec&lt;bool&gt;,
+<span class="doccomment">/// 閉路をただ一つだけもつN辺N頂点の連結無向グラフ。
+</span><span class="kw">pub struct </span>PseudoTree {
+    root: Vec&lt;usize&gt;,
+    kind: Vec&lt;Kind&gt;,
+}
+
+<span class="doccomment">/// [`PseudoTree`]の頂点の種類
+</span><span class="attr">#[derive(Clone, Copy, PartialEq, Debug)]
+</span><span class="kw">pub enum </span>Kind {
+    <span class="doccomment">/// 閉路を構成する頂点。
+    </span>Loop,
+    <span class="doccomment">/// 閉路以外の頂点。
+    </span>Other,
+}
+
+<span class="kw">impl </span>Kind {
+    <span class="doccomment">/// `Loop`ならば`true`を返す。
+    </span><span class="kw">pub fn </span>is_loop(<span class="self">self</span>) -&gt; bool {
+        <span class="macro">matches!</span>(<span class="self">self</span>, <span class="self">Self</span>::Loop)
+    }
 }
 
 <span class="kw">impl </span>PseudoTreeBuilder {
-    <span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 頂点数`n`の空のグラフを用意する。
+    </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             g: <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; n],
             edge_num: <span class="number">0</span>,
         }
     }
 
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize, v: usize) {
+    <span class="doccomment">/// `u, v`間に無向辺を張る。
+    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize, v: usize) {
         <span class="self">self</span>.g[u].push(v);
         <span class="self">self</span>.g[v].push(u);
         <span class="self">self</span>.edge_num += <span class="number">1</span>;
     }
 
-    <span class="kw">pub fn </span>build(<span class="self">self</span>) -&gt; PseudoTree {
+    <span class="doccomment">/// [`PseudoTree`]を構築する。
+    </span><span class="kw">pub fn </span>build(<span class="self">self</span>) -&gt; PseudoTree {
         <span class="macro">assert_eq!</span>(<span class="self">self</span>.edge_num, <span class="self">self</span>.g.len());
         <span class="kw">let </span>n = <span class="self">self</span>.g.len();
         <span class="kw">let </span><span class="kw-2">mut </span>indeg = <span class="macro">vec!</span>[<span class="number">0</span>; n];
         <span class="kw">let </span><span class="kw-2">mut </span>visit = <span class="macro">vec!</span>[<span class="bool-val">false</span>; n];
-        <span class="kw">let </span><span class="kw-2">mut </span>in_loop = <span class="macro">vec!</span>[<span class="bool-val">true</span>; n];
+        <span class="kw">let </span><span class="kw-2">mut </span>kind = <span class="macro">vec!</span>[Kind::Loop; n];
 
         <span class="kw">for </span><span class="kw-2">&amp;</span>to <span class="kw">in </span><span class="self">self</span>.g.iter().flatten() {
             indeg[to] += <span class="number">1</span>;
@@ -156,8 +215,7 @@
             .collect();
 
         <span class="kw">while let </span><span class="prelude-val">Some</span>(cur) = queue.pop_front() {
-            in_loop[cur] = <span class="bool-val">false</span>;
-
+            kind[cur] = Kind::Other;
             <span class="kw">if </span>visit[cur] {
                 <span class="kw">continue</span>;
             }
@@ -174,40 +232,42 @@
             }
         }
 
-        <span class="kw">let </span><span class="kw-2">mut </span>group = <span class="macro">vec!</span>[<span class="number">0</span>; n];
+        <span class="kw">let </span><span class="kw-2">mut </span>root = <span class="macro">vec!</span>[<span class="number">0</span>; n];
 
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-            <span class="kw">if </span>in_loop[i] {
-                group[i] = i;
+            <span class="kw">if </span>kind[i].is_loop() {
+                root[i] = i;
                 <span class="kw">for </span><span class="kw-2">&amp;</span>to <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.g[i] {
-                    <span class="kw">if </span>!in_loop[to] {
-                        <span class="self">self</span>.__dfs(to, i, <span class="kw-2">&amp;mut </span>group);
+                    <span class="kw">if </span>!kind[to].is_loop() {
+                        <span class="self">self</span>.__dfs(to, i, <span class="kw-2">&amp;mut </span>root);
                     }
                 }
             }
         }
 
-        PseudoTree { group, in_loop }
+        PseudoTree { root, kind }
     }
 
-    <span class="kw">fn </span>__dfs(<span class="kw-2">&amp;</span><span class="self">self</span>, cur: usize, par: usize, group: <span class="kw-2">&amp;mut </span>[usize]) {
-        group[cur] = group[par];
+    <span class="kw">fn </span>__dfs(<span class="kw-2">&amp;</span><span class="self">self</span>, cur: usize, par: usize, root: <span class="kw-2">&amp;mut </span>[usize]) {
+        root[cur] = root[par];
 
         <span class="kw">for </span><span class="kw-2">&amp;</span>to <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.g[cur] {
             <span class="kw">if </span>to != par {
-                <span class="self">self</span>.__dfs(to, cur, group);
+                <span class="self">self</span>.__dfs(to, cur, root);
             }
         }
     }
 }
 
 <span class="kw">impl </span>PseudoTree {
-    <span class="kw">pub fn </span>group_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
-        <span class="self">self</span>.group[i]
+    <span class="doccomment">/// 頂点`i`から辺を辿って最初に到達する閉路頂点を返す。
+    </span><span class="kw">pub fn </span>root_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
+        <span class="self">self</span>.root[i]
     }
 
-    <span class="kw">pub fn </span>is_in_loop(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; bool {
-        <span class="self">self</span>.in_loop[i]
+    <span class="doccomment">/// 頂点`i`の種類を返す。
+    </span><span class="kw">pub fn </span>kind_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; Kind {
+        <span class="self">self</span>.kind[i]
     }
 }
 </code></pre></div></section></main></body></html>

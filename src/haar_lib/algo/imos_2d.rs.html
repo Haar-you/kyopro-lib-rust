@@ -107,10 +107,14 @@
 <a href="#91" id="91">91</a>
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::num::{one_zero::Zero, traits::Signed};
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 2次元のimos法
+</span><span class="kw">use </span><span class="kw">crate</span>::num::{one_zero::Zero, traits::Signed};
 <span class="kw">use </span>std::ops::{Add, Range, Sub};
 
-<span class="kw">pub struct </span>Imos2D&lt;T&gt; {
+<span class="doccomment">/// 2次元のimos法
+</span><span class="kw">pub struct </span>Imos2D&lt;T&gt; {
     data: Vec&lt;Vec&lt;T&gt;&gt;,
     n: usize,
     m: usize,

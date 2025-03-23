@@ -46,12 +46,25 @@
 <a href="#30" id="30">30</a>
 <a href="#31" id="31">31</a>
 <a href="#32" id="32">32</a>
-</pre></div><pre class="rust"><code><span class="kw">pub struct </span>FactorizeSieve {
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 前計算による素因数分解
+
+/// 前計算による素因数分解
+///
+/// **Space complexity** $O(n)$
+</span><span class="kw">pub struct </span>FactorizeSieve {
     p: Vec&lt;usize&gt;,
 }
 
 <span class="kw">impl </span>FactorizeSieve {
-    <span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// `n`以下の非負整数を素因数分解できる[`FactorizeSieve`]を構築する。
+    </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>p = <span class="macro">vec!</span>[<span class="number">0</span>; n + <span class="number">1</span>];
 
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">2</span>..=n {
@@ -67,7 +80,8 @@
         <span class="self">Self </span>{ p }
     }
 
-    <span class="kw">pub fn </span>factorize(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>n: usize) -&gt; Vec&lt;usize&gt; {
+    <span class="doccomment">/// `n`の素因数を列挙する。
+    </span><span class="kw">pub fn </span>factorize(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>n: usize) -&gt; Vec&lt;usize&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
 
         <span class="kw">while </span>n &gt; <span class="number">1 </span>{

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["dijkstra"],"struct":["Edge","MulGraph"]};

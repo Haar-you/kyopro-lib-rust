@@ -171,6 +171,32 @@
 <a href="#155" id="155">155</a>
 <a href="#156" id="156">156</a>
 <a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! グラフ一般に関するもの
 
 </span><span class="kw">pub mod </span>articulation_points;
@@ -237,7 +263,8 @@
 }
 
 <span class="kw">impl</span>&lt;T, I&gt; Edge&lt;T, I&gt; {
-    <span class="kw">pub fn </span>new(from: usize, to: usize, weight: T, index: I) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// `from`から`to`への重さ`weight`、辺番号`index`をもつ有向辺を作る。
+    </span><span class="kw">pub fn </span>new(from: usize, to: usize, weight: T, index: I) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             from,
             to,
@@ -278,9 +305,10 @@
 <span class="kw">impl </span>Direction <span class="kw">for </span>Directed {}
 <span class="kw">impl </span>Direction <span class="kw">for </span>Undirected {}
 
-<span class="attr">#[derive(Debug, Clone)]
+<span class="doccomment">/// グラフ
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Graph&lt;D, E&gt; {
-    <span class="kw">pub </span>edges: Vec&lt;Vec&lt;E&gt;&gt;,
+    edges: Vec&lt;Vec&lt;E&gt;&gt;,
     __phantom: PhantomData&lt;D&gt;,
 }
 
@@ -299,9 +327,11 @@
     </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, e: E) {
         <span class="self">self</span>.edges[e.from()].push(e);
     }
+}
 
-    <span class="kw">pub fn </span>extend(<span class="kw-2">&amp;mut </span><span class="self">self</span>, edges: <span class="kw">impl </span>IntoIterator&lt;Item = E&gt;) {
-        edges.into_iter().for_each(|e| <span class="self">self</span>.add(e));
+<span class="kw">impl</span>&lt;E: EdgeTrait + Clone&gt; Extend&lt;E&gt; <span class="kw">for </span>Graph&lt;Directed, E&gt; {
+    <span class="kw">fn </span>extend&lt;T: IntoIterator&lt;Item = E&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: T) {
+        iter.into_iter().for_each(|e| <span class="self">self</span>.add(e));
     }
 }
 
@@ -311,9 +341,11 @@
         <span class="self">self</span>.edges[e.from()].push(e.clone());
         <span class="self">self</span>.edges[e.to()].push(e.rev());
     }
+}
 
-    <span class="kw">pub fn </span>extend(<span class="kw-2">&amp;mut </span><span class="self">self</span>, edges: <span class="kw">impl </span>IntoIterator&lt;Item = E&gt;) {
-        edges.into_iter().for_each(|e| <span class="self">self</span>.add(e));
+<span class="kw">impl</span>&lt;E: EdgeTrait + Clone&gt; Extend&lt;E&gt; <span class="kw">for </span>Graph&lt;Undirected, E&gt; {
+    <span class="kw">fn </span>extend&lt;T: IntoIterator&lt;Item = E&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: T) {
+        iter.into_iter().for_each(|e| <span class="self">self</span>.add(e));
     }
 }
 
@@ -326,6 +358,26 @@
     <span class="doccomment">/// グラフの頂点数が`0`ならば`true`を返す。
     </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.edges.is_empty()
+    }
+
+    <span class="doccomment">/// 各頂点からの辺集合への参照を返す。
+    </span><span class="kw">pub fn </span>edges(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[Vec&lt;E&gt;] {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.edges
+    }
+
+    <span class="doccomment">/// 各頂点からの辺集合への可変参照を返す。
+    </span><span class="kw">pub fn </span>edges_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>[Vec&lt;E&gt;] {
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>.edges
+    }
+
+    <span class="doccomment">/// 頂点`i`の隣接辺へのイテレータを返す。
+    </span><span class="kw">pub fn </span>neighbours(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>E&gt; + ExactSizeIterator {
+        <span class="self">self</span>.edges[i].iter()
+    }
+
+    <span class="doccomment">/// 頂点`i`の隣接辺への可変参照へのイテレータを返す。
+    </span><span class="kw">pub fn </span>neighbours_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;mut </span>E&gt; + ExactSizeIterator {
+        <span class="self">self</span>.edges[i].iter_mut()
     }
 }
 </code></pre></div></section></main></body></html>

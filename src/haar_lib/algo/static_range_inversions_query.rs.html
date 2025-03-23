@@ -98,13 +98,47 @@
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 範囲転倒数取得クエリ
 
 </span><span class="kw">use crate</span>::{algo::bsearch::<span class="kw-2">*</span>, ds::fenwick_add::<span class="kw-2">*</span>};
 <span class="kw">use </span>std::convert::TryFrom;
 <span class="kw">use </span>std::ops::Range;
 
-<span class="kw">pub struct </span>StaticRangeInversionsQuery {
+<span class="doccomment">/// 範囲転倒数取得クエリ
+</span><span class="kw">pub struct </span>StaticRangeInversionsQuery {
     data: Vec&lt;usize&gt;,
     qs: Vec&lt;(usize, usize)&gt;,
 }
@@ -120,17 +154,19 @@
         <span class="self">Self </span>{ data, qs: <span class="macro">vec!</span>[] }
     }
 
-    <span class="kw">pub fn </span>add_query(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) {
+    <span class="doccomment">/// 範囲`l..r`で転倒数を求めるクエリを追加する。
+    </span><span class="kw">pub fn </span>add_query(<span class="kw-2">&amp;mut </span><span class="self">self</span>, Range { start: l, end: r }: Range&lt;usize&gt;) {
         <span class="self">self</span>.qs.push((l, r));
     }
 
-    <span class="kw">pub fn </span>solve(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;u64&gt; {
+    <span class="doccomment">/// クエリに対しての結果を返す。
+    </span><span class="kw">pub fn </span>solve(<span class="self">self</span>) -&gt; Vec&lt;(Range&lt;usize&gt;, u64)&gt; {
         <span class="kw">let </span>n = <span class="self">self</span>.data.len();
         <span class="kw">let </span>width = (n <span class="kw">as </span>f64).sqrt() <span class="kw">as </span>usize;
 
         <span class="kw">let </span><span class="kw-2">mut </span>b = FenwickTreeAdd::&lt;i64&gt;::new(n);
         <span class="kw">let </span><span class="kw-2">mut </span>temp = <span class="number">0</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="number">0</span>; <span class="self">self</span>.qs.len()];
+        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[(<span class="number">0</span>..<span class="number">0</span>, <span class="number">0</span>); <span class="self">self</span>.qs.len()];
 
         <span class="kw">let </span><span class="kw-2">mut </span>ord = (<span class="number">0</span>..<span class="self">self</span>.qs.len()).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
@@ -176,10 +212,40 @@
                 }
             }
 
-            ret[id] = u64::try_from(temp).unwrap()
+            ret[id] = (<span class="self">self</span>.qs[id].<span class="number">0</span>..<span class="self">self</span>.qs[id].<span class="number">1</span>, u64::try_from(temp).unwrap());
         }
 
         ret
+    }
+}
+
+<span class="attr">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use crate</span>::{algo::inversion_number::inversion_number, testtools::rand_range};
+    <span class="kw">use </span>rand::Rng;
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+
+        <span class="kw">let </span>n = <span class="number">100</span>;
+        <span class="kw">let </span>a: Vec&lt;u64&gt; = std::iter::repeat_with(|| rng.gen()).take(n).collect();
+
+        <span class="kw">let </span><span class="kw-2">mut </span>sriq = StaticRangeInversionsQuery::new(<span class="kw-2">&amp;</span>a);
+
+        <span class="kw">let </span>q = <span class="number">100</span>;
+        <span class="kw">for _ in </span><span class="number">0</span>..q {
+            <span class="kw">let </span>range = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
+            sriq.add_query(range);
+        }
+
+        <span class="kw">for </span>(range, res) <span class="kw">in </span>sriq.solve() {
+            <span class="kw">let </span><span class="kw-2">mut </span>temp = a[range].to_vec();
+            <span class="kw">let </span>ans = inversion_number(<span class="kw-2">&amp;mut </span>temp);
+
+            <span class="macro">assert_eq!</span>(res, ans);
+        }
     }
 }
 </code></pre></div></section></main></body></html>

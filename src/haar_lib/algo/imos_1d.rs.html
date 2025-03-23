@@ -77,10 +77,14 @@
 <a href="#61" id="61">61</a>
 <a href="#62" id="62">62</a>
 <a href="#63" id="63">63</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::num::{one_zero::Zero, traits::Signed};
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 1次元のimos法
+</span><span class="kw">use </span><span class="kw">crate</span>::num::{one_zero::Zero, traits::Signed};
 <span class="kw">use </span>std::ops::{Add, Range, Sub};
 
-<span class="kw">pub struct </span>Imos1D&lt;T&gt; {
+<span class="doccomment">/// 1次元のimos法
+</span><span class="kw">pub struct </span>Imos1D&lt;T&gt; {
     data: Vec&lt;T&gt;,
 }
 

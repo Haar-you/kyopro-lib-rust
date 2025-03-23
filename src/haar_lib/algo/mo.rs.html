@@ -110,15 +110,23 @@
 <a href="#94" id="94">94</a>
 <a href="#95" id="95">95</a>
 <a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Mo&#39;s algorithm
+//!
+//! # Problems
+//! - &lt;https://atcoder.jp/contests/dwacon2017-honsen/tasks/dwango2017final_b&gt;
+
+/// Mo&#39;s algorithm
 </span><span class="kw">pub struct </span>Mo&lt;<span class="lifetime">&#39;a</span>&gt; {
-    append_left: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(usize)&gt;,
-    append_right: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(usize)&gt;,
-    remove_left: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(usize)&gt;,
-    remove_right: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(usize)&gt;,
-    query: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ Fn(usize)&gt;,
+    append_left: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ FnMut(usize)&gt;,
+    append_right: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ FnMut(usize)&gt;,
+    remove_left: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ FnMut(usize)&gt;,
+    remove_right: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ FnMut(usize)&gt;,
+    query: Box&lt;<span class="kw">dyn </span><span class="lifetime">&#39;a </span>+ FnMut(usize)&gt;,
     q: usize,
-    index: usize,
     width: usize,
     left: Vec&lt;usize&gt;,
     right: Vec&lt;usize&gt;,
@@ -126,14 +134,14 @@
 }
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Mo&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="kw">pub fn </span>new(
+    <span class="doccomment">/// クエリ処理用の関数を登録して[`Mo`]を作る。
+    </span><span class="kw">pub fn </span>new(
         n: usize,
-        q: usize,
-        append_left: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(usize)&gt;,
-        append_right: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(usize)&gt;,
-        remove_left: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(usize)&gt;,
-        remove_right: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(usize)&gt;,
-        query: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ Fn(usize)&gt;,
+        append_left: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ FnMut(usize)&gt;,
+        append_right: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ FnMut(usize)&gt;,
+        remove_left: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ FnMut(usize)&gt;,
+        remove_right: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ FnMut(usize)&gt;,
+        query: Box&lt;<span class="kw">impl </span><span class="lifetime">&#39;a </span>+ FnMut(usize)&gt;,
     ) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             append_left,
@@ -141,23 +149,24 @@
             remove_left,
             remove_right,
             query,
-            q,
-            index: <span class="number">0</span>,
+            q: <span class="number">0</span>,
             width: (n <span class="kw">as </span>f64).sqrt() <span class="kw">as </span>usize,
-            left: <span class="macro">vec!</span>[<span class="number">0</span>; q],
-            right: <span class="macro">vec!</span>[<span class="number">0</span>; q],
-            ord: <span class="macro">vec!</span>[<span class="number">0</span>; q],
+            left: <span class="macro">vec!</span>[],
+            right: <span class="macro">vec!</span>[],
+            ord: <span class="macro">vec!</span>[],
         }
     }
 
-    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, l: usize, r: usize) {
-        <span class="self">self</span>.left[<span class="self">self</span>.index] = l;
-        <span class="self">self</span>.right[<span class="self">self</span>.index] = r;
-        <span class="self">self</span>.ord[<span class="self">self</span>.index] = <span class="self">self</span>.index;
-        <span class="self">self</span>.index += <span class="number">1</span>;
+    <span class="doccomment">/// 範囲`[l, r)`を登録する。
+    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, l: usize, r: usize) {
+        <span class="self">self</span>.left.push(l);
+        <span class="self">self</span>.right.push(r);
+        <span class="self">self</span>.ord.push(<span class="self">self</span>.q);
+        <span class="self">self</span>.q += <span class="number">1</span>;
     }
 
-    <span class="kw">pub fn </span>run(<span class="kw-2">mut </span><span class="self">self</span>) {
+    <span class="doccomment">/// 登録した範囲をすべて訪れるように実行する。
+    </span><span class="kw">pub fn </span>run(<span class="kw-2">mut </span><span class="self">self</span>) {
         <span class="kw">let </span>left = <span class="self">self</span>.left;
         <span class="kw">let </span>right = <span class="self">self</span>.right;
         <span class="kw">let </span>width = <span class="self">self</span>.width;
@@ -180,23 +189,22 @@
         <span class="kw">let </span><span class="kw-2">mut </span>l = left[<span class="self">self</span>.ord[<span class="number">0</span>]];
         <span class="kw">let </span><span class="kw-2">mut </span>r = left[<span class="self">self</span>.ord[<span class="number">0</span>]];
 
-        <span class="kw">for </span>q <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.q {
-            <span class="kw">let </span>id = <span class="self">self</span>.ord[q];
+        <span class="kw">for </span>id <span class="kw">in </span><span class="self">self</span>.ord {
+            <span class="kw">let </span>left = left[id];
+            <span class="kw">let </span>right = right[id];
 
-            <span class="kw">while </span>l != left[id] || r != right[id] {
-                <span class="kw">if </span>l &gt; left[id] {
+            <span class="kw">while </span>l != left || r != right {
+                <span class="kw">if </span>l &gt; left {
                     l -= <span class="number">1</span>;
                     (<span class="self">self</span>.append_left)(l);
-                }
-                <span class="kw">if </span>l &lt; left[id] {
+                } <span class="kw">else if </span>l &lt; left {
                     (<span class="self">self</span>.remove_left)(l);
                     l += <span class="number">1</span>;
                 }
-                <span class="kw">if </span>r &lt; right[id] {
+                <span class="kw">if </span>r &lt; right {
                     (<span class="self">self</span>.append_right)(r);
                     r += <span class="number">1</span>;
-                }
-                <span class="kw">if </span>r &gt; right[id] {
+                } <span class="kw">else if </span>r &gt; right {
                     r -= <span class="number">1</span>;
                     (<span class="self">self</span>.remove_right)(r);
                 }

@@ -30,10 +30,14 @@
 <a href="#14" id="14">14</a>
 <a href="#15" id="15">15</a>
 <a href="#16" id="16">16</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::math::convolution::{mobius_sub::<span class="kw-2">*</span>, zeta_sub::<span class="kw-2">*</span>};
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! $\mathtt{a_{i \lor j}} = \sum \mathtt{f_{i}} * \mathtt{g_{j}}$を満たす`a`を求める。
+</span><span class="kw">use </span><span class="kw">crate</span>::math::convolution::{mobius::<span class="kw-2">*</span>, zeta::<span class="kw-2">*</span>};
 <span class="kw">use </span>std::ops::{Add, Mul, Sub};
 
-<span class="kw">pub fn </span>convolution_or&lt;T&gt;(<span class="kw-2">mut </span>f: Vec&lt;T&gt;, <span class="kw-2">mut </span>g: Vec&lt;T&gt;) -&gt; Vec&lt;T&gt;
+<span class="doccomment">/// $\mathtt{a_{i \lor j}} = \sum \mathtt{f_{i}} * \mathtt{g_{j}}$を満たす`a`を求める。
+</span><span class="kw">pub fn </span>convolution_or&lt;T&gt;(<span class="kw-2">mut </span>f: Vec&lt;T&gt;, <span class="kw-2">mut </span>g: Vec&lt;T&gt;) -&gt; Vec&lt;T&gt;
 <span class="kw">where
     </span>T: Copy + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt; + Mul&lt;Output = T&gt;,
 {

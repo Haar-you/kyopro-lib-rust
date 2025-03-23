@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["PseudoTree","PseudoTreeBuilder"]};
+window.SIDEBAR_ITEMS = {"enum":["Kind"],"struct":["PseudoTree","PseudoTreeBuilder"]};

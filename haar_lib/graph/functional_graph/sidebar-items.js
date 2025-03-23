@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Kind"],"struct":["FunctionalGraph","FunctionalGraphBuilder"]};
+window.SIDEBAR_ITEMS = {"enum":["Kind"],"struct":["FunctionalGraph","FunctionalGraphBuilder","Group"]};

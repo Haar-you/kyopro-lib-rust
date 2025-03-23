@@ -41,8 +41,16 @@
 <a href="#25" id="25">25</a>
 <a href="#26" id="26">26</a>
 <a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 拡張ユークリッドの互除法
 
+/// 拡張ユークリッドの互除法
+///
+/// # Returns
+/// - `(g, p, q)` : $a * p + m * q = g$を満たす。
 </span><span class="kw">pub fn </span>ext_gcd(a: u64, b: u64) -&gt; (i64, i64, i64) {
     <span class="kw">if </span>b == <span class="number">0 </span>{
         <span class="kw">return </span>(a <span class="kw">as </span>i64, <span class="number">1</span>, <span class="number">0</span>);

@@ -94,9 +94,14 @@
 <a href="#78" id="78">78</a>
 <a href="#79" id="79">79</a>
 <a href="#80" id="80">80</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 有向グラフの(準)Eulerグラフの判定
+</span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
 
-<span class="attr">#[derive(Clone)]
+<span class="doccomment">/// 有向グラフでの一筆書き
+</span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>DirectedEulerianTrail&lt;E: EdgeTrait&gt; {
     size: usize,
     edge_count: usize,
@@ -106,7 +111,8 @@
 }
 
 <span class="kw">impl</span>&lt;E: EdgeTrait + Clone&gt; DirectedEulerianTrail&lt;E&gt; {
-    <span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 頂点数`size`のグラフを用意する。
+    </span><span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             size,
             edge_count: <span class="number">0</span>,
@@ -116,7 +122,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>add_edge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, e: E) {
+    <span class="doccomment">/// 有向辺`e`を追加する。
+    </span><span class="kw">pub fn </span>add_edge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, e: E) {
         <span class="self">self</span>.indeg[e.to()] += <span class="number">1</span>;
         <span class="self">self</span>.outdeg[e.from()] += <span class="number">1</span>;
         <span class="self">self</span>.graph[e.from()].push(e);
@@ -133,8 +140,7 @@
         vs.push(cur);
     }
 
-    <span class="doccomment">/// 有向グラフがオイラー路を持つかを判定する。
-    /// 存在する場合、オイラー路の頂点列と辺列を返す。
+    <span class="doccomment">/// グラフが一筆書き可能なら、その頂点列と辺列を`Some`に包んで返す。
     </span><span class="kw">pub fn </span>solve(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;(Vec&lt;usize&gt;, Vec&lt;E&gt;)&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>in_count = <span class="number">0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>out_count = <span class="number">0</span>;

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["chmax","chmin","ds_macros","for_loop","get_time","impl_algebra","impl_ops","io","max","min","mul_vec","rec","sort_with","timer","trait_alias"]};
+window.SIDEBAR_ITEMS = {"mod":["chmax_chmin","ds_macros","for_loop","get_time","impl_algebra","impl_ops","io","max_min","mul_vec","rec","sort_with","timer","trait_alias"]};

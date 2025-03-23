@@ -45,11 +45,21 @@
 <a href="#29" id="29">29</a>
 <a href="#30" id="30">30</a>
 <a href="#31" id="31">31</a>
-</pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::needless_range_loop)]
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! ベル数$B(n, n)$のテーブル
+//!
+//! # References
+//! - &lt;https://manabitimes.jp/math/892&gt;
+</span><span class="attr">#![allow(clippy::needless_range_loop)]
 
 </span><span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
 
-<span class="kw">pub fn </span>bell_number_table&lt;Modulo: FF&gt;(n: usize, modulo: Modulo) -&gt; Vec&lt;Vec&lt;Modulo::Element&gt;&gt;
+<span class="doccomment">/// ベル数$B(0, 0)$~$B(n, n)$を求める。
+</span><span class="kw">pub fn </span>bell_number_table&lt;Modulo: FF&gt;(n: usize, modulo: Modulo) -&gt; Vec&lt;Vec&lt;Modulo::Element&gt;&gt;
 <span class="kw">where
     </span>Modulo::Element: FFElem + Copy,
 {

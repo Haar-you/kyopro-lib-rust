@@ -108,9 +108,16 @@
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
 <a href="#94" id="94">94</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 無向グラフの(準)Eulerグラフ判定
+</span><span class="kw">use </span><span class="kw">crate</span>::graph::<span class="kw-2">*</span>;
 
-<span class="attr">#[derive(Clone)]
+<span class="doccomment">/// 無向グラフでの一筆書き
+</span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>UndirectedEulerianTrail&lt;E: EdgeTrait&gt; {
     size: usize,
     edge_count: usize,
@@ -119,7 +126,8 @@
 }
 
 <span class="kw">impl</span>&lt;E: EdgeTrait + Clone&gt; UndirectedEulerianTrail&lt;E&gt; {
-    <span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 頂点数`size`のグラフを用意する。
+    </span><span class="kw">pub fn </span>new(size: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             size,
             edge_count: <span class="number">0</span>,
@@ -128,7 +136,8 @@
         }
     }
 
-    <span class="kw">pub fn </span>add_edge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, e: E) {
+    <span class="doccomment">/// 無向辺`e`を追加する。
+    </span><span class="kw">pub fn </span>add_edge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, e: E) {
         <span class="kw">let </span>from = e.from();
         <span class="kw">let </span>to = e.to();
 
@@ -169,7 +178,8 @@
         vs.push(cur);
     }
 
-    <span class="kw">pub fn </span>solve(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;(Vec&lt;usize&gt;, Vec&lt;E&gt;)&gt; {
+    <span class="doccomment">/// グラフが一筆書き可能なら、その頂点列と辺列を`Some`に包んで返す。
+    </span><span class="kw">pub fn </span>solve(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;(Vec&lt;usize&gt;, Vec&lt;E&gt;)&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>odd = <span class="number">0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>start = <span class="prelude-val">None</span>;
 

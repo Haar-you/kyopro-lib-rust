@@ -184,10 +184,14 @@
 <a href="#168" id="168">168</a>
 <a href="#169" id="169">169</a>
 <a href="#170" id="170">170</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 二次元のセグメント木
+</span><span class="kw">use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::ops::Range;
 
-<span class="kw">pub struct </span>Segtree2D&lt;M: Monoid + Commutative&gt; {
+<span class="doccomment">/// 二次元のセグメント木
+</span><span class="kw">pub struct </span>Segtree2D&lt;M: Monoid + Commutative&gt; {
     data: Vec&lt;Vec&lt;M::Element&gt;&gt;,
     w: usize,
     h: usize,

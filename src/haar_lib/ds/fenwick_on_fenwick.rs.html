@@ -132,16 +132,24 @@
 <a href="#116" id="116">116</a>
 <a href="#117" id="117">117</a>
 <a href="#118" id="118">118</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Fenwick木上にFenwick木を構築する。
+</span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
 <span class="kw">use </span>std::ops::{Add, Range, RangeTo, Sub};
 
-<span class="attr">#[derive(Clone, Default)]
+<span class="doccomment">/// [`FenwickOnFenwick`]を構築するための構造体。
+</span><span class="attr">#[derive(Clone, Default)]
 </span><span class="kw">pub struct </span>FenwickOnFenwickBuilder {
     xs: Vec&lt;i64&gt;,
     ys: Vec&lt;i64&gt;,
 }
 
-<span class="attr">#[derive(Clone)]
+<span class="doccomment">/// Fenwick木上にFenwick木を構築する。
+</span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>FenwickOnFenwick&lt;T&gt; {
     c_xs: Vec&lt;i64&gt;,
     c_ys: Vec&lt;Vec&lt;i64&gt;&gt;,
@@ -150,20 +158,22 @@
 }
 
 <span class="kw">impl </span>FenwickOnFenwickBuilder {
-    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// 空の[`FenwickOnFenwickBuilder`]を用意する。
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             xs: <span class="macro">vec!</span>[],
             ys: <span class="macro">vec!</span>[],
         }
     }
 
-    <span class="doccomment">/// 使用する点を登録する。
+    <span class="doccomment">/// 点`(x, y)`を登録する。
     </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: i64, y: i64) {
         <span class="self">self</span>.xs.push(x);
         <span class="self">self</span>.ys.push(y);
     }
 
-    <span class="kw">pub fn </span>build&lt;T: Copy&gt;(<span class="self">self</span>, zero: T) -&gt; FenwickOnFenwick&lt;T&gt; {
+    <span class="doccomment">/// [`FenwickOnFenwick`]を構築する。
+    </span><span class="kw">pub fn </span>build&lt;T: Copy&gt;(<span class="self">self</span>, zero: T) -&gt; FenwickOnFenwick&lt;T&gt; {
         <span class="kw">let </span>n = <span class="self">self</span>.xs.len();
         <span class="kw">let </span><span class="kw-2">mut </span>c_xs = <span class="self">self</span>.xs.clone();
         c_xs.sort_unstable();
@@ -202,7 +212,7 @@
 }
 
 <span class="kw">impl</span>&lt;T: Copy + Add&lt;Output = T&gt; + Sub&lt;Output = T&gt;&gt; FenwickOnFenwick&lt;T&gt; {
-    <span class="doccomment">/// Time Complexity $O(\log ^ 2 n)$
+    <span class="doccomment">/// **Time Complexity** $O(\log ^ 2 n)$
     </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: i64, y: i64, value: T) {
         <span class="kw">let </span><span class="kw-2">mut </span>x = <span class="self">self</span>.c_xs.binary_search(<span class="kw-2">&amp;</span>x).unwrap() + <span class="number">1</span>;
 
@@ -217,7 +227,7 @@
         }
     }
 
-    <span class="doccomment">/// Time Complexity $O(\log ^ 2 n)$
+    <span class="doccomment">/// **Time Complexity** $O(\log ^ 2 n)$
     </span><span class="kw">pub fn </span>fold_2d(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         Range { start: x1, end: x2 }: Range&lt;i64&gt;,
@@ -227,7 +237,7 @@
             + <span class="self">self</span>.fold_to_2d(..x1, ..y1)
     }
 
-    <span class="doccomment">/// Time Complexity $O(\log ^ 2 n)$
+    <span class="doccomment">/// **Time Complexity** $O(\log ^ 2 n)$
     </span><span class="kw">pub fn </span>fold_to_2d(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         RangeTo { end: x }: RangeTo&lt;i64&gt;,

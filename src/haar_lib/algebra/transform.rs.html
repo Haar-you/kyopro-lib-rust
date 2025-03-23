@@ -124,7 +124,41 @@
 <a href="#108" id="108">108</a>
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
-</pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 配列の並び替えを演算とする代数的構造
+</span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 <span class="kw">use </span><span class="kw">crate</span>::impl_algebra;
 <span class="kw">use </span>std::marker::PhantomData;
 
@@ -137,35 +171,67 @@
 </span><span class="kw">pub struct </span>Permutation(Vec&lt;usize&gt;);
 
 <span class="kw">impl </span>Transformation {
-    <span class="kw">pub fn </span>try_from(a: Vec&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
-        <span class="kw">let </span>n = a.len();
-        a.iter().all(|<span class="kw-2">&amp;</span>i| i &lt; n).then_some(<span class="self">Self</span>(a))
-    }
-    <span class="kw">pub fn </span>into_inner(<span class="self">self</span>) -&gt; Vec&lt;usize&gt; {
-        <span class="self">self</span>.<span class="number">0
-    </span>}
-    <span class="kw">pub fn </span>apply&lt;T: Clone&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, a: Vec&lt;T&gt;) -&gt; Vec&lt;T&gt; {
+    <span class="doccomment">/// $b_i = a_{T_i}$を満たすbを返す。
+    </span><span class="kw">pub fn </span>apply&lt;T: Clone&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, a: Vec&lt;T&gt;) -&gt; Vec&lt;T&gt; {
         <span class="self">self</span>.<span class="number">0</span>.iter().map(|<span class="kw-2">&amp;</span>i| a[i].clone()).collect()
+    }
+
+    <span class="doccomment">/// 内部の`Vec`のスライスへの参照を返す。
+    </span><span class="kw">pub fn </span>as_slice(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[usize] {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
+    </span>}
+}
+
+<span class="kw">impl </span>From&lt;Transformation&gt; <span class="kw">for </span>Vec&lt;usize&gt; {
+    <span class="kw">fn </span>from(value: Transformation) -&gt; <span class="self">Self </span>{
+        value.<span class="number">0
+    </span>}
+}
+
+<span class="kw">impl </span>TryFrom&lt;Vec&lt;usize&gt;&gt; <span class="kw">for </span>Transformation {
+    <span class="kw">type </span>Error = <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str;
+
+    <span class="kw">fn </span>try_from(value: Vec&lt;usize&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">let </span>n = value.len();
+        value
+            .iter()
+            .all(|<span class="kw-2">&amp;</span>i| i &lt; n)
+            .then_some(<span class="self">Self</span>(value))
+            .ok_or(<span class="string">&quot;すべての値は`.len()`未満でなければならない。&quot;</span>)
     }
 }
 
 <span class="kw">impl </span>Permutation {
-    <span class="kw">pub fn </span>try_from(a: Vec&lt;usize&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>check = <span class="macro">vec!</span>[<span class="bool-val">false</span>; a.len()];
+    <span class="doccomment">/// $b_i = a_{P_i}$を満たすbを返す。
+    </span><span class="kw">pub fn </span>apply&lt;T: Clone&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, a: Vec&lt;T&gt;) -&gt; Vec&lt;T&gt; {
+        <span class="self">self</span>.<span class="number">0</span>.iter().map(|<span class="kw-2">&amp;</span>i| a[i].clone()).collect()
+    }
 
-        <span class="kw">for </span><span class="kw-2">&amp;</span>x <span class="kw">in </span><span class="kw-2">&amp;</span>a {
-            <span class="kw">if </span>x &gt;= a.len() || check[x] {
-                <span class="kw">return </span><span class="prelude-val">None</span>;
+    <span class="doccomment">/// 内部の`Vec`のスライスへの参照を返す。
+    </span><span class="kw">pub fn </span>as_slice(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[usize] {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
+    </span>}
+}
+
+<span class="kw">impl </span>From&lt;Permutation&gt; <span class="kw">for </span>Vec&lt;usize&gt; {
+    <span class="kw">fn </span>from(value: Permutation) -&gt; <span class="self">Self </span>{
+        value.<span class="number">0
+    </span>}
+}
+
+<span class="kw">impl </span>TryFrom&lt;Vec&lt;usize&gt;&gt; <span class="kw">for </span>Permutation {
+    <span class="kw">type </span>Error = <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str;
+
+    <span class="kw">fn </span>try_from(value: Vec&lt;usize&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>check = <span class="macro">vec!</span>[<span class="bool-val">false</span>; value.len()];
+
+        <span class="kw">for </span><span class="kw-2">&amp;</span>x <span class="kw">in </span><span class="kw-2">&amp;</span>value {
+            <span class="kw">if </span>x &gt;= value.len() || check[x] {
+                <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">&quot;0から`.len()｀未満の値からなる順列でなければならない。&quot;</span>);
             }
             check[x] = <span class="bool-val">true</span>;
         }
-        <span class="prelude-val">Some</span>(<span class="self">Self</span>(a))
-    }
-    <span class="kw">pub fn </span>into_inner(<span class="self">self</span>) -&gt; Vec&lt;usize&gt; {
-        <span class="self">self</span>.<span class="number">0
-    </span>}
-    <span class="kw">pub fn </span>apply&lt;T: Clone&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, a: Vec&lt;T&gt;) -&gt; Vec&lt;T&gt; {
-        <span class="self">self</span>.<span class="number">0</span>.iter().map(|<span class="kw-2">&amp;</span>i| a[i].clone()).collect()
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>(value))
     }
 }
 
@@ -186,7 +252,7 @@
     }
 }
 
-<span class="macro">impl_algebra!</span>(Composition&lt;Transformation&gt;, 
+<span class="macro">impl_algebra!</span>(Composition&lt;Transformation&gt;,
     set: Transformation,
     op: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>, a: Transformation, b: Transformation| {
         <span class="kw">let </span>n = s.len;
@@ -196,7 +262,7 @@
     },
     id: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>| Transformation((<span class="number">0</span>..s.len).collect()), assoc: {});
 
-<span class="macro">impl_algebra!</span>(Composition&lt;Permutation&gt;, 
+<span class="macro">impl_algebra!</span>(Composition&lt;Permutation&gt;,
     set: Permutation,
     op: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>, a: Permutation, b: Permutation| {
         <span class="kw">let </span>n = s.len;

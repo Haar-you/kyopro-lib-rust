@@ -133,6 +133,7 @@
 <a href="#117" id="117">117</a>
 <a href="#118" id="118">118</a>
 <a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! 座標圧縮
 </span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
 
@@ -196,16 +197,17 @@
         <span class="self">self</span>.data.push(value);
     }
 
-    <span class="doccomment">/// 座標圧縮対象に`values`の要素を追加する。
-    </span><span class="kw">pub fn </span>extend(<span class="kw-2">&amp;mut </span><span class="self">self</span>, values: <span class="kw">impl </span>IntoIterator&lt;Item = T&gt;) {
-        <span class="self">self</span>.data.extend(values);
-    }
-
     <span class="doccomment">/// **Time complexity** $O(n \log n)$
     </span><span class="kw">pub fn </span>build(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Compressor&lt;T&gt; {
         <span class="self">self</span>.data.sort();
         <span class="self">self</span>.data.dedup();
         Compressor { data: <span class="self">self</span>.data }
+    }
+}
+
+<span class="kw">impl</span>&lt;U&gt; Extend&lt;U&gt; <span class="kw">for </span>CompressorBuilder&lt;U&gt; {
+    <span class="kw">fn </span>extend&lt;T: IntoIterator&lt;Item = U&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: T) {
+        <span class="self">self</span>.data.extend(iter);
     }
 }
 
