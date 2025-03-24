@@ -1,3 +1,13 @@
+//! Z algorithm
+//!
+//! # References
+//! - <https://snuke.hatenablog.com/entry/2014/12/03/214243>
+//! - <https://qiita.com/Pro_ktmr/items/16904c9570aa0953bf05>
+
+/// Z algorithm
+///
+/// $k \in [1, n]$について、
+/// $s = s_1 s_2 \ldots s_n$と$s$の$k$文字目以降$s_k s_{k+1} \ldots s_n$の最長共通接頭辞の長さを求める。
 pub fn zalgo<T: PartialEq>(s: &[T]) -> Vec<usize> {
     let n = s.len();
     let mut ret = vec![0; n];

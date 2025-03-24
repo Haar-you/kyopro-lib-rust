@@ -1,5 +1,7 @@
+//! Rolling Hash
 use std::ops::Range;
 
+/// 文字列のハッシュ値を計算する構造体。
 pub struct RollingHash {
     m: u64,
     b: u64,
@@ -7,6 +9,7 @@ pub struct RollingHash {
 }
 
 impl RollingHash {
+    /// 最大長`size`、基数`b`と剰余の除数`m`を設定した[`RollingHash`]を用意する。
     pub fn new(size: usize, m: u64, b: u64) -> Self {
         let mut pow = vec![1; size + 1];
 
@@ -39,6 +42,7 @@ impl RollingHash {
     }
 }
 
+/// [`RollingHash::hash_table`]で返される、部分列のハッシュ値計算用の構造体。
 pub struct Table<'a> {
     table: Vec<u64>,
     rh: &'a RollingHash,
