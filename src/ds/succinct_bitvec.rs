@@ -5,15 +5,15 @@ const BLOCK_SIZE: usize = 64;
 const BLOCK_NUM: usize = CHUNK_SIZE / BLOCK_SIZE;
 
 #[derive(Clone)]
-pub struct SuccinctDict {
+pub struct SuccinctBitVec {
     size: usize,
     data: Vec<u64>,
     blocks: Vec<[u8; BLOCK_NUM]>,
     chunks: Vec<u32>,
 }
 
-impl SuccinctDict {
-    /// `Vec<bool>`から[`SuccinctDict`]を構築する。
+impl SuccinctBitVec {
+    /// `Vec<bool>`から[`SuccinctBitVec`]を構築する。
     pub fn new(b: Vec<bool>) -> Self {
         let size = b.len();
         let chunk_num = (size + CHUNK_SIZE - 1) / CHUNK_SIZE;
@@ -120,7 +120,7 @@ mod tests {
         let n = 100;
         let b = (0..n).map(|_| rng.gen::<bool>()).collect::<Vec<_>>();
 
-        let s = SuccinctDict::new(b.clone());
+        let s = SuccinctBitVec::new(b.clone());
 
         for i in 0..=n {
             let t = (0..i).filter(|&i| b[i]).count();
@@ -137,7 +137,7 @@ mod tests {
         let n = 100;
         let b = (0..n).map(|_| rng.gen::<bool>()).collect::<Vec<_>>();
 
-        let s = SuccinctDict::new(b.clone());
+        let s = SuccinctBitVec::new(b.clone());
 
         for l in 0..=n {
             for r in l..=n {
@@ -156,7 +156,7 @@ mod tests {
         let n = 30;
         let b = (0..n).map(|_| rng.gen::<bool>()).collect::<Vec<_>>();
 
-        let s = SuccinctDict::new(b.clone());
+        let s = SuccinctBitVec::new(b.clone());
 
         for i in 1..=n {
             let t = (0..n).filter(|&i| b[i]).nth(i);

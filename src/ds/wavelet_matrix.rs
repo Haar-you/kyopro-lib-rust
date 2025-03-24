@@ -1,5 +1,5 @@
 //! Wavelet matrix
-use crate::{ds::succinct_dict::SuccinctDict, utils::range::range_bounds_to_range};
+use crate::{ds::succinct_bitvec::SuccinctBitVec, utils::range::range_bounds_to_range};
 use std::{
     marker::PhantomData,
     ops::{BitAnd, BitOrAssign, RangeBounds, Shl, Shr},
@@ -9,7 +9,7 @@ use std::{
 #[derive(Clone)]
 pub struct WaveletMatrix<T, const BIT_SIZE: usize> {
     size: usize,
-    sdict: Vec<SuccinctDict>,
+    sdict: Vec<SuccinctBitVec>,
     zero_pos: Vec<usize>,
     _phantom: PhantomData<T>,
 }
@@ -46,7 +46,7 @@ where
                 }
             }
 
-            sdict.push(SuccinctDict::new(s));
+            sdict.push(SuccinctBitVec::new(s));
             zero_pos.push(left.len());
 
             data = left;

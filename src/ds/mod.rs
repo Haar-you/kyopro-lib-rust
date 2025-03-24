@@ -52,7 +52,7 @@ pub mod li_chao;
 
 pub mod binary_trie;
 
-pub mod succinct_dict;
+pub mod succinct_bitvec;
 pub mod wavelet_matrix;
 
 pub mod multiset;
