@@ -8,11 +8,12 @@ const BLOCK_NUM: usize = CHUNK_SIZE / BLOCK_SIZE;
 pub struct SuccinctDict {
     size: usize,
     data: Vec<u64>,
-    blocks: Vec<Vec<u8>>,
+    blocks: Vec<[u8; BLOCK_NUM]>,
     chunks: Vec<u32>,
 }
 
 impl SuccinctDict {
+    /// `Vec<bool>`から[`SuccinctDict`]を構築する。
     pub fn new(b: Vec<bool>) -> Self {
         let size = b.len();
         let chunk_num = (size + CHUNK_SIZE - 1) / CHUNK_SIZE;
@@ -27,15 +28,15 @@ impl SuccinctDict {
         }
 
         let mut chunks: Vec<u32> = vec![0; chunk_num + 1];
-        let mut blocks: Vec<Vec<u8>> = vec![vec![0; BLOCK_NUM]; chunk_num + 1];
+        let mut blocks: Vec<[u8; BLOCK_NUM]> = vec![[0; BLOCK_NUM]; chunk_num + 1];
 
-        for i in 0..chunk_num {
+        for (i, block_i) in blocks.iter_mut().take(chunk_num).enumerate() {
             for j in 0..BLOCK_NUM - 1 {
-                blocks[i][j + 1] = blocks[i][j] + data[i * BLOCK_NUM + j].count_ones() as u8;
+                block_i[j + 1] = block_i[j] + data[i * BLOCK_NUM + j].count_ones() as u8;
             }
 
             chunks[i + 1] = chunks[i]
-                + blocks[i][BLOCK_NUM - 1] as u32
+                + block_i[BLOCK_NUM - 1] as u32
                 + data[(i + 1) * BLOCK_NUM - 1].count_ones();
         }
 
@@ -57,6 +58,8 @@ impl SuccinctDict {
 
     /// [0, index) に含まれる`b`の個数
     pub fn rank(&self, index: usize, b: bool) -> usize {
+        assert!(index <= self.size);
+
         if b {
             let chunk_pos = index / CHUNK_SIZE;
             let block_pos = (index % CHUNK_SIZE) / BLOCK_SIZE;
