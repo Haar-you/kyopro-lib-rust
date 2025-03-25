@@ -1,5 +1,10 @@
+//! 素集合データ構造
+//!
+//! # Problems
+//! - <https://atcoder.jp/contests/abc372/tasks/abc372_e>
 use std::cell::Cell;
 
+/// 素集合の統合と所属の判定ができるデータ構造。
 pub struct UnionFind<'a, T = ()> {
     n: usize,
     count: usize,
@@ -11,6 +16,7 @@ pub struct UnionFind<'a, T = ()> {
 }
 
 impl<'a> UnionFind<'a, ()> {
+    /// 大きさ`1`の集合を`n`個用意する。
     pub fn new(n: usize) -> Self {
         UnionFind {
             n,
@@ -25,7 +31,11 @@ impl<'a> UnionFind<'a, ()> {
 }
 
 impl<'a, T> UnionFind<'a, T> {
-    pub fn with_values(n: usize, values: Vec<T>, merge: Box<impl 'a + Fn(T, T) -> T>) -> Self {
+    /// 大きさ`1`の集合を`|values|`個用意する。このとき、各集合`i`に`value[i]`を割り当てる。
+    ///
+    /// `merge`は、集合を統合する際に、新しい集合に割り当てる値を返す。
+    pub fn with_values(values: Vec<T>, merge: Box<impl 'a + Fn(T, T) -> T>) -> Self {
+        let n = values.len();
         UnionFind {
             n,
             count: n,
@@ -37,7 +47,7 @@ impl<'a, T> UnionFind<'a, T> {
         }
     }
 
-    /// `i`の属する素集合の根を返す。
+    /// `i`の属する集合の根を返す。
     pub fn root_of(&self, i: usize) -> usize {
         if self.parent[i].get() == i {
             return i;
@@ -47,12 +57,12 @@ impl<'a, T> UnionFind<'a, T> {
         self.parent[i].get()
     }
 
-    /// `i`と`j`が同じ素集合に属するならば`true`を返す。
+    /// `i`と`j`が同じ集合に属するならば`true`を返す。
     pub fn is_same(&self, i: usize, j: usize) -> bool {
         self.root_of(i) == self.root_of(j)
     }
 
-    /// `i`の属する素集合と`j`の属する素集合を統合する。
+    /// `i`の属する集合と`j`の属する集合を統合する。
     pub fn merge(&mut self, i: usize, j: usize) -> usize {
         let i = self.root_of(i);
         let j = self.root_of(j);
@@ -61,41 +71,32 @@ impl<'a, T> UnionFind<'a, T> {
             return i;
         }
 
+        let (p, c) = if self.depth[i] < self.depth[j] {
+            (j, i)
+        } else {
+            (i, j)
+        };
+
         self.count -= 1;
 
-        if self.depth[i] < self.depth[j] {
-            self.parent[i].set(j);
-            self.size[j] += self.size[i];
-
-            if let Some(f) = self.merge.as_ref() {
-                let t = f(
-                    self.values[i].take().unwrap(),
-                    self.values[j].take().unwrap(),
-                );
-                self.values[j] = Some(t);
-            }
-
-            j
-        } else {
-            self.parent[j].set(i);
-            self.size[i] += self.size[j];
-            if self.depth[i] == self.depth[j] {
-                self.depth[i] += 1;
-            }
-
-            if let Some(f) = self.merge.as_ref() {
-                let t = f(
-                    self.values[i].take().unwrap(),
-                    self.values[j].take().unwrap(),
-                );
-                self.values[i] = Some(t);
-            }
-
-            i
+        self.parent[c].set(p);
+        self.size[p] += self.size[c];
+        if self.depth[p] == self.depth[c] {
+            self.depth[p] += 1;
         }
+
+        if let Some(f) = self.merge.as_ref() {
+            let t = f(
+                self.values[p].take().unwrap(),
+                self.values[c].take().unwrap(),
+            );
+            self.values[p] = Some(t);
+        }
+
+        p
     }
 
-    /// `i`の属する素集合の大きさを返す。
+    /// `i`の属する集合の大きさを返す。
     pub fn size_of(&self, i: usize) -> usize {
         let i = self.root_of(i);
         self.size[i]
@@ -106,6 +107,7 @@ impl<'a, T> UnionFind<'a, T> {
         self.count
     }
 
+    /// `i`の属する集合のもつ値を返す。
     pub fn value_of(&self, i: usize) -> Option<&T> {
         let i = self.root_of(i);
         self.values[i].as_ref()
