@@ -1,9 +1,11 @@
+//! 完結ビットベクトル
 use std::ops::Range;
 
 const CHUNK_SIZE: usize = 256;
 const BLOCK_SIZE: usize = 64;
 const BLOCK_NUM: usize = CHUNK_SIZE / BLOCK_SIZE;
 
+/// 完結ビットベクトル
 #[derive(Clone)]
 pub struct SuccinctBitVec {
     size: usize,
@@ -48,12 +50,9 @@ impl SuccinctBitVec {
         }
     }
 
+    /// ビットベクトルの長さを返す。
     pub fn len(&self) -> usize {
         self.size
-    }
-
-    pub fn is_empty(&self) -> bool {
-        self.size == 0
     }
 
     /// [0, index) に含まれる`b`の個数
@@ -81,6 +80,7 @@ impl SuccinctBitVec {
         self.rank(r, b) - self.rank(l, b)
     }
 
+    /// `index`番目のビットを返す。
     pub fn access(&self, index: usize) -> u64 {
         (self.data[index / BLOCK_SIZE] >> (index % BLOCK_SIZE)) & 1
     }

@@ -27,9 +27,11 @@ impl Node {
     pub fn length(&self) -> isize {
         self.length
     }
+    /// ノードが表す回文の出現回数を返す。
     pub fn count(&self) -> usize {
         self.count
     }
+    /// ノードに割り当てられた番号を返す。
     pub fn index(&self) -> usize {
         self.index
     }
@@ -231,6 +233,7 @@ impl PalindromicTree {
         unsafe { &*self.list[EVEN] }
     }
 
+    /// `index`番目のノードへの参照を返す。
     pub fn node_of(&self, index: usize) -> Option<&Node> {
         self.list.get(index).map(|&p| {
             assert!(!p.is_null());

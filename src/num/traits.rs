@@ -1,3 +1,5 @@
+//! 数の性質のトレイト
+
 macro_rules! implement {
     ($tr:ty; $($t:ty),*) => {
         $(

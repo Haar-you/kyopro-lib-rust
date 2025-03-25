@@ -1,7 +1,6 @@
 //! Convex Hull Trick
 //!
 //! # Problems
-//!
 //! - [EDPC Z - Frog 3](https://atcoder.jp/contests/dp/submissions/54932537)
 
 use crate::trait_alias;
@@ -38,6 +37,7 @@ fn is_needless<T: Elem>(a: &Linear<T>, b: &Linear<T>, c: &Linear<T>) -> bool {
     (a.b - b.b) * (a.a - c.a) >= (a.b - c.b) * (a.a - b.a)
 }
 
+/// Convex hull trick
 #[derive(Clone, Debug)]
 pub struct ConvexHullTrick<T> {
     lines: VecDeque<Linear<T>>,
@@ -47,6 +47,7 @@ pub struct ConvexHullTrick<T> {
 }
 
 impl<T: Elem> ConvexHullTrick<T> {
+    /// 最小値クエリ・最大値クエリを指定して空の[`ConvexHullTrick`]を用意する。
     pub fn new(mode: Mode) -> Self {
         Self {
             lines: VecDeque::new(),

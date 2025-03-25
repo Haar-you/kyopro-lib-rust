@@ -1,7 +1,8 @@
+//! 括弧列が対応が取れているかを調べる
+
 /// 括弧列が対応が取れているかを調べる
 ///
 /// **Time Complexity O(N)**
-
 pub fn check_paren<T: Copy + Eq>(s: impl IntoIterator<Item = T>, open: T, close: T) -> bool {
     let mut stack = vec![];
 

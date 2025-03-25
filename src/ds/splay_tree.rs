@@ -463,6 +463,7 @@ where
         }
     }
 
+    /// 列の要素を始めから辿り、その参照を`f`に渡す。
     pub fn for_each(&self, mut f: impl FnMut(&M::Element)) {
         Node::traverse(self.root.get(), &mut f);
     }
