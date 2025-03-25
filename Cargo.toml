@@ -6,7 +6,10 @@ edition = "2021"
 
 [dependencies]
 rand = { version = "=0.8.5" }
+
+[dev-dependencies]
 test-case = "3.3.1"
+pretty_assertions = "1.4.1"
 
 [lints.clippy]
 clone_on_ref_ptr = "warn"
