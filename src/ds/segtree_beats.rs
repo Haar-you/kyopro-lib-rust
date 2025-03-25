@@ -3,7 +3,6 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum>
 
-use crate::utils::bits::highest_one;
 use crate::utils::range::range_bounds_to_range;
 use std::cmp::{max, min, Ordering};
 use std::ops::RangeBounds;
@@ -16,6 +15,12 @@ fn lc(i: usize) -> usize {
 #[inline]
 fn rc(i: usize) -> usize {
     i << 1 | 1
+}
+
+#[inline]
+fn highest_one(i: u64) -> u32 {
+    assert!(i > 0);
+    63 - i.leading_zeros()
 }
 
 /// Segment Tree Beats

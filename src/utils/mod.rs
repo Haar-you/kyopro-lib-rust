@@ -1,6 +1,5 @@
 //! 便利そうなもの置き場
 
-pub mod bits;
 pub mod fastio;
 pub mod is_none_or;
 pub mod linear;
