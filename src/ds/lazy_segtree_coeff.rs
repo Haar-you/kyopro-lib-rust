@@ -43,7 +43,8 @@ impl<T: Elem> LazySegtreeCoeff<T> {
         }
     }
 
-    pub fn init_with_vec(&mut self, value: Vec<T>) {
+    /// `self.fold(i..i+1) = value[i]`となるように割り当てる。
+    pub fn set_vec(&mut self, value: Vec<T>) {
         self.data = vec![Cell::new(T::zero()); self.size];
         self.lazy = vec![Cell::new(T::zero()); self.size];
 
