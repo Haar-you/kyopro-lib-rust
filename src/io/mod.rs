@@ -1,0 +1,3 @@
+//! IO
+
+pub mod fastio;
