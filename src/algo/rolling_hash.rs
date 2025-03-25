@@ -55,3 +55,28 @@ impl<'a> Table<'a> {
         (self.table[r] - self.table[l] * self.rh.pow[r - l] % m + m * m) % m
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let rh = RollingHash::new(100, 10_u64.pow(9) + 7, 123);
+
+        let s = "abracadabra";
+
+        let table = rh.hash_table(&s);
+
+        let p = "ab";
+        let h = rh.hash(&p);
+
+        for from in 0..s.len() - p.len() {
+            let to = from + p.len();
+
+            if table.hash(from..to) == h {
+                dbg!(from, to, &s[from..to]);
+            }
+        }
+    }
+}
