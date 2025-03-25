@@ -58,13 +58,15 @@ where
         self.data[i + self.size / 2].clone()
     }
 
-    pub fn from_vec(&mut self, a: &[M::Element]) {
+    /// スライスで初期化する。
+    pub fn from_slice(&mut self, a: &[M::Element]) {
         self.data = vec![self.monoid.id(); self.size];
         for (i, e) in a.iter().enumerate() {
             self.data[i + self.size / 2] = e.clone();
         }
     }
 
+    /// 遅延操作を完了させたモノイド列を`Vec`で返す。
     pub fn to_vec(&mut self) -> Vec<M::Element> {
         for i in 1..self.size {
             self.propagate(i);
