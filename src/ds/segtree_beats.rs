@@ -3,7 +3,7 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum>
 
-use crate::utils::range::range_bounds_to_range;
+use crate::misc::range::range_bounds_to_range;
 use std::cmp::{max, min, Ordering};
 use std::ops::RangeBounds;
 

@@ -1,8 +1,8 @@
 //! 係数乗算付き区間加算区間総和遅延セグ木
 
+use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::utils::range::range_bounds_to_range;
 use std::cell::Cell;
 use std::ops::{Add, Mul, RangeBounds};
 

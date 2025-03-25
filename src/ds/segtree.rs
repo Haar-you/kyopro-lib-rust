@@ -1,6 +1,6 @@
 //! モノイド列の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 pub use crate::algebra::traits::Monoid;
-use crate::utils::range::range_bounds_to_range;
+use crate::misc::range::range_bounds_to_range;
 use std::ops::{Index, RangeBounds};
 
 /// モノイド列の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。

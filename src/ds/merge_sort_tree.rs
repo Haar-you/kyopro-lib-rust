@@ -5,8 +5,8 @@
 //! - <https://atcoder.jp/contests/abc351/tasks/abc351_f>
 
 use crate::algo::{bsearch::upper_bound, merge::inplace_merge};
+use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
-use crate::utils::range::range_bounds_to_range;
 use std::ops::{Add, AddAssign, RangeBounds};
 
 /// Merge-sort Tree

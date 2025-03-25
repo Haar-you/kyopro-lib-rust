@@ -1,6 +1,6 @@
 //! モノイド列の区間更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 use crate::algebra::action::Action;
-use crate::utils::range::range_bounds_to_range;
+use crate::misc::range::range_bounds_to_range;
 use std::ops::RangeBounds;
 
 /// モノイド列の区間更新・区間取得($O(\log n)$, $O(\log n)$)ができる。

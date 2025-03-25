@@ -1,5 +1,5 @@
 //! Wavelet matrix
-use crate::{ds::succinct_bitvec::SuccinctBitVec, utils::range::range_bounds_to_range};
+use crate::{ds::succinct_bitvec::SuccinctBitVec, misc::range::range_bounds_to_range};
 use std::{
     marker::PhantomData,
     ops::{BitAnd, BitOrAssign, RangeBounds, Shl, Shr},

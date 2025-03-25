@@ -1,7 +1,7 @@
 //! 幅優先探索
 
 use crate::graph::*;
-use crate::utils::is_none_or::*;
+use crate::misc::is_none_or::*;
 use std::collections::VecDeque;
 use std::iter::zip;
 

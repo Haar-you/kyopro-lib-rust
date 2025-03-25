@@ -73,3 +73,5 @@ pub mod link_cut_tree;
 pub mod splay_tree;
 
 pub mod integer_set;
+
+pub mod usize_set;

@@ -7,7 +7,7 @@
 //! # Problems
 //! - [yukicoder No.899 γatheree](https://yukicoder.me/problems/no/899)
 
-use crate::{tree::*, utils::is_none_or::IsNoneOr};
+use crate::{misc::is_none_or::IsNoneOr, tree::*};
 use std::collections::VecDeque;
 
 /// 根付き木において、同一の深さの頂点の区間に対して区間クエリができる。

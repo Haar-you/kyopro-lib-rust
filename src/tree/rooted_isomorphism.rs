@@ -1,5 +1,5 @@
+use crate::misc::is_none_or::IsNoneOr;
 use crate::tree::*;
-use crate::utils::is_none_or::IsNoneOr;
 use std::collections::{hash_map::DefaultHasher, HashMap};
 use std::hash::{Hash, Hasher};
 

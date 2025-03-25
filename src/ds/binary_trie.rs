@@ -1,5 +1,5 @@
 //! 非負整数を2進数として管理する。
-use crate::utils::nullable_usize::NullableUsize;
+use crate::misc::nullable_usize::NullableUsize;
 
 #[derive(Debug, Clone)]
 struct Node {

@@ -1,8 +1,8 @@
 //! 区間加算・区間Max(Min)
 
+use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::utils::range::range_bounds_to_range;
 use std::{
     cmp::{max, min},
     ops::{Add, RangeBounds, Sub},

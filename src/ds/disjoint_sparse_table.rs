@@ -1,7 +1,7 @@
 //! 半群の列の区間取得($O(1)$)ができる。
 
 pub use crate::algebra::traits::Semigroup;
-use crate::utils::range::range_bounds_to_range;
+use crate::misc::range::range_bounds_to_range;
 use std::{iter::repeat, ops::RangeBounds};
 
 /// 半群の列の区間取得($O(1)$)ができる。

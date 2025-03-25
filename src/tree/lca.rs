@@ -1,6 +1,6 @@
 //! 最小共通祖先
 
-use crate::{tree::*, utils::is_none_or::IsNoneOr};
+use crate::{misc::is_none_or::IsNoneOr, tree::*};
 
 /// ダブリングによる最小共通祖先
 pub struct DoublingLCA {

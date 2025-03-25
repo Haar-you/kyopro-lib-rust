@@ -1,6 +1,6 @@
 //! 動的セグメント木
 use crate::algebra::traits::Monoid;
-use crate::utils::nullable_usize::NullableUsize;
+use crate::misc::nullable_usize::NullableUsize;
 use std::ops::Range;
 
 #[derive(Debug)]
