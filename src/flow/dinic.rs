@@ -1,7 +1,10 @@
 //! 最大流 (Dinic)
+//!
+//! # References
+//! - <https://misawa.github.io/others/flow/dinic_time_complexity.html>
 
 pub use crate::flow::*;
-use std::{cmp::min, collections::VecDeque};
+use std::collections::VecDeque;
 
 #[derive(Clone, Debug)]
 struct Edge {
@@ -11,42 +14,47 @@ struct Edge {
     is_rev: bool,
 }
 
+/// Dinic法
 #[derive(Clone)]
 pub struct Dinic {
-    size: usize,
+    _size: usize,
     edges: Vec<Vec<Edge>>,
+    first_edge: Vec<usize>,
+    level: Vec<usize>,
 }
 
 impl Dinic {
-    fn dfs(&mut self, path: &mut Vec<(usize, usize)>, cur: usize, t: usize, level: &[u32]) -> u64 {
-        if cur == t {
-            let mut f = u64::MAX;
-
-            for (i, j) in path.clone() {
-                let e = self.edges[i][j].clone();
-                f = min(f, e.cap);
-            }
-
-            for &mut (i, j) in path {
-                let e = &mut self.edges[i][j];
-                e.cap -= f;
-                let Edge { to, rev, .. } = *e;
-                self.edges[to][rev].cap += f;
-            }
-
-            f
+    fn dfs(&mut self, cur: usize, sink: usize, mut min_cap: u64) -> u64 {
+        if cur == sink {
+            min_cap
         } else {
-            let n = self.edges[cur].len();
             let mut f = 0;
 
-            for i in 0..n {
+            for i in self.first_edge[cur]..self.edges[cur].len() {
                 let e = self.edges[cur][i].clone();
-                if e.cap > 0 && level[e.to] > level[cur] {
-                    path.push((cur, i));
-                    f += self.dfs(path, e.to, t, level);
-                    path.pop();
+                if e.cap > 0 && self.level[e.to] > self.level[cur] {
+                    let df = self.dfs(e.to, sink, min_cap.min(e.cap));
+
+                    min_cap -= df;
+
+                    let e = &mut self.edges[cur][i];
+                    e.cap -= df;
+
+                    let Edge { to, rev, .. } = *e;
+                    self.edges[to][rev].cap += df;
+
+                    f += df;
+
+                    let e = &self.edges[cur][i];
+                    if df > 0 && e.cap > 0 {
+                        self.first_edge[cur] = i;
+                        return f;
+                    }
                 }
             }
+
+            self.first_edge[cur] = self.edges[cur].len();
+
             f
         }
     }
@@ -56,8 +64,10 @@ impl MaxFlow for Dinic {
     type Cap = u64;
     fn new(size: usize) -> Self {
         Self {
-            size,
+            _size: size,
             edges: vec![vec![]; size],
+            first_edge: vec![0; size],
+            level: vec![0; size],
         }
     }
 
@@ -80,28 +90,29 @@ impl MaxFlow for Dinic {
 
     fn max_flow(&mut self, s: usize, t: usize) -> Self::Cap {
         let mut f = 0;
+
         loop {
-            let mut level = vec![0; self.size];
-            level[s] = 1;
+            self.level.fill(0);
+            self.level[s] = 1;
             let mut q = VecDeque::new();
             q.push_back(s);
 
             while let Some(cur) = q.pop_front() {
                 for e in &self.edges[cur] {
-                    if level[e.to] == 0 && e.cap > 0 {
-                        level[e.to] = level[cur] + 1;
+                    if self.level[e.to] == 0 && e.cap > 0 {
+                        self.level[e.to] = self.level[cur] + 1;
                         q.push_back(e.to);
                     }
                 }
             }
 
-            if level[t] == 0 {
-                break;
+            if self.level[t] == 0 {
+                break f;
             }
 
-            f += self.dfs(&mut vec![], s, t, &level);
+            self.first_edge.fill(0);
+            f += self.dfs(s, t, u64::MAX);
         }
-        f
     }
 
     fn get_edges(&self, i: usize) -> Vec<(usize, u64)> {

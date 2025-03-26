@@ -10,6 +10,7 @@ struct Edge {
     is_rev: bool,
 }
 
+/// Ford-Fulkerson法
 #[derive(Clone)]
 pub struct FordFulkerson {
     size: usize,
