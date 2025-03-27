@@ -179,7 +179,7 @@ impl<E> Tree<E> {
     }
 
     /// `i`番目の頂点の[`TreeNode`]への参照を返す。
-    pub fn nodes(&self, i: usize) -> &TreeNode<E> {
+    pub fn node_of(&self, i: usize) -> &TreeNode<E> {
         &self.nodes[i]
     }
 

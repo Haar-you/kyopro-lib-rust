@@ -17,18 +17,18 @@ where
     let mut heap = BinaryHeap::new();
 
     visit[0] = true;
-    for (index, e) in g.edges[0].iter().enumerate() {
+    for (index, e) in g.nodes[0].edges.iter().enumerate() {
         heap.push(Reverse((e.weight(), e.from(), index)));
     }
 
     while let Some(Reverse((_, from, index))) = heap.pop() {
-        let e = &g.edges[from][index];
+        let e = &g.nodes[from].edges[index];
         if visit[e.from()] == visit[e.to()] {
             continue;
         }
 
         let i = if visit[e.from()] { e.to() } else { e.from() };
-        for (index, e) in g.edges[i].iter().enumerate() {
+        for (index, e) in g.nodes[i].edges.iter().enumerate() {
             heap.push(Reverse((e.weight(), e.from(), index)));
         }
 

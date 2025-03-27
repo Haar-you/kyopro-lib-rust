@@ -54,7 +54,7 @@ impl Lowlink {
         *index += 1;
         let mut count_par = 0;
 
-        for e in &g.edges[cur] {
+        for e in g.nodes[cur].edges.iter() {
             let to = e.to();
             if par.is_some_and(|p| p == to) {
                 count_par += 1;

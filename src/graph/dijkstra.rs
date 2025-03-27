@@ -29,7 +29,7 @@ where
         }
         check[u] = true;
 
-        for e in &g.edges[u] {
+        for e in g.nodes[u].edges.iter() {
             let (to, cost) = (e.to(), e.weight());
 
             match ret[to] {

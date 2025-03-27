@@ -35,7 +35,7 @@ where
         }
         visited[i] = true;
 
-        for (k, e) in g.edges[i].iter().enumerate() {
+        for (k, e) in g.nodes[i].edges.iter().enumerate() {
             if !valid[i][k] || !usable[e.to()] {
                 continue;
             }
@@ -81,7 +81,7 @@ where
     let mut result: Vec<Option<(E::Weight, Path)>> = vec![None; k];
     let mut stock = BinaryHeap::new();
     let mut valid = (0..n)
-        .map(|i| vec![true; g.edges[i].len()])
+        .map(|i| vec![true; g.nodes[i].edges.len()])
         .collect::<Vec<_>>();
 
     for i in 0..k {
@@ -96,7 +96,7 @@ where
             let mut cur = from;
             for &u in &result[i - 1].as_ref().unwrap().1 {
                 prev_path.push(cur);
-                cur = g.edges[cur][u].to();
+                cur = g.nodes[cur].edges[u].to();
             }
             prev_path.push(to);
 
@@ -117,7 +117,7 @@ where
 
                     for (j, &p) in prev_path.iter().enumerate().take(k) {
                         let v = result[i - 1].as_ref().unwrap().1[j];
-                        c += g.edges[p][v].weight();
+                        c += g.nodes[p].edges[v].weight();
                         temp.push(v);
                     }
                     // for j in 0..k {
@@ -140,7 +140,8 @@ where
 
                 for j in 0..i {
                     if check[j]
-                        && prev_path[k + 1] != g.edges[u][result[j].as_ref().unwrap().1[k]].to()
+                        && prev_path[k + 1]
+                            != g.nodes[u].edges[result[j].as_ref().unwrap().1[k]].to()
                     {
                         check[j] = false;
                     }

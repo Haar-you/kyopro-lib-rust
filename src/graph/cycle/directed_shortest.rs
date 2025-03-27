@@ -18,7 +18,8 @@ pub fn directed_shortest_cycle<E: EdgeTrait>(
         .flatten()
         .flat_map(|(d, e)| {
             if let Some(e) = e {
-                g.edges[e.to()]
+                g.nodes[e.to()]
+                    .edges
                     .iter()
                     .find(|e| e.to() == src)
                     .map(|e_src| (d, e, e_src))

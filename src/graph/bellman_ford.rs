@@ -22,7 +22,7 @@ where
 
     for i in 0..n {
         for s in 0..n {
-            for e in &g.edges[s] {
+            for e in g.nodes[s].edges.iter() {
                 let (to, cost) = (e.to(), e.weight());
                 if let Value(x) = ret[s] {
                     match ret[to] {
@@ -45,7 +45,7 @@ where
 
     for _ in 0..n {
         for s in 0..n {
-            for e in &g.edges[s] {
+            for e in g.nodes[s].edges.iter() {
                 if ret[s].is_neg_inf() {
                     ret[e.to()] = NegInf;
                 }

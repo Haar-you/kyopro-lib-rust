@@ -14,8 +14,8 @@ where
 {
     let n = g.len();
     let mut edges = g
-        .edges
-        .iter()
+        .nodes_iter()
+        .map(|v| &v.edges)
         .flatten()
         .map(|e| (e, e.weight()))
         .collect::<Vec<_>>();

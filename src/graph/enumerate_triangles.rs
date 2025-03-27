@@ -6,9 +6,9 @@ pub fn enumerate_triangles<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Vec<(usize
     let mut ret = vec![];
     let mut adjacent = vec![HashSet::new(); n];
 
-    for e in g.edges.iter().flatten() {
-        if g.edges[e.from()].len() < g.edges[e.to()].len()
-            || (g.edges[e.from()].len() == g.edges[e.to()].len() && e.from() < e.to())
+    for e in g.nodes_iter().map(|v| &v.edges).flatten() {
+        if g.nodes[e.from()].edges.len() < g.nodes[e.to()].edges.len()
+            || (g.nodes[e.from()].edges.len() == g.nodes[e.to()].edges.len() && e.from() < e.to())
         {
             adjacent[e.from()].insert(e.to());
         }

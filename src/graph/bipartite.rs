@@ -32,7 +32,7 @@ pub fn check_bipartite<E: EdgeTrait>(
                 }
                 visit[cur] = true;
 
-                for e in &g.edges[cur] {
+                for e in g.nodes[cur].edges.iter() {
                     let to = e.to();
                     if check[to] == check[cur] {
                         return false;

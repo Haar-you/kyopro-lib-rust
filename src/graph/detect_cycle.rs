@@ -41,7 +41,7 @@ fn rec<'a, D: Direction, E: EdgeTrait>(
         Status::Unchecked => {
             check[cur] = Status::Searching;
 
-            for e in &g.edges[cur] {
+            for e in g.nodes[cur].edges.iter() {
                 if let Some(res) = rec(g, e.to(), ret, check) {
                     if res != -1 {
                         ret.push(e);

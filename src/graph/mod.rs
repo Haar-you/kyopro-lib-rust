@@ -106,10 +106,26 @@ pub struct Undirected;
 impl Direction for Directed {}
 impl Direction for Undirected {}
 
+/// グラフのノード
+#[derive(Clone, Debug)]
+pub struct GraphNode<E> {
+    /// 接続する辺
+    pub edges: Vec<E>,
+}
+
+impl<E: EdgeTrait> IntoIterator for GraphNode<E> {
+    type Item = E;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.edges.into_iter()
+    }
+}
+
 /// グラフ
 #[derive(Debug, Clone)]
 pub struct Graph<D, E> {
-    edges: Vec<Vec<E>>,
+    nodes: Vec<GraphNode<E>>,
     __phantom: PhantomData<D>,
 }
 
@@ -117,7 +133,7 @@ impl<D: Direction, E: EdgeTrait + Clone> Graph<D, E> {
     /// 頂点数が`size`の空の`Graph`を構築する。
     pub fn new(size: usize) -> Self {
         Graph {
-            edges: vec![vec![]; size],
+            nodes: vec![GraphNode { edges: vec![] }; size],
             __phantom: PhantomData,
         }
     }
@@ -126,7 +142,7 @@ impl<D: Direction, E: EdgeTrait + Clone> Graph<D, E> {
 impl<E: EdgeTrait + Clone> Graph<Directed, E> {
     /// 有向グラフに辺を追加する。
     pub fn add(&mut self, e: E) {
-        self.edges[e.from()].push(e);
+        self.nodes[e.from()].edges.push(e);
     }
 }
 
@@ -139,8 +155,8 @@ impl<E: EdgeTrait + Clone> Extend<E> for Graph<Directed, E> {
 impl<E: EdgeTrait + Clone> Graph<Undirected, E> {
     /// 無向グラフに辺を追加する。
     pub fn add(&mut self, e: E) {
-        self.edges[e.from()].push(e.clone());
-        self.edges[e.to()].push(e.rev());
+        self.nodes[e.from()].edges.push(e.clone());
+        self.nodes[e.to()].edges.push(e.rev());
     }
 }
 
@@ -151,33 +167,23 @@ impl<E: EdgeTrait + Clone> Extend<E> for Graph<Undirected, E> {
 }
 
 impl<D, E> Graph<D, E> {
+    /// 各頂点の[`GraphNode`]への参照のイテレータを返す。
+    pub fn nodes_iter(&self) -> impl Iterator<Item = &GraphNode<E>> {
+        self.nodes.iter()
+    }
+
+    /// `i`番目の頂点の[`GraphNode`]への参照を返す。
+    pub fn node_of(&self, i: usize) -> &GraphNode<E> {
+        &self.nodes[i]
+    }
+
     /// グラフの頂点数を返す。
     pub fn len(&self) -> usize {
-        self.edges.len()
+        self.nodes.len()
     }
 
     /// グラフの頂点数が`0`ならば`true`を返す。
     pub fn is_empty(&self) -> bool {
-        self.edges.is_empty()
-    }
-
-    /// 各頂点からの辺集合への参照を返す。
-    pub fn edges(&self) -> &[Vec<E>] {
-        &self.edges
-    }
-
-    /// 各頂点からの辺集合への可変参照を返す。
-    pub fn edges_mut(&mut self) -> &mut [Vec<E>] {
-        &mut self.edges
-    }
-
-    /// 頂点`i`の隣接辺へのイテレータを返す。
-    pub fn neighbours(&self, i: usize) -> impl Iterator<Item = &E> + ExactSizeIterator {
-        self.edges[i].iter()
-    }
-
-    /// 頂点`i`の隣接辺への可変参照へのイテレータを返す。
-    pub fn neighbours_mut(&mut self, i: usize) -> impl Iterator<Item = &mut E> + ExactSizeIterator {
-        self.edges[i].iter_mut()
+        self.nodes.is_empty()
     }
 }

@@ -25,7 +25,7 @@ impl SCC {
         ord.reverse();
 
         let mut rg = vec![vec![]; n];
-        for e in g.edges.iter().flatten() {
+        for e in g.nodes_iter().map(|v| &v.edges).flatten() {
             rg[e.to()].push(e.from());
         }
 
@@ -64,7 +64,7 @@ impl SCC {
         check: &mut [bool],
     ) {
         check[cur] = true;
-        for e in &g.edges[cur] {
+        for e in g.nodes[cur].edges.iter() {
             if !check[e.to()] {
                 Self::dfs(g, e.to(), ord, check);
             }

@@ -27,7 +27,7 @@ pub fn bfs<D: Direction, E: EdgeTrait>(
         check[cur] = true;
 
         let d_cur = dist[cur].unwrap();
-        for e in &g.edges[cur] {
+        for e in g.nodes[cur].edges.iter() {
             let to = e.to();
             if dist[to].is_none_or(|d| d > d_cur + 1) {
                 dist[to] = Some(d_cur + 1);
