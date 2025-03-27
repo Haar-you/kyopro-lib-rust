@@ -2,6 +2,7 @@
 //!
 //! # Problems
 //! - <https://atcoder.jp/contests/abc291/tasks/abc291_h>
+//! - <https://judge.yosupo.jp/problem/frequency_table_of_tree_distance>
 use crate::tree::*;
 
 /// [`CentroidDecomposition`]の頂点ノード
