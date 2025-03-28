@@ -13,6 +13,7 @@ pub mod rooting;
 pub mod tree_dp;
 pub mod utils;
 
+/// [`Tree`]にもたせる辺の満たすトレイト。
 pub trait TreeEdgeTrait {
     /// 辺の重みの型
     type Weight;
@@ -40,6 +41,7 @@ pub struct TreeEdge<T, I> {
 }
 
 impl<T, I> TreeEdge<T, I> {
+    /// `from`から`to`への重さ`weight`、辺番号`index`をもつ有向辺を作る。
     pub fn new(from: usize, to: usize, weight: T, index: I) -> Self {
         Self {
             from,
@@ -110,6 +112,7 @@ impl<E: TreeEdgeTrait + Clone> TreeBuilder<E> {
         }
     }
 
+    /// [`Tree`]を作る。
     pub fn build(self) -> Tree<E> {
         Tree {
             nodes: self.nodes,
@@ -148,6 +151,7 @@ impl<E: TreeEdgeTrait + Clone> RootedTreeBuilder<E> {
         }
     }
 
+    /// 根付きの[`Tree`]を作る。
     pub fn build(self) -> Tree<E> {
         Tree {
             nodes: self.nodes,
@@ -166,6 +170,7 @@ impl<E: TreeEdgeTrait + Clone> Extend<E> for RootedTreeBuilder<E> {
     }
 }
 
+/// 木
 #[derive(Clone, Debug)]
 pub struct Tree<E> {
     nodes: Vec<TreeNode<E>>,

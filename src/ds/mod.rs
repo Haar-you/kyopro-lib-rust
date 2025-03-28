@@ -1,4 +1,21 @@
 //! データ構造
+//!
+//! # セグメント木系の比較
+//!
+//! | データ構造 | 新規作成 | 区間更新 | 点更新 | 区間取得 | 点取得 |
+//! | ---- | ---- | ---- | ---- | ---- | ---- |
+//! | [`Segtree`](segtree::Segtree) | `new(n, M)` | | `assign(i, X)`, `update(i, X)` | `fold(l..r)` | |
+//! | [`DualSegtree`](dual_segtree::DualSegtree) | `new(n, M)` | `update(l..r, X)` | | | `get(i)` |
+//! | [`LazySegtree`](lazy_segtree::LazySegtree) | `new(n, A)` | `update(l..r, X)` | | `fold(l..r)` | |
+//! | [`DynamicSegtree`](dynamic_segtree::DynamicSegtree) | `new(M)` | | `assign(i, X)` | `fold(l..r)` | |
+//! | [`DynamicDualSegtree`](dynamic_dual_segtree::DynamicDualSegtree) | `new(M)` | `update(l..r, X)` | | | `get(i)` |
+//! | [`DynamicLazySegtree`](dynamic_lazy_segtree::DynamicLazySegtree) | `new(A)` | `update(l..r, X)` | | `fold(l..r)` | |
+//! | [`PersistentSegtree`](persistent_segtree::PersistentSegtree) | `new(n, M)` | | `assign(i, X)` | `fold(l..r)` | |
+//! | [`SparseTable`](sparse_table::SparseTable) | `new(s, A)` | | | `fold(l..r)` | |
+//! | [`DisjointSparseTable`](disjoint_sparse_table::DisjointSparseTable) | `new(s, S)` | | | `fold(l..r)` | |
+//! | [`FenwickTree`](fenwick::FenwickTree) | `new(n, G)` | | `update(i, X)` | `fold_to(..r)`, `fold(l..r)` | |
+//! | [`SegtreeBeats`](segtree_beats::SegtreeBeats) | `new(n)` | `chmin(l..r, X)`, `chmax(l..r, X)`, `add(l..r, X)` | | `sum(l..r, X)` | |
+//! | [`StarrySkyTree`](starry_sky_tree::StarrySkyTree) | `new(n)` | `update(l..r, X)` | | `fold(l..r)` | |
 
 pub mod traits;
 
