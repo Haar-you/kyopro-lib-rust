@@ -11,10 +11,10 @@ type Poly<const P: u32> = Vec<ConstModInt<P>>;
 /// 多項式 `p` = $f(x) = a_0 + a_1x + \cdots + a_nx^n$に対して、<br>
 /// 多項式 $f(x + c) = a_0 + a_1(x + c) + \cdots + a_n(x + c)^n = b_0 + b_0x + \cdots + b_nx^n$
 /// を満たす、数列{$b_i$}を求める。
-pub fn polynomial_taylor_shift<const P: u32>(
+pub fn polynomial_taylor_shift<const P: u32, const PR: u32>(
     p: Poly<P>,
     c: ConstModInt<P>,
-    ntt: &NTT<P>,
+    ntt: &NTT<P, PR>,
 ) -> Poly<P> {
     let n = p.len();
     let mut f = ConstModInt::new(1);

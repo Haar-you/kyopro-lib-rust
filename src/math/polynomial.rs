@@ -84,13 +84,13 @@ impl<const P: u32> From<Vec<ConstModInt<P>>> for Polynomial<P> {
 }
 
 /// 多項式の演算を扱う。
-pub struct PolynomialOperator<'a, const P: u32> {
-    ntt: &'a NTT<P>,
+pub struct PolynomialOperator<'a, const P: u32, const PR: u32> {
+    ntt: &'a NTT<P, PR>,
 }
 
-impl<'a, const P: u32> PolynomialOperator<'a, P> {
+impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
     /// [`NTT<P>`]を基に`PolynomialOperator<P>`を生成する。
-    pub fn new(ntt: &'a NTT<P>) -> Self {
+    pub fn new(ntt: &'a NTT<P, PR>) -> Self {
         Self { ntt }
     }
 
@@ -210,8 +210,8 @@ mod tests {
     #[test]
     fn test() {
         let ff = ConstModIntBuilder::<M>;
-        let ntt = NTT::<M>::new(3, 1 << 20);
-        let po = PolynomialOperator::<M>::new(&ntt);
+        let ntt = NTT::<M, 3>::new();
+        let po = PolynomialOperator::new(&ntt);
 
         let a: Vec<_> = vec![5, 4, 3, 2, 1]
             .into_iter()
