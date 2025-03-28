@@ -95,7 +95,7 @@ impl<M: Monoid> Index<usize> for Segtree<M> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     fn random_test_helper<T, M, F>(size: usize, m: M, mut gen_value: F)

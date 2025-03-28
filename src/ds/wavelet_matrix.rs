@@ -228,7 +228,7 @@ pub type WM32 = WaveletMatrix<u32, 32>;
 mod tests {
     use super::*;
     use crate::algo::bsearch::lower_bound;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]

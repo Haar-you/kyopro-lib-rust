@@ -478,7 +478,7 @@ impl<M: Monoid> std::ops::Drop for SplayTree<M> {
 #[cfg(test)]
 mod tests {
     use crate::algebra::sum::*;
-    use crate::testtools::rand_range;
+    use my_testtools::rand_range;
 
     use rand::Rng;
 

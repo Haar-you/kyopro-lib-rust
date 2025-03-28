@@ -36,7 +36,7 @@ impl<T: Copy + Signed + Zero + Add<Output = T> + Sub<Output = T>> Imos1D<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]

@@ -104,7 +104,7 @@ where
 mod tests {
     use super::*;
     use crate::algebra::sum::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]

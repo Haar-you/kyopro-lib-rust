@@ -8,6 +8,7 @@ edition = "2021"
 rand = { version = "=0.8.5" }
 
 [dev-dependencies]
+my_testtools = {path = "./my_testtools"}
 test-case = "3.3.1"
 pretty_assertions = "1.4.1"
 

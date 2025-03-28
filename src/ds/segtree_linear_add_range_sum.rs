@@ -98,7 +98,7 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
     use std::ops::Range;
 

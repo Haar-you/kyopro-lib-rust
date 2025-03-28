@@ -31,5 +31,3 @@ pub mod traits;
 pub mod tree;
 
 pub mod typical;
-
-pub mod testtools;

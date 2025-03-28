@@ -48,7 +48,7 @@ where
 #[cfg(test)]
 mod tests {
     use crate::num::const_modint::*;
-    use crate::testtools::rand_range;
+    use my_testtools::rand_range;
 
     use super::*;
     use rand::Rng;
