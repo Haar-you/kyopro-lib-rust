@@ -1,7 +1,6 @@
 //! 分類を放置しているもの /  便利そうなもの置き場
 
 pub mod bitwise_sum_popcount;
-pub mod closed_interval;
 pub mod dice;
 pub mod is_none_or;
 pub mod linear;
