@@ -1,3 +1,4 @@
+//! 木上の便利関数
 use crate::num::one_zero::Zero;
 use crate::tree::*;
 use std::ops::Add;

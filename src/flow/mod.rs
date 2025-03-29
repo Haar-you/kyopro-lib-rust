@@ -9,6 +9,7 @@ pub mod min_cost_flow;
 pub trait MaxFlow {
     /// 容量の型
     type Cap;
+    /// 頂点数`n`の空のグラフを返す。
     fn new(n: usize) -> Self;
     /// 頂点`u`から頂点`v`へ容量`cap`の辺を張る。
     fn add_edge(&mut self, u: usize, v: usize, cap: Self::Cap);

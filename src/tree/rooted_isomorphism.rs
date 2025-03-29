@@ -1,8 +1,16 @@
+//! 根付き木の(根付き)部分木を同型性によって分類する。
+//!
+//! # Problems
+//! - <https://judge.yosupo.jp/problem/rooted_tree_isomorphism_classification>
 use crate::misc::is_none_or::IsNoneOr;
 use crate::tree::*;
 use std::collections::{hash_map::DefaultHasher, HashMap};
 use std::hash::{Hash, Hasher};
 
+/// 根付き木の(根付き)部分木を同型性によって分類する。
+///
+/// # Returns
+/// - `(k, a)` : `k`は部分木の種類数、`a`は頂点`i`と頂点`j`を根とする部分木が同型のときに限り`a[i] = a[j]`を満たす。
 pub fn rooted_isomorphism<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> (usize, Vec<usize>) {
     let n = tree.len();
     let mut ret = vec![0; n];
