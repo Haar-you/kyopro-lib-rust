@@ -6,7 +6,6 @@ pub mod is_none_or;
 pub mod linear;
 pub mod nullable_usize;
 pub mod paren;
-pub mod parse_paren;
 pub mod range;
 pub mod swap;
 pub mod transpose;
