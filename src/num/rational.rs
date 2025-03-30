@@ -1,7 +1,7 @@
 //! 有理数
 
-use crate::impl_ops;
 use crate::math::gcd_lcm::GcdLcm;
+use crate::{impl_from, impl_ops};
 use std::{
     cmp::Ordering,
     fmt,
@@ -87,20 +87,8 @@ impl Debug for Rational {
     }
 }
 
-impl From<Rational> for f64 {
-    fn from(from: Rational) -> Self {
-        (from.numerator as f64) / (from.denominator as f64)
-    }
-}
-
-impl From<i64> for Rational {
-    fn from(from: i64) -> Self {
-        Self {
-            numerator: from,
-            denominator: 1,
-        }
-    }
-}
+impl_from!(Rational => f64, |value: Rational| (value.numerator as f64) / (value.denominator as f64));
+impl_from!(i64 => Rational, |value| Self { numerator: value, denominator: 1 });
 
 impl_ops!(Add, Rational, |s: Self, rhs| s.__add(rhs));
 impl_ops!(Sub, Rational, |s: Self, rhs| s.__sub(rhs));
