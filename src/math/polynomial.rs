@@ -49,6 +49,7 @@ impl<const P: u32> Polynomial<P> {
         self.data.is_empty()
     }
 
+    /// 係数が`0`の高次項を縮める。
     pub fn shrink(&mut self) {
         while self.data.last().is_some_and(|x| x.value() == 0) {
             self.data.pop();
@@ -64,22 +65,45 @@ impl<const P: u32> Polynomial<P> {
     /// 多項式の次数を返す。
     ///
     /// `self`が零多項式のときは`None`を返す。
+    ///
+    /// **Time complexity** $O(n)$
     pub fn deg(&self) -> Option<usize> {
-        if self.is_empty() {
-            return None;
+        for i in (0..self.len()).rev() {
+            if self.data[i].value() != 0 {
+                return Some(i);
+            }
         }
-        if self.len() == 1 && self.data[0].value() == 0 {
-            return None;
-        }
-        Some(self.len() - 1)
+
+        None
     }
 }
 
-impl<const P: u32> From<Vec<ConstModInt<P>>> for Polynomial<P> {
-    fn from(data: Vec<ConstModInt<P>>) -> Self {
-        let mut this = Self { data };
-        this.shrink();
-        this
+impl<const P: u32> From<Polynomial<P>> for Vec<ConstModInt<P>> {
+    fn from(value: Polynomial<P>) -> Self {
+        value.data
+    }
+}
+
+impl<T, const P: u32> From<Vec<T>> for Polynomial<P>
+where
+    T: Into<ConstModInt<P>>,
+{
+    fn from(value: Vec<T>) -> Self {
+        Self {
+            data: value.into_iter().map(Into::into).collect(),
+        }
+    }
+}
+
+impl<const P: u32> AsRef<[ConstModInt<P>]> for Polynomial<P> {
+    fn as_ref(&self) -> &[ConstModInt<P>] {
+        &self.data
+    }
+}
+
+impl<const P: u32> AsMut<[ConstModInt<P>]> for Polynomial<P> {
+    fn as_mut(&mut self) -> &mut [ConstModInt<P>] {
+        &mut self.data
     }
 }
 
@@ -229,5 +253,17 @@ mod tests {
 
         let a_ = po.add(po.mul(q, b.clone()), r);
         assert_eq!(a, a_);
+    }
+
+    #[test]
+    fn test_deg() {
+        let check = |a: Vec<usize>, d: Option<usize>| {
+            assert_eq!(Polynomial::<M>::from(a).deg(), d);
+        };
+
+        check(vec![1, 2, 3], Some(2));
+        check(vec![1, 2, 3, 0, 0, 0], Some(2));
+        check(vec![], None);
+        check(vec![0, 0, 0, 0], None);
     }
 }
