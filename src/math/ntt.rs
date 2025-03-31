@@ -91,11 +91,7 @@ impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
         }
 
         let m = f.len() + g.len() - 1;
-        let n = if m.is_power_of_two() {
-            m
-        } else {
-            m.next_power_of_two()
-        };
+        let n = m.next_power_of_two();
 
         f.resize(n, ConstModInt::new(0));
         self.run(&mut f, false);
@@ -108,6 +104,25 @@ impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
         }
         self.run(&mut f, true);
 
+        f
+    }
+
+    /// `convolve(f.clone(), f)`と同等。
+    pub fn convolve_same(&self, mut f: Vec<ConstModInt<P>>) -> Vec<ConstModInt<P>> {
+        if f.is_empty() {
+            return vec![];
+        }
+
+        let n = (f.len() * 2 - 1).next_power_of_two();
+        f.resize(n, ConstModInt::new(0));
+
+        self.run(&mut f, false);
+
+        for x in f.iter_mut() {
+            *x *= *x;
+        }
+
+        self.run(&mut f, true);
         f
     }
 

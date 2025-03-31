@@ -43,3 +43,5 @@ pub mod polynomial;
 pub mod polynomial_taylor_shift;
 
 pub mod closed_interval;
+
+pub mod fps;
