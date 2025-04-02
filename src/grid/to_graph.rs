@@ -1,3 +1,4 @@
+//! グリッドをグラフに変換する
 use crate::{graph::*, grid::*};
 
 /// グリッドをグラフに変換する
@@ -17,10 +18,10 @@ pub fn grid_to_graph<T: Clone>(
 
     for i in 0..h {
         for j in 0..w {
-            let p = Position::new(i, j);
+            let p = Position::new(i, j, h, w);
 
             for d in dirs {
-                let q = p.mov_strict(*d, h, w);
+                let q = p.mov(*d);
 
                 if let Some(q) = q {
                     if let Some(c) = edge(p, q) {
