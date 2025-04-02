@@ -36,6 +36,16 @@ impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
         }
     }
 
+    /// 数論変換を行う。
+    pub fn ntt(&self, f: &mut Vec<ConstModInt<P>>) {
+        self.run(f, false);
+    }
+
+    /// `ntt`の逆変換を行う。
+    pub fn intt(&self, f: &mut Vec<ConstModInt<P>>) {
+        self.run(f, true);
+    }
+
     fn run(&self, f: &mut Vec<ConstModInt<P>>, inv: bool) {
         let n = f.len();
         assert!(n.is_power_of_two() && n < self.max_size);
