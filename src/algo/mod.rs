@@ -24,6 +24,7 @@ pub mod mo;
 pub mod monotone_minima;
 pub mod num_subseq;
 pub mod parallel_binary_search;
+pub mod paren;
 pub mod permutation;
 pub mod psp;
 pub mod rle;
