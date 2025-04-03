@@ -4,7 +4,8 @@
 //!
 //! - [HUPC 2020 B 三角形足し算](https://onlinejudge.u-aizu.ac.jp/challenges/sources/VPC/HUPC/3165?year=2020)
 
-use crate::misc::{linear::*, range::range_bounds_to_range};
+use crate::math::linear::*;
+use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
 use std::{

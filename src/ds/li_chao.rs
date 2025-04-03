@@ -6,7 +6,7 @@
 //! - [Segment Add Get Min](https://judge.yosupo.jp/submission/217834)
 
 use crate::algo::bsearch::lower_bound;
-use crate::misc::linear::*;
+use crate::math::linear::*;
 use crate::trait_alias;
 use std::{
     cmp::{max, min},

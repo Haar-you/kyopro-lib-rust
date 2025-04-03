@@ -1,6 +1,7 @@
 //! 区間一次関数加算区間総和セグメントツリー
 
-use crate::misc::{linear::*, range::range_bounds_to_range};
+use crate::math::linear::*;
+use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
 use std::ops::{Add, AddAssign, Mul, RangeBounds};

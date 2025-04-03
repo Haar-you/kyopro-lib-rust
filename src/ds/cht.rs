@@ -3,7 +3,7 @@
 //! # Problems
 //! - [EDPC Z - Frog 3](https://atcoder.jp/contests/dp/submissions/54932537)
 
-use crate::misc::linear::*;
+use crate::math::linear::*;
 use crate::trait_alias;
 use std::{
     collections::VecDeque,
