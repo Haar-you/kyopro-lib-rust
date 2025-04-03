@@ -73,10 +73,6 @@ impl FF for MontgomeryBuilder {
         let value = reduce(value as u64 * self.r2, self.modulo as u64, self.m);
         Montgomery::__new(value, self.modulo as u64, self.r2, self.m)
     }
-
-    fn frac(&self, numerator: i64, denominator: i64) -> Self::Element {
-        self.from_i64(numerator) * self.from_i64(denominator).inv()
-    }
 }
 
 /// `modulo`を法として剰余をとる構造体。
@@ -87,6 +83,8 @@ pub struct Montgomery {
     r2: u64,
     m: u64,
 }
+
+impl FFElem for Montgomery {}
 
 impl Montgomery {
     fn __new(value: u64, modulo: u64, r2: u64, m: u64) -> Self {
@@ -143,6 +141,13 @@ impl_ops!(MulAssign, Montgomery, |x: &mut Self, y: Self| x.value =
 
 impl_ops!(DivAssign, Montgomery, |x: &mut Self, y: Self| *x *= y.inv());
 
+impl_ops!(Neg, Montgomery, |mut x: Self| {
+    if x.value != 0 {
+        x.value = x.modulo - x.value;
+    }
+    x
+});
+
 impl Pow for Montgomery {
     type Output = Self;
     fn pow(self, mut p: u64) -> Self::Output {
@@ -182,6 +187,7 @@ mod tests {
         Sub(u64),
         Mul(u64),
         Div(u64),
+        Neg,
     }
 
     #[test]
@@ -202,12 +208,13 @@ mod tests {
             .map(|_| {
                 let x = rng.gen_range(1..MOD) as u64;
 
-                let op = rng.gen_range(0..4);
+                let op = rng.gen_range(0..5);
                 match op {
                     0 => Ops::Add(x),
                     1 => Ops::Sub(x),
                     2 => Ops::Mul(x),
                     3 => Ops::Div(x),
+                    4 => Ops::Neg,
                     _ => unreachable!(),
                 }
             })
@@ -219,7 +226,8 @@ mod tests {
                     Ops::Add(x) => ans += constmodint.from_u64(x),
                     Ops::Sub(x) => ans -= constmodint.from_u64(x),
                     Ops::Mul(x) => ans *= constmodint.from_u64(x),
-                    Ops::Div(x) => ans /= constmodint.from_u64(x)
+                    Ops::Div(x) => ans /= constmodint.from_u64(x),
+                    Ops::Neg => ans = -ans
                 }
             }
         }};
@@ -230,7 +238,8 @@ mod tests {
                     Ops::Add(x) => ans2 += modint.from_u64(x),
                     Ops::Sub(x) => ans2 -= modint.from_u64(x),
                     Ops::Mul(x) => ans2 *= modint.from_u64(x),
-                    Ops::Div(x) => ans2 /= modint.from_u64(x)
+                    Ops::Div(x) => ans2 /= modint.from_u64(x),
+                    Ops::Neg => ans2 = -ans2
                 }
             }
         }};
@@ -241,7 +250,8 @@ mod tests {
                     Ops::Add(x) => res += montgomery.from_u64(x),
                     Ops::Sub(x) => res -= montgomery.from_u64(x),
                     Ops::Mul(x) => res *= montgomery.from_u64(x),
-                    Ops::Div(x) => res /= montgomery.from_u64(x)
+                    Ops::Div(x) => res /= montgomery.from_u64(x),
+                    Ops::Neg => res = -res
                 }
             }
         }};

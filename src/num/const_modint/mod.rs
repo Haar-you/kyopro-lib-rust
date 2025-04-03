@@ -28,9 +28,6 @@ impl<const M: u32> FF for ConstModIntBuilder<M> {
         let value = ((value % M as i64) + M as i64) as u32;
         Self::Element::new(value)
     }
-    fn frac(&self, numerator: i64, denominator: i64) -> Self::Element {
-        self.from_i64(numerator) * self.from_i64(denominator).inv()
-    }
 }
 
 /// `M`で剰余をとる構造体。

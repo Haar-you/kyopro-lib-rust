@@ -33,10 +33,6 @@ impl FF for ModIntBuilder {
         let value = ((value % self.modulo as i64) + self.modulo as i64) as u32;
         ModInt::new(value, self.modulo)
     }
-
-    fn frac(&self, numerator: i64, denominator: i64) -> Self::Element {
-        self.from_i64(numerator) * self.from_i64(denominator).inv()
-    }
 }
 
 /// `modulo`を法として剰余をとる構造体。
