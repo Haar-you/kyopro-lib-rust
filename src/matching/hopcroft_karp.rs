@@ -66,12 +66,11 @@ impl HopcroftKarp {
             for i in 0..self.edges[l].len() {
                 let r = self.edges[l][i];
 
-                if self.dist[self.pair_right[r]] == self.dist[l] + 1 {
-                    if self.dfs(self.pair_right[r]) {
-                        self.pair_right[r] = l;
-                        self.pair_left[l] = r;
-                        return true;
-                    }
+                if self.dist[self.pair_right[r]] == self.dist[l] + 1 && self.dfs(self.pair_right[r])
+                {
+                    self.pair_right[r] = l;
+                    self.pair_left[l] = r;
+                    return true;
                 }
             }
 

@@ -145,9 +145,7 @@ impl<const P: u32, const PR: u32> FPS for PolynomialOperator<'_, P, PR> {
         let ret = self.scale(self.fps_log(ret), m.into());
         let ret = self.fps_exp(ret);
         let ret = self.scale(ret, a.pow(m));
-        let ret = self.shift_higher(ret, m as usize * k);
-
-        ret
+        self.shift_higher(ret, m as usize * k)
     }
 }
 

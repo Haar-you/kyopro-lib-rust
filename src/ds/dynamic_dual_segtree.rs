@@ -170,7 +170,7 @@ mod tests {
         let m = Sum::<u32>::new();
 
         let mut a = vec![m.id(); n];
-        let mut seg = DynamicDualSegtree::new(m.clone());
+        let mut seg = DynamicDualSegtree::new(m);
 
         let mut rng = rand::thread_rng();
 

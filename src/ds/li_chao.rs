@@ -65,7 +65,7 @@ impl<T: Elem> LiChaoTree<T> {
             range[i] = (left, right);
             let mid = (left + right) / 2;
             Self::init_range(range, size, i << 1, left, mid);
-            Self::init_range(range, size, i << 1 | 1, mid, right);
+            Self::init_range(range, size, (i << 1) | 1, mid, right);
         }
     }
 
@@ -122,7 +122,7 @@ impl<T: Elem> LiChaoTree<T> {
             if left != mid {
                 self.update(i << 1, new_line, l, m);
             } else {
-                self.update(i << 1 | 1, new_line, m, r);
+                self.update((i << 1) | 1, new_line, m, r);
             }
         } else {
             self.data[i] = Some(new_line);

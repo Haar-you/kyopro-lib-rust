@@ -47,7 +47,7 @@ mod tests {
         );
 
         let ans = two_edge_connected_components(&Lowlink::new(&g));
-        let ans = BTreeSet::from_iter(ans.into_iter().map(|s| BTreeSet::from_iter(s)));
+        let ans = BTreeSet::from_iter(ans.into_iter().map(BTreeSet::from_iter));
         assert_eq!(ans, btreeset! {btreeset!{0, 1, 2, 3}});
 
         let mut g = Graph::<Undirected, _>::new(13);
@@ -80,7 +80,7 @@ mod tests {
         );
 
         let ans = two_edge_connected_components(&Lowlink::new(&g));
-        let ans = BTreeSet::from_iter(ans.into_iter().map(|s| BTreeSet::from_iter(s)));
+        let ans = BTreeSet::from_iter(ans.into_iter().map(BTreeSet::from_iter));
 
         assert_eq!(
             ans,

@@ -33,7 +33,7 @@ impl<const P: u32, const PR: u32> MultipointEval for PolynomialOperator<'_, P, P
             f[i + k] = Polynomial::from(vec![-p[i], ConstModInt::new(1)]);
         }
         for i in (1..k).rev() {
-            f[i] = self.mul(f[i << 1].clone(), f[i << 1 | 1].clone());
+            f[i] = self.mul(f[i << 1].clone(), f[(i << 1) | 1].clone());
         }
 
         f[1] = self.divmod(a, f[1].clone()).1;

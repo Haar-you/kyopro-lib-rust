@@ -36,6 +36,6 @@ impl_ops!(DivAssign, Totalf64, |s: &mut Self, rhs: Self| s.0 /= rhs.0);
 
 impl_ops!(Neg, Totalf64, |s: Self| Self(-s.0));
 
-impl_from!(f64 => Totalf64, |value| Self(value));
+impl_from!(f64 => Totalf64, Self);
 impl_from!(f32 => Totalf64, |value| Self(value as f64));
 impl_from!(Totalf64 => f64, |value: Totalf64| value.0);

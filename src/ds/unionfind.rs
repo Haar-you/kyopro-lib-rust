@@ -15,7 +15,7 @@ pub struct UnionFind<'a, T = ()> {
     merge: Option<Box<dyn 'a + Fn(T, T) -> T>>,
 }
 
-impl<'a> UnionFind<'a, ()> {
+impl UnionFind<'_, ()> {
     /// 大きさ`1`の集合を`n`個用意する。
     pub fn new(n: usize) -> Self {
         UnionFind {

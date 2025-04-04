@@ -62,7 +62,7 @@ where
             i >>= 1;
             self.data[i] = self
                 .monoid
-                .op(self.data[i << 1].clone(), self.data[i << 1 | 1].clone());
+                .op(self.data[i << 1].clone(), self.data[(i << 1) | 1].clone());
         }
     }
 

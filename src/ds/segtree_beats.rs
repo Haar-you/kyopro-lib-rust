@@ -14,7 +14,7 @@ fn lc(i: usize) -> usize {
 
 #[inline]
 fn rc(i: usize) -> usize {
-    i << 1 | 1
+    (i << 1) | 1
 }
 
 #[inline]
@@ -355,14 +355,14 @@ mod test {
                     let lr = rand_range(&mut rng, 0..n);
                     assert_eq!(
                         seg.max(lr.clone()),
-                        a[lr].iter().max().copied().unwrap_or(std::i64::MIN)
+                        a[lr].iter().max().copied().unwrap_or(i64::MIN)
                     );
                 }
                 5 => {
                     let lr = rand_range(&mut rng, 0..n);
                     assert_eq!(
                         seg.min(lr.clone()),
-                        a[lr].iter().min().copied().unwrap_or(std::i64::MAX)
+                        a[lr].iter().min().copied().unwrap_or(i64::MAX)
                     );
                 }
 

@@ -70,7 +70,7 @@ fn test() {
     // Number -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
     parser.add_rule(
         State::Number,
-        |c| c.is_digit(10),
+        |c| c.is_ascii_digit(),
         |_, input| {
             let n = input.consume()?.to_digit(10)?;
             let mut ret = Poly::new();
@@ -82,7 +82,7 @@ fn test() {
     // Factor -> Number
     parser.add_rule(
         State::Factor,
-        |c| c.is_digit(10),
+        |c| c.is_ascii_digit(),
         |slf, input| slf.parse(State::Number, input),
     );
 

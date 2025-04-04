@@ -51,7 +51,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let a = vec![1, 2, 3, 4, 5];
+        let a = [1, 2, 3, 4, 5];
         let b = a.iter().cumsum(0, |acc, x| *acc += x).collect::<Vec<_>>();
 
         assert_eq!(b, vec![0, 1, 3, 6, 10, 15]);

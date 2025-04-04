@@ -71,13 +71,7 @@ impl<const P: u32> Polynomial<P> {
     ///
     /// **Time complexity** $O(n)$
     pub fn deg(&self) -> Option<usize> {
-        for i in (0..self.len()).rev() {
-            if self.data[i].value() != 0 {
-                return Some(i);
-            }
-        }
-
-        None
+        (0..self.len()).rev().find(|&i| self.data[i].value() != 0)
     }
 }
 
@@ -89,7 +83,7 @@ impl<const P: u32> PartialEq for Polynomial<P> {
                 return false;
             }
         }
-        return true;
+        true
     }
 }
 
@@ -275,9 +269,7 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
         let n = a.len();
         let mut ret = vec![ConstModInt::new(0); n];
 
-        for i in k..n {
-            ret[i] = a[i - k];
-        }
+        ret[k..n].copy_from_slice(&a[..(n - k)]);
 
         ret.into()
     }

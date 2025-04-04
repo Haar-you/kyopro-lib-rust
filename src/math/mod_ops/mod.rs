@@ -16,8 +16,8 @@ mod tests {
         fn straight_forward(x: u64, p: u64, m: u64) -> u64 {
             let mut ret = 1;
             for _ in 0..p {
-                ret = ret * x;
-                ret = ret % m;
+                ret *= x;
+                ret %= m;
             }
             ret
         }

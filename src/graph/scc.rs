@@ -25,7 +25,7 @@ impl SCC {
         ord.reverse();
 
         let mut rg = vec![vec![]; n];
-        for e in g.nodes_iter().map(|v| &v.edges).flatten() {
+        for e in g.nodes_iter().flat_map(|v| &v.edges) {
             rg[e.to()].push(e.from());
         }
 

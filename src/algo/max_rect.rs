@@ -99,12 +99,12 @@ mod tests {
         let a = [2, 1, 3, 5, 3, 4, 2, 1];
         let (ans, Range { start: l, end: r }) = max_rect_in_histogram(&a);
         assert_eq!(ans, 12);
-        assert_eq!(ans, a[l..r].into_iter().min().unwrap() * (r - l));
+        assert_eq!(ans, a[l..r].iter().min().unwrap() * (r - l));
 
         let a = [2, 0, 1];
         let (ans, Range { start: l, end: r }) = max_rect_in_histogram(&a);
         assert_eq!(ans, 2);
-        assert_eq!(ans, a[l..r].into_iter().min().unwrap() * (r - l));
+        assert_eq!(ans, a[l..r].iter().min().unwrap() * (r - l));
     }
 
     #[test]

@@ -122,7 +122,7 @@ mod tests {
                 if lr.is_empty() {
                     None
                 } else {
-                    Some(a[lr].iter().fold(0, |acc, &x| acc + x))
+                    Some(a[lr].iter().sum::<u32>())
                 }
             );
         }

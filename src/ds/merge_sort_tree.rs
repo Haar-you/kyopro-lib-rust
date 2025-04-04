@@ -50,7 +50,7 @@ where
         } else {
             let mid = (l + r) / 2;
             self._init(i << 1, a, l, mid);
-            self._init(i << 1 | 1, a, mid, r);
+            self._init((i << 1) | 1, a, mid, r);
 
             if a.len() <= mid {
                 self.data[i] = a[l..].to_vec();

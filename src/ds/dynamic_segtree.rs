@@ -157,7 +157,7 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let m = Sum::<u64>::new();
-        let mut seg = DynamicSegtree::new(m.clone());
+        let mut seg = DynamicSegtree::new(m);
         let mut map = BTreeMap::new();
 
         let t = 100;

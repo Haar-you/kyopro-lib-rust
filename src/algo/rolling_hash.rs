@@ -48,7 +48,7 @@ pub struct Table<'a> {
     rh: &'a RollingHash,
 }
 
-impl<'a> Table<'a> {
+impl Table<'_> {
     /// 範囲`l..r`でのハッシュを計算する。
     pub fn hash(&self, Range { start: l, end: r }: Range<usize>) -> u64 {
         let m = self.rh.m;
@@ -66,10 +66,10 @@ mod tests {
 
         let s = "abracadabra";
 
-        let table = rh.hash_table(&s);
+        let table = rh.hash_table(s);
 
         let p = "ab";
-        let h = rh.hash(&p);
+        let h = rh.hash(p);
 
         for from in 0..s.len() - p.len() {
             let to = from + p.len();

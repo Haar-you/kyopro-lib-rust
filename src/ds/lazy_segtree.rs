@@ -46,7 +46,7 @@ where
         }
 
         for i in (1..size / 2).rev() {
-            this.data[i] = a.fold(this.data[i << 1].clone(), this.data[i << 1 | 1].clone());
+            this.data[i] = a.fold(this.data[i << 1].clone(), this.data[(i << 1) | 1].clone());
         }
 
         this
@@ -58,7 +58,7 @@ where
         }
         if i < self.size / 2 {
             let l = i << 1;
-            let r = i << 1 | 1;
+            let r = (i << 1) | 1;
 
             self.lazy[l] = self
                 .action
@@ -90,10 +90,10 @@ where
         while i > 1 {
             i >>= 1;
             self.propagate(i << 1);
-            self.propagate(i << 1 | 1);
+            self.propagate((i << 1) | 1);
             self.data[i] = self
                 .action
-                .fold(self.data[i << 1].clone(), self.data[i << 1 | 1].clone());
+                .fold(self.data[i << 1].clone(), self.data[(i << 1) | 1].clone());
         }
     }
 

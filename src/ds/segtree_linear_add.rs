@@ -95,7 +95,7 @@ impl<T: Elem> SegtreeLinearAdd<T> {
                 self.data[i].get().0 + self.data[i].get().1 * T::from(len as u32),
                 self.data[i].get().1,
             ));
-            self.data[i << 1 | 1].set(add(self.data[i << 1 | 1].get(), self.data[i].get()));
+            self.data[(i << 1) | 1].set(add(self.data[(i << 1) | 1].get(), self.data[i].get()));
 
             self.data[i].set((T::zero(), T::zero()));
         }

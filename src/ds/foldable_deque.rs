@@ -152,7 +152,7 @@ mod tests {
         let monoid = Affine::<Mint>::new();
 
         let mut deq = VecDeque::<(Mint, Mint)>::new();
-        let mut swag = FoldableDeque::new(monoid.clone());
+        let mut swag = FoldableDeque::new(monoid);
 
         for _ in 0..1000 {
             assert_eq!(deq.front(), swag.front());

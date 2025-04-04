@@ -54,6 +54,6 @@ mod tests {
 
     #[test]
     fn test() {
-        assert_eq!((12 as i32).gcd_lcm(8), (4, 24));
+        assert_eq!(12_i32.gcd_lcm(8), (4, 24));
     }
 }

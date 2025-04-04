@@ -135,7 +135,7 @@ impl FastIO {
     /// `s`と改行文字を標準出力に書き込む。
     pub fn writeln<T: Display>(&mut self, s: T) {
         self.write(s);
-        self.out_buf.write_all(&[b'\n']).unwrap();
+        self.out_buf.write_all(b"\n").unwrap();
     }
 }
 

@@ -20,7 +20,7 @@ where
         dist[i][i] = Some(zero);
     }
 
-    for e in g.nodes_iter().map(|v| &v.edges).flatten() {
+    for e in g.nodes_iter().flat_map(|v| &v.edges) {
         let (from, to, cost) = (e.from(), e.to(), e.weight());
         dist[from][to] = dist[from][to].map(|x| x.min(cost)).or(Some(cost));
     }

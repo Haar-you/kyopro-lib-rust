@@ -142,6 +142,12 @@ impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
     }
 }
 
+impl<const P: u32, const PRIM_ROOT: u32> Default for NTT<P, PRIM_ROOT> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// $\mod 998244353 (= 2^{23} * 7 * 17 + 1)$上の`NTT`
 pub type NTT998244353 = NTT<998244353, 3>;
 

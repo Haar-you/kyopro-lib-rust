@@ -41,8 +41,8 @@ impl QwordTree {
         let x = x as usize;
 
         *self.v3.get_unchecked_mut(x >> 6) |= 1 << (x & 0x3f);
-        *self.v2.get_unchecked_mut(x >> 12) |= 1 << (x >> 6 & 0x3f);
-        *self.v1.get_unchecked_mut(x >> 18) |= 1 << (x >> 12 & 0x3f);
+        *self.v2.get_unchecked_mut(x >> 12) |= 1 << ((x >> 6) & 0x3f);
+        *self.v1.get_unchecked_mut(x >> 18) |= 1 << ((x >> 12) & 0x3f);
         self.v0 |= 1 << (x >> 18);
     }
 
@@ -71,10 +71,10 @@ impl QwordTree {
 
         *self.v3.get_unchecked_mut(x >> 6) &= !(1 << (x & 0x3f));
         if *self.v3.get_unchecked(x >> 6) == 0 {
-            *self.v2.get_unchecked_mut(x >> 12) &= !(1 << (x >> 6 & 0x3f));
+            *self.v2.get_unchecked_mut(x >> 12) &= !(1 << ((x >> 6) & 0x3f));
         }
         if *self.v2.get_unchecked(x >> 12) == 0 {
-            *self.v1.get_unchecked_mut(x >> 18) &= !(1 << (x >> 12 & 0x3f));
+            *self.v1.get_unchecked_mut(x >> 18) &= !(1 << ((x >> 12) & 0x3f));
         }
         if *self.v1.get_unchecked(x >> 18) == 0 {
             self.v0 &= !(1 << (x >> 18));
@@ -120,9 +120,9 @@ impl QwordTree {
         } else {
             let mut ret = self.v0.trailing_zeros();
             unsafe {
-                ret = ret << 6 | self.v1.get_unchecked(ret as usize).trailing_zeros();
-                ret = ret << 6 | self.v2.get_unchecked(ret as usize).trailing_zeros();
-                ret = ret << 6 | self.v3.get_unchecked(ret as usize).trailing_zeros();
+                ret = (ret << 6) | self.v1.get_unchecked(ret as usize).trailing_zeros();
+                ret = (ret << 6) | self.v2.get_unchecked(ret as usize).trailing_zeros();
+                ret = (ret << 6) | self.v3.get_unchecked(ret as usize).trailing_zeros();
             }
             Some(ret)
         }
@@ -135,9 +135,9 @@ impl QwordTree {
         } else {
             let mut ret = 63 - self.v0.leading_zeros();
             unsafe {
-                ret = ret << 6 | (63 - self.v1.get_unchecked(ret as usize).leading_zeros());
-                ret = ret << 6 | (63 - self.v2.get_unchecked(ret as usize).leading_zeros());
-                ret = ret << 6 | (63 - self.v3.get_unchecked(ret as usize).leading_zeros());
+                ret = (ret << 6) | (63 - self.v1.get_unchecked(ret as usize).leading_zeros());
+                ret = (ret << 6) | (63 - self.v2.get_unchecked(ret as usize).leading_zeros());
+                ret = (ret << 6) | (63 - self.v3.get_unchecked(ret as usize).leading_zeros());
             }
             Some(ret)
         }
@@ -161,7 +161,7 @@ impl QwordTree {
         if t != 64 {
             let mut ret = (x & !0x3f) | t;
             unsafe {
-                ret = ret << 6 | self.v3.get_unchecked(ret as usize).trailing_zeros();
+                ret = (ret << 6) | self.v3.get_unchecked(ret as usize).trailing_zeros();
             }
             return Some(ret);
         }
@@ -172,8 +172,8 @@ impl QwordTree {
         if t != 64 {
             let mut ret = (x & !0x3f) | t;
             unsafe {
-                ret = ret << 6 | self.v2.get_unchecked(ret as usize).trailing_zeros();
-                ret = ret << 6 | self.v3.get_unchecked(ret as usize).trailing_zeros();
+                ret = (ret << 6) | self.v2.get_unchecked(ret as usize).trailing_zeros();
+                ret = (ret << 6) | self.v3.get_unchecked(ret as usize).trailing_zeros();
             }
             return Some(ret);
         }
@@ -184,9 +184,9 @@ impl QwordTree {
         if t != 64 {
             let mut ret = t;
             unsafe {
-                ret = ret << 6 | self.v1.get_unchecked(ret as usize).trailing_zeros();
-                ret = ret << 6 | self.v2.get_unchecked(ret as usize).trailing_zeros();
-                ret = ret << 6 | self.v3.get_unchecked(ret as usize).trailing_zeros();
+                ret = (ret << 6) | self.v1.get_unchecked(ret as usize).trailing_zeros();
+                ret = (ret << 6) | self.v2.get_unchecked(ret as usize).trailing_zeros();
+                ret = (ret << 6) | self.v3.get_unchecked(ret as usize).trailing_zeros();
             }
             return Some(ret);
         }
@@ -212,7 +212,7 @@ impl QwordTree {
         if t != 64 {
             let mut ret = (x & !0x3f) | (63 - t);
             unsafe {
-                ret = ret << 6 | (63 - self.v3.get_unchecked(ret as usize).leading_zeros());
+                ret = (ret << 6) | (63 - self.v3.get_unchecked(ret as usize).leading_zeros());
             }
             return Some(ret);
         }
@@ -223,8 +223,8 @@ impl QwordTree {
         if t != 64 {
             let mut ret = (x & !0x3f) | (63 - t);
             unsafe {
-                ret = ret << 6 | (63 - self.v2.get_unchecked(ret as usize).leading_zeros());
-                ret = ret << 6 | (63 - self.v3.get_unchecked(ret as usize).leading_zeros());
+                ret = (ret << 6) | (63 - self.v2.get_unchecked(ret as usize).leading_zeros());
+                ret = (ret << 6) | (63 - self.v3.get_unchecked(ret as usize).leading_zeros());
             }
             return Some(ret);
         }
@@ -235,9 +235,9 @@ impl QwordTree {
         if t != 64 {
             let mut ret = 63 - t;
             unsafe {
-                ret = ret << 6 | (63 - self.v1.get_unchecked(ret as usize).leading_zeros());
-                ret = ret << 6 | (63 - self.v2.get_unchecked(ret as usize).leading_zeros());
-                ret = ret << 6 | (63 - self.v3.get_unchecked(ret as usize).leading_zeros());
+                ret = (ret << 6) | (63 - self.v1.get_unchecked(ret as usize).leading_zeros());
+                ret = (ret << 6) | (63 - self.v2.get_unchecked(ret as usize).leading_zeros());
+                ret = (ret << 6) | (63 - self.v3.get_unchecked(ret as usize).leading_zeros());
             }
             return Some(ret);
         }
@@ -265,14 +265,14 @@ mod tests {
             assert_eq!(set.len(), qt.len());
 
             assert_eq!(set.iter().next(), qt.min().as_ref());
-            assert_eq!(set.iter().rev().next(), qt.max().as_ref());
+            assert_eq!(set.iter().next_back(), qt.max().as_ref());
 
             let x: u32 = rng.gen_range(0..1 << 12);
             assert_eq!(set.remove(&x), qt.erase(x));
             assert_eq!(set.len(), qt.len());
 
             assert_eq!(set.iter().next(), qt.min().as_ref());
-            assert_eq!(set.iter().rev().next(), qt.max().as_ref());
+            assert_eq!(set.iter().next_back(), qt.max().as_ref());
 
             let x: u32 = rng.gen_range(0..1 << 12);
             assert_eq!(set.contains(&x), qt.contains(x));
@@ -309,7 +309,7 @@ mod tests {
             qt.insert(x);
 
             let x: u32 = rng.gen_range(0..1 << 24);
-            assert_eq!(set.range(..=x).rev().next(), qt.max_le(x).as_ref());
+            assert_eq!(set.range(..=x).next_back(), qt.max_le(x).as_ref());
         }
     }
 }

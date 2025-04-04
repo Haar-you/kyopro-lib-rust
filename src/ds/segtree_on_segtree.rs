@@ -64,7 +64,7 @@ impl SegtreeOnSegtreeBuilder {
         }
 
         for i in (1..x_size / 2).rev() {
-            c_ys[i] = merge(c_ys[i << 1].clone(), c_ys[i << 1 | 1].clone());
+            c_ys[i] = merge(c_ys[i << 1].clone(), c_ys[(i << 1) | 1].clone());
             c_ys[i].dedup();
         }
 

@@ -33,9 +33,9 @@ where
             self.data[i << 1] = self
                 .monoid
                 .op(self.data[i].clone(), self.data[i << 1].clone());
-            self.data[i << 1 | 1] = self
+            self.data[(i << 1) | 1] = self
                 .monoid
-                .op(self.data[i].clone(), self.data[i << 1 | 1].clone());
+                .op(self.data[i].clone(), self.data[(i << 1) | 1].clone());
             self.data[i] = self.monoid.id();
         }
     }
@@ -113,7 +113,7 @@ mod tests {
         let m = Sum::<u32>::new();
 
         let mut a = vec![m.id(); n];
-        let mut seg = DualSegtree::new(n, m.clone());
+        let mut seg = DualSegtree::new(n, m);
 
         let mut rng = rand::thread_rng();
 

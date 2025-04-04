@@ -13,7 +13,7 @@ pub fn tsort<E: EdgeTrait>(g: &Graph<Directed, E>) -> Option<Vec<usize>> {
     let n = g.len();
     let mut indeg = vec![0; n];
 
-    for e in g.nodes_iter().map(|v| &v.edges).flatten() {
+    for e in g.nodes_iter().flat_map(|v| &v.edges) {
         indeg[e.to()] += 1;
     }
 

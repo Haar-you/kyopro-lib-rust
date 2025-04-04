@@ -72,7 +72,7 @@ impl DoublingLCA {
             std::mem::swap(&mut a, &mut b);
         }
         for k in 0..self.log2n {
-            if ((self.depth[b] - self.depth[a]) >> k & 1) != 0 {
+            if (((self.depth[b] - self.depth[a]) >> k) & 1) != 0 {
                 b = self.parent[b][k].unwrap();
             }
         }
