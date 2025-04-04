@@ -3,7 +3,9 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/vertex_add_subtree_sum>
 
-use crate::{misc::is_none_or::IsNoneOr, tree::*};
+#[allow(unused_imports)]
+use crate::misc::is_none_or::IsNoneOr;
+use crate::tree::*;
 
 pub struct EulerTour {
     begin: Vec<usize>,

@@ -1,6 +1,8 @@
 //! 全方位木DP
 
-use crate::{misc::is_none_or::IsNoneOr, tree::*};
+#[allow(unused_imports)]
+use crate::misc::is_none_or::IsNoneOr;
+use crate::tree::*;
 
 /// 全方位木DP
 ///

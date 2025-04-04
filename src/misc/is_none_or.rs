@@ -1,4 +1,6 @@
 #![allow(clippy::wrong_self_convention)]
+#![allow(clippy::nonminimal_bool)]
+#![allow(missing_docs)]
 
 pub trait IsNoneOr<T> {
     fn is_none_or(self, f: impl FnOnce(T) -> bool) -> bool;
