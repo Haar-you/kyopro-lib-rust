@@ -14,8 +14,11 @@ use std::hash::Hash;
 /// [`MulGraph`]の辺
 #[derive(Clone, Debug)]
 pub struct Edge<V, W> {
+    /// 始点
     pub from: V,
+    /// 終点
     pub to: V,
+    /// 重み
     pub weight: W,
 }
 
@@ -29,7 +32,7 @@ impl<V, W> Edge<V, W> {
 /// 頂点倍加グラフ
 #[derive(Clone, Default, Debug)]
 pub struct MulGraph<V, W> {
-    edges: HashMap<V, Vec<Edge<V, W>>>,
+    nodes: HashMap<V, Vec<Edge<V, W>>>,
 }
 
 impl<V, W> MulGraph<V, W>
@@ -40,7 +43,7 @@ where
     /// 空のグラフを作る。
     pub fn new() -> Self {
         Self {
-            edges: HashMap::new(),
+            nodes: HashMap::new(),
         }
     }
 
@@ -52,14 +55,14 @@ where
 
     /// `from`から`to`への有向辺を張る。
     pub fn add_directed(&mut self, from: V, to: V, weight: W) {
-        self.edges
+        self.nodes
             .entry(from)
             .or_default()
             .push(Edge::new(from, to, weight));
     }
 
     /// 頂点`cur`の隣接辺への参照へのイテレータを返す。
-    pub fn neighbours(&self, cur: V) -> impl Iterator<Item = &Edge<V, W>> {
-        self.edges.get(&cur).into_iter().flatten()
+    pub fn neighbours_of(&self, cur: V) -> impl Iterator<Item = &Edge<V, W>> {
+        self.nodes.get(&cur).into_iter().flatten()
     }
 }
