@@ -1,10 +1,15 @@
 //! 二面体群
+//!
+//! # Problems
+//! - <https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0390>
 pub use crate::algebra::traits::*;
 
 /// 二面体群の元
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DihedralValue {
+    /// 回転
     R(usize),
+    /// 鏡映
     S(usize),
 }
 

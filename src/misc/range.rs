@@ -1,5 +1,6 @@
 use std::ops::RangeBounds;
 
+/// [`RangeBounds<usize>`]を実装した`r`を半開区間`start..end`内に含まれる半開区間として返す。
 pub fn range_bounds_to_range<R: RangeBounds<usize>>(
     r: R,
     start: usize,

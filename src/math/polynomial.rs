@@ -58,6 +58,7 @@ impl<const P: u32> Polynomial<P> {
         }
     }
 
+    /// [`len()`](Self::len())を超えないように、先頭`t`項をもつ多項式を返す。
     pub fn get_until(&self, t: usize) -> Self {
         Self {
             data: self.data[..t.min(self.len())].to_vec(),

@@ -1,6 +1,10 @@
+//! タプルの`Vec`を`Vec`のタプルに変換する。
+
 /// タプルの`Vec`を`Vec`のタプルに変換する。
 pub trait Transpose {
+    /// `Vec`のタプルを表す型
     type Output;
+    /// タプルの`Vec`を`Vec`のタプルに変換する。
     fn transpose(self) -> Self::Output;
 }
 

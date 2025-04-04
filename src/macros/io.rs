@@ -1,5 +1,6 @@
 //! `get!`, `input!`
 
+/// [`crate::io::fastio::FastIO`]を第一引数に、型を第二引数にとって、入力のパースを行う。
 #[macro_export]
 macro_rules! get {
     ( $in:ident, [$a:tt $(as $to:ty)*; $num:expr] ) => {
@@ -30,6 +31,7 @@ macro_rules! get {
     ( $in:ident, $from:tt as $to:ty ) => { <$to>::from(get!($in, $from)) };
 }
 
+/// [`crate::io::fastio::FastIO`]を第一引数にとり、第二引数以降に`変数名: 型`を連ねる。
 #[macro_export]
 macro_rules! input {
     ( @inner $in:ident, mut $name:ident : $type:tt ) => {

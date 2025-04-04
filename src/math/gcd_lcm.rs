@@ -4,6 +4,7 @@ use std::mem::swap;
 
 /// 最大公約数・最小公倍数
 pub trait GcdLcm {
+    /// GCD,LCMの計算結果の型
     type Output;
     /// 最大公約数を求める。
     fn gcd(self, _: Self::Output) -> Self::Output;
