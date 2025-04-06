@@ -1,5 +1,5 @@
 pub mod bsearch;
-pub mod bsearch_f;
+pub mod bsearch_ng_ok;
 pub mod compressor;
 pub mod cycle_finding;
 pub mod edit_distance;
