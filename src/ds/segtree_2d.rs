@@ -130,6 +130,7 @@ mod tests {
 
     #[test]
     fn test() {
+        #![allow(clippy::needless_range_loop)]
         let w = 300;
         let h = 100;
 

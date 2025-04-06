@@ -55,6 +55,11 @@ impl SuccinctBitVec {
         self.size
     }
 
+    /// ビットベクトルの長さが`0`なら`true`を返す。
+    pub fn is_empty(&self) -> bool {
+        self.size == 0
+    }
+
     /// [0, index) に含まれる`b`の個数
     pub fn rank(&self, index: usize, b: bool) -> usize {
         assert!(index <= self.size);

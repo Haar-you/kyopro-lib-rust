@@ -30,6 +30,7 @@ mod tests {
 
     #[test]
     fn test_zeta_mobius() {
+        #![allow(clippy::needless_range_loop)]
         let mut rng = rand::thread_rng();
 
         let ff = ConstModIntBuilder::<M>;

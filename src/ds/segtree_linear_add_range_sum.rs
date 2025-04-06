@@ -105,6 +105,7 @@ mod tests {
 
     #[test]
     fn test() {
+        #![allow(clippy::needless_range_loop)]
         let mut rng = rand::thread_rng();
         let n = 100;
 

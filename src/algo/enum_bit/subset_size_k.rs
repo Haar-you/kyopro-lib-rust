@@ -16,8 +16,8 @@ mod tests {
     use super::*;
 
     fn check(n: u32, k: u32) {
-        let a = (0..1 << n)
-            .filter(|&i| (i as u32).count_ones() == k)
+        let a = (0_u32..1 << n)
+            .filter(|&i| i.count_ones() == k)
             .collect::<Vec<_>>();
 
         let b = subset_size_k(n, k).collect::<Vec<_>>();

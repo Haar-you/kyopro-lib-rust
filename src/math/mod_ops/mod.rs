@@ -74,6 +74,7 @@ mod tests {
 
     #[test]
     fn test_enumerate_mod_inv() {
+        #![allow(clippy::needless_range_loop)]
         let m = 1000000007;
         let n = 100;
 

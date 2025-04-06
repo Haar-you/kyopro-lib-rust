@@ -40,7 +40,7 @@ impl<T: Ord + Eq> Compressor<T> {
     pub fn decompress<'a>(
         &'a self,
         indices: impl IntoIterator<Item = usize> + 'a,
-    ) -> impl Iterator<Item = &T> + 'a {
+    ) -> impl Iterator<Item = &'a T> + 'a {
         indices.into_iter().map(move |i| self.get(i))
     }
 
