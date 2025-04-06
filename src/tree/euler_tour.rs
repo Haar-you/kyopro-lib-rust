@@ -7,6 +7,7 @@
 use crate::misc::is_none_or::IsNoneOr;
 use crate::tree::*;
 
+/// Euler tour
 pub struct EulerTour {
     begin: Vec<usize>,
     end: Vec<usize>,
