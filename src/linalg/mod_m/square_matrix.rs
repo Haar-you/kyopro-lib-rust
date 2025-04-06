@@ -35,7 +35,8 @@ where
         ret
     }
 
-    pub fn from_vec(other: Vec<Vec<u32>>, modulo: Modulo) -> Self {
+    /// [`Vec<Vec<u32>>`]から[`SquareMatrix`]を作る。
+    pub fn from_vec_vec_u32(other: Vec<Vec<u32>>, modulo: Modulo) -> Self {
         let size = other.len();
         assert!(size > 0);
         assert!(other.iter().all(|r| r.len() == size));
@@ -55,10 +56,6 @@ where
             modulo,
         }
     }
-
-    // pub fn to_vec(&self) -> Vec<Vec<T>> {
-    //     self.data.clone()
-    // }
 
     /// 行列の行数(列数)を返す。
     pub fn size(&self) -> usize {
@@ -118,6 +115,7 @@ where
         ret
     }
 
+    /// Strassenのアルゴリズムによる行列乗算
     pub fn strassen_mul(self, b: Self) -> Self {
         let mut a = self;
         let n = a.size();
@@ -189,6 +187,18 @@ where
         }
 
         a
+    }
+}
+
+impl<Modulo: FF> From<SquareMatrix<Modulo>> for Vec<Vec<Modulo::Element>> {
+    fn from(value: SquareMatrix<Modulo>) -> Self {
+        value.data
+    }
+}
+
+impl<Modulo: FF> AsRef<[Vec<Modulo::Element>]> for SquareMatrix<Modulo> {
+    fn as_ref(&self) -> &[Vec<Modulo::Element>] {
+        &self.data
     }
 }
 
