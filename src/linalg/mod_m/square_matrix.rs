@@ -125,7 +125,7 @@ where
             return Self::straight_mul(a, b);
         }
 
-        let m = (n + 1) / 2;
+        let m = n.div_ceil(2);
 
         let mut a11 = Self::new(m, a.modulo.clone());
         let mut a12 = Self::new(m, a.modulo.clone());

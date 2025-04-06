@@ -19,7 +19,7 @@ impl Bitset {
     /// 長さ`n`の`Bitset`を構築する。
     pub fn new(n: usize) -> Self {
         Self {
-            data: vec![0; (n + B_SIZE - 1) / B_SIZE],
+            data: vec![0; n.div_ceil(B_SIZE)],
             size: n,
         }
     }

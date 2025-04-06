@@ -21,7 +21,7 @@ pub fn sum_floor_linear(n: u64, m: u64, mut a: u64, mut b: u64) -> u64 {
 
     let x_max = y_max * m - b;
 
-    ret += (n - (x_max + a - 1) / a) * y_max;
+    ret += (n - x_max.div_ceil(a)) * y_max;
     ret += sum_floor_linear(y_max, a, m, (a - x_max % a) % a);
 
     ret

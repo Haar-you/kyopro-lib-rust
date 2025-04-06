@@ -45,7 +45,7 @@ pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
     let mut m = s;
     let mut c = mod_pow(z, q, p);
     let mut t = mod_pow(a, q, p);
-    let mut r = mod_pow(a, (q + 1) / 2, p);
+    let mut r = mod_pow(a, q.div_ceil(2), p);
 
     loop {
         if t == 0 {

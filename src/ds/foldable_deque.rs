@@ -82,7 +82,7 @@ where
                 return None;
             }
 
-            self.front_stack = self.back_stack.split_off((n + 1) / 2);
+            self.front_stack = self.back_stack.split_off(n.div_ceil(2));
             std::mem::swap(&mut self.front_stack, &mut self.back_stack);
             self.front_stack.reverse();
 
@@ -103,7 +103,7 @@ where
                 return None;
             }
 
-            self.back_stack = self.front_stack.split_off((n + 1) / 2);
+            self.back_stack = self.front_stack.split_off(n.div_ceil(2));
             std::mem::swap(&mut self.front_stack, &mut self.back_stack);
             self.back_stack.reverse();
 

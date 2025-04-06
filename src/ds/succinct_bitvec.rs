@@ -18,7 +18,7 @@ impl SuccinctBitVec {
     /// `Vec<bool>`から[`SuccinctBitVec`]を構築する。
     pub fn new(b: Vec<bool>) -> Self {
         let size = b.len();
-        let chunk_num = (size + CHUNK_SIZE - 1) / CHUNK_SIZE;
+        let chunk_num = size.div_ceil(CHUNK_SIZE);
         let mut data: Vec<u64> = vec![0; chunk_num * BLOCK_NUM + 1];
 
         for (i, x) in b.into_iter().enumerate() {
