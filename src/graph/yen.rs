@@ -1,12 +1,13 @@
+//! 最短パスを`k`個列挙する。
+//!
+//! # Problems
+//! - <https://yukicoder.me/problems/no/1069>
 use std::ops::{Add, AddAssign};
 use std::{cmp::Reverse, collections::BinaryHeap};
 
-use crate::trait_alias;
+#[allow(unused_imports)]
+use crate::misc::is_none_or::IsNoneOr;
 use crate::{graph::*, num::one_zero::Zero};
-
-trait_alias!(
-    Elem: Zero + Add<Output = Self> + AddAssign + Ord + Eq + Copy
-);
 
 type Path = Vec<usize>;
 
@@ -18,7 +19,7 @@ fn shortest_path<D: Direction, E: EdgeTrait>(
     valid: &[Vec<bool>],
 ) -> Option<(E::Weight, Path)>
 where
-    E::Weight: Elem,
+    E::Weight: Zero + Add<Output = E::Weight> + Ord + Eq + Copy,
 {
     let n = g.len();
     let mut visited = vec![false; n];
@@ -40,7 +41,7 @@ where
                 continue;
             }
 
-            if dist[e.to()].is_none() || dist[e.to()].unwrap() > d + e.weight() {
+            if dist[e.to()].is_none_or(|x| x > d + e.weight()) {
                 dist[e.to()] = Some(d + e.weight());
                 restore[e.to()] = (i, k);
                 if !visited[e.to()] {
@@ -68,6 +69,7 @@ where
     }
 }
 
+/// 有向グラフ`g`上で`from`から`to`へのパスを、その距離が小さい順に`k`個を返す。
 pub fn yen_algorithm<D: Direction, E: EdgeTrait>(
     g: &Graph<D, E>,
     from: usize,
@@ -75,7 +77,7 @@ pub fn yen_algorithm<D: Direction, E: EdgeTrait>(
     k: usize,
 ) -> Vec<Option<(E::Weight, Path)>>
 where
-    E::Weight: Elem,
+    E::Weight: Zero + Add<Output = E::Weight> + AddAssign + Ord + Eq + Copy,
 {
     let n = g.len();
     let mut result: Vec<Option<(E::Weight, Path)>> = vec![None; k];
@@ -120,11 +122,6 @@ where
                         c += g.nodes[p].edges[v].weight();
                         temp.push(v);
                     }
-                    // for j in 0..k {
-                    //     let v = result[i - 1].as_ref().unwrap().1[j];
-                    //     c += g.edges[prev_path[j]][v].weight();
-                    //     temp.push(v);
-                    // }
 
                     temp.extend(p.into_iter());
                     stock.push(Reverse((c, temp)));
