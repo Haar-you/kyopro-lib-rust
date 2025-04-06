@@ -57,16 +57,15 @@ pub fn bsearch_ng_ok<
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::iter::repeat;
+    use std::iter::repeat_n;
 
     #[test]
     fn test() {
         let n = 100;
 
         for k in 0..=n {
-            let a = repeat(0)
-                .take(k)
-                .chain(repeat(1).take(n - k))
+            let a = repeat_n(0, k)
+                .chain(repeat_n(1, n - k))
                 .collect::<Vec<u64>>();
 
             let check = |i| a[i] > 0;

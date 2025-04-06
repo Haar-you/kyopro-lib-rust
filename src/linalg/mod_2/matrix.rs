@@ -48,11 +48,7 @@ impl MatrixMod2 {
     /// `i`行`j`列の成分を返す
     pub fn get(&self, i: usize, j: usize) -> Option<u32> {
         let a = self.data.get(i)?;
-        if j < a.len() {
-            Some(a.test(j) as u32)
-        } else {
-            None
-        }
+        (j < a.len()).then(|| a.test(j) as u32)
     }
 }
 

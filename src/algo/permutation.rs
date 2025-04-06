@@ -37,13 +37,7 @@ pub fn prev_permutation<T: Ord + Copy>(a: &mut [T]) -> bool {
 
 /// 辞書式順序で`a`以降の順列を列挙するイテレータを返す。
 pub fn permutations<T: Ord + Copy>(mut a: Vec<T>) -> impl Iterator<Item = Vec<T>> {
-    once(a.clone()).chain(from_fn(move || {
-        if next_permutation(&mut a) {
-            Some(a.clone())
-        } else {
-            None
-        }
-    }))
+    once(a.clone()).chain(from_fn(move || next_permutation(&mut a).then(|| a.clone())))
 }
 
 #[cfg(test)]

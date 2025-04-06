@@ -71,13 +71,12 @@ impl<E: EdgeTrait + Clone> DirectedEulerianTrail<E> {
         let mut vs = vec![];
         let mut es = vec![];
         self.dfs(start, &mut vs, &mut es);
-        if vs.len() == self.edge_count + 1 && es.len() == self.edge_count {
+
+        (vs.len() == self.edge_count + 1 && es.len() == self.edge_count).then(|| {
             vs.reverse();
             es.reverse();
 
-            Some((vs, es))
-        } else {
-            None
-        }
+            (vs, es)
+        })
     }
 }

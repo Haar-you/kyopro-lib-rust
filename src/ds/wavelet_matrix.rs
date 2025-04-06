@@ -226,6 +226,7 @@ pub type WM32 = WaveletMatrix<u32, 32>;
 
 #[cfg(test)]
 mod tests {
+    #![allow(clippy::needless_range_loop)]
     use super::*;
     use crate::algo::bsearch::lower_bound;
     use crate::testtools::*;

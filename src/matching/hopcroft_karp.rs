@@ -94,11 +94,7 @@ impl HopcroftKarp {
         (1..=self.left)
             .filter_map(|l| {
                 let r = self.pair_left[l];
-                if r != 0 {
-                    Some((l - 1, r - 1))
-                } else {
-                    None
-                }
+                (r != 0).then(|| (l - 1, r - 1))
             })
             .collect()
     }

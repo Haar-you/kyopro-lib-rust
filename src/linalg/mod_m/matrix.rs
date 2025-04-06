@@ -76,7 +76,8 @@ where
 
     /// `i`行`j`列の要素への可変参照を返す。
     pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Element> {
-        self.data.get_mut(i).and_then(|a| a.get_mut(j))
+        let a = self.data.get_mut(i)?;
+        a.get_mut(j)
     }
 }
 

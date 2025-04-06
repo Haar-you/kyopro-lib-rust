@@ -13,6 +13,13 @@ pretty_assertions = "1.4.1"
 
 [lints.clippy]
 clone_on_ref_ptr = "warn"
+unseparated_literal_suffix = "warn"
+unneeded_field_pattern = "warn"
+self_named_module_files = "warn"
+return_and_then = "warn"
+rest_pat_in_fully_bound_structs = "warn"
+mixed_read_write_in_expression = "warn"
+if_then_some_else_none = "warn"
 
 [lints.rust]
 missing_docs = "warn"

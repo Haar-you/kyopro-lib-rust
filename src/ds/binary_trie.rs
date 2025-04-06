@@ -110,16 +110,13 @@ impl BinaryTrie {
             }
         }
 
-        if self.data[node].count > 0 {
+        (self.data[node].count > 0).then(|| {
             path.push(node);
             for a in path {
                 self.data[a].count -= 1;
             }
-
-            Some(self.data[node].count)
-        } else {
-            None
-        }
+            self.data[node].count
+        })
     }
 
     /// $\min_{a \in S} a \oplus xor$を求める。

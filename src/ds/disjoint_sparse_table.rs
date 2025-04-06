@@ -2,7 +2,7 @@
 
 pub use crate::algebra::traits::Semigroup;
 use crate::misc::range::range_bounds_to_range;
-use std::{iter::repeat, ops::RangeBounds};
+use std::{iter::repeat_n, ops::RangeBounds};
 
 /// 半群の列の区間取得($O(1)$)ができる。
 pub struct DisjointSparseTable<S: Semigroup> {
@@ -27,7 +27,7 @@ where
         let seq = seq
             .into_iter()
             .map(Some)
-            .chain(repeat(None).take((1 << log_size) - size))
+            .chain(repeat_n(None, (1 << log_size) - size))
             .collect::<Vec<_>>();
 
         for (i, x) in seq.iter().enumerate() {
