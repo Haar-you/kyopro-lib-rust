@@ -320,8 +320,8 @@ mod tests {
             }
         }
 
-        let a = SquareMatrix::from_vec(a, modulo);
-        let b = SquareMatrix::from_vec(b, modulo);
+        let a = SquareMatrix::from_vec_vec_u32(a, modulo);
+        let b = SquareMatrix::from_vec_vec_u32(b, modulo);
 
         assert!(a.clone().straight_mul(b.clone()) == a.strassen_mul(b));
     }
@@ -348,8 +348,8 @@ mod tests {
                 }
             }
 
-            let a = SquareMatrix::from_vec(a, modulo);
-            let b = SquareMatrix::from_vec(b, modulo);
+            let a = SquareMatrix::from_vec_vec_u32(a, modulo);
+            let b = SquareMatrix::from_vec_vec_u32(b, modulo);
 
             straight.push(get_time!({
                 a.clone().straight_mul(b.clone());
