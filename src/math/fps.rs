@@ -10,8 +10,6 @@
 //! - <https://judge.yosupo.jp/problem/pow_of_formal_power_series>
 
 use crate::math::polynomial::{Polynomial, PolynomialOperator};
-#[allow(unused_imports)]
-use crate::misc::is_none_or::*;
 use crate::num::{const_modint::ConstModInt, ff::*};
 
 /// 形式的冪級数

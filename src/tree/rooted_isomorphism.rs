@@ -2,8 +2,6 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/rooted_tree_isomorphism_classification>
-#[allow(unused_imports)]
-use crate::misc::is_none_or::IsNoneOr;
 use crate::tree::*;
 use std::collections::{hash_map::DefaultHasher, HashMap};
 use std::hash::{Hash, Hasher};

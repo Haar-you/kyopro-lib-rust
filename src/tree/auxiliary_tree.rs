@@ -3,8 +3,6 @@
 //! # References
 //! - <https://noshi91.github.io/algorithm-encyclopedia/auxiliary-tree>
 
-#[allow(unused_imports)]
-use crate::misc::is_none_or::IsNoneOr;
 use crate::tree::*;
 
 /// Auxiliary Tree

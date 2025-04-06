@@ -2,7 +2,6 @@
 
 pub mod bitwise_sum_popcount;
 pub mod dice;
-pub mod is_none_or;
 pub mod nullable_usize;
 pub mod range;
 pub mod swap;

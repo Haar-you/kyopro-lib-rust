@@ -1,7 +1,5 @@
 //! 最小共通祖先
 
-#[allow(unused_imports)]
-use crate::misc::is_none_or::IsNoneOr;
 use crate::tree::*;
 
 /// ダブリングによる最小共通祖先

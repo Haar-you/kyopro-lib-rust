@@ -7,8 +7,6 @@
 //! # Problems
 //! - [yukicoder No.899 γatheree](https://yukicoder.me/problems/no/899)
 
-#[allow(unused_imports)]
-use crate::misc::is_none_or::IsNoneOr;
 use crate::tree::*;
 use std::collections::VecDeque;
 

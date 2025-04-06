@@ -1,8 +1,6 @@
 //! 幅優先探索
 
 use crate::graph::*;
-#[allow(unused_imports)]
-use crate::misc::is_none_or::*;
 use std::collections::VecDeque;
 use std::iter::zip;
 

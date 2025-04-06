@@ -3,8 +3,6 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/vertex_add_subtree_sum>
 
-#[allow(unused_imports)]
-use crate::misc::is_none_or::IsNoneOr;
 use crate::tree::*;
 
 /// Euler tour
