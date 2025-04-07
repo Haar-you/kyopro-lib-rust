@@ -33,13 +33,13 @@ mod tests {
 
     #[test]
     fn test() {
-        let a = 0b1001010010101usize;
+        let a = 0b1001010010101_usize;
         dbg!(a.bit_ones(64).collect_vec());
 
-        let a = 0b1001010010101u64;
+        let a = 0b1001010010101_u64;
         dbg!(a.bit_ones(64).collect_vec());
 
-        let a = 0b1001010010101u32;
+        let a = 0b1001010010101_u32;
         dbg!(a.bit_ones(32).collect_vec());
         dbg!(a.bit_zeros(32).collect_vec());
     }
@@ -47,7 +47,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_panic() {
-        let a = 0b1001010010101u32;
+        let a = 0b1001010010101_u32;
         dbg!(a.bit_ones(64).collect_vec());
     }
 }
