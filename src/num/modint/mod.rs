@@ -42,7 +42,12 @@ pub struct ModInt {
     modulo: u32,
 }
 
-impl FFElem for ModInt {}
+impl FFElem for ModInt {
+    #[inline]
+    fn value(self) -> u32 {
+        self.value
+    }
+}
 
 impl ModInt {
     /// `value`を値にもち、`modulo`を法とする`ModInt`を生成する。
@@ -53,12 +58,6 @@ impl ModInt {
             value % modulo
         };
         Self { value, modulo }
-    }
-
-    /// 内部の値を取り出す。
-    #[inline]
-    pub fn value(self) -> u32 {
-        self.value
     }
 
     #[inline]

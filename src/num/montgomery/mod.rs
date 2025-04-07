@@ -84,7 +84,11 @@ pub struct Montgomery {
     m: u64,
 }
 
-impl FFElem for Montgomery {}
+impl FFElem for Montgomery {
+    fn value(self) -> u32 {
+        reduce(self.value, self.modulo, self.m) as u32
+    }
+}
 
 impl Montgomery {
     fn __new(value: u64, modulo: u64, r2: u64, m: u64) -> Self {
@@ -94,11 +98,6 @@ impl Montgomery {
             r2,
             m,
         }
-    }
-
-    /// 内部の値を取り出す。
-    pub fn value(self) -> u32 {
-        reduce(self.value, self.modulo, self.m) as u32
     }
 }
 

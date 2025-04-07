@@ -34,18 +34,17 @@ impl<const M: u32> FF for ConstModIntBuilder<M> {
 #[derive(Copy, Clone, PartialEq, Default)]
 pub struct ConstModInt<const M: u32>(u32);
 
-impl<const M: u32> FFElem for ConstModInt<M> {}
+impl<const M: u32> FFElem for ConstModInt<M> {
+    #[inline]
+    fn value(self) -> u32 {
+        self.0
+    }
+}
 
 impl<const M: u32> ConstModInt<M> {
     /// `ConstModInt<M>`を生成する。
     pub fn new(n: u32) -> Self {
         Self(if n < M { n } else { n % M })
-    }
-
-    /// 内部の値を取り出す。
-    #[inline]
-    pub fn value(self) -> u32 {
-        self.0
     }
 
     #[inline]

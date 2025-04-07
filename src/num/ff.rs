@@ -23,4 +23,6 @@ pub trait FF: Clone {
 pub trait FFElem:
     Sized + Neg<Output = Self> + PartialEq + Arithmetic + Pow<Output = Self> + Inv<Output = Self>
 {
+    /// 内部の値を取り出す。
+    fn value(self) -> u32;
 }
