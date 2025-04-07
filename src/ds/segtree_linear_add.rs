@@ -123,7 +123,7 @@ impl<T: Elem> SegtreeLinearAdd<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]

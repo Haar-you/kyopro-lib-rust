@@ -314,7 +314,7 @@ impl From<Vec<i64>> for SegtreeBeats {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]

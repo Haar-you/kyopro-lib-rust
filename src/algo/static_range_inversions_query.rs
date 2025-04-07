@@ -89,7 +89,8 @@ impl StaticRangeInversionsQuery {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{algo::inversion_number::inversion_number, testtools::rand_range};
+    use crate::algo::inversion_number::inversion_number;
+    use my_testtools::rand_range;
     use rand::Rng;
 
     #[test]

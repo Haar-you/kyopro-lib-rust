@@ -149,7 +149,7 @@ mod tests {
 
     use super::*;
     use crate::algebra::sum::*;
-    use crate::testtools::rand_range;
+    use my_testtools::rand_range;
     use rand::Rng;
 
     #[test]

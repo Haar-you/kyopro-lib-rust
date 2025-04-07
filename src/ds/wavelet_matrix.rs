@@ -229,7 +229,7 @@ mod tests {
     #![allow(clippy::needless_range_loop)]
     use super::*;
     use crate::algo::bsearch::lower_bound;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]
