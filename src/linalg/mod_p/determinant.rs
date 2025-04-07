@@ -1,32 +1,35 @@
 //! 行列式 (mod 素数)
-use crate::math::mod_ops::inv_p::mod_inv_p;
+use crate::num::{ff::FFElem, one_zero::*};
 
 /// 素数mod p上での行列式を求める。
 ///
 /// **Time complexity** $O(n^3)$
-pub fn determinant(mut a: Vec<Vec<u64>>, p: u64) -> u64 {
+pub fn determinant<T>(mut a: Vec<Vec<T>>) -> T
+where
+    T: FFElem + Copy + Zero + One,
+{
     let n = a.len();
 
     assert!(a.iter().all(|r| r.len() == n));
 
     let mut s = 0;
     for i in 0..n {
-        if a[i][i] == 0 {
-            if let Some(j) = (i + 1..n).find(|&j| a[j][i] != 0) {
+        if a[i][i].value() == 0 {
+            if let Some(j) = (i + 1..n).find(|&j| a[j][i].value() != 0) {
                 a.swap(i, j);
                 s ^= 1;
             } else {
-                return 0;
+                return T::zero();
             }
         }
 
-        let d = mod_inv_p(a[i][i], p);
+        let d = a[i][i].inv();
         let ai = a.swap_remove(i);
 
         for aj in a.iter_mut().skip(i) {
-            let t = aj[i] * d % p;
+            let t = aj[i] * d;
             for (x, y) in aj.iter_mut().zip(ai.iter()) {
-                *x = (*x + p - *y * t % p) % p;
+                *x -= *y * t;
             }
         }
 
@@ -34,13 +37,13 @@ pub fn determinant(mut a: Vec<Vec<u64>>, p: u64) -> u64 {
         a.swap(i, n - 1);
     }
 
-    let mut ret = 1;
+    let mut ret = T::one();
     for (i, a) in a.into_iter().enumerate() {
-        ret = (ret * a[i]) % p;
+        ret *= a[i];
     }
 
-    if s == 1 && ret != 0 {
-        ret = p - ret;
+    if s == 1 {
+        ret = -ret;
     }
 
     ret
@@ -49,18 +52,31 @@ pub fn determinant(mut a: Vec<Vec<u64>>, p: u64) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::num::const_modint::*;
+
+    fn convert<U, T>(a: Vec<Vec<T>>) -> Vec<Vec<U>>
+    where
+        U: From<T>,
+    {
+        a.into_iter()
+            .map(|b| b.into_iter().map(From::from).collect())
+            .collect()
+    }
 
     #[test]
     fn test() {
-        let p = 998244353;
+        const P: u32 = 998244353;
 
         let a = vec![vec![3, 1, 4], vec![1, 5, 9], vec![2, 6, 5]];
-        assert_eq!(determinant(a, p), 998244263);
+        let a = convert::<ConstModInt<P>, _>(a);
+        assert_eq!(determinant(a).value(), 998244263);
 
         let a = vec![vec![1, 2, 3], vec![4, 5, 6], vec![7, 8, 9]];
-        assert_eq!(determinant(a, p), 0);
+        let a = convert::<ConstModInt<P>, _>(a);
+        assert_eq!(determinant(a).value(), 0);
 
         let a = vec![vec![0, 1], vec![1, 0]];
-        assert_eq!(determinant(a, p), 998244352);
+        let a = convert::<ConstModInt<P>, _>(a);
+        assert_eq!(determinant(a).value(), 998244352);
     }
 }
