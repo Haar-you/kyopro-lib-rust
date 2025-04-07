@@ -120,4 +120,13 @@ impl MinCostFlow {
             Err((f - flow, ret))
         }
     }
+
+    /// 頂点`i`に接続する辺を、`(終点, 流量, 費用)`の形で返す。
+    pub fn get_edges(&self, i: usize) -> Vec<(usize, u64, i64)> {
+        self.edges[i]
+            .iter()
+            .filter(|e| !e.is_rev)
+            .map(|e| (e.to, e.cap, e.cost))
+            .collect()
+    }
 }
