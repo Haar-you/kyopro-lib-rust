@@ -1,3 +1,5 @@
+//! 数の構造体やトレイトなど
+
 pub mod const_modint;
 pub mod ff;
 pub mod modint;

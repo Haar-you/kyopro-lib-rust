@@ -17,5 +17,6 @@ pub trait MaxFlow {
     fn max_flow(&mut self, s: usize, t: usize) -> Self::Cap;
     /// 最大フローを達成するのに通った辺を返す。
     fn get_edges(&self, i: usize) -> Vec<(usize, Self::Cap)>;
+    /// フローを初期化する。
     fn reset(&mut self);
 }

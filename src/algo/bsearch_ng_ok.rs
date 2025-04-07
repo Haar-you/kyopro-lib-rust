@@ -1,3 +1,4 @@
+//! 単調増加な判定関数上の二分探索
 use std::ops::{Add, Div, Sub};
 
 /// [`bsearch_ng_ok`]の返り値
