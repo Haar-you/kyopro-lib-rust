@@ -5,9 +5,11 @@ use std::iter::Peekable;
 /// 括弧列のパースの結果
 #[derive(Clone, Debug)]
 pub struct ParseResult<T> {
-    pub elems: Vec<Box<Elem<T>>>,
+    /// 複数の[`Elem`]からなる列
+    pub elems: Vec<Elem<T>>,
 }
 
+/// ‍対応のある括弧列、または括弧以外の値を一つもつ列挙型
 #[derive(Clone, Debug)]
 pub enum Elem<T> {
     /// 括弧以外
@@ -42,12 +44,12 @@ fn _parse<T: Copy + Eq + std::fmt::Debug>(
 
                     let c = s.peek()?;
                     assert_eq!(c, &close);
-                    elems.push(Box::new(Elem::Paren { open, inner, close }));
+                    elems.push(Elem::Paren { open, inner, close });
                     s.next();
                 } else if c == close {
                     break;
                 } else {
-                    elems.push(Box::new(Elem::Value(c)));
+                    elems.push(Elem::Value(c));
                     s.next();
                 }
             }
