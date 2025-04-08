@@ -41,6 +41,9 @@ macro_rules! impl_ops {
     (@when $(#[$meta:meta])* Div, $a:ty, $f:expr; $($bound:tt)*) => {
         impl_ops!(@inner, $(#[$meta])* std::ops::Div, $a, $f, div; $($bound)*);
     };
+    (@when $(#[$meta:meta])* Rem, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner, $(#[$meta])* std::ops::Rem, $a, $f, rem; $($bound)*);
+    };
 
     (@when $(#[$meta:meta])* AddAssign, $a:ty, $f:expr; $($bound:tt)*) => {
         impl_ops!(@inner_assign, $(#[$meta])* std::ops::AddAssign, $a, $f, add_assign; $($bound)*);
@@ -53,6 +56,9 @@ macro_rules! impl_ops {
     };
     (@when $(#[$meta:meta])* DivAssign, $a:ty, $f:expr; $($bound:tt)*) => {
         impl_ops!(@inner_assign, $(#[$meta])* std::ops::DivAssign, $a, $f, div_assign; $($bound)*);
+    };
+    (@when $(#[$meta:meta])* RemAssign, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner_assign, $(#[$meta])* std::ops::RemAssign, $a, $f, rem_assign; $($bound)*);
     };
 
     (@when $(#[$meta:meta])* Neg, $a:ty, $f:expr; $($bound:tt)*) => {
