@@ -1,3 +1,5 @@
+//! アルゴリズム
+
 pub mod bsearch;
 pub mod bsearch_ng_ok;
 pub mod compressor;

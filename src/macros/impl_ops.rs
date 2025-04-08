@@ -1,6 +1,6 @@
 //! `impl_ops!`
 
-/// [`std::ops::Add`], [`std::ops::Sub`], [`std::ops::Mul`], [`std::ops::Div`], [`std::ops::AddAssign`], [`std::ops::SubAssign`], [`std::ops::MulAssign`], [`std::ops::DivAssign`], [`std::ops::Neg`]を実装する。
+/// [`Add`](std::ops::Add), [`Sub`](std::ops::Sub), [`Mul`](std::ops::Mul), [`Div`](std::ops::Div), [`Rem`](std::ops::Rem), [`AddAssign`](std::ops::AddAssign), [`SubAssign`](std::ops::SubAssign), [`MulAssign`](std::ops::MulAssign), [`DivAssign`](std::ops::DivAssign), [`RemAssign`](std::ops::RemAssign), [`Neg`](std::ops::Neg)を実装する。
 #[macro_export]
 macro_rules! impl_ops {
     (@inner, $(#[$meta:meta])* $tr:ty, $a:ty, $f:expr, $fn:tt; $($bound:tt)*) => {
