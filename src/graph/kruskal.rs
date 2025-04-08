@@ -14,9 +14,8 @@ where
 {
     let n = g.len();
     let mut edges = g
-        .edges
-        .iter()
-        .flatten()
+        .nodes_iter()
+        .flat_map(|v| &v.edges)
         .map(|e| (e, e.weight()))
         .collect::<Vec<_>>();
     edges.sort_unstable_by_key(|&(_, c)| c);

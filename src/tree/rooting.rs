@@ -3,6 +3,7 @@
 use crate::tree::*;
 use std::mem::swap;
 
+/// 根付き木に変換
 pub fn rooting<E: TreeEdgeTrait>(tr: &mut Tree<E>, root: usize) -> Result<(), &str> {
     let n = tr.len();
     let mut stack = vec![(root, -1)];

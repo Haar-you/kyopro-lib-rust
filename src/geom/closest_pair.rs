@@ -2,6 +2,7 @@
 
 use crate::{algo::merge::*, geom::*};
 
+/// 最近点対を求める。
 pub fn closest_pair(mut ps: Vec<Vector>, eps: Eps) -> Option<(Vector, Vector)> {
     if ps.len() < 2 {
         None

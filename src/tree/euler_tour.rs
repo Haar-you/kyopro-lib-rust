@@ -3,8 +3,9 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/vertex_add_subtree_sum>
 
-use crate::{tree::*, utils::is_none_or::IsNoneOr};
+use crate::tree::*;
 
+/// Euler tour
 pub struct EulerTour {
     begin: Vec<usize>,
     end: Vec<usize>,

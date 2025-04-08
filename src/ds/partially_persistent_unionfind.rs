@@ -76,7 +76,7 @@ impl PartiallyPersistentUnionFind {
     }
 }
 
-impl<'a> At<'a> {
+impl At<'_> {
     /// `i`を含む素集合の代表の値を返す。
     pub fn root_of(&self, i: usize) -> usize {
         let &(t, r) = self.p[i].last().unwrap();

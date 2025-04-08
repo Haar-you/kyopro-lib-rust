@@ -1,21 +1,24 @@
+//! 完結ビットベクトル
 use std::ops::Range;
 
 const CHUNK_SIZE: usize = 256;
 const BLOCK_SIZE: usize = 64;
 const BLOCK_NUM: usize = CHUNK_SIZE / BLOCK_SIZE;
 
+/// 完結ビットベクトル
 #[derive(Clone)]
-pub struct SuccinctDict {
+pub struct SuccinctBitVec {
     size: usize,
     data: Vec<u64>,
-    blocks: Vec<Vec<u8>>,
+    blocks: Vec<[u8; BLOCK_NUM]>,
     chunks: Vec<u32>,
 }
 
-impl SuccinctDict {
+impl SuccinctBitVec {
+    /// `Vec<bool>`から[`SuccinctBitVec`]を構築する。
     pub fn new(b: Vec<bool>) -> Self {
         let size = b.len();
-        let chunk_num = (size + CHUNK_SIZE - 1) / CHUNK_SIZE;
+        let chunk_num = size.div_ceil(CHUNK_SIZE);
         let mut data: Vec<u64> = vec![0; chunk_num * BLOCK_NUM + 1];
 
         for (i, x) in b.into_iter().enumerate() {
@@ -27,15 +30,15 @@ impl SuccinctDict {
         }
 
         let mut chunks: Vec<u32> = vec![0; chunk_num + 1];
-        let mut blocks: Vec<Vec<u8>> = vec![vec![0; BLOCK_NUM]; chunk_num + 1];
+        let mut blocks: Vec<[u8; BLOCK_NUM]> = vec![[0; BLOCK_NUM]; chunk_num + 1];
 
-        for i in 0..chunk_num {
+        for (i, block_i) in blocks.iter_mut().take(chunk_num).enumerate() {
             for j in 0..BLOCK_NUM - 1 {
-                blocks[i][j + 1] = blocks[i][j] + data[i * BLOCK_NUM + j].count_ones() as u8;
+                block_i[j + 1] = block_i[j] + data[i * BLOCK_NUM + j].count_ones() as u8;
             }
 
             chunks[i + 1] = chunks[i]
-                + blocks[i][BLOCK_NUM - 1] as u32
+                + block_i[BLOCK_NUM - 1] as u32
                 + data[(i + 1) * BLOCK_NUM - 1].count_ones();
         }
 
@@ -47,16 +50,20 @@ impl SuccinctDict {
         }
     }
 
+    /// ビットベクトルの長さを返す。
     pub fn len(&self) -> usize {
         self.size
     }
 
+    /// ビットベクトルの長さが`0`なら`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.size == 0
     }
 
     /// [0, index) に含まれる`b`の個数
     pub fn rank(&self, index: usize, b: bool) -> usize {
+        assert!(index <= self.size);
+
         if b {
             let chunk_pos = index / CHUNK_SIZE;
             let block_pos = (index % CHUNK_SIZE) / BLOCK_SIZE;
@@ -78,6 +85,7 @@ impl SuccinctDict {
         self.rank(r, b) - self.rank(l, b)
     }
 
+    /// `index`番目のビットを返す。
     pub fn access(&self, index: usize) -> u64 {
         (self.data[index / BLOCK_SIZE] >> (index % BLOCK_SIZE)) & 1
     }
@@ -117,7 +125,7 @@ mod tests {
         let n = 100;
         let b = (0..n).map(|_| rng.gen::<bool>()).collect::<Vec<_>>();
 
-        let s = SuccinctDict::new(b.clone());
+        let s = SuccinctBitVec::new(b.clone());
 
         for i in 0..=n {
             let t = (0..i).filter(|&i| b[i]).count();
@@ -134,7 +142,7 @@ mod tests {
         let n = 100;
         let b = (0..n).map(|_| rng.gen::<bool>()).collect::<Vec<_>>();
 
-        let s = SuccinctDict::new(b.clone());
+        let s = SuccinctBitVec::new(b.clone());
 
         for l in 0..=n {
             for r in l..=n {
@@ -153,7 +161,7 @@ mod tests {
         let n = 30;
         let b = (0..n).map(|_| rng.gen::<bool>()).collect::<Vec<_>>();
 
-        let s = SuccinctDict::new(b.clone());
+        let s = SuccinctBitVec::new(b.clone());
 
         for i in 1..=n {
             let t = (0..n).filter(|&i| b[i]).nth(i);

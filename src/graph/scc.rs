@@ -4,8 +4,8 @@ use crate::graph::*;
 
 /// 強連結成分分解
 pub struct SCC {
-    size: usize,
     groups: Vec<Vec<usize>>,
+    index: Vec<usize>,
 }
 
 impl SCC {
@@ -25,11 +25,11 @@ impl SCC {
         ord.reverse();
 
         let mut rg = vec![vec![]; n];
-        for e in g.edges.iter().flatten() {
+        for e in g.nodes_iter().flat_map(|v| &v.edges) {
             rg[e.to()].push(e.from());
         }
 
-        let mut ret = vec![];
+        let mut groups = vec![];
         let mut check = vec![false; n];
 
         let mut stack: Vec<usize> = Vec::with_capacity(n);
@@ -47,14 +47,18 @@ impl SCC {
                     }
                     temp.push(cur);
                 }
-                ret.push(temp);
+                groups.push(temp);
             }
         }
 
-        Self {
-            size: n,
-            groups: ret,
+        let mut index = vec![0; n];
+        for (i, s) in groups.iter().enumerate() {
+            for &x in s {
+                index[x] = i;
+            }
         }
+
+        Self { groups, index }
     }
 
     fn dfs<E: EdgeTrait>(
@@ -64,7 +68,7 @@ impl SCC {
         check: &mut [bool],
     ) {
         check[cur] = true;
-        for e in &g.edges[cur] {
+        for e in g.nodes[cur].edges.iter() {
             if !check[e.to()] {
                 Self::dfs(g, e.to(), ord, check);
             }
@@ -73,18 +77,14 @@ impl SCC {
         ord.push(cur);
     }
 
+    /// 強連結成分を返す。
     pub fn groups(&self) -> &Vec<Vec<usize>> {
         &self.groups
     }
 
-    pub fn to_vec(&self) -> Vec<usize> {
-        let mut ret = vec![0; self.size];
-        for (i, s) in self.groups.iter().enumerate() {
-            for &x in s {
-                ret[x] = i;
-            }
-        }
-        ret
+    /// 頂点がどのグループに属しているかを示した`Vec`への参照を返す。
+    pub fn index(&self) -> &Vec<usize> {
+        &self.index
     }
 }
 
@@ -102,7 +102,8 @@ mod tests {
                 .into_iter()
                 .map(|(u, v)| Edge::new(u, v, (), ())),
         );
-        let scc = SCC::new(&g).to_vec();
+        let scc = SCC::new(&g);
+        let scc = scc.index();
 
         assert_eq!(scc[0], scc[1]);
         assert_ne!(scc[0], scc[3]);

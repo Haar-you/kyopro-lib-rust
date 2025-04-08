@@ -1,60 +1,70 @@
 //! `impl_ops!`
 
+/// [`Add`](std::ops::Add), [`Sub`](std::ops::Sub), [`Mul`](std::ops::Mul), [`Div`](std::ops::Div), [`Rem`](std::ops::Rem), [`AddAssign`](std::ops::AddAssign), [`SubAssign`](std::ops::SubAssign), [`MulAssign`](std::ops::MulAssign), [`DivAssign`](std::ops::DivAssign), [`RemAssign`](std::ops::RemAssign), [`Neg`](std::ops::Neg)を実装する。
 #[macro_export]
 macro_rules! impl_ops {
-    (@inner, $tr:ty, $a:ty, $f:expr, $fn:tt; $($bound:tt)*) => {
+    (@inner, $(#[$meta:meta])* $tr:ty, $a:ty, $f:expr, $fn:tt; $($bound:tt)*) => {
         impl $($bound)* $tr for $a {
             type Output = Self;
+            $(#[$meta])*
             fn $fn(self, rhs: Self) -> Self::Output {
                 $f(self, rhs)
             }
         }
     };
-    (@inner_assign, $tr:ty, $a:ty, $f:expr, $fn:tt; $($bound:tt)*) => {
+    (@inner_assign, $(#[$meta:meta])* $tr:ty, $a:ty, $f:expr, $fn:tt; $($bound:tt)*) => {
         impl $($bound)* $tr for $a {
+            $(#[$meta])*
             fn $fn(&mut self, rhs: Self) {
                 $f(self, rhs)
             }
         }
     };
 
-    (<const $m:tt: $t:ty>; $trait:ident, $a:ty, $f:expr) => {
-        impl_ops!(@when $trait, $a, $f; <const $m: $t>);
+    ($(#[$meta:meta])* <const $m:tt: $t:ty>; $trait:ident, $a:ty, $f:expr) => {
+        impl_ops!(@when $(#[$meta])* $trait, $a, $f; <const $m: $t>);
     };
-    ($trait:ident, $a:ty, $f:expr) => {
-        impl_ops!(@when $trait, $a, $f;);
-    };
-
-
-    (@when Add, $a:ty, $f:expr; $($bound:tt)*) => {
-        impl_ops!(@inner, std::ops::Add, $a, $f, add; $($bound)*);
-    };
-    (@when Sub, $a:ty, $f:expr; $($bound:tt)*) => {
-        impl_ops!(@inner, std::ops::Sub, $a, $f, sub; $($bound)*);
-    };
-    (@when Mul, $a:ty, $f:expr; $($bound:tt)*) => {
-        impl_ops!(@inner, std::ops::Mul, $a, $f, mul; $($bound)*);
-    };
-    (@when Div, $a:ty, $f:expr; $($bound:tt)*) => {
-        impl_ops!(@inner, std::ops::Div, $a, $f, div; $($bound)*);
+    ($(#[$meta:meta])* $trait:ident, $a:ty, $f:expr) => {
+        impl_ops!(@when $(#[$meta])* $trait, $a, $f;);
     };
 
-    (@when AddAssign, $a:ty, $f:expr; $($bound:tt)*) => {
-        impl_ops!(@inner_assign, std::ops::AddAssign, $a, $f, add_assign; $($bound)*);
+
+    (@when $(#[$meta:meta])* Add, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner, $(#[$meta])* std::ops::Add, $a, $f, add; $($bound)*);
     };
-    (@when SubAssign, $a:ty, $f:expr; $($bound:tt)*) => {
-        impl_ops!(@inner_assign, std::ops::SubAssign, $a, $f, sub_assign; $($bound)*);
+    (@when $(#[$meta:meta])* Sub, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner, $(#[$meta])* std::ops::Sub, $a, $f, sub; $($bound)*);
     };
-    (@when MulAssign, $a:ty, $f:expr; $($bound:tt)*) => {
-        impl_ops!(@inner_assign, std::ops::MulAssign, $a, $f, mul_assign; $($bound)*);
+    (@when $(#[$meta:meta])* Mul, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner, $(#[$meta])* std::ops::Mul, $a, $f, mul; $($bound)*);
     };
-    (@when DivAssign, $a:ty, $f:expr; $($bound:tt)*) => {
-        impl_ops!(@inner_assign, std::ops::DivAssign, $a, $f, div_assign; $($bound)*);
+    (@when $(#[$meta:meta])* Div, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner, $(#[$meta])* std::ops::Div, $a, $f, div; $($bound)*);
+    };
+    (@when $(#[$meta:meta])* Rem, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner, $(#[$meta])* std::ops::Rem, $a, $f, rem; $($bound)*);
     };
 
-    (@when Neg, $a:ty, $f:expr; $($bound:tt)*) => {
+    (@when $(#[$meta:meta])* AddAssign, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner_assign, $(#[$meta])* std::ops::AddAssign, $a, $f, add_assign; $($bound)*);
+    };
+    (@when $(#[$meta:meta])* SubAssign, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner_assign, $(#[$meta])* std::ops::SubAssign, $a, $f, sub_assign; $($bound)*);
+    };
+    (@when $(#[$meta:meta])* MulAssign, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner_assign, $(#[$meta])* std::ops::MulAssign, $a, $f, mul_assign; $($bound)*);
+    };
+    (@when $(#[$meta:meta])* DivAssign, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner_assign, $(#[$meta])* std::ops::DivAssign, $a, $f, div_assign; $($bound)*);
+    };
+    (@when $(#[$meta:meta])* RemAssign, $a:ty, $f:expr; $($bound:tt)*) => {
+        impl_ops!(@inner_assign, $(#[$meta])* std::ops::RemAssign, $a, $f, rem_assign; $($bound)*);
+    };
+
+    (@when $(#[$meta:meta])* Neg, $a:ty, $f:expr; $($bound:tt)*) => {
         impl $($bound)* std::ops::Neg for $a {
             type Output = Self;
+            $(#[$meta])*
             fn neg(self) -> Self::Output {
                 $f(self)
             }

@@ -45,7 +45,8 @@ impl TwoSat {
 
     /// **Time complexity** $O(size + E)$
     pub fn solve(&self) -> Option<Vec<bool>> {
-        let s = SCC::new(&self.g).to_vec();
+        let s = SCC::new(&self.g);
+        let s = s.index();
 
         let (a, b) = s.split_at(self.size);
         if a.iter().zip(b).any(|(a, b)| a == b) {

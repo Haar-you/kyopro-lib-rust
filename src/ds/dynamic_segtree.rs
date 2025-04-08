@@ -1,6 +1,6 @@
 //! 動的セグメント木
 use crate::algebra::traits::Monoid;
-use crate::utils::nullable_usize::NullableUsize;
+use crate::misc::nullable_usize::NullableUsize;
 use std::ops::Range;
 
 #[derive(Debug)]
@@ -149,7 +149,7 @@ mod tests {
 
     use super::*;
     use crate::algebra::sum::*;
-    use crate::testtools::rand_range;
+    use my_testtools::rand_range;
     use rand::Rng;
 
     #[test]
@@ -157,7 +157,7 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let m = Sum::<u64>::new();
-        let mut seg = DynamicSegtree::new(m.clone());
+        let mut seg = DynamicSegtree::new(m);
         let mut map = BTreeMap::new();
 
         let t = 100;

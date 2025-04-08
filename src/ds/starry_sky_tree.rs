@@ -1,8 +1,8 @@
 //! 区間加算・区間Max(Min)
 
+use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::utils::range::range_bounds_to_range;
 use std::{
     cmp::{max, min},
     ops::{Add, RangeBounds, Sub},
@@ -61,7 +61,7 @@ impl<T: Elem> StarrySkyTree<T> {
         }
 
         let a = self.rec(s, t, i << 1, l, (l + r) / 2, value + self.data[i]);
-        let b = self.rec(s, t, i << 1 | 1, (l + r) / 2, r, value + self.data[i]);
+        let b = self.rec(s, t, (i << 1) | 1, (l + r) / 2, r, value + self.data[i]);
 
         match (a, b) {
             (None, _) => b,
@@ -83,10 +83,10 @@ impl<T: Elem> StarrySkyTree<T> {
 
         while i >= 1 {
             if i < self.size / 2 {
-                let d = self.mode.op(self.data[i << 1], self.data[i << 1 | 1]);
+                let d = self.mode.op(self.data[i << 1], self.data[(i << 1) | 1]);
 
                 self.data[i << 1] = self.data[i << 1] - d;
-                self.data[i << 1 | 1] = self.data[i << 1 | 1] - d;
+                self.data[(i << 1) | 1] = self.data[(i << 1) | 1] - d;
                 self.data[i] = self.data[i] + d;
             }
 
@@ -123,7 +123,7 @@ impl<T: Elem> StarrySkyTree<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]

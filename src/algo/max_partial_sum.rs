@@ -41,7 +41,7 @@ mod tests {
 
     #[test]
     fn test_zero_array() {
-        assert_eq!(max_partial_sum::<i64>(&vec![]), None);
+        assert_eq!(max_partial_sum::<i64>(&[]), None);
     }
 
     #[test]
@@ -54,7 +54,7 @@ mod tests {
             .map(|_| rng.gen_range(-1000..=1000))
             .collect::<Vec<_>>();
 
-        let mut ans = std::i64::MIN;
+        let mut ans = i64::MIN;
 
         for i in 0..n {
             for j in i + 1..=n {
@@ -76,7 +76,7 @@ mod tests {
 
         let a = (0..n).map(|_| rng.gen_range(-1000..0)).collect::<Vec<_>>();
 
-        let mut ans = std::i64::MIN;
+        let mut ans = i64::MIN;
 
         for i in 0..n {
             for j in i + 1..=n {

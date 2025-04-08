@@ -2,6 +2,14 @@
 
 use crate::math::ext_gcd::ext_gcd;
 
+/// 二元の中国剰余定理
+///
+/// $$\begin{aligned}
+/// x \equiv b_1 \pmod {m_1} \\\\
+/// x \equiv b_2 \pmod {m_2}
+/// \end{aligned}$$
+/// を満たす$x \pmod {\mathrm{lcm}(m_1, m_2)}$が存在すれば、$x$と$\mathrm{lcm}(m_1, m_2)$を返す。
+/// そうでなければ、`None`を返す。
 pub fn crt((b1, m1): (i64, u64), (b2, m2): (i64, u64)) -> Option<(i64, u64)> {
     let (d, p, _) = ext_gcd(m1, m2);
 
@@ -19,6 +27,7 @@ pub fn crt((b1, m1): (i64, u64), (b2, m2): (i64, u64)) -> Option<(i64, u64)> {
     Some((r, m as u64))
 }
 
+/// 多元の中国剰余定理
 pub fn crt_vec(params: &[(i64, u64)]) -> Option<(i64, u64)> {
     let mut _r = 0;
     let mut _m = 1;

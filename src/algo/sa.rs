@@ -161,10 +161,11 @@ impl SuffixArray {
     }
 
     /// 接尾辞配列への参照を返す。
-    pub fn to_slice(&self) -> &[usize] {
+    pub fn as_slice(&self) -> &[usize] {
         &self.data
     }
 
+    /// 接尾辞配列`s`について、`s[i]`と`s[i-1]`最長共通接頭辞の長さを格納した配列を返す。
     pub fn lcp_array(&self) -> Vec<usize> {
         let n = self.data.len();
         let mut rank = vec![0; n];
@@ -209,7 +210,10 @@ mod tests {
 
     #[test]
     fn test() {
-        let sa = SuffixArray::new("abracadabra");
-        assert_eq!(sa.to_slice(), &[11, 10, 7, 0, 3, 5, 8, 1, 4, 6, 9, 2]);
+        let s = "abracadabra";
+        let sa = SuffixArray::new(s);
+        assert_eq!(sa.as_slice(), &[11, 10, 7, 0, 3, 5, 8, 1, 4, 6, 9, 2]);
+
+        assert_eq!(sa.lcp_array(), vec![0, 0, 1, 4, 1, 1, 0, 3, 0, 0, 0, 2]);
     }
 }

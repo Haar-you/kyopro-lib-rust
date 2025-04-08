@@ -42,7 +42,8 @@ fn rec<E: EdgeTrait>(
     let next = (0..g.len())
         .filter(|i| removed & (1 << i) == 0)
         .max_by_key(|&i| {
-            g.edges[i]
+            g.nodes[i]
+                .edges
                 .iter()
                 .filter(|e| removed & (1 << e.to()) == 0)
                 .count()
@@ -57,7 +58,7 @@ fn rec<E: EdgeTrait>(
     let mut deg = 0;
     let mut neighbour: u64 = 0;
 
-    for e in &g.edges[next] {
+    for e in g.nodes[next].edges.iter() {
         if removed & (1 << e.to()) == 0 {
             deg += 1;
             neighbour |= 1 << e.to();

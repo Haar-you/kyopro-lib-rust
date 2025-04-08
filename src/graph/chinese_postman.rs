@@ -20,7 +20,7 @@ where
         dist[i][i] = Some(zero);
     }
 
-    for e in g.edges.iter().flatten() {
+    for e in g.nodes_iter().flat_map(|v| &v.edges) {
         let (from, to, cost) = (e.from(), e.to(), e.weight());
         dist[from][to] = dist[from][to].map(|x| x.min(cost)).or(Some(cost));
     }
@@ -36,10 +36,9 @@ where
     }
 
     let odd: Vec<_> = g
-        .edges
-        .iter()
+        .nodes_iter()
         .enumerate()
-        .filter_map(|(i, es)| (es.len() % 2 == 1).then_some(i))
+        .filter_map(|(i, es)| (es.edges.len() % 2 == 1).then_some(i))
         .collect();
     let m = odd.len();
 
@@ -61,10 +60,10 @@ where
         }
     }
 
-    g.edges
-        .iter()
+    g.nodes_iter()
         .flat_map(|es| {
-            es.iter()
+            es.edges
+                .iter()
                 .filter_map(|e| (e.from() <= e.to()).then_some(e.weight()))
         })
         .fold(dp[(1 << m) - 1].unwrap(), |x, y| x + y)

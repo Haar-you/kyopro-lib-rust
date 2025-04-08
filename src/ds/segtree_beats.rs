@@ -3,8 +3,7 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum>
 
-use crate::utils::bits::highest_one;
-use crate::utils::range::range_bounds_to_range;
+use crate::misc::range::range_bounds_to_range;
 use std::cmp::{max, min, Ordering};
 use std::ops::RangeBounds;
 
@@ -15,7 +14,13 @@ fn lc(i: usize) -> usize {
 
 #[inline]
 fn rc(i: usize) -> usize {
-    i << 1 | 1
+    (i << 1) | 1
+}
+
+#[inline]
+fn highest_one(i: u64) -> u32 {
+    assert!(i > 0);
+    63 - i.leading_zeros()
 }
 
 /// Segment Tree Beats
@@ -283,12 +288,14 @@ impl SegtreeBeats {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
         self.get_min_(1, 0, self.hsize, start, end)
     }
+}
 
-    pub fn new_with_vec(a: Vec<i64>) -> Self {
-        let mut ret = Self::new(a.len());
+impl From<Vec<i64>> for SegtreeBeats {
+    fn from(value: Vec<i64>) -> Self {
+        let mut ret = Self::new(value.len());
         let hsize = ret.hsize;
 
-        for (i, x) in a.into_iter().enumerate() {
+        for (i, x) in value.into_iter().enumerate() {
             ret.fst_max[hsize + i] = x;
             ret.max_count[hsize + i] = 1;
             ret.fst_min[hsize + i] = x;
@@ -307,7 +314,7 @@ impl SegtreeBeats {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]
@@ -318,7 +325,7 @@ mod test {
         let limit = 1000000000;
 
         let mut a = vec![0; n];
-        let mut seg = SegtreeBeats::new_with_vec(a.clone());
+        let mut seg = SegtreeBeats::from(a.clone());
 
         for _ in 0..10000 {
             match rng.gen_range(0..=5) {
@@ -348,14 +355,14 @@ mod test {
                     let lr = rand_range(&mut rng, 0..n);
                     assert_eq!(
                         seg.max(lr.clone()),
-                        a[lr].iter().max().copied().unwrap_or(std::i64::MIN)
+                        a[lr].iter().max().copied().unwrap_or(i64::MIN)
                     );
                 }
                 5 => {
                     let lr = rand_range(&mut rng, 0..n);
                     assert_eq!(
                         seg.min(lr.clone()),
-                        a[lr].iter().min().copied().unwrap_or(std::i64::MAX)
+                        a[lr].iter().min().copied().unwrap_or(i64::MAX)
                     );
                 }
 

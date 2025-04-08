@@ -36,7 +36,7 @@ where
         for i in 0..n {
             dist[i][i] = Some(zero);
         }
-        for e in g.edges.iter().flatten() {
+        for e in g.nodes_iter().flat_map(|v: &GraphNode<E>| &v.edges) {
             dist[e.from()][e.to()] = Some(e.weight());
         }
 

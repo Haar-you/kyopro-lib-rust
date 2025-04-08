@@ -35,7 +35,8 @@ where
         ret
     }
 
-    pub fn from_vec(other: Vec<Vec<u32>>, modulo: Modulo) -> Self {
+    /// [`Vec<Vec<u32>>`]から[`SquareMatrix`]を作る。
+    pub fn from_vec_vec_u32(other: Vec<Vec<u32>>, modulo: Modulo) -> Self {
         let size = other.len();
         assert!(size > 0);
         assert!(other.iter().all(|r| r.len() == size));
@@ -55,10 +56,6 @@ where
             modulo,
         }
     }
-
-    // pub fn to_vec(&self) -> Vec<Vec<T>> {
-    //     self.data.clone()
-    // }
 
     /// 行列の行数(列数)を返す。
     pub fn size(&self) -> usize {
@@ -95,7 +92,8 @@ where
 
     /// `i`行`j`列の要素への可変参照を返す。
     pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Element> {
-        self.data.get_mut(i).and_then(|a| a.get_mut(j))
+        let a = self.data.get_mut(i)?;
+        a.get_mut(j)
     }
 
     /// 愚直に行列積を求める。
@@ -118,6 +116,7 @@ where
         ret
     }
 
+    /// Strassenのアルゴリズムによる行列乗算
     pub fn strassen_mul(self, b: Self) -> Self {
         let mut a = self;
         let n = a.size();
@@ -126,7 +125,7 @@ where
             return Self::straight_mul(a, b);
         }
 
-        let m = (n + 1) / 2;
+        let m = n.div_ceil(2);
 
         let mut a11 = Self::new(m, a.modulo.clone());
         let mut a12 = Self::new(m, a.modulo.clone());
@@ -189,6 +188,18 @@ where
         }
 
         a
+    }
+}
+
+impl<Modulo: FF> From<SquareMatrix<Modulo>> for Vec<Vec<Modulo::Element>> {
+    fn from(value: SquareMatrix<Modulo>) -> Self {
+        value.data
+    }
+}
+
+impl<Modulo: FF> AsRef<[Vec<Modulo::Element>]> for SquareMatrix<Modulo> {
+    fn as_ref(&self) -> &[Vec<Modulo::Element>] {
+        &self.data
     }
 }
 
@@ -310,8 +321,8 @@ mod tests {
             }
         }
 
-        let a = SquareMatrix::from_vec(a, modulo);
-        let b = SquareMatrix::from_vec(b, modulo);
+        let a = SquareMatrix::from_vec_vec_u32(a, modulo);
+        let b = SquareMatrix::from_vec_vec_u32(b, modulo);
 
         assert!(a.clone().straight_mul(b.clone()) == a.strassen_mul(b));
     }
@@ -338,8 +349,8 @@ mod tests {
                 }
             }
 
-            let a = SquareMatrix::from_vec(a, modulo);
-            let b = SquareMatrix::from_vec(b, modulo);
+            let a = SquareMatrix::from_vec_vec_u32(a, modulo);
+            let b = SquareMatrix::from_vec_vec_u32(b, modulo);
 
             straight.push(get_time!({
                 a.clone().straight_mul(b.clone());

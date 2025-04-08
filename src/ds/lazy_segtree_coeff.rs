@@ -1,8 +1,8 @@
 //! 係数乗算付き区間加算区間総和遅延セグ木
 
+use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::utils::range::range_bounds_to_range;
 use std::cell::Cell;
 use std::ops::{Add, Mul, RangeBounds};
 
@@ -31,7 +31,7 @@ impl<T: Elem> LazySegtreeCoeff<T> {
             coeff[i + size / 2] = coefficients[i];
         }
         for i in (1..size / 2).rev() {
-            coeff[i] = coeff[i << 1] + coeff[i << 1 | 1];
+            coeff[i] = coeff[i << 1] + coeff[(i << 1) | 1];
         }
 
         Self {
@@ -43,7 +43,8 @@ impl<T: Elem> LazySegtreeCoeff<T> {
         }
     }
 
-    pub fn init_with_vec(&mut self, value: Vec<T>) {
+    /// `self.fold(i..i+1) = value[i]`となるように割り当てる。
+    pub fn set_vec(&mut self, value: Vec<T>) {
         self.data = vec![Cell::new(T::zero()); self.size];
         self.lazy = vec![Cell::new(T::zero()); self.size];
 
@@ -51,7 +52,7 @@ impl<T: Elem> LazySegtreeCoeff<T> {
             self.data[self.size / 2 + i].set(x);
         }
         for i in (1..self.size / 2).rev() {
-            self.data[i].set(self.data[i << 1].get() + self.data[i << 1 | 1].get());
+            self.data[i].set(self.data[i << 1].get() + self.data[(i << 1) | 1].get());
         }
     }
 
@@ -59,7 +60,7 @@ impl<T: Elem> LazySegtreeCoeff<T> {
         if self.lazy[i].get() != T::zero() {
             if i < self.size / 2 {
                 self.lazy[i << 1].set(self.lazy[i].get() + self.lazy[i << 1].get());
-                self.lazy[i << 1 | 1].set(self.lazy[i].get() + self.lazy[i << 1 | 1].get());
+                self.lazy[(i << 1) | 1].set(self.lazy[i].get() + self.lazy[(i << 1) | 1].get());
             }
             self.data[i].set(self.data[i].get() + self.lazy[i].get() * self.coeff[i]);
             self.lazy[i].set(T::zero());
@@ -78,7 +79,7 @@ impl<T: Elem> LazySegtreeCoeff<T> {
         }
 
         let t = self.update_internal(i << 1, l, (l + r) / 2, s, t, value)
-            + self.update_internal(i << 1 | 1, (l + r) / 2, r, s, t, value);
+            + self.update_internal((i << 1) | 1, (l + r) / 2, r, s, t, value);
 
         self.data[i].replace(t)
     }
@@ -92,7 +93,7 @@ impl<T: Elem> LazySegtreeCoeff<T> {
             return self.data[i].get();
         }
         self.get_internal(i << 1, l, (l + r) / 2, x, y)
-            + self.get_internal(i << 1 | 1, (l + r) / 2, r, x, y)
+            + self.get_internal((i << 1) | 1, (l + r) / 2, r, x, y)
     }
 
     /// 範囲`range`に値`value`を加算する。

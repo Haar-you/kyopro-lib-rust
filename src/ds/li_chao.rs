@@ -6,8 +6,8 @@
 //! - [Segment Add Get Min](https://judge.yosupo.jp/submission/217834)
 
 use crate::algo::bsearch::lower_bound;
+use crate::math::linear::*;
 use crate::trait_alias;
-use crate::utils::linear::*;
 use std::{
     cmp::{max, min},
     mem::swap,
@@ -65,29 +65,33 @@ impl<T: Elem> LiChaoTree<T> {
             range[i] = (left, right);
             let mid = (left + right) / 2;
             Self::init_range(range, size, i << 1, left, mid);
-            Self::init_range(range, size, i << 1 | 1, mid, right);
+            Self::init_range(range, size, (i << 1) | 1, mid, right);
         }
     }
 
     /// `query`で使用する点列`xs`と最大値クエリ/最小値クエリを指定して[`LiChaoTree`]を構築する。
-    pub fn new(mut xs: Vec<T>, mode: Mode) -> Self {
-        xs.sort();
-        xs.dedup();
+    pub fn new(mut xs: Vec<T>, mode: Mode) -> Result<Self, &'static str> {
+        if xs.is_empty() {
+            Err("`xs`が空なので、`LiChaoTree`は構築されない。")
+        } else {
+            xs.sort();
+            xs.dedup();
 
-        let size = xs.len().next_power_of_two();
+            let size = xs.len().next_power_of_two();
 
-        xs.resize(size, *xs.last().unwrap());
+            xs.resize(size, *xs.last().unwrap());
 
-        let data = vec![None; size * 2];
-        let mut range = vec![(0, 0); size * 2];
-        Self::init_range(&mut range, size, 1, 0, size);
+            let data = vec![None; size * 2];
+            let mut range = vec![(0, 0); size * 2];
+            Self::init_range(&mut range, size, 1, 0, size);
 
-        Self {
-            xs,
-            size,
-            data,
-            range,
-            mode,
+            Ok(Self {
+                xs,
+                size,
+                data,
+                range,
+                mode,
+            })
         }
     }
 
@@ -118,7 +122,7 @@ impl<T: Elem> LiChaoTree<T> {
             if left != mid {
                 self.update(i << 1, new_line, l, m);
             } else {
-                self.update(i << 1 | 1, new_line, m, r);
+                self.update((i << 1) | 1, new_line, m, r);
             }
         } else {
             self.data[i] = Some(new_line);

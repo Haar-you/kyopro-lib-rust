@@ -5,6 +5,7 @@
 
 use crate::algo::{bsearch::lower_bound, merge::merge};
 
+/// Range search tree
 pub struct RangeSearchTree<Index> {
     size: usize,
     cxs: Vec<Index>,
@@ -15,6 +16,7 @@ impl<Index> RangeSearchTree<Index>
 where
     Index: Copy + Ord,
 {
+    /// $[sx, tx), [sy, ty)$の矩形内部にある点を列挙する。
     pub fn search(
         &self,
         (sx, sy): (Index, Index),
@@ -58,6 +60,7 @@ where
     }
 }
 
+/// [`RangeSearchTree`]を構築するための構造体。
 #[derive(Clone, Default)]
 pub struct RangeSearchTreeBuilder<Index> {
     size: usize,
@@ -69,6 +72,7 @@ impl<Index> RangeSearchTreeBuilder<Index>
 where
     Index: Copy + Ord,
 {
+    /// 空の[`RangeSearchTreeBuilder`]を用意する。
     pub fn new() -> Self {
         Self {
             size: 0,
@@ -77,12 +81,14 @@ where
         }
     }
 
+    /// 点`(x, y)`を登録する。
     pub fn add(&mut self, x: Index, y: Index) {
         self.size += 1;
         self.xs.push(x);
         self.ys.push(y);
     }
 
+    /// [`RangeSearchTree`]を構築する。
     pub fn build(self) -> RangeSearchTree<Index> {
         let mut cxs = self.xs.clone();
         cxs.sort_unstable();
@@ -103,7 +109,7 @@ where
         }
 
         for i in (1..size / 2).rev() {
-            data[i] = merge(data[i << 1].clone(), data[i << 1 | 1].clone());
+            data[i] = merge(data[i << 1].clone(), data[(i << 1) | 1].clone());
         }
 
         RangeSearchTree { size, cxs, data }

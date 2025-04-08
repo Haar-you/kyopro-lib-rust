@@ -3,7 +3,7 @@
 //! # References
 //! - <https://noshi91.github.io/algorithm-encyclopedia/auxiliary-tree>
 
-use crate::{tree::*, utils::is_none_or::IsNoneOr};
+use crate::tree::*;
 
 /// Auxiliary Tree
 ///

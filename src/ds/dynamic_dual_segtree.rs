@@ -1,6 +1,6 @@
 //! 動的双対セグメント木
 use crate::algebra::traits::Monoid;
-use crate::utils::nullable_usize::NullableUsize;
+use crate::misc::nullable_usize::NullableUsize;
 use std::ops::Range;
 
 #[derive(Clone, Debug)]
@@ -161,7 +161,7 @@ where
 mod tests {
     use super::*;
     use crate::algebra::sum::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]
@@ -170,7 +170,7 @@ mod tests {
         let m = Sum::<u32>::new();
 
         let mut a = vec![m.id(); n];
-        let mut seg = DynamicDualSegtree::new(m.clone());
+        let mut seg = DynamicDualSegtree::new(m);
 
         let mut rng = rand::thread_rng();
 

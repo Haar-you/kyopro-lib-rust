@@ -95,7 +95,7 @@ where
         while x > 0 {
             self.data[x][j] = self.monoid.op(
                 self.data[x << 1][j].clone(),
-                self.data[x << 1 | 1][j].clone(),
+                self.data[(x << 1) | 1][j].clone(),
             );
             x >>= 1;
         }
@@ -106,7 +106,7 @@ where
             while x > 0 {
                 self.data[x][y] = self.monoid.op(
                     self.data[x][y << 1].clone(),
-                    self.data[x][y << 1 | 1].clone(),
+                    self.data[x][(y << 1) | 1].clone(),
                 );
                 x >>= 1;
             }
@@ -125,11 +125,12 @@ where
 mod tests {
     use super::*;
     use crate::algebra::sum::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]
     fn test() {
+        #![allow(clippy::needless_range_loop)]
         let w = 300;
         let h = 100;
 

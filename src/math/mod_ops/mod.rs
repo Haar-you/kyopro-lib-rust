@@ -16,8 +16,8 @@ mod tests {
         fn straight_forward(x: u64, p: u64, m: u64) -> u64 {
             let mut ret = 1;
             for _ in 0..p {
-                ret = ret * x;
-                ret = ret % m;
+                ret *= x;
+                ret %= m;
             }
             ret
         }
@@ -74,6 +74,7 @@ mod tests {
 
     #[test]
     fn test_enumerate_mod_inv() {
+        #![allow(clippy::needless_range_loop)]
         let m = 1000000007;
         let n = 100;
 

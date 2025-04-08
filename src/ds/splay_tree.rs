@@ -463,6 +463,7 @@ where
         }
     }
 
+    /// 列の要素を始めから辿り、その参照を`f`に渡す。
     pub fn for_each(&self, mut f: impl FnMut(&M::Element)) {
         Node::traverse(self.root.get(), &mut f);
     }
@@ -477,7 +478,7 @@ impl<M: Monoid> std::ops::Drop for SplayTree<M> {
 #[cfg(test)]
 mod tests {
     use crate::algebra::sum::*;
-    use crate::testtools::rand_range;
+    use my_testtools::rand_range;
 
     use rand::Rng;
 

@@ -1,8 +1,17 @@
 //! Garner's algorithm
 use crate::math::mod_ops::inv::mod_inv;
 
-pub fn garner(r: Vec<u64>, mut m: Vec<u64>, modulo: u64) -> u64 {
+/// $$ \begin{aligned}
+/// x \equiv r_1 \pmod {m_1} \\\\
+/// x \equiv r_2 \pmod {m_2} \\\\
+/// \vdots \\\\
+/// x \equiv r_n \pmod {m_n}
+/// \end{aligned} $$
+/// を満たす$x \pmod {modulo}$を求める。
+/// そのような$x$が存在しなければ`None`を返す。
+pub fn garner(r: Vec<u64>, mut m: Vec<u64>, modulo: u64) -> Option<u64> {
     assert_eq!(r.len(), m.len());
+    assert!(!r.is_empty());
 
     m.push(modulo);
 
@@ -11,7 +20,7 @@ pub fn garner(r: Vec<u64>, mut m: Vec<u64>, modulo: u64) -> u64 {
     let mut constants = vec![0; n + 1];
 
     for k in 0..n {
-        let t = ((r[k] + m[k] - constants[k]) % m[k] * mod_inv(coeffs[k], m[k]).unwrap()) % m[k];
+        let t = ((r[k] + m[k] - constants[k]) % m[k] * mod_inv(coeffs[k], m[k])?) % m[k];
 
         for i in k + 1..n + 1 {
             constants[i] += t * coeffs[i] % m[i];
@@ -21,7 +30,7 @@ pub fn garner(r: Vec<u64>, mut m: Vec<u64>, modulo: u64) -> u64 {
         }
     }
 
-    *constants.last().unwrap()
+    Some(*constants.last().unwrap())
 }
 
 #[cfg(test)]
@@ -37,7 +46,12 @@ mod tests {
 
         for x in 0..=1000 {
             let r = m.iter().map(|&m| x % m).collect_vec();
-            assert_eq!(garner(r, m.clone(), modulo), x % modulo);
+            assert_eq!(garner(r, m.clone(), modulo).unwrap(), x % modulo);
         }
+    }
+
+    #[test]
+    fn test_failure() {
+        assert_eq!(garner(vec![1, 2], vec![6, 8], 100), None);
     }
 }

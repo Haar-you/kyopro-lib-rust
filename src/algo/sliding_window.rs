@@ -13,7 +13,7 @@ pub fn sliding_minimum<T: Ord + Copy>(a: &[T], k: usize) -> Vec<T> {
     let mut ret = vec![];
 
     for i in 0..k {
-        while !dq.is_empty() && a[*dq.back().unwrap()] >= a[i] {
+        while dq.back().is_some_and(|&b| a[b] >= a[i]) {
             dq.pop_back();
         }
         dq.push_back(i);
@@ -26,7 +26,7 @@ pub fn sliding_minimum<T: Ord + Copy>(a: &[T], k: usize) -> Vec<T> {
 
         ret.push(a[*dq.front().unwrap()]);
 
-        while !dq.is_empty() && i + k < n && a[*dq.back().unwrap()] >= a[i + k] {
+        while i + k < n && dq.back().is_some_and(|&b| a[b] >= a[i + k]) {
             dq.pop_back();
         }
 

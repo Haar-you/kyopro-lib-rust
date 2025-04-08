@@ -1,10 +1,15 @@
+//! Lowlink
 use crate::graph::*;
 use std::cmp::min;
 
+/// Lowlink
 #[derive(Debug, Clone)]
 pub struct Lowlink {
+    /// グラフの頂点数
     pub size: usize,
+    /// DFSで頂点を訪れた順番
     pub ord: Vec<usize>,
+    /// DFS木を葉方向に0回以上、後退辺を1回以下辿って到達可能な頂点の`ord`の最小値
     pub low: Vec<usize>,
     /// DFS木での親ノード
     pub par: Vec<Option<usize>>,
@@ -15,6 +20,7 @@ pub struct Lowlink {
 }
 
 impl Lowlink {
+    /// 無向グラフから[`Lowlink`]を構築する。
     pub fn new<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Self {
         let n = g.len();
         let mut this = Self {
@@ -54,7 +60,7 @@ impl Lowlink {
         *index += 1;
         let mut count_par = 0;
 
-        for e in &g.edges[cur] {
+        for e in g.nodes[cur].edges.iter() {
             let to = e.to();
             if par.is_some_and(|p| p == to) {
                 count_par += 1;

@@ -68,6 +68,7 @@ impl Eps {
     pub fn ge(&self, a: f64, b: f64) -> bool {
         self.gt(a, b) || self.eq(a, b)
     }
+    /// `a`と`b`の比較をする。
     pub fn partial_cmp(&self, a: f64, b: f64) -> Option<Ordering> {
         if self.eq(a, b) {
             Some(Ordering::Equal)
@@ -146,6 +147,7 @@ impl Vector {
     pub fn polar(r: f64, ang: f64) -> Self {
         Vector(r * ang.cos(), r * ang.sin())
     }
+    /// `self`から`other`への角度($-\pi \le \theta \le \pi$)を返す。
     pub fn angle_diff(self, other: Self) -> f64 {
         let r = other.1.atan2(other.0) - self.1.atan2(self.0);
 

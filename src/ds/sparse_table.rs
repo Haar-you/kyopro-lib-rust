@@ -1,7 +1,7 @@
 //! 冪等性と結合性をもつ列の区間取得($O(1)$)ができる。
 
 use crate::algebra::traits::*;
-use crate::utils::range::range_bounds_to_range;
+use crate::misc::range::range_bounds_to_range;
 use std::{cmp::min, ops::RangeBounds};
 
 /// 冪等性と結合性をもつ列の区間取得($O(1)$)ができる。

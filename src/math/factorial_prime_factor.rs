@@ -31,7 +31,7 @@ mod tests {
 
     #[test]
     fn test() {
-        for p in vec![2, 3, 5, 7, 11, 13] {
+        for p in [2, 3, 5, 7, 11, 13] {
             let a = 1000;
 
             let mut ans = 0;

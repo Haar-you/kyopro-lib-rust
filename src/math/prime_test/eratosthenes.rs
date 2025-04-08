@@ -10,7 +10,7 @@ pub struct EratosthenesSieve {
 impl EratosthenesSieve {
     /// `size`までの自然数の素数判定ができる`EratosthenesSieve`を構築する。
     pub fn new(size: usize) -> Self {
-        let mut data = vec![true; (size + 1) / 2];
+        let mut data = vec![true; size.div_ceil(2)];
         data[0] = false;
 
         let mut i = 3;

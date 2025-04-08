@@ -1,6 +1,6 @@
 //! モノイド列の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 pub use crate::algebra::traits::Monoid;
-use crate::utils::range::range_bounds_to_range;
+use crate::misc::range::range_bounds_to_range;
 use std::ops::{Index, RangeBounds};
 
 /// モノイド列の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
@@ -62,7 +62,7 @@ where
             i >>= 1;
             self.data[i] = self
                 .monoid
-                .op(self.data[i << 1].clone(), self.data[i << 1 | 1].clone());
+                .op(self.data[i << 1].clone(), self.data[(i << 1) | 1].clone());
         }
     }
 
@@ -95,7 +95,7 @@ impl<M: Monoid> Index<usize> for Segtree<M> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     fn random_test_helper<T, M, F>(size: usize, m: M, mut gen_value: F)

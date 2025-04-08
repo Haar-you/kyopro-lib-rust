@@ -31,7 +31,7 @@ where
         }
         check.insert(u);
 
-        for e in graph.neighbours(u) {
+        for e in graph.neighbours_of(u) {
             let to = e.to;
             let cost = e.weight;
 

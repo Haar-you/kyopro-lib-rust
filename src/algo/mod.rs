@@ -1,5 +1,7 @@
+//! アルゴリズム
+
 pub mod bsearch;
-pub mod bsearch_f;
+pub mod bsearch_ng_ok;
 pub mod compressor;
 pub mod cycle_finding;
 pub mod edit_distance;
@@ -24,6 +26,7 @@ pub mod mo;
 pub mod monotone_minima;
 pub mod num_subseq;
 pub mod parallel_binary_search;
+pub mod paren;
 pub mod permutation;
 pub mod psp;
 pub mod rle;

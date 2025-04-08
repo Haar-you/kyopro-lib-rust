@@ -2,8 +2,8 @@
 
 /// `a[0..k]`と`a[k..]`を`cmp`で比較してマージする。
 pub fn inplace_merge_by<T: Copy>(a: &mut [T], k: usize, cmp: fn(&T, &T) -> bool) {
-    let fst = &a[0..k].to_vec();
-    let snd = &a[k..].to_vec();
+    let fst = a[0..k].to_vec();
+    let snd = a[k..].to_vec();
 
     let mut i = 0;
     let mut j = 0;

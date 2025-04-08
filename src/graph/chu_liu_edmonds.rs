@@ -18,7 +18,7 @@ where
     let n = g.len();
     let mut rg = vec![vec![]; n];
 
-    for e in g.edges.iter().flatten() {
+    for e in g.nodes_iter().flat_map(|v| &v.edges) {
         rg[e.to()].push((e.to(), e.from(), e.weight(), e));
     }
 

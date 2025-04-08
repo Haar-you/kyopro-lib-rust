@@ -4,9 +4,10 @@
 //!
 //! - [HUPC 2020 B 三角形足し算](https://onlinejudge.u-aizu.ac.jp/challenges/sources/VPC/HUPC/3165?year=2020)
 
+use crate::math::linear::*;
+use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::utils::{linear::*, range::range_bounds_to_range};
 use std::{
     cell::Cell,
     mem::size_of,
@@ -94,7 +95,7 @@ impl<T: Elem> SegtreeLinearAdd<T> {
                 self.data[i].get().0 + self.data[i].get().1 * T::from(len as u32),
                 self.data[i].get().1,
             ));
-            self.data[i << 1 | 1].set(add(self.data[i << 1 | 1].get(), self.data[i].get()));
+            self.data[(i << 1) | 1].set(add(self.data[(i << 1) | 1].get(), self.data[i].get()));
 
             self.data[i].set((T::zero(), T::zero()));
         }
@@ -122,7 +123,7 @@ impl<T: Elem> SegtreeLinearAdd<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]

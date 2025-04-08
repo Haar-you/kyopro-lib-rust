@@ -14,7 +14,7 @@ where
     let n = g.len();
     let mut dp: Vec<Vec<Option<E::Weight>>> = vec![vec![None; 1 << n]; n];
 
-    for e in &g.edges[src] {
+    for e in g.nodes[src].edges.iter() {
         let (to, cost) = (e.to(), e.weight());
         dp[to][1 << to] = dp[to][1 << to].map(|x| x.min(cost)).or(Some(cost));
     }
@@ -25,7 +25,7 @@ where
                 continue;
             }
 
-            for e in &g.edges[i] {
+            for e in g.nodes[i].edges.iter() {
                 let (to, cost) = (e.to(), e.weight());
                 if s & (1 << to) != 0 {
                     continue;

@@ -5,8 +5,8 @@
 //! - <https://atcoder.jp/contests/abc351/tasks/abc351_f>
 
 use crate::algo::{bsearch::upper_bound, merge::inplace_merge};
+use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
-use crate::utils::range::range_bounds_to_range;
 use std::ops::{Add, AddAssign, RangeBounds};
 
 /// Merge-sort Tree
@@ -50,7 +50,7 @@ where
         } else {
             let mid = (l + r) / 2;
             self._init(i << 1, a, l, mid);
-            self._init(i << 1 | 1, a, mid, r);
+            self._init((i << 1) | 1, a, mid, r);
 
             if a.len() <= mid {
                 self.data[i] = a[l..].to_vec();
@@ -109,7 +109,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
     use std::ops::Range;
 

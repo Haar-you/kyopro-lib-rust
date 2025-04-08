@@ -3,6 +3,7 @@
 pub mod algebra;
 pub mod one_zero;
 
+use crate::impl_from;
 use crate::impl_ops;
 pub use crate::num::ff::*;
 use std::{
@@ -27,27 +28,23 @@ impl<const M: u32> FF for ConstModIntBuilder<M> {
         let value = ((value % M as i64) + M as i64) as u32;
         Self::Element::new(value)
     }
-    fn frac(&self, numerator: i64, denominator: i64) -> Self::Element {
-        self.from_i64(numerator) * self.from_i64(denominator).inv()
-    }
 }
 
 /// `M`で剰余をとる構造体。
 #[derive(Copy, Clone, PartialEq, Default)]
 pub struct ConstModInt<const M: u32>(u32);
 
-impl<const M: u32> FFElem for ConstModInt<M> {}
+impl<const M: u32> FFElem for ConstModInt<M> {
+    #[inline]
+    fn value(self) -> u32 {
+        self.0
+    }
+}
 
 impl<const M: u32> ConstModInt<M> {
     /// `ConstModInt<M>`を生成する。
     pub fn new(n: u32) -> Self {
         Self(if n < M { n } else { n % M })
-    }
-
-    /// 内部の値を取り出す。
-    #[inline]
-    pub fn value(self) -> u32 {
-        self.0
     }
 
     #[inline]
@@ -151,20 +148,12 @@ impl_ops!(<const M: u32>; DivAssign, ConstModInt<M>, |x: &mut Self, y| *x = *x /
 
 impl_ops!(<const M: u32>; Neg, ConstModInt<M>, |x: Self| Self::new_unchecked(if x.0 == 0 { 0 } else { M - x.0 }));
 
-impl<const M: u32> From<ConstModInt<M>> for u32 {
-    fn from(from: ConstModInt<M>) -> Self {
-        from.0
-    }
-}
+impl_from!(<const M: u32>; ConstModInt<M> => u32, |value: ConstModInt<M>| value.0);
 
-impl<const M: u32> From<usize> for ConstModInt<M> {
-    fn from(value: usize) -> Self {
-        ConstModIntBuilder.from_u64(value as u64)
-    }
-}
+impl_from!(<const M: u32>; usize => ConstModInt<M>, |value| ConstModIntBuilder.from_u64(value as u64));
+impl_from!(<const M: u32>; u64 => ConstModInt<M>, |value| ConstModIntBuilder.from_u64(value));
+impl_from!(<const M: u32>; u32 => ConstModInt<M>, |value| ConstModIntBuilder.from_u64(value as u64));
 
-impl<const M: u32> From<u64> for ConstModInt<M> {
-    fn from(value: u64) -> Self {
-        ConstModIntBuilder.from_u64(value)
-    }
-}
+impl_from!(<const M: u32>; isize => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value as i64));
+impl_from!(<const M: u32>; i64 => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value));
+impl_from!(<const M: u32>; i32 => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value as i64));

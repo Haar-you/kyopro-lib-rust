@@ -1,6 +1,7 @@
 //! macro_exportされたmacro置き場
 
 pub mod chmax_chmin;
+pub mod convert;
 pub mod ds_macros;
 pub mod for_loop;
 pub mod get_time;

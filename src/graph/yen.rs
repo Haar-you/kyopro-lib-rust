@@ -1,12 +1,11 @@
+//! 最短パスを`k`個列挙する。
+//!
+//! # Problems
+//! - <https://yukicoder.me/problems/no/1069>
 use std::ops::{Add, AddAssign};
 use std::{cmp::Reverse, collections::BinaryHeap};
 
-use crate::trait_alias;
 use crate::{graph::*, num::one_zero::Zero};
-
-trait_alias!(
-    Elem: Zero + Add<Output = Self> + AddAssign + Ord + Eq + Copy
-);
 
 type Path = Vec<usize>;
 
@@ -18,7 +17,7 @@ fn shortest_path<D: Direction, E: EdgeTrait>(
     valid: &[Vec<bool>],
 ) -> Option<(E::Weight, Path)>
 where
-    E::Weight: Elem,
+    E::Weight: Zero + Add<Output = E::Weight> + Ord + Eq + Copy,
 {
     let n = g.len();
     let mut visited = vec![false; n];
@@ -35,12 +34,12 @@ where
         }
         visited[i] = true;
 
-        for (k, e) in g.edges[i].iter().enumerate() {
+        for (k, e) in g.nodes[i].edges.iter().enumerate() {
             if !valid[i][k] || !usable[e.to()] {
                 continue;
             }
 
-            if dist[e.to()].is_none() || dist[e.to()].unwrap() > d + e.weight() {
+            if dist[e.to()].is_none_or(|x| x > d + e.weight()) {
                 dist[e.to()] = Some(d + e.weight());
                 restore[e.to()] = (i, k);
                 if !visited[e.to()] {
@@ -68,6 +67,7 @@ where
     }
 }
 
+/// 有向グラフ`g`上で`from`から`to`へのパスを、その距離が小さい順に`k`個を返す。
 pub fn yen_algorithm<D: Direction, E: EdgeTrait>(
     g: &Graph<D, E>,
     from: usize,
@@ -75,13 +75,13 @@ pub fn yen_algorithm<D: Direction, E: EdgeTrait>(
     k: usize,
 ) -> Vec<Option<(E::Weight, Path)>>
 where
-    E::Weight: Elem,
+    E::Weight: Zero + Add<Output = E::Weight> + AddAssign + Ord + Eq + Copy,
 {
     let n = g.len();
     let mut result: Vec<Option<(E::Weight, Path)>> = vec![None; k];
     let mut stock = BinaryHeap::new();
     let mut valid = (0..n)
-        .map(|i| vec![true; g.edges[i].len()])
+        .map(|i| vec![true; g.nodes[i].edges.len()])
         .collect::<Vec<_>>();
 
     for i in 0..k {
@@ -96,7 +96,7 @@ where
             let mut cur = from;
             for &u in &result[i - 1].as_ref().unwrap().1 {
                 prev_path.push(cur);
-                cur = g.edges[cur][u].to();
+                cur = g.nodes[cur].edges[u].to();
             }
             prev_path.push(to);
 
@@ -117,14 +117,9 @@ where
 
                     for (j, &p) in prev_path.iter().enumerate().take(k) {
                         let v = result[i - 1].as_ref().unwrap().1[j];
-                        c += g.edges[p][v].weight();
+                        c += g.nodes[p].edges[v].weight();
                         temp.push(v);
                     }
-                    // for j in 0..k {
-                    //     let v = result[i - 1].as_ref().unwrap().1[j];
-                    //     c += g.edges[prev_path[j]][v].weight();
-                    //     temp.push(v);
-                    // }
 
                     temp.extend(p.into_iter());
                     stock.push(Reverse((c, temp)));
@@ -140,7 +135,8 @@ where
 
                 for j in 0..i {
                     if check[j]
-                        && prev_path[k + 1] != g.edges[u][result[j].as_ref().unwrap().1[k]].to()
+                        && prev_path[k + 1]
+                            != g.nodes[u].edges[result[j].as_ref().unwrap().1[k]].to()
                     {
                         check[j] = false;
                     }

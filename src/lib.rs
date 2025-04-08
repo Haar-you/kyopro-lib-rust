@@ -17,6 +17,7 @@ pub mod flow;
 pub mod geom;
 pub mod graph;
 pub mod grid;
+pub mod io;
 pub mod iter;
 pub mod linalg;
 pub mod macros;
@@ -28,8 +29,5 @@ pub mod num;
 pub mod parser;
 pub mod traits;
 pub mod tree;
-pub mod utils;
 
 pub mod typical;
-
-pub mod testtools;

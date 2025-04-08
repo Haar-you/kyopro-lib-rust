@@ -1,6 +1,6 @@
 //! モノイド列の区間更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 use crate::algebra::action::Action;
-use crate::utils::range::range_bounds_to_range;
+use crate::misc::range::range_bounds_to_range;
 use std::ops::RangeBounds;
 
 /// モノイド列の区間更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
@@ -46,7 +46,7 @@ where
         }
 
         for i in (1..size / 2).rev() {
-            this.data[i] = a.fold(this.data[i << 1].clone(), this.data[i << 1 | 1].clone());
+            this.data[i] = a.fold(this.data[i << 1].clone(), this.data[(i << 1) | 1].clone());
         }
 
         this
@@ -58,7 +58,7 @@ where
         }
         if i < self.size / 2 {
             let l = i << 1;
-            let r = i << 1 | 1;
+            let r = (i << 1) | 1;
 
             self.lazy[l] = self
                 .action
@@ -90,10 +90,10 @@ where
         while i > 1 {
             i >>= 1;
             self.propagate(i << 1);
-            self.propagate(i << 1 | 1);
+            self.propagate((i << 1) | 1);
             self.data[i] = self
                 .action
-                .fold(self.data[i << 1].clone(), self.data[i << 1 | 1].clone());
+                .fold(self.data[i << 1].clone(), self.data[(i << 1) | 1].clone());
         }
     }
 
@@ -168,7 +168,7 @@ where
 mod tests {
     use super::*;
     use crate::algebra::add_sum::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]

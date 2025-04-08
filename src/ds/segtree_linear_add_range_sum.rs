@@ -1,8 +1,9 @@
 //! 区間一次関数加算区間総和セグメントツリー
 
+use crate::math::linear::*;
+use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
 use crate::trait_alias;
-use crate::utils::{linear::*, range::range_bounds_to_range};
 use std::ops::{Add, AddAssign, Mul, RangeBounds};
 
 trait_alias!(
@@ -45,7 +46,7 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
             let mut t = self.lazy[i];
             self.lazy[i << 1] = Self::_add(t, self.lazy[i << 1]);
             t.0 += t.1 * T::from(((r - l) / 2) as u32);
-            self.lazy[i << 1 | 1] = Self::_add(t, self.lazy[i << 1 | 1]);
+            self.lazy[(i << 1) | 1] = Self::_add(t, self.lazy[(i << 1) | 1]);
         }
         let len = r - l;
         let (s, d) = self.lazy[i];
@@ -65,7 +66,7 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
         } else {
             let mid = (l + r) / 2;
             self.data[i] = self._update(i << 1, l, mid, s, t, a, b)
-                + self._update(i << 1 | 1, mid, r, s, t, a, b);
+                + self._update((i << 1) | 1, mid, r, s, t, a, b);
             self.data[i]
         }
     }
@@ -84,7 +85,7 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
             self.data[i]
         } else {
             let mid = (l + r) / 2;
-            self._fold(i << 1, l, mid, x, y) + self._fold(i << 1 | 1, mid, r, x, y)
+            self._fold(i << 1, l, mid, x, y) + self._fold((i << 1) | 1, mid, r, x, y)
         }
     }
 
@@ -98,12 +99,13 @@ impl<T: Elem> SegtreeLinearAddRangeSum<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
     use std::ops::Range;
 
     #[test]
     fn test() {
+        #![allow(clippy::needless_range_loop)]
         let mut rng = rand::thread_rng();
         let n = 100;
 

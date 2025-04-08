@@ -14,6 +14,7 @@ struct Edge {
     is_rev: bool,
 }
 
+/// 最小費用流
 #[derive(Clone)]
 pub struct MinCostFlow {
     size: usize,
@@ -21,6 +22,7 @@ pub struct MinCostFlow {
 }
 
 impl MinCostFlow {
+    /// 頂点数`size`の空の[`MinCostFlow`]を返す。
     pub fn new(size: usize) -> Self {
         Self {
             size,
@@ -28,6 +30,7 @@ impl MinCostFlow {
         }
     }
 
+    /// 頂点`u`から頂点`v`に容量`cap`・費用`cost`の辺を張る。
     pub fn add_edge(&mut self, u: usize, v: usize, cap: u64, cost: i64) {
         let rev = self.edges[v].len();
         self.edges[u].push(Edge {
@@ -47,6 +50,10 @@ impl MinCostFlow {
         });
     }
 
+    /// 始点`src`から終点`sink`へ流量`f`を流して、その最小費用を求める。
+    ///
+    /// 流量`f`を流しきれるとき、`Ok`に最小費用を包んで返す。
+    /// そうでないとき、`Err`に流せた流量とその最小費用のペアを包んで返す。
     pub fn min_cost_flow(&mut self, src: usize, sink: usize, f: u64) -> Result<i64, (u64, i64)> {
         let mut ret = 0;
         let mut flow = f;
@@ -112,5 +119,14 @@ impl MinCostFlow {
         } else {
             Err((f - flow, ret))
         }
+    }
+
+    /// 頂点`i`に接続する辺を、`(終点, 流量, 費用)`の形で返す。
+    pub fn get_edges(&self, i: usize) -> Vec<(usize, u64, i64)> {
+        self.edges[i]
+            .iter()
+            .filter(|e| !e.is_rev)
+            .map(|e| (e.to, e.cap, e.cost))
+            .collect()
     }
 }

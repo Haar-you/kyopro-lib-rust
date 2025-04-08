@@ -2,7 +2,7 @@
 #![allow(clippy::wrong_self_convention)]
 
 pub use crate::algebra::traits::Monoid;
-use crate::utils::range::range_bounds_to_range;
+use crate::misc::range::range_bounds_to_range;
 use std::ops::RangeBounds;
 
 /// モノイド列の区間更新・点取得($O(\log n)$, $O(\log n)$)ができる。
@@ -33,9 +33,9 @@ where
             self.data[i << 1] = self
                 .monoid
                 .op(self.data[i].clone(), self.data[i << 1].clone());
-            self.data[i << 1 | 1] = self
+            self.data[(i << 1) | 1] = self
                 .monoid
-                .op(self.data[i].clone(), self.data[i << 1 | 1].clone());
+                .op(self.data[i].clone(), self.data[(i << 1) | 1].clone());
             self.data[i] = self.monoid.id();
         }
     }
@@ -58,13 +58,15 @@ where
         self.data[i + self.size / 2].clone()
     }
 
-    pub fn from_vec(&mut self, a: &[M::Element]) {
+    /// スライスで初期化する。
+    pub fn from_slice(&mut self, a: &[M::Element]) {
         self.data = vec![self.monoid.id(); self.size];
         for (i, e) in a.iter().enumerate() {
             self.data[i + self.size / 2] = e.clone();
         }
     }
 
+    /// 遅延操作を完了させたモノイド列を`Vec`で返す。
     pub fn to_vec(&mut self) -> Vec<M::Element> {
         for i in 1..self.size {
             self.propagate(i);
@@ -102,7 +104,7 @@ where
 mod tests {
     use super::*;
     use crate::algebra::sum::*;
-    use crate::testtools::*;
+    use my_testtools::*;
     use rand::Rng;
 
     #[test]
@@ -111,7 +113,7 @@ mod tests {
         let m = Sum::<u32>::new();
 
         let mut a = vec![m.id(); n];
-        let mut seg = DualSegtree::new(n, m.clone());
+        let mut seg = DualSegtree::new(n, m);
 
         let mut rng = rand::thread_rng();
 

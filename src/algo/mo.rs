@@ -3,6 +3,8 @@
 //! # Problems
 //! - <https://atcoder.jp/contests/dwacon2017-honsen/tasks/dwango2017final_b>
 
+use std::cmp::Ordering;
+
 /// Mo's algorithm
 pub struct Mo<'a> {
     append_left: Box<dyn 'a + FnMut(usize)>,
@@ -78,19 +80,28 @@ impl<'a> Mo<'a> {
             let right = right[id];
 
             while l != left || r != right {
-                if l > left {
-                    l -= 1;
-                    (self.append_left)(l);
-                } else if l < left {
-                    (self.remove_left)(l);
-                    l += 1;
+                match l.cmp(&left) {
+                    Ordering::Greater => {
+                        l -= 1;
+                        (self.append_left)(l);
+                    }
+                    Ordering::Less => {
+                        (self.remove_left)(l);
+                        l += 1;
+                    }
+                    _ => {}
                 }
-                if r < right {
-                    (self.append_right)(r);
-                    r += 1;
-                } else if r > right {
-                    r -= 1;
-                    (self.remove_right)(r);
+
+                match r.cmp(&right) {
+                    Ordering::Less => {
+                        (self.append_right)(r);
+                        r += 1;
+                    }
+                    Ordering::Greater => {
+                        r -= 1;
+                        (self.remove_right)(r);
+                    }
+                    _ => {}
                 }
             }
 

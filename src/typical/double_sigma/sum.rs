@@ -1,6 +1,6 @@
 //! 2要素の和の総和
 
-use std::{iter::repeat, ops::Add};
+use std::{iter::repeat_n, ops::Add};
 
 use crate::num::one_zero::Zero;
 
@@ -15,5 +15,5 @@ where
 {
     let n = a.len();
     let s = a.into_iter().fold(T::zero(), |x, y| x + y);
-    repeat(s).take(n - 1).fold(T::zero(), |x, y| x + y)
+    repeat_n(s, n - 1).fold(T::zero(), |x, y| x + y)
 }
