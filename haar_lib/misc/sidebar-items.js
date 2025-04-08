@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["bitwise_sum_popcount","closed_interval","dice","paren","parse_paren"]};
+window.SIDEBAR_ITEMS = {"mod":["bitwise_sum_popcount","dice","nullable_usize","range","swap","transpose","xor_shift","yesno"]};

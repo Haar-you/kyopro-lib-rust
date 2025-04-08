@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["determinant","inverse"]};
+window.SIDEBAR_ITEMS = {"mod":["determinant","gaussian_elim","inverse"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["collect","cumsum","join_str","reject"]};
+window.SIDEBAR_ITEMS = {"mod":["bit","collect","cumsum","join_str","reject"]};

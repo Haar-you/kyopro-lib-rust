@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["ll1"]};
+window.SIDEBAR_ITEMS = {"mod":["ll1","parse_paren"]};

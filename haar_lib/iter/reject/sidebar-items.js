@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["_Reject"],"trait":["Reject"]};
+window.SIDEBAR_ITEMS = {"trait":["Reject"]};

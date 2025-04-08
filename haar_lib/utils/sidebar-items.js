@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["bits","fastio","is_none_or","linear","nullable_usize","range","swap","transpose","usize_set","xor_shift","yesno"]};

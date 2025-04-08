@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["NTT"]};
+window.SIDEBAR_ITEMS = {"struct":["NTT"],"type":["NTT998244353"]};

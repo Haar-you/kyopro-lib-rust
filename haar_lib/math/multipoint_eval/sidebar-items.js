@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["multipoint_eval"]};
+window.SIDEBAR_ITEMS = {"trait":["MultipointEval"]};
