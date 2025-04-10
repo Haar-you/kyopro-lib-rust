@@ -1,42 +1,46 @@
 //! Range Affine Range Sum用の代数的構造
 use crate::algebra::action::Action;
-use crate::num::one_zero::*;
-use std::{
-    marker::PhantomData,
-    ops::{Add, Mul},
-};
+use crate::algebra::{affine::*, sum::*};
+use std::fmt::Debug;
+use std::ops::{Add, Mul};
 
 /// Range Affine Range Sum用の代数的構造
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
-pub struct AffineSum<T, U = T>(PhantomData<(T, U)>);
+pub struct AffineSum<T, U = T> {
+    fold_m: Sum<T>,
+    update_m: Affine<U>,
+}
 
 impl<T, U> AffineSum<T, U> {
     /// `AffineSum<T, U>`を生成する。
     pub fn new() -> Self {
-        Self(PhantomData)
+        Self {
+            fold_m: Sum::new(),
+            update_m: Affine::new(),
+        }
     }
 }
 
 impl<T, U> Action for AffineSum<T, U>
 where
-    T: Add<Output = T> + Mul<Output = T> + Zero + Copy + From<U>,
-    U: Add<Output = U> + Mul<Output = U> + Zero + One + Copy + From<u64>,
+    Sum<T>: Monoid<Element = T>,
+    Affine<U>: Monoid<Element = (U, U)>,
+    T: Add<Output = T> + Mul<Output = T> + TryFrom<U, Error: Debug>,
+    U: Mul<Output = U> + TryFrom<usize, Error: Debug>,
 {
-    type Output = T;
-    type Lazy = (U, U);
-    fn fold_id(&self) -> Self::Output {
-        T::zero()
+    type FoldMonoid = Sum<T>;
+    type UpdateMonoid = Affine<U>;
+    type Output = <Self::FoldMonoid as Set>::Element;
+    type Lazy = <Self::UpdateMonoid as Set>::Element;
+
+    fn fold_monoid(&self) -> &Self::FoldMonoid {
+        &self.fold_m
     }
-    fn fold(&self, left: Self::Output, right: Self::Output) -> Self::Output {
-        left + right
-    }
-    fn update_id(&self) -> Self::Lazy {
-        (U::one(), U::zero())
-    }
-    fn update(&self, next: Self::Lazy, cur: Self::Lazy) -> Self::Lazy {
-        (next.0 * cur.0, next.0 * cur.1 + next.1)
+    fn update_monoid(&self) -> &Self::UpdateMonoid {
+        &self.update_m
     }
     fn convert(&self, value: Self::Output, lazy: Self::Lazy, len: usize) -> Self::Output {
-        T::from(lazy.0) * value + T::from(lazy.1 * U::from(len as u64))
+        let len = U::try_from(len).unwrap();
+        T::try_from(lazy.0).unwrap() * value + T::try_from(lazy.1 * len).unwrap()
     }
 }

@@ -23,4 +23,5 @@ pub mod action;
 
 pub mod add_sum;
 pub mod affine_sum;
+pub mod update_fold;
 pub mod update_sum;
