@@ -1,4 +1,7 @@
 //! 動的セグメント木
+//!
+//! # Problems
+//! - <https://judge.yosupo.jp/problem/point_set_range_composite_large_array>
 use crate::algebra::traits::Monoid;
 use crate::misc::nullable_usize::NullableUsize;
 use std::ops::Range;
