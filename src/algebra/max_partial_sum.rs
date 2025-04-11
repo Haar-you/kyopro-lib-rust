@@ -72,6 +72,8 @@ impl<T: Copy + Ord + Add<Output = T>> BinaryOp for MaxPartialSum<T> {
     }
 }
 
+impl<T> Associative for MaxPartialSum<T> {}
+
 #[cfg(test)]
 mod tests {
     use crate::iter::collect::CollectVec;
