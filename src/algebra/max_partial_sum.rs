@@ -1,3 +1,7 @@
+//! 空ではない連続する部分列の総和の最大値を扱う。
+//!
+//! # Problems
+//! - <https://yukicoder.me/problems/no/776>
 pub use crate::algebra::traits::*;
 
 use crate::max;
@@ -6,17 +10,21 @@ use std::cmp::max;
 use std::marker::PhantomData;
 use std::ops::Add;
 
-/// 連続する部分列の総和を管理する。
+/// 空ではない連続する部分列の総和を管理する。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct MaxPartialSumValue<T> {
-    sum: T,
-    left_max: T,
-    right_max: T,
-    partial_max: T,
+    /// 列の総和
+    pub sum: T,
+    /// 列の左端から連続する空でない部分列の総和の最大値
+    pub left_max: T,
+    /// 列の右端から連続する空でない部分列の総和の最大値
+    pub right_max: T,
+    /// 連続する空でない部分列の総和の最大値
+    pub partial_max: T,
 }
 
 impl<T: Copy> MaxPartialSumValue<T> {
-    /// 値`value`をもつ[`MaxPartialSumValue`]を生成する。
+    /// 値`value`をもつ長さ`1`の列に対応する[`MaxPartialSumValue`]を生成する。
     pub fn new(value: T) -> Self {
         Self {
             sum: value,
@@ -27,7 +35,7 @@ impl<T: Copy> MaxPartialSumValue<T> {
     }
 }
 
-/// 連続する部分列の総和の最大値を扱う。
+/// 空ではない連続する部分列の総和の最大値を扱う。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct MaxPartialSum<T>(PhantomData<T>);
 

@@ -1,5 +1,11 @@
+//! 線形漸化式を求める。
+//!
+//! # Problems
+//! - <https://judge.yosupo.jp/problem/find_linear_recurrence>
 use crate::num::ff::*;
 
+/// $N$項の数列$a_0, a_1, \ldots, a_{N-1}$から、
+/// 最短の線形漸化式$a_i = c_1 a_{i-1} + c_2 a_{i-2} + \dots + c_d a_{i-d}$の係数$c_i$を求める。
 pub fn berlekamp_massey<Modulo: FF>(s: Vec<u32>, modulo: Modulo) -> Vec<Modulo::Element>
 where
     Modulo::Element: FFElem + Copy,
