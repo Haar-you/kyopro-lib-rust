@@ -1,6 +1,6 @@
 //! Range Update Range ~~~ 用の代数的構造
 use crate::algebra::action::Action;
-use crate::algebra::update::*;
+use crate::algebra::first_last::*;
 use std::fmt::Debug;
 
 /// Range Update Range ~~~ 用の代数的構造
@@ -10,7 +10,7 @@ use std::fmt::Debug;
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
 pub struct UpdateFold<M: Monoid> {
     fold_m: M,
-    update_m: Update<M::Element>,
+    update_m: Last<M::Element>,
 }
 
 impl<M: Monoid> UpdateFold<M> {
@@ -18,7 +18,7 @@ impl<M: Monoid> UpdateFold<M> {
     pub fn new(fold_m: M) -> Self {
         Self {
             fold_m,
-            update_m: Update::new(),
+            update_m: Last::new(),
         }
     }
 }
@@ -29,7 +29,7 @@ where
     M::Element: Clone,
 {
     type FoldMonoid = M;
-    type UpdateMonoid = Update<M::Element>;
+    type UpdateMonoid = Last<M::Element>;
     type Output = <Self::FoldMonoid as Set>::Element;
     type Lazy = <Self::UpdateMonoid as Set>::Element;
 

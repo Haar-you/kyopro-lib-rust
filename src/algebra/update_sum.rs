@@ -1,6 +1,6 @@
 //! Range Update Range Sum用の代数的構造
 use crate::algebra::action::Action;
-use crate::algebra::{sum::*, update::*};
+use crate::algebra::{first_last::*, sum::*};
 use std::fmt::Debug;
 use std::ops::Mul;
 
@@ -8,7 +8,7 @@ use std::ops::Mul;
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
 pub struct UpdateSum<T> {
     fold_m: Sum<T>,
-    update_m: Update<T>,
+    update_m: Last<T>,
 }
 
 impl<T> UpdateSum<T> {
@@ -16,7 +16,7 @@ impl<T> UpdateSum<T> {
     pub fn new() -> Self {
         Self {
             fold_m: Sum::new(),
-            update_m: Update::new(),
+            update_m: Last::new(),
         }
     }
 }
@@ -27,7 +27,7 @@ where
     T: Mul<Output = T> + TryFrom<usize, Error: Debug>,
 {
     type FoldMonoid = Sum<T>;
-    type UpdateMonoid = Update<T>;
+    type UpdateMonoid = Last<T>;
     type Output = <Self::FoldMonoid as Set>::Element;
     type Lazy = <Self::UpdateMonoid as Set>::Element;
 

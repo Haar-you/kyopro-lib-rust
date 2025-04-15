@@ -57,13 +57,13 @@ where
                     (*t).left = Box::into_raw(Box::new(Node::new(self.action)));
                 }
                 let left = (*t).left;
-                (*left).lazy = self.action.update(lazy.clone(), (*left).lazy.clone());
+                (*left).lazy = self.action.update((*left).lazy.clone(), lazy.clone());
 
                 if (*t).right.is_null() {
                     (*t).right = Box::into_raw(Box::new(Node::new(self.action)));
                 }
                 let right = (*t).right;
-                (*right).lazy = self.action.update(lazy.clone(), (*right).lazy.clone());
+                (*right).lazy = self.action.update((*right).lazy.clone(), lazy.clone());
             }
         }
         let len = to - from;
@@ -91,7 +91,7 @@ where
         if to - from == 1 {
             if s <= from && to <= t {
                 unsafe {
-                    (*cur).lazy = self.action.update(value, (*cur).lazy.clone());
+                    (*cur).lazy = self.action.update((*cur).lazy.clone(), value);
                 }
             }
             self._propagate(cur, from, to);
@@ -103,7 +103,7 @@ where
         }
         if s <= from && to <= t {
             unsafe {
-                (*cur).lazy = self.action.update(value, (*cur).lazy.clone());
+                (*cur).lazy = self.action.update((*cur).lazy.clone(), value);
             }
             self._propagate(cur, from, to);
             return cur;

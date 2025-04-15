@@ -8,6 +8,7 @@ pub mod bitor;
 pub mod bitxor;
 pub mod dihedral;
 pub mod dual;
+pub mod first_last;
 pub mod max;
 pub mod max_contiguous;
 pub mod max_partial_sum;
@@ -17,7 +18,6 @@ pub mod sum;
 pub mod transform;
 pub mod trivial;
 pub mod tuple;
-pub mod update;
 
 pub mod action;
 

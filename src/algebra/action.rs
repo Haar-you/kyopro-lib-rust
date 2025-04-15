@@ -30,8 +30,8 @@ pub trait Action {
         self.update_monoid().id()
     }
     /// 範囲更新のモノイドの二項演算を適用させる。
-    fn update(&self, next: Self::Lazy, cur: Self::Lazy) -> Self::Lazy {
-        self.update_monoid().op(next, cur)
+    fn update(&self, cur: Self::Lazy, next: Self::Lazy) -> Self::Lazy {
+        self.update_monoid().op(cur, next)
     }
 
     /// 範囲更新を範囲取得に反映させる。
