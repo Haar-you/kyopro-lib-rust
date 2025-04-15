@@ -61,29 +61,29 @@ impl GaussianInt {
     }
 }
 
-impl_ops!(Add, GaussianInt, |a: Self, b: Self| Self {
+impl_ops!(Add for GaussianInt, |a: Self, b: Self| Self {
     re: a.re + b.re,
     im: a.im + b.im,
 });
-impl_ops!(Sub, GaussianInt, |a: Self, b: Self| Self {
+impl_ops!(Sub for GaussianInt, |a: Self, b: Self| Self {
     re: a.re - b.re,
     im: a.im - b.im,
 });
-impl_ops!(Mul, GaussianInt, |a: Self, b: Self| Self {
+impl_ops!(Mul for GaussianInt, |a: Self, b: Self| Self {
     re: a.re * b.re - a.im * b.im,
     im: a.re * b.im + a.im * b.re
 });
 
-impl_ops!(AddAssign, GaussianInt, |a: &mut Self, b: Self| *a = *a + b);
-impl_ops!(SubAssign, GaussianInt, |a: &mut Self, b: Self| *a = *a - b);
-impl_ops!(MulAssign, GaussianInt, |a: &mut Self, b: Self| *a = *a * b);
+impl_ops!(AddAssign for GaussianInt, |a: &mut Self, b: Self| *a = *a + b);
+impl_ops!(SubAssign for GaussianInt, |a: &mut Self, b: Self| *a = *a - b);
+impl_ops!(MulAssign for GaussianInt, |a: &mut Self, b: Self| *a = *a * b);
 
 impl_ops!(
     /// $\mathtt{self} = q \times \mathtt{b} + r (N(b) > N(r))$となる$q$を返す。
-    Div, GaussianInt, |a: Self, b: Self| a.div_rem(b).0);
+    Div for GaussianInt, |a: Self, b: Self| a.div_rem(b).0);
 impl_ops!(
     /// $\mathtt{self} = q \times \mathtt{b} + r (N(b) > N(r))$となる$r$を返す。
-    Rem, GaussianInt, |a: Self, b: Self| a.div_rem(b).1);
+    Rem for GaussianInt, |a: Self, b: Self| a.div_rem(b).1);
 
-impl_ops!(DivAssign, GaussianInt, |a: &mut Self, b: Self| *a = *a / b);
-impl_ops!(RemAssign, GaussianInt, |a: &mut Self, b: Self| *a = *a % b);
+impl_ops!(DivAssign for GaussianInt, |a: &mut Self, b: Self| *a = *a / b);
+impl_ops!(RemAssign for GaussianInt, |a: &mut Self, b: Self| *a = *a % b);

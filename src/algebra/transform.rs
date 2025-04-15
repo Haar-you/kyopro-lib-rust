@@ -93,32 +93,38 @@ impl<T> Composition<T> {
     }
 }
 
-impl_algebra!(Composition<Transformation>,
-    set: Transformation,
+impl_algebra!(
+    Composition<Transformation>;
+    set: Transformation;
     op: |s: &Self, a: Transformation, b: Transformation| {
         let n = s.len;
         assert_eq!(a.0.len(), n);
         assert_eq!(b.0.len(), n);
         Transformation((0..n).map(|i| a.0[b.0[i]]).collect())
-    },
-    id: |s: &Self| Transformation((0..s.len).collect()), assoc: {});
+    };
+    id: |s: &Self| Transformation((0..s.len).collect());
+    assoc;
+);
 
-impl_algebra!(Composition<Permutation>,
-    set: Permutation,
+impl_algebra!(
+    Composition<Permutation>;
+    set: Permutation;
     op: |s: &Self, a: Permutation, b: Permutation| {
         let n = s.len;
         assert_eq!(a.0.len(), n);
         assert_eq!(b.0.len(), n);
         Permutation((0..n).map(|i| a.0[b.0[i]]).collect())
-    }, 
+    };
     inv: |s: &Self, a: Permutation| {
         let n = s.len;
         assert_eq!(a.0.len(), n);
         let mut ret = vec![0; n];
         for i in 0..n { ret[a.0[i]] = i; }
         Permutation(ret)
-    },
-    id: |s: &Self| Permutation((0..s.len).collect()), assoc: {});
+    };
+    id: |s: &Self| Permutation((0..s.len).collect());
+    assoc;
+);
 
 #[cfg(test)]
 mod tests {

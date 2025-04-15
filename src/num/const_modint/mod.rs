@@ -136,24 +136,24 @@ impl<const M: u32> Debug for ConstModInt<M> {
     }
 }
 
-impl_ops!(<const M: u32>; Add, ConstModInt<M>, |x: Self, y| x.__add(y));
-impl_ops!(<const M: u32>; Sub, ConstModInt<M>, |x: Self, y| x.__sub(y));
-impl_ops!(<const M: u32>; Mul, ConstModInt<M>, |x: Self, y| x.__mul(y));
-impl_ops!(<const M: u32>; Div, ConstModInt<M>, |x: Self, y| x.__div(y));
+impl_ops!([const M: u32]; Add for ConstModInt<M>, |x: Self, y| x.__add(y));
+impl_ops!([const M: u32]; Sub for ConstModInt<M>, |x: Self, y| x.__sub(y));
+impl_ops!([const M: u32]; Mul for ConstModInt<M>, |x: Self, y| x.__mul(y));
+impl_ops!([const M: u32]; Div for ConstModInt<M>, |x: Self, y| x.__div(y));
 
-impl_ops!(<const M: u32>; AddAssign, ConstModInt<M>, |x: &mut Self, y| *x = *x + y);
-impl_ops!(<const M: u32>; SubAssign, ConstModInt<M>, |x: &mut Self, y| *x = *x - y);
-impl_ops!(<const M: u32>; MulAssign, ConstModInt<M>, |x: &mut Self, y| *x = *x * y);
-impl_ops!(<const M: u32>; DivAssign, ConstModInt<M>, |x: &mut Self, y| *x = *x / y);
+impl_ops!([const M: u32]; AddAssign for ConstModInt<M>, |x: &mut Self, y| *x = *x + y);
+impl_ops!([const M: u32]; SubAssign for ConstModInt<M>, |x: &mut Self, y| *x = *x - y);
+impl_ops!([const M: u32]; MulAssign for ConstModInt<M>, |x: &mut Self, y| *x = *x * y);
+impl_ops!([const M: u32]; DivAssign for ConstModInt<M>, |x: &mut Self, y| *x = *x / y);
 
-impl_ops!(<const M: u32>; Neg, ConstModInt<M>, |x: Self| Self::new_unchecked(if x.0 == 0 { 0 } else { M - x.0 }));
+impl_ops!([const M: u32]; Neg for ConstModInt<M>, |x: Self| Self::new_unchecked(if x.0 == 0 { 0 } else { M - x.0 }));
 
-impl_from!(<const M: u32>; ConstModInt<M> => u32, |value: ConstModInt<M>| value.0);
+impl_from!([const M: u32]; ConstModInt<M> => u32, |value: ConstModInt<M>| value.0);
 
-impl_from!(<const M: u32>; usize => ConstModInt<M>, |value| ConstModIntBuilder.from_u64(value as u64));
-impl_from!(<const M: u32>; u64 => ConstModInt<M>, |value| ConstModIntBuilder.from_u64(value));
-impl_from!(<const M: u32>; u32 => ConstModInt<M>, |value| ConstModIntBuilder.from_u64(value as u64));
+impl_from!([const M: u32]; usize => ConstModInt<M>, |value| ConstModIntBuilder.from_u64(value as u64));
+impl_from!([const M: u32]; u64 => ConstModInt<M>, |value| ConstModIntBuilder.from_u64(value));
+impl_from!([const M: u32]; u32 => ConstModInt<M>, |value| ConstModIntBuilder.from_u64(value as u64));
 
-impl_from!(<const M: u32>; isize => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value as i64));
-impl_from!(<const M: u32>; i64 => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value));
-impl_from!(<const M: u32>; i32 => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value as i64));
+impl_from!([const M: u32]; isize => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value as i64));
+impl_from!([const M: u32]; i64 => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value));
+impl_from!([const M: u32]; i32 => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value as i64));

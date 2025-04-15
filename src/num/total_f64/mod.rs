@@ -24,17 +24,17 @@ impl Ord for Totalf64 {
     }
 }
 
-impl_ops!(Add, Totalf64, |s: Self, rhs: Self| Self(s.0 + rhs.0));
-impl_ops!(Sub, Totalf64, |s: Self, rhs: Self| Self(s.0 - rhs.0));
-impl_ops!(Mul, Totalf64, |s: Self, rhs: Self| Self(s.0 * rhs.0));
-impl_ops!(Div, Totalf64, |s: Self, rhs: Self| Self(s.0 / rhs.0));
+impl_ops!(Add for Totalf64, |s: Self, rhs: Self| Self(s.0 + rhs.0));
+impl_ops!(Sub for Totalf64, |s: Self, rhs: Self| Self(s.0 - rhs.0));
+impl_ops!(Mul for Totalf64, |s: Self, rhs: Self| Self(s.0 * rhs.0));
+impl_ops!(Div for Totalf64, |s: Self, rhs: Self| Self(s.0 / rhs.0));
 
-impl_ops!(AddAssign, Totalf64, |s: &mut Self, rhs: Self| s.0 += rhs.0);
-impl_ops!(SubAssign, Totalf64, |s: &mut Self, rhs: Self| s.0 -= rhs.0);
-impl_ops!(MulAssign, Totalf64, |s: &mut Self, rhs: Self| s.0 *= rhs.0);
-impl_ops!(DivAssign, Totalf64, |s: &mut Self, rhs: Self| s.0 /= rhs.0);
+impl_ops!(AddAssign for Totalf64, |s: &mut Self, rhs: Self| s.0 += rhs.0);
+impl_ops!(SubAssign for Totalf64, |s: &mut Self, rhs: Self| s.0 -= rhs.0);
+impl_ops!(MulAssign for Totalf64, |s: &mut Self, rhs: Self| s.0 *= rhs.0);
+impl_ops!(DivAssign for Totalf64, |s: &mut Self, rhs: Self| s.0 /= rhs.0);
 
-impl_ops!(Neg, Totalf64, |s: Self| Self(-s.0));
+impl_ops!(Neg for Totalf64, |s: Self| Self(-s.0));
 
 impl_from!(f64 => Totalf64, Self);
 impl_from!(f32 => Totalf64, |value| Self(value as f64));

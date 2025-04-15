@@ -14,13 +14,14 @@ impl<T> Update<T> {
     }
 }
 
-impl_algebra!(<T>; Update<T>,
-    set: Option<T>,
+impl_algebra!(
+    [T]; Update<T>;
+    set: Option<T>;
     op: |_, a, b| match a {
         Some(_) => a,
         None => b
-    },
-    id: |_| None,
-    assoc: {},
-    idem: {}
+    };
+    id: |_| None;
+    assoc;
+    idem;
 );

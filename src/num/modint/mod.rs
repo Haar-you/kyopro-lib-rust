@@ -157,15 +157,15 @@ impl Debug for ModInt {
     }
 }
 
-impl_ops!(Add, ModInt, |x: Self, y| x.__add(y));
-impl_ops!(Sub, ModInt, |x: Self, y| x.__sub(y));
-impl_ops!(Mul, ModInt, |x: Self, y| x.__mul(y));
-impl_ops!(Div, ModInt, |x: Self, y| x.__div(y));
+impl_ops!(Add for ModInt, |x: Self, y| x.__add(y));
+impl_ops!(Sub for ModInt, |x: Self, y| x.__sub(y));
+impl_ops!(Mul for ModInt, |x: Self, y| x.__mul(y));
+impl_ops!(Div for ModInt, |x: Self, y| x.__div(y));
 
-impl_ops!(AddAssign, ModInt, |x: &mut Self, y| *x = *x + y);
-impl_ops!(SubAssign, ModInt, |x: &mut Self, y| *x = *x - y);
-impl_ops!(MulAssign, ModInt, |x: &mut Self, y| *x = *x * y);
-impl_ops!(DivAssign, ModInt, |x: &mut Self, y| *x = *x / y);
+impl_ops!(AddAssign for ModInt, |x: &mut Self, y| *x = *x + y);
+impl_ops!(SubAssign for ModInt, |x: &mut Self, y| *x = *x - y);
+impl_ops!(MulAssign for ModInt, |x: &mut Self, y| *x = *x * y);
+impl_ops!(DivAssign for ModInt, |x: &mut Self, y| *x = *x / y);
 
 impl Neg for ModInt {
     type Output = Self;
