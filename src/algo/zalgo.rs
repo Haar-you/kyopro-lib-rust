@@ -3,6 +3,9 @@
 //! # References
 //! - <https://snuke.hatenablog.com/entry/2014/12/03/214243>
 //! - <https://qiita.com/Pro_ktmr/items/16904c9570aa0953bf05>
+//!
+//! # Problems
+//! - <https://judge.yosupo.jp/problem/zalgorithm>
 
 /// Z algorithm
 ///

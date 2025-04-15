@@ -2,6 +2,7 @@
 //!
 //! # References
 //! - <https://maspypy.com/%E5%A4%9A%E9%A0%85%E5%BC%8F%E3%83%BB%E5%BD%A2%E5%BC%8F%E7%9A%84%E3%81%B9%E3%81%8D%E7%B4%9A%E6%95%B0%E6%95%B0%E3%81%88%E4%B8%8A%E3%81%92%E3%81%A8%E3%81%AE%E5%AF%BE%E5%BF%9C%E4%BB%98%E3%81%91>
+//! - <https://qiita.com/hotman78/items/f0e6d2265badd84d429a>
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/inv_of_formal_power_series>

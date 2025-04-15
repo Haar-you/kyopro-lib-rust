@@ -1,18 +1,23 @@
+//! First, Lastモノイド
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use std::marker::PhantomData;
 
+/// 最初に出現する`Some`を返す演算。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct First<T>(PhantomData<T>);
+/// 最後に出現する`Some`を返す演算。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Last<T>(PhantomData<T>);
 
 impl<T> First<T> {
+    /// `First<T>`を返す。
     pub fn new() -> Self {
         Self(PhantomData)
     }
 }
 impl<T> Last<T> {
+    /// `Last<T>`を返す。
     pub fn new() -> Self {
         Self(PhantomData)
     }
