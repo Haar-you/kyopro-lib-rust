@@ -1,6 +1,6 @@
 //! Range Affine Range Sum用の代数的構造
 use crate::algebra::action::Action;
-use crate::algebra::{affine::*, sum::*};
+use crate::algebra::{affine::*, dual::*, sum::*};
 use std::fmt::Debug;
 use std::ops::{Add, Mul};
 
@@ -8,7 +8,7 @@ use std::ops::{Add, Mul};
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
 pub struct AffineSum<T, U = T> {
     fold_m: Sum<T>,
-    update_m: Affine<U>,
+    update_m: Dual<Affine<U>>,
 }
 
 impl<T, U> AffineSum<T, U> {
@@ -16,7 +16,7 @@ impl<T, U> AffineSum<T, U> {
     pub fn new() -> Self {
         Self {
             fold_m: Sum::new(),
-            update_m: Affine::new(),
+            update_m: Dual::new(Affine::new()),
         }
     }
 }
@@ -29,7 +29,7 @@ where
     U: Mul<Output = U> + TryFrom<usize, Error: Debug>,
 {
     type FoldMonoid = Sum<T>;
-    type UpdateMonoid = Affine<U>;
+    type UpdateMonoid = Dual<Affine<U>>;
     type Output = <Self::FoldMonoid as Set>::Element;
     type Lazy = <Self::UpdateMonoid as Set>::Element;
 
