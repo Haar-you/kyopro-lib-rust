@@ -2,6 +2,7 @@
 
 pub mod bsearch;
 pub mod bsearch_ng_ok;
+pub mod cartesian_tree;
 pub mod compressor;
 pub mod cycle_finding;
 pub mod edit_distance;
