@@ -66,6 +66,7 @@ impl Bitset {
         self.size as u32 - self.count_ones()
     }
 
+    #[allow(missing_docs)]
     pub fn and_count_ones(&self, rhs: &Self) -> u32 {
         self.data
             .iter()
@@ -74,6 +75,7 @@ impl Bitset {
             .sum()
     }
 
+    #[allow(missing_docs)]
     pub fn same_size_xor_assign(&mut self, rhs: &Self) {
         assert_eq!(self.size, rhs.size);
         for (a, b) in self.data.iter_mut().zip(rhs.data.iter()) {

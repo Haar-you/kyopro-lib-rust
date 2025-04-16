@@ -1,5 +1,9 @@
 //! `impl_algebra!`
 
+/// [`Set`](crate::algebra::traits::Set), [`BinaryOp`](crate::algebra::traits::BinaryOp),
+/// [`Identity`](crate::algebra::traits::Identity), [`Inverse`](crate::algebra::traits::Inverse),
+/// [`Commutative`](crate::algebra::traits::Commutative), [`Associative`](crate::algebra::traits::Associative),
+/// [`Idempotence`](crate::algebra::traits::Idempotence)を実装する。
 #[macro_export]
 macro_rules! impl_algebra {
     (@inner [$($bound:tt)*]; $t:ty;) => {};
