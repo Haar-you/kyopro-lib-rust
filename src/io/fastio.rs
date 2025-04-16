@@ -127,6 +127,19 @@ impl FastIO {
         ret
     }
 
+    /// 文字列を[`Vec<u8>`]として読み出す。
+    pub fn read_bytes(&mut self) -> Vec<u8> {
+        self.skip();
+        let mut ret = vec![];
+
+        while self.peek().is_some_and(|c| c.is_ascii_graphic()) {
+            ret.push(self.in_bytes[self.in_cur]);
+            self.in_cur += 1;
+        }
+
+        ret
+    }
+
     /// `s`を標準出力に書き込む。
     pub fn write<T: Display>(&mut self, s: T) {
         self.out_buf.write_all(format!("{}", s).as_bytes()).unwrap();
