@@ -5,6 +5,7 @@ pub mod ff;
 pub mod modint;
 pub mod montgomery;
 
+pub mod complex;
 pub mod gaussian_int;
 pub mod num_inf;
 pub mod rational;
