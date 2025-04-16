@@ -17,7 +17,7 @@
 //! | [`SegtreeBeats`](segtree_beats::SegtreeBeats) | `new(n)` | `chmin(l..r, X)`, `chmax(l..r, X)`, `add(l..r, X)` | | `sum(l..r, X)` | |
 //! | [`StarrySkyTree`](starry_sky_tree::StarrySkyTree) | `new(n)` | `update(l..r, X)` | | `fold(l..r)` | |
 
-pub mod traits;
+// pub mod traits;
 
 pub mod partially_persistent_unionfind;
 pub mod potential_unionfind;

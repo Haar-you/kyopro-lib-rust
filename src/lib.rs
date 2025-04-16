@@ -27,7 +27,7 @@ pub mod misc;
 pub mod mul_graph;
 pub mod num;
 pub mod parser;
-pub mod traits;
+// pub mod traits;
 pub mod tree;
 
 pub mod typical;
