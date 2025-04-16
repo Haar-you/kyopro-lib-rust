@@ -25,3 +25,5 @@ pub mod add_sum;
 pub mod affine_sum;
 pub mod update_fold;
 pub mod update_sum;
+
+pub mod semiring;
