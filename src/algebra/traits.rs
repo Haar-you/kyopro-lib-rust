@@ -11,6 +11,14 @@ pub trait Set {
 pub trait BinaryOp: Set {
     /// 二項演算
     fn op(&self, _: Self::Element, _: Self::Element) -> Self::Element;
+
+    /// 二項演算$\circ$で(右側から)代入操作($a \leftarrow a \circ b$)をする。
+    fn op_assign(&self, a: &mut Self::Element, b: Self::Element)
+    where
+        Self::Element: Clone,
+    {
+        *a = self.op(a.clone(), b);
+    }
 }
 
 /// 単位元をもつ
@@ -43,7 +51,9 @@ pub trait Times: BinaryOp + Identity
 where
     Self::Element: Clone,
 {
-    /// `n`個の値`a`に二項演算を適用する。
+    /// $\underbrace{a \circ a \circ \dots \circ a \circ a}_{n}$を計算する。
+    ///
+    /// **Time complexity** $O(\log n)$
     fn times(&self, mut a: Self::Element, mut n: u64) -> Self::Element {
         let mut ret = self.id();
 
