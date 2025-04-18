@@ -61,7 +61,7 @@ impl FastIO {
         ret
     }
 
-    /// [`u64`]型の数値を読み出す。
+    /// [`u32`]型の数値を読み出す。
     pub fn read_u32(&mut self) -> u32 {
         self.read_u64() as u32
     }
