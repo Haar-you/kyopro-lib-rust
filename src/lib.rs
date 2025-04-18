@@ -28,6 +28,7 @@ pub mod mul_graph;
 pub mod num;
 pub mod parser;
 // pub mod traits;
+pub mod geom_int;
 pub mod tree;
 
 pub mod typical;
