@@ -1,4 +1,5 @@
 //! ガウス整数
+use crate::impl_from;
 use crate::impl_ops;
 
 /// ガウス整数 $a + bi (a, b \in \mathbb{Z})$
@@ -61,18 +62,10 @@ impl GaussianInt {
     }
 }
 
-impl_ops!(Add for GaussianInt, |a: Self, b: Self| Self {
-    re: a.re + b.re,
-    im: a.im + b.im,
-});
-impl_ops!(Sub for GaussianInt, |a: Self, b: Self| Self {
-    re: a.re - b.re,
-    im: a.im - b.im,
-});
-impl_ops!(Mul for GaussianInt, |a: Self, b: Self| Self {
-    re: a.re * b.re - a.im * b.im,
-    im: a.re * b.im + a.im * b.re
-});
+impl_ops!(Add for GaussianInt, |a: Self, b: Self| Self::new(a.re + b.re, a.im + b.im));
+impl_ops!(Sub for GaussianInt, |a: Self, b: Self| Self::new(a.re - b.re, a.im - b.im));
+impl_ops!(Mul for GaussianInt, |a: Self, b: Self| Self::new(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re));
+impl_ops!(Neg for GaussianInt, |a: Self| Self::new(-a.re, -a.im));
 
 impl_ops!(AddAssign for GaussianInt, |a: &mut Self, b: Self| *a = *a + b);
 impl_ops!(SubAssign for GaussianInt, |a: &mut Self, b: Self| *a = *a - b);
@@ -87,3 +80,6 @@ impl_ops!(
 
 impl_ops!(DivAssign for GaussianInt, |a: &mut Self, b: Self| *a = *a / b);
 impl_ops!(RemAssign for GaussianInt, |a: &mut Self, b: Self| *a = *a % b);
+
+impl_from!((i64, i64) => GaussianInt, |(a, b)| Self::new(a, b));
+impl_from!(GaussianInt => (i64, i64), |GaussianInt { re, im }| (re, im));
