@@ -135,7 +135,7 @@ impl Vector {
     pub fn unit(self) -> Self {
         self / self.abs()
     }
-    /// 直行するベクトルを返す
+    /// 直交するベクトルを返す
     pub fn normal(self) -> Self {
         Self(-self.1, self.0)
     }
