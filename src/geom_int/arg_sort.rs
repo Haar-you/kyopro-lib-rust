@@ -20,8 +20,8 @@ pub fn arg_sort(a: Vec<VectorInt>) -> Vec<VectorInt> {
     let mut x_minus = vec![];
 
     for p in a {
-        match p.1.cmp(&0) {
-            Ordering::Equal => match p.0.cmp(&0) {
+        match p.y.cmp(&0) {
+            Ordering::Equal => match p.x.cmp(&0) {
                 Ordering::Greater => x_plus.push(p),
                 Ordering::Less => x_minus.push(p),
                 Ordering::Equal => zero.push(p),
