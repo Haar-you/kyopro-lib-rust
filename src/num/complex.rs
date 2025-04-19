@@ -1,4 +1,5 @@
 //! 複素数
+use crate::impl_from;
 use crate::impl_ops;
 
 /// 複素数
@@ -43,31 +44,25 @@ impl Complex {
     }
 }
 
-impl_ops!(Add for Complex, |a: Self, b: Self| Self {
-    re: a.re + b.re,
-    im: a.im + b.im
-});
-impl_ops!(Sub for Complex, |a: Self, b: Self| Self {
-    re: a.re - b.re,
-    im: a.im - b.im,
-});
-impl_ops!(Mul for Complex, |a: Self, b: Self| Self {
-    re: a.re * b.re - a.im * b.im,
-    im: a.re * b.im + a.im * b.re
-});
-impl_ops!(Div for Complex, |a: Self, b: Self| Self {
-    re: (a.re * b.re + a.im * b.im) / (b.re * b.re + b.im * b.im),
-    im: (a.im * b.re - a.re * b.im) / (b.re * b.re + b.im * b.im)
-});
-impl_ops!(Neg for Complex, |a: Self| Self {
-    re: -a.re,
-    im: -a.im
-});
+impl_ops!(Add for Complex, |a: Self, b: Self| Self::new(a.re + b.re, a.im + b.im));
+impl_ops!(Sub for Complex, |a: Self, b: Self| Self::new(a.re - b.re, a.im - b.im));
+impl_ops!(Mul for Complex, |a: Self, b: Self| Self::new(
+    a.re * b.re - a.im * b.im,
+    a.re * b.im + a.im * b.re
+));
+impl_ops!(Div for Complex, |a: Self, b: Self| Self::new(
+    (a.re * b.re + a.im * b.im) / (b.re * b.re + b.im * b.im),
+    (a.im * b.re - a.re * b.im) / (b.re * b.re + b.im * b.im)
+));
+impl_ops!(Neg for Complex, |a: Self| Self::new(-a.re, -a.im));
 
 impl_ops!(AddAssign for Complex, |a: &mut Self, b: Self| *a = *a + b);
 impl_ops!(SubAssign for Complex, |a: &mut Self, b: Self| *a = *a - b);
 impl_ops!(MulAssign for Complex, |a: &mut Self, b: Self| *a = *a * b);
 impl_ops!(DivAssign for Complex, |a: &mut Self, b: Self| *a = *a / b);
+
+impl_from!((f64, f64) => Complex, |(a, b)| Self::new(a, b));
+impl_from!(Complex => (f64, f64), |Complex { re, im }| (re, im));
 
 #[cfg(test)]
 mod tests {
