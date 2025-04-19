@@ -1,4 +1,5 @@
 pub mod arg_sort;
+pub mod closest_pair;
 pub mod convex_hull;
 
 use crate::impl_from;
