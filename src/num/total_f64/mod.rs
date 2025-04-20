@@ -1,9 +1,9 @@
 //! 全順序を実装した`f64`
 
-pub mod one_zero;
-
 use crate::impl_from;
+use crate::impl_one_zero;
 use crate::impl_ops;
+use crate::num::one_zero::*;
 
 use std::cmp::Ordering;
 
@@ -39,3 +39,5 @@ impl_ops!(Neg for Totalf64, |s: Self| Self(-s.0));
 impl_from!(f64 => Totalf64, Self);
 impl_from!(f32 => Totalf64, |value| Self(value as f64));
 impl_from!(Totalf64 => f64, |value: Totalf64| value.0);
+
+impl_one_zero!(Totalf64; one: Self(1.0); zero: Self(0.0););

@@ -1,11 +1,12 @@
 //! コンパイル時にmod Mが決まるModInt
 
 pub mod algebra;
-pub mod one_zero;
 
 use crate::impl_from;
+use crate::impl_one_zero;
 use crate::impl_ops;
 pub use crate::num::ff::*;
+use crate::num::one_zero::*;
 use std::{
     fmt,
     fmt::{Debug, Display, Formatter},
@@ -157,3 +158,5 @@ impl_from!([const M: u32]; u32 => ConstModInt<M>, |value| ConstModIntBuilder.fro
 impl_from!([const M: u32]; isize => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value as i64));
 impl_from!([const M: u32]; i64 => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value));
 impl_from!([const M: u32]; i32 => ConstModInt<M>, |value| ConstModIntBuilder.from_i64(value as i64));
+
+impl_one_zero!([const M: u32]; ConstModInt<M>; one: Self(1); zero: Self(0););
