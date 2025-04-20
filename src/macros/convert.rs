@@ -1,4 +1,4 @@
-//! `impl_from!`
+//! `impl_from!`, `impl_try_from!`
 
 /// [`From`]を実装する。
 #[macro_export]
@@ -16,6 +16,7 @@ macro_rules! impl_from {
     };
 }
 
+/// [`TryFrom`]を実装する。
 #[macro_export]
 macro_rules! impl_try_from {
     ($(#[$meta:meta])* [ $($t:tt)* ]; $from:ty => $into:ty, type Error = $error:ty, $f:expr) => {

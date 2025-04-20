@@ -1,3 +1,5 @@
+//! 整数値での幾何
+
 pub mod arg_sort;
 pub mod closest_pair;
 pub mod convex_hull;
