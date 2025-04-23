@@ -2,7 +2,7 @@ pub mod main {
     use super::*;
 
     #[allow(unused_imports)]
-    use haar_lib::{get, input, io::fastio::*, iter::join_str::*};
+    use haar_lib::{get, input, io::fastio::*, iter::join_str::*, output};
 
     #[allow(unused_imports)]
     use std::cell::{Cell, RefCell};
