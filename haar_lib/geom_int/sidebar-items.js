@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["arg_sort","closest_pair","convex_hull"],"struct":["VectorInt"]};

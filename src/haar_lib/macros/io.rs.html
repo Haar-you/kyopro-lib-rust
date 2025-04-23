@@ -69,4 +69,21 @@
 <a href=#53 id=53 data-nosnippet>53</a>    ( <span class="macro-nonterminal">$</span><span class="kw">in</span>:<span class="macro-nonterminal">ident </span>&gt;&gt; $($(<span class="macro-nonterminal">$names</span>:ident)* : <span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">tt </span>$(<span class="kw">as </span><span class="macro-nonterminal">$to</span>:ty)<span class="kw-2">*</span>),* ) =&gt; {
 <a href=#54 id=54 data-nosnippet>54</a>        $(<span class="macro">input!</span>(@inner <span class="macro-nonterminal">$</span><span class="kw">in</span>, $(<span class="macro-nonterminal">$names</span>)* : <span class="macro-nonterminal">$</span><span class="kw">type </span>$(<span class="kw">as </span><span class="macro-nonterminal">$to</span>)<span class="kw-2">*</span>);)*
 <a href=#55 id=55 data-nosnippet>55</a>    }
-<a href=#56 id=56 data-nosnippet>56</a>}</code></pre></div></section></main></body></html>
+<a href=#56 id=56 data-nosnippet>56</a>}
+<a href=#57 id=57 data-nosnippet>57</a>
+<a href=#58 id=58 data-nosnippet>58</a><span class="doccomment">/// [`crate::io::fastio::FastIO`]を第一引数にとり、第二引数以降を空白区切りで出力する。
+<a href=#59 id=59 data-nosnippet>59</a></span><span class="attr">#[macro_export]
+<a href=#60 id=60 data-nosnippet>60</a></span><span class="macro">macro_rules!</span> output {
+<a href=#61 id=61 data-nosnippet>61</a>    ( @one <span class="macro-nonterminal">$io</span>:ident, <span class="macro-nonterminal">$a</span>:expr ) =&gt; {
+<a href=#62 id=62 data-nosnippet>62</a>        <span class="macro-nonterminal">$io</span>.write(<span class="macro-nonterminal">$a</span>);
+<a href=#63 id=63 data-nosnippet>63</a>    };
+<a href=#64 id=64 data-nosnippet>64</a>
+<a href=#65 id=65 data-nosnippet>65</a>    ( <span class="macro-nonterminal">$io</span>:ident &lt;&lt; <span class="macro-nonterminal">$a</span>:expr, $(<span class="macro-nonterminal">$rest</span>:expr),* ) =&gt; {
+<a href=#66 id=66 data-nosnippet>66</a>        <span class="macro">output!</span>(@one <span class="macro-nonterminal">$io</span>, <span class="macro-nonterminal">$a</span>);
+<a href=#67 id=67 data-nosnippet>67</a>        $(
+<a href=#68 id=68 data-nosnippet>68</a>            <span class="macro-nonterminal">$io</span>.write(<span class="string">" "</span>);
+<a href=#69 id=69 data-nosnippet>69</a>            <span class="macro-nonterminal">$io</span>.write(<span class="macro-nonterminal">$rest</span>);
+<a href=#70 id=70 data-nosnippet>70</a>        )*
+<a href=#71 id=71 data-nosnippet>71</a>        <span class="macro-nonterminal">$io</span>.writeln(<span class="string">""</span>);
+<a href=#72 id=72 data-nosnippet>72</a>    };
+<a href=#73 id=73 data-nosnippet>73</a>}</code></pre></div></section></main></body></html>

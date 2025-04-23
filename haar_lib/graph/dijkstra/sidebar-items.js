@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["dijkstra"]};
+window.SIDEBAR_ITEMS = {"struct":["Dijkstra"]};

@@ -261,115 +261,117 @@
 <a href=#245 id=245 data-nosnippet>245</a>        }
 <a href=#246 id=246 data-nosnippet>246</a>    }
 <a href=#247 id=247 data-nosnippet>247</a>
-<a href=#248 id=248 data-nosnippet>248</a>    <span class="kw">pub fn </span>expose(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: usize) {
-<a href=#249 id=249 data-nosnippet>249</a>        Node::expose(<span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[k]);
-<a href=#250 id=250 data-nosnippet>250</a>    }
-<a href=#251 id=251 data-nosnippet>251</a>
-<a href=#252 id=252 data-nosnippet>252</a>    <span class="doccomment">/// 頂点`i`と頂点`j`の間にある辺を削除する。
-<a href=#253 id=253 data-nosnippet>253</a>    ///
-<a href=#254 id=254 data-nosnippet>254</a>    /// # Panics
-<a href=#255 id=255 data-nosnippet>255</a>    ///
-<a href=#256 id=256 data-nosnippet>256</a>    /// 頂点`i`と頂点`j`が隣接していないときパニックする。
-<a href=#257 id=257 data-nosnippet>257</a>    </span><span class="kw">pub fn </span>cut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) {
-<a href=#258 id=258 data-nosnippet>258</a>        <span class="kw">let </span>u = <span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[i] <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">_</span>;
-<a href=#259 id=259 data-nosnippet>259</a>        <span class="kw">let </span>v = <span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[j] <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">_</span>;
-<a href=#260 id=260 data-nosnippet>260</a>
-<a href=#261 id=261 data-nosnippet>261</a>        Node::expose(u);
-<a href=#262 id=262 data-nosnippet>262</a>        Node::expose(v);
-<a href=#263 id=263 data-nosnippet>263</a>
-<a href=#264 id=264 data-nosnippet>264</a>        <span class="macro">assert!</span>(
-<a href=#265 id=265 data-nosnippet>265</a>            Node::is_conencted(u, v),
-<a href=#266 id=266 data-nosnippet>266</a>            <span class="string">"`cut`操作では頂点`{i}`と`{j}`は隣接して連結されねばならない。"</span>,
-<a href=#267 id=267 data-nosnippet>267</a>        );
-<a href=#268 id=268 data-nosnippet>268</a>
-<a href=#269 id=269 data-nosnippet>269</a>        <span class="kw">if </span>Node::is_root(u) {
-<a href=#270 id=270 data-nosnippet>270</a>            Node::set_par(u, ptr::null_mut());
-<a href=#271 id=271 data-nosnippet>271</a>        } <span class="kw">else </span>{
-<a href=#272 id=272 data-nosnippet>272</a>            Node::set_par(Node::left_of(v).unwrap(), ptr::null_mut());
-<a href=#273 id=273 data-nosnippet>273</a>            Node::set_left(v, ptr::null_mut());
-<a href=#274 id=274 data-nosnippet>274</a>            Node::update_node_status(v);
-<a href=#275 id=275 data-nosnippet>275</a>        }
-<a href=#276 id=276 data-nosnippet>276</a>    }
-<a href=#277 id=277 data-nosnippet>277</a>
-<a href=#278 id=278 data-nosnippet>278</a>    <span class="doccomment">/// 頂点`i`と頂点`j`の間に辺を張る。
-<a href=#279 id=279 data-nosnippet>279</a>    ///
-<a href=#280 id=280 data-nosnippet>280</a>    /// # Panics
-<a href=#281 id=281 data-nosnippet>281</a>    ///
-<a href=#282 id=282 data-nosnippet>282</a>    /// 頂点`i`と頂点`j`が同一の木に属するときパニックする。
-<a href=#283 id=283 data-nosnippet>283</a>    </span><span class="kw">pub fn </span>link(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) {
-<a href=#284 id=284 data-nosnippet>284</a>        <span class="macro">assert_ne!</span>(i, j);
-<a href=#285 id=285 data-nosnippet>285</a>        <span class="kw">let </span>u = <span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[i] <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">_</span>;
-<a href=#286 id=286 data-nosnippet>286</a>        <span class="kw">let </span>v = <span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[j] <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">_</span>;
-<a href=#287 id=287 data-nosnippet>287</a>
-<a href=#288 id=288 data-nosnippet>288</a>        Node::evert(u);
-<a href=#289 id=289 data-nosnippet>289</a>
-<a href=#290 id=290 data-nosnippet>290</a>        <span class="macro">assert!</span>(
-<a href=#291 id=291 data-nosnippet>291</a>            !Node::same_group(u, v),
-<a href=#292 id=292 data-nosnippet>292</a>            <span class="string">"`link`操作では頂点`{i}`と`{j}`は同一の木に属してはならない。"</span>,
-<a href=#293 id=293 data-nosnippet>293</a>        );
-<a href=#294 id=294 data-nosnippet>294</a>
-<a href=#295 id=295 data-nosnippet>295</a>        Node::set_par(u, v);
-<a href=#296 id=296 data-nosnippet>296</a>    }
-<a href=#297 id=297 data-nosnippet>297</a>
-<a href=#298 id=298 data-nosnippet>298</a>    <span class="kw">pub fn </span>evert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: usize) {
-<a href=#299 id=299 data-nosnippet>299</a>        Node::evert(<span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[k]);
-<a href=#300 id=300 data-nosnippet>300</a>    }
-<a href=#301 id=301 data-nosnippet>301</a>
-<a href=#302 id=302 data-nosnippet>302</a>    <span class="doccomment">/// 頂点`k`の値を`x`に変更する。
-<a href=#303 id=303 data-nosnippet>303</a>    </span><span class="kw">pub fn </span>set(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: usize, x: M::Element) {
-<a href=#304 id=304 data-nosnippet>304</a>        Node::evert(<span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[k]);
-<a href=#305 id=305 data-nosnippet>305</a>        <span class="self">self</span>.nodes[k].value = x;
-<a href=#306 id=306 data-nosnippet>306</a>        Node::pushdown(<span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[k]);
-<a href=#307 id=307 data-nosnippet>307</a>    }
-<a href=#308 id=308 data-nosnippet>308</a>
-<a href=#309 id=309 data-nosnippet>309</a>    <span class="doccomment">/// 頂点`k`の値をモノイドの演算と値`x`で更新する。
-<a href=#310 id=310 data-nosnippet>310</a>    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: usize, x: M::Element) {
-<a href=#311 id=311 data-nosnippet>311</a>        <span class="self">self</span>.set(k, <span class="self">self</span>.monoid.op(<span class="self">self</span>.get(k), x));
-<a href=#312 id=312 data-nosnippet>312</a>    }
-<a href=#313 id=313 data-nosnippet>313</a>
-<a href=#314 id=314 data-nosnippet>314</a>    <span class="doccomment">/// 頂点`k`の値を返す。
-<a href=#315 id=315 data-nosnippet>315</a>    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, k: usize) -&gt; M::Element {
-<a href=#316 id=316 data-nosnippet>316</a>        <span class="self">self</span>.nodes[k].value.clone()
-<a href=#317 id=317 data-nosnippet>317</a>    }
-<a href=#318 id=318 data-nosnippet>318</a>
-<a href=#319 id=319 data-nosnippet>319</a>    <span class="doccomment">/// 頂点`i`,`j`間のパス上でのモノイドの演算の結果を返す。
-<a href=#320 id=320 data-nosnippet>320</a>    ///
-<a href=#321 id=321 data-nosnippet>321</a>    /// # Panics
+<a href=#248 id=248 data-nosnippet>248</a>    <span class="attr">#[allow(missing_docs)]
+<a href=#249 id=249 data-nosnippet>249</a>    </span><span class="kw">pub fn </span>expose(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: usize) {
+<a href=#250 id=250 data-nosnippet>250</a>        Node::expose(<span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[k]);
+<a href=#251 id=251 data-nosnippet>251</a>    }
+<a href=#252 id=252 data-nosnippet>252</a>
+<a href=#253 id=253 data-nosnippet>253</a>    <span class="doccomment">/// 頂点`i`と頂点`j`の間にある辺を削除する。
+<a href=#254 id=254 data-nosnippet>254</a>    ///
+<a href=#255 id=255 data-nosnippet>255</a>    /// # Panics
+<a href=#256 id=256 data-nosnippet>256</a>    ///
+<a href=#257 id=257 data-nosnippet>257</a>    /// 頂点`i`と頂点`j`が隣接していないときパニックする。
+<a href=#258 id=258 data-nosnippet>258</a>    </span><span class="kw">pub fn </span>cut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) {
+<a href=#259 id=259 data-nosnippet>259</a>        <span class="kw">let </span>u = <span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[i] <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">_</span>;
+<a href=#260 id=260 data-nosnippet>260</a>        <span class="kw">let </span>v = <span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[j] <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">_</span>;
+<a href=#261 id=261 data-nosnippet>261</a>
+<a href=#262 id=262 data-nosnippet>262</a>        Node::expose(u);
+<a href=#263 id=263 data-nosnippet>263</a>        Node::expose(v);
+<a href=#264 id=264 data-nosnippet>264</a>
+<a href=#265 id=265 data-nosnippet>265</a>        <span class="macro">assert!</span>(
+<a href=#266 id=266 data-nosnippet>266</a>            Node::is_conencted(u, v),
+<a href=#267 id=267 data-nosnippet>267</a>            <span class="string">"`cut`操作では頂点`{i}`と`{j}`は隣接して連結されねばならない。"</span>,
+<a href=#268 id=268 data-nosnippet>268</a>        );
+<a href=#269 id=269 data-nosnippet>269</a>
+<a href=#270 id=270 data-nosnippet>270</a>        <span class="kw">if </span>Node::is_root(u) {
+<a href=#271 id=271 data-nosnippet>271</a>            Node::set_par(u, ptr::null_mut());
+<a href=#272 id=272 data-nosnippet>272</a>        } <span class="kw">else </span>{
+<a href=#273 id=273 data-nosnippet>273</a>            Node::set_par(Node::left_of(v).unwrap(), ptr::null_mut());
+<a href=#274 id=274 data-nosnippet>274</a>            Node::set_left(v, ptr::null_mut());
+<a href=#275 id=275 data-nosnippet>275</a>            Node::update_node_status(v);
+<a href=#276 id=276 data-nosnippet>276</a>        }
+<a href=#277 id=277 data-nosnippet>277</a>    }
+<a href=#278 id=278 data-nosnippet>278</a>
+<a href=#279 id=279 data-nosnippet>279</a>    <span class="doccomment">/// 頂点`i`と頂点`j`の間に辺を張る。
+<a href=#280 id=280 data-nosnippet>280</a>    ///
+<a href=#281 id=281 data-nosnippet>281</a>    /// # Panics
+<a href=#282 id=282 data-nosnippet>282</a>    ///
+<a href=#283 id=283 data-nosnippet>283</a>    /// 頂点`i`と頂点`j`が同一の木に属するときパニックする。
+<a href=#284 id=284 data-nosnippet>284</a>    </span><span class="kw">pub fn </span>link(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize) {
+<a href=#285 id=285 data-nosnippet>285</a>        <span class="macro">assert_ne!</span>(i, j);
+<a href=#286 id=286 data-nosnippet>286</a>        <span class="kw">let </span>u = <span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[i] <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">_</span>;
+<a href=#287 id=287 data-nosnippet>287</a>        <span class="kw">let </span>v = <span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[j] <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">_</span>;
+<a href=#288 id=288 data-nosnippet>288</a>
+<a href=#289 id=289 data-nosnippet>289</a>        Node::evert(u);
+<a href=#290 id=290 data-nosnippet>290</a>
+<a href=#291 id=291 data-nosnippet>291</a>        <span class="macro">assert!</span>(
+<a href=#292 id=292 data-nosnippet>292</a>            !Node::same_group(u, v),
+<a href=#293 id=293 data-nosnippet>293</a>            <span class="string">"`link`操作では頂点`{i}`と`{j}`は同一の木に属してはならない。"</span>,
+<a href=#294 id=294 data-nosnippet>294</a>        );
+<a href=#295 id=295 data-nosnippet>295</a>
+<a href=#296 id=296 data-nosnippet>296</a>        Node::set_par(u, v);
+<a href=#297 id=297 data-nosnippet>297</a>    }
+<a href=#298 id=298 data-nosnippet>298</a>
+<a href=#299 id=299 data-nosnippet>299</a>    <span class="attr">#[allow(missing_docs)]
+<a href=#300 id=300 data-nosnippet>300</a>    </span><span class="kw">pub fn </span>evert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: usize) {
+<a href=#301 id=301 data-nosnippet>301</a>        Node::evert(<span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[k]);
+<a href=#302 id=302 data-nosnippet>302</a>    }
+<a href=#303 id=303 data-nosnippet>303</a>
+<a href=#304 id=304 data-nosnippet>304</a>    <span class="doccomment">/// 頂点`k`の値を`x`に変更する。
+<a href=#305 id=305 data-nosnippet>305</a>    </span><span class="kw">pub fn </span>set(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: usize, x: M::Element) {
+<a href=#306 id=306 data-nosnippet>306</a>        Node::evert(<span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[k]);
+<a href=#307 id=307 data-nosnippet>307</a>        <span class="self">self</span>.nodes[k].value = x;
+<a href=#308 id=308 data-nosnippet>308</a>        Node::pushdown(<span class="kw-2">&amp;mut </span><span class="self">self</span>.nodes[k]);
+<a href=#309 id=309 data-nosnippet>309</a>    }
+<a href=#310 id=310 data-nosnippet>310</a>
+<a href=#311 id=311 data-nosnippet>311</a>    <span class="doccomment">/// 頂点`k`の値をモノイドの演算と値`x`で更新する。
+<a href=#312 id=312 data-nosnippet>312</a>    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: usize, x: M::Element) {
+<a href=#313 id=313 data-nosnippet>313</a>        <span class="self">self</span>.set(k, <span class="self">self</span>.monoid.op(<span class="self">self</span>.get(k), x));
+<a href=#314 id=314 data-nosnippet>314</a>    }
+<a href=#315 id=315 data-nosnippet>315</a>
+<a href=#316 id=316 data-nosnippet>316</a>    <span class="doccomment">/// 頂点`k`の値を返す。
+<a href=#317 id=317 data-nosnippet>317</a>    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, k: usize) -&gt; M::Element {
+<a href=#318 id=318 data-nosnippet>318</a>        <span class="self">self</span>.nodes[k].value.clone()
+<a href=#319 id=319 data-nosnippet>319</a>    }
+<a href=#320 id=320 data-nosnippet>320</a>
+<a href=#321 id=321 data-nosnippet>321</a>    <span class="doccomment">/// 頂点`i`,`j`間のパス上でのモノイドの演算の結果を返す。
 <a href=#322 id=322 data-nosnippet>322</a>    ///
-<a href=#323 id=323 data-nosnippet>323</a>    /// 頂点`i`と`j`が同一の木に属していないときパニックする。
-<a href=#324 id=324 data-nosnippet>324</a>    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, j: usize) -&gt; M::Element {
-<a href=#325 id=325 data-nosnippet>325</a>        <span class="kw">let </span>u = <span class="kw-2">&amp;</span><span class="self">self</span>.nodes[i] <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span><span class="kw-2">*mut </span>Node&lt;M&gt;;
-<a href=#326 id=326 data-nosnippet>326</a>        <span class="kw">let </span>v = <span class="kw-2">&amp;</span><span class="self">self</span>.nodes[j] <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span><span class="kw-2">*mut </span>Node&lt;M&gt;;
-<a href=#327 id=327 data-nosnippet>327</a>
-<a href=#328 id=328 data-nosnippet>328</a>        <span class="macro">assert!</span>(
-<a href=#329 id=329 data-nosnippet>329</a>            Node::same_group(u, v),
-<a href=#330 id=330 data-nosnippet>330</a>            <span class="string">"頂点`{i}`と`{j}`は同一の木に属していなければならない。"</span>,
-<a href=#331 id=331 data-nosnippet>331</a>        );
-<a href=#332 id=332 data-nosnippet>332</a>
-<a href=#333 id=333 data-nosnippet>333</a>        Node::evert(u);
-<a href=#334 id=334 data-nosnippet>334</a>        Node::expose(v);
-<a href=#335 id=335 data-nosnippet>335</a>        <span class="self">self</span>.nodes[j].result.clone()
-<a href=#336 id=336 data-nosnippet>336</a>    }
-<a href=#337 id=337 data-nosnippet>337</a>}
-<a href=#338 id=338 data-nosnippet>338</a>
-<a href=#339 id=339 data-nosnippet>339</a><span class="attr">#[cfg(test)]
-<a href=#340 id=340 data-nosnippet>340</a></span><span class="kw">mod </span>tests {
-<a href=#341 id=341 data-nosnippet>341</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#342 id=342 data-nosnippet>342</a>
-<a href=#343 id=343 data-nosnippet>343</a>    <span class="kw">use </span><span class="kw">crate</span>::algebra::trivial::<span class="kw-2">*</span>;
+<a href=#323 id=323 data-nosnippet>323</a>    /// # Panics
+<a href=#324 id=324 data-nosnippet>324</a>    ///
+<a href=#325 id=325 data-nosnippet>325</a>    /// 頂点`i`と`j`が同一の木に属していないときパニックする。
+<a href=#326 id=326 data-nosnippet>326</a>    </span><span class="kw">pub fn </span>fold(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, j: usize) -&gt; M::Element {
+<a href=#327 id=327 data-nosnippet>327</a>        <span class="kw">let </span>u = <span class="kw-2">&amp;</span><span class="self">self</span>.nodes[i] <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span><span class="kw-2">*mut </span>Node&lt;M&gt;;
+<a href=#328 id=328 data-nosnippet>328</a>        <span class="kw">let </span>v = <span class="kw-2">&amp;</span><span class="self">self</span>.nodes[j] <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span><span class="kw-2">*mut </span>Node&lt;M&gt;;
+<a href=#329 id=329 data-nosnippet>329</a>
+<a href=#330 id=330 data-nosnippet>330</a>        <span class="macro">assert!</span>(
+<a href=#331 id=331 data-nosnippet>331</a>            Node::same_group(u, v),
+<a href=#332 id=332 data-nosnippet>332</a>            <span class="string">"頂点`{i}`と`{j}`は同一の木に属していなければならない。"</span>,
+<a href=#333 id=333 data-nosnippet>333</a>        );
+<a href=#334 id=334 data-nosnippet>334</a>
+<a href=#335 id=335 data-nosnippet>335</a>        Node::evert(u);
+<a href=#336 id=336 data-nosnippet>336</a>        Node::expose(v);
+<a href=#337 id=337 data-nosnippet>337</a>        <span class="self">self</span>.nodes[j].result.clone()
+<a href=#338 id=338 data-nosnippet>338</a>    }
+<a href=#339 id=339 data-nosnippet>339</a>}
+<a href=#340 id=340 data-nosnippet>340</a>
+<a href=#341 id=341 data-nosnippet>341</a><span class="attr">#[cfg(test)]
+<a href=#342 id=342 data-nosnippet>342</a></span><span class="kw">mod </span>tests {
+<a href=#343 id=343 data-nosnippet>343</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#344 id=344 data-nosnippet>344</a>
-<a href=#345 id=345 data-nosnippet>345</a>    <span class="attr">#[test]
-<a href=#346 id=346 data-nosnippet>346</a>    </span><span class="kw">fn </span>test() {
-<a href=#347 id=347 data-nosnippet>347</a>        <span class="kw">let </span>monoid = Trivial;
-<a href=#348 id=348 data-nosnippet>348</a>        <span class="kw">let </span>n = <span class="number">10</span>;
-<a href=#349 id=349 data-nosnippet>349</a>
-<a href=#350 id=350 data-nosnippet>350</a>        <span class="kw">let </span><span class="kw-2">mut </span>lct = LinkCutTree::new(monoid, n);
+<a href=#345 id=345 data-nosnippet>345</a>    <span class="kw">use </span><span class="kw">crate</span>::algebra::trivial::<span class="kw-2">*</span>;
+<a href=#346 id=346 data-nosnippet>346</a>
+<a href=#347 id=347 data-nosnippet>347</a>    <span class="attr">#[test]
+<a href=#348 id=348 data-nosnippet>348</a>    </span><span class="kw">fn </span>test() {
+<a href=#349 id=349 data-nosnippet>349</a>        <span class="kw">let </span>monoid = Trivial;
+<a href=#350 id=350 data-nosnippet>350</a>        <span class="kw">let </span>n = <span class="number">10</span>;
 <a href=#351 id=351 data-nosnippet>351</a>
-<a href=#352 id=352 data-nosnippet>352</a>        <span class="comment">//        lct.cut(0, 1); // Runtime error
+<a href=#352 id=352 data-nosnippet>352</a>        <span class="kw">let </span><span class="kw-2">mut </span>lct = LinkCutTree::new(monoid, n);
 <a href=#353 id=353 data-nosnippet>353</a>
-<a href=#354 id=354 data-nosnippet>354</a>        </span>lct.link(<span class="number">0</span>, <span class="number">1</span>);
-<a href=#355 id=355 data-nosnippet>355</a>        lct.link(<span class="number">1</span>, <span class="number">2</span>);
-<a href=#356 id=356 data-nosnippet>356</a>
-<a href=#357 id=357 data-nosnippet>357</a>        <span class="comment">//        lct.link(0, 2); // Runtime error
-<a href=#358 id=358 data-nosnippet>358</a>    </span>}
-<a href=#359 id=359 data-nosnippet>359</a>}</code></pre></div></section></main></body></html>
+<a href=#354 id=354 data-nosnippet>354</a>        <span class="comment">//        lct.cut(0, 1); // Runtime error
+<a href=#355 id=355 data-nosnippet>355</a>
+<a href=#356 id=356 data-nosnippet>356</a>        </span>lct.link(<span class="number">0</span>, <span class="number">1</span>);
+<a href=#357 id=357 data-nosnippet>357</a>        lct.link(<span class="number">1</span>, <span class="number">2</span>);
+<a href=#358 id=358 data-nosnippet>358</a>
+<a href=#359 id=359 data-nosnippet>359</a>        <span class="comment">//        lct.link(0, 2); // Runtime error
+<a href=#360 id=360 data-nosnippet>360</a>    </span>}
+<a href=#361 id=361 data-nosnippet>361</a>}</code></pre></div></section></main></body></html>

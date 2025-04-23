@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["action","add_sum","affine","affine_sum","bitand","bitor","bitxor","dihedral","dual","max","max_contiguous","max_partial_sum","min","prod","sum","traits","transform","trivial","tuple","update","update_sum"]};
+window.SIDEBAR_ITEMS = {"mod":["action","add_sum","affine","affine_sum","bitand","bitor","bitxor","dihedral","dual","first_last","max","max_contiguous","max_partial_sum","min","prod","semiring","sum","traits","transform","trivial","tuple","update_fold","update_sum"]};

@@ -106,17 +106,17 @@
 <a href=#90 id=90 data-nosnippet>90</a><span class="macro">impl_from!</span>(Rational =&gt; f64, |value: Rational| (value.numerator <span class="kw">as </span>f64) / (value.denominator <span class="kw">as </span>f64));
 <a href=#91 id=91 data-nosnippet>91</a><span class="macro">impl_from!</span>(i64 =&gt; Rational, |value| <span class="self">Self </span>{ numerator: value, denominator: <span class="number">1 </span>});
 <a href=#92 id=92 data-nosnippet>92</a>
-<a href=#93 id=93 data-nosnippet>93</a><span class="macro">impl_ops!</span>(Add, Rational, |s: <span class="self">Self</span>, rhs| s.__add(rhs));
-<a href=#94 id=94 data-nosnippet>94</a><span class="macro">impl_ops!</span>(Sub, Rational, |s: <span class="self">Self</span>, rhs| s.__sub(rhs));
-<a href=#95 id=95 data-nosnippet>95</a><span class="macro">impl_ops!</span>(Mul, Rational, |s: <span class="self">Self</span>, rhs| s.__mul(rhs));
-<a href=#96 id=96 data-nosnippet>96</a><span class="macro">impl_ops!</span>(Div, Rational, |s: <span class="self">Self</span>, rhs| s.__div(rhs));
+<a href=#93 id=93 data-nosnippet>93</a><span class="macro">impl_ops!</span>(Add <span class="kw">for </span>Rational, |s: <span class="self">Self</span>, rhs| s.__add(rhs));
+<a href=#94 id=94 data-nosnippet>94</a><span class="macro">impl_ops!</span>(Sub <span class="kw">for </span>Rational, |s: <span class="self">Self</span>, rhs| s.__sub(rhs));
+<a href=#95 id=95 data-nosnippet>95</a><span class="macro">impl_ops!</span>(Mul <span class="kw">for </span>Rational, |s: <span class="self">Self</span>, rhs| s.__mul(rhs));
+<a href=#96 id=96 data-nosnippet>96</a><span class="macro">impl_ops!</span>(Div <span class="kw">for </span>Rational, |s: <span class="self">Self</span>, rhs| s.__div(rhs));
 <a href=#97 id=97 data-nosnippet>97</a>
-<a href=#98 id=98 data-nosnippet>98</a><span class="macro">impl_ops!</span>(AddAssign, Rational, |s: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, rhs| <span class="kw-2">*</span>s = <span class="kw-2">*</span>s + rhs);
-<a href=#99 id=99 data-nosnippet>99</a><span class="macro">impl_ops!</span>(SubAssign, Rational, |s: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, rhs| <span class="kw-2">*</span>s = <span class="kw-2">*</span>s - rhs);
-<a href=#100 id=100 data-nosnippet>100</a><span class="macro">impl_ops!</span>(MulAssign, Rational, |s: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, rhs| <span class="kw-2">*</span>s = <span class="kw-2">*</span>s * rhs);
-<a href=#101 id=101 data-nosnippet>101</a><span class="macro">impl_ops!</span>(DivAssign, Rational, |s: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, rhs| <span class="kw-2">*</span>s = <span class="kw-2">*</span>s / rhs);
+<a href=#98 id=98 data-nosnippet>98</a><span class="macro">impl_ops!</span>(AddAssign <span class="kw">for </span>Rational, |s: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, rhs| <span class="kw-2">*</span>s = <span class="kw-2">*</span>s + rhs);
+<a href=#99 id=99 data-nosnippet>99</a><span class="macro">impl_ops!</span>(SubAssign <span class="kw">for </span>Rational, |s: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, rhs| <span class="kw-2">*</span>s = <span class="kw-2">*</span>s - rhs);
+<a href=#100 id=100 data-nosnippet>100</a><span class="macro">impl_ops!</span>(MulAssign <span class="kw">for </span>Rational, |s: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, rhs| <span class="kw-2">*</span>s = <span class="kw-2">*</span>s * rhs);
+<a href=#101 id=101 data-nosnippet>101</a><span class="macro">impl_ops!</span>(DivAssign <span class="kw">for </span>Rational, |s: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, rhs| <span class="kw-2">*</span>s = <span class="kw-2">*</span>s / rhs);
 <a href=#102 id=102 data-nosnippet>102</a>
-<a href=#103 id=103 data-nosnippet>103</a><span class="macro">impl_ops!</span>(Neg, Rational, |s: <span class="self">Self</span>| <span class="self">Self</span>::new(
+<a href=#103 id=103 data-nosnippet>103</a><span class="macro">impl_ops!</span>(Neg <span class="kw">for </span>Rational, |s: <span class="self">Self</span>| <span class="self">Self</span>::new(
 <a href=#104 id=104 data-nosnippet>104</a>    -s.numerator,
 <a href=#105 id=105 data-nosnippet>105</a>    s.denominator
 <a href=#106 id=106 data-nosnippet>106</a>));

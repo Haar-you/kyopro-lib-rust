@@ -14,21 +14,23 @@
  });
 </script>
 
-</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../haar_lib/index.html">haar_<wbr>lib</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">haar_lib</a></div><h1>Macro <span class="macro">impl_ops</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/haar_lib/macros/impl_ops.rs.html#5-73">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! impl_ops {
-    (@inner, $(#[$meta:meta])* $tr:ty, $a:ty, $f:expr, $fn:tt; $($bound:tt)*) =&gt; { ... };
-    (@inner_assign, $(#[$meta:meta])* $tr:ty, $a:ty, $f:expr, $fn:tt; $($bound:tt)*) =&gt; { ... };
-    ($(#[$meta:meta])* &lt;const $m:tt: $t:ty&gt;; $trait:ident, $a:ty, $f:expr) =&gt; { ... };
-    ($(#[$meta:meta])* $trait:ident, $a:ty, $f:expr) =&gt; { ... };
-    (@when $(#[$meta:meta])* Add, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
-    (@when $(#[$meta:meta])* Sub, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
-    (@when $(#[$meta:meta])* Mul, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
-    (@when $(#[$meta:meta])* Div, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
-    (@when $(#[$meta:meta])* Rem, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
-    (@when $(#[$meta:meta])* AddAssign, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
-    (@when $(#[$meta:meta])* SubAssign, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
-    (@when $(#[$meta:meta])* MulAssign, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
-    (@when $(#[$meta:meta])* DivAssign, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
-    (@when $(#[$meta:meta])* RemAssign, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
-    (@when $(#[$meta:meta])* Neg, $a:ty, $f:expr; $($bound:tt)*) =&gt; { ... };
+</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../haar_lib/index.html">haar_<wbr>lib</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">haar_lib</a></div><h1>Macro <span class="macro">impl_ops</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/haar_lib/macros/impl_ops.rs.html#5-78">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! impl_ops {
+    (@inner, $(#[$meta:meta])* [$($bound:tt)*]; $tr:ty, $rhs:ty, $a:ty, $f:expr, $fn:tt) =&gt; { ... };
+    (@inner_assign, $(#[$meta:meta])* [$($bound:tt)*]; $tr:ty, $rhs:ty, $a:ty, $f:expr, $fn:tt) =&gt; { ... };
+    ($(#[$meta:meta])* [$($bound:tt)*]; $trait:ident for $a:ty, $f:expr) =&gt; { ... };
+    ($(#[$meta:meta])* [$($bound:tt)*]; $trait:ident &lt;$rhs:ty&gt; for $a:ty, $f:expr) =&gt; { ... };
+    ($(#[$meta:meta])* $trait:ident for $a:ty, $f:expr) =&gt; { ... };
+    ($(#[$meta:meta])* $trait:ident &lt;$rhs:ty&gt; for $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; Add, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; Sub, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; Mul, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; Div, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; Rem, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; AddAssign, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; SubAssign, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; MulAssign, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; DivAssign, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; RemAssign, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
+    (@when $(#[$meta:meta])* [$($bound:tt)*]; Neg, $rhs:ty, $a:ty, $f:expr) =&gt; { ... };
 }</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.Add.html" title="trait core::ops::arith::Add"><code>Add</code></a>, <a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.Sub.html" title="trait core::ops::arith::Sub"><code>Sub</code></a>, <a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.Mul.html" title="trait core::ops::arith::Mul"><code>Mul</code></a>, <a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.Div.html" title="trait core::ops::arith::Div"><code>Div</code></a>, <a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.Rem.html" title="trait core::ops::arith::Rem"><code>Rem</code></a>, <a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.AddAssign.html" title="trait core::ops::arith::AddAssign"><code>AddAssign</code></a>, <a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.SubAssign.html" title="trait core::ops::arith::SubAssign"><code>SubAssign</code></a>, <a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.MulAssign.html" title="trait core::ops::arith::MulAssign"><code>MulAssign</code></a>, <a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.DivAssign.html" title="trait core::ops::arith::DivAssign"><code>DivAssign</code></a>, <a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.RemAssign.html" title="trait core::ops::arith::RemAssign"><code>RemAssign</code></a>, <a href="https://doc.rust-lang.org/1.86.0/core/ops/arith/trait.Neg.html" title="trait core::ops::arith::Neg"><code>Neg</code></a>を実装する。</p>
 </div></details></section></div></main></body></html>

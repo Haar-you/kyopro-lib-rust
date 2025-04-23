@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["xor_and"],"trait":["Semiring"]};

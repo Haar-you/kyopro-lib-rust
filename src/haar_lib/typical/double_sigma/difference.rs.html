@@ -18,20 +18,36 @@
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a>/// 2要素の差の絶対値の総和
 <a href=#4 id=4 data-nosnippet>4</a>///
-<a href=#5 id=5 data-nosnippet>5</a>/// Σ{i = 1 ~ N - 1}Σ{j = i + 1 ~ N} |aᵢ - aⱼ|
+<a href=#5 id=5 data-nosnippet>5</a>/// **Time complexity** $O(|a| \log |a|)$
 <a href=#6 id=6 data-nosnippet>6</a>///
-<a href=#7 id=7 data-nosnippet>7</a>/// **Time complexity** $O(|a| \log |a|)$
-<a href=#8 id=8 data-nosnippet>8</a>///
-<a href=#9 id=9 data-nosnippet>9</a>/// # Problems
-<a href=#10 id=10 data-nosnippet>10</a>/// - &lt;https://atcoder.jp/contests/abc186/tasks/abc186_d&gt;
-<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub fn </span>sum_of_sum_of_difference(<span class="kw-2">mut </span>a: Vec&lt;i64&gt;) -&gt; i64 {
-<a href=#12 id=12 data-nosnippet>12</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="number">0</span>;
-<a href=#13 id=13 data-nosnippet>13</a>    <span class="kw">let </span>n = a.len();
-<a href=#14 id=14 data-nosnippet>14</a>    a.sort();
-<a href=#15 id=15 data-nosnippet>15</a>
-<a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">for </span>(i, x) <span class="kw">in </span>a.into_iter().enumerate() {
-<a href=#17 id=17 data-nosnippet>17</a>        ret += x * (i <span class="kw">as </span>i64 * <span class="number">2 </span>+ <span class="number">1 </span>- n <span class="kw">as </span>i64);
-<a href=#18 id=18 data-nosnippet>18</a>    }
-<a href=#19 id=19 data-nosnippet>19</a>
-<a href=#20 id=20 data-nosnippet>20</a>    ret
-<a href=#21 id=21 data-nosnippet>21</a>}</code></pre></div></section></main></body></html>
+<a href=#7 id=7 data-nosnippet>7</a>/// # Problems
+<a href=#8 id=8 data-nosnippet>8</a>/// - &lt;https://atcoder.jp/contests/abc186/tasks/abc186_d&gt;
+<a href=#9 id=9 data-nosnippet>9</a>///
+<a href=#10 id=10 data-nosnippet>10</a>/// # Explanation
+<a href=#11 id=11 data-nosnippet>11</a>/// $$\bigstar = \sum_{1 \le i \le N-1} \sum_{i+1 \le j \le N} |a_i - a_j|$$
+<a href=#12 id=12 data-nosnippet>12</a>///
+<a href=#13 id=13 data-nosnippet>13</a>/// $f(i, j) = |a_i - a_j|$は可換なので、$a$を降順にソートされているものとする。
+<a href=#14 id=14 data-nosnippet>14</a>///
+<a href=#15 id=15 data-nosnippet>15</a>/// このとき、$a_i \ge a_j (i \lt j)$なので、絶対値は外してよく、
+<a href=#16 id=16 data-nosnippet>16</a>///
+<a href=#17 id=17 data-nosnippet>17</a>/// $$
+<a href=#18 id=18 data-nosnippet>18</a>/// \begin{aligned}
+<a href=#19 id=19 data-nosnippet>19</a>/// \bigstar &amp;= \sum_{1 \le i \le N-1} \sum_{i+1 \le j \le N} (a_i - a_j) \\\\
+<a href=#20 id=20 data-nosnippet>20</a>/// &amp;= \sum_{1 \le i \le N-1} ((N-i) * a_i - \sum_{i+1 \le j \le N} a_j)
+<a href=#21 id=21 data-nosnippet>21</a>/// \end{aligned}
+<a href=#22 id=22 data-nosnippet>22</a>/// $$
+<a href=#23 id=23 data-nosnippet>23</a>///
+<a href=#24 id=24 data-nosnippet>24</a>/// 各$a_i$が何回だけ加減算されているかを考えると、
+<a href=#25 id=25 data-nosnippet>25</a>/// シグマ内の第一項から$N-i$回足して、第二項から$i-1$回引いているので、
+<a href=#26 id=26 data-nosnippet>26</a>/// $$\bigstar = \sum_{1 \le i \le N} ((N-i)-(i-1))a_i$$
+<a href=#27 id=27 data-nosnippet>27</a></span><span class="kw">pub fn </span>sum_of_sum_of_difference(<span class="kw-2">mut </span>a: Vec&lt;i64&gt;) -&gt; i64 {
+<a href=#28 id=28 data-nosnippet>28</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="number">0</span>;
+<a href=#29 id=29 data-nosnippet>29</a>    <span class="kw">let </span>n = a.len();
+<a href=#30 id=30 data-nosnippet>30</a>    a.sort();
+<a href=#31 id=31 data-nosnippet>31</a>
+<a href=#32 id=32 data-nosnippet>32</a>    <span class="kw">for </span>(i, x) <span class="kw">in </span>a.into_iter().enumerate() {
+<a href=#33 id=33 data-nosnippet>33</a>        ret += x * (i <span class="kw">as </span>i64 * <span class="number">2 </span>+ <span class="number">1 </span>- n <span class="kw">as </span>i64);
+<a href=#34 id=34 data-nosnippet>34</a>    }
+<a href=#35 id=35 data-nosnippet>35</a>
+<a href=#36 id=36 data-nosnippet>36</a>    ret
+<a href=#37 id=37 data-nosnippet>37</a>}</code></pre></div></section></main></body></html>

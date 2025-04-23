@@ -78,10 +78,10 @@
 <a href=#62 id=62 data-nosnippet>62</a>
 <a href=#63 id=63 data-nosnippet>63</a>            <span class="self">self</span>.lazy[l] = <span class="self">self
 <a href=#64 id=64 data-nosnippet>64</a>                </span>.action
-<a href=#65 id=65 data-nosnippet>65</a>                .update(<span class="self">self</span>.lazy[i].clone(), <span class="self">self</span>.lazy[l].clone());
+<a href=#65 id=65 data-nosnippet>65</a>                .update(<span class="self">self</span>.lazy[l].clone(), <span class="self">self</span>.lazy[i].clone());
 <a href=#66 id=66 data-nosnippet>66</a>            <span class="self">self</span>.lazy[r] = <span class="self">self
 <a href=#67 id=67 data-nosnippet>67</a>                </span>.action
-<a href=#68 id=68 data-nosnippet>68</a>                .update(<span class="self">self</span>.lazy[i].clone(), <span class="self">self</span>.lazy[r].clone());
+<a href=#68 id=68 data-nosnippet>68</a>                .update(<span class="self">self</span>.lazy[r].clone(), <span class="self">self</span>.lazy[i].clone());
 <a href=#69 id=69 data-nosnippet>69</a>        }
 <a href=#70 id=70 data-nosnippet>70</a>        <span class="kw">let </span>len = (<span class="self">self</span>.size / <span class="number">2</span>) &gt;&gt; (<span class="number">31 </span>- (i <span class="kw">as </span>u32).leading_zeros());
 <a href=#71 id=71 data-nosnippet>71</a>        <span class="self">self</span>.data[i] = <span class="self">self
@@ -162,10 +162,10 @@
 <a href=#146 id=146 data-nosnippet>146</a>            <span class="kw">while </span>l &lt; r {
 <a href=#147 id=147 data-nosnippet>147</a>                <span class="kw">if </span>r &amp; <span class="number">1 </span>== <span class="number">1 </span>{
 <a href=#148 id=148 data-nosnippet>148</a>                    r -= <span class="number">1</span>;
-<a href=#149 id=149 data-nosnippet>149</a>                    <span class="self">self</span>.lazy[r] = <span class="self">self</span>.action.update(x.clone(), <span class="self">self</span>.lazy[r].clone());
+<a href=#149 id=149 data-nosnippet>149</a>                    <span class="self">self</span>.lazy[r] = <span class="self">self</span>.action.update(<span class="self">self</span>.lazy[r].clone(), x.clone());
 <a href=#150 id=150 data-nosnippet>150</a>                }
 <a href=#151 id=151 data-nosnippet>151</a>                <span class="kw">if </span>l &amp; <span class="number">1 </span>== <span class="number">1 </span>{
-<a href=#152 id=152 data-nosnippet>152</a>                    <span class="self">self</span>.lazy[l] = <span class="self">self</span>.action.update(x.clone(), <span class="self">self</span>.lazy[l].clone());
+<a href=#152 id=152 data-nosnippet>152</a>                    <span class="self">self</span>.lazy[l] = <span class="self">self</span>.action.update(<span class="self">self</span>.lazy[l].clone(), x.clone());
 <a href=#153 id=153 data-nosnippet>153</a>                    l += <span class="number">1</span>;
 <a href=#154 id=154 data-nosnippet>154</a>                }
 <a href=#155 id=155 data-nosnippet>155</a>                r &gt;&gt;= <span class="number">1</span>;

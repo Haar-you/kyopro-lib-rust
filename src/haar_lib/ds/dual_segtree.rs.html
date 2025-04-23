@@ -48,10 +48,10 @@
 <a href=#32 id=32 data-nosnippet>32</a>        <span class="kw">if </span>i &lt; <span class="self">self</span>.size / <span class="number">2 </span>{
 <a href=#33 id=33 data-nosnippet>33</a>            <span class="self">self</span>.data[i &lt;&lt; <span class="number">1</span>] = <span class="self">self
 <a href=#34 id=34 data-nosnippet>34</a>                </span>.monoid
-<a href=#35 id=35 data-nosnippet>35</a>                .op(<span class="self">self</span>.data[i].clone(), <span class="self">self</span>.data[i &lt;&lt; <span class="number">1</span>].clone());
+<a href=#35 id=35 data-nosnippet>35</a>                .op(<span class="self">self</span>.data[i &lt;&lt; <span class="number">1</span>].clone(), <span class="self">self</span>.data[i].clone());
 <a href=#36 id=36 data-nosnippet>36</a>            <span class="self">self</span>.data[(i &lt;&lt; <span class="number">1</span>) | <span class="number">1</span>] = <span class="self">self
 <a href=#37 id=37 data-nosnippet>37</a>                </span>.monoid
-<a href=#38 id=38 data-nosnippet>38</a>                .op(<span class="self">self</span>.data[i].clone(), <span class="self">self</span>.data[(i &lt;&lt; <span class="number">1</span>) | <span class="number">1</span>].clone());
+<a href=#38 id=38 data-nosnippet>38</a>                .op(<span class="self">self</span>.data[(i &lt;&lt; <span class="number">1</span>) | <span class="number">1</span>].clone(), <span class="self">self</span>.data[i].clone());
 <a href=#39 id=39 data-nosnippet>39</a>            <span class="self">self</span>.data[i] = <span class="self">self</span>.monoid.id();
 <a href=#40 id=40 data-nosnippet>40</a>        }
 <a href=#41 id=41 data-nosnippet>41</a>    }
@@ -104,10 +104,10 @@
 <a href=#88 id=88 data-nosnippet>88</a>        <span class="kw">while </span>l &lt; r {
 <a href=#89 id=89 data-nosnippet>89</a>            <span class="kw">if </span>(r &amp; <span class="number">1</span>) == <span class="number">1 </span>{
 <a href=#90 id=90 data-nosnippet>90</a>                r -= <span class="number">1</span>;
-<a href=#91 id=91 data-nosnippet>91</a>                <span class="self">self</span>.data[r] = <span class="self">self</span>.monoid.op(value.clone(), <span class="self">self</span>.data[r].clone());
+<a href=#91 id=91 data-nosnippet>91</a>                <span class="self">self</span>.data[r] = <span class="self">self</span>.monoid.op(<span class="self">self</span>.data[r].clone(), value.clone());
 <a href=#92 id=92 data-nosnippet>92</a>            }
 <a href=#93 id=93 data-nosnippet>93</a>            <span class="kw">if </span>(l &amp; <span class="number">1</span>) == <span class="number">1 </span>{
-<a href=#94 id=94 data-nosnippet>94</a>                <span class="self">self</span>.data[l] = <span class="self">self</span>.monoid.op(value.clone(), <span class="self">self</span>.data[l].clone());
+<a href=#94 id=94 data-nosnippet>94</a>                <span class="self">self</span>.data[l] = <span class="self">self</span>.monoid.op(<span class="self">self</span>.data[l].clone(), value.clone());
 <a href=#95 id=95 data-nosnippet>95</a>                l += <span class="number">1</span>;
 <a href=#96 id=96 data-nosnippet>96</a>            }
 <a href=#97 id=97 data-nosnippet>97</a>            l &gt;&gt;= <span class="number">1</span>;

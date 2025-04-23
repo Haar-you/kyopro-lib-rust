@@ -173,15 +173,15 @@
 <a href=#157 id=157 data-nosnippet>157</a>    }
 <a href=#158 id=158 data-nosnippet>158</a>}
 <a href=#159 id=159 data-nosnippet>159</a>
-<a href=#160 id=160 data-nosnippet>160</a><span class="macro">impl_ops!</span>(Add, ModInt, |x: <span class="self">Self</span>, y| x.__add(y));
-<a href=#161 id=161 data-nosnippet>161</a><span class="macro">impl_ops!</span>(Sub, ModInt, |x: <span class="self">Self</span>, y| x.__sub(y));
-<a href=#162 id=162 data-nosnippet>162</a><span class="macro">impl_ops!</span>(Mul, ModInt, |x: <span class="self">Self</span>, y| x.__mul(y));
-<a href=#163 id=163 data-nosnippet>163</a><span class="macro">impl_ops!</span>(Div, ModInt, |x: <span class="self">Self</span>, y| x.__div(y));
+<a href=#160 id=160 data-nosnippet>160</a><span class="macro">impl_ops!</span>(Add <span class="kw">for </span>ModInt, |x: <span class="self">Self</span>, y| x.__add(y));
+<a href=#161 id=161 data-nosnippet>161</a><span class="macro">impl_ops!</span>(Sub <span class="kw">for </span>ModInt, |x: <span class="self">Self</span>, y| x.__sub(y));
+<a href=#162 id=162 data-nosnippet>162</a><span class="macro">impl_ops!</span>(Mul <span class="kw">for </span>ModInt, |x: <span class="self">Self</span>, y| x.__mul(y));
+<a href=#163 id=163 data-nosnippet>163</a><span class="macro">impl_ops!</span>(Div <span class="kw">for </span>ModInt, |x: <span class="self">Self</span>, y| x.__div(y));
 <a href=#164 id=164 data-nosnippet>164</a>
-<a href=#165 id=165 data-nosnippet>165</a><span class="macro">impl_ops!</span>(AddAssign, ModInt, |x: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, y| <span class="kw-2">*</span>x = <span class="kw-2">*</span>x + y);
-<a href=#166 id=166 data-nosnippet>166</a><span class="macro">impl_ops!</span>(SubAssign, ModInt, |x: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, y| <span class="kw-2">*</span>x = <span class="kw-2">*</span>x - y);
-<a href=#167 id=167 data-nosnippet>167</a><span class="macro">impl_ops!</span>(MulAssign, ModInt, |x: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, y| <span class="kw-2">*</span>x = <span class="kw-2">*</span>x * y);
-<a href=#168 id=168 data-nosnippet>168</a><span class="macro">impl_ops!</span>(DivAssign, ModInt, |x: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, y| <span class="kw-2">*</span>x = <span class="kw-2">*</span>x / y);
+<a href=#165 id=165 data-nosnippet>165</a><span class="macro">impl_ops!</span>(AddAssign <span class="kw">for </span>ModInt, |x: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, y| <span class="kw-2">*</span>x = <span class="kw-2">*</span>x + y);
+<a href=#166 id=166 data-nosnippet>166</a><span class="macro">impl_ops!</span>(SubAssign <span class="kw">for </span>ModInt, |x: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, y| <span class="kw-2">*</span>x = <span class="kw-2">*</span>x - y);
+<a href=#167 id=167 data-nosnippet>167</a><span class="macro">impl_ops!</span>(MulAssign <span class="kw">for </span>ModInt, |x: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, y| <span class="kw-2">*</span>x = <span class="kw-2">*</span>x * y);
+<a href=#168 id=168 data-nosnippet>168</a><span class="macro">impl_ops!</span>(DivAssign <span class="kw">for </span>ModInt, |x: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, y| <span class="kw-2">*</span>x = <span class="kw-2">*</span>x / y);
 <a href=#169 id=169 data-nosnippet>169</a>
 <a href=#170 id=170 data-nosnippet>170</a><span class="kw">impl </span>Neg <span class="kw">for </span>ModInt {
 <a href=#171 id=171 data-nosnippet>171</a>    <span class="kw">type </span>Output = <span class="self">Self</span>;
