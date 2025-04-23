@@ -31,6 +31,7 @@ pub mod tangent_circle;
 
 pub mod closest_pair;
 
+use crate::impl_ops;
 use std::{cmp::Ordering, f64::consts::PI};
 
 /// `f64`の誤差を許容する演算を提供する。
@@ -86,33 +87,10 @@ impl Eps {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Vector(pub f64, pub f64);
 
-impl std::ops::Add for Vector {
-    type Output = Self;
-    fn add(self, other: Self) -> Self {
-        Self(self.0 + other.0, self.1 + other.1)
-    }
-}
-
-impl std::ops::Sub for Vector {
-    type Output = Self;
-    fn sub(self, other: Self) -> Self {
-        Self(self.0 - other.0, self.1 - other.1)
-    }
-}
-
-impl std::ops::Mul<f64> for Vector {
-    type Output = Self;
-    fn mul(self, other: f64) -> Self {
-        Self(self.0 * other, self.1 * other)
-    }
-}
-
-impl std::ops::Div<f64> for Vector {
-    type Output = Self;
-    fn div(self, other: f64) -> Self {
-        Self(self.0 / other, self.1 / other)
-    }
-}
+impl_ops!(Add for Vector, |a: Self, b: Self| Self(a.0 + b.0, a.1 + b.1));
+impl_ops!(Sub for Vector, |a: Self, b: Self| Self(a.0 - b.0, a.1 - b.1));
+impl_ops!(Mul<f64> for Vector, |a: Self, k: f64| Self(a.0 * k, a.1 * k));
+impl_ops!(Div<f64> for Vector, |a: Self, k: f64| Self(a.0 / k, a.1 / k));
 
 impl Vector {
     /// 絶対値を計算する
