@@ -10,23 +10,24 @@ use crate::tree::*;
 /// # Problems
 /// - [EDPC V - Subtree](https://atcoder.jp/contests/dp/submissions/57560435)
 /// - <https://atcoder.jp/contests/abc160/tasks/abc160_f>
-pub struct RerootingDP<'a, Weight, T, U> {
+/// - <https://judge.yosupo.jp/problem/tree_path_composite_sum>
+pub struct RerootingDP<'a, T, U, E> {
     init: U,
-    up: Box<dyn 'a + Fn(T, (usize, Weight)) -> U>,
+    up: Box<dyn 'a + Fn(T, &'a E) -> U>,
     merge: Box<dyn 'a + Fn(U, U) -> U>,
     apply: Box<dyn 'a + Fn(U, usize) -> T>,
 }
 
-impl<'a, Weight, T, U> RerootingDP<'a, Weight, T, U>
+impl<'a, T, U, E> RerootingDP<'a, T, U, E>
 where
-    Weight: Copy,
+    E: TreeEdgeTrait,
     T: Clone,
     U: Clone,
 {
     /// `RerootingDP`を構築する。
     pub fn new(
         init: U,
-        up: Box<impl 'a + Fn(T, (usize, Weight)) -> U>,
+        up: Box<impl 'a + Fn(T, &'a E) -> U>,
         merge: Box<impl 'a + Fn(U, U) -> U>,
         apply: Box<impl 'a + Fn(U, usize) -> T>,
     ) -> Self {
@@ -39,7 +40,7 @@ where
     }
 
     /// `tree`上で、全方位DPを実行する。
-    pub fn run<E: TreeEdgeTrait<Weight = Weight>>(&self, tree: &Tree<E>) -> Vec<T> {
+    pub fn run(&self, tree: &'a Tree<E>) -> Vec<T> {
         let size = tree.len();
         let mut dp = (0..size)
             .map(|i| vec![None; tree.nodes[i].neighbors_size()])
@@ -55,20 +56,16 @@ where
                 let acc = nodes
                     .neighbors()
                     .enumerate()
-                    .filter_map(|(j, e)| {
-                        dp[i][j]
-                            .as_ref()
-                            .map(|res| (self.up)(res.clone(), (e.to(), e.weight())))
-                    })
+                    .filter_map(|(j, e)| dp[i][j].as_ref().map(|res| (self.up)(res.clone(), e)))
                     .fold(self.init.clone(), |x, y| (self.merge)(x, y));
                 (self.apply)(acc, i)
             })
             .collect()
     }
 
-    fn rec1<E: TreeEdgeTrait<Weight = Weight>>(
+    fn rec1(
         &self,
-        tree: &Tree<E>,
+        tree: &'a Tree<E>,
         dp: &mut Vec<Vec<Option<T>>>,
         cur: usize,
         par: Option<usize>,
@@ -80,16 +77,16 @@ where
             .map(|(i, e)| {
                 let res = self.rec1(tree, dp, e.to(), Some(cur));
                 dp[cur][i] = Some(res.clone());
-                (self.up)(res, (e.to(), e.weight()))
+                (self.up)(res, e)
             })
             .fold(self.init.clone(), |x, y| (self.merge)(x, y));
 
         (self.apply)(acc, cur)
     }
 
-    fn rec2<E: TreeEdgeTrait<Weight = Weight>>(
+    fn rec2(
         &self,
-        tree: &Tree<E>,
+        tree: &'a Tree<E>,
         dp: &mut Vec<Vec<Option<T>>>,
         cur: usize,
         par: Option<usize>,
@@ -109,7 +106,7 @@ where
         if len > 1 {
             for (i, e) in tree.nodes[cur].neighbors().take(len - 1).enumerate() {
                 left[i + 1] = if let Some(res) = dp[cur][i].clone() {
-                    (self.merge)(left[i].clone(), (self.up)(res, (e.to(), e.weight())))
+                    (self.merge)(left[i].clone(), (self.up)(res, e))
                 } else {
                     left[i].clone()
                 };
@@ -118,7 +115,7 @@ where
             for (i, e) in tree.nodes[cur].neighbors().rev().take(len - 1).enumerate() {
                 let i = len - i - 1;
                 right[i - 1] = if let Some(res) = dp[cur][i].clone() {
-                    (self.merge)(right[i].clone(), (self.up)(res, (e.to(), e.weight())))
+                    (self.merge)(right[i].clone(), (self.up)(res, e))
                 } else {
                     right[i].clone()
                 };

@@ -61,7 +61,7 @@ impl FastIO {
         ret
     }
 
-    /// [`u64`]型の数値を読み出す。
+    /// [`u32`]型の数値を読み出す。
     pub fn read_u32(&mut self) -> u32 {
         self.read_u64() as u32
     }
@@ -121,6 +121,19 @@ impl FastIO {
 
         while self.peek().is_some_and(|c| c.is_ascii_graphic()) {
             ret.push(self.in_bytes[self.in_cur] as char);
+            self.in_cur += 1;
+        }
+
+        ret
+    }
+
+    /// 文字列を[`Vec<u8>`]として読み出す。
+    pub fn read_bytes(&mut self) -> Vec<u8> {
+        self.skip();
+        let mut ret = vec![];
+
+        while self.peek().is_some_and(|c| c.is_ascii_graphic()) {
+            ret.push(self.in_bytes[self.in_cur]);
             self.in_cur += 1;
         }
 

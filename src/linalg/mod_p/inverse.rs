@@ -70,7 +70,7 @@ mod tests {
         let a = vec![vec![3, 1, 4], vec![1, 5, 9], vec![2, 6, 5]];
         let a = convert::<ConstModInt<P>, _>(a);
         let res = inverse(a);
-        let res = res.map(|a| convert::<u32, _>(a));
+        let res = res.map(convert::<u32, _>);
         assert_eq!(
             res,
             Some(vec![
@@ -83,13 +83,13 @@ mod tests {
         let a = vec![vec![1, 2, 3], vec![4, 5, 6], vec![7, 8, 9]];
         let a = convert::<ConstModInt<P>, _>(a);
         let res = inverse(a);
-        let res = res.map(|a| convert::<u32, _>(a));
+        let res = res.map(convert::<u32, _>);
         assert_eq!(res, None);
 
         let a = vec![vec![0, 1], vec![1, 0]];
         let a = convert::<ConstModInt<P>, _>(a);
         let res = inverse(a);
-        let res = res.map(|a| convert::<u32, _>(a));
-        assert_eq!(res, Some(vec![vec![0, 1], vec![1, 0]]))
+        let res = res.map(convert::<u32, _>);
+        assert_eq!(res, Some(vec![vec![0, 1], vec![1, 0]]));
     }
 }

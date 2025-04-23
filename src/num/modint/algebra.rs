@@ -14,13 +14,14 @@ impl SumModM {
         Self { m }
     }
 }
-impl_algebra!(SumModM,
-    set: ModInt,
-    op: |_, a, b| a + b,
-    id: |s: &Self| ModInt::new(0, s.m),
-    inv: |_, a: Self::Element| -a,
-    assoc: {},
-    commu: {}
+impl_algebra!(
+    SumModM;
+    set: ModInt;
+    op: |_, a, b| a + b;
+    id: |s: &Self| ModInt::new(0, s.m);
+    inv: |_, a: Self::Element| -a;
+    assoc;
+    commu;
 );
 
 /// `mod m`上の乗法
@@ -34,10 +35,11 @@ impl ProdModM {
         Self { m }
     }
 }
-impl_algebra!(ProdModM,
-    set: ModInt,
-    op: |_, a, b| a * b,
-    id: |s: &Self| ModInt::new(1, s.m),
-    assoc: {},
-    commu: {}
+impl_algebra!(
+    ProdModM;
+    set: ModInt;
+    op: |_, a, b| a * b;
+    id: |s: &Self| ModInt::new(1, s.m);
+    assoc;
+    commu;
 );

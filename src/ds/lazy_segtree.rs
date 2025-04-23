@@ -62,10 +62,10 @@ where
 
             self.lazy[l] = self
                 .action
-                .update(self.lazy[i].clone(), self.lazy[l].clone());
+                .update(self.lazy[l].clone(), self.lazy[i].clone());
             self.lazy[r] = self
                 .action
-                .update(self.lazy[i].clone(), self.lazy[r].clone());
+                .update(self.lazy[r].clone(), self.lazy[i].clone());
         }
         let len = (self.size / 2) >> (31 - (i as u32).leading_zeros());
         self.data[i] = self
@@ -146,10 +146,10 @@ where
             while l < r {
                 if r & 1 == 1 {
                     r -= 1;
-                    self.lazy[r] = self.action.update(x.clone(), self.lazy[r].clone());
+                    self.lazy[r] = self.action.update(self.lazy[r].clone(), x.clone());
                 }
                 if l & 1 == 1 {
-                    self.lazy[l] = self.action.update(x.clone(), self.lazy[l].clone());
+                    self.lazy[l] = self.action.update(self.lazy[l].clone(), x.clone());
                     l += 1;
                 }
                 r >>= 1;

@@ -184,6 +184,7 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
         }
     }
 
+    #[allow(missing_docs)]
     pub fn inv(&self, a: Polynomial<P>, n: usize) -> Polynomial<P> {
         let mut ret = Polynomial::constant(a.data[0].inv());
         let mut t = 1;

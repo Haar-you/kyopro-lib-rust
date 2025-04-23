@@ -38,7 +38,9 @@ impl MaxContiguousValue {
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct MaxContiguous;
 
-impl_algebra!(MaxContiguous, set: MaxContiguousValue,
+impl_algebra!(
+    MaxContiguous;
+    set: MaxContiguousValue;
     op: |_, a: Self::Element, b: Self::Element| {
         let count = max(a.count, b.count).max(a.right + b.left);
         let left = if a.count == a.length {
@@ -56,7 +58,7 @@ impl_algebra!(MaxContiguous, set: MaxContiguousValue,
         MaxContiguousValue {
             count, left, right, length
         }
-    },
-    id: |_| MaxContiguousValue { count: 0, left: 0, right: 0, length: 0 },
-    assoc: {}
+    };
+    id: |_| MaxContiguousValue { count: 0, left: 0, right: 0, length: 0 };
+    assoc;
 );

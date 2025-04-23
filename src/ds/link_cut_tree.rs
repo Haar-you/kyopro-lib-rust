@@ -245,6 +245,7 @@ where
         }
     }
 
+    #[allow(missing_docs)]
     pub fn expose(&mut self, k: usize) {
         Node::expose(&mut self.nodes[k]);
     }
@@ -295,6 +296,7 @@ where
         Node::set_par(u, v);
     }
 
+    #[allow(missing_docs)]
     pub fn evert(&mut self, k: usize) {
         Node::evert(&mut self.nodes[k]);
     }

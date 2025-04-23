@@ -101,46 +101,46 @@ impl Montgomery {
     }
 }
 
-impl_ops!(Add, Montgomery, |mut x: Self, y| {
+impl_ops!(Add for Montgomery, |mut x: Self, y| {
     x += y;
     x
 });
 
-impl_ops!(Sub, Montgomery, |mut x: Self, y| {
+impl_ops!(Sub for Montgomery, |mut x: Self, y| {
     x -= y;
     x
 });
 
-impl_ops!(Mul, Montgomery, |mut x: Self, y| {
+impl_ops!(Mul for Montgomery, |mut x: Self, y| {
     x *= y;
     x
 });
 
-impl_ops!(Div, Montgomery, |mut x: Self, y| {
+impl_ops!(Div for Montgomery, |mut x: Self, y| {
     x /= y;
     x
 });
 
-impl_ops!(AddAssign, Montgomery, |x: &mut Self, y: Self| {
+impl_ops!(AddAssign for Montgomery, |x: &mut Self, y: Self| {
     x.value += y.value;
     if x.value >= x.modulo {
         x.value -= x.modulo;
     }
 });
 
-impl_ops!(SubAssign, Montgomery, |x: &mut Self, y: Self| {
+impl_ops!(SubAssign for Montgomery, |x: &mut Self, y: Self| {
     if x.value < y.value {
         x.value += x.modulo;
     }
     x.value -= y.value;
 });
 
-impl_ops!(MulAssign, Montgomery, |x: &mut Self, y: Self| x.value =
+impl_ops!(MulAssign for Montgomery, |x: &mut Self, y: Self| x.value =
     reduce(x.value * y.value, x.modulo, x.m));
 
-impl_ops!(DivAssign, Montgomery, |x: &mut Self, y: Self| *x *= y.inv());
+impl_ops!(DivAssign for Montgomery, |x: &mut Self, y: Self| *x *= y.inv());
 
-impl_ops!(Neg, Montgomery, |mut x: Self| {
+impl_ops!(Neg for Montgomery, |mut x: Self| {
     if x.value != 0 {
         x.value = x.modulo - x.value;
     }

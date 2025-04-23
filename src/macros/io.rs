@@ -54,3 +54,20 @@ macro_rules! input {
         $(input!(@inner $in, $($names)* : $type $(as $to)*);)*
     }
 }
+
+/// [`crate::io::fastio::FastIO`]を第一引数にとり、第二引数以降を空白区切りで出力する。
+#[macro_export]
+macro_rules! output {
+    ( @one $io:ident, $a:expr ) => {
+        $io.write($a);
+    };
+
+    ( $io:ident << $a:expr, $($rest:expr),* ) => {
+        output!(@one $io, $a);
+        $(
+            $io.write(" ");
+            $io.write($rest);
+        )*
+        $io.writeln("");
+    };
+}

@@ -32,10 +32,10 @@ where
         if i < self.size / 2 {
             self.data[i << 1] = self
                 .monoid
-                .op(self.data[i].clone(), self.data[i << 1].clone());
+                .op(self.data[i << 1].clone(), self.data[i].clone());
             self.data[(i << 1) | 1] = self
                 .monoid
-                .op(self.data[i].clone(), self.data[(i << 1) | 1].clone());
+                .op(self.data[(i << 1) | 1].clone(), self.data[i].clone());
             self.data[i] = self.monoid.id();
         }
     }
@@ -88,10 +88,10 @@ where
         while l < r {
             if (r & 1) == 1 {
                 r -= 1;
-                self.data[r] = self.monoid.op(value.clone(), self.data[r].clone());
+                self.data[r] = self.monoid.op(self.data[r].clone(), value.clone());
             }
             if (l & 1) == 1 {
-                self.data[l] = self.monoid.op(value.clone(), self.data[l].clone());
+                self.data[l] = self.monoid.op(self.data[l].clone(), value.clone());
                 l += 1;
             }
             l >>= 1;

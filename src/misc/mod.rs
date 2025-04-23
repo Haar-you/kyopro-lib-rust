@@ -7,4 +7,4 @@ pub mod range;
 pub mod swap;
 pub mod transpose;
 pub mod xor_shift;
-pub mod yesno;
+//pub mod yesno;

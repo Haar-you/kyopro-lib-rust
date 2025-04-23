@@ -90,17 +90,17 @@ impl Debug for Rational {
 impl_from!(Rational => f64, |value: Rational| (value.numerator as f64) / (value.denominator as f64));
 impl_from!(i64 => Rational, |value| Self { numerator: value, denominator: 1 });
 
-impl_ops!(Add, Rational, |s: Self, rhs| s.__add(rhs));
-impl_ops!(Sub, Rational, |s: Self, rhs| s.__sub(rhs));
-impl_ops!(Mul, Rational, |s: Self, rhs| s.__mul(rhs));
-impl_ops!(Div, Rational, |s: Self, rhs| s.__div(rhs));
+impl_ops!(Add for Rational, |s: Self, rhs| s.__add(rhs));
+impl_ops!(Sub for Rational, |s: Self, rhs| s.__sub(rhs));
+impl_ops!(Mul for Rational, |s: Self, rhs| s.__mul(rhs));
+impl_ops!(Div for Rational, |s: Self, rhs| s.__div(rhs));
 
-impl_ops!(AddAssign, Rational, |s: &mut Self, rhs| *s = *s + rhs);
-impl_ops!(SubAssign, Rational, |s: &mut Self, rhs| *s = *s - rhs);
-impl_ops!(MulAssign, Rational, |s: &mut Self, rhs| *s = *s * rhs);
-impl_ops!(DivAssign, Rational, |s: &mut Self, rhs| *s = *s / rhs);
+impl_ops!(AddAssign for Rational, |s: &mut Self, rhs| *s = *s + rhs);
+impl_ops!(SubAssign for Rational, |s: &mut Self, rhs| *s = *s - rhs);
+impl_ops!(MulAssign for Rational, |s: &mut Self, rhs| *s = *s * rhs);
+impl_ops!(DivAssign for Rational, |s: &mut Self, rhs| *s = *s / rhs);
 
-impl_ops!(Neg, Rational, |s: Self| Self::new(
+impl_ops!(Neg for Rational, |s: Self| Self::new(
     -s.numerator,
     s.denominator
 ));

@@ -68,6 +68,7 @@ impl<T: Elem> FenwickTreeAdd<T> {
 }
 
 impl<T: Elem + Ord> FenwickTreeAdd<T> {
+    /// 列の接頭辞の総和が単調増加であるとき、接頭辞の総和が`value`以上となる位置を返す。
     pub fn lower_bound(&self, value: T) -> usize {
         let n = self.size;
         let mut b = 0;

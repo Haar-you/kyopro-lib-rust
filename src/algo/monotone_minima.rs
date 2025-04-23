@@ -17,13 +17,11 @@ where
     F: Fn(usize, usize) -> T,
 {
     let mut ret = vec![None; n];
-    rec(n, m, 0, n, 0, m, &a, &mut ret);
+    rec(0, n, 0, m, &a, &mut ret);
     ret.into_iter().flatten().collect()
 }
 
 fn rec<T, F>(
-    _n: usize,
-    _m: usize,
     top: usize,
     bottom: usize,
     left: usize,
@@ -54,9 +52,9 @@ fn rec<T, F>(
     }
 
     let mid = (top + bottom) / 2;
-    rec(_n, _m, mid, mid + 1, left, right, a, ret);
+    rec(mid, mid + 1, left, right, a, ret);
 
     let min_index = ret[mid].as_ref().unwrap().0;
-    rec(_n, _m, top, mid, left, min_index + 1, a, ret);
-    rec(_n, _m, mid + 1, bottom, min_index, right, a, ret);
+    rec(top, mid, left, min_index + 1, a, ret);
+    rec(mid + 1, bottom, min_index, right, a, ret);
 }

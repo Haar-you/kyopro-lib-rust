@@ -1,47 +1,45 @@
 //! Range Update Range Sum用の代数的構造
 use crate::algebra::action::Action;
-use crate::num::one_zero::Zero;
-use std::{
-    marker::PhantomData,
-    ops::{Add, Mul},
-};
+use crate::algebra::{first_last::*, sum::*};
+use std::fmt::Debug;
+use std::ops::Mul;
 
 /// Range Update Range Sum用の代数的構造
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
-pub struct UpdateSum<T, U = T>(PhantomData<(T, U)>);
+pub struct UpdateSum<T> {
+    fold_m: Sum<T>,
+    update_m: Last<T>,
+}
 
-impl<T, U> UpdateSum<T, U> {
+impl<T> UpdateSum<T> {
     /// `UpdateSum<T,U>`を生成する。
     pub fn new() -> Self {
-        Self(PhantomData)
+        Self {
+            fold_m: Sum::new(),
+            update_m: Last::new(),
+        }
     }
 }
 
-impl<T, U> Action for UpdateSum<T, U>
+impl<T> Action for UpdateSum<T>
 where
-    T: Add<Output = T> + Zero + From<U>,
-    U: Mul<Output = U> + From<u64>,
+    Sum<T>: Monoid<Element = T>,
+    T: Mul<Output = T> + TryFrom<usize, Error: Debug>,
 {
-    type Output = T;
-    type Lazy = Option<U>;
-    fn fold_id(&self) -> Self::Output {
-        T::zero()
+    type FoldMonoid = Sum<T>;
+    type UpdateMonoid = Last<T>;
+    type Output = <Self::FoldMonoid as Set>::Element;
+    type Lazy = <Self::UpdateMonoid as Set>::Element;
+
+    fn fold_monoid(&self) -> &Self::FoldMonoid {
+        &self.fold_m
     }
-    fn fold(&self, left: Self::Output, right: Self::Output) -> Self::Output {
-        left + right
-    }
-    fn update_id(&self) -> Self::Lazy {
-        None
-    }
-    fn update(&self, next: Self::Lazy, cur: Self::Lazy) -> Self::Lazy {
-        match next {
-            Some(_) => next,
-            _ => cur,
-        }
+    fn update_monoid(&self) -> &Self::UpdateMonoid {
+        &self.update_m
     }
     fn convert(&self, value: Self::Output, lazy: Self::Lazy, len: usize) -> Self::Output {
         match lazy {
-            Some(lazy) => T::from(lazy * U::from(len as u64)),
+            Some(lazy) => lazy * T::try_from(len).unwrap(),
             _ => value,
         }
     }

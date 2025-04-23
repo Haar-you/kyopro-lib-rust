@@ -56,7 +56,7 @@ where
             }
             let left = cur_node.left.0;
             let lv = self.data[left].value.clone();
-            self.data[left].value = self.monoid.op(value.clone(), lv);
+            self.data[left].value = self.monoid.op(lv, value.clone());
 
             let right = cur_node.right;
             if right.is_null() {
@@ -66,7 +66,7 @@ where
             }
             let right = cur_node.right.0;
             let rv = self.data[right].value.clone();
-            self.data[right].value = self.monoid.op(value, rv);
+            self.data[right].value = self.monoid.op(rv, value);
 
             cur_node.value = self.monoid.id();
             self.data[cur] = cur_node;
@@ -88,7 +88,7 @@ where
                 let cur_value = unsafe { self.data.get_unchecked(cur).value.clone() };
                 unsafe {
                     self.data.get_unchecked_mut(cur).value =
-                        self.monoid.op(value.clone(), cur_value);
+                        self.monoid.op(cur_value, value.clone());
                 }
             }
         } else {
@@ -97,7 +97,7 @@ where
                 let cur_value = unsafe { self.data.get_unchecked(cur).value.clone() };
                 unsafe {
                     self.data.get_unchecked_mut(cur).value =
-                        self.monoid.op(value.clone(), cur_value);
+                        self.monoid.op(cur_value, value.clone());
                 }
             } else {
                 let mid = (from + to) / 2;
