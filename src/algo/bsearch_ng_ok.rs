@@ -1,7 +1,7 @@
 //! 単調増加な判定関数上の二分探索
 use std::ops::{Add, Div, Sub};
 
-/// [`bsearch_ng_ok`]の返り値
+/// [`bsearch_ng_ok`]、[`bsearch_ok_ng`]の返り値
 #[derive(Clone, Copy, Debug)]
 pub enum SearchResult<T> {
     /// `ng`以下で条件を満たさず、`ok`以上で条件を満たす。
@@ -10,6 +10,13 @@ pub enum SearchResult<T> {
         ng: T,
         /// 条件を満たす最小値
         ok: T,
+    },
+    /// `ok`以下で条件を満たし、`ng`以上で条件を満たさない。
+    OkNg {
+        /// 条件を満たす最大値
+        ok: T,
+        /// 条件を満たさない最小値
+        ng: T,
     },
     /// 全体で条件を満たす。
     AllOk,
@@ -55,6 +62,28 @@ pub fn bsearch_ng_ok<
     }
 }
 
+/// 二分探索
+///
+/// `f`は、`lower..=upper`の範囲で、ある値を境界にそれ未満では常に`true`、それ以上では常に`false`となる関数
+///
+/// **Time complexity** $O(\log n)$
+pub fn bsearch_ok_ng<
+    T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Div<Output = T> + From<u8>,
+>(
+    lower: T,
+    upper: T,
+    f: impl Fn(T) -> bool,
+) -> SearchResult<T> {
+    assert!(lower < upper);
+
+    match bsearch_ng_ok(lower, upper, |x| !f(x)) {
+        SearchResult::AllNg => SearchResult::AllOk,
+        SearchResult::AllOk => SearchResult::AllNg,
+        SearchResult::NgOk { ng, ok } => SearchResult::OkNg { ok: ng, ng: ok },
+        _ => unreachable!(),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -85,6 +114,7 @@ mod tests {
                 SearchResult::AllNg => {
                     assert!((0..n).all(|i| !check(i)));
                 }
+                _ => {}
             }
         }
     }
