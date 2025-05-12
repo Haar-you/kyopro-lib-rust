@@ -1,11 +1,12 @@
 //! 永続配列
 
+use std::ops::Index;
 use std::rc::Rc;
 
 #[derive(Clone)]
 enum Node<T> {
     Terminal {
-        value: Rc<T>,
+        value: T,
     },
     Internal {
         size: usize,
@@ -54,7 +55,7 @@ where
         }
         if depth == 1 {
             Some(Rc::new(Node::Terminal {
-                value: Rc::new(values[l].clone()),
+                value: values[l].clone(),
             }))
         } else {
             let mid = (l + r) / 2;
@@ -75,7 +76,7 @@ where
         if let Some(node) = node {
             match node.as_ref() {
                 Node::Terminal { value } => {
-                    ret.push(value.as_ref().clone());
+                    ret.push(value.clone());
                 }
                 Node::Internal { l_ch, r_ch, .. } => {
                     Self::_traverse(l_ch, ret);
@@ -87,9 +88,7 @@ where
 
     fn _set(prev: &Rc<Node<T>>, i: usize, value: T) -> Rc<Node<T>> {
         match prev.as_ref() {
-            Node::Terminal { .. } => Rc::new(Node::Terminal {
-                value: Rc::new(value),
-            }),
+            Node::Terminal { .. } => Rc::new(Node::Terminal { value }),
             Node::Internal { l_ch, r_ch, .. } => {
                 let (l_ch, r_ch) = {
                     let k = get_size(l_ch);
@@ -129,9 +128,9 @@ where
         }
     }
 
-    fn _get(node: &Rc<Node<T>>, i: usize) -> Rc<Node<T>> {
+    fn _get(node: &Rc<Node<T>>, i: usize) -> &Node<T> {
         match node.as_ref() {
-            Node::Terminal { .. } => Rc::clone(node),
+            Node::Terminal { .. } => node.as_ref(),
             Node::Internal { l_ch, r_ch, .. } => {
                 let k = get_size(l_ch);
                 if i < k {
@@ -144,17 +143,24 @@ where
     }
 
     /// **Time complexity** $O(\log n)$
-    pub fn get(&self, i: usize) -> Rc<T> {
+    pub fn get(&self, i: usize) -> &T {
         assert!(
             i < self.size,
             "index out of bounds: the len is {} but the index is {}",
             self.size,
             i
         );
-        match Self::_get(self.root.as_ref().unwrap(), i).as_ref() {
-            Node::Terminal { value } => Rc::clone(value),
+        match Self::_get(self.root.as_ref().unwrap(), i) {
+            Node::Terminal { value } => value,
             _ => unreachable!(),
         }
+    }
+}
+
+impl<T: Clone> Index<usize> for PersistentArray<T> {
+    type Output = T;
+    fn index(&self, index: usize) -> &Self::Output {
+        self.get(index)
     }
 }
 

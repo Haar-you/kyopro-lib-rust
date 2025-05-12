@@ -116,15 +116,12 @@ impl FastIO {
 
     /// 文字列を[`Vec<char>`]として読み出す。
     pub fn read_chars(&mut self) -> Vec<char> {
-        self.skip();
-        let mut ret = vec![];
+        self.read_bytes().into_iter().map(Into::into).collect()
+    }
 
-        while self.peek().is_some_and(|c| c.is_ascii_graphic()) {
-            ret.push(self.in_bytes[self.in_cur] as char);
-            self.in_cur += 1;
-        }
-
-        ret
+    /// 文字列を[`String`]として読み出す。
+    pub fn read_string(&mut self) -> String {
+        self.read_chars().into_iter().collect()
     }
 
     /// 文字列を[`Vec<u8>`]として読み出す。

@@ -1,5 +1,5 @@
 //! 座標圧縮
-use crate::algo::bsearch::lower_bound;
+use crate::algo::bsearch_slice::BinarySearch;
 
 /// 座標圧縮のための構造体
 #[derive(Clone)]
@@ -18,7 +18,7 @@ impl<T: Ord + Eq> Compressor<T> {
     ///
     /// **Time complexity** $O(\log n)$
     pub fn index(&self, value: &T) -> usize {
-        lower_bound(&self.data, value)
+        self.data.lower_bound(value)
     }
 
     /// `i`番目の値を返す。

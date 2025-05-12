@@ -3,7 +3,7 @@
 //! # Problems
 //! - [AOJ DSL 2_C: Range Search(kD Tree)](https://onlinejudge.u-aizu.ac.jp/courses/library/3/DSL/2/DSL_2_C)
 
-use crate::algo::{bsearch::lower_bound, merge::merge};
+use crate::algo::{bsearch_slice::BinarySearch, merge::merge};
 
 /// Range search tree
 pub struct RangeSearchTree<Index> {
@@ -26,15 +26,15 @@ where
         assert!(sy < ty);
 
         let mut ret = vec![];
-        let mut l = lower_bound(&self.cxs, &sx) + self.size / 2;
-        let mut r = lower_bound(&self.cxs, &tx) + self.size / 2;
+        let mut l = self.cxs.lower_bound(&sx) + self.size / 2;
+        let mut r = self.cxs.lower_bound(&tx) + self.size / 2;
 
         while l < r {
             if (r & 1) != 0 {
                 r -= 1;
                 let a = &self.data[r];
 
-                let i = lower_bound(a, &(sy, 0));
+                let i = a.lower_bound(&(sy, 0));
 
                 for &(y, x) in a.iter().skip(i).take_while(|(y, _)| *y < ty) {
                     ret.push((self.cxs[x], y));
@@ -45,7 +45,7 @@ where
                 let a = &self.data[l];
                 l += 1;
 
-                let i = lower_bound(a, &(sy, 0));
+                let i = a.lower_bound(&(sy, 0));
 
                 for &(y, x) in a.iter().skip(i).take_while(|(y, _)| *y < ty) {
                     ret.push((self.cxs[x], y));
@@ -100,7 +100,7 @@ where
         let mut data: Vec<Vec<(Index, usize)>> = vec![vec![]; size];
 
         for i in 0..self.size {
-            let j = lower_bound(&cxs, &self.xs[i]);
+            let j = cxs.lower_bound(&self.xs[i]);
             data[size / 2 + j].push((self.ys[i], j));
         }
 

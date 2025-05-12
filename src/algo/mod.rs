@@ -1,7 +1,7 @@
 //! アルゴリズム
 
 pub mod bsearch;
-pub mod bsearch_ng_ok;
+pub mod bsearch_slice;
 pub mod cartesian_tree;
 pub mod compressor;
 pub mod cycle_finding;

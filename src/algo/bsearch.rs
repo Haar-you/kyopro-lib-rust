@@ -1,116 +1,121 @@
-//! 二分探索
+//! 単調増加な判定関数上の二分探索
+use std::ops::{Add, Div, Sub};
 
-macro_rules! bsearch_impl {
-    ($t:tt, $a:expr, $value:expr) => {{
-        let n = $a.len();
-        let mut b = 0;
-        let mut len = n;
+/// [`bsearch_ng_ok`]、[`bsearch_ok_ng`]の返り値
+#[derive(Clone, Copy, Debug)]
+pub enum SearchResult<T> {
+    /// `ng`以下で条件を満たさず、`ok`以上で条件を満たす。
+    NgOk {
+        /// 条件を満たさない最大値
+        ng: T,
+        /// 条件を満たす最小値
+        ok: T,
+    },
+    /// `ok`以下で条件を満たし、`ng`以上で条件を満たさない。
+    OkNg {
+        /// 条件を満たす最大値
+        ok: T,
+        /// 条件を満たさない最小値
+        ng: T,
+    },
+    /// 全体で条件を満たす。
+    AllOk,
+    /// 全体で条件を満たさない。
+    AllNg,
+}
 
-        while len > 0 {
-            let half = len / 2;
-            let mid = b + half;
+/// 二分探索
+///
+/// `f`は、`lower..=upper`の範囲で、ある値を境界にそれ未満では常に`false`、それ以上では常に`true`となる関数
+///
+/// **Time complexity** $O(\log n)$
+pub fn bsearch_ng_ok<
+    T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Div<Output = T> + From<u8>,
+>(
+    mut lower: T,
+    mut upper: T,
+    f: impl Fn(T) -> bool,
+) -> SearchResult<T> {
+    assert!(lower < upper);
 
-            if &$a[mid] $t $value {
-                len -= half + 1;
-                b = mid + 1;
-            } else {
-                len = half;
-            }
+    if f(lower) {
+        // all ok
+        return SearchResult::AllOk;
+    } else if !f(upper) {
+        // all ng
+        return SearchResult::AllNg;
+    }
+
+    while upper - lower > T::from(1) {
+        let mid = (lower + upper) / T::from(2);
+
+        if f(mid) {
+            upper = mid;
+        } else {
+            lower = mid
         }
+    }
 
-        b
-    }}
+    SearchResult::NgOk {
+        ng: lower,
+        ok: upper,
+    }
 }
 
-/// x以上となる最小のindexを求める。
+/// 二分探索
+///
+/// `f`は、`lower..=upper`の範囲で、ある値を境界にそれ未満では常に`true`、それ以上では常に`false`となる関数
 ///
 /// **Time complexity** $O(\log n)$
-#[inline]
-pub fn lower_bound<T: Ord>(a: &[T], value: &T) -> usize {
-    bsearch_impl!(<, a, value)
-}
+pub fn bsearch_ok_ng<
+    T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Div<Output = T> + From<u8>,
+>(
+    lower: T,
+    upper: T,
+    f: impl Fn(T) -> bool,
+) -> SearchResult<T> {
+    assert!(lower < upper);
 
-/// xを超える最小のindexを求める。
-///
-/// **Time complexity** $O(\log n)$
-#[inline]
-pub fn upper_bound<T: Ord>(a: &[T], value: &T) -> usize {
-    bsearch_impl!(<=, a, value)
-}
-
-/// lower_bound, upper_boundの組を求める。
-///
-/// **Time complexity** $O(\log n)$
-#[inline]
-pub fn equal_range<T: Ord>(a: &[T], value: &T) -> (usize, usize) {
-    (lower_bound(a, value), upper_bound(a, value))
+    match bsearch_ng_ok(lower, upper, |x| !f(x)) {
+        SearchResult::AllNg => SearchResult::AllOk,
+        SearchResult::AllOk => SearchResult::AllNg,
+        SearchResult::NgOk { ng, ok } => SearchResult::OkNg { ok: ng, ng: ok },
+        _ => unreachable!(),
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand::Rng;
+    use std::iter::repeat_n;
 
     #[test]
-    fn test_lower_bound() {
-        let a = vec![1, 1, 2, 3, 5, 6];
-        assert_eq!(lower_bound(&a, &1), 0);
-        assert_eq!(lower_bound(&a, &2), 2);
-        assert_eq!(lower_bound(&a, &0), 0);
-        assert_eq!(lower_bound(&a, &4), 4);
-        assert_eq!(lower_bound(&a, &7), 6);
-    }
-
-    #[test]
-    fn test_upper_bound() {
-        let a = vec![1, 1, 2, 3, 5, 6];
-        assert_eq!(upper_bound(&a, &1), 2);
-        assert_eq!(upper_bound(&a, &2), 3);
-        assert_eq!(upper_bound(&a, &0), 0);
-        assert_eq!(upper_bound(&a, &4), 4);
-        assert_eq!(upper_bound(&a, &7), 6);
-    }
-
-    #[test]
-    fn test_equal_range() {
-        let a = vec![1, 1, 3, 4, 5, 5, 5, 8];
-        assert_eq!(equal_range(&a, &1), (0, 2));
-        assert_eq!(equal_range(&a, &5), (4, 7));
-        assert_eq!(equal_range(&a, &4), (3, 4));
-        assert_eq!(equal_range(&a, &6), (7, 7));
-    }
-
-    #[test]
-    fn test_random() {
-        let mut rng = rand::thread_rng();
-
+    fn test() {
         let n = 100;
-        let a = (0..n)
-            .map(|_| rng.gen_range(0..=10))
-            .scan(0, |state, x| {
-                *state += x;
-                Some(*state)
-            })
-            .collect::<Vec<_>>();
 
-        for x in 0..=1000 {
-            assert_eq!(
-                lower_bound(&a, &x),
-                a.iter()
-                    .enumerate()
-                    .find(|(_, &y)| y >= x)
-                    .map(|(i, _)| i)
-                    .unwrap_or(n)
-            );
+        for k in 0..=n {
+            let a = repeat_n(0, k)
+                .chain(repeat_n(1, n - k))
+                .collect::<Vec<u64>>();
 
-            assert_eq!(
-                upper_bound(&a, &x),
-                a.iter()
-                    .enumerate()
-                    .find(|(_, &y)| y > x)
-                    .map(|(i, _)| i)
-                    .unwrap_or(n)
-            );
+            let check = |i| a[i] > 0;
+
+            let res = bsearch_ng_ok(0, n - 1, check);
+
+            match res {
+                SearchResult::NgOk { ng, ok } => {
+                    assert!(!check(ng));
+                    assert!(check(ok));
+                    assert_eq!(ng + 1, ok);
+                }
+                SearchResult::AllOk => {
+                    assert!((0..n).all(check));
+                }
+                SearchResult::AllNg => {
+                    assert!((0..n).all(|i| !check(i)));
+                }
+                _ => {}
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 //! 範囲転倒数取得クエリ
 
-use crate::{algo::bsearch::*, ds::fenwick_add::*};
+use crate::{algo::bsearch_slice::BinarySearch, ds::fenwick_add::*};
 use std::convert::TryFrom;
 use std::ops::Range;
 
@@ -17,7 +17,7 @@ impl StaticRangeInversionsQuery {
         a.sort();
         a.dedup();
 
-        let data = data.iter().map(|x| lower_bound(&a, x)).collect();
+        let data = data.iter().map(|x| a.lower_bound(x)).collect();
         Self { data, qs: vec![] }
     }
 

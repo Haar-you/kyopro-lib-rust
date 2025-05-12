@@ -47,3 +47,6 @@ pub mod closed_interval;
 pub mod fps;
 
 pub mod linear;
+
+pub mod continued_fraction;
+pub mod stern_brocot;

@@ -1,7 +1,7 @@
 //! セグメント木上にセグメント木を構築する。
 use crate::{
     algebra::traits::*,
-    algo::{bsearch::lower_bound, merge::merge},
+    algo::{bsearch_slice::BinarySearch, merge::merge},
     ds::segtree::*,
 };
 
@@ -53,7 +53,7 @@ impl SegtreeOnSegtreeBuilder {
         let mut c_ys = vec![vec![]; x_size];
 
         for i in 0..n {
-            let j = lower_bound(&c_xs, &self.xs[i]);
+            let j = c_xs.lower_bound(&self.xs[i]);
             c_ys[j + x_size / 2].push(self.ys[i]);
         }
 
@@ -89,17 +89,17 @@ where
 {
     /// 点`(x, y)`の値を`value`で更新する。
     pub fn update(&mut self, x: i64, y: i64, value: M::Element) {
-        let mut i = lower_bound(&self.c_xs, &x) + self.x_size / 2;
+        let mut i = self.c_xs.lower_bound(&x) + self.x_size / 2;
         while i >= 1 {
-            let j = lower_bound(&self.c_ys[i], &y);
+            let j = self.c_ys[i].lower_bound(&y);
             self.segs[i].as_mut().unwrap().update(j, value.clone());
             i >>= 1;
         }
     }
 
     fn fold_sub(&self, i: usize, y1: i64, y2: i64) -> M::Element {
-        let l = lower_bound(&self.c_ys[i], &y1);
-        let r = lower_bound(&self.c_ys[i], &y2);
+        let l = self.c_ys[i].lower_bound(&y1);
+        let r = self.c_ys[i].lower_bound(&y2);
         self.segs[i].as_ref().unwrap().fold(l..r)
     }
 
@@ -109,8 +109,8 @@ where
         Range { start: x1, end: x2 }: Range<i64>,
         Range { start: y1, end: y2 }: Range<i64>,
     ) -> M::Element {
-        let mut l = lower_bound(&self.c_xs, &x1) + self.x_size / 2;
-        let mut r = lower_bound(&self.c_xs, &x2) + self.x_size / 2;
+        let mut l = self.c_xs.lower_bound(&x1) + self.x_size / 2;
+        let mut r = self.c_xs.lower_bound(&x2) + self.x_size / 2;
 
         let mut ret = self.monoid.id();
 

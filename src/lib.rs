@@ -15,6 +15,7 @@ pub mod algo;
 pub mod ds;
 pub mod flow;
 pub mod geom;
+pub mod geom_int;
 pub mod graph;
 pub mod grid;
 pub mod io;
@@ -27,8 +28,7 @@ pub mod misc;
 pub mod mul_graph;
 pub mod num;
 pub mod parser;
-// pub mod traits;
-pub mod geom_int;
+pub mod rand;
 pub mod tree;
 
 pub mod typical;

@@ -1,7 +1,7 @@
 //! x² = a (mod p)を満たすxを一つ求める。
 
 use crate::math::mod_ops::pow::*;
-use rand::Rng;
+use crate::rand::rand;
 
 /// x² = a (mod p)を満たすxを一つ求める。
 pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
@@ -28,12 +28,10 @@ pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
         s += 1;
     }
 
-    let mut rng = rand::thread_rng();
-
     let z = {
         let ret;
         loop {
-            let z = rng.gen::<u64>() % p;
+            let z = rand() % p;
             if mod_pow(z, (p - 1) / 2, p) == p - 1 {
                 ret = z;
                 break;

@@ -4,7 +4,7 @@
 //! - <https://atcoder.jp/contests/abc339/tasks/abc339_g>
 //! - <https://atcoder.jp/contests/abc351/tasks/abc351_f>
 
-use crate::algo::{bsearch::upper_bound, merge::inplace_merge};
+use crate::algo::{bsearch_slice::BinarySearch, merge::inplace_merge};
 use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
 use std::ops::{Add, AddAssign, RangeBounds};
@@ -88,12 +88,12 @@ where
         while l < r {
             if r & 1 == 1 {
                 r -= 1;
-                let i = upper_bound(&self.data[r], &ub);
+                let i = self.data[r].upper_bound(&ub);
                 count += i;
                 sum += self.accum[r][i];
             }
             if l & 1 == 1 {
-                let i = upper_bound(&self.data[l], &ub);
+                let i = self.data[l].upper_bound(&ub);
                 count += i;
                 sum += self.accum[l][i];
                 l += 1;
