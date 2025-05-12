@@ -1,5 +1,5 @@
 //! Fenwick木上にFenwick木を構築する。
-use crate::algo::bsearch::lower_bound;
+use crate::algo::bsearch_slice::BinarySearch;
 use std::ops::{Add, Range, RangeTo, Sub};
 
 /// [`FenwickOnFenwick`]を構築するための構造体。
@@ -105,10 +105,10 @@ impl<T: Copy + Add<Output = T> + Sub<Output = T>> FenwickOnFenwick<T> {
         RangeTo { end: y }: RangeTo<i64>,
     ) -> T {
         let mut ret = self.zero;
-        let mut x = lower_bound(&self.c_xs, &x);
+        let mut x = self.c_xs.lower_bound(&x);
 
         while x > 0 {
-            let mut y = lower_bound(&self.c_ys[x], &y);
+            let mut y = self.c_ys[x].lower_bound(&y);
             let seg = &self.segs[x];
 
             while y > 0 {

@@ -1,6 +1,6 @@
 //! 最長増加部分列
 
-use crate::algo::bsearch::lower_bound;
+use crate::algo::bsearch_slice::BinarySearch;
 
 /// 列の最長増加部分列の一つを求める。
 ///
@@ -22,7 +22,7 @@ where
             }
             pos.push(i);
         } else {
-            let k = lower_bound(&dp, &x);
+            let k = dp.lower_bound(&x);
             dp[k] = x;
             if k > 0 {
                 prev[i] = Some(pos[k - 1]);

@@ -1,6 +1,6 @@
 //! 配列に対する範囲頻度取得クエリ
 
-use crate::algo::bsearch::*;
+use crate::algo::bsearch_slice::BinarySearch;
 use std::collections::HashMap;
 use std::hash::Hash;
 use std::ops::Range;
@@ -25,8 +25,8 @@ impl<T: Hash + Eq> StaticRangeFreqQuery<T> {
     /// **Time complexity** $O(\log |a|)$
     pub fn query(&self, Range { start, end }: Range<usize>, value: &T) -> usize {
         if let Some(a) = self.map.get(value) {
-            let lower = lower_bound(a, &start);
-            let upper = lower_bound(a, &end);
+            let lower = a.lower_bound(&start);
+            let upper = a.lower_bound(&end);
 
             upper - lower
         } else {

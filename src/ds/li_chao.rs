@@ -5,7 +5,7 @@
 //! - [Line Add Get Min](https://judge.yosupo.jp/submission/217829)
 //! - [Segment Add Get Min](https://judge.yosupo.jp/submission/217834)
 
-use crate::algo::bsearch::lower_bound;
+use crate::algo::bsearch_slice::BinarySearch;
 use crate::math::linear::*;
 use crate::trait_alias;
 use std::{
@@ -136,8 +136,8 @@ impl<T: Elem> LiChaoTree<T> {
 
     /// 線分を追加する。
     pub fn add_segment(&mut self, segment: Linear<T>, range: RangeInclusive<T>) {
-        let mut l = lower_bound(&self.xs, range.start()) + self.size;
-        let mut r = lower_bound(&self.xs, range.end()) + self.size;
+        let mut l = self.xs.lower_bound(range.start()) + self.size;
+        let mut r = self.xs.lower_bound(range.end()) + self.size;
 
         while l < r {
             if r & 1 == 1 {
