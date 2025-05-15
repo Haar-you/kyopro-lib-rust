@@ -50,7 +50,6 @@ where
 
     /// `i`のポテンシャル($P(i)$)を返す。
     pub fn potential_of(&self, i: usize) -> T {
-        self.root_of(i);
         self.potential[i].get()
     }
 
