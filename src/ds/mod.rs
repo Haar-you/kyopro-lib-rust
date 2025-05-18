@@ -20,6 +20,7 @@
 // pub mod traits;
 
 pub mod partially_persistent_unionfind;
+pub mod persistent_unionfind;
 pub mod potential_unionfind;
 pub mod rollbackable_unionfind;
 pub mod unionfind;
@@ -92,3 +93,5 @@ pub mod splay_tree;
 pub mod integer_set;
 
 pub mod usize_set;
+
+pub mod ordered_map;

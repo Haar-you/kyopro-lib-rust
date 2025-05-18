@@ -228,7 +228,7 @@ pub type WM32 = WaveletMatrix<u32, 32>;
 mod tests {
     #![allow(clippy::needless_range_loop)]
     use super::*;
-    use crate::algo::bsearch::lower_bound;
+    use crate::algo::bsearch_slice::BinarySearch;
     use my_testtools::*;
     use rand::Rng;
 
@@ -373,11 +373,11 @@ mod tests {
             a.sort();
 
             let x = rng.gen::<u64>();
-            let i = lower_bound(&a, &x);
+            let i = a.lower_bound(&x);
 
             assert_eq!(wm.next_value(lr.clone(), x), a.get(i).copied());
 
-            let i = lower_bound(&a, &x);
+            let i = a.lower_bound(&x);
 
             assert_eq!(
                 wm.prev_value(lr, x),
