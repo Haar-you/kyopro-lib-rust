@@ -16,7 +16,7 @@
 
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">haar_lib/algo/</div>lis.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! 最長増加部分列
 <a href=#2 id=2 data-nosnippet>2</a>
-<a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
+<a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch_slice::BinarySearch;
 <a href=#4 id=4 data-nosnippet>4</a>
 <a href=#5 id=5 data-nosnippet>5</a><span class="doccomment">/// 列の最長増加部分列の一つを求める。
 <a href=#6 id=6 data-nosnippet>6</a>///
@@ -38,7 +38,7 @@
 <a href=#22 id=22 data-nosnippet>22</a>            }
 <a href=#23 id=23 data-nosnippet>23</a>            pos.push(i);
 <a href=#24 id=24 data-nosnippet>24</a>        } <span class="kw">else </span>{
-<a href=#25 id=25 data-nosnippet>25</a>            <span class="kw">let </span>k = lower_bound(<span class="kw-2">&amp;</span>dp, <span class="kw-2">&amp;</span>x);
+<a href=#25 id=25 data-nosnippet>25</a>            <span class="kw">let </span>k = dp.lower_bound(<span class="kw-2">&amp;</span>x);
 <a href=#26 id=26 data-nosnippet>26</a>            dp[k] = x;
 <a href=#27 id=27 data-nosnippet>27</a>            <span class="kw">if </span>k &gt; <span class="number">0 </span>{
 <a href=#28 id=28 data-nosnippet>28</a>                prev[i] = <span class="prelude-val">Some</span>(pos[k - <span class="number">1</span>]);

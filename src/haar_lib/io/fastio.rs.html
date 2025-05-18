@@ -132,44 +132,41 @@
 <a href=#116 id=116 data-nosnippet>116</a>
 <a href=#117 id=117 data-nosnippet>117</a>    <span class="doccomment">/// 文字列を[`Vec&lt;char&gt;`]として読み出す。
 <a href=#118 id=118 data-nosnippet>118</a>    </span><span class="kw">pub fn </span>read_chars(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;char&gt; {
-<a href=#119 id=119 data-nosnippet>119</a>        <span class="self">self</span>.skip();
-<a href=#120 id=120 data-nosnippet>120</a>        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
+<a href=#119 id=119 data-nosnippet>119</a>        <span class="self">self</span>.read_bytes().into_iter().map(Into::into).collect()
+<a href=#120 id=120 data-nosnippet>120</a>    }
 <a href=#121 id=121 data-nosnippet>121</a>
-<a href=#122 id=122 data-nosnippet>122</a>        <span class="kw">while </span><span class="self">self</span>.peek().is_some_and(|c| c.is_ascii_graphic()) {
-<a href=#123 id=123 data-nosnippet>123</a>            ret.push(<span class="self">self</span>.in_bytes[<span class="self">self</span>.in_cur] <span class="kw">as </span>char);
-<a href=#124 id=124 data-nosnippet>124</a>            <span class="self">self</span>.in_cur += <span class="number">1</span>;
-<a href=#125 id=125 data-nosnippet>125</a>        }
+<a href=#122 id=122 data-nosnippet>122</a>    <span class="doccomment">/// 文字列を[`String`]として読み出す。
+<a href=#123 id=123 data-nosnippet>123</a>    </span><span class="kw">pub fn </span>read_string(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; String {
+<a href=#124 id=124 data-nosnippet>124</a>        <span class="self">self</span>.read_chars().into_iter().collect()
+<a href=#125 id=125 data-nosnippet>125</a>    }
 <a href=#126 id=126 data-nosnippet>126</a>
-<a href=#127 id=127 data-nosnippet>127</a>        ret
-<a href=#128 id=128 data-nosnippet>128</a>    }
-<a href=#129 id=129 data-nosnippet>129</a>
-<a href=#130 id=130 data-nosnippet>130</a>    <span class="doccomment">/// 文字列を[`Vec&lt;u8&gt;`]として読み出す。
-<a href=#131 id=131 data-nosnippet>131</a>    </span><span class="kw">pub fn </span>read_bytes(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
-<a href=#132 id=132 data-nosnippet>132</a>        <span class="self">self</span>.skip();
-<a href=#133 id=133 data-nosnippet>133</a>        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
-<a href=#134 id=134 data-nosnippet>134</a>
-<a href=#135 id=135 data-nosnippet>135</a>        <span class="kw">while </span><span class="self">self</span>.peek().is_some_and(|c| c.is_ascii_graphic()) {
-<a href=#136 id=136 data-nosnippet>136</a>            ret.push(<span class="self">self</span>.in_bytes[<span class="self">self</span>.in_cur]);
-<a href=#137 id=137 data-nosnippet>137</a>            <span class="self">self</span>.in_cur += <span class="number">1</span>;
-<a href=#138 id=138 data-nosnippet>138</a>        }
+<a href=#127 id=127 data-nosnippet>127</a>    <span class="doccomment">/// 文字列を[`Vec&lt;u8&gt;`]として読み出す。
+<a href=#128 id=128 data-nosnippet>128</a>    </span><span class="kw">pub fn </span>read_bytes(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+<a href=#129 id=129 data-nosnippet>129</a>        <span class="self">self</span>.skip();
+<a href=#130 id=130 data-nosnippet>130</a>        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
+<a href=#131 id=131 data-nosnippet>131</a>
+<a href=#132 id=132 data-nosnippet>132</a>        <span class="kw">while </span><span class="self">self</span>.peek().is_some_and(|c| c.is_ascii_graphic()) {
+<a href=#133 id=133 data-nosnippet>133</a>            ret.push(<span class="self">self</span>.in_bytes[<span class="self">self</span>.in_cur]);
+<a href=#134 id=134 data-nosnippet>134</a>            <span class="self">self</span>.in_cur += <span class="number">1</span>;
+<a href=#135 id=135 data-nosnippet>135</a>        }
+<a href=#136 id=136 data-nosnippet>136</a>
+<a href=#137 id=137 data-nosnippet>137</a>        ret
+<a href=#138 id=138 data-nosnippet>138</a>    }
 <a href=#139 id=139 data-nosnippet>139</a>
-<a href=#140 id=140 data-nosnippet>140</a>        ret
-<a href=#141 id=141 data-nosnippet>141</a>    }
-<a href=#142 id=142 data-nosnippet>142</a>
-<a href=#143 id=143 data-nosnippet>143</a>    <span class="doccomment">/// `s`を標準出力に書き込む。
-<a href=#144 id=144 data-nosnippet>144</a>    </span><span class="kw">pub fn </span>write&lt;T: Display&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: T) {
-<a href=#145 id=145 data-nosnippet>145</a>        <span class="self">self</span>.out_buf.write_all(<span class="macro">format!</span>(<span class="string">"{}"</span>, s).as_bytes()).unwrap();
-<a href=#146 id=146 data-nosnippet>146</a>    }
-<a href=#147 id=147 data-nosnippet>147</a>
-<a href=#148 id=148 data-nosnippet>148</a>    <span class="doccomment">/// `s`と改行文字を標準出力に書き込む。
-<a href=#149 id=149 data-nosnippet>149</a>    </span><span class="kw">pub fn </span>writeln&lt;T: Display&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: T) {
-<a href=#150 id=150 data-nosnippet>150</a>        <span class="self">self</span>.write(s);
-<a href=#151 id=151 data-nosnippet>151</a>        <span class="self">self</span>.out_buf.write_all(<span class="string">b"\n"</span>).unwrap();
-<a href=#152 id=152 data-nosnippet>152</a>    }
-<a href=#153 id=153 data-nosnippet>153</a>}
-<a href=#154 id=154 data-nosnippet>154</a>
-<a href=#155 id=155 data-nosnippet>155</a><span class="kw">impl </span>Drop <span class="kw">for </span>FastIO {
-<a href=#156 id=156 data-nosnippet>156</a>    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#157 id=157 data-nosnippet>157</a>        <span class="self">self</span>.out_buf.flush().unwrap();
-<a href=#158 id=158 data-nosnippet>158</a>    }
-<a href=#159 id=159 data-nosnippet>159</a>}</code></pre></div></section></main></body></html>
+<a href=#140 id=140 data-nosnippet>140</a>    <span class="doccomment">/// `s`を標準出力に書き込む。
+<a href=#141 id=141 data-nosnippet>141</a>    </span><span class="kw">pub fn </span>write&lt;T: Display&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: T) {
+<a href=#142 id=142 data-nosnippet>142</a>        <span class="self">self</span>.out_buf.write_all(<span class="macro">format!</span>(<span class="string">"{}"</span>, s).as_bytes()).unwrap();
+<a href=#143 id=143 data-nosnippet>143</a>    }
+<a href=#144 id=144 data-nosnippet>144</a>
+<a href=#145 id=145 data-nosnippet>145</a>    <span class="doccomment">/// `s`と改行文字を標準出力に書き込む。
+<a href=#146 id=146 data-nosnippet>146</a>    </span><span class="kw">pub fn </span>writeln&lt;T: Display&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: T) {
+<a href=#147 id=147 data-nosnippet>147</a>        <span class="self">self</span>.write(s);
+<a href=#148 id=148 data-nosnippet>148</a>        <span class="self">self</span>.out_buf.write_all(<span class="string">b"\n"</span>).unwrap();
+<a href=#149 id=149 data-nosnippet>149</a>    }
+<a href=#150 id=150 data-nosnippet>150</a>}
+<a href=#151 id=151 data-nosnippet>151</a>
+<a href=#152 id=152 data-nosnippet>152</a><span class="kw">impl </span>Drop <span class="kw">for </span>FastIO {
+<a href=#153 id=153 data-nosnippet>153</a>    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#154 id=154 data-nosnippet>154</a>        <span class="self">self</span>.out_buf.flush().unwrap();
+<a href=#155 id=155 data-nosnippet>155</a>    }
+<a href=#156 id=156 data-nosnippet>156</a>}</code></pre></div></section></main></body></html>

@@ -21,7 +21,7 @@
 <a href=#5 id=5 data-nosnippet>5</a>//! - [Line Add Get Min](https://judge.yosupo.jp/submission/217829)
 <a href=#6 id=6 data-nosnippet>6</a>//! - [Segment Add Get Min](https://judge.yosupo.jp/submission/217834)
 <a href=#7 id=7 data-nosnippet>7</a>
-<a href=#8 id=8 data-nosnippet>8</a></span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
+<a href=#8 id=8 data-nosnippet>8</a></span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch_slice::BinarySearch;
 <a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span><span class="kw">crate</span>::math::linear::<span class="kw-2">*</span>;
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span><span class="kw">crate</span>::trait_alias;
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>std::{
@@ -152,8 +152,8 @@
 <a href=#136 id=136 data-nosnippet>136</a>
 <a href=#137 id=137 data-nosnippet>137</a>    <span class="doccomment">/// 線分を追加する。
 <a href=#138 id=138 data-nosnippet>138</a>    </span><span class="kw">pub fn </span>add_segment(<span class="kw-2">&amp;mut </span><span class="self">self</span>, segment: Linear&lt;T&gt;, range: RangeInclusive&lt;T&gt;) {
-<a href=#139 id=139 data-nosnippet>139</a>        <span class="kw">let </span><span class="kw-2">mut </span>l = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.xs, range.start()) + <span class="self">self</span>.size;
-<a href=#140 id=140 data-nosnippet>140</a>        <span class="kw">let </span><span class="kw-2">mut </span>r = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.xs, range.end()) + <span class="self">self</span>.size;
+<a href=#139 id=139 data-nosnippet>139</a>        <span class="kw">let </span><span class="kw-2">mut </span>l = <span class="self">self</span>.xs.lower_bound(range.start()) + <span class="self">self</span>.size;
+<a href=#140 id=140 data-nosnippet>140</a>        <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="self">self</span>.xs.lower_bound(range.end()) + <span class="self">self</span>.size;
 <a href=#141 id=141 data-nosnippet>141</a>
 <a href=#142 id=142 data-nosnippet>142</a>        <span class="kw">while </span>l &lt; r {
 <a href=#143 id=143 data-nosnippet>143</a>            <span class="kw">if </span>r &amp; <span class="number">1 </span>== <span class="number">1 </span>{

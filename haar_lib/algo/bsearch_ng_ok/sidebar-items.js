@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["SearchResult"],"fn":["bsearch_ng_ok"]};

@@ -15,7 +15,7 @@
 </script>
 
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">haar_lib/algo/</div>compressor.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! 座標圧縮
-<a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::lower_bound;
+<a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch_slice::BinarySearch;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="doccomment">/// 座標圧縮のための構造体
 <a href=#5 id=5 data-nosnippet>5</a></span><span class="attr">#[derive(Clone)]
@@ -34,7 +34,7 @@
 <a href=#18 id=18 data-nosnippet>18</a>    ///
 <a href=#19 id=19 data-nosnippet>19</a>    /// **Time complexity** $O(\log n)$
 <a href=#20 id=20 data-nosnippet>20</a>    </span><span class="kw">pub fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="kw-2">&amp;</span>T) -&gt; usize {
-<a href=#21 id=21 data-nosnippet>21</a>        lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.data, value)
+<a href=#21 id=21 data-nosnippet>21</a>        <span class="self">self</span>.data.lower_bound(value)
 <a href=#22 id=22 data-nosnippet>22</a>    }
 <a href=#23 id=23 data-nosnippet>23</a>
 <a href=#24 id=24 data-nosnippet>24</a>    <span class="doccomment">/// `i`番目の値を返す。

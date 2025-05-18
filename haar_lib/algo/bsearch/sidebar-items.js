@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["equal_range","lower_bound","upper_bound"]};
+window.SIDEBAR_ITEMS = {"enum":["SearchResult"],"fn":["bsearch_ng_ok","bsearch_ok_ng"]};

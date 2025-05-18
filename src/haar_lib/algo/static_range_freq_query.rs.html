@@ -16,7 +16,7 @@
 
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">haar_lib/algo/</div>static_range_freq_query.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! 配列に対する範囲頻度取得クエリ
 <a href=#2 id=2 data-nosnippet>2</a>
-<a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch::<span class="kw-2">*</span>;
+<a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span><span class="kw">crate</span>::algo::bsearch_slice::BinarySearch;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>std::collections::HashMap;
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>std::hash::Hash;
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>std::ops::Range;
@@ -41,8 +41,8 @@
 <a href=#25 id=25 data-nosnippet>25</a>    <span class="doccomment">/// **Time complexity** $O(\log |a|)$
 <a href=#26 id=26 data-nosnippet>26</a>    </span><span class="kw">pub fn </span>query(<span class="kw-2">&amp;</span><span class="self">self</span>, Range { start, end }: Range&lt;usize&gt;, value: <span class="kw-2">&amp;</span>T) -&gt; usize {
 <a href=#27 id=27 data-nosnippet>27</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(a) = <span class="self">self</span>.map.get(value) {
-<a href=#28 id=28 data-nosnippet>28</a>            <span class="kw">let </span>lower = lower_bound(a, <span class="kw-2">&amp;</span>start);
-<a href=#29 id=29 data-nosnippet>29</a>            <span class="kw">let </span>upper = lower_bound(a, <span class="kw-2">&amp;</span>end);
+<a href=#28 id=28 data-nosnippet>28</a>            <span class="kw">let </span>lower = a.lower_bound(<span class="kw-2">&amp;</span>start);
+<a href=#29 id=29 data-nosnippet>29</a>            <span class="kw">let </span>upper = a.lower_bound(<span class="kw-2">&amp;</span>end);
 <a href=#30 id=30 data-nosnippet>30</a>
 <a href=#31 id=31 data-nosnippet>31</a>            upper - lower
 <a href=#32 id=32 data-nosnippet>32</a>        } <span class="kw">else </span>{

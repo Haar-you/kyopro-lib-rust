@@ -66,73 +66,72 @@
 <a href=#50 id=50 data-nosnippet>50</a>
 <a href=#51 id=51 data-nosnippet>51</a>    <span class="doccomment">/// `i`のポテンシャル($P(i)$)を返す。
 <a href=#52 id=52 data-nosnippet>52</a>    </span><span class="kw">pub fn </span>potential_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; T {
-<a href=#53 id=53 data-nosnippet>53</a>        <span class="self">self</span>.root_of(i);
-<a href=#54 id=54 data-nosnippet>54</a>        <span class="self">self</span>.potential[i].get()
-<a href=#55 id=55 data-nosnippet>55</a>    }
-<a href=#56 id=56 data-nosnippet>56</a>
-<a href=#57 id=57 data-nosnippet>57</a>    <span class="doccomment">/// `i`と`j`が同じ素集合に属するならば`true`を返す。
-<a href=#58 id=58 data-nosnippet>58</a>    </span><span class="kw">pub fn </span>is_same(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, j: usize) -&gt; bool {
-<a href=#59 id=59 data-nosnippet>59</a>        <span class="self">self</span>.root_of(i) == <span class="self">self</span>.root_of(j)
-<a href=#60 id=60 data-nosnippet>60</a>    }
-<a href=#61 id=61 data-nosnippet>61</a>
-<a href=#62 id=62 data-nosnippet>62</a>    <span class="doccomment">/// `i`と`j`が同一の素集合に属するとき、ポテンシャルの差($P(i) - P(j)$)を返す。
-<a href=#63 id=63 data-nosnippet>63</a>    </span><span class="kw">pub fn </span>diff(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, j: usize) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
-<a href=#64 id=64 data-nosnippet>64</a>        <span class="self">self</span>.is_same(i, j)
-<a href=#65 id=65 data-nosnippet>65</a>            .then_some(<span class="self">self</span>.potential_of(i) - <span class="self">self</span>.potential_of(j))
-<a href=#66 id=66 data-nosnippet>66</a>    }
-<a href=#67 id=67 data-nosnippet>67</a>
-<a href=#68 id=68 data-nosnippet>68</a>    <span class="doccomment">/// `i`の属する素集合と`j`の属する素集合を統合する。
-<a href=#69 id=69 data-nosnippet>69</a>    /// 統合後は、$P(i) = P(j) + p$を満たす。
-<a href=#70 id=70 data-nosnippet>70</a>    </span><span class="kw">pub fn </span>merge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize, p: T) -&gt; usize {
-<a href=#71 id=71 data-nosnippet>71</a>        <span class="kw">let </span>ri = <span class="self">self</span>.root_of(i);
-<a href=#72 id=72 data-nosnippet>72</a>        <span class="kw">let </span>rj = <span class="self">self</span>.root_of(j);
-<a href=#73 id=73 data-nosnippet>73</a>
-<a href=#74 id=74 data-nosnippet>74</a>        <span class="kw">if </span>ri == rj {
-<a href=#75 id=75 data-nosnippet>75</a>            <span class="kw">return </span>ri;
-<a href=#76 id=76 data-nosnippet>76</a>        }
-<a href=#77 id=77 data-nosnippet>77</a>
-<a href=#78 id=78 data-nosnippet>78</a>        <span class="self">self</span>.count -= <span class="number">1</span>;
-<a href=#79 id=79 data-nosnippet>79</a>
-<a href=#80 id=80 data-nosnippet>80</a>        <span class="kw">if </span><span class="self">self</span>.depth[ri] &lt; <span class="self">self</span>.depth[rj] {
-<a href=#81 id=81 data-nosnippet>81</a>            <span class="self">self</span>.parent[ri].set(rj);
-<a href=#82 id=82 data-nosnippet>82</a>            <span class="self">self</span>.size[rj] += <span class="self">self</span>.size[ri];
-<a href=#83 id=83 data-nosnippet>83</a>
-<a href=#84 id=84 data-nosnippet>84</a>            <span class="kw">let </span>p = p - <span class="self">self</span>.potential[i].get() + <span class="self">self</span>.potential[j].get();
-<a href=#85 id=85 data-nosnippet>85</a>            <span class="self">self</span>.potential[ri].set(p);
-<a href=#86 id=86 data-nosnippet>86</a>            j
-<a href=#87 id=87 data-nosnippet>87</a>        } <span class="kw">else </span>{
-<a href=#88 id=88 data-nosnippet>88</a>            <span class="self">self</span>.parent[rj].set(ri);
-<a href=#89 id=89 data-nosnippet>89</a>            <span class="self">self</span>.size[ri] += <span class="self">self</span>.size[rj];
-<a href=#90 id=90 data-nosnippet>90</a>
-<a href=#91 id=91 data-nosnippet>91</a>            <span class="kw">let </span>p = <span class="self">self</span>.potential[i].get() - <span class="self">self</span>.potential[j].get() - p;
-<a href=#92 id=92 data-nosnippet>92</a>            <span class="self">self</span>.potential[rj].set(p);
-<a href=#93 id=93 data-nosnippet>93</a>
-<a href=#94 id=94 data-nosnippet>94</a>            <span class="kw">if </span><span class="self">self</span>.depth[ri] == <span class="self">self</span>.depth[rj] {
-<a href=#95 id=95 data-nosnippet>95</a>                <span class="self">self</span>.depth[i] += <span class="number">1</span>;
-<a href=#96 id=96 data-nosnippet>96</a>            }
-<a href=#97 id=97 data-nosnippet>97</a>
-<a href=#98 id=98 data-nosnippet>98</a>            i
-<a href=#99 id=99 data-nosnippet>99</a>        }
-<a href=#100 id=100 data-nosnippet>100</a>    }
-<a href=#101 id=101 data-nosnippet>101</a>
-<a href=#102 id=102 data-nosnippet>102</a>    <span class="doccomment">/// `i`の属する素集合の大きさを返す。
-<a href=#103 id=103 data-nosnippet>103</a>    </span><span class="kw">pub fn </span>size_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
-<a href=#104 id=104 data-nosnippet>104</a>        <span class="self">self</span>.size[<span class="self">self</span>.root_of(i)]
-<a href=#105 id=105 data-nosnippet>105</a>    }
-<a href=#106 id=106 data-nosnippet>106</a>
-<a href=#107 id=107 data-nosnippet>107</a>    <span class="doccomment">/// 素集合の個数を返す。
-<a href=#108 id=108 data-nosnippet>108</a>    </span><span class="kw">pub fn </span>count_groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
-<a href=#109 id=109 data-nosnippet>109</a>        <span class="self">self</span>.count
-<a href=#110 id=110 data-nosnippet>110</a>    }
-<a href=#111 id=111 data-nosnippet>111</a>
-<a href=#112 id=112 data-nosnippet>112</a>    <span class="doccomment">/// 素集合をすべて列挙する。
-<a href=#113 id=113 data-nosnippet>113</a>    </span><span class="kw">pub fn </span>get_groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;Vec&lt;usize&gt;&gt; {
-<a href=#114 id=114 data-nosnippet>114</a>        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; <span class="self">self</span>.n];
-<a href=#115 id=115 data-nosnippet>115</a>
-<a href=#116 id=116 data-nosnippet>116</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.n {
-<a href=#117 id=117 data-nosnippet>117</a>            ret[<span class="self">self</span>.root_of(i)].push(i);
-<a href=#118 id=118 data-nosnippet>118</a>        }
-<a href=#119 id=119 data-nosnippet>119</a>
-<a href=#120 id=120 data-nosnippet>120</a>        ret.into_iter().filter(|x| !x.is_empty()).collect()
-<a href=#121 id=121 data-nosnippet>121</a>    }
-<a href=#122 id=122 data-nosnippet>122</a>}</code></pre></div></section></main></body></html>
+<a href=#53 id=53 data-nosnippet>53</a>        <span class="self">self</span>.potential[i].get()
+<a href=#54 id=54 data-nosnippet>54</a>    }
+<a href=#55 id=55 data-nosnippet>55</a>
+<a href=#56 id=56 data-nosnippet>56</a>    <span class="doccomment">/// `i`と`j`が同じ素集合に属するならば`true`を返す。
+<a href=#57 id=57 data-nosnippet>57</a>    </span><span class="kw">pub fn </span>is_same(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, j: usize) -&gt; bool {
+<a href=#58 id=58 data-nosnippet>58</a>        <span class="self">self</span>.root_of(i) == <span class="self">self</span>.root_of(j)
+<a href=#59 id=59 data-nosnippet>59</a>    }
+<a href=#60 id=60 data-nosnippet>60</a>
+<a href=#61 id=61 data-nosnippet>61</a>    <span class="doccomment">/// `i`と`j`が同一の素集合に属するとき、ポテンシャルの差($P(i) - P(j)$)を返す。
+<a href=#62 id=62 data-nosnippet>62</a>    </span><span class="kw">pub fn </span>diff(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, j: usize) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+<a href=#63 id=63 data-nosnippet>63</a>        <span class="self">self</span>.is_same(i, j)
+<a href=#64 id=64 data-nosnippet>64</a>            .then_some(<span class="self">self</span>.potential_of(i) - <span class="self">self</span>.potential_of(j))
+<a href=#65 id=65 data-nosnippet>65</a>    }
+<a href=#66 id=66 data-nosnippet>66</a>
+<a href=#67 id=67 data-nosnippet>67</a>    <span class="doccomment">/// `i`の属する素集合と`j`の属する素集合を統合する。
+<a href=#68 id=68 data-nosnippet>68</a>    /// 統合後は、$P(i) = P(j) + p$を満たす。
+<a href=#69 id=69 data-nosnippet>69</a>    </span><span class="kw">pub fn </span>merge(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, j: usize, p: T) -&gt; usize {
+<a href=#70 id=70 data-nosnippet>70</a>        <span class="kw">let </span>ri = <span class="self">self</span>.root_of(i);
+<a href=#71 id=71 data-nosnippet>71</a>        <span class="kw">let </span>rj = <span class="self">self</span>.root_of(j);
+<a href=#72 id=72 data-nosnippet>72</a>
+<a href=#73 id=73 data-nosnippet>73</a>        <span class="kw">if </span>ri == rj {
+<a href=#74 id=74 data-nosnippet>74</a>            <span class="kw">return </span>ri;
+<a href=#75 id=75 data-nosnippet>75</a>        }
+<a href=#76 id=76 data-nosnippet>76</a>
+<a href=#77 id=77 data-nosnippet>77</a>        <span class="self">self</span>.count -= <span class="number">1</span>;
+<a href=#78 id=78 data-nosnippet>78</a>
+<a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">if </span><span class="self">self</span>.depth[ri] &lt; <span class="self">self</span>.depth[rj] {
+<a href=#80 id=80 data-nosnippet>80</a>            <span class="self">self</span>.parent[ri].set(rj);
+<a href=#81 id=81 data-nosnippet>81</a>            <span class="self">self</span>.size[rj] += <span class="self">self</span>.size[ri];
+<a href=#82 id=82 data-nosnippet>82</a>
+<a href=#83 id=83 data-nosnippet>83</a>            <span class="kw">let </span>p = p - <span class="self">self</span>.potential[i].get() + <span class="self">self</span>.potential[j].get();
+<a href=#84 id=84 data-nosnippet>84</a>            <span class="self">self</span>.potential[ri].set(p);
+<a href=#85 id=85 data-nosnippet>85</a>            j
+<a href=#86 id=86 data-nosnippet>86</a>        } <span class="kw">else </span>{
+<a href=#87 id=87 data-nosnippet>87</a>            <span class="self">self</span>.parent[rj].set(ri);
+<a href=#88 id=88 data-nosnippet>88</a>            <span class="self">self</span>.size[ri] += <span class="self">self</span>.size[rj];
+<a href=#89 id=89 data-nosnippet>89</a>
+<a href=#90 id=90 data-nosnippet>90</a>            <span class="kw">let </span>p = <span class="self">self</span>.potential[i].get() - <span class="self">self</span>.potential[j].get() - p;
+<a href=#91 id=91 data-nosnippet>91</a>            <span class="self">self</span>.potential[rj].set(p);
+<a href=#92 id=92 data-nosnippet>92</a>
+<a href=#93 id=93 data-nosnippet>93</a>            <span class="kw">if </span><span class="self">self</span>.depth[ri] == <span class="self">self</span>.depth[rj] {
+<a href=#94 id=94 data-nosnippet>94</a>                <span class="self">self</span>.depth[i] += <span class="number">1</span>;
+<a href=#95 id=95 data-nosnippet>95</a>            }
+<a href=#96 id=96 data-nosnippet>96</a>
+<a href=#97 id=97 data-nosnippet>97</a>            i
+<a href=#98 id=98 data-nosnippet>98</a>        }
+<a href=#99 id=99 data-nosnippet>99</a>    }
+<a href=#100 id=100 data-nosnippet>100</a>
+<a href=#101 id=101 data-nosnippet>101</a>    <span class="doccomment">/// `i`の属する素集合の大きさを返す。
+<a href=#102 id=102 data-nosnippet>102</a>    </span><span class="kw">pub fn </span>size_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; usize {
+<a href=#103 id=103 data-nosnippet>103</a>        <span class="self">self</span>.size[<span class="self">self</span>.root_of(i)]
+<a href=#104 id=104 data-nosnippet>104</a>    }
+<a href=#105 id=105 data-nosnippet>105</a>
+<a href=#106 id=106 data-nosnippet>106</a>    <span class="doccomment">/// 素集合の個数を返す。
+<a href=#107 id=107 data-nosnippet>107</a>    </span><span class="kw">pub fn </span>count_groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+<a href=#108 id=108 data-nosnippet>108</a>        <span class="self">self</span>.count
+<a href=#109 id=109 data-nosnippet>109</a>    }
+<a href=#110 id=110 data-nosnippet>110</a>
+<a href=#111 id=111 data-nosnippet>111</a>    <span class="doccomment">/// 素集合をすべて列挙する。
+<a href=#112 id=112 data-nosnippet>112</a>    </span><span class="kw">pub fn </span>get_groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;Vec&lt;usize&gt;&gt; {
+<a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; <span class="self">self</span>.n];
+<a href=#114 id=114 data-nosnippet>114</a>
+<a href=#115 id=115 data-nosnippet>115</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.n {
+<a href=#116 id=116 data-nosnippet>116</a>            ret[<span class="self">self</span>.root_of(i)].push(i);
+<a href=#117 id=117 data-nosnippet>117</a>        }
+<a href=#118 id=118 data-nosnippet>118</a>
+<a href=#119 id=119 data-nosnippet>119</a>        ret.into_iter().filter(|x| !x.is_empty()).collect()
+<a href=#120 id=120 data-nosnippet>120</a>    }
+<a href=#121 id=121 data-nosnippet>121</a>}</code></pre></div></section></main></body></html>

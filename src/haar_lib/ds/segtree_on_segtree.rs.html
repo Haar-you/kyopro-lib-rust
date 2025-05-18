@@ -17,7 +17,7 @@
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">haar_lib/ds/</div>segtree_on_segtree.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! セグメント木上にセグメント木を構築する。
 <a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">use crate</span>::{
 <a href=#3 id=3 data-nosnippet>3</a>    algebra::traits::<span class="kw-2">*</span>,
-<a href=#4 id=4 data-nosnippet>4</a>    algo::{bsearch::lower_bound, merge::merge},
+<a href=#4 id=4 data-nosnippet>4</a>    algo::{bsearch_slice::BinarySearch, merge::merge},
 <a href=#5 id=5 data-nosnippet>5</a>    ds::segtree::<span class="kw-2">*</span>,
 <a href=#6 id=6 data-nosnippet>6</a>};
 <a href=#7 id=7 data-nosnippet>7</a>
@@ -69,7 +69,7 @@
 <a href=#53 id=53 data-nosnippet>53</a>        <span class="kw">let </span><span class="kw-2">mut </span>c_ys = <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; x_size];
 <a href=#54 id=54 data-nosnippet>54</a>
 <a href=#55 id=55 data-nosnippet>55</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-<a href=#56 id=56 data-nosnippet>56</a>            <span class="kw">let </span>j = lower_bound(<span class="kw-2">&amp;</span>c_xs, <span class="kw-2">&amp;</span><span class="self">self</span>.xs[i]);
+<a href=#56 id=56 data-nosnippet>56</a>            <span class="kw">let </span>j = c_xs.lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.xs[i]);
 <a href=#57 id=57 data-nosnippet>57</a>            c_ys[j + x_size / <span class="number">2</span>].push(<span class="self">self</span>.ys[i]);
 <a href=#58 id=58 data-nosnippet>58</a>        }
 <a href=#59 id=59 data-nosnippet>59</a>
@@ -105,17 +105,17 @@
 <a href=#89 id=89 data-nosnippet>89</a>{
 <a href=#90 id=90 data-nosnippet>90</a>    <span class="doccomment">/// 点`(x, y)`の値を`value`で更新する。
 <a href=#91 id=91 data-nosnippet>91</a>    </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: i64, y: i64, value: M::Element) {
-<a href=#92 id=92 data-nosnippet>92</a>        <span class="kw">let </span><span class="kw-2">mut </span>i = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.c_xs, <span class="kw-2">&amp;</span>x) + <span class="self">self</span>.x_size / <span class="number">2</span>;
+<a href=#92 id=92 data-nosnippet>92</a>        <span class="kw">let </span><span class="kw-2">mut </span>i = <span class="self">self</span>.c_xs.lower_bound(<span class="kw-2">&amp;</span>x) + <span class="self">self</span>.x_size / <span class="number">2</span>;
 <a href=#93 id=93 data-nosnippet>93</a>        <span class="kw">while </span>i &gt;= <span class="number">1 </span>{
-<a href=#94 id=94 data-nosnippet>94</a>            <span class="kw">let </span>j = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.c_ys[i], <span class="kw-2">&amp;</span>y);
+<a href=#94 id=94 data-nosnippet>94</a>            <span class="kw">let </span>j = <span class="self">self</span>.c_ys[i].lower_bound(<span class="kw-2">&amp;</span>y);
 <a href=#95 id=95 data-nosnippet>95</a>            <span class="self">self</span>.segs[i].as_mut().unwrap().update(j, value.clone());
 <a href=#96 id=96 data-nosnippet>96</a>            i &gt;&gt;= <span class="number">1</span>;
 <a href=#97 id=97 data-nosnippet>97</a>        }
 <a href=#98 id=98 data-nosnippet>98</a>    }
 <a href=#99 id=99 data-nosnippet>99</a>
 <a href=#100 id=100 data-nosnippet>100</a>    <span class="kw">fn </span>fold_sub(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize, y1: i64, y2: i64) -&gt; M::Element {
-<a href=#101 id=101 data-nosnippet>101</a>        <span class="kw">let </span>l = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.c_ys[i], <span class="kw-2">&amp;</span>y1);
-<a href=#102 id=102 data-nosnippet>102</a>        <span class="kw">let </span>r = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.c_ys[i], <span class="kw-2">&amp;</span>y2);
+<a href=#101 id=101 data-nosnippet>101</a>        <span class="kw">let </span>l = <span class="self">self</span>.c_ys[i].lower_bound(<span class="kw-2">&amp;</span>y1);
+<a href=#102 id=102 data-nosnippet>102</a>        <span class="kw">let </span>r = <span class="self">self</span>.c_ys[i].lower_bound(<span class="kw-2">&amp;</span>y2);
 <a href=#103 id=103 data-nosnippet>103</a>        <span class="self">self</span>.segs[i].as_ref().unwrap().fold(l..r)
 <a href=#104 id=104 data-nosnippet>104</a>    }
 <a href=#105 id=105 data-nosnippet>105</a>
@@ -125,8 +125,8 @@
 <a href=#109 id=109 data-nosnippet>109</a>        Range { start: x1, end: x2 }: Range&lt;i64&gt;,
 <a href=#110 id=110 data-nosnippet>110</a>        Range { start: y1, end: y2 }: Range&lt;i64&gt;,
 <a href=#111 id=111 data-nosnippet>111</a>    ) -&gt; M::Element {
-<a href=#112 id=112 data-nosnippet>112</a>        <span class="kw">let </span><span class="kw-2">mut </span>l = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.c_xs, <span class="kw-2">&amp;</span>x1) + <span class="self">self</span>.x_size / <span class="number">2</span>;
-<a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">let </span><span class="kw-2">mut </span>r = lower_bound(<span class="kw-2">&amp;</span><span class="self">self</span>.c_xs, <span class="kw-2">&amp;</span>x2) + <span class="self">self</span>.x_size / <span class="number">2</span>;
+<a href=#112 id=112 data-nosnippet>112</a>        <span class="kw">let </span><span class="kw-2">mut </span>l = <span class="self">self</span>.c_xs.lower_bound(<span class="kw-2">&amp;</span>x1) + <span class="self">self</span>.x_size / <span class="number">2</span>;
+<a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="self">self</span>.c_xs.lower_bound(<span class="kw-2">&amp;</span>x2) + <span class="self">self</span>.x_size / <span class="number">2</span>;
 <a href=#114 id=114 data-nosnippet>114</a>
 <a href=#115 id=115 data-nosnippet>115</a>        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="self">self</span>.monoid.id();
 <a href=#116 id=116 data-nosnippet>116</a>
