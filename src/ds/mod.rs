@@ -20,6 +20,7 @@
 // pub mod traits;
 
 pub mod partially_persistent_unionfind;
+pub mod persistent_unionfind;
 pub mod potential_unionfind;
 pub mod rollbackable_unionfind;
 pub mod unionfind;
