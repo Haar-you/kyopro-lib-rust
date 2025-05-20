@@ -139,12 +139,25 @@ impl FastIO {
 
     /// `s`を標準出力に書き込む。
     pub fn write<T: Display>(&mut self, s: T) {
-        self.out_buf.write_all(format!("{}", s).as_bytes()).unwrap();
+        self.out_buf.write_all(s.to_string().as_bytes()).unwrap();
+    }
+
+    /// `s`を標準出力に**逆順**に書き込む。
+    pub fn write_rev<T: Display>(&mut self, s: T) {
+        let mut s = s.to_string().as_bytes().to_vec();
+        s.reverse();
+        self.out_buf.write_all(&s).unwrap();
     }
 
     /// `s`と改行文字を標準出力に書き込む。
     pub fn writeln<T: Display>(&mut self, s: T) {
         self.write(s);
+        self.out_buf.write_all(b"\n").unwrap();
+    }
+
+    /// `s`の**逆順**と改行文字を標準出力に書き込む。
+    pub fn writeln_rev<T: Display>(&mut self, s: T) {
+        self.write_rev(s);
         self.out_buf.write_all(b"\n").unwrap();
     }
 }
