@@ -2,7 +2,7 @@
 use std::arch::asm;
 
 /// `u64`型の範囲で乱数を返す。
-#[cfg(target_arch = "x86_64")]
+#[cfg(all(target_arch = "x86_64", target_os = "linux"))]
 pub fn rand() -> u64 {
     let b = [0_u8; 8];
 
