@@ -2,46 +2,25 @@
 use crate::algebra::action::Action;
 use crate::algebra::first_last::*;
 use std::fmt::Debug;
+use std::marker::PhantomData;
 
 /// Range Update Range ~~~ 用の代数的構造
 ///
 /// `convert`は時間計算量が$O(\log n)$なので、
 /// 遅延セグメント木に載せる場合は、更新・取得はともに$O(\log^2 n)$の計算量になることに注意。
 #[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
-pub struct UpdateFold<M: Monoid> {
-    fold_m: M,
-    update_m: Last<M::Element>,
-}
-
-impl<M: Monoid> UpdateFold<M> {
-    /// [`UpdateFold<M>`]を生成する。
-    pub fn new(fold_m: M) -> Self {
-        Self {
-            fold_m,
-            update_m: Last::new(),
-        }
-    }
-}
+pub struct UpdateFold<M: Monoid>(PhantomData<M>);
 
 impl<M> Action for UpdateFold<M>
 where
-    M: Monoid,
-    M::Element: Clone,
+    M: Monoid + Clone,
 {
-    type FoldMonoid = M;
-    type UpdateMonoid = Last<M::Element>;
-    type Output = <Self::FoldMonoid as Set>::Element;
-    type Lazy = <Self::UpdateMonoid as Set>::Element;
+    type Output = M;
+    type Lazy = Last<M>;
 
-    fn fold_monoid(&self) -> &Self::FoldMonoid {
-        &self.fold_m
-    }
-    fn update_monoid(&self) -> &Self::UpdateMonoid {
-        &self.update_m
-    }
-    fn convert(&self, value: Self::Output, lazy: Self::Lazy, len: usize) -> Self::Output {
-        match lazy {
-            Some(lazy) => self.fold_monoid().times(lazy, len as u64),
+    fn convert(value: Self::Output, lazy: Self::Lazy, len: usize) -> Self::Output {
+        match lazy.0 {
+            Some(m) => m.times(len as u64),
             _ => value,
         }
     }

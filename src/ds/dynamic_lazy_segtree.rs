@@ -12,10 +12,10 @@ struct Node<A: Action> {
 }
 
 impl<A: Action> Node<A> {
-    fn new(action: A) -> Self {
+    fn new() -> Self {
         Self {
-            value: action.fold_id(),
-            lazy: action.update_id(),
+            value: A::fold_id(),
+            lazy: A::update_id(),
             left: ptr::null_mut(),
             right: ptr::null_mut(),
         }
@@ -26,20 +26,18 @@ impl<A: Action> Node<A> {
 #[derive(Clone, Debug)]
 pub struct DynamicLazySegtree<A: Action> {
     root: *mut Node<A>,
-    action: A,
     to: usize,
 }
 
-impl<A: Action + Copy> DynamicLazySegtree<A>
+impl<A: Action> DynamicLazySegtree<A>
 where
     A::Output: Clone + PartialEq,
     A::Lazy: Clone + PartialEq,
 {
     /// `DynamicLazySegtree<A>`を生成する。
-    pub fn new(action: A) -> Self {
+    pub fn new() -> Self {
         Self {
-            root: Box::into_raw(Box::new(Node::new(action))),
-            action,
+            root: Box::into_raw(Box::new(Node::new())),
             to: 1,
         }
     }
@@ -48,28 +46,28 @@ where
         assert!(!t.is_null());
         let lazy = unsafe { (*t).lazy.clone() };
 
-        if lazy == self.action.update_id() {
+        if lazy == A::update_id() {
             return;
         }
         if to - from > 1 {
             unsafe {
                 if (*t).left.is_null() {
-                    (*t).left = Box::into_raw(Box::new(Node::new(self.action)));
+                    (*t).left = Box::into_raw(Box::new(Node::new()));
                 }
                 let left = (*t).left;
-                (*left).lazy = self.action.update((*left).lazy.clone(), lazy.clone());
+                (*left).lazy = A::update((*left).lazy.clone(), lazy.clone());
 
                 if (*t).right.is_null() {
-                    (*t).right = Box::into_raw(Box::new(Node::new(self.action)));
+                    (*t).right = Box::into_raw(Box::new(Node::new()));
                 }
                 let right = (*t).right;
-                (*right).lazy = self.action.update((*right).lazy.clone(), lazy.clone());
+                (*right).lazy = A::update((*right).lazy.clone(), lazy.clone());
             }
         }
         let len = to - from;
         unsafe {
-            (*t).value = self.action.convert((*t).value.clone(), lazy, len);
-            (*t).lazy = self.action.update_id();
+            (*t).value = A::convert((*t).value.clone(), lazy, len);
+            (*t).lazy = A::update_id();
         }
     }
 
@@ -83,7 +81,7 @@ where
         value: A::Lazy,
     ) -> *mut Node<A> {
         if cur.is_null() {
-            cur = Box::into_raw(Box::new(Node::new(self.action)));
+            cur = Box::into_raw(Box::new(Node::new()));
         }
 
         self._propagate(cur, from, to);
@@ -91,7 +89,7 @@ where
         if to - from == 1 {
             if s <= from && to <= t {
                 unsafe {
-                    (*cur).lazy = self.action.update((*cur).lazy.clone(), value);
+                    (*cur).lazy = A::update((*cur).lazy.clone(), value);
                 }
             }
             self._propagate(cur, from, to);
@@ -103,7 +101,7 @@ where
         }
         if s <= from && to <= t {
             unsafe {
-                (*cur).lazy = self.action.update((*cur).lazy.clone(), value);
+                (*cur).lazy = A::update((*cur).lazy.clone(), value);
             }
             self._propagate(cur, from, to);
             return cur;
@@ -113,9 +111,7 @@ where
         unsafe {
             (*cur).left = self._update((*cur).left, from, mid, s, t, value.clone());
             (*cur).right = self._update((*cur).right, mid, to, s, t, value);
-            (*cur).value = self
-                .action
-                .fold((*(*cur).left).value.clone(), (*(*cur).right).value.clone());
+            (*cur).value = A::fold((*(*cur).left).value.clone(), (*(*cur).right).value.clone());
         }
         cur
     }
@@ -128,7 +124,7 @@ where
             }
             self.to *= 2;
 
-            let mut new_root = Box::new(Node::new(self.action));
+            let mut new_root = Box::new(Node::new());
             new_root.left = self.root;
 
             self.root = Box::into_raw(new_root);
@@ -139,12 +135,12 @@ where
 
     fn _fold(&self, cur: *mut Node<A>, from: usize, to: usize, s: usize, t: usize) -> A::Output {
         if cur.is_null() {
-            return self.action.fold_id();
+            return A::fold_id();
         }
 
         self._propagate(cur, from, to);
         if to <= s || t <= from {
-            return self.action.fold_id();
+            return A::fold_id();
         }
         if s <= from && to <= t {
             return unsafe { (*cur).value.clone() };
@@ -154,7 +150,7 @@ where
         let lv = self._fold(unsafe { (*cur).left }, from, mid, s, t);
         let rv = self._fold(unsafe { (*cur).right }, mid, to, s, t);
 
-        self.action.fold(lv, rv)
+        A::fold(lv, rv)
     }
 
     /// 範囲`s..t`で計算を集約する。

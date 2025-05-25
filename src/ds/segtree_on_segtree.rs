@@ -20,7 +20,6 @@ pub struct SegtreeOnSegtree<M: Monoid> {
     c_ys: Vec<Vec<i64>>,
     x_size: usize,
     segs: Vec<Option<Segtree<M>>>,
-    monoid: M,
 }
 
 impl SegtreeOnSegtreeBuilder {
@@ -39,10 +38,7 @@ impl SegtreeOnSegtreeBuilder {
     }
 
     /// [`SegtreeOnSegtree`]を構築する。
-    pub fn build<M: Monoid + Copy>(self, monoid: M) -> SegtreeOnSegtree<M>
-    where
-        M::Element: Clone,
-    {
+    pub fn build<M: Monoid + Clone>(self) -> SegtreeOnSegtree<M> {
         let n = self.xs.len();
         let mut c_xs = self.xs.clone();
         c_xs.sort_unstable();
@@ -70,7 +66,7 @@ impl SegtreeOnSegtreeBuilder {
 
         let mut segs = vec![None; x_size];
         for i in 1..x_size {
-            segs[i] = Some(Segtree::new(c_ys[i].len(), monoid));
+            segs[i] = Some(Segtree::new(c_ys[i].len()));
         }
 
         SegtreeOnSegtree {
@@ -78,17 +74,13 @@ impl SegtreeOnSegtreeBuilder {
             c_ys,
             x_size,
             segs,
-            monoid,
         }
     }
 }
 
-impl<M: Monoid> SegtreeOnSegtree<M>
-where
-    M::Element: Clone,
-{
+impl<M: Monoid + Clone> SegtreeOnSegtree<M> {
     /// 点`(x, y)`の値を`value`で更新する。
-    pub fn update(&mut self, x: i64, y: i64, value: M::Element) {
+    pub fn update(&mut self, x: i64, y: i64, value: M) {
         let mut i = self.c_xs.lower_bound(&x) + self.x_size / 2;
         while i >= 1 {
             let j = self.c_ys[i].lower_bound(&y);
@@ -97,7 +89,7 @@ where
         }
     }
 
-    fn fold_sub(&self, i: usize, y1: i64, y2: i64) -> M::Element {
+    fn fold_sub(&self, i: usize, y1: i64, y2: i64) -> M {
         let l = self.c_ys[i].lower_bound(&y1);
         let r = self.c_ys[i].lower_bound(&y2);
         self.segs[i].as_ref().unwrap().fold(l..r)
@@ -108,19 +100,19 @@ where
         &self,
         Range { start: x1, end: x2 }: Range<i64>,
         Range { start: y1, end: y2 }: Range<i64>,
-    ) -> M::Element {
+    ) -> M {
         let mut l = self.c_xs.lower_bound(&x1) + self.x_size / 2;
         let mut r = self.c_xs.lower_bound(&x2) + self.x_size / 2;
 
-        let mut ret = self.monoid.id();
+        let mut ret = M::id();
 
         while l < r {
             if r & 1 == 1 {
                 r -= 1;
-                ret = self.monoid.op(ret, self.fold_sub(r, y1, y2));
+                ret = M::op(ret, self.fold_sub(r, y1, y2));
             }
             if l & 1 == 1 {
-                ret = self.monoid.op(ret, self.fold_sub(l, y1, y2));
+                ret = M::op(ret, self.fold_sub(l, y1, y2));
                 l += 1;
             }
 
