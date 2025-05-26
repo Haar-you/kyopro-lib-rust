@@ -3,43 +3,48 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
 /// 変換操作
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Transformation(Vec<usize>);
-
-/// 置換操作
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Permutation(Vec<usize>);
+#[derive(Clone, Debug, Default)]
+pub enum Transformation {
+    #[default]
+    Id,
+    Value(Vec<usize>),
+}
 
 impl Transformation {
     /// $b_i = a_{T_i}$を満たすbを返す。
     pub fn apply<T: Clone>(&self, a: Vec<T>) -> Vec<T> {
-        self.0.iter().map(|&i| a[i].clone()).collect()
-    }
-
-    /// 内部の`Vec`のスライスへの参照を返す。
-    pub fn as_slice(&self) -> &[usize] {
-        &self.0
-    }
-
-    pub fn compose(self, other: Self) -> Self {
-        let n = self.0.len();
-        assert_eq!(self.0.len(), other.0.len());
-        Self((0..n).map(|i| self.0[other.0[i]]).collect())
+        match self {
+            Self::Id => a,
+            Self::Value(t) => t.iter().map(|&i| a[i].clone()).collect(),
+        }
     }
 
     pub fn is_identity(&self) -> bool {
-        for (i, &x) in self.0.iter().enumerate() {
-            if i != x {
-                return false;
-            }
+        match self {
+            Self::Id => true,
+            Self::Value(a) => a.iter().enumerate().all(|(i, &x)| i == x),
         }
-        true
     }
-}
 
-impl From<Transformation> for Vec<usize> {
-    fn from(value: Transformation) -> Self {
-        value.0
+    /// 内部の`Vec`のスライスへの参照を返す。
+    pub fn as_slice(&self) -> Option<&[usize]> {
+        match self {
+            Self::Id => None,
+            Self::Value(a) => Some(a),
+        }
+    }
+
+    pub fn compose(self, other: Self) -> Self {
+        match (self, other) {
+            (Self::Value(a), Self::Value(b)) => {
+                let n = a.len();
+                assert_eq!(a.len(), b.len());
+                Self::Value((0..n).map(|i| a[b[i]]).collect())
+            }
+            (a @ Self::Value(_), _) => a,
+            (_, b @ Self::Value(_)) => b,
+            _ => Self::Id,
+        }
     }
 }
 
@@ -51,50 +56,84 @@ impl TryFrom<Vec<usize>> for Transformation {
         value
             .iter()
             .all(|&i| i < n)
-            .then_some(Self(value))
+            .then_some(Self::Value(value))
             .ok_or("すべての値は`.len()`未満でなければならない。")
     }
+}
+
+impl PartialEq for Transformation {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Value(a), Self::Value(b)) => a == b,
+            _ => self.is_identity() && other.is_identity(),
+        }
+    }
+}
+
+impl_algebra!(
+    Transformation;
+    op: |a: Self, b: Self| a.compose(b);
+    id: Self::Id;
+    assoc;
+);
+
+/// 置換操作
+#[derive(Clone, Debug, Default)]
+pub enum Permutation {
+    #[default]
+    Id,
+    Value(Vec<usize>),
 }
 
 impl Permutation {
     /// $b_i = a_{P_i}$を満たすbを返す。
     pub fn apply<T: Clone>(&self, a: Vec<T>) -> Vec<T> {
-        self.0.iter().map(|&i| a[i].clone()).collect()
-    }
-
-    /// 内部の`Vec`のスライスへの参照を返す。
-    pub fn as_slice(&self) -> &[usize] {
-        &self.0
-    }
-
-    pub fn compose(self, other: Self) -> Self {
-        let n = self.0.len();
-        assert_eq!(self.0.len(), other.0.len());
-        Self((0..n).map(|i| self.0[other.0[i]]).collect())
-    }
-
-    pub fn inv(self) -> Self {
-        let n = self.0.len();
-        let mut ret = vec![0; n];
-        for i in 0..n {
-            ret[self.0[i]] = i;
+        match self {
+            Self::Id => a,
+            Self::Value(t) => t.iter().map(|&i| a[i].clone()).collect(),
         }
-        Self(ret)
     }
 
     pub fn is_identity(&self) -> bool {
-        for (i, &x) in self.0.iter().enumerate() {
-            if i != x {
-                return false;
+        match self {
+            Self::Id => true,
+            Self::Value(a) => a.iter().enumerate().all(|(i, &x)| i == x),
+        }
+    }
+
+    /// 内部の`Vec`のスライスへの参照を返す。
+    pub fn as_slice(&self) -> Option<&[usize]> {
+        match self {
+            Self::Id => None,
+            Self::Value(a) => Some(a),
+        }
+    }
+
+    pub fn compose(self, other: Self) -> Self {
+        match (self, other) {
+            (Self::Value(a), Self::Value(b)) => {
+                let n = a.len();
+                assert_eq!(a.len(), b.len());
+                Self::Value((0..n).map(|i| a[b[i]]).collect())
+            }
+            (a @ Self::Value(_), _) => a,
+            (_, b @ Self::Value(_)) => b,
+            _ => Self::Id,
+        }
+    }
+
+    pub fn inv(self) -> Self {
+        match self {
+            Self::Id => self,
+            Self::Value(a) => {
+                let n = a.len();
+                let mut ret = vec![0; n];
+                for i in 0..n {
+                    ret[a[i]] = i;
+                }
+                Self::Value(ret)
             }
         }
-        true
-    }
-}
-
-impl From<Permutation> for Vec<usize> {
-    fn from(value: Permutation) -> Self {
-        value.0
     }
 }
 
@@ -110,70 +149,23 @@ impl TryFrom<Vec<usize>> for Permutation {
             }
             check[x] = true;
         }
-        Ok(Self(value))
+        Ok(Self::Value(value))
     }
 }
 
-/// 置換や変換の合成を演算とする代数的構造
-#[derive(Clone, Copy, Default, Debug)]
-pub enum Composition<T> {
-    #[default]
-    Id,
-    Value(T),
-}
-
-impl PartialEq for Composition<Transformation> {
+impl PartialEq for Permutation {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
             (Self::Value(a), Self::Value(b)) => a == b,
-            (Self::Value(a), _) => a.is_identity(),
-            (_, Self::Value(b)) => b.is_identity(),
-            _ => true,
-        }
-    }
-}
-
-impl PartialEq for Composition<Permutation> {
-    fn eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (Self::Value(a), Self::Value(b)) => a == b,
-            (Self::Value(a), _) => a.is_identity(),
-            (_, Self::Value(b)) => b.is_identity(),
-            _ => true,
+            _ => self.is_identity() && other.is_identity(),
         }
     }
 }
 
 impl_algebra!(
-    Composition<Transformation>;
-    op: |a: Self, b: Self| {
-        match (a, b) {
-            (Self::Value(a), Self::Value(b)) => Self::Value(a.compose(b)),
-            (a@Self::Value(_),_) => a,
-            (_, b@Self::Value(_)) => b,
-            _ => Self::Id
-        }
-    };
-    id: Self::Id;
-    assoc;
-);
-
-impl_algebra!(
-    Composition<Permutation>;
-    op: |a: Self, b: Self| {
-        match (a, b) {
-            (Self::Value(a), Self::Value(b)) => Self::Value(a.compose(b)),
-            (a@Self::Value(_),_) => a,
-            (_, b@Self::Value(_)) => b,
-            _ => Self::Id
-        }
-    };
-    inv: |a: Self| {
-        match a {
-            Self::Value(a) => Self::Value(a.inv()),
-            _ => Self::Id
-        }
-    };
+    Permutation;
+    op: |a: Self, b: Self| a.compose(b);
+    inv: |a: Self| a.inv();
     id: Self::Id;
     assoc;
 );
@@ -191,10 +183,10 @@ mod tests {
 
         let mut a = (0..n).collect::<Vec<_>>();
         a.shuffle(&mut rng);
-        let a = Composition::Value(Permutation::try_from(a).unwrap());
+        let a = Permutation::try_from(a).unwrap();
 
         let b = a.clone().inv();
 
-        assert_eq!(a.op(b), Composition::id());
+        assert_eq!(a.op(b), Permutation::id());
     }
 }
