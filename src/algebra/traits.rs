@@ -10,11 +10,19 @@ pub trait BinaryOp: Set {
     fn op(self, other: Self) -> Self;
 
     /// 二項演算$\circ$で(右側から)代入操作($a \leftarrow a \circ b$)をする。
-    fn op_assign(&mut self, b: Self)
+    fn op_assign_r(&mut self, b: Self)
     where
         Self: Clone,
     {
         *self = Self::op(self.clone(), b);
+    }
+
+    /// 二項演算$\circ$で(左側から)代入操作($a \leftarrow b \circ a$)をする。
+    fn op_assign_l(&mut self, b: Self)
+    where
+        Self: Clone,
+    {
+        *self = Self::op(b, self.clone());
     }
 }
 

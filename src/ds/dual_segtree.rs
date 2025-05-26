@@ -112,7 +112,7 @@ mod tests {
             let x = rng.gen_range(0..10000);
 
             seg.update(lr.clone(), Sum(x));
-            a[lr].iter_mut().for_each(|e| e.op_assign(Sum(x)));
+            a[lr].iter_mut().for_each(|e| e.op_assign_r(Sum(x)));
 
             assert_eq!(a, seg.to_vec());
         }

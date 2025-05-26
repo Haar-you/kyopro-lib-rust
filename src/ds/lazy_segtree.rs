@@ -180,7 +180,7 @@ mod tests {
                     let x = rng.gen_range(0..range);
 
                     seg.update(lr.clone(), Sum(x));
-                    vec[lr].iter_mut().for_each(|y| y.op_assign(Sum(x)));
+                    vec[lr].iter_mut().for_each(|y| y.op_assign_r(Sum(x)));
                 }
                 1 => {
                     assert_eq!(seg.fold(lr.clone()), vec[lr].iter().cloned().fold_m());

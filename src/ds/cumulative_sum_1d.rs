@@ -83,7 +83,7 @@ mod tests {
             let x = rng.gen_range(-1000..=1000);
 
             csb.update(i, Sum(x));
-            other[i].op_assign(Sum(x));
+            other[i].op_assign_r(Sum(x));
         }
 
         let cs = csb.build();

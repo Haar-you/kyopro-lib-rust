@@ -164,7 +164,7 @@ mod tests {
             let x = rng.gen::<u64>() % 1000000;
 
             seg.assign(i, Sum(x));
-            map.entry(i).or_insert(Sum::id()).op_assign(Sum(x));
+            map.entry(i).or_insert(Sum::id()).op_assign_r(Sum(x));
 
             let lr = rand_range(&mut rng, 0..usize::MAX / 2);
 
