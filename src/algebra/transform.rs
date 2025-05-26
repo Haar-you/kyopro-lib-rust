@@ -4,46 +4,44 @@ use crate::impl_algebra;
 
 /// 変換操作
 #[derive(Clone, Debug, Default)]
-pub enum Transformation {
-    #[default]
-    Id,
-    Value(Vec<usize>),
+pub struct Transformation {
+    value: Option<Vec<usize>>,
 }
 
 impl Transformation {
+    /// `i`番目の要素を返す。
+    pub fn get(&self, i: usize) -> usize {
+        self.value.as_ref().map_or_else(|| i, |a| a[i])
+    }
+
     /// $b_i = a_{T_i}$を満たすbを返す。
     pub fn apply<T: Clone>(&self, a: Vec<T>) -> Vec<T> {
-        match self {
-            Self::Id => a,
-            Self::Value(t) => t.iter().map(|&i| a[i].clone()).collect(),
-        }
+        self.value
+            .as_ref()
+            .map(|t| t.iter().map(|&i| a[i].clone()).collect())
+            .unwrap_or(a)
     }
 
+    /// 単位元であるとき、`true`を返す。
     pub fn is_identity(&self) -> bool {
-        match self {
-            Self::Id => true,
-            Self::Value(a) => a.iter().enumerate().all(|(i, &x)| i == x),
-        }
+        self.value
+            .as_ref()
+            .map_or(true, |a| a.iter().enumerate().all(|(i, &x)| i == x))
     }
 
-    /// 内部の`Vec`のスライスへの参照を返す。
-    pub fn as_slice(&self) -> Option<&[usize]> {
-        match self {
-            Self::Id => None,
-            Self::Value(a) => Some(a),
-        }
-    }
-
+    /// 操作を合成する。
     pub fn compose(self, other: Self) -> Self {
-        match (self, other) {
-            (Self::Value(a), Self::Value(b)) => {
-                let n = a.len();
-                assert_eq!(a.len(), b.len());
-                Self::Value((0..n).map(|i| a[b[i]]).collect())
-            }
-            (a @ Self::Value(_), _) => a,
-            (_, b @ Self::Value(_)) => b,
-            _ => Self::Id,
+        Self {
+            value: match (self.value, other.value) {
+                (Some(a), Some(b)) => {
+                    let n = a.len();
+                    assert_eq!(a.len(), b.len());
+                    Some((0..n).map(|i| a[b[i]]).collect())
+                }
+                (a @ Some(_), _) => a,
+                (_, b @ Some(_)) => b,
+                _ => None,
+            },
         }
     }
 }
@@ -56,15 +54,15 @@ impl TryFrom<Vec<usize>> for Transformation {
         value
             .iter()
             .all(|&i| i < n)
-            .then_some(Self::Value(value))
+            .then_some(Self { value: Some(value) })
             .ok_or("すべての値は`.len()`未満でなければならない。")
     }
 }
 
 impl PartialEq for Transformation {
     fn eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (Self::Value(a), Self::Value(b)) => a == b,
+        match (&self.value, &other.value) {
+            (Some(a), Some(b)) => a == b,
             _ => self.is_identity() && other.is_identity(),
         }
     }
@@ -73,6 +71,6 @@ impl PartialEq for Transformation {
 impl_algebra!(
     Transformation;
     op: |a: Self, b: Self| a.compose(b);
-    id: Self::Id;
+    id: Self { value: None };
     assoc;
 );
