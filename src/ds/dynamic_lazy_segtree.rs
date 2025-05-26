@@ -29,11 +29,13 @@ pub struct DynamicLazySegtree<A: Action> {
     to: usize,
 }
 
-impl<A: Action> DynamicLazySegtree<A>
-where
-    A::Output: Clone + PartialEq,
-    A::Lazy: Clone + PartialEq,
-{
+impl<A: Action> Default for DynamicLazySegtree<A> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl<A: Action> DynamicLazySegtree<A> {
     /// `DynamicLazySegtree<A>`を生成する。
     pub fn new() -> Self {
         Self {
@@ -41,7 +43,13 @@ where
             to: 1,
         }
     }
+}
 
+impl<A: Action> DynamicLazySegtree<A>
+where
+    A::Output: Clone + PartialEq,
+    A::Lazy: Clone + PartialEq,
+{
     fn _propagate(&self, t: *mut Node<A>, from: usize, to: usize) {
         assert!(!t.is_null());
         let lazy = unsafe { (*t).lazy.clone() };

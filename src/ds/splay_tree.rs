@@ -291,6 +291,12 @@ pub struct SplayTree<M: Monoid> {
     root: Cell<*mut Node<M>>,
 }
 
+impl<M: Monoid + Clone> Default for SplayTree<M> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<M: Monoid + Clone> SplayTree<M> {
     /// モノイド`m`をもつ`SplayTree<M>`を生成
     pub fn new() -> Self {

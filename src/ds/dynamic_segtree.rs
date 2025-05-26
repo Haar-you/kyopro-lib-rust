@@ -31,6 +31,12 @@ pub struct DynamicSegtree<M: Monoid> {
     to: usize,
 }
 
+impl<M: Monoid + Clone> Default for DynamicSegtree<M> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<M: Monoid + Clone> DynamicSegtree<M> {
     /// [`DynamicSegtree<M>`]を生成する。
     pub fn new() -> Self {

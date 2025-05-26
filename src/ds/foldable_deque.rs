@@ -1,6 +1,7 @@
 //! 半群で畳み込み可能なdeque
 pub use crate::algebra::traits::*;
 
+#[derive(Clone, Default, Debug)]
 /// 半群で畳み込み可能なdeque
 pub struct FoldableDeque<S: Semigroup> {
     front_stack: Vec<S>,
