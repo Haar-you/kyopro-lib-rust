@@ -73,7 +73,9 @@ pub trait Times: BinaryOp + Identity + Clone {
 }
 impl<A: BinaryOp + Identity + Clone> Times for A {}
 
+/// `fold_m`を提供する。
 pub trait FoldM: Iterator {
+    /// モノイドで畳み込んだ結果を返す。
     fn fold_m(self) -> Self::Item
     where
         Self: Sized,

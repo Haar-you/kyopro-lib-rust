@@ -1,3 +1,5 @@
+//! Optionモノイド
+
 pub use crate::algebra::traits::*;
 
 impl<T> Set for Option<T> {}
