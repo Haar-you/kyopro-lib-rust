@@ -1,5 +1,6 @@
 //! 半環
 
+pub mod add_mul;
 pub mod xor_and;
 
 /// 半環
