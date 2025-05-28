@@ -6,18 +6,14 @@ use std::{iter::repeat_n, ops::RangeBounds};
 
 /// 半群の列の区間取得($O(1)$)ができる。
 pub struct DisjointSparseTable<S: Semigroup> {
-    data: Vec<Vec<Option<S::Element>>>,
-    seq: Vec<Option<S::Element>>,
-    semigroup: S,
+    data: Vec<Vec<Option<S>>>,
+    seq: Vec<Option<S>>,
     size: usize,
 }
 
-impl<S: Semigroup> DisjointSparseTable<S>
-where
-    S::Element: Clone,
-{
+impl<S: Semigroup + Clone> DisjointSparseTable<S> {
     /// 列`seq`から`DisjointSparseTable<S>`を構築する。
-    pub fn new(seq: Vec<S::Element>, semigroup: S) -> Self {
+    pub fn new(seq: Vec<S>) -> Self {
         assert!(!seq.is_empty());
 
         let size = seq.len();
@@ -34,12 +30,7 @@ where
             data[0][i] = x.clone();
         }
 
-        let mut this = Self {
-            data,
-            seq,
-            semigroup,
-            size,
-        };
+        let mut this = Self { data, seq, size };
         this.build(0, 1 << log_size, log_size - 1);
 
         this
@@ -51,7 +42,7 @@ where
         self.data[d][m] = self.seq[m].clone();
         for i in m + 1..r {
             self.data[d][i] = match (self.data[d][i - 1].clone(), self.seq[i].clone()) {
-                (Some(x), Some(y)) => Some(self.semigroup.op(x, y)),
+                (Some(x), Some(y)) => Some(x.op(y)),
                 (a @ Some(_), None) => a,
                 (None, a @ Some(_)) => a,
                 (None, None) => None,
@@ -61,7 +52,7 @@ where
         self.data[d][m - 1] = self.seq[m - 1].clone();
         for i in (l..m - 1).rev() {
             self.data[d][i] = match (self.data[d][i + 1].clone(), self.seq[i].clone()) {
-                (Some(x), Some(y)) => Some(self.semigroup.op(x, y)),
+                (Some(x), Some(y)) => Some(x.op(y)),
                 (a @ Some(_), None) => a,
                 (None, a @ Some(_)) => a,
                 (None, None) => None,
@@ -75,7 +66,7 @@ where
     }
 
     /// **Time complexity** $O(1)$
-    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<S::Element> {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<S> {
         let (l, r) = range_bounds_to_range(range, 0, self.size);
 
         if l == r {
@@ -88,7 +79,7 @@ where
             } else {
                 let k = usize::BITS as usize - 1 - (l ^ r).leading_zeros() as usize;
                 match (self.data[k][l].clone(), self.data[k][r].clone()) {
-                    (Some(x), Some(y)) => Some(self.semigroup.op(x, y)),
+                    (Some(x), Some(y)) => Some(x.op(y)),
                     (a @ Some(_), None) => a,
                     (None, a @ Some(_)) => a,
                     (None, None) => None,
@@ -110,9 +101,10 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 100;
-        let a = (0..n).map(|_| rng.gen::<u32>() % 10000).collect::<Vec<_>>();
-
-        let s = DisjointSparseTable::new(a.clone(), Sum::<u32>::new());
+        let a = (0..n)
+            .map(|_| Sum(rng.gen::<u32>() % 10000))
+            .collect::<Vec<_>>();
+        let s = DisjointSparseTable::<Sum<u32>>::new(a.clone());
 
         for _ in 0..100 {
             let lr = rand_range(&mut rng, 0..n);
@@ -122,7 +114,7 @@ mod tests {
                 if lr.is_empty() {
                     None
                 } else {
-                    Some(a[lr].iter().sum::<u32>())
+                    Some(a[lr].iter().cloned().fold_m())
                 }
             );
         }

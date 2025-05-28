@@ -9,34 +9,25 @@ use std::ops::RangeBounds;
 pub struct DualSegtree<M: Monoid> {
     original_size: usize,
     size: usize,
-    data: Vec<M::Element>,
-    monoid: M,
+    data: Vec<M>,
 }
 
-impl<M: Monoid> DualSegtree<M>
-where
-    M::Element: Clone,
-{
+impl<M: Monoid + Clone> DualSegtree<M> {
     /// **Time complexity** $O(n)$
-    pub fn new(n: usize, monoid: M) -> Self {
+    pub fn new(n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
         DualSegtree {
             original_size: n,
             size,
-            data: vec![monoid.id(); size],
-            monoid,
+            data: vec![M::id(); size],
         }
     }
 
     fn propagate(&mut self, i: usize) {
         if i < self.size / 2 {
-            self.data[i << 1] = self
-                .monoid
-                .op(self.data[i << 1].clone(), self.data[i].clone());
-            self.data[(i << 1) | 1] = self
-                .monoid
-                .op(self.data[(i << 1) | 1].clone(), self.data[i].clone());
-            self.data[i] = self.monoid.id();
+            self.data[i << 1] = M::op(self.data[i << 1].clone(), self.data[i].clone());
+            self.data[(i << 1) | 1] = M::op(self.data[(i << 1) | 1].clone(), self.data[i].clone());
+            self.data[i] = M::id();
         }
     }
 
@@ -53,21 +44,21 @@ where
     }
 
     /// **Time complexity** $O(\log n)$
-    pub fn get(&mut self, i: usize) -> M::Element {
+    pub fn get(&mut self, i: usize) -> M {
         self.propagate_top_down(i + self.size / 2);
         self.data[i + self.size / 2].clone()
     }
 
     /// スライスで初期化する。
-    pub fn from_slice(&mut self, a: &[M::Element]) {
-        self.data = vec![self.monoid.id(); self.size];
+    pub fn from_slice(&mut self, a: &[M]) {
+        self.data = vec![M::id(); self.size];
         for (i, e) in a.iter().enumerate() {
             self.data[i + self.size / 2] = e.clone();
         }
     }
 
     /// 遅延操作を完了させたモノイド列を`Vec`で返す。
-    pub fn to_vec(&mut self) -> Vec<M::Element> {
+    pub fn to_vec(&mut self) -> Vec<M> {
         for i in 1..self.size {
             self.propagate(i);
         }
@@ -76,7 +67,7 @@ where
     }
 
     /// **Time complexity** $O(\log n)$
-    pub fn update(&mut self, range: impl RangeBounds<usize>, value: M::Element) {
+    pub fn update(&mut self, range: impl RangeBounds<usize>, value: M) {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
         let mut l = l + self.size / 2;
@@ -88,10 +79,10 @@ where
         while l < r {
             if (r & 1) == 1 {
                 r -= 1;
-                self.data[r] = self.monoid.op(self.data[r].clone(), value.clone());
+                self.data[r] = M::op(self.data[r].clone(), value.clone());
             }
             if (l & 1) == 1 {
-                self.data[l] = self.monoid.op(self.data[l].clone(), value.clone());
+                self.data[l] = M::op(self.data[l].clone(), value.clone());
                 l += 1;
             }
             l >>= 1;
@@ -110,10 +101,9 @@ mod tests {
     #[test]
     fn test() {
         let n = 100;
-        let m = Sum::<u32>::new();
 
-        let mut a = vec![m.id(); n];
-        let mut seg = DualSegtree::new(n, m);
+        let mut a = vec![Sum::id(); n];
+        let mut seg = DualSegtree::<Sum<u32>>::new(n);
 
         let mut rng = rand::thread_rng();
 
@@ -121,8 +111,8 @@ mod tests {
             let lr = rand_range(&mut rng, 0..n);
             let x = rng.gen_range(0..10000);
 
-            seg.update(lr.clone(), x);
-            a[lr].iter_mut().for_each(|e| *e += x);
+            seg.update(lr.clone(), Sum(x));
+            a[lr].iter_mut().for_each(|e| e.op_assign_r(Sum(x)));
 
             assert_eq!(a, seg.to_vec());
         }

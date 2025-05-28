@@ -1,20 +1,20 @@
-//! 配列の並び替えを演算とする代数的構造
+//! 配列の置換を演算とする代数的構造
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
-/// 変換操作
+/// 置換操作
 #[derive(Clone, Debug, Default)]
-pub struct Transformation {
+pub struct Permutation {
     value: Option<Vec<usize>>,
 }
 
-impl Transformation {
+impl Permutation {
     /// `i`番目の要素を返す。
     pub fn get(&self, i: usize) -> usize {
         self.value.as_ref().map_or_else(|| i, |a| a[i])
     }
 
-    /// $b_i = a_{T_i}$を満たすbを返す。
+    /// $b_i = a_{P_i}$を満たすbを返す。
     pub fn apply<T: Clone>(&self, a: Vec<T>) -> Vec<T> {
         self.value
             .as_ref()
@@ -43,22 +43,40 @@ impl Transformation {
             },
         }
     }
-}
 
-impl TryFrom<Vec<usize>> for Transformation {
-    type Error = &'static str;
-
-    fn try_from(value: Vec<usize>) -> Result<Self, Self::Error> {
-        let n = value.len();
-        value
-            .iter()
-            .all(|&i| i < n)
-            .then_some(Self { value: Some(value) })
-            .ok_or("すべての値は`.len()`未満でなければならない。")
+    /// 逆操作を返す。
+    pub fn inv(self) -> Self {
+        self.value
+            .as_ref()
+            .map(|a| {
+                let n = a.len();
+                let mut ret = vec![0; n];
+                for i in 0..n {
+                    ret[a[i]] = i;
+                }
+                Self { value: Some(ret) }
+            })
+            .unwrap_or(self)
     }
 }
 
-impl PartialEq for Transformation {
+impl TryFrom<Vec<usize>> for Permutation {
+    type Error = &'static str;
+
+    fn try_from(value: Vec<usize>) -> Result<Self, Self::Error> {
+        let mut check = vec![false; value.len()];
+
+        for &x in &value {
+            if x >= value.len() || check[x] {
+                return Err("0から`.len()｀未満の値からなる順列でなければならない。");
+            }
+            check[x] = true;
+        }
+        Ok(Self { value: Some(value) })
+    }
+}
+
+impl PartialEq for Permutation {
     fn eq(&self, other: &Self) -> bool {
         match (&self.value, &other.value) {
             (Some(a), Some(b)) => a == b,
@@ -68,8 +86,30 @@ impl PartialEq for Transformation {
 }
 
 impl_algebra!(
-    Transformation;
+    Permutation;
     op: |a: Self, b: Self| a.compose(b);
+    inv: |a: Self| a.inv();
     id: Self { value: None };
     assoc;
 );
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rand::seq::SliceRandom;
+
+    #[test]
+    fn test() {
+        let mut rng = rand::thread_rng();
+
+        let n = 100;
+
+        let mut a = (0..n).collect::<Vec<_>>();
+        a.shuffle(&mut rng);
+        let a = Permutation::try_from(a).unwrap();
+
+        let b = a.clone().inv();
+
+        assert_eq!(a.op(b), Permutation::id());
+    }
+}

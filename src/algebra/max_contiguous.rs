@@ -8,9 +8,9 @@ use crate::impl_algebra;
 
 use std::cmp::max;
 
-/// [`MaxContiguous`]の元
+/// 連続する`true`列の最大長を管理する。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
-pub struct MaxContiguousValue {
+pub struct MaxContiguous {
     /// 最大連続長
     pub count: usize,
     /// 左側最大連続長
@@ -21,8 +21,8 @@ pub struct MaxContiguousValue {
     pub length: usize,
 }
 
-impl MaxContiguousValue {
-    /// `value`を値にもつ`MaxContiguousValue`を生成する。
+impl MaxContiguous {
+    /// `value`を値にもつ`MaxContiguous`を生成する。
     pub fn new(value: bool) -> Self {
         let value = if value { 1 } else { 0 };
         Self {
@@ -34,14 +34,9 @@ impl MaxContiguousValue {
     }
 }
 
-/// 連続する`true`列の最大長を管理する。
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
-pub struct MaxContiguous;
-
 impl_algebra!(
     MaxContiguous;
-    set: MaxContiguousValue;
-    op: |_, a: Self::Element, b: Self::Element| {
+    op: |a: Self, b: Self| {
         let count = max(a.count, b.count).max(a.right + b.left);
         let left = if a.count == a.length {
             a.count + b.left
@@ -55,10 +50,10 @@ impl_algebra!(
         };
         let length = a.length + b.length;
 
-        MaxContiguousValue {
+        Self {
             count, left, right, length
         }
     };
-    id: |_| MaxContiguousValue { count: 0, left: 0, right: 0, length: 0 };
+    id: Self { count: 0, left: 0, right: 0, length: 0 };
     assoc;
 );

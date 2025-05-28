@@ -8,9 +8,8 @@ use std::{mem::swap, ptr};
 use crate::algebra::traits::Monoid;
 
 struct Node<M: Monoid> {
-    value: M::Element,
-    result: M::Element,
-    monoid: M,
+    value: M,
+    result: M,
     subsize: usize,
     _index: usize,
     rev: bool,
@@ -19,15 +18,11 @@ struct Node<M: Monoid> {
     par: *mut Node<M>,
 }
 
-impl<M: Monoid + Copy> Node<M>
-where
-    M::Element: Clone,
-{
-    fn new(monoid: M, _index: usize) -> Self {
+impl<M: Monoid + Clone> Node<M> {
+    fn new(_index: usize) -> Self {
         Self {
-            value: monoid.id(),
-            result: monoid.id(),
-            monoid,
+            value: M::id(),
+            result: M::id(),
             subsize: 1,
             _index,
             rev: false,
@@ -55,18 +50,14 @@ where
             if !left.is_null() {
                 Self::pushdown(left);
                 (*this).subsize += (*left).subsize;
-                (*this).result = (*this)
-                    .monoid
-                    .op((*this).result.clone(), (*left).result.clone());
+                (*this).result = M::op((*this).result.clone(), (*left).result.clone());
             }
 
             let right = (*this).rc;
             if !right.is_null() {
                 Self::pushdown(right);
                 (*this).subsize += (*right).subsize;
-                (*this).result = (*this)
-                    .monoid
-                    .op((*this).result.clone(), (*right).result.clone());
+                (*this).result = M::op((*this).result.clone(), (*right).result.clone());
             }
         }
     }
@@ -229,19 +220,14 @@ where
 ///
 /// 動的に木の辺を追加・削除可能
 pub struct LinkCutTree<M: Monoid> {
-    monoid: M,
     nodes: Vec<Node<M>>,
 }
 
-impl<M: Monoid + Copy> LinkCutTree<M>
-where
-    M::Element: Clone,
-{
+impl<M: Monoid + Clone> LinkCutTree<M> {
     /// `LinkCutTree<M>`を生成する。
-    pub fn new(monoid: M, n: usize) -> Self {
+    pub fn new(n: usize) -> Self {
         Self {
-            monoid,
-            nodes: (0..n).map(|i| Node::new(monoid, i)).collect(),
+            nodes: (0..n).map(|i| Node::new(i)).collect(),
         }
     }
 
@@ -302,19 +288,19 @@ where
     }
 
     /// 頂点`k`の値を`x`に変更する。
-    pub fn set(&mut self, k: usize, x: M::Element) {
+    pub fn set(&mut self, k: usize, x: M) {
         Node::evert(&mut self.nodes[k]);
         self.nodes[k].value = x;
         Node::pushdown(&mut self.nodes[k]);
     }
 
     /// 頂点`k`の値をモノイドの演算と値`x`で更新する。
-    pub fn update(&mut self, k: usize, x: M::Element) {
-        self.set(k, self.monoid.op(self.get(k), x));
+    pub fn update(&mut self, k: usize, x: M) {
+        self.set(k, M::op(self.get(k), x));
     }
 
     /// 頂点`k`の値を返す。
-    pub fn get(&self, k: usize) -> M::Element {
+    pub fn get(&self, k: usize) -> M {
         self.nodes[k].value.clone()
     }
 
@@ -323,7 +309,7 @@ where
     /// # Panics
     ///
     /// 頂点`i`と`j`が同一の木に属していないときパニックする。
-    pub fn fold(&self, i: usize, j: usize) -> M::Element {
+    pub fn fold(&self, i: usize, j: usize) -> M {
         let u = &self.nodes[i] as *const _ as *mut Node<M>;
         let v = &self.nodes[j] as *const _ as *mut Node<M>;
 
@@ -346,10 +332,9 @@ mod tests {
 
     #[test]
     fn test() {
-        let monoid = Trivial;
         let n = 10;
 
-        let mut lct = LinkCutTree::new(monoid, n);
+        let mut lct = LinkCutTree::<Trivial>::new(n);
 
         //        lct.cut(0, 1); // Runtime error
 

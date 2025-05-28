@@ -1,17 +1,16 @@
 //! 半環
 
+pub mod add_mul;
 pub mod xor_and;
 
 /// 半環
 pub trait Semiring {
-    ///集合の要素の型
-    type Element;
     /// 加法の単位元
-    fn zero(&self) -> Self::Element;
+    fn zero() -> Self;
     /// 乗法の単位元
-    fn one(&self) -> Self::Element;
+    fn one() -> Self;
     /// 可換で結合的な二項演算
-    fn add(&self, a: Self::Element, b: Self::Element) -> Self::Element;
+    fn add(self, b: Self) -> Self;
     /// 結合的な二項演算
-    fn mul(&self, a: Self::Element, b: Self::Element) -> Self::Element;
+    fn mul(self, b: Self) -> Self;
 }

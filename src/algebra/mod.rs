@@ -13,6 +13,8 @@ pub mod max;
 pub mod max_contiguous;
 pub mod max_partial_sum;
 pub mod min;
+pub mod option;
+pub mod permutation;
 pub mod prod;
 pub mod sum;
 pub mod transform;

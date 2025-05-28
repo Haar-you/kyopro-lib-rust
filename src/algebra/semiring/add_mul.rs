@@ -1,24 +1,24 @@
-//! XorとAndの半環
+//! AddとMulの半環
 pub use crate::algebra::semiring::Semiring;
 
-/// XorとAndの半環
+/// AddとMulの半環
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
-pub struct XorAndSemiring<T>(pub T);
+pub struct AddMulSemiring<T>(pub T);
 
 macro_rules! impl_semiring {
     ($($t:ty),*) => {
-        $(impl Semiring for XorAndSemiring<$t> {
+        $(impl Semiring for AddMulSemiring<$t> {
             fn zero() -> Self {
                 Self(0)
             }
             fn one() -> Self {
-                Self(!0)
+                Self(1)
             }
             fn add(self, b: Self) -> Self {
-                Self(self.0 ^ b.0)
+                Self(self.0 + b.0)
             }
             fn mul(self, b: Self) -> Self {
-                Self(self.0 & b.0)
+                Self(self.0 * b.0)
             }
         })*
     };

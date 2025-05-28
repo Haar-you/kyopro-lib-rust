@@ -1,47 +1,31 @@
 //! First, Lastモノイド
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
-use std::marker::PhantomData;
 
 /// 最初に出現する`Some`を返す演算。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
-pub struct First<T>(PhantomData<T>);
+pub struct First<T>(pub Option<T>);
 /// 最後に出現する`Some`を返す演算。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
-pub struct Last<T>(PhantomData<T>);
-
-impl<T> First<T> {
-    /// `First<T>`を返す。
-    pub fn new() -> Self {
-        Self(PhantomData)
-    }
-}
-impl<T> Last<T> {
-    /// `Last<T>`を返す。
-    pub fn new() -> Self {
-        Self(PhantomData)
-    }
-}
+pub struct Last<T>(pub Option<T>);
 
 impl_algebra!(
     [T]; First<T>;
-    set: Option<T>;
-    op: |_, a, b| match a {
+    op: |a: Self, b| match a.0 {
         Some(_) => a,
         None => b
     };
-    id: |_| None;
+    id: Self(None);
     assoc;
     idem;
 );
 impl_algebra!(
     [T]; Last<T>;
-    set: Option<T>;
-    op: |_, a, b| match b {
+    op: |a, b: Self| match b.0 {
         Some(_) => b,
         None => a
     };
-    id: |_| None;
+    id: Self(None);
     assoc;
     idem;
 );
@@ -54,10 +38,10 @@ mod tests {
     fn test() {
         let a = [None, None, Some(1), None, Some(3), Some(5)];
 
-        let monoid = First::new();
-        dbg!(a.iter().fold(monoid.id(), |x, y| monoid.op(x, *y)));
+        let b: Vec<_> = a.into_iter().map(First).collect();
+        dbg!(b.iter().fold(First::id(), |x, y| First::op(x, *y)));
 
-        let monoid = Last::new();
-        dbg!(a.iter().fold(monoid.id(), |x, y| monoid.op(x, *y)));
+        let b: Vec<_> = a.into_iter().map(Last).collect();
+        dbg!(b.iter().fold(Last::id(), |x, y| Last::op(x, *y)));
     }
 }

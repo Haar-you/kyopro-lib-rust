@@ -6,33 +6,29 @@
 /// [`Idempotence`](crate::algebra::traits::Idempotence)を実装する。
 #[macro_export]
 macro_rules! impl_algebra {
-    (@inner [$($bound:tt)*]; $t:ty;) => {};
-    (@inner [$($bound:tt)*]; $t:ty; set: $elem:ty; $($rest:tt)*) => {
-        impl <$($bound)*> Set for $t {
-            type Element = $elem;
-        }
-        impl_algebra!(@inner [$($bound)*]; $t; $($rest)*);
+    (@inner [$($bound:tt)*]; $t:ty;) => {
+        impl <$($bound)*> Set for $t {}
     };
     (@inner [$($bound:tt)*]; $t:ty; op: $f:expr; $($rest:tt)*) => {
         impl <$($bound)*> BinaryOp for $t {
-            fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
-                $f(&self, a, b)
+            fn op(self, b: Self) -> Self {
+                $f(self, b)
             }
         }
         impl_algebra!(@inner [$($bound)*]; $t; $($rest)*);
     };
     (@inner [$($bound:tt)*]; $t:ty; id: $f:expr; $($rest:tt)*) => {
         impl <$($bound)*> Identity for $t {
-            fn id(&self) -> Self::Element {
-                $f(&self)
+            fn id() -> Self {
+                $f
             }
         }
         impl_algebra!(@inner [$($bound)*]; $t; $($rest)*);
     };
     (@inner [$($bound:tt)*]; $t:ty; inv: $f:expr; $($rest:tt)*) => {
         impl <$($bound)*> Inverse for $t {
-            fn inv(&self, a: Self::Element) -> Self::Element {
-                $f(&self, a)
+            fn inv(self) -> Self {
+                $f(self)
             }
         }
         impl_algebra!(@inner [$($bound)*]; $t; $($rest)*);
