@@ -26,7 +26,7 @@ impl Permutation {
     pub fn is_identity(&self) -> bool {
         self.value
             .as_ref()
-            .map_or(true, |a| a.iter().enumerate().all(|(i, &x)| i == x))
+            .is_none_or(|a| a.iter().enumerate().all(|(i, &x)| i == x))
     }
 
     /// 操作を合成する。
@@ -38,9 +38,8 @@ impl Permutation {
                     assert_eq!(a.len(), b.len());
                     Some((0..n).map(|i| a[b[i]]).collect())
                 }
-                (a @ Some(_), _) => a,
-                (_, b @ Some(_)) => b,
-                _ => None,
+                (a, None) => a,
+                (None, b) => b,
             },
         }
     }

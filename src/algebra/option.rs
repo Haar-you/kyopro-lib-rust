@@ -5,9 +5,8 @@ impl<T: BinaryOp> BinaryOp for Option<T> {
     fn op(self, other: Self) -> Self {
         match (self, other) {
             (Some(a), Some(b)) => Some(a.op(b)),
-            (a @ Some(_), _) => a,
-            (_, b @ Some(_)) => b,
-            _ => None,
+            (a, None) => a,
+            (None, b) => b,
         }
     }
 }
