@@ -51,7 +51,7 @@ impl<S: Semigroup + Clone> DisjointSparseTable<S> {
 
         self.data[d][m - 1] = self.seq[m - 1].clone();
         for i in (l..m - 1).rev() {
-            self.data[d][i] = match (self.data[d][i + 1].clone(), self.seq[i].clone()) {
+            self.data[d][i] = match (self.seq[i].clone(), self.data[d][i + 1].clone()) {
                 (Some(x), Some(y)) => Some(x.op(y)),
                 (a @ Some(_), None) => a,
                 (None, a @ Some(_)) => a,
