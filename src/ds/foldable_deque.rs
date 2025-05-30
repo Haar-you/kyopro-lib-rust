@@ -24,9 +24,8 @@ impl<S: Semigroup + Clone> FoldableDeque<S> {
     fn f(&self, a: Option<S>, b: Option<S>) -> Option<S> {
         match (a, b) {
             (Some(a), Some(b)) => Some(S::op(a, b)),
-            (x @ Some(_), _) => x,
-            (_, x @ Some(_)) => x,
-            (_, _) => None,
+            (x, None) => x,
+            (None, x) => x,
         }
     }
 

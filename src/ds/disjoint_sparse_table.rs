@@ -43,9 +43,8 @@ impl<S: Semigroup + Clone> DisjointSparseTable<S> {
         for i in m + 1..r {
             self.data[d][i] = match (self.data[d][i - 1].clone(), self.seq[i].clone()) {
                 (Some(x), Some(y)) => Some(x.op(y)),
-                (a @ Some(_), None) => a,
-                (None, a @ Some(_)) => a,
-                (None, None) => None,
+                (a, None) => a,
+                (None, a) => a,
             }
         }
 
@@ -53,9 +52,8 @@ impl<S: Semigroup + Clone> DisjointSparseTable<S> {
         for i in (l..m - 1).rev() {
             self.data[d][i] = match (self.seq[i].clone(), self.data[d][i + 1].clone()) {
                 (Some(x), Some(y)) => Some(x.op(y)),
-                (a @ Some(_), None) => a,
-                (None, a @ Some(_)) => a,
-                (None, None) => None,
+                (a, None) => a,
+                (None, a) => a,
             }
         }
 
@@ -80,9 +78,8 @@ impl<S: Semigroup + Clone> DisjointSparseTable<S> {
                 let k = usize::BITS as usize - 1 - (l ^ r).leading_zeros() as usize;
                 match (self.data[k][l].clone(), self.data[k][r].clone()) {
                     (Some(x), Some(y)) => Some(x.op(y)),
-                    (a @ Some(_), None) => a,
-                    (None, a @ Some(_)) => a,
-                    (None, None) => None,
+                    (a, None) => a,
+                    (None, a) => a,
                 }
             }
         }
