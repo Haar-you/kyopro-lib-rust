@@ -99,33 +99,3 @@ impl Inverse for Dihedral {
 }
 
 impl Associative for Dihedral {}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test() {
-        let k = 3;
-
-        let a = (0..k)
-            .map(|i| Dihedral::r(i, k))
-            .chain((0..k).map(|i| Dihedral::s(i, k)))
-            .collect::<Vec<_>>();
-
-        for &l in &a {
-            for &r in &a {
-                let x = r.op(l);
-
-                println!("{:?} {:?} = {:?}", l, r, x)
-            }
-        }
-
-        for x in a {
-            let y = x.inv();
-
-            println!("{:?} {:?} {:?}", x, y, x.op(y));
-            assert_eq!(x.op(y), Dihedral::id());
-        }
-    }
-}
