@@ -2,6 +2,7 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/unionfind_with_potential>
+//! - <https://judge.yosupo.jp/problem/unionfind_with_potential_non_commutative_group>
 
 use crate::algebra::traits::*;
 use std::cell::{Cell, RefCell};
@@ -14,14 +15,15 @@ pub struct PotentialUnionFind<T> {
     depth: Vec<usize>,
     size: Vec<usize>,
     potential: RefCell<Vec<T>>,
+    inverse: Option<RefCell<Vec<T>>>,
 }
 
 impl<T> PotentialUnionFind<T>
 where
     T: AbelianGroup + Clone,
 {
-    /// 大きさ`n`の[`PotentialUnionFind`]を生成する。
-    pub fn new(n: usize) -> Self {
+    /// 大きさ`n`の[`PotentialUnionFind`]を生成する。(ポテンシャルが可換群のとき)
+    pub fn new_commutative(n: usize) -> Self {
         Self {
             n,
             count: n,
@@ -29,6 +31,25 @@ where
             depth: vec![1; n],
             size: vec![1; n],
             potential: RefCell::new(vec![T::id(); n]),
+            inverse: None,
+        }
+    }
+}
+
+impl<T> PotentialUnionFind<T>
+where
+    T: Group + Clone,
+{
+    /// 大きさ`n`の[`PotentialUnionFind`]を生成する。(ポテンシャルが可換とは限らない群のとき)
+    pub fn new_non_commutative(n: usize) -> Self {
+        Self {
+            n,
+            count: n,
+            parent: (0..n).map(Cell::new).collect(),
+            depth: vec![1; n],
+            size: vec![1; n],
+            potential: RefCell::new(vec![T::id(); n]),
+            inverse: Some(RefCell::new(vec![T::id(); n])),
         }
     }
 
@@ -40,8 +61,15 @@ where
         let p = self.parent[i].get();
         let p = self.root_of(p);
 
-        let t = self.potential.borrow()[self.parent[i].get()].clone();
-        self.potential.borrow_mut()[i].op_assign_r(t);
+        let mut potential = self.potential.borrow_mut();
+        let t = potential[self.parent[i].get()].clone();
+        potential[i].op_assign_l(t);
+
+        if let Some(inv) = self.inverse.as_ref() {
+            let mut inv = inv.borrow_mut();
+            let t = inv[self.parent[i].get()].clone();
+            inv[i].op_assign_r(t);
+        }
 
         self.parent[i].set(p);
         self.parent[i].get()
@@ -61,8 +89,11 @@ where
     pub fn diff(&self, i: usize, j: usize) -> Option<T> {
         self.is_same(i, j).then(|| {
             let pi = self.potential_of(i);
-            let pj = self.potential_of(j);
-            pi.op(pj.inv())
+            if let Some(inv) = self.inverse.as_ref() {
+                inv.borrow()[j].clone().op(pi)
+            } else {
+                self.potential_of(j).inv().op(pi)
+            }
         })
     }
 
@@ -84,12 +115,27 @@ where
         if self.depth[ri] < self.depth[rj] {
             self.parent[ri].set(rj);
             self.size[rj] += self.size[ri];
-            potential[ri] = p.op(pi.inv()).op(pj);
+
+            if let Some(inv) = self.inverse.as_ref() {
+                let mut inv = inv.borrow_mut();
+                potential[ri] = pj.op(p.clone()).op(inv[i].clone());
+                inv[ri] = pi.op(p.inv()).op(inv[j].clone());
+            } else {
+                potential[ri] = pj.op(p).op(pi.inv());
+            }
+
             j
         } else {
             self.parent[rj].set(ri);
             self.size[ri] += self.size[rj];
-            potential[rj] = pi.op(pj.inv()).op(p.inv());
+
+            if let Some(inv) = self.inverse.as_ref() {
+                let mut inv = inv.borrow_mut();
+                potential[rj] = pi.op(p.clone().inv()).op(inv[j].clone());
+                inv[rj] = pj.op(p).op(inv[i].clone())
+            } else {
+                potential[rj] = pi.op(p.inv()).op(pj.inv());
+            }
 
             if self.depth[ri] == self.depth[rj] {
                 self.depth[i] += 1;
