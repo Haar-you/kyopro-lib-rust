@@ -7,6 +7,7 @@ use std::cell::RefCell;
 use std::ops::RangeBounds;
 
 /// モノイド列の区間更新・点取得($O(\log n)$, $O(\log n)$)ができる。
+#[derive(Clone)]
 pub struct DualSegtree<M: Monoid> {
     original_size: usize,
     size: usize,
