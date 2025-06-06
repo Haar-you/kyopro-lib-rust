@@ -21,6 +21,7 @@ impl MontgomeryBuilder {
     /// `modulo`を法とする[`MontgomeryBuilder`]を生成する。
     pub fn new(modulo: u32) -> Self {
         assert!(modulo % 2 != 0);
+        assert!(modulo > 0);
 
         let r = R % modulo as u64;
         let r2 = r * r % modulo as u64;
@@ -85,8 +86,29 @@ pub struct Montgomery {
 }
 
 impl FFElem for Montgomery {
+    #[inline]
     fn value(self) -> u32 {
         reduce(self.value, self.modulo, self.m) as u32
+    }
+
+    #[inline]
+    fn modulo(self) -> u32 {
+        self.modulo as u32
+    }
+
+    fn pow(self, mut p: u64) -> Self {
+        let mut value = reduce(self.r2, self.modulo, self.m);
+        let mut a = self.value;
+
+        while p > 0 {
+            if (p & 1) != 0 {
+                value = reduce(value * a, self.modulo, self.m);
+            }
+            a = reduce(a * a, self.modulo, self.m);
+            p >>= 1;
+        }
+
+        Self { value, ..self }
     }
 }
 
@@ -146,31 +168,6 @@ impl_ops!(Neg for Montgomery, |mut x: Self| {
     }
     x
 });
-
-impl Pow for Montgomery {
-    type Output = Self;
-    fn pow(self, mut p: u64) -> Self::Output {
-        let mut value = reduce(self.r2, self.modulo, self.m);
-        let mut a = self.value;
-
-        while p > 0 {
-            if (p & 1) != 0 {
-                value = reduce(value * a, self.modulo, self.m);
-            }
-            a = reduce(a * a, self.modulo, self.m);
-            p >>= 1;
-        }
-
-        Self { value, ..self }
-    }
-}
-
-impl Inv for Montgomery {
-    type Output = Self;
-    fn inv(self) -> Self::Output {
-        self.pow(self.modulo - 2)
-    }
-}
 
 #[cfg(test)]
 mod tests {
