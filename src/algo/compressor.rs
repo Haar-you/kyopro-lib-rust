@@ -28,6 +28,16 @@ impl<T: Ord + Eq> Compressor<T> {
         &self.data[i]
     }
 
+    /// 最小値を返す。
+    pub fn min(&self) -> Option<&T> {
+        self.data.first()
+    }
+
+    /// 最大値を返す。
+    pub fn max(&self) -> Option<&T> {
+        self.data.last()
+    }
+
     /// `values`の要素をすべて座標圧縮する。
     pub fn compress<'a>(
         &'a self,
