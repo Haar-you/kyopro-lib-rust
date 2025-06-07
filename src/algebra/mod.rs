@@ -13,6 +13,7 @@ pub mod max;
 pub mod max_contiguous;
 pub mod max_partial_sum;
 pub mod min;
+pub mod min_count;
 pub mod option;
 pub mod permutation;
 pub mod prod;
@@ -23,6 +24,7 @@ pub mod tuple;
 
 pub mod action;
 
+pub mod add_min_count;
 pub mod add_sum;
 pub mod affine_sum;
 pub mod update_fold;
