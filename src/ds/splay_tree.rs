@@ -384,7 +384,7 @@ impl<M: Monoid + Clone> SplayTree<M> {
 
         let value = unsafe {
             let m = Box::from_raw(m);
-            ptr::read(&m.value)
+            m.value
         };
 
         self.root.set(Node::merge(l, r));
