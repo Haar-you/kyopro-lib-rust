@@ -86,6 +86,12 @@ where
         }
     }
 
+    /// `i`番目の値を返す。
+    pub fn get(&mut self, i: usize) -> A::Output {
+        self.propagate_top_down(i + self.size / 2);
+        self.data[i + self.size / 2].clone()
+    }
+
     /// 区間`range`で計算を集約して返す。
     pub fn fold(&mut self, range: impl RangeBounds<usize>) -> A::Output {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
@@ -117,6 +123,13 @@ where
         }
 
         A::fold(ret_l, ret_r)
+    }
+
+    /// `i`番目の値を`value`で置き換える。
+    pub fn assign(&mut self, i: usize, value: A::Output) {
+        self.propagate_top_down(i + self.size / 2);
+        self.data[i + self.size / 2] = value;
+        self.bottom_up(i + self.size / 2);
     }
 
     /// 区間`range`を値`x`で更新する。
