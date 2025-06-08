@@ -17,6 +17,7 @@ pub mod bell_number;
 pub mod binomial_coefficient;
 pub mod factorial;
 pub mod partition_number;
+pub mod stirling_second;
 
 pub mod montmort;
 
