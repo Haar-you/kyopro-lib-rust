@@ -2,6 +2,7 @@
 pub mod bell;
 pub mod bernoulli;
 pub mod catalan;
+pub mod stirling_second;
 
 use crate::num::ff::*;
 
@@ -92,7 +93,9 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::num::modint::*;
+    use crate::{
+        math::stirling_second_table::stirling_second_table, num::const_modint::*, num::modint::*,
+    };
 
     #[test]
     fn test() {
@@ -104,5 +107,22 @@ mod tests {
         assert_eq!(ft.comb(0, 0), modulo.from_u64(1));
         assert_eq!(ft.perm(1000000, 1000000), modulo.from_u64(641102369));
         assert_eq!(ft.perm(1, 10), modulo.from_u64(0));
+    }
+
+    #[test]
+    fn test_stirling_second() {
+        use super::stirling_second::StirlingSecond;
+
+        let modulo = ConstModIntBuilder::<1000000007>;
+        let ft = FactorialTable::new(2000000, modulo);
+        let n = 100;
+
+        let ans = stirling_second_table(n, modulo);
+
+        for i in 0..=n {
+            for j in 0..=n {
+                assert_eq!(ans[i][j], ft.stirling_second(i, j));
+            }
+        }
     }
 }
