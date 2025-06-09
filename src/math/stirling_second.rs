@@ -55,22 +55,12 @@ pub fn stirling_second<const P: u32, const PR: u32>(
 mod tests {
     use super::*;
 
-    use crate::{math::ntt::NTT998244353, num::const_modint::*};
+    use crate::math::{ntt::NTT998244353, stirling_second_table::stirling_second_table};
 
     #[test]
     fn test() {
         let n = 100;
-        let ans = {
-            let ff = ConstModIntBuilder;
-            let mut s = vec![vec![ff.from_u64(0); n + 1]; n + 1];
-            s[0][0] = ff.from_u64(1);
-            for i in 1..=n {
-                for k in 1..=i {
-                    s[i][k] = s[i - 1][k - 1] + ff.from_u64(k as u64) * s[i - 1][k];
-                }
-            }
-            s
-        };
+        let ans = stirling_second_table(n, ConstModIntBuilder);
 
         let ntt = NTT998244353::new();
         for i in 0..=n {
