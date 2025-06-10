@@ -95,3 +95,4 @@ pub mod integer_set;
 pub mod usize_set;
 
 pub mod ordered_map;
+pub mod ordered_set;

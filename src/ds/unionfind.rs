@@ -11,7 +11,7 @@ pub struct UnionFind<'a, T = ()> {
     parent: Vec<Cell<usize>>,
     depth: Vec<usize>,
     size: Vec<usize>,
-    values: Vec<Option<T>>,
+    values: Option<Vec<Option<T>>>,
     merge: Option<Box<dyn 'a + Fn(T, T) -> T>>,
 }
 
@@ -24,7 +24,7 @@ impl UnionFind<'_, ()> {
             parent: (0..n).map(Cell::new).collect(),
             depth: vec![1; n],
             size: vec![1; n],
-            values: vec![None; n],
+            values: None,
             merge: None,
         }
     }
@@ -42,7 +42,7 @@ impl<'a, T> UnionFind<'a, T> {
             parent: (0..n).map(Cell::new).collect(),
             depth: vec![1; n],
             size: vec![1; n],
-            values: values.into_iter().map(Option::Some).collect(),
+            values: Some(values.into_iter().map(Option::Some).collect()),
             merge: Some(Box::new(merge)),
         }
     }
@@ -87,10 +87,10 @@ impl<'a, T> UnionFind<'a, T> {
 
         if let Some(f) = self.merge.as_ref() {
             let t = f(
-                self.values[p].take().unwrap(),
-                self.values[c].take().unwrap(),
+                self.values.as_mut().unwrap()[p].take().unwrap(),
+                self.values.as_mut().unwrap()[c].take().unwrap(),
             );
-            self.values[p] = Some(t);
+            self.values.as_mut().unwrap()[p] = Some(t);
         }
 
         p
@@ -110,7 +110,7 @@ impl<'a, T> UnionFind<'a, T> {
     /// `i`の属する集合のもつ値を返す。
     pub fn value_of(&self, i: usize) -> Option<&T> {
         let i = self.root_of(i);
-        self.values[i].as_ref()
+        self.values.as_ref()?[i].as_ref()
     }
 
     /// 素集合をすべて列挙する。

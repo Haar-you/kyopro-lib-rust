@@ -40,58 +40,13 @@ impl<const M: u32> FFElem for ConstModInt<M> {
     fn value(self) -> u32 {
         self.0
     }
-}
-
-impl<const M: u32> ConstModInt<M> {
-    /// `ConstModInt<M>`を生成する。
-    pub fn new(n: u32) -> Self {
-        Self(if n < M { n } else { n % M })
-    }
 
     #[inline]
-    fn new_unchecked(value: u32) -> Self {
-        Self(value)
+    fn modulo(self) -> u32 {
+        M
     }
 
-    #[inline]
-    fn __add(self, other: Self) -> Self {
-        let a = self.0 + other.0;
-        Self::new_unchecked(if a < M { a } else { a - M })
-    }
-
-    #[inline]
-    fn __sub(self, other: Self) -> Self {
-        let a = if self.0 < other.0 {
-            self.0 + M - other.0
-        } else {
-            self.0 - other.0
-        };
-
-        Self::new_unchecked(a)
-    }
-
-    #[inline]
-    fn __mul(self, other: Self) -> Self {
-        let a = self.0 as u64 * other.0 as u64;
-        Self::new_unchecked(if a < M as u64 {
-            a as u32
-        } else {
-            (a % M as u64) as u32
-        })
-    }
-
-    #[inline]
-    fn __div(self, other: Self) -> Self {
-        self * other.__inv()
-    }
-
-    #[inline]
-    fn __inv(self) -> Self {
-        self.__pow(M as u64 - 2)
-    }
-
-    #[inline]
-    fn __pow(self, mut p: u64) -> Self {
+    fn pow(self, mut p: u64) -> Self {
         let mut ret: u64 = 1;
         let mut a = self.0 as u64;
 
@@ -111,17 +66,15 @@ impl<const M: u32> ConstModInt<M> {
     }
 }
 
-impl<const M: u32> Pow for ConstModInt<M> {
-    type Output = Self;
-    fn pow(self, p: u64) -> Self {
-        self.__pow(p)
+impl<const M: u32> ConstModInt<M> {
+    /// `ConstModInt<M>`を生成する。
+    pub fn new(n: u32) -> Self {
+        Self(if n < M { n } else { n % M })
     }
-}
 
-impl<const M: u32> Inv for ConstModInt<M> {
-    type Output = Self;
-    fn inv(self) -> Self {
-        self.__inv()
+    #[inline]
+    fn new_unchecked(value: u32) -> Self {
+        Self(value)
     }
 }
 
@@ -137,10 +90,27 @@ impl<const M: u32> Debug for ConstModInt<M> {
     }
 }
 
-impl_ops!([const M: u32]; Add for ConstModInt<M>, |x: Self, y| x.__add(y));
-impl_ops!([const M: u32]; Sub for ConstModInt<M>, |x: Self, y| x.__sub(y));
-impl_ops!([const M: u32]; Mul for ConstModInt<M>, |x: Self, y| x.__mul(y));
-impl_ops!([const M: u32]; Div for ConstModInt<M>, |x: Self, y| x.__div(y));
+impl_ops!([const M: u32]; Add for ConstModInt<M>, |x: Self, y: Self| {
+    let a = x.0 + y.0;
+    Self::new_unchecked(if a < M { a } else { a - M })
+});
+impl_ops!([const M: u32]; Sub for ConstModInt<M>, |x: Self, y: Self| {
+    let a = if x.0 < y.0 {
+        x.0 + M - y.0
+    } else {
+        x.0 - y.0
+    };
+    Self::new_unchecked(a)
+});
+impl_ops!([const M: u32]; Mul for ConstModInt<M>, |x: Self, y: Self| {
+    let a = x.0 as u64 * y.0 as u64;
+    Self::new_unchecked(if a < M as u64 {
+        a as u32
+    } else {
+        (a % M as u64) as u32
+    })
+});
+impl_ops!([const M: u32]; Div for ConstModInt<M>, |x: Self, y: Self| x * y.inv());
 
 impl_ops!([const M: u32]; AddAssign for ConstModInt<M>, |x: &mut Self, y| *x = *x + y);
 impl_ops!([const M: u32]; SubAssign for ConstModInt<M>, |x: &mut Self, y| *x = *x - y);

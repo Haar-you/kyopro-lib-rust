@@ -6,19 +6,17 @@ use crate::{impl_algebra, num::const_modint::ConstModInt};
 
 impl_algebra!(
     [const M: u32]; Sum<ConstModInt<M>>;
-    set: ConstModInt<M>;
-    op: |_, a, b| a + b;
-    id: |_| ConstModInt::new(0);
-    inv: |_, a: Self::Element| -a;
+    op: |a: Self, b: Self| Self(a.0 + b.0);
+    id: Self(ConstModInt::new(0));
+    inv: |a: Self| Self(-a.0);
     assoc;
     commu;
 );
 
 impl_algebra!(
     [const M: u32]; Prod<ConstModInt<M>>;
-    set: ConstModInt<M>;
-    op: |_, a, b| a * b;
-    id: |_| ConstModInt::new(1);
+    op: |a: Self, b: Self| Self(a.0 * b.0);
+    id: Self(ConstModInt::new(1));
     assoc;
     commu;
 );

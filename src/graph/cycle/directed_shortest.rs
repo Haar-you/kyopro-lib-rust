@@ -17,19 +17,18 @@ pub fn directed_shortest_cycle<E: EdgeTrait>(
         .iter()
         .flatten()
         .flat_map(|(d, e)| {
-            if let Some(e) = e {
+            e.map(|e| {
                 g.nodes[e.to()]
                     .edges
                     .iter()
                     .find(|e| e.to() == src)
                     .map(|e_src| (d, e, e_src))
-            } else {
-                None
-            }
+            })
+            .flatten()
         })
         .min_by_key(|(d, _, _)| *d);
 
-    if let Some((_, e, e_src)) = p {
+    p.map(|(_, e, e_src)| {
         let mut ret = vec![];
         let mut cur = e.to();
 
@@ -42,9 +41,6 @@ pub fn directed_shortest_cycle<E: EdgeTrait>(
         }
 
         ret.reverse();
-
-        Some(ret)
-    } else {
-        None
-    }
+        ret
+    })
 }

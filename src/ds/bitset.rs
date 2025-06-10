@@ -94,6 +94,31 @@ impl Bitset {
     pub fn is_empty(&self) -> bool {
         self.size == 0
     }
+
+    /// 末尾に値`val`を追加する。
+    pub fn push(&mut self, val: bool) {
+        if self.size % B_SIZE == 0 {
+            self.data.push(0);
+        }
+        self.size += 1;
+        self.set(self.size - 1, val);
+    }
+
+    /// 末尾の値を削除して返す。
+    pub fn pop(&mut self) -> Option<bool> {
+        if self.size == 0 {
+            None
+        } else {
+            let ret = self.test(self.size - 1);
+            self.set(self.size - 1, false);
+
+            self.size -= 1;
+            if self.size % B_SIZE == 0 {
+                self.data.pop();
+            }
+            Some(ret)
+        }
+    }
 }
 
 impl From<Vec<bool>> for Bitset {

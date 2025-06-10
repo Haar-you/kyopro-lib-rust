@@ -1,4 +1,6 @@
 //! $\mathbb{F}_p$上の多項式
+use std::ops::{Index, IndexMut};
+
 use crate::math::ntt::NTT;
 use crate::num::const_modint::*;
 
@@ -113,6 +115,19 @@ impl<const P: u32> AsRef<[ConstModInt<P>]> for Polynomial<P> {
 impl<const P: u32> AsMut<Vec<ConstModInt<P>>> for Polynomial<P> {
     fn as_mut(&mut self) -> &mut Vec<ConstModInt<P>> {
         &mut self.data
+    }
+}
+
+impl<const P: u32> Index<usize> for Polynomial<P> {
+    type Output = ConstModInt<P>;
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.data[index]
+    }
+}
+
+impl<const P: u32> IndexMut<usize> for Polynomial<P> {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self.data[index]
     }
 }
 

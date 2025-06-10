@@ -7,25 +7,23 @@ macro_rules! impl_tuple {
         #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
         pub struct $a<$($t),*>($(pub $t),*);
 
-        impl<$($t:Set),*> Set for $a<$($t),*> {
-            type Element = ($($t::Element),*);
-        }
+        impl<$($t:Set),*> Set for $a<$($t),*> {}
 
         impl<$($t:BinaryOp),*> BinaryOp for $a<$($t),*> {
-            fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
-                ($(self.$i.op(a.$i, b.$i)),*)
+            fn op(self, b: Self) -> Self {
+                Self($($t::op(self.$i, b.$i)),*)
             }
         }
 
         impl<$($t:Identity),*> Identity for $a<$($t),*> {
-            fn id(&self) -> Self::Element {
-                ($(self.$i.id()),*)
+            fn id() -> Self {
+                Self($($t::id()),*)
             }
         }
 
         impl<$($t:Inverse),*> Inverse for $a<$($t),*> {
-            fn inv(&self, a: Self::Element) -> Self::Element {
-                ($(self.$i.inv(a.$i)),*)
+            fn inv(self) -> Self {
+                Self($($t::inv(self.$i)),*)
             }
         }
 

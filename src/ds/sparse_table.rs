@@ -6,30 +6,27 @@ use std::{cmp::min, ops::RangeBounds};
 
 /// 冪等性と結合性をもつ列の区間取得($O(1)$)ができる。
 pub struct SparseTable<A: Semigroup + Idempotence> {
-    data: Vec<Vec<A::Element>>,
+    data: Vec<Vec<A>>,
     log_table: Vec<usize>,
-    semilattice: A,
+
     original_size: usize,
 }
 
-impl<A: Semigroup + Idempotence> SparseTable<A>
-where
-    A::Element: Clone + Default,
-{
+impl<A: Semigroup + Idempotence + Clone + Default> SparseTable<A> {
     /// **Time complexity** $O(n \log n)$
     ///
     /// **Space complexity** $O(n \log n)$
-    pub fn new(s: Vec<A::Element>, a: A) -> Self {
+    pub fn new(s: Vec<A>) -> Self {
         let n = s.len();
         let logn = n.next_power_of_two().trailing_zeros() as usize + 1;
 
-        let mut data = vec![vec![A::Element::default(); n]; logn];
+        let mut data = vec![vec![A::default(); n]; logn];
 
         data[0] = s;
 
         for i in 1..logn {
             for j in 0..n {
-                data[i][j] = a.op(
+                data[i][j] = A::op(
                     data[i - 1][j].clone(),
                     data[i - 1][min(n - 1, j + (1 << (i - 1)))].clone(),
                 );
@@ -44,23 +41,22 @@ where
         Self {
             data,
             log_table,
-            semilattice: a,
             original_size: n,
         }
     }
 
     /// **Time complexity** $O(1)$
-    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<A::Element> {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<A> {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
         if l >= r {
             None
         } else {
             let k = self.log_table[r - l];
-            Some(
-                self.semilattice
-                    .op(self.data[k][l].clone(), self.data[k][r - (1 << k)].clone()),
-            )
+            Some(A::op(
+                self.data[k][l].clone(),
+                self.data[k][r - (1 << k)].clone(),
+            ))
         }
     }
 }
@@ -74,17 +70,16 @@ mod tests {
     use super::*;
     use rand::Rng;
 
-    fn test<A>(s: Vec<A::Element>, a: A)
+    fn test<A>(s: Vec<A>)
     where
-        A: Semigroup + Idempotence + Identity + Copy,
-        A::Element: Clone + Default + PartialEq + Debug + Copy,
+        A: Semigroup + Idempotence + Identity + Copy + Default + PartialEq + Debug,
     {
-        let st = SparseTable::new(s.clone(), a);
+        let st = SparseTable::new(s.clone());
 
         for l in 0..s.len() {
             for r in l..=s.len() {
-                let ans = &s[l..r].iter().fold(a.id(), |x, y| a.op(x, *y));
-                assert_eq!(*ans, st.fold(l..r).unwrap_or(a.id()));
+                let ans = &s[l..r].iter().cloned().fold_m();
+                assert_eq!(*ans, st.fold(l..r).unwrap_or(A::id()));
             }
         }
     }
@@ -93,35 +88,31 @@ mod tests {
     fn test_max() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let s = (0..n).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
-        let a = Max::<u64>::new();
-        test(s, a);
+        let s = (0..n).map(|_| Max(rng.gen::<u64>())).collect::<Vec<_>>();
+        test(s);
     }
 
     #[test]
     fn test_min() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let s = (0..n).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
-        let a = Min::<u64>::new();
-        test(s, a);
+        let s = (0..n).map(|_| Min(rng.gen::<u64>())).collect::<Vec<_>>();
+        test(s);
     }
 
     #[test]
     fn test_bitand() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let s = (0..n).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
-        let a = BitAnd::<u64>::new();
-        test(s, a);
+        let s = (0..n).map(|_| BitAnd(rng.gen::<u64>())).collect::<Vec<_>>();
+        test(s);
     }
 
     #[test]
     fn test_bitor() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let s = (0..n).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
-        let a = BitOr::<u64>::new();
-        test(s, a);
+        let s = (0..n).map(|_| BitOr(rng.gen::<u64>())).collect::<Vec<_>>();
+        test(s);
     }
 }

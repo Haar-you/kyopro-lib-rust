@@ -7,12 +7,11 @@ pub use crate::algebra::traits::*;
 use crate::max;
 
 use std::cmp::max;
-use std::marker::PhantomData;
 use std::ops::Add;
 
 /// 空ではない連続する部分列の総和を管理する。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
-pub struct MaxPartialSumValue<T> {
+pub struct MaxPartialSum<T> {
     /// 列の総和
     pub sum: T,
     /// 列の左端から連続する空でない部分列の総和の最大値
@@ -23,8 +22,8 @@ pub struct MaxPartialSumValue<T> {
     pub partial_max: T,
 }
 
-impl<T: Copy> MaxPartialSumValue<T> {
-    /// 値`value`をもつ長さ`1`の列に対応する[`MaxPartialSumValue`]を生成する。
+impl<T: Copy> MaxPartialSum<T> {
+    /// 値`value`をもつ長さ`1`の列に対応する[`MaxPartialSum`]を生成する。
     pub fn new(value: T) -> Self {
         Self {
             sum: value,
@@ -35,39 +34,16 @@ impl<T: Copy> MaxPartialSumValue<T> {
     }
 }
 
-/// 空ではない連続する部分列の総和の最大値を扱う。
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
-pub struct MaxPartialSum<T>(PhantomData<T>);
-
-impl<T> MaxPartialSum<T> {
-    /// [`MaxPartialSum`]を生成する。
-    pub fn new() -> Self {
-        Self(PhantomData)
-    }
-}
-
-impl<T> Set for MaxPartialSum<T> {
-    type Element = Option<MaxPartialSumValue<T>>;
-}
-
-impl<T> Identity for MaxPartialSum<T> {
-    fn id(&self) -> Self::Element {
-        None
-    }
-}
+impl<T> Set for MaxPartialSum<T> {}
 
 impl<T: Copy + Ord + Add<Output = T>> BinaryOp for MaxPartialSum<T> {
-    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
-        match (a, b) {
-            (None, None) => None,
-            (Some(_), None) => a,
-            (None, Some(_)) => b,
-            (Some(a), Some(b)) => Some(MaxPartialSumValue {
-                sum: a.sum + b.sum,
-                left_max: a.left_max.max(a.sum + max(b.left_max, b.sum)),
-                right_max: b.right_max.max(b.sum + max(a.right_max, a.sum)),
-                partial_max: max!(a.partial_max, b.partial_max, a.right_max + b.left_max),
-            }),
+    fn op(self, b: Self) -> Self {
+        let a = self;
+        Self {
+            sum: a.sum + b.sum,
+            left_max: a.left_max.max(a.sum + max(b.left_max, b.sum)),
+            right_max: b.right_max.max(b.sum + max(a.right_max, a.sum)),
+            partial_max: max!(a.partial_max, b.partial_max, a.right_max + b.left_max),
         }
     }
 }
@@ -87,14 +63,13 @@ mod tests {
 
         let n = 20;
         let a = (0..n).map(|_| rng.gen_range(-100..=100)).collect_vec();
-        let monoid = MaxPartialSum::<i64>::new();
 
         let (ans, _) = crate::algo::max_partial_sum::max_partial_sum(&a).unwrap();
 
         let res = a
             .iter()
-            .map(|&x| Some(MaxPartialSumValue::new(x)))
-            .fold(monoid.id(), |x, y| monoid.op(x, y))
+            .map(|&x| Some(MaxPartialSum::new(x)))
+            .fold(Option::id(), |x, y| x.op(y))
             .unwrap();
 
         assert_eq!(ans, res.partial_max);

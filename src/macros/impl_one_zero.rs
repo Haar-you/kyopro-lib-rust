@@ -1,3 +1,6 @@
+//! `impl_one_zero`
+
+/// [`crate::num::one_zero::One`], [`crate::num::one_zero::Zero`]を実装する。
 #[macro_export]
 macro_rules! impl_one_zero {
     ([$($bound:tt)*]; $t:ty; zero: $e:expr; $($rest:tt)*) => {

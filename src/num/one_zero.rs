@@ -13,17 +13,28 @@ pub trait One {
 }
 
 macro_rules! impl_one_zero {
-    ($($t:ty),*) => {
+    ($($t:tt),*) => {
         $(
-            impl Zero for $t {
-                fn zero() -> Self { 0 as $t }
-            }
+            impl Zero for $t { fn zero() -> Self { 0 as $t } }
+            impl One for $t { fn one() -> Self { 1 as $t } }
+            impl Zero for &$t { fn zero() -> Self { &(0 as $t) } }
+            impl One for &$t { fn one() -> Self { &(1 as $t) } }
+        )*
+    }
+}
 
-            impl One for $t {
-                fn one() -> Self { 1 as $t }
-            }
+use std::num::Saturating;
+use std::num::Wrapping;
+macro_rules! impl_one_zero_wrap {
+    ($($t:tt),*) => {
+        $(
+            impl Zero for Wrapping<$t> { fn zero() -> Self { Wrapping($t::zero()) }}
+            impl One for Wrapping<$t> { fn one() -> Self { Wrapping($t::one()) }}
+            impl Zero for Saturating<$t> { fn zero() -> Self { Saturating($t::zero()) }}
+            impl One for Saturating<$t> { fn one() -> Self { Saturating($t::one()) }}
         )*
     }
 }
 
 impl_one_zero!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
+impl_one_zero_wrap!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);

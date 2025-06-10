@@ -1,21 +1,15 @@
 //! 論理和を演算とする代数的構造
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
-use std::marker::PhantomData;
 
 /// 論理和を演算とする代数的構造
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
-pub struct BitOr<T>(PhantomData<T>);
-impl<T> BitOr<T> {
-    /// `BitOr<T>`を生成する。
-    pub fn new() -> Self {
-        Self(PhantomData)
-    }
+pub struct BitOr<T>(pub T);
+
+macro_rules! implement {
+    ($($t:tt),*) => {
+        $(impl_algebra!(BitOr<$t>; op: |a: Self, b: Self| Self(a.0 | b.0); id: Self(0); commu; assoc; idem;);)*
+    };
 }
 
-impl_algebra!(BitOr<u8>; set: u8; op: |_, a, b| a | b; id: |_| 0; commu; assoc; idem;);
-impl_algebra!(BitOr<u16>; set: u16; op: |_, a, b| a | b; id: |_| 0; commu; assoc; idem;);
-impl_algebra!(BitOr<u32>; set: u32; op: |_, a, b| a | b; id: |_| 0; commu; assoc; idem;);
-impl_algebra!(BitOr<u64>; set: u64; op: |_, a, b| a | b; id: |_| 0; commu; assoc; idem;);
-impl_algebra!(BitOr<u128>; set: u128; op: |_, a, b| a | b; id: |_| 0; commu; assoc; idem;);
-impl_algebra!(BitOr<usize>; set: usize; op: |_, a, b| a | b; id: |_| 0; commu; assoc; idem;);
+implement!(u8, u16, u32, u64, u128, usize);
