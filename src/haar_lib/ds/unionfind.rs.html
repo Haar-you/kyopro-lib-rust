@@ -27,7 +27,7 @@
 <a href=#11 id=11 data-nosnippet>11</a>    parent: Vec&lt;Cell&lt;usize&gt;&gt;,
 <a href=#12 id=12 data-nosnippet>12</a>    depth: Vec&lt;usize&gt;,
 <a href=#13 id=13 data-nosnippet>13</a>    size: Vec&lt;usize&gt;,
-<a href=#14 id=14 data-nosnippet>14</a>    values: Vec&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;,
+<a href=#14 id=14 data-nosnippet>14</a>    values: <span class="prelude-ty">Option</span>&lt;Vec&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;&gt;,
 <a href=#15 id=15 data-nosnippet>15</a>    merge: <span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span><span class="lifetime">'a </span>+ Fn(T, T) -&gt; T&gt;&gt;,
 <a href=#16 id=16 data-nosnippet>16</a>}
 <a href=#17 id=17 data-nosnippet>17</a>
@@ -40,7 +40,7 @@
 <a href=#24 id=24 data-nosnippet>24</a>            parent: (<span class="number">0</span>..n).map(Cell::new).collect(),
 <a href=#25 id=25 data-nosnippet>25</a>            depth: <span class="macro">vec!</span>[<span class="number">1</span>; n],
 <a href=#26 id=26 data-nosnippet>26</a>            size: <span class="macro">vec!</span>[<span class="number">1</span>; n],
-<a href=#27 id=27 data-nosnippet>27</a>            values: <span class="macro">vec!</span>[<span class="prelude-val">None</span>; n],
+<a href=#27 id=27 data-nosnippet>27</a>            values: <span class="prelude-val">None</span>,
 <a href=#28 id=28 data-nosnippet>28</a>            merge: <span class="prelude-val">None</span>,
 <a href=#29 id=29 data-nosnippet>29</a>        }
 <a href=#30 id=30 data-nosnippet>30</a>    }
@@ -58,7 +58,7 @@
 <a href=#42 id=42 data-nosnippet>42</a>            parent: (<span class="number">0</span>..n).map(Cell::new).collect(),
 <a href=#43 id=43 data-nosnippet>43</a>            depth: <span class="macro">vec!</span>[<span class="number">1</span>; n],
 <a href=#44 id=44 data-nosnippet>44</a>            size: <span class="macro">vec!</span>[<span class="number">1</span>; n],
-<a href=#45 id=45 data-nosnippet>45</a>            values: values.into_iter().map(Option::Some).collect(),
+<a href=#45 id=45 data-nosnippet>45</a>            values: <span class="prelude-val">Some</span>(values.into_iter().map(Option::Some).collect()),
 <a href=#46 id=46 data-nosnippet>46</a>            merge: <span class="prelude-val">Some</span>(Box::new(merge)),
 <a href=#47 id=47 data-nosnippet>47</a>        }
 <a href=#48 id=48 data-nosnippet>48</a>    }
@@ -103,10 +103,10 @@
 <a href=#87 id=87 data-nosnippet>87</a>
 <a href=#88 id=88 data-nosnippet>88</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(f) = <span class="self">self</span>.merge.as_ref() {
 <a href=#89 id=89 data-nosnippet>89</a>            <span class="kw">let </span>t = f(
-<a href=#90 id=90 data-nosnippet>90</a>                <span class="self">self</span>.values[p].take().unwrap(),
-<a href=#91 id=91 data-nosnippet>91</a>                <span class="self">self</span>.values[c].take().unwrap(),
+<a href=#90 id=90 data-nosnippet>90</a>                <span class="self">self</span>.values.as_mut().unwrap()[p].take().unwrap(),
+<a href=#91 id=91 data-nosnippet>91</a>                <span class="self">self</span>.values.as_mut().unwrap()[c].take().unwrap(),
 <a href=#92 id=92 data-nosnippet>92</a>            );
-<a href=#93 id=93 data-nosnippet>93</a>            <span class="self">self</span>.values[p] = <span class="prelude-val">Some</span>(t);
+<a href=#93 id=93 data-nosnippet>93</a>            <span class="self">self</span>.values.as_mut().unwrap()[p] = <span class="prelude-val">Some</span>(t);
 <a href=#94 id=94 data-nosnippet>94</a>        }
 <a href=#95 id=95 data-nosnippet>95</a>
 <a href=#96 id=96 data-nosnippet>96</a>        p
@@ -126,7 +126,7 @@
 <a href=#110 id=110 data-nosnippet>110</a>    <span class="doccomment">/// `i`の属する集合のもつ値を返す。
 <a href=#111 id=111 data-nosnippet>111</a>    </span><span class="kw">pub fn </span>value_of(<span class="kw-2">&amp;</span><span class="self">self</span>, i: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
 <a href=#112 id=112 data-nosnippet>112</a>        <span class="kw">let </span>i = <span class="self">self</span>.root_of(i);
-<a href=#113 id=113 data-nosnippet>113</a>        <span class="self">self</span>.values[i].as_ref()
+<a href=#113 id=113 data-nosnippet>113</a>        <span class="self">self</span>.values.as_ref()<span class="question-mark">?</span>[i].as_ref()
 <a href=#114 id=114 data-nosnippet>114</a>    }
 <a href=#115 id=115 data-nosnippet>115</a>
 <a href=#116 id=116 data-nosnippet>116</a>    <span class="doccomment">/// 素集合をすべて列挙する。

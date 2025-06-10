@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["mod_2","mod_m","mod_p","semiring","xor_basis"]};
+window.SIDEBAR_ITEMS = {"mod":["const_matrix","mod_2","mod_m","mod_p","semiring","xor_basis"]};

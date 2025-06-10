@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":["AbelianGroup","AbelianMonoid","Associative","BinaryOp","Commutative","Group","Idempotence","Identity","Inverse","Monoid","Semigroup","Set","Times"]};
+window.SIDEBAR_ITEMS = {"trait":["AbelianGroup","AbelianMonoid","Associative","BinaryOp","Commutative","FoldM","Group","Idempotence","Identity","Inverse","Monoid","Semigroup","Set","Times"]};

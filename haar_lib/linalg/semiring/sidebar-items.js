@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["SemiringMatrix","SemiringMatrixOperator"]};
+window.SIDEBAR_ITEMS = {"struct":["SemiringMatrix"]};

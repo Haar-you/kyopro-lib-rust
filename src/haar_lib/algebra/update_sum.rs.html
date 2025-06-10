@@ -18,45 +18,26 @@
 <a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">use </span><span class="kw">crate</span>::algebra::action::Action;
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span><span class="kw">crate</span>::algebra::{first_last::<span class="kw-2">*</span>, sum::<span class="kw-2">*</span>};
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>std::fmt::Debug;
-<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>std::ops::Mul;
-<a href=#6 id=6 data-nosnippet>6</a>
-<a href=#7 id=7 data-nosnippet>7</a><span class="doccomment">/// Range Update Range Sum用の代数的構造
-<a href=#8 id=8 data-nosnippet>8</a></span><span class="attr">#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
-<a href=#9 id=9 data-nosnippet>9</a></span><span class="kw">pub struct </span>UpdateSum&lt;T&gt; {
-<a href=#10 id=10 data-nosnippet>10</a>    fold_m: Sum&lt;T&gt;,
-<a href=#11 id=11 data-nosnippet>11</a>    update_m: Last&lt;T&gt;,
-<a href=#12 id=12 data-nosnippet>12</a>}
-<a href=#13 id=13 data-nosnippet>13</a>
-<a href=#14 id=14 data-nosnippet>14</a><span class="kw">impl</span>&lt;T&gt; UpdateSum&lt;T&gt; {
-<a href=#15 id=15 data-nosnippet>15</a>    <span class="doccomment">/// `UpdateSum&lt;T,U&gt;`を生成する。
-<a href=#16 id=16 data-nosnippet>16</a>    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
-<a href=#17 id=17 data-nosnippet>17</a>        <span class="self">Self </span>{
-<a href=#18 id=18 data-nosnippet>18</a>            fold_m: Sum::new(),
-<a href=#19 id=19 data-nosnippet>19</a>            update_m: Last::new(),
-<a href=#20 id=20 data-nosnippet>20</a>        }
-<a href=#21 id=21 data-nosnippet>21</a>    }
-<a href=#22 id=22 data-nosnippet>22</a>}
-<a href=#23 id=23 data-nosnippet>23</a>
-<a href=#24 id=24 data-nosnippet>24</a><span class="kw">impl</span>&lt;T&gt; Action <span class="kw">for </span>UpdateSum&lt;T&gt;
-<a href=#25 id=25 data-nosnippet>25</a><span class="kw">where
-<a href=#26 id=26 data-nosnippet>26</a>    </span>Sum&lt;T&gt;: Monoid&lt;Element = T&gt;,
-<a href=#27 id=27 data-nosnippet>27</a>    T: Mul&lt;Output = T&gt; + TryFrom&lt;usize, Error: Debug&gt;,
-<a href=#28 id=28 data-nosnippet>28</a>{
-<a href=#29 id=29 data-nosnippet>29</a>    <span class="kw">type </span>FoldMonoid = Sum&lt;T&gt;;
-<a href=#30 id=30 data-nosnippet>30</a>    <span class="kw">type </span>UpdateMonoid = Last&lt;T&gt;;
-<a href=#31 id=31 data-nosnippet>31</a>    <span class="kw">type </span>Output = &lt;<span class="self">Self</span>::FoldMonoid <span class="kw">as </span>Set&gt;::Element;
-<a href=#32 id=32 data-nosnippet>32</a>    <span class="kw">type </span>Lazy = &lt;<span class="self">Self</span>::UpdateMonoid <span class="kw">as </span>Set&gt;::Element;
-<a href=#33 id=33 data-nosnippet>33</a>
-<a href=#34 id=34 data-nosnippet>34</a>    <span class="kw">fn </span>fold_monoid(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::FoldMonoid {
-<a href=#35 id=35 data-nosnippet>35</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.fold_m
-<a href=#36 id=36 data-nosnippet>36</a>    }
-<a href=#37 id=37 data-nosnippet>37</a>    <span class="kw">fn </span>update_monoid(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::UpdateMonoid {
-<a href=#38 id=38 data-nosnippet>38</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.update_m
-<a href=#39 id=39 data-nosnippet>39</a>    }
-<a href=#40 id=40 data-nosnippet>40</a>    <span class="kw">fn </span>convert(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="self">Self</span>::Output, lazy: <span class="self">Self</span>::Lazy, len: usize) -&gt; <span class="self">Self</span>::Output {
-<a href=#41 id=41 data-nosnippet>41</a>        <span class="kw">match </span>lazy {
-<a href=#42 id=42 data-nosnippet>42</a>            <span class="prelude-val">Some</span>(lazy) =&gt; lazy * T::try_from(len).unwrap(),
-<a href=#43 id=43 data-nosnippet>43</a>            <span class="kw">_ </span>=&gt; value,
-<a href=#44 id=44 data-nosnippet>44</a>        }
-<a href=#45 id=45 data-nosnippet>45</a>    }
-<a href=#46 id=46 data-nosnippet>46</a>}</code></pre></div></section></main></body></html>
+<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>std::marker::PhantomData;
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>std::ops::Mul;
+<a href=#7 id=7 data-nosnippet>7</a>
+<a href=#8 id=8 data-nosnippet>8</a><span class="doccomment">/// Range Update Range Sum用の代数的構造
+<a href=#9 id=9 data-nosnippet>9</a></span><span class="attr">#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
+<a href=#10 id=10 data-nosnippet>10</a></span><span class="kw">pub struct </span>UpdateSum&lt;T&gt;(PhantomData&lt;T&gt;);
+<a href=#11 id=11 data-nosnippet>11</a>
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">impl</span>&lt;T&gt; Action <span class="kw">for </span>UpdateSum&lt;T&gt;
+<a href=#13 id=13 data-nosnippet>13</a><span class="kw">where
+<a href=#14 id=14 data-nosnippet>14</a>    </span>Sum&lt;T&gt;: Monoid,
+<a href=#15 id=15 data-nosnippet>15</a>    Last&lt;T&gt;: Monoid,
+<a href=#16 id=16 data-nosnippet>16</a>    T: Mul&lt;Output = T&gt; + TryFrom&lt;usize, Error: Debug&gt;,
+<a href=#17 id=17 data-nosnippet>17</a>{
+<a href=#18 id=18 data-nosnippet>18</a>    <span class="kw">type </span>Output = Sum&lt;T&gt;;
+<a href=#19 id=19 data-nosnippet>19</a>    <span class="kw">type </span>Lazy = Last&lt;T&gt;;
+<a href=#20 id=20 data-nosnippet>20</a>
+<a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">fn </span>convert(value: <span class="self">Self</span>::Output, lazy: <span class="self">Self</span>::Lazy, len: usize) -&gt; <span class="self">Self</span>::Output {
+<a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">match </span>lazy.<span class="number">0 </span>{
+<a href=#23 id=23 data-nosnippet>23</a>            <span class="prelude-val">Some</span>(lazy) =&gt; Sum(lazy * T::try_from(len).unwrap()),
+<a href=#24 id=24 data-nosnippet>24</a>            <span class="kw">_ </span>=&gt; value,
+<a href=#25 id=25 data-nosnippet>25</a>        }
+<a href=#26 id=26 data-nosnippet>26</a>    }
+<a href=#27 id=27 data-nosnippet>27</a>}</code></pre></div></section></main></body></html>

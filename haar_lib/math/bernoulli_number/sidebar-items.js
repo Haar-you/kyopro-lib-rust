@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["bernoulli_number"]};
