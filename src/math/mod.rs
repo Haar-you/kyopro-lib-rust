@@ -21,6 +21,8 @@ pub mod partition_number;
 pub mod stirling_second;
 pub mod stirling_second_table;
 
+pub mod number_of_subset_sum;
+
 pub mod montmort;
 
 pub mod convolution;
