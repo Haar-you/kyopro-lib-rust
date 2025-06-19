@@ -56,3 +56,5 @@ pub mod linear;
 
 pub mod continued_fraction;
 pub mod stern_brocot;
+
+pub mod kth_root;
