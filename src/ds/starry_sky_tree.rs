@@ -2,16 +2,10 @@
 
 use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
-use crate::trait_alias;
 use std::{
     cmp::{max, min},
     ops::{Add, RangeBounds, Sub},
 };
-
-trait_alias!(
-    /// [`StarrySkyTree<T>`]が扱える型
-    Elem: Add<Output = Self> + Sub<Output = Self> + Ord + Copy + Zero
-);
 
 /// 区間Max/Minを選択する。
 #[derive(Copy, Clone)]
@@ -23,7 +17,7 @@ pub enum Mode {
 }
 
 impl Mode {
-    fn op<T: Ord + Copy>(self, a: T, b: T) -> T {
+    fn op<T: Ord>(self, a: T, b: T) -> T {
         match self {
             Mode::Max => max(a, b),
             Mode::Min => min(a, b),
@@ -39,7 +33,10 @@ pub struct StarrySkyTree<T> {
     mode: Mode,
 }
 
-impl<T: Elem> StarrySkyTree<T> {
+impl<T> StarrySkyTree<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Ord + Copy + Zero,
+{
     /// **Time complexity** $O(n)$
     pub fn new(n: usize, mode: Mode) -> Self {
         let size = n.next_power_of_two() * 2;
