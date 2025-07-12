@@ -40,6 +40,7 @@ pub mod segtree_beats;
 pub mod segtree_linear_add;
 pub mod segtree_linear_add_range_sum;
 pub mod starry_sky_tree;
+pub mod starry_sky_tree_count;
 
 pub mod fenwick_on_fenwick;
 pub mod segtree_on_segtree;
