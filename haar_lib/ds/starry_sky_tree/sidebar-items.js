@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Mode"],"struct":["StarrySkyTree"],"trait":["Elem"]};
+window.SIDEBAR_ITEMS = {"enum":["Mode"],"struct":["StarrySkyTree"]};
