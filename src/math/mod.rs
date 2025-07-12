@@ -21,6 +21,8 @@ pub mod partition_number;
 pub mod stirling_second;
 pub mod stirling_second_table;
 
+pub mod number_of_subset_sum;
+
 pub mod montmort;
 
 pub mod convolution;
@@ -54,3 +56,5 @@ pub mod linear;
 
 pub mod continued_fraction;
 pub mod stern_brocot;
+
+pub mod kth_root;

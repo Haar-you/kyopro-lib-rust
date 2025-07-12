@@ -1,4 +1,4 @@
-//! 区間加算・区間Max(Min)
+//! 区間加算・個数総和付き区間Max(Min)
 
 use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
@@ -25,50 +25,72 @@ impl Mode {
     }
 }
 
-/// 区間加算・区間Max(Min)ができるデータ構造。
-pub struct StarrySkyTree<T> {
+/// 区間加算・個数総和付き区間Max(Min)ができるデータ構造。
+pub struct StarrySkyTreeCount<T> {
     size: usize,
     original_size: usize,
     data: Vec<T>,
+    count: Vec<u64>,
     mode: Mode,
 }
 
-impl<T> StarrySkyTree<T>
+impl<T> StarrySkyTreeCount<T>
 where
     T: Add<Output = T> + Sub<Output = T> + Ord + Copy + Zero,
 {
     /// **Time complexity** $O(n)$
-    pub fn new(n: usize, mode: Mode) -> Self {
+    pub fn new(coeffs: Vec<u64>, mode: Mode) -> Self {
+        let n = coeffs.len();
         let size = n.next_power_of_two() * 2;
         let zero = T::zero();
+
+        let mut count = vec![0; size];
+        for (i, &x) in coeffs.iter().enumerate() {
+            count[size / 2 + i] = x;
+        }
+        for i in (1..size / 2).rev() {
+            count[i] = count[i << 1] + count[(i << 1) | 1];
+        }
+
         Self {
             size,
             original_size: n,
             data: vec![zero; size],
+            count,
             mode,
         }
     }
 
-    fn rec(&self, s: usize, t: usize, i: usize, l: usize, r: usize, value: T) -> Option<T> {
+    fn rec(&self, s: usize, t: usize, i: usize, l: usize, r: usize, value: T) -> Option<(T, u64)> {
         if r <= s || t <= l {
             return None;
         }
         if s <= l && r <= t {
-            return Some(value + self.data[i]);
+            return Some((value + self.data[i], self.count[i]));
         }
 
-        let a = self.rec(s, t, i << 1, l, (l + r) / 2, value + self.data[i]);
-        let b = self.rec(s, t, (i << 1) | 1, (l + r) / 2, r, value + self.data[i]);
+        let m = (l + r) / 2;
+        let a = self.rec(s, t, i << 1, l, m, value + self.data[i]);
+        let b = self.rec(s, t, (i << 1) | 1, m, r, value + self.data[i]);
 
         match (a, b) {
             (None, _) => b,
             (_, None) => a,
-            (Some(a), Some(b)) => Some(self.mode.op(a, b)),
+            (Some((a, ca)), Some((b, cb))) => {
+                let t = self.mode.op(a, b);
+                if a == b {
+                    Some((a, ca + cb))
+                } else if a == t {
+                    Some((a, ca))
+                } else {
+                    Some((b, cb))
+                }
+            }
         }
     }
 
     /// **Time complexity** $O(\log n)$
-    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<T> {
+    pub fn fold(&self, range: impl RangeBounds<usize>) -> Option<(T, u64)> {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
         self.rec(l, r, 1, 0, self.size / 2, T::zero())
     }
@@ -85,6 +107,18 @@ where
                 self.data[i << 1] = self.data[i << 1] - d;
                 self.data[(i << 1) | 1] = self.data[(i << 1) | 1] - d;
                 self.data[i] = self.data[i] + d;
+
+                let l = self.data[i << 1];
+                let r = self.data[(i << 1) | 1];
+                let t = self.mode.op(l, r);
+
+                if l == r {
+                    self.count[i] = self.count[i << 1] + self.count[(i << 1) | 1];
+                } else if l == t {
+                    self.count[i] = self.count[i << 1];
+                } else {
+                    self.count[i] = self.count[(i << 1) | 1];
+                }
             }
 
             i >>= 1;
@@ -114,66 +148,5 @@ where
 
         self.bottom_up(l + hsize);
         self.bottom_up(r + hsize);
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use my_testtools::*;
-    use rand::Rng;
-
-    #[test]
-    fn test_max() {
-        let mut rng = rand::thread_rng();
-
-        let size = 100;
-        let mut other = vec![0; size];
-        let mut s = StarrySkyTree::<i32>::new(size, Mode::Max);
-
-        for _ in 0..1000 {
-            let ty = rng.gen_range(0..2);
-            let lr = rand_range(&mut rng, 0..size);
-
-            if ty == 0 {
-                let x = rng.gen_range(-1000..=1000);
-
-                s.update(lr.clone(), x);
-                for i in lr {
-                    other[i] += x;
-                }
-            } else {
-                let ans = lr.clone().map(|i| other[i]).max();
-
-                assert_eq!(s.fold(lr), ans);
-            }
-        }
-    }
-
-    #[test]
-    fn test_min() {
-        let mut rng = rand::thread_rng();
-
-        let size = 100;
-        let mut other = vec![0; size];
-        let mut s = StarrySkyTree::<i32>::new(size, Mode::Min);
-
-        for _ in 0..1000 {
-            let ty = rng.gen_range(0..2);
-            let lr = rand_range(&mut rng, 0..size);
-
-            if ty == 0 {
-                let x = rng.gen_range(-1000..=1000);
-
-                s.update(lr.clone(), x);
-                for i in lr {
-                    other[i] += x;
-                }
-            } else {
-                let ans = lr.clone().map(|i| other[i]).min();
-
-                assert_eq!(s.fold(lr), ans);
-            }
-        }
     }
 }
