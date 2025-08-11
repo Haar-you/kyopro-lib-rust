@@ -20,7 +20,7 @@ pub fn zalgo<T: PartialEq>(s: &[T]) -> Vec<usize> {
         if i + ret[i - j] < j + ret[j] {
             ret[i] = ret[i - j];
         } else {
-            let mut k = if j + ret[j] >= i { j + ret[j] - i } else { 0 };
+            let mut k = (j + ret[j]).saturating_sub(i);
             while i + k < n && s[k] == s[i + k] {
                 k += 1;
             }

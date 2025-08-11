@@ -209,10 +209,10 @@ impl Display for Bitset {
         if let Some(a) = self.data.last() {
             let w = self.len() % B_SIZE;
             let w = if w == 0 { B_SIZE } else { w };
-            f.write_fmt(format_args!("{:0width$b}", a, width = w))?
+            f.write_fmt(format_args!("{a:0w$b}"))?
         }
         for a in self.data.iter().rev().skip(1) {
-            f.write_fmt(format_args!("{:0width$b}", a, width = B_SIZE))?
+            f.write_fmt(format_args!("{a:0B_SIZE$b}"))?
         }
         Ok(())
     }

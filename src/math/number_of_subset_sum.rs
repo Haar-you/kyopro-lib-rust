@@ -24,14 +24,14 @@ where
 
     let mut ret = vec![ff.from_u64(0); t + 1];
 
-    for i in 1..=t {
-        if c[i] != 0 {
+    for (i, c) in c.into_iter().enumerate().skip(1) {
+        if c != 0 {
             for j in (1..).take_while(|&j| i * j <= t) {
                 let k = j * i;
                 let x = ff.from_i64(if j % 2 == 1 { 1 } else { -1 })
                     * ff.from_u64(i as u64)
                     * ff.from_u64(k as u64).inv();
-                ret[k] += x * ff.from_u64(c[i] as u64);
+                ret[k] += x * ff.from_u64(c as u64);
             }
         }
     }
