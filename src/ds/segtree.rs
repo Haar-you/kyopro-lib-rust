@@ -22,6 +22,22 @@ impl<M: Monoid + Clone> Segtree<M> {
         }
     }
 
+    pub fn from_slice(s: &[M]) -> Self {
+        let mut this = Self::new(s.len());
+
+        for (i, x) in s.iter().enumerate() {
+            this.data[i + this.size / 2] = x.clone();
+        }
+
+        for i in (1..this.size / 2).rev() {
+            this.data[i] = this.data[i << 1]
+                .clone()
+                .op(this.data[(i << 1) | 1].clone());
+        }
+
+        this
+    }
+
     /// **Time complexity** $O(\log n)$
     pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> M {
         let (l, r) = range_bounds_to_range(range, 0, self.size / 2);
