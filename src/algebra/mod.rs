@@ -11,6 +11,7 @@ pub mod dual;
 pub mod first_last;
 pub mod max;
 pub mod max_contiguous;
+pub mod max_contiguous_many;
 pub mod max_partial_sum;
 pub mod min;
 pub mod min_count;
