@@ -22,7 +22,10 @@ impl<M: Monoid + Clone> Segtree<M> {
         }
     }
 
-    pub fn from_slice(s: &[M]) -> Self {
+    /// モノイド列から`Segtree`を構築する。
+    ///
+    /// **Time complexity** $O(|s|)$
+    pub fn from_vec(s: Vec<M>) -> Self {
         let mut this = Self::new(s.len());
 
         for (i, x) in s.iter().enumerate() {
@@ -36,6 +39,11 @@ impl<M: Monoid + Clone> Segtree<M> {
         }
 
         this
+    }
+
+    /// モノイド列をスライスで返す。
+    pub fn to_slice(&self) -> &[M] {
+        &self.data[self.size / 2..self.size / 2 + self.original_size]
     }
 
     /// **Time complexity** $O(\log n)$

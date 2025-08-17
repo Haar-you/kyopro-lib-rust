@@ -28,7 +28,9 @@ where
     }
 
     /// [`Vec`]から[`LazySegtree`]を構築する。
-    pub fn new_with_vec(s: Vec<A::Output>) -> Self {
+    ///
+    /// **Time complexity** $O(|s|)$
+    pub fn from_vec(s: Vec<A::Output>) -> Self {
         let n = s.len();
         let size = n.next_power_of_two() * 2;
         let mut this = Self {
@@ -47,6 +49,17 @@ where
         }
 
         this
+    }
+
+    /// 遅延操作を完了させたモノイド列をスライスで返す。
+    ///
+    /// **Time complexity** $O(n)$
+    pub fn to_slice(&mut self) -> &[A::Output] {
+        for i in 1..self.size {
+            self.propagate(i);
+        }
+
+        &self.data[self.size / 2..self.size / 2 + self.original_size]
     }
 
     fn propagate(&mut self, i: usize) {
