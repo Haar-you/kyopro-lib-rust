@@ -74,6 +74,9 @@ impl FF for MontgomeryBuilder {
         let value = reduce(value as u64 * self.r2, self.modulo as u64, self.m);
         Montgomery::__new(value, self.modulo as u64, self.r2, self.m)
     }
+    fn modulo(&self) -> u32 {
+        self.modulo
+    }
 }
 
 /// `modulo`を法として剰余をとる構造体。

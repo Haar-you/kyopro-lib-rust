@@ -29,6 +29,9 @@ impl<const M: u32> FF for ConstModIntBuilder<M> {
         let value = ((value % M as i64) + M as i64) as u32;
         Self::Element::new(value)
     }
+    fn modulo(&self) -> u32 {
+        M
+    }
 }
 
 /// `M`で剰余をとる構造体。
