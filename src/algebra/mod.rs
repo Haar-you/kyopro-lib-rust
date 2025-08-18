@@ -3,9 +3,7 @@
 pub mod traits;
 
 pub mod affine;
-pub mod bitand;
-pub mod bitor;
-pub mod bitxor;
+pub mod bit;
 pub mod dihedral;
 pub mod dual;
 pub mod first_last;
