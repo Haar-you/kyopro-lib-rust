@@ -1,4 +1,4 @@
-//! 加法を演算とする代数的構造
+//! 加法
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 

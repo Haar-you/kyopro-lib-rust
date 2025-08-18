@@ -1,4 +1,4 @@
-//! Range Update Range ~~~ 用の代数的構造
+//! Range Update Range ~~~
 use crate::algebra::action::Action;
 use crate::algebra::first_last::*;
 use std::fmt::Debug;

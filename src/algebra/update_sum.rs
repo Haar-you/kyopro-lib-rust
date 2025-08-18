@@ -1,4 +1,4 @@
-//! Range Update Range Sum用の代数的構造
+//! Range Update Range Sum
 use crate::algebra::action::Action;
 use crate::algebra::{first_last::*, sum::*};
 use std::fmt::Debug;

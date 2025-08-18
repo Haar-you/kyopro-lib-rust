@@ -1,4 +1,4 @@
-//! 乗算を演算とする代数的構造
+//! 乗算
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 

@@ -1,4 +1,4 @@
-//! 列の中で同じ値が連続する最大長を管理する。
+//! 列の中で同じ値が連続する最大長
 //!
 //! # Problems
 //! - <https://atcoder.jp/contests/abc415/tasks/abc415_f>

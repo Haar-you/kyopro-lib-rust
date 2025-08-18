@@ -1,4 +1,4 @@
-//! Range Add Range Sum用の代数的構造
+//! Range Add Range Sum
 use crate::algebra::action::Action;
 use crate::algebra::sum::*;
 use std::fmt::Debug;

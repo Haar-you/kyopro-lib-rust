@@ -1,4 +1,4 @@
-//! `bool`値列の結合による、連続する`true`列の最大長を管理する。
+//! `bool`値列の結合による、連続する`true`列の最大長
 //!
 //! # Problems
 //! - <https://codeforces.com/contest/484/problem/E>

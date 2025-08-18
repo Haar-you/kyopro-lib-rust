@@ -1,4 +1,4 @@
-//! Range Affine Range Sum用の代数的構造
+//! Range Affine Range Sum
 use crate::algebra::action::Action;
 use crate::algebra::{affine::*, dual::*, sum::*};
 use std::fmt::Debug;
