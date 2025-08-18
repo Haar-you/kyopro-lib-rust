@@ -87,7 +87,7 @@ impl<A: Semigroup + Idempotence + Clone + Default> SparseTable2D<A> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{algebra::max::*, iter::collect::CollectVec};
+    use crate::{algebra::min_max::Max, iter::collect::CollectVec};
     use rand::Rng;
     use std::fmt::Debug;
 

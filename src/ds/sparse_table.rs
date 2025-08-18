@@ -65,7 +65,10 @@ impl<A: Semigroup + Idempotence + Clone + Default> SparseTable<A> {
 mod tests {
     use std::fmt::Debug;
 
-    use crate::algebra::{bitand::BitAnd, bitor::BitOr, max::Max, min::Min};
+    use crate::algebra::{
+        bit::{BitAnd, BitOr},
+        min_max::{Max, Min},
+    };
 
     use super::*;
     use rand::Rng;

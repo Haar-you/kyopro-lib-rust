@@ -144,9 +144,8 @@ mod tests {
         assert_eq!(Vec::<M>::from(&s), other);
     }
 
-    use crate::algebra::bitxor::BitXor;
-    use crate::algebra::max::Max;
-    use crate::algebra::min::Min;
+    use crate::algebra::bit::BitXor;
+    use crate::algebra::min_max::{Max, Min};
     use crate::algebra::sum::Sum;
 
     #[test]
