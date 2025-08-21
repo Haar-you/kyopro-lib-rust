@@ -79,7 +79,7 @@ where
     }
 
     fn propagate_top_down(&mut self, mut i: usize) {
-        let mut temp = vec![];
+        let mut temp = vec![i];
         while i > 1 {
             i >>= 1;
             temp.push(i);
