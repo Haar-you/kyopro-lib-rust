@@ -1,6 +1,5 @@
 //! Range Affine Range Sum
-use crate::algebra::action::Action;
-use crate::algebra::{affine::*, dual::*, sum::*};
+pub use crate::algebra::{action::Action, affine::Affine, dual::Dual, sum::Sum, traits::*};
 use std::fmt::Debug;
 use std::marker::PhantomData;
 use std::ops::{Add, Mul};

@@ -1,6 +1,5 @@
 //! Range Update Range ~~~
-use crate::algebra::action::Action;
-use crate::algebra::first_last::*;
+pub use crate::algebra::{action::Action, first_last::Last, traits::*};
 use std::fmt::Debug;
 use std::marker::PhantomData;
 

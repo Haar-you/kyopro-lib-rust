@@ -1,5 +1,5 @@
 //! Range Add Range Min-Count
-use crate::algebra::{action::Action, min_count::MinCount, sum::Sum, traits::*};
+pub use crate::algebra::{action::Action, min_count::MinCount, sum::Sum, traits::*};
 use std::marker::PhantomData;
 use std::ops::Add;
 

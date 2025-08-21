@@ -1,6 +1,5 @@
 //! Range Update Range Sum
-use crate::algebra::action::Action;
-use crate::algebra::{first_last::*, sum::*};
+pub use crate::algebra::{action::Action, first_last::Last, sum::Sum, traits::*};
 use std::fmt::Debug;
 use std::marker::PhantomData;
 use std::ops::Mul;
