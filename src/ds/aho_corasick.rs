@@ -119,7 +119,10 @@ impl<K: Copy + Hash + Eq> AhoCorasickBuilder<K> {
     }
 
     /// パターン`pat`を追加する。
-    pub fn add(&mut self, pat: impl IntoIterator<Item = K>) {
+    pub fn add<I>(&mut self, pat: I)
+    where
+        I: IntoIterator<Item = K>,
+    {
         let pat = pat.into_iter().collect::<Vec<_>>();
         self.dict.push(pat.clone());
 
