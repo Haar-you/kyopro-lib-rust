@@ -17,23 +17,25 @@ pub mod main {
     #[allow(unused_imports)]
     use std::rc::Rc;
 
-    #[derive(Clone, Default)]
-    pub struct Problem {/* write variables here */}
+    pub struct Problem {
+        io: FastIO,
+    }
 
     impl Problem {
         pub fn init() -> Self {
-            Self {}
+            Self { io: FastIO::new() }
         }
 
-        pub fn main(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-            let mut io = FastIO::new();
-
-            Ok(())
-        }
-        /* write functions here */
+        pub fn main(&mut self) {}
     }
 }
 
 fn main() {
-    main::Problem::init().main().unwrap();
+    //    const STACK_SIZE: usize = 1024 * 1024 * 1024;
+    std::thread::Builder::new()
+        //        .stack_size(STACK_SIZE)
+        .spawn(|| main::Problem::init().main())
+        .unwrap()
+        .join()
+        .unwrap()
 }
