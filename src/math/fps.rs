@@ -40,30 +40,47 @@ impl<const P: u32, const PR: u32> FPS for PolynomialOperator<'_, P, PR> {
         let mut ret = vec![f[0].inv()];
         ret.reserve(2 * n);
 
-        while t <= n * 2 {
-            let mut a = self.ntt.convolve_same(ret.clone());
-            a.truncate(t);
+        loop {
+            let mut f = f[0..(2 * t).min(n)].to_vec();
+            f.resize(2 * t, 0.into());
+            self.ntt.ntt(&mut f);
 
-            let c = f[0..t.min(n)].to_vec();
-            let mut c = self.ntt.convolve(c, a);
+            let mut g = ret.clone();
+            g.resize(2 * t, 0.into());
+            self.ntt.ntt(&mut g);
 
-            c.truncate(t);
-            ret.truncate(t);
+            for (f, g) in f.iter_mut().zip(g.iter()) {
+                *f *= *g;
+            }
+            self.ntt.intt(&mut f);
 
-            ret.iter_mut().for_each(|x| *x *= ConstModInt::new(2));
+            let h = f;
 
-            if ret.len() < c.len() {
-                ret.resize(c.len().min(t), ConstModInt::new(0));
+            let mut h = h[t..2 * t].to_vec();
+            h.resize(2 * t, 0.into());
+            self.ntt.ntt(&mut h);
+
+            for (h, g) in h.iter_mut().zip(g.iter()) {
+                *h *= *g;
+            }
+            self.ntt.intt(&mut h);
+
+            let g = h;
+
+            ret.resize(2 * t, 0.into());
+
+            for (ret, x) in ret.iter_mut().skip(t).zip(g.into_iter().take(t)) {
+                *ret = -x;
             }
 
-            ret.iter_mut()
-                .zip(c.into_iter())
-                .for_each(|(ret, c)| *ret -= c);
-
             t <<= 1;
+
+            if t >= n {
+                break;
+            }
         }
 
-        ret.resize(n, ConstModInt::new(0));
+        ret.truncate(n);
         ret.into()
     }
 
