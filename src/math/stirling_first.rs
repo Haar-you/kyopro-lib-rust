@@ -1,4 +1,4 @@
-//! 符号付き第一種スターリング数$s(n, 0) \dots s(n, n)$を列挙する。
+//! 符号付き第一種スターリング数$s(n, 0), \dots, s(n, n)$を列挙する。
 //!
 //! $s(n,k)$ は $$x(x-1)\dots (x-(n-1)) = \sum_{k=0}^n s(n,k) x^k$$を満たす。
 use crate::math::ntt::NTT;
@@ -6,7 +6,7 @@ use crate::math::polynomial::{Polynomial, PolynomialOperator};
 use crate::math::polynomial_taylor_shift::*;
 use crate::num::const_modint::*;
 
-/// 符号付き第一種スターリング数$s(n, 0) \dots s(n, n)$を列挙する。
+/// 符号付き第一種スターリング数$s(n, 0), \dots, s(n, n)$を列挙する。
 ///
 /// **Time complexity** $O(n \log n)$
 pub fn stirling_first<const P: u32, const PR: u32>(
