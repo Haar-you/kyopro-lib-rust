@@ -41,3 +41,32 @@ pub fn stirling_first<const P: u32, const PR: u32>(
     ret.as_mut().truncate(n + 1);
     ret.into()
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::math::ntt::NTT998244353;
+
+    use super::*;
+
+    #[test]
+    fn test() {
+        const M: u32 = 998244353;
+        let ff = ConstModIntBuilder::<M>;
+        let ntt = NTT998244353::new();
+        let op = PolynomialOperator::new(&ntt);
+
+        let n = 100;
+        let mut ans = Polynomial::from(vec![ff.from_u64(1)]);
+
+        for i in 1..=n {
+            let res = stirling_first(i, &ntt);
+
+            ans = op.mul(
+                ans,
+                Polynomial::from(vec![-ff.from_u64(i as u64 - 1), 1.into()]),
+            );
+
+            assert_eq!(res, ans.as_ref());
+        }
+    }
+}
