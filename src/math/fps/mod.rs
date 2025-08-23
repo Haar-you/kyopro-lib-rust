@@ -14,6 +14,7 @@ pub mod exp;
 pub mod inv;
 pub mod log;
 pub mod pow;
+pub mod sqrt;
 
 #[cfg(test)]
 mod tests {
