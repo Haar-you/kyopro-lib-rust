@@ -3,19 +3,18 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/sharp_p_subset_sum>
 use crate::math::fps::exp::*;
+use crate::math::ntt::*;
 use crate::math::polynomial::*;
 use crate::num::const_modint::*;
 
 /// $\\#_p$ Subset sum
-pub fn number_of_subset_sum<Fps, const P: u32>(
+pub fn number_of_subset_sum<const P: u32, const PR: u32>(
     s: Vec<usize>,
     t: usize,
-    fps: &Fps,
-) -> Vec<ConstModInt<P>>
-where
-    Fps: FpsExp<Poly = Polynomial<P>>,
-{
+    ntt: &NTT<P, PR>,
+) -> Vec<ConstModInt<P>> {
     let ff = ConstModIntBuilder;
+    let fps = PolynomialOperator::new(ntt);
 
     let mut c = vec![0; t + 1];
     for x in s {

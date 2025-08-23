@@ -16,7 +16,7 @@ pub fn stirling_first<const P: u32, const PR: u32>(
     let ff = ConstModIntBuilder;
 
     let mut ret = Polynomial::<P>::from(vec![1]);
-    let op = PolynomialOperator::new(&ntt);
+    let op = PolynomialOperator::new(ntt);
 
     let mut t: usize = 0;
     let mut check = false;
