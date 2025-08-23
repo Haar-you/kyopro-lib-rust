@@ -14,10 +14,13 @@ pub mod prime_test;
 pub mod primitive_root;
 
 pub mod bell_number;
+pub mod bell_number_table;
 pub mod bernoulli_number;
 pub mod binomial_coefficient;
 pub mod factorial;
 pub mod partition_number;
+pub mod stirling_first;
+pub mod stirling_first_table;
 pub mod stirling_second;
 pub mod stirling_second_table;
 

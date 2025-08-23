@@ -1,11 +1,11 @@
-//! 完結ビットベクトル
+//! 簡潔ビットベクトル
 use std::ops::Range;
 
 const CHUNK_SIZE: usize = 256;
 const BLOCK_SIZE: usize = 64;
 const BLOCK_NUM: usize = CHUNK_SIZE / BLOCK_SIZE;
 
-/// 完結ビットベクトル
+/// 簡潔ビットベクトル
 #[derive(Clone)]
 pub struct SuccinctBitVec {
     size: usize,

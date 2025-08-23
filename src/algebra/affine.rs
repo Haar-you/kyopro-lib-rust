@@ -1,4 +1,4 @@
-//! 一次関数の合成を演算とする代数的構造
+//! 一次関数の合成
 pub use crate::algebra::traits::*;
 pub use crate::num::one_zero::*;
 use std::ops::{Add, Mul};

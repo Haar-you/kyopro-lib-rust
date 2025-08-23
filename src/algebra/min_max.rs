@@ -1,6 +1,10 @@
-//! 最大値を演算とする代数的構造
+//! 最小値・最大値
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
+
+/// 最小値を演算とする代数的構造
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+pub struct Min<T>(pub T);
 
 /// 最大値を演算とする代数的構造
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
@@ -8,6 +12,7 @@ pub struct Max<T>(pub T);
 
 macro_rules! implement {
     ($($t:tt),*) => {
+        $(impl_algebra!(Min<$t>; op: |a: Self, b: Self| Self(a.0.min(b.0)); id: Self($t::MAX); commu; assoc; idem;);)*
         $(impl_algebra!(Max<$t>; op: |a: Self, b: Self| Self(a.0.max(b.0)); id: Self($t::MIN); commu; assoc; idem;);)*
     };
 }

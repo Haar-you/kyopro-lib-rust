@@ -1,6 +1,5 @@
-//! Range Affine Range Sum用の代数的構造
-use crate::algebra::action::Action;
-use crate::algebra::{affine::*, dual::*, sum::*};
+//! Range Affine Range Sum
+pub use crate::algebra::{action::Action, affine::Affine, dual::Dual, sum::Sum, traits::*};
 use std::fmt::Debug;
 use std::marker::PhantomData;
 use std::ops::{Add, Mul};

@@ -1,5 +1,5 @@
-//! Range Add Range Min-Count用の代数的構造
-use crate::algebra::{action::Action, min_count::MinCount, sum::Sum, traits::*};
+//! Range Add Range Min-Count
+pub use crate::algebra::{action::Action, min_count::MinCount, sum::Sum, traits::*};
 use std::marker::PhantomData;
 use std::ops::Add;
 

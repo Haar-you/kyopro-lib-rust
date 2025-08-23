@@ -137,6 +137,12 @@ impl FastIO {
         ret
     }
 
+    /// `is_ascii_whitespace`でない文字を一文字だけ読み出す。
+    pub fn read_char(&mut self) -> char {
+        self.skip();
+        self.getc().unwrap().into()
+    }
+
     /// `s`を標準出力に書き込む。
     pub fn write<T: Display>(&mut self, s: T) {
         self.out_buf.write_all(s.to_string().as_bytes()).unwrap();

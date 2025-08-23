@@ -3,17 +3,15 @@
 pub mod traits;
 
 pub mod affine;
-pub mod bitand;
-pub mod bitor;
-pub mod bitxor;
+pub mod bit;
 pub mod dihedral;
 pub mod dual;
 pub mod first_last;
-pub mod max;
 pub mod max_contiguous;
+pub mod max_contiguous_true;
 pub mod max_partial_sum;
-pub mod min;
 pub mod min_count;
+pub mod min_max;
 pub mod option;
 pub mod permutation;
 pub mod prod;

@@ -12,9 +12,9 @@ where
 
     ret[0][0] = modulo.from_u64(1);
 
-    for i in 1..=n {
-        ret[i][1] = modulo.from_u64(1);
-        ret[i][i] = modulo.from_u64(1);
+    for (i, ret_i) in ret.iter_mut().enumerate().skip(1) {
+        ret_i[1] = modulo.from_u64(1);
+        ret_i[i] = modulo.from_u64(1);
     }
 
     for i in 3..=n {

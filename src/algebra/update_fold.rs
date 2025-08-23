@@ -1,6 +1,5 @@
-//! Range Update Range ~~~ 用の代数的構造
-use crate::algebra::action::Action;
-use crate::algebra::first_last::*;
+//! Range Update Range ~~~
+pub use crate::algebra::{action::Action, first_last::Last, traits::*};
 use std::fmt::Debug;
 use std::marker::PhantomData;
 

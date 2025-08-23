@@ -3,20 +3,19 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/bernoulli_number>
 use crate::math::factorial::FactorialTable;
-use crate::math::fps::FPS;
-use crate::math::polynomial::Polynomial;
+use crate::math::fps::inv::*;
+use crate::math::ntt::*;
+use crate::math::polynomial::*;
 use crate::num::const_modint::*;
 
 /// ベルヌーイ数$B_0, \dots, B_n$を列挙する。
-pub fn bernoulli_number<Fps, const P: u32>(
+pub fn bernoulli_number<const P: u32, const PR: u32>(
     n: usize,
     ft: &FactorialTable<ConstModIntBuilder<P>>,
-    fps: &Fps,
-) -> Vec<ConstModInt<P>>
-where
-    Fps: FPS<Poly = Polynomial<P>>,
-{
+    ntt: &NTT<P, PR>,
+) -> Vec<ConstModInt<P>> {
     let ff = ConstModIntBuilder;
+    let fps = PolynomialOperator::new(ntt);
     let mut x: Polynomial<P> = vec![ff.from_u64(0); n + 1].into();
 
     for i in 0..=n {
@@ -36,7 +35,6 @@ mod tests {
     use super::*;
 
     use crate::math::factorial::bernoulli::BernoulliNumber;
-    use crate::math::{factorial::*, ntt::*, polynomial::*};
 
     #[test]
     fn test() {
@@ -44,9 +42,8 @@ mod tests {
 
         let ff = ConstModIntBuilder::<998244353>;
         let ntt = NTT::<998244353, 3>::new();
-        let fps = PolynomialOperator::new(&ntt);
         let ft = FactorialTable::new(n + 1, ff);
 
-        assert_eq!(ft.bernoulli_number(n), bernoulli_number(n, &ft, &fps));
+        assert_eq!(ft.bernoulli_number(n), bernoulli_number(n, &ft, &ntt));
     }
 }

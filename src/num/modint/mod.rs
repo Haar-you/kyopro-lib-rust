@@ -34,6 +34,9 @@ impl FF for ModIntBuilder {
         let value = ((value % self.modulo as i64) + self.modulo as i64) as u32;
         ModInt::new(value, self.modulo)
     }
+    fn modulo(&self) -> u32 {
+        self.modulo
+    }
 }
 
 /// `modulo`を法として剰余をとる構造体。

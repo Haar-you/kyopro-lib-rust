@@ -26,15 +26,18 @@ impl<M: Monoid + Clone> DualSegtree<M> {
         }
     }
 
-    /// スライスで初期化する。
-    pub fn from_slice(a: &[M]) -> Self {
+    /// モノイド列から`DualSegtree`を構築する。
+    ///
+    /// **Time complexity** $O(|a|)$
+    pub fn from_vec(a: Vec<M>) -> Self {
         let size = a.len().next_power_of_two() * 2;
+        let original_size = a.len();
         let mut data = vec![M::id(); size];
-        for (i, e) in a.iter().enumerate() {
+        for (i, e) in a.into_iter().enumerate() {
             data[i + size / 2] = e.clone();
         }
         DualSegtree {
-            original_size: a.len(),
+            original_size,
             size,
             data: RefCell::new(data),
         }
@@ -122,7 +125,7 @@ mod tests {
                 Sum(x)
             })
             .collect::<Vec<_>>();
-        let mut seg = DualSegtree::<Sum<u32>>::from_slice(&a);
+        let mut seg = DualSegtree::<Sum<u32>>::from_vec(a.clone());
 
         for _ in 0..100 {
             let lr = rand_range(&mut rng, 0..n);

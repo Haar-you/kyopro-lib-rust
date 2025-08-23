@@ -2,20 +2,19 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/sharp_p_subset_sum>
-use crate::math::fps::*;
+use crate::math::fps::exp::*;
+use crate::math::ntt::*;
 use crate::math::polynomial::*;
 use crate::num::const_modint::*;
 
 /// $\\#_p$ Subset sum
-pub fn number_of_subset_sum<Fps, const P: u32>(
+pub fn number_of_subset_sum<const P: u32, const PR: u32>(
     s: Vec<usize>,
     t: usize,
-    fps: &Fps,
-) -> Vec<ConstModInt<P>>
-where
-    Fps: FPS<Poly = Polynomial<P>>,
-{
+    ntt: &NTT<P, PR>,
+) -> Vec<ConstModInt<P>> {
     let ff = ConstModIntBuilder;
+    let fps = PolynomialOperator::new(ntt);
 
     let mut c = vec![0; t + 1];
     for x in s {
@@ -24,14 +23,14 @@ where
 
     let mut ret = vec![ff.from_u64(0); t + 1];
 
-    for i in 1..=t {
-        if c[i] != 0 {
+    for (i, c) in c.into_iter().enumerate().skip(1) {
+        if c != 0 {
             for j in (1..).take_while(|&j| i * j <= t) {
                 let k = j * i;
                 let x = ff.from_i64(if j % 2 == 1 { 1 } else { -1 })
                     * ff.from_u64(i as u64)
                     * ff.from_u64(k as u64).inv();
-                ret[k] += x * ff.from_u64(c[i] as u64);
+                ret[k] += x * ff.from_u64(c as u64);
             }
         }
     }

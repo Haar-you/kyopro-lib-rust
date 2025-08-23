@@ -3,6 +3,7 @@
 //! # Problems
 //! - <https://atcoder.jp/contests/abc339/tasks/abc339_g>
 //! - <https://atcoder.jp/contests/abc351/tasks/abc351_f>
+//! - <https://judge.yosupo.jp/problem/static_range_sum_with_upper_bound>
 
 use crate::algo::{bsearch_slice::BinarySearch, merge::inplace_merge};
 use crate::misc::range::range_bounds_to_range;

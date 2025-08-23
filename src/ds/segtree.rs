@@ -22,6 +22,30 @@ impl<M: Monoid + Clone> Segtree<M> {
         }
     }
 
+    /// モノイド列から`Segtree`を構築する。
+    ///
+    /// **Time complexity** $O(|s|)$
+    pub fn from_vec(s: Vec<M>) -> Self {
+        let mut this = Self::new(s.len());
+
+        for (i, x) in s.iter().enumerate() {
+            this.data[i + this.size / 2] = x.clone();
+        }
+
+        for i in (1..this.size / 2).rev() {
+            this.data[i] = this.data[i << 1]
+                .clone()
+                .op(this.data[(i << 1) | 1].clone());
+        }
+
+        this
+    }
+
+    /// モノイド列をスライスで返す。
+    pub fn to_slice(&self) -> &[M] {
+        &self.data[self.size / 2..self.size / 2 + self.original_size]
+    }
+
     /// **Time complexity** $O(\log n)$
     pub fn fold<R: RangeBounds<usize>>(&self, range: R) -> M {
         let (l, r) = range_bounds_to_range(range, 0, self.size / 2);
@@ -120,9 +144,8 @@ mod tests {
         assert_eq!(Vec::<M>::from(&s), other);
     }
 
-    use crate::algebra::bitxor::BitXor;
-    use crate::algebra::max::Max;
-    use crate::algebra::min::Min;
+    use crate::algebra::bit::BitXor;
+    use crate::algebra::min_max::{Max, Min};
     use crate::algebra::sum::Sum;
 
     #[test]

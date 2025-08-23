@@ -1,40 +1,48 @@
 //! $\sum_{i=0}^{\infty} r^ii^d$
+//!
+//! # Problems
+//! - <https://judge.yosupo.jp/problem/sum_of_exponential_times_polynomial_limit>
 
-use crate::math::mod_ops::inv_p::mod_inv_p;
-use crate::math::mod_ops::pow::mod_pow;
+use crate::num::ff::*;
 
 /// $\sum_{i=0}^{\infty} r^ii^d$
 ///
 /// **Time Complexity** $O(d \log p)$
-pub fn sum_of_exponential_times_polynomial_limit(r: u64, d: u64, p: u64) -> u64 {
-    let mut ret = 0;
-    let mut r_pow = 1;
-    let mut s = vec![0; d as usize + 1];
-    let mut invs = vec![0; d as usize + 2];
+pub fn sum_of_exponential_times_polynomial_limit<Modulo: FF>(
+    r: Modulo::Element,
+    d: u64,
+    m: Modulo,
+) -> Modulo::Element
+where
+    Modulo::Element: FFElem + Copy,
+{
+    let mut ret = m.from_u64(0);
+    let mut r_pow = m.from_u64(1);
+    let mut s = vec![m.from_u64(0); d as usize + 1];
+    let mut invs = vec![m.from_u64(0); d as usize + 2];
+    let p = m.modulo();
 
-    invs[1] = 1;
+    invs[1] = m.from_u64(1);
 
     for i in 2..=d + 1 {
-        invs[i as usize] = (p / i) * (p - invs[(p % i) as usize]) % p;
+        invs[i as usize] = m.from_u64(p as u64 / i) * -invs[(p as u64 % i) as usize];
     }
 
     for i in 0..=d as usize {
         if i > 0 {
-            s[i] += s[i - 1];
-            if s[i] >= p {
-                s[i] -= p;
-            }
+            let x = s[i - 1];
+            s[i] += x;
         }
-        s[i] = (s[i] + mod_pow(i as u64, d, p) * r_pow) % p;
-        r_pow = (r_pow * r) % p;
+        s[i] += m.from_u64(i as u64).pow(d) * r_pow;
+        r_pow *= r;
     }
 
-    let mut t = 1;
+    let mut t = m.from_u64(1);
 
     for i in 0..=d {
-        ret = (ret + t * s[(d - i) as usize]) % p;
-        t = t * (invs[i as usize + 1] * (p - r) % p * (d + 1 - i) % p) % p;
+        ret += t * s[(d - i) as usize];
+        t *= invs[i as usize + 1] * -r * m.from_u64(d + 1 - i);
     }
 
-    ret * mod_inv_p(mod_pow(p + 1 - r, d + 1, p), p) % p
+    ret * (m.from_u64(1) - r).pow(d + 1).inv()
 }

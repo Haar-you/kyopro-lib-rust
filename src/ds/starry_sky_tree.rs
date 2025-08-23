@@ -49,6 +49,27 @@ where
         }
     }
 
+    /// [`Vec`]から[`StarrySkyTree`]を構築する。
+    ///
+    /// **Time complexity** $O(|a|)$
+    pub fn from_vec(a: Vec<T>, mode: Mode) -> Self {
+        let mut this = Self::new(a.len(), mode);
+
+        for (i, x) in a.into_iter().enumerate() {
+            this.data[i + this.size / 2] = x;
+        }
+
+        for i in (1..this.size / 2).rev() {
+            let d = mode.op(this.data[i << 1], this.data[(i << 1) | 1]);
+
+            this.data[i << 1] = this.data[i << 1] - d;
+            this.data[(i << 1) | 1] = this.data[(i << 1) | 1] - d;
+            this.data[i] = this.data[i] + d;
+        }
+
+        this
+    }
+
     fn rec(&self, s: usize, t: usize, i: usize, l: usize, r: usize, value: T) -> Option<T> {
         if r <= s || t <= l {
             return None;

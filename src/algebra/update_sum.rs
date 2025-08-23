@@ -1,6 +1,5 @@
-//! Range Update Range Sum用の代数的構造
-use crate::algebra::action::Action;
-use crate::algebra::{first_last::*, sum::*};
+//! Range Update Range Sum
+pub use crate::algebra::{action::Action, first_last::Last, sum::Sum, traits::*};
 use std::fmt::Debug;
 use std::marker::PhantomData;
 use std::ops::Mul;

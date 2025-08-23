@@ -1,35 +1,26 @@
-//! ベル数$B(n, n)$のテーブル
-//!
-//! # References
-//! - <https://manabitimes.jp/math/892>
-#![allow(clippy::needless_range_loop)]
+//! ベル数$B_0, \dots, B_n$を列挙する。
+use crate::{
+    math::{factorial::FactorialTable, fps::exp::*, ntt::*, polynomial::*},
+    num::const_modint::*,
+};
 
-use crate::num::ff::*;
-
-/// ベル数$B(0, 0)$~$B(n, n)$を求める。
-pub fn bell_number_table<Modulo: FF>(n: usize, modulo: Modulo) -> Vec<Vec<Modulo::Element>>
-where
-    Modulo::Element: FFElem + Copy,
-{
-    let mut ret = vec![vec![modulo.from_u64(0); n + 1]; n + 1];
-    ret[0][0] = modulo.from_u64(1);
+/// ベル数$B_0, \dots, B_n$を列挙する。
+pub fn bell_number<const P: u32, const PR: u32>(
+    n: usize,
+    ft: &FactorialTable<ConstModIntBuilder<P>>,
+    ntt: &NTT<P, PR>,
+) -> Vec<ConstModInt<P>> {
+    let fps = PolynomialOperator::new(ntt);
+    let mut f = vec![ConstModInt::new(0); n + 1];
 
     for i in 1..=n {
-        ret[i][1] = modulo.from_u64(1);
-        ret[i][i] = modulo.from_u64(1);
+        f[i] = ft.inv_facto(i);
     }
 
-    for i in 3..=n {
-        for j in 2..i {
-            ret[i][j] = ret[i - 1][j - 1] + modulo.from_u64(j as u64) * ret[i - 1][j];
-        }
-    }
+    let mut ret: Vec<_> = fps.fps_exp(f.into()).into();
 
     for i in 0..=n {
-        for j in 1..=n {
-            let t = ret[i][j - 1];
-            ret[i][j] += t;
-        }
+        ret[i] *= ft.facto(i);
     }
 
     ret

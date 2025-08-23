@@ -4,20 +4,26 @@
 //! - <https://yukicoder.me/problems/no/430>
 //! - <https://atcoder.jp/contests/abc362/tasks/abc362_g>
 //! - <https://atcoder.jp/contests/abc268/tasks/abc268_h>
-use std::collections::{HashMap, VecDeque};
+//! - <https://judge.yosupo.jp/problem/aho_corasick>
+use std::{
+    collections::{HashMap, VecDeque},
+    hash::Hash,
+};
 
 /// [`AhoCorasick`]のノード
-pub struct Node {
+pub struct Node<K> {
     index: usize,
-    children: HashMap<char, *mut Self>,
+    parent: Option<*mut Self>,
+    children: HashMap<K, *mut Self>,
     failure_link: Option<*mut Self>,
     rev_failure_links: Vec<*mut Self>,
 }
 
-impl Node {
+impl<K: Copy + Hash + Eq> Node<K> {
     fn new(index: usize) -> Self {
         Self {
             index,
+            parent: None,
             children: HashMap::new(),
             failure_link: None,
             rev_failure_links: vec![],
@@ -30,11 +36,21 @@ impl Node {
     }
 
     /// 文字`c`で遷移する子ノードへの参照を返す。
-    pub fn child(&self, c: char) -> Option<&Self> {
+    pub fn child(&self, c: K) -> Option<&Self> {
         self.children.get(&c).map(|&p| {
             assert!(!p.is_null());
             unsafe { &*p }
         })
+    }
+
+    /// すべての子ノードへの遷移文字と参照へのイテレータを返す。
+    pub fn children(&self) -> impl Iterator<Item = (&K, &Self)> {
+        self.children.iter().map(|(k, &v)| (k, unsafe { &*v }))
+    }
+
+    /// 親ノードへの参照を返す。
+    pub fn parent(&self) -> Option<&Self> {
+        self.parent.map(|p| unsafe { &*p })
     }
 
     /// 子ノードへ遷移できないときに辿るべきノードへの参照を返す。
@@ -54,22 +70,22 @@ impl Node {
     }
 }
 
-fn index_of(p: *mut Node) -> usize {
+fn index_of<K>(p: *mut Node<K>) -> usize {
     assert!(!p.is_null());
     unsafe { (*p).index }
 }
 
-fn child_of(p: *mut Node, c: char) -> Option<*mut Node> {
+fn child_of<K: Hash + Eq>(p: *mut Node<K>, c: K) -> Option<*mut Node<K>> {
     assert!(!p.is_null());
     unsafe { (*p).children.get(&c).copied() }
 }
 
-fn failure_link_of(p: *mut Node) -> Option<*mut Node> {
+fn failure_link_of<K>(p: *mut Node<K>) -> Option<*mut Node<K>> {
     assert!(!p.is_null());
     unsafe { (*p).failure_link }
 }
 
-fn set_failure_link(from: *mut Node, to: *mut Node) {
+fn set_failure_link<K>(from: *mut Node<K>, to: *mut Node<K>) {
     assert!(!from.is_null());
     unsafe {
         (*from).failure_link = Some(to);
@@ -78,16 +94,16 @@ fn set_failure_link(from: *mut Node, to: *mut Node) {
 }
 
 /// [`AhoCorasick`]を構築するための構造体。
-pub struct AhoCorasickBuilder {
+pub struct AhoCorasickBuilder<K> {
     size: usize,
-    root: *mut Node,
-    dict: Vec<String>,
+    root: *mut Node<K>,
+    dict: Vec<Vec<K>>,
     dict_index: Vec<Vec<usize>>,
-    nodes: Vec<*mut Node>,
+    nodes: Vec<*mut Node<K>>,
 }
 
 #[allow(clippy::new_without_default)]
-impl AhoCorasickBuilder {
+impl<K: Copy + Hash + Eq> AhoCorasickBuilder<K> {
     /// [`AhoCorasickBuilder`]を生成する。
     pub fn new() -> Self {
         let root = Box::new(Node::new(0));
@@ -103,12 +119,16 @@ impl AhoCorasickBuilder {
     }
 
     /// パターン`pat`を追加する。
-    pub fn add(&mut self, pat: &str) {
-        self.dict.push(pat.to_owned());
+    pub fn add<I>(&mut self, pat: I)
+    where
+        I: IntoIterator<Item = K>,
+    {
+        let pat = pat.into_iter().collect::<Vec<_>>();
+        self.dict.push(pat.clone());
 
         let mut cur = self.root;
 
-        for c in pat.chars() {
+        for c in pat {
             assert!(!cur.is_null());
             if let Some(next) = child_of(cur, c) {
                 cur = next;
@@ -118,6 +138,7 @@ impl AhoCorasickBuilder {
 
                 assert!(!cur.is_null());
                 unsafe { (*cur).children.insert(c, new) };
+                unsafe { (*new).parent = Some(cur) };
 
                 cur = new;
                 self.size += 1;
@@ -131,7 +152,7 @@ impl AhoCorasickBuilder {
     }
 
     /// [`AhoCorasick`]を構築する。
-    pub fn build(self) -> AhoCorasick {
+    pub fn build(self) -> AhoCorasick<K> {
         let mut dq = VecDeque::new();
         dq.push_back(self.root);
 
@@ -173,40 +194,41 @@ impl AhoCorasickBuilder {
 }
 
 /// Aho-Corasick法
-pub struct AhoCorasick {
+pub struct AhoCorasick<K> {
     size: usize,
-    root: *mut Node,
-    dict: Vec<String>,
+    root: *mut Node<K>,
+    dict: Vec<Vec<K>>,
     dict_index: Vec<Vec<usize>>,
-    nodes: Vec<*mut Node>,
+    nodes: Vec<*mut Node<K>>,
 }
 
 #[allow(clippy::len_without_is_empty)]
-impl AhoCorasick {
+impl<K: Copy + Hash + Eq> AhoCorasick<K> {
     /// ノード数を返す。
     pub fn len(&self) -> usize {
         self.size
     }
 
     /// Trie木の根ノードへの参照を返す。
-    pub fn root_node(&self) -> &Node {
+    pub fn root_node(&self) -> &Node<K> {
         unsafe { &*self.root }
     }
 
     /// `index`番目に追加したパターンに対応するノードへの参照を返す。
-    pub fn node_of(&self, index: usize) -> &Node {
+    pub fn node_of(&self, index: usize) -> &Node<K> {
         assert!(!self.nodes[index].is_null());
         unsafe { &*self.nodes[index] }
     }
 
     /// 文字列`s`がマッチするすべてのパターンを列挙する。
-    pub fn matches<F>(&self, s: &str, mut proc: F)
+    pub fn matches<I, F>(&self, s: I, mut proc: F)
     where
+        I: IntoIterator<Item = K>,
         F: FnMut(usize, std::ops::Range<usize>),
     {
         let mut cur = self.root;
 
-        for (i, c) in s.chars().enumerate() {
+        for (i, c) in s.into_iter().enumerate() {
             while cur != self.root && unsafe { !(*cur).children.contains_key(&c) } {
                 cur = failure_link_of(cur).unwrap();
             }
@@ -238,14 +260,14 @@ mod tests {
     fn test() {
         let mut builder = AhoCorasickBuilder::new();
 
-        builder.add("ur");
-        builder.add("et");
-        builder.add("ur");
+        builder.add("ur".chars());
+        builder.add("et".chars());
+        builder.add("ur".chars());
 
         let ac = builder.build();
 
         let s = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-        ac.matches(s, |index, range| {
+        ac.matches(s.chars(), |index, range| {
             let Range { start, end } = range;
             println!(
                 "{} {}\x1b[m\x1b[1m\x1b[32m{}\x1b[m{}",

@@ -1,4 +1,4 @@
-//! 配列の置換を演算とする代数的構造
+//! 配列の置換の合成
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
