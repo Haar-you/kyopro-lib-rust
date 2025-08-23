@@ -100,30 +100,30 @@ impl<const P: u32, const PR: u32> FPS for PolynomialOperator<'_, P, PR> {
         let n = f.len();
 
         let mut t = 1;
-        let mut b = Polynomial::constant(ConstModInt::new(1));
+        let mut b = Polynomial::constant(1.into());
 
-        while t <= n * 2 {
-            t <<= 1;
+        loop {
+            let mut temp: Vec<_> = self.fps_log(b.clone()).into();
 
-            let mut temp = self.fps_log(b.clone());
-            temp.as_mut().resize(t, ConstModInt::new(0));
-
-            let mut temp: Vec<_> = temp.into();
+            temp.resize(2 * t, 0.into());
             temp.iter_mut().for_each(|x| *x = -*x);
-            temp[0] += ConstModInt::new(1);
+            temp[0] += 1.into();
 
             temp.iter_mut()
                 .zip(f.iter())
-                .take(t.min(n))
-                .for_each(|(temp, f)| {
-                    *temp += *f;
-                });
+                .for_each(|(temp, f)| *temp += *f);
 
             b = self.mul(b, temp.into());
-            b.as_mut().resize(t, ConstModInt::new(0));
+            b.as_mut().resize(2 * t, 0.into());
+
+            if t >= n {
+                break;
+            }
+
+            t <<= 1;
         }
 
-        b.as_mut().resize(n, ConstModInt::new(0));
+        b.as_mut().truncate(n);
         b
     }
 
