@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":["FPS"]};
+window.SIDEBAR_ITEMS = {"mod":["exp","inv","log","pow","sqrt"]};

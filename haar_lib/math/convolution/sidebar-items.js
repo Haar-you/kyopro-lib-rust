@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["conv_and","conv_gcd","conv_or","conv_xor","mobius","subset_conv","zeta"]};
+window.SIDEBAR_ITEMS = {"mod":["conv_and","conv_gcd","conv_mul_modp","conv_or","conv_xor","mobius","subset_conv","zeta"]};

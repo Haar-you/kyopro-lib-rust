@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/ds/sparse_table.rs`."><title>sparse_table.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-6c3ea77c.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="haar_lib" data-themes="" data-resource-suffix="" data-rustdoc-version="1.86.0 (05f9846f8 2025-03-31)" data-channel="1.86.0" data-search-js="search-581efc7a.js" data-settings-js="settings-6dad6058.js" ><script src="../../../static.files/storage-3a5871a4.js"></script><script defer src="../../../static.files/src-script-b8d3f215.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-4d63596a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/ds/sparse_table.rs`."><title>sparse_table.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="haar_lib" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-4e99c027.js"></script><script defer src="../../../static.files/src-script-63605ae7.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js"                  integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js"    integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
 <script>
@@ -81,54 +81,57 @@
 <a href=#65 id=65 data-nosnippet>65</a></span><span class="kw">mod </span>tests {
 <a href=#66 id=66 data-nosnippet>66</a>    <span class="kw">use </span>std::fmt::Debug;
 <a href=#67 id=67 data-nosnippet>67</a>
-<a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">use </span><span class="kw">crate</span>::algebra::{bitand::BitAnd, bitor::BitOr, max::Max, min::Min};
-<a href=#69 id=69 data-nosnippet>69</a>
-<a href=#70 id=70 data-nosnippet>70</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#71 id=71 data-nosnippet>71</a>    <span class="kw">use </span>rand::Rng;
+<a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">use </span><span class="kw">crate</span>::algebra::{
+<a href=#69 id=69 data-nosnippet>69</a>        bit::{BitAnd, BitOr},
+<a href=#70 id=70 data-nosnippet>70</a>        min_max::{Max, Min},
+<a href=#71 id=71 data-nosnippet>71</a>    };
 <a href=#72 id=72 data-nosnippet>72</a>
-<a href=#73 id=73 data-nosnippet>73</a>    <span class="kw">fn </span>test&lt;A&gt;(s: Vec&lt;A&gt;)
-<a href=#74 id=74 data-nosnippet>74</a>    <span class="kw">where
-<a href=#75 id=75 data-nosnippet>75</a>        </span>A: Semigroup + Idempotence + Identity + Copy + Default + PartialEq + Debug,
-<a href=#76 id=76 data-nosnippet>76</a>    {
-<a href=#77 id=77 data-nosnippet>77</a>        <span class="kw">let </span>st = SparseTable::new(s.clone());
-<a href=#78 id=78 data-nosnippet>78</a>
-<a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">for </span>l <span class="kw">in </span><span class="number">0</span>..s.len() {
-<a href=#80 id=80 data-nosnippet>80</a>            <span class="kw">for </span>r <span class="kw">in </span>l..=s.len() {
-<a href=#81 id=81 data-nosnippet>81</a>                <span class="kw">let </span>ans = <span class="kw-2">&amp;</span>s[l..r].iter().cloned().fold_m();
-<a href=#82 id=82 data-nosnippet>82</a>                <span class="macro">assert_eq!</span>(<span class="kw-2">*</span>ans, st.fold(l..r).unwrap_or(A::id()));
-<a href=#83 id=83 data-nosnippet>83</a>            }
-<a href=#84 id=84 data-nosnippet>84</a>        }
-<a href=#85 id=85 data-nosnippet>85</a>    }
-<a href=#86 id=86 data-nosnippet>86</a>
-<a href=#87 id=87 data-nosnippet>87</a>    <span class="attr">#[test]
-<a href=#88 id=88 data-nosnippet>88</a>    </span><span class="kw">fn </span>test_max() {
-<a href=#89 id=89 data-nosnippet>89</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-<a href=#90 id=90 data-nosnippet>90</a>        <span class="kw">let </span>n = <span class="number">100</span>;
-<a href=#91 id=91 data-nosnippet>91</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| Max(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#92 id=92 data-nosnippet>92</a>        test(s);
-<a href=#93 id=93 data-nosnippet>93</a>    }
-<a href=#94 id=94 data-nosnippet>94</a>
-<a href=#95 id=95 data-nosnippet>95</a>    <span class="attr">#[test]
-<a href=#96 id=96 data-nosnippet>96</a>    </span><span class="kw">fn </span>test_min() {
-<a href=#97 id=97 data-nosnippet>97</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-<a href=#98 id=98 data-nosnippet>98</a>        <span class="kw">let </span>n = <span class="number">100</span>;
-<a href=#99 id=99 data-nosnippet>99</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| Min(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#100 id=100 data-nosnippet>100</a>        test(s);
-<a href=#101 id=101 data-nosnippet>101</a>    }
-<a href=#102 id=102 data-nosnippet>102</a>
-<a href=#103 id=103 data-nosnippet>103</a>    <span class="attr">#[test]
-<a href=#104 id=104 data-nosnippet>104</a>    </span><span class="kw">fn </span>test_bitand() {
-<a href=#105 id=105 data-nosnippet>105</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-<a href=#106 id=106 data-nosnippet>106</a>        <span class="kw">let </span>n = <span class="number">100</span>;
-<a href=#107 id=107 data-nosnippet>107</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| BitAnd(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#108 id=108 data-nosnippet>108</a>        test(s);
-<a href=#109 id=109 data-nosnippet>109</a>    }
-<a href=#110 id=110 data-nosnippet>110</a>
-<a href=#111 id=111 data-nosnippet>111</a>    <span class="attr">#[test]
-<a href=#112 id=112 data-nosnippet>112</a>    </span><span class="kw">fn </span>test_bitor() {
-<a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-<a href=#114 id=114 data-nosnippet>114</a>        <span class="kw">let </span>n = <span class="number">100</span>;
-<a href=#115 id=115 data-nosnippet>115</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| BitOr(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#116 id=116 data-nosnippet>116</a>        test(s);
-<a href=#117 id=117 data-nosnippet>117</a>    }
-<a href=#118 id=118 data-nosnippet>118</a>}</code></pre></div></section></main></body></html>
+<a href=#73 id=73 data-nosnippet>73</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+<a href=#74 id=74 data-nosnippet>74</a>    <span class="kw">use </span>rand::Rng;
+<a href=#75 id=75 data-nosnippet>75</a>
+<a href=#76 id=76 data-nosnippet>76</a>    <span class="kw">fn </span>test&lt;A&gt;(s: Vec&lt;A&gt;)
+<a href=#77 id=77 data-nosnippet>77</a>    <span class="kw">where
+<a href=#78 id=78 data-nosnippet>78</a>        </span>A: Semigroup + Idempotence + Identity + Copy + Default + PartialEq + Debug,
+<a href=#79 id=79 data-nosnippet>79</a>    {
+<a href=#80 id=80 data-nosnippet>80</a>        <span class="kw">let </span>st = SparseTable::new(s.clone());
+<a href=#81 id=81 data-nosnippet>81</a>
+<a href=#82 id=82 data-nosnippet>82</a>        <span class="kw">for </span>l <span class="kw">in </span><span class="number">0</span>..s.len() {
+<a href=#83 id=83 data-nosnippet>83</a>            <span class="kw">for </span>r <span class="kw">in </span>l..=s.len() {
+<a href=#84 id=84 data-nosnippet>84</a>                <span class="kw">let </span>ans = <span class="kw-2">&amp;</span>s[l..r].iter().cloned().fold_m();
+<a href=#85 id=85 data-nosnippet>85</a>                <span class="macro">assert_eq!</span>(<span class="kw-2">*</span>ans, st.fold(l..r).unwrap_or(A::id()));
+<a href=#86 id=86 data-nosnippet>86</a>            }
+<a href=#87 id=87 data-nosnippet>87</a>        }
+<a href=#88 id=88 data-nosnippet>88</a>    }
+<a href=#89 id=89 data-nosnippet>89</a>
+<a href=#90 id=90 data-nosnippet>90</a>    <span class="attr">#[test]
+<a href=#91 id=91 data-nosnippet>91</a>    </span><span class="kw">fn </span>test_max() {
+<a href=#92 id=92 data-nosnippet>92</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#93 id=93 data-nosnippet>93</a>        <span class="kw">let </span>n = <span class="number">100</span>;
+<a href=#94 id=94 data-nosnippet>94</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| Max(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#95 id=95 data-nosnippet>95</a>        test(s);
+<a href=#96 id=96 data-nosnippet>96</a>    }
+<a href=#97 id=97 data-nosnippet>97</a>
+<a href=#98 id=98 data-nosnippet>98</a>    <span class="attr">#[test]
+<a href=#99 id=99 data-nosnippet>99</a>    </span><span class="kw">fn </span>test_min() {
+<a href=#100 id=100 data-nosnippet>100</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#101 id=101 data-nosnippet>101</a>        <span class="kw">let </span>n = <span class="number">100</span>;
+<a href=#102 id=102 data-nosnippet>102</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| Min(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#103 id=103 data-nosnippet>103</a>        test(s);
+<a href=#104 id=104 data-nosnippet>104</a>    }
+<a href=#105 id=105 data-nosnippet>105</a>
+<a href=#106 id=106 data-nosnippet>106</a>    <span class="attr">#[test]
+<a href=#107 id=107 data-nosnippet>107</a>    </span><span class="kw">fn </span>test_bitand() {
+<a href=#108 id=108 data-nosnippet>108</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#109 id=109 data-nosnippet>109</a>        <span class="kw">let </span>n = <span class="number">100</span>;
+<a href=#110 id=110 data-nosnippet>110</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| BitAnd(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#111 id=111 data-nosnippet>111</a>        test(s);
+<a href=#112 id=112 data-nosnippet>112</a>    }
+<a href=#113 id=113 data-nosnippet>113</a>
+<a href=#114 id=114 data-nosnippet>114</a>    <span class="attr">#[test]
+<a href=#115 id=115 data-nosnippet>115</a>    </span><span class="kw">fn </span>test_bitor() {
+<a href=#116 id=116 data-nosnippet>116</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#117 id=117 data-nosnippet>117</a>        <span class="kw">let </span>n = <span class="number">100</span>;
+<a href=#118 id=118 data-nosnippet>118</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| BitOr(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#119 id=119 data-nosnippet>119</a>        test(s);
+<a href=#120 id=120 data-nosnippet>120</a>    }
+<a href=#121 id=121 data-nosnippet>121</a>}</code></pre></div></section></main></body></html>
