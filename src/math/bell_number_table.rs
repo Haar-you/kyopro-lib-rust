@@ -1,4 +1,4 @@
-//! ベル数$B(n, n)$のテーブル
+//! ベル数$B(0, 0), \dots, B(n, n)$
 //!
 //! # References
 //! - <https://manabitimes.jp/math/892>
@@ -6,7 +6,7 @@
 
 use crate::num::ff::*;
 
-/// ベル数$B(0, 0)$~$B(n, n)$を求める。
+/// ベル数$B(0, 0), \dots, B(n, n)$を求める。
 pub fn bell_number_table<Modulo: FF>(n: usize, modulo: Modulo) -> Vec<Vec<Modulo::Element>>
 where
     Modulo::Element: FFElem + Copy,

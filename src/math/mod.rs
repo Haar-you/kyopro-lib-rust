@@ -13,7 +13,7 @@ pub mod tetration;
 pub mod prime_test;
 pub mod primitive_root;
 
-pub mod bell_number;
+pub mod bell_number_table;
 pub mod bernoulli_number;
 pub mod binomial_coefficient;
 pub mod factorial;
