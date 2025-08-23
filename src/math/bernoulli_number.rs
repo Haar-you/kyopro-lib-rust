@@ -3,7 +3,7 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/bernoulli_number>
 use crate::math::factorial::FactorialTable;
-use crate::math::fps::FPS;
+use crate::math::fps::inv::*;
 use crate::math::polynomial::Polynomial;
 use crate::num::const_modint::*;
 
@@ -14,7 +14,7 @@ pub fn bernoulli_number<Fps, const P: u32>(
     fps: &Fps,
 ) -> Vec<ConstModInt<P>>
 where
-    Fps: FPS<Poly = Polynomial<P>>,
+    Fps: FpsInv<Poly = Polynomial<P>>,
 {
     let ff = ConstModIntBuilder;
     let mut x: Polynomial<P> = vec![ff.from_u64(0); n + 1].into();

@@ -2,7 +2,7 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/sharp_p_subset_sum>
-use crate::math::fps::*;
+use crate::math::fps::exp::*;
 use crate::math::polynomial::*;
 use crate::num::const_modint::*;
 
@@ -13,7 +13,7 @@ pub fn number_of_subset_sum<Fps, const P: u32>(
     fps: &Fps,
 ) -> Vec<ConstModInt<P>>
 where
-    Fps: FPS<Poly = Polynomial<P>>,
+    Fps: FpsExp<Poly = Polynomial<P>>,
 {
     let ff = ConstModIntBuilder;
 

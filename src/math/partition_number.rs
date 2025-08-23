@@ -3,14 +3,14 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/partition_function>
 use crate::{
-    math::{fps::*, polynomial::*},
+    math::{fps::inv::*, polynomial::*},
     num::const_modint::*,
 };
 
 /// 分割数$p(0), \dots, p(n)$を列挙する。
 pub fn partition_number<Fps, const P: u32>(n: usize, fps: &Fps) -> Vec<ConstModInt<P>>
 where
-    Fps: FPS<Poly = Polynomial<P>>,
+    Fps: FpsInv<Poly = Polynomial<P>>,
 {
     let ff = ConstModIntBuilder;
     let mut f = vec![ff.from_u64(0); n + 1];

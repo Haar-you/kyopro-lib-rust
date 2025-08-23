@@ -1,0 +1,69 @@
+//! 形式的冪級数の逆数
+use crate::math::polynomial::{Polynomial, PolynomialOperator};
+use crate::num::ff::*;
+
+/// 形式的冪級数の逆数
+pub trait FpsInv {
+    /// 多項式の型
+    type Poly;
+
+    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\frac{1}{f(x)}$の先頭$n$項を求める。
+    fn fps_inv(&self, f: Self::Poly) -> Self::Poly;
+}
+
+impl<const P: u32, const PR: u32> FpsInv for PolynomialOperator<'_, P, PR> {
+    type Poly = Polynomial<P>;
+
+    fn fps_inv(&self, f: Self::Poly) -> Self::Poly {
+        let f: Vec<_> = f.into();
+        assert_ne!(f[0].value(), 0);
+        let n = f.len();
+
+        let mut t = 1;
+        let mut ret = vec![f[0].inv()];
+        ret.reserve(2 * n);
+
+        loop {
+            let mut f = f[0..(2 * t).min(n)].to_vec();
+            f.resize(2 * t, 0.into());
+            self.ntt.ntt(&mut f);
+
+            let mut g = ret.clone();
+            g.resize(2 * t, 0.into());
+            self.ntt.ntt(&mut g);
+
+            for (f, g) in f.iter_mut().zip(g.iter()) {
+                *f *= *g;
+            }
+            self.ntt.intt(&mut f);
+
+            let h = f;
+
+            let mut h = h[t..2 * t].to_vec();
+            h.resize(2 * t, 0.into());
+            self.ntt.ntt(&mut h);
+
+            for (h, g) in h.iter_mut().zip(g.iter()) {
+                *h *= *g;
+            }
+            self.ntt.intt(&mut h);
+
+            let g = h;
+
+            ret.resize(2 * t, 0.into());
+
+            for (ret, x) in ret.iter_mut().skip(t).zip(g.into_iter().take(t)) {
+                *ret = -x;
+            }
+
+            t <<= 1;
+
+            if t >= n {
+                break;
+            }
+        }
+
+        ret.truncate(n);
+        ret.into()
+    }
+}
