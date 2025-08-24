@@ -1,6 +1,8 @@
+//! 線形漸化式で表される数列の第`k`項目を求める。
 use crate::math::ntt::NTT;
 use crate::num::const_modint::ConstModInt;
 
+/// $a_i = \sum_{j = 1}^d c_j a_{i-j}$を満たす数列$a$の初め$d$項と係数$c$から、数列の第`k`項$a_k$を求める。
 pub fn bostan_mori<const P: u32, const PR: u32>(
     a: Vec<ConstModInt<P>>,
     c: Vec<ConstModInt<P>>,
