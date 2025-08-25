@@ -175,9 +175,19 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
     }
 
     /// 多項式`a`に多項式`b`を掛ける。
-    pub fn mul_assign(&self, a: &mut Polynomial<P>, b: Polynomial<P>) {
+    pub fn mul_assign(&self, a: &mut Polynomial<P>, mut b: Polynomial<P>) {
         let k = a.len() + b.len() - 1;
-        a.data = self.ntt.convolve(a.data.clone(), b.data);
+
+        let n = k.next_power_of_two();
+        a.data.resize(n, 0.into());
+        self.ntt.ntt(&mut a.data);
+
+        b.data.resize(n, 0.into());
+        self.ntt.ntt(&mut b.data);
+
+        a.data.iter_mut().zip(b.data).for_each(|(x, y)| *x *= y);
+        self.ntt.intt(&mut a.data);
+
         a.data.truncate(k);
     }
 
@@ -188,8 +198,17 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
     }
 
     /// 多項式`a`の2乗を返す。
-    pub fn sq(&self, a: Polynomial<P>) -> Polynomial<P> {
-        self.mul(a.clone(), a)
+    pub fn sq(&self, mut a: Polynomial<P>) -> Polynomial<P> {
+        let k = a.len() * 2 - 1;
+        let n = k.next_power_of_two();
+
+        a.data.resize(n, 0.into());
+        self.ntt.ntt(&mut a.data);
+        a.data.iter_mut().for_each(|x| *x *= *x);
+        self.ntt.intt(&mut a.data);
+
+        a.data.truncate(k);
+        a.into()
     }
 
     /// 多項式`a`の`k`倍を返す。
@@ -201,19 +220,54 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
 
     #[allow(missing_docs)]
     pub fn inv(&self, a: Polynomial<P>, n: usize) -> Polynomial<P> {
-        let mut ret = Polynomial::constant(a.data[0].inv());
         let mut t = 1;
+        let mut ret = vec![a.data[0].inv()];
+        let a: Vec<_> = a.into();
 
         while t <= n * 2 {
-            ret = self.sub(
-                self.scale(ret.clone(), ConstModInt::new(2)),
-                self.mul(self.sq(ret).get_until(t), a.clone().get_until(t)),
-            );
-            ret.data.truncate(t);
+            let k = (t * 2 - 1).next_power_of_two();
+
+            let mut s = ret.clone();
+            s.resize(k, 0.into());
+            self.ntt.ntt(&mut s);
+            s.iter_mut().for_each(|x| *x *= *x);
+
+            let mut a = a[..t.min(a.len())].to_vec();
+            a.resize(k, 0.into());
+            self.ntt.ntt(&mut a);
+
+            s.iter_mut().zip(a).for_each(|(x, y)| *x *= y);
+            self.ntt.intt(&mut s);
+
+            ret.resize(t, 0.into());
+            ret.iter_mut()
+                .zip(s)
+                .for_each(|(x, y)| *x = *x * 2.into() - y);
+
             t *= 2;
         }
 
-        ret
+        ret.into()
+    }
+
+    pub fn div(&self, mut a: Polynomial<P>, mut b: Polynomial<P>) -> Polynomial<P> {
+        if a.len() < b.len() {
+            return Polynomial::zero();
+        }
+
+        let m = a.len() - b.len();
+
+        a.data.reverse();
+        b.data.reverse();
+
+        b = self.inv(b, m);
+        b.data.resize(m + 1, 0.into());
+
+        let mut q = self.mul(a, b);
+        q.data.resize(m + 1, 0.into());
+        q.data.reverse();
+        q.shrink();
+        q
     }
 
     /// 多項式`a`の多項式`b`による商と剰余を返す。
@@ -222,27 +276,12 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
             return (Polynomial::zero(), a);
         }
 
-        let m = a.len() - b.len();
-
-        let mut g = a.clone();
-        g.data.reverse();
-
-        let mut f = b.clone();
-        f.data.reverse();
-
-        f = self.inv(f, m);
-        f.data.resize(m + 1, ConstModInt::new(0));
-
-        let mut q = self.mul(f, g);
-        q.data.resize(m + 1, ConstModInt::new(0));
-        q.data.reverse();
+        let q = self.div(a.clone(), b.clone());
 
         let d = b.len() - 1;
         let mut r = self.sub(a, self.mul(b, q.clone()));
         r.data.truncate(d);
-
         r.shrink();
-        q.shrink();
 
         (q, r)
     }
