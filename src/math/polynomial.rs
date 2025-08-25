@@ -5,7 +5,7 @@ use crate::math::ntt::NTT;
 use crate::num::const_modint::*;
 
 /// $\mathbb{F}_p$上の多項式
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Polynomial<const P: u32> {
     data: Vec<ConstModInt<P>>,
 }
