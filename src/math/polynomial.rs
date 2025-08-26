@@ -208,7 +208,7 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
         self.ntt.intt(&mut a.data);
 
         a.data.truncate(k);
-        a.into()
+        a
     }
 
     /// 多項式`a`の`k`倍を返す。

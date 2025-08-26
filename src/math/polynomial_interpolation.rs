@@ -15,7 +15,7 @@ pub fn polynomial_interpolation<const P: u32, const PR: u32>(
 
     let po = PolynomialOperator::new(ntt);
 
-    let g = rec_g(0, n, &xs, &ys, ntt);
+    let g = rec_g(0, n, &xs, ntt);
 
     let gd = po.differentiate(g.clone());
     let gd = po.multipoint_eval(gd, xs.clone());
@@ -30,7 +30,6 @@ fn rec_g<const P: u32, const PR: u32>(
     l: usize,
     r: usize,
     xs: &[ConstModInt<P>],
-    ys: &[ConstModInt<P>],
     ntt: &NTT<P, PR>,
 ) -> Polynomial<P> {
     if r - l == 1 {
@@ -39,7 +38,7 @@ fn rec_g<const P: u32, const PR: u32>(
 
     let po = PolynomialOperator::new(ntt);
     let m = (l + r) / 2;
-    po.mul(rec_g(l, m, xs, ys, ntt), rec_g(m, r, xs, ys, ntt))
+    po.mul(rec_g(l, m, xs, ntt), rec_g(m, r, xs, ntt))
 }
 
 fn rec_frac<const P: u32, const PR: u32>(
@@ -59,7 +58,7 @@ fn rec_frac<const P: u32, const PR: u32>(
     let (la, lb) = rec_frac(l, m, xs, ys, gs, ntt);
     let (ra, rb) = rec_frac(m, r, xs, ys, gs, ntt);
 
-    let po = PolynomialOperator::new(&ntt);
+    let po = PolynomialOperator::new(ntt);
 
     let deno = po.mul(lb.clone(), rb.clone());
     let nume = po.add(po.mul(la, rb), po.mul(ra, lb));
