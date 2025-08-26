@@ -250,6 +250,7 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
         ret.into()
     }
 
+    /// 多項式`a`の多項式`b`による商を返す。
     pub fn div(&self, mut a: Polynomial<P>, mut b: Polynomial<P>) -> Polynomial<P> {
         if a.len() < b.len() {
             return Polynomial::zero();
@@ -270,6 +271,7 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
         q
     }
 
+    /// 多項式`a`の多項式`b`による剰余を返す。
     pub fn rem(&self, a: Polynomial<P>, b: Polynomial<P>) -> Polynomial<P> {
         self.divrem(a, b).1
     }

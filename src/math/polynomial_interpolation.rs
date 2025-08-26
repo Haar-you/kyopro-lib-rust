@@ -1,8 +1,10 @@
+//! 多項式補間
 use crate::math::multipoint_eval::MultipointEval;
 use crate::math::ntt::*;
 use crate::math::polynomial::{Polynomial, PolynomialOperator};
 use crate::num::const_modint::ConstModInt;
 
+/// $y_0 = f(x_0), \dots, y_{n-1} = f(x_{n-1})$を満たす多項式$f(x) = c_0 x^0 + c_1 x^1 + \dots + c_{n-1} x^{n-1}$を求める。
 pub fn polynomial_interpolation<const P: u32, const PR: u32>(
     xs: Vec<impl Into<ConstModInt<P>>>,
     ys: Vec<impl Into<ConstModInt<P>>>,
