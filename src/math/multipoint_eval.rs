@@ -33,10 +33,10 @@ impl<const P: u32, const PR: u32> MultipointEval for PolynomialOperator<'_, P, P
             f[i] = self.mul(f[i << 1].clone(), f[(i << 1) | 1].clone());
         }
 
-        f[1] = self.divmod(a, f[1].clone()).1;
+        f[1] = self.rem(a, f[1].clone());
 
         for i in 2..k + m {
-            f[i] = self.divmod(f[i >> 1].clone(), std::mem::take(&mut f[i])).1;
+            f[i] = self.rem(f[i >> 1].clone(), std::mem::take(&mut f[i]));
         }
 
         f.into_iter()

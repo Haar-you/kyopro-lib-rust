@@ -270,8 +270,12 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
         q
     }
 
+    pub fn rem(&self, a: Polynomial<P>, b: Polynomial<P>) -> Polynomial<P> {
+        self.divrem(a, b).1
+    }
+
     /// 多項式`a`の多項式`b`による商と剰余を返す。
-    pub fn divmod(&self, a: Polynomial<P>, b: Polynomial<P>) -> (Polynomial<P>, Polynomial<P>) {
+    pub fn divrem(&self, a: Polynomial<P>, b: Polynomial<P>) -> (Polynomial<P>, Polynomial<P>) {
         if a.len() < b.len() {
             return (Polynomial::zero(), a);
         }
@@ -369,7 +373,7 @@ mod tests {
             .collect();
         let b = Polynomial::from(b);
 
-        let (q, r) = po.divmod(a.clone(), b.clone());
+        let (q, r) = po.divrem(a.clone(), b.clone());
 
         let a_ = po.add(po.mul(q, b.clone()), r);
         assert_eq!(a, a_);
