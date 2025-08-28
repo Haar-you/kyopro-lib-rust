@@ -16,6 +16,7 @@ pub mod log;
 pub mod pow;
 pub mod sqrt;
 
+pub mod exp_sparse;
 pub mod inv_sparse;
 pub mod log_sparse;
 
