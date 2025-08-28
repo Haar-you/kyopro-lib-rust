@@ -18,10 +18,11 @@ impl<const P: u32, const PR: u32> FpsLog for PolynomialOperator<'_, P, PR> {
     fn fps_log(&self, f: Self::Poly) -> Self::Poly {
         assert_eq!(f.coeff_of(0).value(), 1);
         let n = f.len();
-        let a = self.differentiate(f.clone());
+        let mut a = f.clone();
+        a.differentiate();
         let b = self.fps_inv(f);
-        let c = self.mul(a, b);
-        let mut ret = self.integrate(c);
+        let mut ret = self.mul(a, b);
+        ret.integrate();
         ret.as_mut().resize(n, 0.into());
         ret
     }

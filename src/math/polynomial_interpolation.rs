@@ -19,7 +19,8 @@ pub fn polynomial_interpolation<const P: u32, const PR: u32>(
 
     let g = rec_g(0, n, &xs, ntt);
 
-    let gd = po.differentiate(g.clone());
+    let mut gd = g.clone();
+    gd.differentiate();
     let gd = po.multipoint_eval(gd, xs.clone());
 
     let (a, b) = rec_frac(0, n, &xs, &ys, &gd, ntt);
@@ -63,7 +64,7 @@ fn rec_frac<const P: u32, const PR: u32>(
     let po = PolynomialOperator::new(ntt);
 
     let deno = po.mul(lb.clone(), rb.clone());
-    let nume = po.add(po.mul(la, rb), po.mul(ra, lb));
+    let nume = po.mul(la, rb) + po.mul(ra, lb);
 
     (nume, deno)
 }

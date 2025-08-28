@@ -66,6 +66,8 @@ impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<'_, P, PR> {
         }
 
         ret.resize(n, 0.into());
-        Some(self.shift_higher(ret.into(), k / 2))
+        let mut ret: Polynomial<P> = ret.into();
+        ret.shift_higher(k / 2);
+        Some(ret)
     }
 }

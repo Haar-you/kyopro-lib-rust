@@ -45,11 +45,14 @@ impl<const P: u32, const PR: u32> FpsPow for PolynomialOperator<'_, P, PR> {
 
         let a = f.coeff_of(k);
 
-        let ret = self.shift_lower(f, k);
-        let ret = self.scale(ret, a.inv());
-        let ret = self.scale(self.fps_log(ret), m.into());
-        let ret = self.fps_exp(ret);
-        let ret = self.scale(ret, a.pow(m));
-        self.shift_higher(ret, m as usize * k)
+        let mut ret = f;
+        ret.shift_lower(k);
+        ret.scale(a.inv());
+        let mut ret = self.fps_log(ret);
+        ret.scale(m.into());
+        let mut ret = self.fps_exp(ret);
+        ret.scale(a.pow(m));
+        ret.shift_higher(m as usize * k);
+        ret
     }
 }
