@@ -20,6 +20,7 @@ pub mod exp_sparse;
 pub mod inv_sparse;
 pub mod log_sparse;
 pub mod pow_sparse;
+pub mod sqrt_sparse;
 
 #[cfg(test)]
 mod tests {
