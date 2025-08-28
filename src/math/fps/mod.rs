@@ -16,6 +16,8 @@ pub mod log;
 pub mod pow;
 pub mod sqrt;
 
+pub mod inv_sparse;
+
 #[cfg(test)]
 mod tests {
     use super::{exp::*, inv::*, log::*, pow::*};
