@@ -29,12 +29,13 @@ impl<const P: u32> FpsInvSparse for SparsePolynomial<P> {
         g[0] = f0.inv();
 
         for i in 1..n {
-            for (&j, &fj) in f.data.iter() {
+            let mut s = ConstModInt::new(0);
+            for &(j, fj) in f.data.iter() {
                 if j != 0 && i >= j {
-                    let t = fj * g[i - j] * g[0];
-                    g[i] -= t;
+                    s += fj * g[i - j];
                 }
             }
+            g[i] = -s * g[0];
         }
 
         Polynomial::from(g)
