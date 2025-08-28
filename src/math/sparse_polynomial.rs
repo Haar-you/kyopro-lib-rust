@@ -45,6 +45,7 @@ impl<const P: u32> SparsePolynomial<P> {
             .map_or(0.into(), |(_, x)| *x)
     }
 
+    /// 多項式を微分する。
     pub fn differential(&mut self) {
         let a = self
             .data
@@ -61,6 +62,7 @@ impl<const P: u32> SparsePolynomial<P> {
         self.data = a;
     }
 
+    /// 多項式を積分する。
     pub fn integral(&mut self) {
         let a = self
             .data
@@ -71,10 +73,12 @@ impl<const P: u32> SparsePolynomial<P> {
         self.data = a;
     }
 
+    /// 多項式を`k`倍する。
     pub fn scale(&mut self, k: ConstModInt<P>) {
         self.data.iter_mut().for_each(|(_, x)| *x *= k);
     }
 
+    /// 係数を`k`次だけ低次側にずらす。ただし、負の次数の項は無視する。
     pub fn shift_lower(&mut self, k: usize) {
         self.data = self
             .data
@@ -83,6 +87,7 @@ impl<const P: u32> SparsePolynomial<P> {
             .collect();
     }
 
+    /// 係数を`k`次だけ高次側にずらす。
     pub fn shift_higher(&mut self, k: usize) {
         self.data.iter_mut().for_each(|(i, _)| *i += k);
     }
