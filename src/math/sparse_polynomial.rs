@@ -70,4 +70,20 @@ impl<const P: u32> SparsePolynomial<P> {
 
         self.data = a;
     }
+
+    pub fn scale(&mut self, k: ConstModInt<P>) {
+        self.data.iter_mut().for_each(|(_, x)| *x *= k);
+    }
+
+    pub fn shift_lower(&mut self, k: usize) {
+        self.data = self
+            .data
+            .iter()
+            .filter_map(|&(i, x)| if i < k { None } else { Some((i - k, x)) })
+            .collect();
+    }
+
+    pub fn shift_higher(&mut self, k: usize) {
+        self.data.iter_mut().for_each(|(i, _)| *i += k);
+    }
 }
