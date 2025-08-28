@@ -52,6 +52,7 @@ pub mod ntt;
 pub mod polynomial;
 pub mod polynomial_interpolation;
 pub mod polynomial_taylor_shift;
+pub mod sparse_polynomial;
 
 pub mod closed_interval;
 
