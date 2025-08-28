@@ -17,7 +17,7 @@ pub fn bell_number<const P: u32, const PR: u32>(
         f[i] = ft.inv_facto(i);
     }
 
-    let mut ret: Vec<_> = fps.fps_exp(f.into()).into();
+    let mut ret: Vec<_> = fps.fps_exp(f.into()).unwrap().into();
 
     for i in 0..=n {
         ret[i] *= ft.facto(i);

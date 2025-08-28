@@ -9,14 +9,18 @@ pub trait FpsExpSparse {
     type Output;
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\exp (f(x))$の先頭$n$項を求める。
-    fn fps_exp_sparse(self, n: usize) -> Self::Output;
+    fn fps_exp_sparse(self, n: usize) -> Result<Self::Output, &'static str>;
 }
 
 impl<const P: u32> FpsExpSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
     /// **Time complexity** $O(nk)$
-    fn fps_exp_sparse(self, n: usize) -> Self::Output {
+    fn fps_exp_sparse(self, n: usize) -> Result<Self::Output, &'static str> {
+        if self.coeff_of(0).value() != 0 {
+            return Err("定数項が`0`の形式的べき級数のexpを計算しようとした。");
+        }
+
         let mut f = self;
         f.differential();
 
@@ -39,6 +43,6 @@ impl<const P: u32> FpsExpSparse for SparsePolynomial<P> {
             g[i + 1] = s * invs[i + 1];
         }
 
-        Polynomial::from(g)
+        Ok(Polynomial::from(g))
     }
 }

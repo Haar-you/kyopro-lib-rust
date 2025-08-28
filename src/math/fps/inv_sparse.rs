@@ -9,19 +9,19 @@ pub trait FpsInvSparse {
     type Output;
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\frac{1}{f(x)}$の先頭$n$項を求める。
-    fn fps_inv_sparse(self, n: usize) -> Self::Output;
+    fn fps_inv_sparse(self, n: usize) -> Result<Self::Output, &'static str>;
 }
 
 impl<const P: u32> FpsInvSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
     /// **Time complexity** $O(nk)$
-    fn fps_inv_sparse(self, n: usize) -> Self::Output {
+    fn fps_inv_sparse(self, n: usize) -> Result<Self::Output, &'static str> {
         let f = self;
 
         let f0 = f.coeff_of(0);
         if f0.value() == 0 {
-            panic!("f[0] == 0");
+            return Err("定数項が`0`の形式的べき級数の逆数を計算しようとした。");
         }
 
         let mut g = vec![ConstModInt::new(0); n];
@@ -38,6 +38,6 @@ impl<const P: u32> FpsInvSparse for SparsePolynomial<P> {
             g[i] = -s * g[0];
         }
 
-        Polynomial::from(g)
+        Ok(Polynomial::from(g))
     }
 }

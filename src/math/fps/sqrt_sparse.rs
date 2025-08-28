@@ -10,24 +10,27 @@ pub trait FpsSqrtSparse {
     type Output;
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\sqrt{f(x)}$の先頭$n$項を求める。
-    fn fps_sqrt_sparse(self, n: usize) -> Option<Self::Output>;
+    fn fps_sqrt_sparse(self, n: usize) -> Result<Self::Output, &'static str>;
 }
 
 impl<const P: u32> FpsSqrtSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
     /// **Time complexity** $O(nk)$
-    fn fps_sqrt_sparse(self, n: usize) -> Option<Self::Output> {
+    fn fps_sqrt_sparse(self, n: usize) -> Result<Self::Output, &'static str> {
         let Some(k) = (0..n).find(|&i| self.coeff_of(i).value() != 0) else {
-            return Some(vec![ConstModInt::new(0); n].into());
+            return Ok(vec![ConstModInt::new(0); n].into());
         };
 
         if k % 2 == 1 {
-            return None;
+            return Err("最小次数が偶数ではない。");
         }
 
         let a = self.coeff_of(k);
-        let sr = ConstModInt::new(mod_sqrt(a.value() as u64, P as u64)? as u32);
+        let sr = ConstModInt::new(
+            mod_sqrt(a.value() as u64, P as u64).ok_or("最小次数項の係数に平方根が存在しない。")?
+                as u32,
+        );
 
         let mut f = self;
         f.shift_lower(k);
@@ -65,6 +68,6 @@ impl<const P: u32> FpsSqrtSparse for SparsePolynomial<P> {
         let mut ret = Polynomial::from(ret);
         ret.scale(sr);
         ret.shift_higher(k / 2);
-        Some(ret)
+        Ok(ret)
     }
 }

@@ -35,5 +35,5 @@ pub fn number_of_subset_sum<const P: u32, const PR: u32>(
         }
     }
 
-    fps.fps_exp(ret.into()).into()
+    fps.fps_exp(ret.into()).unwrap().into()
 }

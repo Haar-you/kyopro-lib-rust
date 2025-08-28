@@ -35,7 +35,7 @@ mod tests {
         let po = PolynomialOperator::new(&ntt);
 
         let a: Vec<u32> = vec![5, 4, 3, 2, 1];
-        let b = po.fps_inv(a.clone().into());
+        let b = po.fps_inv(a.clone().into()).unwrap();
 
         assert_eq!(
             po.mul(a.into(), b).get_until(5),
@@ -49,7 +49,7 @@ mod tests {
         let po = PolynomialOperator::new(&ntt);
 
         let a: Vec<u32> = vec![1, 1, 499122179, 166374064, 291154613];
-        let b = po.fps_log(a.clone().into());
+        let b = po.fps_log(a.clone().into()).unwrap();
 
         assert_eq!(b, vec![0, 1, 2, 3, 4].into());
     }
@@ -60,8 +60,8 @@ mod tests {
         let po = PolynomialOperator::new(&ntt);
 
         let a: Vec<u32> = vec![0, 1, 2, 3, 4];
-        let b = po.fps_exp(a.clone().into());
-        let b = po.fps_log(b);
+        let b = po.fps_exp(a.clone().into()).unwrap();
+        let b = po.fps_log(b).unwrap();
 
         assert_eq!(b, a.into());
     }
@@ -72,15 +72,15 @@ mod tests {
         let po = PolynomialOperator::new(&ntt);
 
         let a: Vec<u32> = vec![0, 0, 9, 2];
-        let b = po.fps_pow(a.clone().into(), 3);
+        let b = po.fps_pow(a.clone().into(), 3).unwrap();
         assert_eq!(b, vec![0, 0, 0, 0].into());
 
         let a: Vec<u32> = vec![1, 1];
-        let b = po.fps_pow(a.clone().into(), 2);
+        let b = po.fps_pow(a.clone().into(), 2).unwrap();
         assert_eq!(b, vec![1, 2].into());
 
         let a: Vec<u32> = vec![0, 0];
-        let b = po.fps_pow(a.clone().into(), 0);
+        let b = po.fps_pow(a.clone().into(), 0).unwrap();
         dbg!(b);
     }
 }

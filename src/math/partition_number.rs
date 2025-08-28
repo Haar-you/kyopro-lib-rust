@@ -29,7 +29,7 @@ pub fn partition_number<const P: u32, const PR: u32>(
     }
 
     let f = Polynomial::from(f);
-    fps.fps_inv(f).into()
+    fps.fps_inv(f).unwrap().into()
 }
 
 #[cfg(test)]

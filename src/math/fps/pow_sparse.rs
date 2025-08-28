@@ -9,28 +9,28 @@ pub trait FpsPowSparse {
     type Output;
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$について、$(f(x))^m$の先頭$n$項を求める。
-    fn fps_pow_sparse(self, m: u64, n: usize) -> Self::Output;
+    fn fps_pow_sparse(self, m: u64, n: usize) -> Result<Self::Output, &'static str>;
 }
 
 impl<const P: u32> FpsPowSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
     /// **Time complexity** $O(nk)$
-    fn fps_pow_sparse(self, m: u64, n: usize) -> Self::Output {
+    fn fps_pow_sparse(self, m: u64, n: usize) -> Result<Self::Output, &'static str> {
         if m == 0 {
             let mut f: Vec<_> = vec![ConstModInt::new(0); n];
             f[0] = ConstModInt::new(1);
-            return f.into();
+            return Ok(f.into());
         }
 
         let k = (0..n).find(|&i| self.coeff_of(i).value() != 0).unwrap_or(n);
 
         if k >= n {
-            return vec![ConstModInt::new(0); n].into();
+            return Ok(vec![ConstModInt::new(0); n].into());
         }
 
         if k.checked_mul(m as usize).is_none_or(|x| x >= n) {
-            return vec![ConstModInt::new(0); n].into();
+            return Ok(vec![ConstModInt::new(0); n].into());
         }
 
         let a = self.coeff_of(k);
@@ -69,6 +69,6 @@ impl<const P: u32> FpsPowSparse for SparsePolynomial<P> {
         let mut ret = Polynomial::from(ret);
         ret.scale(a.pow(m));
         ret.shift_higher(m as usize * k);
-        ret
+        Ok(ret)
     }
 }

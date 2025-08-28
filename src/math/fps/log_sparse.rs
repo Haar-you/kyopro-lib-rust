@@ -10,18 +10,18 @@ pub trait FpsLogSparse {
     type Output;
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\log f(x)$の先頭$n$項を求める。
-    fn fps_log_sparse(self, n: usize) -> Self::Output;
+    fn fps_log_sparse(self, n: usize) -> Result<Self::Output, &'static str>;
 }
 
 impl<const P: u32> FpsLogSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
     /// **Time complexity** $O(nk)$
-    fn fps_log_sparse(self, n: usize) -> Self::Output {
+    fn fps_log_sparse(self, n: usize) -> Result<Self::Output, &'static str> {
         let mut f = self.clone();
         f.differential();
 
-        let g = self.fps_inv_sparse(n);
+        let g = self.fps_inv_sparse(n)?;
 
         let mut h = vec![ConstModInt::new(0); n];
         for (i, x) in f.data {
@@ -40,6 +40,6 @@ impl<const P: u32> FpsLogSparse for SparsePolynomial<P> {
         }
         h[0] = 0.into();
 
-        Polynomial::from(h)
+        Ok(Polynomial::from(h))
     }
 }

@@ -22,7 +22,7 @@ pub fn bernoulli_number<const P: u32, const PR: u32>(
         x[i] = ft.inv_facto(i + 1);
     }
 
-    x = fps.fps_inv(x);
+    x = fps.fps_inv(x).unwrap();
     for i in 0..=n {
         x[i] *= ft.facto(i);
     }

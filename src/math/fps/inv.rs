@@ -8,15 +8,18 @@ pub trait FpsInv {
     type Poly;
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\frac{1}{f(x)}$の先頭$n$項を求める。
-    fn fps_inv(&self, f: Self::Poly) -> Self::Poly;
+    fn fps_inv(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
 }
 
 impl<const P: u32, const PR: u32> FpsInv for PolynomialOperator<'_, P, PR> {
     type Poly = Polynomial<P>;
 
-    fn fps_inv(&self, f: Self::Poly) -> Self::Poly {
+    fn fps_inv(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {
         let f: Vec<_> = f.into();
-        assert_ne!(f[0].value(), 0);
+
+        if f[0].value() == 0 {
+            return Err("定数項が`0`の形式的べき級数の逆数を計算しようとした。");
+        }
         let n = f.len();
 
         let mut t = 1;
@@ -64,6 +67,6 @@ impl<const P: u32, const PR: u32> FpsInv for PolynomialOperator<'_, P, PR> {
         }
 
         ret.truncate(n);
-        ret.into()
+        Ok(ret.into())
     }
 }
