@@ -17,6 +17,7 @@ pub mod pow;
 pub mod sqrt;
 
 pub mod inv_sparse;
+pub mod log_sparse;
 
 #[cfg(test)]
 mod tests {
