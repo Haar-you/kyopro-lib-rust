@@ -37,6 +37,7 @@ pub mod persistent_segtree;
 pub mod segtree;
 pub mod segtree_2d;
 pub mod segtree_beats;
+pub mod segtree_bidir;
 pub mod segtree_linear_add;
 pub mod segtree_linear_add_range_sum;
 pub mod starry_sky_tree;
