@@ -98,3 +98,5 @@ pub mod usize_set;
 
 pub mod ordered_map;
 pub mod ordered_set;
+
+pub mod euler_tour_tree;
