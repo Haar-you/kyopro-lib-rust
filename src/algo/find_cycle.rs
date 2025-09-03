@@ -7,7 +7,7 @@
 //! - <https://atcoder.jp/contests/abc179/tasks/abc179_e>
 //! - <https://atcoder.jp/contests/typical90/tasks/typical90_bf>
 
-/// [`cycle_finding`]の結果
+/// [`find_cycle`]の結果
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Rho {
     /// 先頭の非循環部の長さ
@@ -19,7 +19,7 @@ pub struct Rho {
 /// 循環検出法
 ///
 /// **Space complexity** $O(1)$
-pub fn cycle_finding<T>(init: T, f: impl Fn(T) -> T) -> Rho
+pub fn find_cycle<T>(init: T, f: impl Fn(T) -> T) -> Rho
 where
     T: Copy + Eq,
 {
