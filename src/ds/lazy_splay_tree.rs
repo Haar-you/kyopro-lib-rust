@@ -127,7 +127,7 @@ where
                     lc.lazy = A::update(lc.lazy.clone(), this.lazy.clone());
                 }
 
-                let rc = (*this).rc;
+                let rc = this.rc;
                 if !rc.is_null() {
                     let rc = unsafe { &mut *rc };
                     rc.lazy = A::update(rc.lazy.clone(), this.lazy.clone());

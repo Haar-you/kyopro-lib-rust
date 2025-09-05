@@ -12,7 +12,7 @@ struct Edge {
     is_rev: bool,
 }
 
-fn add_edge(edges: &mut Vec<Vec<Edge>>, u: usize, v: usize, cost: i64) {
+fn add_edge(edges: &mut [Vec<Edge>], u: usize, v: usize, cost: i64) {
     let rev = edges[v].len();
     edges[u].push(Edge {
         to: v,
