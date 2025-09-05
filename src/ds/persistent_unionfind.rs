@@ -34,7 +34,7 @@ impl PersistentUnionFind {
         (-self.par[self.root_of(i)]) as usize
     }
 
-    /// `i`と`j`が同じ集合にぞくするならば、`true`を返す。
+    /// `i`と`j`が同じ集合に属するならば、`true`を返す。
     pub fn is_same(&self, i: usize, j: usize) -> bool {
         self.root_of(i) == self.root_of(j)
     }
