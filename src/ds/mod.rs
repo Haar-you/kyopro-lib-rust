@@ -102,3 +102,8 @@ pub mod ordered_map;
 pub mod ordered_set;
 
 pub mod euler_tour_tree;
+
+pub mod static_range_count_query;
+pub mod static_range_freq_query;
+pub mod static_range_inversions_query;
+pub mod static_range_mode_query;

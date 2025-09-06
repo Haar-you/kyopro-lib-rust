@@ -39,8 +39,3 @@ pub mod subset_sum;
 pub mod ternary_search;
 pub mod two_sat;
 pub mod zalgo;
-
-pub mod static_range_count_query;
-pub mod static_range_freq_query;
-pub mod static_range_inversions_query;
-pub mod static_range_mode_query;
