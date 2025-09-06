@@ -49,6 +49,7 @@ pub mod segtree_on_segtree;
 pub mod cumulative_sum_1d;
 pub mod cumulative_sum_2d;
 
+pub mod partially_persistent_array;
 pub mod persistent_array;
 pub mod rollbackable_vector;
 
