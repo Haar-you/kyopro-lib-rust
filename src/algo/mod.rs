@@ -39,4 +39,5 @@ pub mod sliding_window;
 pub mod subset_sum;
 pub mod ternary_search;
 pub mod two_sat;
+pub mod wildcard_pattern_matching;
 pub mod zalgo;
