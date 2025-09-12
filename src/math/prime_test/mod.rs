@@ -2,6 +2,7 @@
 
 pub mod eratosthenes;
 pub mod miller_rabin;
+pub mod segmented;
 
 /// 素数判定
 pub trait CheckPrime<T> {
