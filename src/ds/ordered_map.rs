@@ -212,6 +212,14 @@ impl<K, V> Node<K, V> {
         }
     }
 
+    fn set_par(this: *mut Self, par: *mut Self) {
+        if !this.is_null() {
+            unsafe {
+                (*this).par = par;
+            }
+        }
+    }
+
     fn size_of(this: *mut Self) -> usize {
         if this.is_null() {
             0
@@ -250,21 +258,35 @@ impl<K, V> Node<K, V> {
 }
 
 impl<K: Ord, V> Node<K, V> {
-    fn binary_search(this: *mut Self, key: &K) -> Result<usize, usize> {
-        if this.is_null() {
-            Err(0)
-        } else {
-            let left = Self::left_of(this).unwrap();
-            let right = Self::right_of(this).unwrap();
+    fn binary_search(this: *mut Self, key: &K) -> (*mut Self, Result<usize, usize>) {
+        let mut cur = this;
+        let mut index = 0;
+        let mut prev = ptr::null_mut();
+
+        while !cur.is_null() {
+            let left = Self::left_of(cur).unwrap();
             let c = Self::size_of(left);
-            match Self::key_of(this).unwrap().cmp(key) {
-                Ordering::Equal => Ok(c),
-                Ordering::Greater => Self::binary_search(left, key),
-                Ordering::Less => Self::binary_search(right, key)
-                    .map(|a| a + c + 1)
-                    .map_err(|a| a + c + 1),
+            prev = cur;
+
+            match Self::key_of(cur).unwrap().cmp(key) {
+                Ordering::Equal => {
+                    Self::splay(cur);
+                    return (cur, Ok(index + c));
+                }
+                Ordering::Greater => {
+                    cur = left;
+                }
+                Ordering::Less => {
+                    cur = Self::right_of(cur).unwrap();
+                    index += c + 1;
+                }
             }
         }
+
+        if !prev.is_null() {
+            Self::splay(prev);
+        }
+        (prev, Err(index))
     }
 }
 
@@ -294,7 +316,9 @@ impl<K: Ord, V> OrderedMap<K, V> {
     /// `key`が存在するとき、それが何番目のキーであるかを`Ok`で返す。
     /// そうでないとき、仮に`key`があったとき何番目のキーであったか、を`Err`で返す。
     pub fn binary_search(&self, key: &K) -> Result<usize, usize> {
-        Node::binary_search(self.root.get(), key)
+        let (root, index) = Node::binary_search(self.root.get(), key);
+        self.root.set(root);
+        index
     }
 
     /// `key`以下の最大のキーをもつキーと値のペアを返す。
@@ -320,25 +344,21 @@ impl<K: Ord, V> OrderedMap<K, V> {
 
     /// `key`をキーとして持つならば`true`を返す。
     pub fn contains(&self, key: &K) -> bool {
-        Node::binary_search(self.root.get(), key).is_ok()
+        self.binary_search(key).is_ok()
     }
 
     /// `key`がすでに存在している場合、値を`value`で更新して、古い値を`Some`で返す。
     /// そうでないとき、`key`に`value`を紐付けて、`None`を返す。
     pub fn insert(&mut self, key: K, value: V) -> Option<V> {
-        match Node::binary_search(self.root.get(), &key) {
-            Ok(i) => {
-                let (l, r) = Node::split(self.root.get(), i);
-                let (m, r) = Node::split(r, 1);
-                let old = Node::set_value(m, value);
-
-                let r = Node::merge(m, r);
-                let root = Node::merge(l, r);
-                self.root.set(root);
+        let (new_root, index) = Node::binary_search(self.root.get(), &key);
+        match index {
+            Ok(_) => {
+                let old = Node::set_value(new_root, value);
+                self.root.set(new_root);
                 Some(old)
             }
             Err(i) => {
-                let (l, r) = Node::split(self.root.get(), i);
+                let (l, r) = Node::split(new_root, i);
                 let node = Box::into_raw(Box::new(Node::new(key, value)));
                 let root = Node::merge(l, Node::merge(node, r));
                 self.root.set(root);
@@ -349,20 +369,37 @@ impl<K: Ord, V> OrderedMap<K, V> {
 
     /// キー`key`に対応する値の参照を返す。
     pub fn get(&self, key: &K) -> Option<&V> {
-        let k = Node::binary_search(self.root.get(), key).ok()?;
+        let k = self.binary_search(key).ok()?;
         self.get_by_index(k).map(|(_, v)| v)
     }
 
     /// キー`key`に対応する値の可変参照を返す
     pub fn get_mut(&mut self, key: &K) -> Option<&mut V> {
-        let k = Node::binary_search(self.root.get(), key).ok()?;
+        let k = self.binary_search(key).ok()?;
         self.get_value_mut_by_index(k)
     }
 
     /// キー`key`があれば、そのキーと対応する値を削除して、その値を`Some`で返す。
     pub fn remove(&mut self, key: &K) -> Option<V> {
-        let i = Node::binary_search(self.root.get(), key).ok()?;
-        self.remove_by_index(i).map(|(_, v)| v)
+        let (m, index) = Node::binary_search(self.root.get(), key);
+
+        if index.is_err() {
+            self.root.set(m);
+            return None;
+        }
+
+        assert!(!m.is_null());
+        let left = Node::left_of(m).unwrap();
+        Node::set_par(left, ptr::null_mut());
+        let right = Node::right_of(m).unwrap();
+        Node::set_par(right, ptr::null_mut());
+
+        self.root.set(Node::merge(left, right));
+
+        (!m.is_null()).then(|| unsafe {
+            let m = Box::from_raw(m);
+            m.value
+        })
     }
 
     /// `i`番目のキーとその対応する値のペアへの参照を返す。
