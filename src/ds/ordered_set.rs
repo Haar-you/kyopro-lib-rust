@@ -31,6 +31,17 @@ impl<K: Ord> OrderedSet<K> {
         self.map.binary_search(key)
     }
 
+    /// `l`以上`r`未満の値の個数を返す。
+    pub fn count(&self, l: &K, r: &K) -> usize {
+        let r = match self.binary_search(r) {
+            Ok(i) | Err(i) => i,
+        };
+        let l = match self.binary_search(l) {
+            Ok(i) | Err(i) => i,
+        };
+        r.saturating_sub(l)
+    }
+
     /// `key`以下の最大のキーをもつキーを返す。
     pub fn max_le(&self, key: &K) -> Option<&K> {
         self.map.max_le(key).map(|(k, _)| k)
