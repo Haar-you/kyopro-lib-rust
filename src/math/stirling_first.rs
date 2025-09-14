@@ -9,14 +9,12 @@ use crate::num::const_modint::*;
 /// 符号付き第一種スターリング数$s(n, 0), \dots, s(n, n)$を列挙する。
 ///
 /// **Time complexity** $O(n \log n)$
-pub fn stirling_first<const P: u32, const PR: u32>(
-    n: usize,
-    ntt: &NTT<P, PR>,
-) -> Vec<ConstModInt<P>> {
+pub fn stirling_first<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt<P>> {
     let ff = ConstModIntBuilder;
 
     let mut ret = Polynomial::<P>::from(vec![1]);
-    let op = PolynomialOperator::new(ntt);
+    let ntt = NTT::<P, PR>::new();
+    let op = PolynomialOperator::new(&ntt);
 
     let mut t: usize = 0;
     let mut check = false;
@@ -59,7 +57,7 @@ mod tests {
         let mut ans = Polynomial::from(vec![ff.from_u64(1)]);
 
         for i in 1..=n {
-            let res = stirling_first(i, &ntt);
+            let res = stirling_first::<998244353, 3>(i);
 
             ans = op.mul(
                 ans,
