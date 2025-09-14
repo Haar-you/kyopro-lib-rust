@@ -1,7 +1,8 @@
-//! $\mathtt{a_{\gcd (i, j)}} = \sum \mathtt{f_{i}} * \mathtt{g_{j}}$を満たす`a`を求める。
+//! GCD畳み込み
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/gcd_convolution>
+use crate::math::convolution::div_mul_transform::*;
 use std::ops::{Add, Mul, Sub};
 
 /// $\mathtt{a_{\gcd (i, j)}} = \sum \mathtt{f_{i}} * \mathtt{g_{j}}$を満たす`a`を求める。
@@ -11,45 +12,13 @@ where
 {
     assert_eq!(f.len(), g.len());
 
-    div_zeta(&mut f);
-    div_zeta(&mut g);
+    mul_zeta(&mut f);
+    mul_zeta(&mut g);
 
     for (x, y) in f.iter_mut().zip(g.into_iter()) {
         *x = *x * y;
     }
 
-    div_mobius(&mut f);
+    mul_mobius(&mut f);
     f
-}
-
-fn div_mobius<T>(f: &mut [T])
-where
-    T: Copy + Sub<Output = T>,
-{
-    let n = f.len();
-    let mut check = vec![true; n];
-    for i in 2..n {
-        if check[i] {
-            for j in (1..).take_while(|j| j * i < n) {
-                check[j * i] = false;
-                f[j] = f[j] - f[j * i];
-            }
-        }
-    }
-}
-
-fn div_zeta<T>(f: &mut [T])
-where
-    T: Copy + Add<Output = T>,
-{
-    let n = f.len();
-    let mut check = vec![true; n];
-    for i in 2..n {
-        if check[i] {
-            for j in (1..=(n - 1) / i).rev() {
-                check[j * i] = false;
-                f[j] = f[j] + f[j * i];
-            }
-        }
-    }
 }
