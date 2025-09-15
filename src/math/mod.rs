@@ -22,6 +22,7 @@ pub mod partition_number;
 pub mod stirling_first;
 pub mod stirling_first_table;
 pub mod stirling_second;
+pub mod stirling_second_fixed_k;
 pub mod stirling_second_table;
 
 pub mod number_of_subset_sum;
