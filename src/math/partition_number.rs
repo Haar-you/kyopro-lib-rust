@@ -8,11 +8,9 @@ use crate::{
 };
 
 /// 分割数$p(0), \dots, p(n)$を列挙する。
-pub fn partition_number<const P: u32, const PR: u32>(
-    n: usize,
-    ntt: &NTT<P, PR>,
-) -> Vec<ConstModInt<P>> {
-    let fps = PolynomialOperator::new(ntt);
+pub fn partition_number<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt<P>> {
+    let ntt = NTT::<P, PR>::new();
+    let fps = PolynomialOperator::new(&ntt);
 
     let ff = ConstModIntBuilder;
     let mut f = vec![ff.from_u64(0); n + 1];
@@ -29,20 +27,16 @@ pub fn partition_number<const P: u32, const PR: u32>(
     }
 
     let f = Polynomial::from(f);
-    fps.fps_inv(f).into()
+    fps.fps_inv(f).unwrap().into()
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::math::ntt::NTT998244353;
-
     use super::*;
 
     #[test]
     fn test() {
-        let ntt = NTT998244353::new();
-
-        let res = partition_number(49, &ntt);
+        let res = partition_number::<998244353, 3>(49);
 
         let ans = [
             1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, 56, 77, 101, 135, 176, 231, 297, 385, 490, 627,

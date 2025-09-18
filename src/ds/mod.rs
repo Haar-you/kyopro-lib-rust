@@ -37,6 +37,7 @@ pub mod persistent_segtree;
 pub mod segtree;
 pub mod segtree_2d;
 pub mod segtree_beats;
+pub mod segtree_bidir;
 pub mod segtree_linear_add;
 pub mod segtree_linear_add_range_sum;
 pub mod starry_sky_tree;
@@ -48,6 +49,7 @@ pub mod segtree_on_segtree;
 pub mod cumulative_sum_1d;
 pub mod cumulative_sum_2d;
 
+pub mod partially_persistent_array;
 pub mod persistent_array;
 pub mod rollbackable_vector;
 
@@ -88,6 +90,7 @@ pub mod merge_sort_tree;
 
 pub mod linked_list;
 
+pub mod lazy_splay_tree;
 pub mod link_cut_tree;
 pub mod splay_tree;
 
@@ -97,3 +100,12 @@ pub mod usize_set;
 
 pub mod ordered_map;
 pub mod ordered_set;
+
+pub mod euler_tour_tree;
+
+pub mod static_range_count_query;
+pub mod static_range_freq_query;
+pub mod static_range_inversions_query;
+pub mod static_range_mode_query;
+
+pub mod circular_array;

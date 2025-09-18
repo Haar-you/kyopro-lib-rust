@@ -79,51 +79,100 @@ impl HLD {
         self.end[cur] = *index;
     }
 
+    /// 頂点`x`から頂点`y`へ向かうパス上の頂点についてのクエリを扱う。
+    ///
     /// 演算は可換性を仮定する。
     ///
     /// **Time complexity** $O(\log n)$
-    pub fn path_query_vertex(&self, mut x: usize, mut y: usize) -> Vec<(usize, usize)> {
-        let mut ret = vec![];
+    pub fn path_query_vertex<F>(&self, mut x: usize, mut y: usize, mut f: F)
+    where
+        F: FnMut(usize, usize),
+    {
         loop {
             if self.id[x] > self.id[y] {
-                std::mem::swap(&mut x, &mut y);
+                (x, y) = (y, x);
             }
-            ret.push((max(self.id[self.head[y]], self.id[x]), self.id[y] + 1));
+            f(max(self.id[self.head[y]], self.id[x]), self.id[y] + 1);
             if self.head[x] == self.head[y] {
                 break;
             }
             y = self.par[self.head[y]].unwrap();
         }
-        ret
     }
 
+    /// 頂点`x`から頂点`y`へ向かうパス上の頂点についてのクエリを扱う。
+    ///
     /// **Time complexity** $O(\log n)$
-    pub fn path_query_edge(&self, mut x: usize, mut y: usize) -> Vec<(usize, usize)> {
-        let mut ret = vec![];
+    pub fn path_query_vertex_non_commutative<LFunc, RFunc>(
+        &self,
+        x: usize,
+        y: usize,
+        f: LFunc,
+        mut g: RFunc,
+    ) where
+        LFunc: FnMut(usize, usize),
+        RFunc: FnMut(usize, usize),
+    {
+        let w = self.lca(x, y);
+        self.path_query_vertex(x, w, f);
+
+        let (mut x, mut y) = (y, w);
+
         loop {
             if self.id[x] > self.id[y] {
-                std::mem::swap(&mut x, &mut y);
+                (x, y) = (y, x);
+            }
+            g(
+                self.id[self.head[y]].max(self.id[x]).max(self.id[w] + 1),
+                self.id[y] + 1,
+            );
+            if self.head[x] == self.head[y] {
+                break;
+            }
+            y = self.par[self.head[y]].unwrap();
+        }
+    }
+
+    /// 頂点`x`から頂点`y`へ向かうパス上の辺についてのクエリを扱う。
+    ///
+    /// **Time complexity** $O(\log n)$
+    pub fn path_query_edge<F>(&self, mut x: usize, mut y: usize, mut f: F)
+    where
+        F: FnMut(usize, usize),
+    {
+        loop {
+            if self.id[x] > self.id[y] {
+                (x, y) = (y, x);
             }
             if self.head[x] == self.head[y] {
                 if x != y {
-                    ret.push((self.id[x] + 1, self.id[y] + 1));
+                    f(self.id[x] + 1, self.id[y] + 1);
                 }
                 break;
             }
-            ret.push((self.id[self.head[y]], self.id[y] + 1));
+            f(self.id[self.head[y]], self.id[y] + 1);
             y = self.par[self.head[y]].unwrap();
         }
-        ret
     }
 
+    /// 頂点`x`の部分木の頂点についてのクエリを扱う。
+    ///
     /// **Time complexity** $O(1)$
-    pub fn subtree_query_vertex(&self, x: usize) -> (usize, usize) {
-        (self.id[x], self.end[x])
+    pub fn subtree_query_vertex<F>(&self, x: usize, f: F)
+    where
+        F: FnOnce(usize, usize),
+    {
+        f(self.id[x], self.end[x])
     }
 
+    /// 頂点`x`の部分木の辺についてのクエリを扱う。
+    ///
     /// **Time complexity** $O(1)$
-    pub fn subtree_query_edge(&self, x: usize) -> (usize, usize) {
-        (self.id[x] + 1, self.end[x])
+    pub fn subtree_query_edge<F>(&self, x: usize, f: F)
+    where
+        F: FnOnce(usize, usize),
+    {
+        f(self.id[x] + 1, self.end[x]);
     }
 
     /// **Time complexity** $O(1)$

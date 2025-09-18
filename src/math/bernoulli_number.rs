@@ -9,25 +9,22 @@ use crate::math::polynomial::*;
 use crate::num::const_modint::*;
 
 /// ベルヌーイ数$B_0, \dots, B_n$を列挙する。
-pub fn bernoulli_number<const P: u32, const PR: u32>(
-    n: usize,
-    ft: &FactorialTable<ConstModIntBuilder<P>>,
-    ntt: &NTT<P, PR>,
-) -> Vec<ConstModInt<P>> {
-    let ff = ConstModIntBuilder;
-    let fps = PolynomialOperator::new(ntt);
-    let mut x: Polynomial<P> = vec![ff.from_u64(0); n + 1].into();
+pub fn bernoulli_number<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt<P>> {
+    let ft = FactorialTable::new(n + 1, ConstModIntBuilder);
+    let ntt = NTT::<P, PR>::new();
+    let fps = PolynomialOperator::new(&ntt);
+    let mut x = vec![ConstModInt::new(0); n + 1];
 
     for i in 0..=n {
         x[i] = ft.inv_facto(i + 1);
     }
 
-    x = fps.fps_inv(x);
+    x = fps.fps_inv(x.into()).unwrap().into();
     for i in 0..=n {
         x[i] *= ft.facto(i);
     }
 
-    x.into()
+    x
 }
 
 #[cfg(test)]
@@ -41,9 +38,8 @@ mod tests {
         let n = 100;
 
         let ff = ConstModIntBuilder::<998244353>;
-        let ntt = NTT::<998244353, 3>::new();
         let ft = FactorialTable::new(n + 1, ff);
 
-        assert_eq!(ft.bernoulli_number(n), bernoulli_number(n, &ft, &ntt));
+        assert_eq!(ft.bernoulli_number(n), bernoulli_number::<998244353, 3>(n));
     }
 }

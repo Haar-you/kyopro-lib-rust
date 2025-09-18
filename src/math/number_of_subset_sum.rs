@@ -11,10 +11,10 @@ use crate::num::const_modint::*;
 pub fn number_of_subset_sum<const P: u32, const PR: u32>(
     s: Vec<usize>,
     t: usize,
-    ntt: &NTT<P, PR>,
 ) -> Vec<ConstModInt<P>> {
     let ff = ConstModIntBuilder;
-    let fps = PolynomialOperator::new(ntt);
+    let ntt = NTT::<P, PR>::new();
+    let fps = PolynomialOperator::new(&ntt);
 
     let mut c = vec![0; t + 1];
     for x in s {
@@ -35,5 +35,5 @@ pub fn number_of_subset_sum<const P: u32, const PR: u32>(
         }
     }
 
-    fps.fps_exp(ret.into()).into()
+    fps.fps_exp(ret.into()).unwrap().into()
 }

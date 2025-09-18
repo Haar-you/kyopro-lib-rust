@@ -3,6 +3,7 @@
 pub mod dinic;
 pub mod ford_fulkerson;
 
+pub mod assignment;
 pub mod min_cost_flow;
 
 /// 最大フロー問題を扱うトレイト。

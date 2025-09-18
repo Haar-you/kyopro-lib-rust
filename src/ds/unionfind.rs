@@ -113,6 +113,12 @@ impl<'a, T> UnionFind<'a, T> {
         self.values.as_ref()?[i].as_ref()
     }
 
+    /// `i`の属する集合のもつ値への可変参照を返す。
+    pub fn value_mut_of(&mut self, i: usize) -> Option<&mut T> {
+        let i = self.root_of(i);
+        self.values.as_mut()?[i].as_mut()
+    }
+
     /// 素集合をすべて列挙する。
     pub fn get_groups(&self) -> Vec<Vec<usize>> {
         let mut ret = vec![vec![]; self.n];

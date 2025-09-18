@@ -9,21 +9,21 @@ pub trait FpsPow {
     type Poly;
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$について、$(f(x))^m$の先頭$n$項を求める。
-    fn fps_pow(&self, f: Self::Poly, m: u64) -> Self::Poly;
+    fn fps_pow(&self, f: Self::Poly, m: u64) -> Result<Self::Poly, &'static str>;
 }
 
 impl<const P: u32, const PR: u32> FpsPow for PolynomialOperator<'_, P, PR> {
     type Poly = Polynomial<P>;
 
-    fn fps_pow(&self, f: Self::Poly, m: u64) -> Self::Poly {
+    fn fps_pow(&self, f: Self::Poly, m: u64) -> Result<Self::Poly, &'static str> {
         if m == 0 {
             let mut f: Vec<_> = f.into();
             f.fill(ConstModInt::new(0));
             f[0] = ConstModInt::new(1);
-            return f.into();
+            return Ok(f.into());
         }
         if m == 1 {
-            return f;
+            return Ok(f);
         }
 
         let n = f.len();
@@ -36,20 +36,23 @@ impl<const P: u32, const PR: u32> FpsPow for PolynomialOperator<'_, P, PR> {
         }
 
         if k >= n {
-            return f;
+            return Ok(f);
         }
 
         if k.checked_mul(m as usize).is_none_or(|x| x >= n) {
-            return vec![ConstModInt::new(0); n].into();
+            return Ok(vec![ConstModInt::new(0); n].into());
         }
 
         let a = f.coeff_of(k);
 
-        let ret = self.shift_lower(f, k);
-        let ret = self.scale(ret, a.inv());
-        let ret = self.scale(self.fps_log(ret), m.into());
-        let ret = self.fps_exp(ret);
-        let ret = self.scale(ret, a.pow(m));
-        self.shift_higher(ret, m as usize * k)
+        let mut ret = f;
+        ret.shift_lower(k);
+        ret.scale(a.inv());
+        let mut ret = self.fps_log(ret)?;
+        ret.scale(m.into());
+        let mut ret = self.fps_exp(ret)?;
+        ret.scale(a.pow(m));
+        ret.shift_higher(m as usize * k);
+        Ok(ret)
     }
 }

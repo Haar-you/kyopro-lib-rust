@@ -7,10 +7,8 @@ use crate::math::ntt::NTT;
 use crate::num::const_modint::*;
 
 /// 第二種スターリング数$S(n, 0), \dots, S(n, n)$を列挙する。
-pub fn stirling_second<const P: u32, const PR: u32>(
-    n: usize,
-    ntt: &NTT<P, PR>,
-) -> Vec<ConstModInt<P>> {
+pub fn stirling_second<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt<P>> {
+    let ntt = NTT::<P, PR>::new();
     let ff = ConstModIntBuilder;
     let mut a = vec![ff.from_u64(0); n + 1];
     let mut b = vec![ff.from_u64(0); n + 1];
@@ -55,16 +53,15 @@ pub fn stirling_second<const P: u32, const PR: u32>(
 mod tests {
     use super::*;
 
-    use crate::math::{ntt::NTT998244353, stirling_second_table::stirling_second_table};
+    use crate::math::stirling_second_table::stirling_second_table;
 
     #[test]
     fn test() {
         let n = 100;
         let ans = stirling_second_table(n, ConstModIntBuilder);
 
-        let ntt = NTT998244353::new();
         for i in 0..=n {
-            assert_eq!(stirling_second(i, &ntt), ans[i][0..=i]);
+            assert_eq!(stirling_second::<998244353, 3>(i), ans[i][0..=i]);
         }
     }
 }

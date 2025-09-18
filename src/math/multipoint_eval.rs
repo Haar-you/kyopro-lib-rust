@@ -23,23 +23,20 @@ impl<const P: u32, const PR: u32> MultipointEval for PolynomialOperator<'_, P, P
     fn multipoint_eval(&self, a: Self::Poly, p: Vec<Self::Value>) -> Vec<Self::Value> {
         let m = p.len();
 
-        let mut k = 1;
-        while k < m {
-            k *= 2;
-        }
+        let k = m.next_power_of_two();
 
-        let mut f = vec![Polynomial::constant(ConstModInt::new(1)); k * 2];
+        let mut f = vec![Polynomial::constant(1.into()); k * 2];
         for i in 0..m {
-            f[i + k] = Polynomial::from(vec![-p[i], ConstModInt::new(1)]);
+            f[i + k] = vec![-p[i], 1.into()].into();
         }
         for i in (1..k).rev() {
             f[i] = self.mul(f[i << 1].clone(), f[(i << 1) | 1].clone());
         }
 
-        f[1] = self.divmod(a, f[1].clone()).1;
+        f[1] = self.rem(a, f[1].clone());
 
         for i in 2..k + m {
-            f[i] = self.divmod(f[i >> 1].clone(), f[i].clone()).1;
+            f[i] = self.rem(f[i >> 1].clone(), std::mem::take(&mut f[i]));
         }
 
         f.into_iter()

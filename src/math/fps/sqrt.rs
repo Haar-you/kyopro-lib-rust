@@ -15,13 +15,13 @@ pub trait FpsSqrt {
     type Poly;
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\sqrt{f(x)}$の先頭$n$項を求める。
-    fn fps_sqrt(&self, f: Self::Poly) -> Option<Self::Poly>;
+    fn fps_sqrt(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
 }
 
 impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<'_, P, PR> {
     type Poly = Polynomial<P>;
 
-    fn fps_sqrt(&self, f: Self::Poly) -> Option<Self::Poly> {
+    fn fps_sqrt(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {
         let f: Vec<_> = f.into();
 
         let n = f.len();
@@ -32,13 +32,14 @@ impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<'_, P, PR> {
             .map_or(n, |(k, _)| k);
 
         if k == n {
-            return Some(f.into());
+            return Ok(f.into());
         }
         if k % 2 == 1 {
-            return None;
+            return Err("最小次数が偶数ではない。");
         }
 
-        let x = mod_sqrt(f[k].value() as u64, P as u64)?;
+        let x = mod_sqrt(f[k].value() as u64, P as u64)
+            .ok_or("最小次数項の係数に平方根が存在しない。")?;
         let m = n - k;
 
         let half = ConstModInt::new(2).inv();
@@ -50,7 +51,7 @@ impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<'_, P, PR> {
             f.resize(t, 0.into());
 
             ret.resize(t, 0.into());
-            let h = self.fps_inv(ret.clone().into());
+            let h = self.fps_inv(ret.clone().into())?;
             let h = self.mul(f.into(), h);
             let h: Vec<_> = h.into();
 
@@ -66,6 +67,8 @@ impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<'_, P, PR> {
         }
 
         ret.resize(n, 0.into());
-        Some(self.shift_higher(ret.into(), k / 2))
+        let mut ret: Polynomial<P> = ret.into();
+        ret.shift_higher(k / 2);
+        Ok(ret)
     }
 }
