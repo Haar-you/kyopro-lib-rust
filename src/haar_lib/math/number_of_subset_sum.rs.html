@@ -27,10 +27,10 @@
 <a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub fn </span>number_of_subset_sum&lt;<span class="kw">const </span>P: u32, <span class="kw">const </span>PR: u32&gt;(
 <a href=#12 id=12 data-nosnippet>12</a>    s: Vec&lt;usize&gt;,
 <a href=#13 id=13 data-nosnippet>13</a>    t: usize,
-<a href=#14 id=14 data-nosnippet>14</a>    ntt: <span class="kw-2">&amp;</span>NTT&lt;P, PR&gt;,
-<a href=#15 id=15 data-nosnippet>15</a>) -&gt; Vec&lt;ConstModInt&lt;P&gt;&gt; {
-<a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">let </span>ff = ConstModIntBuilder;
-<a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">let </span>fps = PolynomialOperator::new(ntt);
+<a href=#14 id=14 data-nosnippet>14</a>) -&gt; Vec&lt;ConstModInt&lt;P&gt;&gt; {
+<a href=#15 id=15 data-nosnippet>15</a>    <span class="kw">let </span>ff = ConstModIntBuilder;
+<a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">let </span>ntt = NTT::&lt;P, PR&gt;::new();
+<a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">let </span>fps = PolynomialOperator::new(<span class="kw-2">&amp;</span>ntt);
 <a href=#18 id=18 data-nosnippet>18</a>
 <a href=#19 id=19 data-nosnippet>19</a>    <span class="kw">let </span><span class="kw-2">mut </span>c = <span class="macro">vec!</span>[<span class="number">0</span>; t + <span class="number">1</span>];
 <a href=#20 id=20 data-nosnippet>20</a>    <span class="kw">for </span>x <span class="kw">in </span>s {
@@ -51,5 +51,5 @@
 <a href=#35 id=35 data-nosnippet>35</a>        }
 <a href=#36 id=36 data-nosnippet>36</a>    }
 <a href=#37 id=37 data-nosnippet>37</a>
-<a href=#38 id=38 data-nosnippet>38</a>    fps.fps_exp(ret.into()).into()
+<a href=#38 id=38 data-nosnippet>38</a>    fps.fps_exp(ret.into()).unwrap().into()
 <a href=#39 id=39 data-nosnippet>39</a>}</code></pre></div></section></main></body></html>

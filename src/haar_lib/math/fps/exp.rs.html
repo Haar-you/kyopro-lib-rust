@@ -24,13 +24,13 @@
 <a href=#8 id=8 data-nosnippet>8</a>    </span><span class="kw">type </span>Poly;
 <a href=#9 id=9 data-nosnippet>9</a>
 <a href=#10 id=10 data-nosnippet>10</a>    <span class="doccomment">/// $f(x) = \sum_0^{n-1} a_ix^i$について、$\exp (f(x))$の先頭$n$項を求める。
-<a href=#11 id=11 data-nosnippet>11</a>    </span><span class="kw">fn </span>fps_exp(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="self">Self</span>::Poly) -&gt; <span class="self">Self</span>::Poly;
+<a href=#11 id=11 data-nosnippet>11</a>    </span><span class="kw">fn </span>fps_exp(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="self">Self</span>::Poly) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Poly, <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt;;
 <a href=#12 id=12 data-nosnippet>12</a>}
 <a href=#13 id=13 data-nosnippet>13</a>
 <a href=#14 id=14 data-nosnippet>14</a><span class="kw">impl</span>&lt;<span class="kw">const </span>P: u32, <span class="kw">const </span>PR: u32&gt; FpsExp <span class="kw">for </span>PolynomialOperator&lt;<span class="lifetime">'_</span>, P, PR&gt; {
 <a href=#15 id=15 data-nosnippet>15</a>    <span class="kw">type </span>Poly = Polynomial&lt;P&gt;;
 <a href=#16 id=16 data-nosnippet>16</a>
-<a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">fn </span>fps_exp(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="self">Self</span>::Poly) -&gt; <span class="self">Self</span>::Poly {
+<a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">fn </span>fps_exp(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="self">Self</span>::Poly) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Poly, <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; {
 <a href=#18 id=18 data-nosnippet>18</a>        <span class="kw">let </span>f: Vec&lt;<span class="kw">_</span>&gt; = f.into();
 <a href=#19 id=19 data-nosnippet>19</a>        <span class="kw">let </span>n = f.len();
 <a href=#20 id=20 data-nosnippet>20</a>
@@ -38,7 +38,7 @@
 <a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">let </span><span class="kw-2">mut </span>b = Polynomial::constant(<span class="number">1</span>.into());
 <a href=#23 id=23 data-nosnippet>23</a>
 <a href=#24 id=24 data-nosnippet>24</a>        <span class="kw">loop </span>{
-<a href=#25 id=25 data-nosnippet>25</a>            <span class="kw">let </span><span class="kw-2">mut </span>temp: Vec&lt;<span class="kw">_</span>&gt; = <span class="self">self</span>.fps_log(b.clone()).into();
+<a href=#25 id=25 data-nosnippet>25</a>            <span class="kw">let </span><span class="kw-2">mut </span>temp: Vec&lt;<span class="kw">_</span>&gt; = <span class="self">self</span>.fps_log(b.clone())<span class="question-mark">?</span>.into();
 <a href=#26 id=26 data-nosnippet>26</a>
 <a href=#27 id=27 data-nosnippet>27</a>            temp.resize(<span class="number">2 </span>* t, <span class="number">0</span>.into());
 <a href=#28 id=28 data-nosnippet>28</a>            temp.iter_mut().for_each(|x| <span class="kw-2">*</span>x = -<span class="kw-2">*</span>x);
@@ -59,6 +59,6 @@
 <a href=#43 id=43 data-nosnippet>43</a>        }
 <a href=#44 id=44 data-nosnippet>44</a>
 <a href=#45 id=45 data-nosnippet>45</a>        b.as_mut().truncate(n);
-<a href=#46 id=46 data-nosnippet>46</a>        b
+<a href=#46 id=46 data-nosnippet>46</a>        <span class="prelude-val">Ok</span>(b)
 <a href=#47 id=47 data-nosnippet>47</a>    }
 <a href=#48 id=48 data-nosnippet>48</a>}</code></pre></div></section></main></body></html>

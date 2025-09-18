@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["stirling_first_fixed_k"]};

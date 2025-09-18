@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["exp","inv","log","pow","sqrt"]};
+window.SIDEBAR_ITEMS = {"mod":["exp","exp_sparse","inv","inv_sparse","log","log_sparse","pow","pow_sparse","sqrt","sqrt_sparse"]};
