@@ -257,6 +257,18 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
         a
     }
 
+    /// 多項式の列の積を計算する。
+    pub fn prod(&self, mut a: Vec<Polynomial<P>>) -> Polynomial<P> {
+        match a.len() {
+            0 => Polynomial::constant(1.into()),
+            1 => a.pop().unwrap(),
+            n => {
+                let b = a.split_off(n / 2);
+                self.mul(self.prod(a), self.prod(b))
+            }
+        }
+    }
+
     /// 多項式`a`の2乗を返す。
     pub fn sq(&self, mut a: Polynomial<P>) -> Polynomial<P> {
         let k = a.len() * 2 - 1;
