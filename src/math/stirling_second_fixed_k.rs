@@ -18,14 +18,14 @@ pub fn stirling_second_fixed_k<const P: u32, const PR: u32>(
 
     let mut ret = vec![ConstModInt::new(0); n + 1];
 
-    for i in 1..=n {
-        ret[i] = ft.inv_facto(i);
+    for (i, reti) in ret.iter_mut().enumerate().take(n + 1).skip(1) {
+        *reti = ft.inv_facto(i);
     }
 
     ret = fps.fps_pow(ret.into(), k as u64).unwrap().into();
 
-    for i in k..=n {
-        ret[i] *= ft.inv_facto(k) * ft.facto(i);
+    for (i, reti) in ret.iter_mut().enumerate().take(n + 1).skip(k) {
+        *reti *= ft.inv_facto(k) * ft.facto(i);
     }
 
     ret

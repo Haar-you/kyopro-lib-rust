@@ -28,8 +28,8 @@ pub fn stirling_first_fixed_k<const P: u32, const PR: u32>(
 
     ret = fps.fps_pow(ret.into(), k as u64).unwrap().into();
 
-    for i in k..=n {
-        ret[i] *= ft.inv_facto(k) * ft.facto(i);
+    for (i, reti) in ret.iter_mut().enumerate().take(n + 1).skip(k) {
+        *reti *= ft.inv_facto(k) * ft.facto(i);
     }
 
     ret

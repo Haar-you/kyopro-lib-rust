@@ -15,13 +15,13 @@ pub fn bernoulli_number<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModIn
     let fps = PolynomialOperator::new(&ntt);
     let mut x = vec![ConstModInt::new(0); n + 1];
 
-    for i in 0..=n {
-        x[i] = ft.inv_facto(i + 1);
+    for (i, xi) in x.iter_mut().enumerate().take(n + 1) {
+        *xi = ft.inv_facto(i + 1);
     }
 
     x = fps.fps_inv(x.into()).unwrap().into();
-    for i in 0..=n {
-        x[i] *= ft.facto(i);
+    for (i, xi) in x.iter_mut().enumerate().take(n + 1) {
+        *xi *= ft.facto(i);
     }
 
     x

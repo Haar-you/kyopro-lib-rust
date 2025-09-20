@@ -11,14 +11,14 @@ pub fn bell_number<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt<P>>
     let fps = PolynomialOperator::new(&ntt);
     let mut f = vec![ConstModInt::new(0); n + 1];
 
-    for i in 1..=n {
-        f[i] = ft.inv_facto(i);
+    for (i, fi) in f.iter_mut().enumerate().take(n + 1).skip(1) {
+        *fi = ft.inv_facto(i);
     }
 
     let mut ret: Vec<_> = fps.fps_exp(f.into()).unwrap().into();
 
-    for i in 0..=n {
-        ret[i] *= ft.facto(i);
+    for (i, reti) in ret.iter_mut().enumerate().take(n + 1) {
+        *reti *= ft.facto(i);
     }
 
     ret
