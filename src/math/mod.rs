@@ -18,6 +18,7 @@ pub mod bell_number_table;
 pub mod bernoulli_number;
 pub mod binomial_coefficient;
 pub mod factorial;
+pub mod factorial_large;
 pub mod partition_number;
 pub mod stirling_first;
 pub mod stirling_first_fixed_k;
