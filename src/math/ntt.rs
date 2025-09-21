@@ -38,53 +38,86 @@ impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
 
     /// 数論変換を行う。
     pub fn ntt(&self, f: &mut Vec<ConstModInt<P>>) {
-        self.run(f, false);
+        let n = f.len();
+        assert!(n.is_power_of_two() && n < self.max_size);
+
+        let mut b = n / 2;
+        let mut k = n.trailing_zeros() as usize;
+        while b > 0 {
+            let dw = self.base[k];
+
+            let mut ws = vec![ConstModInt::new(1); b];
+            for i in 1..b {
+                ws[i] = ws[i - 1] * dw;
+            }
+
+            for a in f.chunks_exact_mut(2 * b) {
+                let (x, y) = a.split_at_mut(b);
+
+                for ((s, t), &w) in x.iter_mut().zip(y.iter_mut()).zip(ws.iter()) {
+                    let p = *s + *t;
+                    let q = (*s - *t) * w;
+
+                    *s = p;
+                    *t = q;
+                }
+            }
+
+            k -= 1;
+            b >>= 1;
+        }
+
+        // let p = size_of::<usize>() * 8 - n.trailing_zeros() as usize;
+        // let mut g = vec![ConstModInt::new(0); n];
+        // for i in 0..n {
+        //     let j = i.reverse_bits() >> p;
+        //     g[j] = f[i];
+        // }
+        // std::mem::swap(f, &mut g);
     }
 
     /// `ntt`の逆変換を行う。
     pub fn intt(&self, f: &mut Vec<ConstModInt<P>>) {
-        self.run(f, true);
-    }
-
-    fn run(&self, f: &mut Vec<ConstModInt<P>>, inv: bool) {
         let n = f.len();
         assert!(n.is_power_of_two() && n < self.max_size);
 
-        let mut g = vec![ConstModInt::new(0); n];
+        // let p = size_of::<usize>() * 8 - n.trailing_zeros() as usize;
+        // let mut g = vec![ConstModInt::new(0); n];
+        // for i in 0..n {
+        //     let j = i.reverse_bits() >> p;
+        //     g[j] = f[i];
+        // }
+        // std::mem::swap(f, &mut g);
 
-        let mut b = n >> 1;
+        let mut b = 1;
         let mut k = 1;
-        while b > 0 {
-            let dw = if !inv { self.base[k] } else { self.inv_base[k] };
-            let len = n / b;
+        while b < n {
+            let dw = self.inv_base[k];
 
-            let mut w = ConstModInt::new(1);
+            let mut ws = vec![ConstModInt::new(1); b];
+            for i in 1..b {
+                ws[i] = ws[i - 1] * dw;
+            }
 
-            for j in 0..len / 2 {
-                for i in 0..b {
-                    let even = unsafe { *f.get_unchecked(i + 2 * j * b) };
-                    let odd = unsafe { *f.get_unchecked(i + 2 * j * b + b) };
+            for a in f.chunks_exact_mut(2 * b) {
+                let (x, y) = a.split_at_mut(b);
 
-                    unsafe {
-                        *g.get_unchecked_mut(i + j * b) = even + w * odd;
-                        *g.get_unchecked_mut(i + j * b + n / 2) = even - w * odd;
-                    }
+                for ((s, t), &w) in x.iter_mut().zip(y.iter_mut()).zip(ws.iter()) {
+                    let p = *s + *t * w;
+                    let q = *s - *t * w;
+
+                    *s = p;
+                    *t = q;
                 }
-
-                w *= dw;
             }
 
             k += 1;
-            b >>= 1;
-
-            std::mem::swap(&mut g, f);
+            b <<= 1;
         }
 
-        if inv {
-            let t = ConstModInt::new(n as u32).inv();
-            for x in f.iter_mut() {
-                *x *= t;
-            }
+        let t = ConstModInt::new(n as u32).inv();
+        for x in f.iter_mut() {
+            *x *= t;
         }
     }
 
@@ -104,15 +137,15 @@ impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
         let n = m.next_power_of_two();
 
         f.resize(n, ConstModInt::new(0));
-        self.run(&mut f, false);
+        self.ntt(&mut f);
 
         g.resize(n, ConstModInt::new(0));
-        self.run(&mut g, false);
+        self.ntt(&mut g);
 
         for (f, g) in f.iter_mut().zip(g.into_iter()) {
             *f *= g;
         }
-        self.run(&mut f, true);
+        self.intt(&mut f);
 
         f
     }
@@ -126,13 +159,13 @@ impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
         let n = (f.len() * 2 - 1).next_power_of_two();
         f.resize(n, ConstModInt::new(0));
 
-        self.run(&mut f, false);
+        self.ntt(&mut f);
 
         for x in f.iter_mut() {
             *x *= *x;
         }
 
-        self.run(&mut f, true);
+        self.intt(&mut f);
         f
     }
 
