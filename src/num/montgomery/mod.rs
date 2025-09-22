@@ -176,6 +176,7 @@ impl_ops!(Neg for Montgomery, |mut x: Self| {
 mod tests {
     use super::*;
     use crate::iter::collect::CollectVec;
+    use crate::math::prime_mod::Prime;
     use crate::num::{const_modint::*, modint::*};
     use crate::timer;
     use rand::Rng;
@@ -195,7 +196,7 @@ mod tests {
 
         let mut rng = rand::thread_rng();
 
-        let constmodint = ConstModIntBuilder::<MOD>;
+        let constmodint = ConstModIntBuilder::<Prime<MOD>>::new();
         let modint = ModIntBuilder::new(MOD);
         let montgomery = MontgomeryBuilder::new(MOD);
 

@@ -1,5 +1,6 @@
 //! 形式的冪級数の逆数
 use crate::math::polynomial::{Polynomial, PolynomialOperator};
+use crate::math::prime_mod::PrimeMod;
 use crate::num::ff::*;
 
 /// 形式的冪級数の逆数
@@ -11,7 +12,7 @@ pub trait FpsInv {
     fn fps_inv(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsInv for PolynomialOperator<P, PR> {
+impl<P: PrimeMod> FpsInv for PolynomialOperator<P> {
     type Poly = Polynomial<P>;
 
     fn fps_inv(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {

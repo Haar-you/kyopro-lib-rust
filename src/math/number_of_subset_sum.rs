@@ -4,15 +4,13 @@
 //! - <https://judge.yosupo.jp/problem/sharp_p_subset_sum>
 use crate::math::fps::exp::*;
 use crate::math::polynomial::*;
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// $\\#_p$ Subset sum
-pub fn number_of_subset_sum<const P: u32, const PR: u32>(
-    s: Vec<usize>,
-    t: usize,
-) -> Vec<ConstModInt<P>> {
-    let ff = ConstModIntBuilder;
-    let fps = PolynomialOperator::<P, PR>::new();
+pub fn number_of_subset_sum<P: PrimeMod>(s: Vec<usize>, t: usize) -> Vec<ConstModInt<P>> {
+    let ff = ConstModIntBuilder::<P>::new();
+    let fps = PolynomialOperator::<P>::new();
 
     let mut c = vec![0; t + 1];
     for x in s {

@@ -94,7 +94,8 @@ where
 mod tests {
     use super::*;
     use crate::{
-        math::stirling_second_table::stirling_second_table, num::const_modint::*, num::modint::*,
+        math::{prime_mod::Prime, stirling_second_table::stirling_second_table},
+        num::{const_modint::*, modint::*},
     };
 
     #[test]
@@ -113,7 +114,7 @@ mod tests {
     fn test_stirling_second() {
         use super::stirling_second::StirlingSecond;
 
-        let modulo = ConstModIntBuilder::<1000000007>;
+        let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
         let ft = FactorialTable::new(2000000, modulo);
         let n = 100;
 

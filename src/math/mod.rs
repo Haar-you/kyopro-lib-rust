@@ -70,3 +70,5 @@ pub mod stern_brocot;
 pub mod kth_root;
 
 pub mod multiplicative;
+
+pub mod prime_mod;

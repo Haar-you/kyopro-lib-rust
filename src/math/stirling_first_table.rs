@@ -23,19 +23,24 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::{math::stirling_first::stirling_first, num::const_modint::ConstModIntBuilder};
+    use crate::{
+        math::{prime_mod::Prime, stirling_first::stirling_first},
+        num::const_modint::ConstModIntBuilder,
+    };
 
     use super::*;
 
+    type P = Prime<998244353>;
+
     #[test]
     fn test() {
-        let modulo = ConstModIntBuilder::<998244353>;
+        let modulo = ConstModIntBuilder::<P>::new();
 
         let n = 100;
         let table = stirling_first_table(n, modulo);
 
         for i in 0..=n {
-            let ans = stirling_first::<998244353, 3>(i);
+            let ans = stirling_first::<P>(i);
 
             assert_eq!(&table[i][..=i], ans);
         }

@@ -4,6 +4,7 @@
 //! - <https://judge.yosupo.jp/problem/polynomial_taylor_shift>
 
 use crate::math::polynomial::*;
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// Polynomial Taylor shift
@@ -19,7 +20,7 @@ pub trait TaylorShift {
     fn taylor_shift(&self, p: Self::Poly, c: Self::Value) -> Self::Poly;
 }
 
-impl<const P: u32, const PR: u32> TaylorShift for PolynomialOperator<P, PR> {
+impl<P: PrimeMod> TaylorShift for PolynomialOperator<P> {
     type Poly = Polynomial<P>;
     type Value = ConstModInt<P>;
 

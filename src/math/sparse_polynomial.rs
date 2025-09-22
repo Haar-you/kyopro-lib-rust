@@ -1,13 +1,14 @@
 //! 疎な多項式
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// 疎な多項式
 #[derive(Clone, Debug, Default)]
-pub struct SparsePolynomial<const P: u32> {
+pub struct SparsePolynomial<P: PrimeMod> {
     pub(crate) data: Vec<(usize, ConstModInt<P>)>,
 }
 
-impl<const P: u32> SparsePolynomial<P> {
+impl<P: PrimeMod> SparsePolynomial<P> {
     /// 零多項式を得る。
     pub fn zero() -> Self {
         Self { data: vec![] }

@@ -3,15 +3,16 @@
 //! # References
 //! - <https://suisen-kyopro.hatenablog.com/entry/2023/11/22/201600>
 
+use crate::math::prime_mod::PrimeMod;
 use crate::{math::shift_sampling_points::*, num::const_modint::*};
 
 /// 階乗を計算する。
-pub struct Factorial<const P: u32, const PR: u32> {
+pub struct Factorial<P: PrimeMod> {
     r: u32,
     prod: Vec<ConstModInt<P>>,
 }
 
-impl<const P: u32, const PR: u32> Factorial<P, PR> {
+impl<P: PrimeMod> Factorial<P> {
     /// 前計算を行う。
     pub fn new() -> Self {
         let k = 9;
@@ -21,7 +22,7 @@ impl<const P: u32, const PR: u32> Factorial<P, PR> {
 
         for i in 0..k {
             let n = f.len();
-            let mut g = shift_sampling_points::<P, PR>(f.clone(), n as u32, n * 3);
+            let mut g = shift_sampling_points::<P>(f.clone(), n as u32, n * 3);
             f.append(&mut g);
 
             f = f
@@ -31,10 +32,9 @@ impl<const P: u32, const PR: u32> Factorial<P, PR> {
                 .collect();
         }
 
-        let block_num = (P / r) as usize;
+        let block_num = (P::PRIME_NUM / r) as usize;
         if f.len() < block_num {
-            let mut g =
-                shift_sampling_points::<P, PR>(f.clone(), f.len() as u32, block_num - f.len());
+            let mut g = shift_sampling_points::<P>(f.clone(), f.len() as u32, block_num - f.len());
             f.append(&mut g);
         }
 
@@ -48,7 +48,7 @@ impl<const P: u32, const PR: u32> Factorial<P, PR> {
 
     /// $n! \pmod P$を計算する。
     pub fn factorial(&self, n: u32) -> ConstModInt<P> {
-        if n >= P {
+        if n >= P::PRIME_NUM {
             return 0.into();
         }
 

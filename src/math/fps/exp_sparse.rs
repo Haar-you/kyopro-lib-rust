@@ -1,5 +1,6 @@
 //! 疎な形式的冪級数の指数関数
 use crate::math::polynomial::Polynomial;
+use crate::math::prime_mod::PrimeMod;
 use crate::math::sparse_polynomial::SparsePolynomial;
 use crate::num::const_modint::*;
 
@@ -12,7 +13,7 @@ pub trait FpsExpSparse {
     fn fps_exp_sparse(self, n: usize) -> Result<Self::Output, &'static str>;
 }
 
-impl<const P: u32> FpsExpSparse for SparsePolynomial<P> {
+impl<P: PrimeMod> FpsExpSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
     /// **Time complexity** $O(nk)$
@@ -29,7 +30,7 @@ impl<const P: u32> FpsExpSparse for SparsePolynomial<P> {
 
         let mut invs = vec![ConstModInt::new(1); n + 1];
         for i in 2..=n {
-            invs[i] = -invs[P as usize % i] * ConstModInt::new(P / i as u32);
+            invs[i] = -invs[P::PRIME_NUM as usize % i] * ConstModInt::new(P::PRIME_NUM / i as u32);
         }
 
         for i in 0..n - 1 {

@@ -4,12 +4,13 @@
 //! - <https://judge.yosupo.jp/problem/stirling_number_of_the_second_kind>
 
 use crate::math::ntt::NTT;
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// 第二種スターリング数$S(n, 0), \dots, S(n, n)$を列挙する。
-pub fn stirling_second<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt<P>> {
-    let ntt = NTT::<P, PR>::new();
-    let ff = ConstModIntBuilder;
+pub fn stirling_second<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {
+    let ntt = NTT::<P>::new();
+    let ff = ConstModIntBuilder::new();
     let mut a = vec![ff.from_u64(0); n + 1];
     let mut b = vec![ff.from_u64(0); n + 1];
     let mut m = vec![0; n + 1];
@@ -53,15 +54,17 @@ pub fn stirling_second<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt
 mod tests {
     use super::*;
 
-    use crate::math::stirling_second_table::stirling_second_table;
+    use crate::math::{prime_mod::Prime, stirling_second_table::stirling_second_table};
+
+    type P = Prime<998244353>;
 
     #[test]
     fn test() {
         let n = 100;
-        let ans = stirling_second_table(n, ConstModIntBuilder);
+        let ans = stirling_second_table(n, ConstModIntBuilder::new());
 
         for i in 0..=n {
-            assert_eq!(stirling_second::<998244353, 3>(i), ans[i][0..=i]);
+            assert_eq!(stirling_second::<P>(i), ans[i][0..=i]);
         }
     }
 }

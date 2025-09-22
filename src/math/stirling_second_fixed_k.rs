@@ -2,17 +2,15 @@
 use crate::math::factorial::FactorialTable;
 use crate::math::fps::pow::FpsPow;
 use crate::math::polynomial::PolynomialOperator;
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// 第二種スターリング数$S(0, k), \dots, S(n, k)$を列挙する。
-pub fn stirling_second_fixed_k<const P: u32, const PR: u32>(
-    n: usize,
-    k: usize,
-) -> Vec<ConstModInt<P>> {
+pub fn stirling_second_fixed_k<P: PrimeMod>(n: usize, k: usize) -> Vec<ConstModInt<P>> {
     assert!(k <= n);
 
-    let fps = PolynomialOperator::<P, PR>::new();
-    let ft = FactorialTable::new(n, ConstModIntBuilder);
+    let fps = PolynomialOperator::<P>::new();
+    let ft = FactorialTable::new(n, ConstModIntBuilder::new());
 
     let mut ret = vec![ConstModInt::new(0); n + 1];
 
@@ -33,16 +31,18 @@ pub fn stirling_second_fixed_k<const P: u32, const PR: u32>(
 mod tests {
     use super::*;
 
-    use crate::math::stirling_second_table::stirling_second_table;
+    use crate::math::{prime_mod::Prime, stirling_second_table::stirling_second_table};
+
+    type P = Prime<998244353>;
 
     #[test]
     fn test() {
         let n = 100;
-        let ans = stirling_second_table(n, ConstModIntBuilder::<998244353>);
+        let ans = stirling_second_table(n, ConstModIntBuilder::new());
 
         for k in 0..=n {
             assert_eq!(
-                stirling_second_fixed_k::<998244353, 3>(n, k),
+                stirling_second_fixed_k::<P>(n, k),
                 ans.iter().map(|a| a[k]).collect::<Vec<_>>()
             );
         }

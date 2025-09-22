@@ -1,6 +1,7 @@
 //! 多項式の多点評価
 
 use crate::math::polynomial::{Polynomial, PolynomialOperator};
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::ConstModInt;
 
 /// 多項式の多点評価
@@ -16,7 +17,7 @@ pub trait MultipointEval {
     fn multipoint_eval(&self, a: Self::Poly, p: Vec<Self::Value>) -> Vec<Self::Value>;
 }
 
-impl<const P: u32, const PR: u32> MultipointEval for PolynomialOperator<P, PR> {
+impl<P: PrimeMod> MultipointEval for PolynomialOperator<P> {
     type Poly = Polynomial<P>;
     type Value = ConstModInt<P>;
 
@@ -51,23 +52,23 @@ impl<const P: u32, const PR: u32> MultipointEval for PolynomialOperator<P, PR> {
 mod tests {
     use super::*;
     use crate::math::polynomial::*;
-    use crate::math::primitive_root::primitive_root;
+    use crate::math::prime_mod::Prime;
     use crate::num::const_modint::*;
     use rand::Rng;
 
+    const M: u32 = 998244353;
+    type P = Prime<M>;
+
     #[test]
     fn test() {
-        const M: u32 = 998244353;
-        const PR: u32 = primitive_root(M);
-
-        let ff = ConstModIntBuilder::<M>;
-        let po = PolynomialOperator::<M, PR>::new();
+        let ff = ConstModIntBuilder::<P>::new();
+        let po = PolynomialOperator::<P>::new();
 
         let mut rng = rand::thread_rng();
 
         let n = 100;
         let a = (0..n)
-            .map(|_| ff.from_u64(rng.gen_range(0..M) as u64))
+            .map(|_| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
             .collect::<Vec<_>>();
         let a = Polynomial::from(a);
 

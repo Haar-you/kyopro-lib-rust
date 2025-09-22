@@ -1,5 +1,6 @@
 //! 疎な形式的冪級数の逆数
 use crate::math::polynomial::Polynomial;
+use crate::math::prime_mod::PrimeMod;
 use crate::math::sparse_polynomial::SparsePolynomial;
 use crate::num::const_modint::*;
 
@@ -12,7 +13,7 @@ pub trait FpsInvSparse {
     fn fps_inv_sparse(self, n: usize) -> Result<Self::Output, &'static str>;
 }
 
-impl<const P: u32> FpsInvSparse for SparsePolynomial<P> {
+impl<P: PrimeMod> FpsInvSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
     /// **Time complexity** $O(nk)$

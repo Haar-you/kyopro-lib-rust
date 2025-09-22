@@ -1,6 +1,7 @@
 //! 形式的冪級数の指数関数
 use crate::math::fps::log::*;
 use crate::math::polynomial::{Polynomial, PolynomialOperator};
+use crate::math::prime_mod::PrimeMod;
 
 /// 形式的冪級数の指数関数
 pub trait FpsExp {
@@ -11,7 +12,7 @@ pub trait FpsExp {
     fn fps_exp(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsExp for PolynomialOperator<P, PR> {
+impl<P: PrimeMod> FpsExp for PolynomialOperator<P> {
     type Poly = Polynomial<P>;
 
     fn fps_exp(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {

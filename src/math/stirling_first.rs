@@ -4,17 +4,18 @@
 use crate::math::ntt::NTT;
 use crate::math::polynomial::{Polynomial, PolynomialOperator};
 use crate::math::polynomial_taylor_shift::*;
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// 符号付き第一種スターリング数$s(n, 0), \dots, s(n, n)$を列挙する。
 ///
 /// **Time complexity** $O(n \log n)$
-pub fn stirling_first<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt<P>> {
-    let ff = ConstModIntBuilder;
+pub fn stirling_first<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {
+    let ff = ConstModIntBuilder::new();
 
     let mut ret = Polynomial::<P>::from(vec![1]);
-    let ntt = NTT::<P, PR>::new();
-    let op = PolynomialOperator::<P, PR>::new();
+    let ntt = NTT::<P>::new();
+    let op = PolynomialOperator::<P>::new();
 
     let mut t: usize = 0;
     let mut check = false;
@@ -42,22 +43,22 @@ pub fn stirling_first<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt<
 
 #[cfg(test)]
 mod tests {
-    use crate::math::primitive_root::primitive_root;
+    use crate::math::prime_mod::Prime;
 
     use super::*;
 
+    type P = Prime<998244353>;
+
     #[test]
     fn test() {
-        const M: u32 = 998244353;
-        const PR: u32 = primitive_root(M);
-        let ff = ConstModIntBuilder::<M>;
-        let op = PolynomialOperator::<M, PR>::new();
+        let ff = ConstModIntBuilder::<P>::new();
+        let op = PolynomialOperator::<P>::new();
 
         let n = 100;
         let mut ans = Polynomial::from(vec![ff.from_u64(1)]);
 
         for i in 1..=n {
-            let res = stirling_first::<998244353, 3>(i);
+            let res = stirling_first::<P>(i);
 
             ans = op.mul(
                 ans,

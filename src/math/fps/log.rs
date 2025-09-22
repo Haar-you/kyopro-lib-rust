@@ -1,6 +1,7 @@
 //! 形式的冪級数の対数
 use crate::math::fps::inv::*;
 use crate::math::polynomial::{Polynomial, PolynomialOperator};
+use crate::math::prime_mod::PrimeMod;
 use crate::num::ff::*;
 
 /// 形式的冪級数の対数
@@ -12,7 +13,7 @@ pub trait FpsLog {
     fn fps_log(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsLog for PolynomialOperator<P, PR> {
+impl<P: PrimeMod> FpsLog for PolynomialOperator<P> {
     type Poly = Polynomial<P>;
 
     fn fps_log(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {

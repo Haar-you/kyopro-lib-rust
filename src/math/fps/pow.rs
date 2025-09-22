@@ -1,6 +1,7 @@
 //! 形式的冪級数の累乗
 use crate::math::fps::{exp::*, log::*};
 use crate::math::polynomial::{Polynomial, PolynomialOperator};
+use crate::math::prime_mod::PrimeMod;
 use crate::num::{const_modint::ConstModInt, ff::*};
 
 /// 形式的冪級数の累乗
@@ -12,7 +13,7 @@ pub trait FpsPow {
     fn fps_pow(&self, f: Self::Poly, m: u64) -> Result<Self::Poly, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsPow for PolynomialOperator<P, PR> {
+impl<P: PrimeMod> FpsPow for PolynomialOperator<P> {
     type Poly = Polynomial<P>;
 
     fn fps_pow(&self, f: Self::Poly, m: u64) -> Result<Self::Poly, &'static str> {

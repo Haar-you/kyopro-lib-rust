@@ -1,25 +1,26 @@
 //! 数論変換 (Number Theoretic Transform)
+use crate::math::prime_mod::*;
 use crate::num::const_modint::*;
 
 /// 素数$P$上の数論変換 (Number Theoretic Transform)
 ///
 /// `PRIM_ROOT`は`P`の原始根。
-pub struct NTT<const P: u32, const PRIM_ROOT: u32> {
+pub struct NTT<P: PrimeMod> {
     base: Vec<ConstModInt<P>>,
     inv_base: Vec<ConstModInt<P>>,
     max_size: usize,
 }
 
-impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
+impl<P: PrimeMod> NTT<P> {
     /// [`NTT<P, PRIM_ROOT>`]を作る。
     pub fn new() -> Self {
-        let max_power = (P as usize - 1).trailing_zeros() as usize;
+        let max_power = (P::PRIME_NUM as usize - 1).trailing_zeros() as usize;
         let max_size = 1 << max_power;
 
         let mut base = vec![ConstModInt::new(0); max_power + 1];
         let mut inv_base = vec![ConstModInt::new(0); max_power + 1];
 
-        let mut t = ConstModInt::new(PRIM_ROOT).pow((P as u64 - 1) >> (max_power));
+        let mut t = ConstModInt::new(P::PRIM_ROOT).pow((P::PRIME_NUM as u64 - 1) >> (max_power));
         let mut s = t.inv();
 
         for i in (0..max_power).rev() {
@@ -175,14 +176,11 @@ impl<const P: u32, const PRIM_ROOT: u32> NTT<P, PRIM_ROOT> {
     }
 }
 
-impl<const P: u32, const PRIM_ROOT: u32> Default for NTT<P, PRIM_ROOT> {
+impl<P: PrimeMod> Default for NTT<P> {
     fn default() -> Self {
         Self::new()
     }
 }
-
-/// $\mod 998244353 (= 2^{23} * 7 * 17 + 1)$上の`NTT`
-pub type NTT998244353 = NTT<998244353, 3>;
 
 #[cfg(test)]
 mod tests {
@@ -192,10 +190,10 @@ mod tests {
 
     #[test]
     fn test() {
-        const MOD: u32 = 998244353;
+        type P = Prime<998244353>;
 
-        let ntt = NTT998244353::new();
-        let ff = ConstModIntBuilder::<MOD>;
+        let ntt = NTT::<P>::new();
+        let ff = ConstModIntBuilder::<P>::new();
 
         let mut rng = rand::thread_rng();
 
@@ -203,10 +201,10 @@ mod tests {
         let m = rng.gen_range(1..1000);
 
         let a = (0..n)
-            .map(|_| ff.from_u64(rng.gen_range(0..MOD) as u64))
+            .map(|_| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
             .collect::<Vec<_>>();
         let b = (0..m)
-            .map(|_| ff.from_u64(rng.gen_range(0..MOD) as u64))
+            .map(|_| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
             .collect::<Vec<_>>();
 
         let res = ntt.convolve(a.clone(), b.clone());

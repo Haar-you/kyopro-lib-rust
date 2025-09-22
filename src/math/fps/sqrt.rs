@@ -1,6 +1,7 @@
 //! 形式的冪級数の平方根
 use crate::num::ff::*;
 use crate::{
+    math::prime_mod::PrimeMod,
     math::{
         fps::inv::FpsInv,
         mod_ops::sqrt::mod_sqrt,
@@ -18,7 +19,7 @@ pub trait FpsSqrt {
     fn fps_sqrt(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<P, PR> {
+impl<P: PrimeMod> FpsSqrt for PolynomialOperator<P> {
     type Poly = Polynomial<P>;
 
     fn fps_sqrt(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {
@@ -38,7 +39,7 @@ impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<P, PR> {
             return Err("最小次数が偶数ではない。");
         }
 
-        let x = mod_sqrt(f[k].value() as u64, P as u64)
+        let x = mod_sqrt(f[k].value() as u64, P::PRIME_NUM as u64)
             .ok_or("最小次数項の係数に平方根が存在しない。")?;
         let m = n - k;
 

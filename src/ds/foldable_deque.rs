@@ -133,12 +133,12 @@ impl<S: Semigroup + Clone> FoldableDeque<S> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{algebra::affine::*, num::const_modint::ConstModInt};
+    use crate::{algebra::affine::*, math::prime_mod::Prime, num::const_modint::ConstModInt};
     use rand::Rng;
     use std::collections::VecDeque;
 
     const M: u32 = 998244353;
-    type Mint = ConstModInt<M>;
+    type Mint = ConstModInt<Prime<M>>;
 
     #[test]
     fn test() {

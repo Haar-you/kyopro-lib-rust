@@ -1,21 +1,23 @@
 //! 素数$P$に対して、$c_k = \sum_{i \times j = k \pmod P} a_i b_j$を満たす$c$を求める。
 use std::iter::successors;
 
+use crate::math::prime_mod::PrimeMod;
 use crate::sort_with;
 use crate::{
     math::{ntt::NTT, primitive_root::primitive_root},
     num::const_modint::ConstModInt,
 };
 
-/// 素数$P$に対して、$c_k = \sum_{i \times j = k \pmod P} a_i b_j$を満たす$c$を求める。
-pub fn convolution_mul_modp<const M: u32, const PR: u32>(
-    mut a: Vec<ConstModInt<M>>,
-    mut b: Vec<ConstModInt<M>>,
-    ntt: &NTT<M, PR>,
-) -> Vec<ConstModInt<M>> {
+/// 素数$M$に対して、$c_k = \sum_{i \times j = k \pmod M} a_i b_j$を満たす$c$を求める。
+pub fn convolution_mul_modp<P: PrimeMod>(
+    mut a: Vec<ConstModInt<P>>,
+    mut b: Vec<ConstModInt<P>>,
+) -> Vec<ConstModInt<P>> {
     assert_eq!(a.len(), b.len());
     let p = a.len();
     let p_root = primitive_root(p as u32) as usize;
+
+    let ntt = NTT::<P>::new();
 
     let mut index = vec![0; p];
     successors(Some(1), |&s| Some(s * p_root % p))
@@ -50,19 +52,20 @@ pub fn convolution_mul_modp<const M: u32, const PR: u32>(
 mod tests {
     use crate::{
         iter::collect::CollectVec,
-        math::ntt::NTT998244353,
+        math::prime_mod::Prime,
         num::{const_modint::ConstModIntBuilder, ff::FF},
     };
 
     use super::*;
     use rand::Rng;
 
+    type P = Prime<998244353>;
+
     #[test]
     fn test() {
         let p = 1009;
-        let modulo = ConstModIntBuilder::<998244353>;
+        let modulo = ConstModIntBuilder::<P>::new();
         let mut rng = rand::thread_rng();
-        let ntt = NTT998244353::new();
 
         let a = (0..p)
             .map(|_| modulo.from_u64(rng.gen::<u64>()))
@@ -78,7 +81,7 @@ mod tests {
             }
         }
 
-        let res = convolution_mul_modp(a, b, &ntt);
+        let res = convolution_mul_modp::<P>(a, b);
 
         assert_eq!(ans, res);
     }

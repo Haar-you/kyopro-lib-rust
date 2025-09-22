@@ -15,9 +15,10 @@ mod tests {
 
     use rand::Rng;
 
-    use crate::num::const_modint::*;
+    use crate::{math::prime_mod::Prime, num::const_modint::*};
 
-    const M998244353: u32 = 998244353;
+    const M: u32 = 998244353;
+    type P = Prime<M>;
 
     fn solve<T, U, F>(a: Vec<T>, init: U, mut f: F) -> U
     where
@@ -95,7 +96,7 @@ mod tests {
     fn test_sum() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let modulo = ConstModIntBuilder::<M998244353>;
+        let modulo = ConstModIntBuilder::<P>::new();
         let a = (0..n)
             .map(|_| modulo.from_i64(rng.gen::<i64>()))
             .collect::<Vec<_>>();
@@ -110,7 +111,7 @@ mod tests {
     fn test_prod() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let modulo = ConstModIntBuilder::<M998244353>;
+        let modulo = ConstModIntBuilder::<P>::new();
         let a = (0..n)
             .map(|_| modulo.from_i64(rng.gen::<i64>()))
             .collect::<Vec<_>>();
@@ -149,7 +150,7 @@ mod tests {
     fn test_range_prod() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let modulo = ConstModIntBuilder::<M998244353>;
+        let modulo = ConstModIntBuilder::<P>::new();
         let a = (0..n)
             .map(|_| modulo.from_i64(rng.gen::<i64>()))
             .collect::<Vec<_>>();

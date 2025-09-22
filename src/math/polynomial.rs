@@ -2,15 +2,16 @@
 use std::ops::{Add, AddAssign, Index, IndexMut, Sub, SubAssign};
 
 use crate::math::ntt::NTT;
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// $\mathbb{F}_p$上の多項式
 #[derive(Clone, Debug, Default)]
-pub struct Polynomial<const P: u32> {
+pub struct Polynomial<P: PrimeMod> {
     pub(crate) data: Vec<ConstModInt<P>>,
 }
 
-impl<const P: u32> Polynomial<P> {
+impl<P: PrimeMod> Polynomial<P> {
     /// 零多項式を得る。
     pub fn zero() -> Self {
         Self { data: vec![] }
@@ -97,7 +98,7 @@ impl<const P: u32> Polynomial<P> {
         let n = self.len();
         let mut invs = vec![ConstModInt::new(1); n + 1];
         for i in 2..=n {
-            invs[i] = -invs[P as usize % i] * ConstModInt::new(P / i as u32);
+            invs[i] = -invs[P::PRIME_NUM as usize % i] * ConstModInt::new(P::PRIME_NUM / i as u32);
         }
         self.data.push(0.into());
         for i in (0..n).rev() {
@@ -131,7 +132,7 @@ impl<const P: u32> Polynomial<P> {
     }
 }
 
-impl<const P: u32> AddAssign for Polynomial<P> {
+impl<P: PrimeMod> AddAssign for Polynomial<P> {
     fn add_assign(&mut self, b: Polynomial<P>) {
         if self.len() < b.len() {
             self.data.resize(b.len(), ConstModInt::new(0));
@@ -142,7 +143,7 @@ impl<const P: u32> AddAssign for Polynomial<P> {
     }
 }
 
-impl<const P: u32> Add for Polynomial<P> {
+impl<P: PrimeMod> Add for Polynomial<P> {
     type Output = Self;
     fn add(mut self, b: Polynomial<P>) -> Polynomial<P> {
         self += b;
@@ -150,7 +151,7 @@ impl<const P: u32> Add for Polynomial<P> {
     }
 }
 
-impl<const P: u32> SubAssign for Polynomial<P> {
+impl<P: PrimeMod> SubAssign for Polynomial<P> {
     fn sub_assign(&mut self, b: Polynomial<P>) {
         if self.len() < b.len() {
             self.data.resize(b.len(), ConstModInt::new(0));
@@ -161,7 +162,7 @@ impl<const P: u32> SubAssign for Polynomial<P> {
     }
 }
 
-impl<const P: u32> Sub for Polynomial<P> {
+impl<P: PrimeMod> Sub for Polynomial<P> {
     type Output = Self;
     fn sub(mut self, b: Polynomial<P>) -> Polynomial<P> {
         self -= b;
@@ -169,7 +170,7 @@ impl<const P: u32> Sub for Polynomial<P> {
     }
 }
 
-impl<const P: u32> PartialEq for Polynomial<P> {
+impl<P: PrimeMod> PartialEq for Polynomial<P> {
     fn eq(&self, other: &Self) -> bool {
         let n = self.len().max(other.len());
         for i in 0..n {
@@ -181,13 +182,13 @@ impl<const P: u32> PartialEq for Polynomial<P> {
     }
 }
 
-impl<const P: u32> From<Polynomial<P>> for Vec<ConstModInt<P>> {
+impl<P: PrimeMod> From<Polynomial<P>> for Vec<ConstModInt<P>> {
     fn from(value: Polynomial<P>) -> Self {
         value.data
     }
 }
 
-impl<T, const P: u32> From<Vec<T>> for Polynomial<P>
+impl<T, P: PrimeMod> From<Vec<T>> for Polynomial<P>
 where
     T: Into<ConstModInt<P>>,
 {
@@ -198,41 +199,41 @@ where
     }
 }
 
-impl<const P: u32> AsRef<[ConstModInt<P>]> for Polynomial<P> {
+impl<P: PrimeMod> AsRef<[ConstModInt<P>]> for Polynomial<P> {
     fn as_ref(&self) -> &[ConstModInt<P>] {
         &self.data
     }
 }
 
-impl<const P: u32> AsMut<Vec<ConstModInt<P>>> for Polynomial<P> {
+impl<P: PrimeMod> AsMut<Vec<ConstModInt<P>>> for Polynomial<P> {
     fn as_mut(&mut self) -> &mut Vec<ConstModInt<P>> {
         &mut self.data
     }
 }
 
-impl<const P: u32> Index<usize> for Polynomial<P> {
+impl<P: PrimeMod> Index<usize> for Polynomial<P> {
     type Output = ConstModInt<P>;
     fn index(&self, index: usize) -> &Self::Output {
         &self.data[index]
     }
 }
 
-impl<const P: u32> IndexMut<usize> for Polynomial<P> {
+impl<P: PrimeMod> IndexMut<usize> for Polynomial<P> {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         &mut self.data[index]
     }
 }
 
 /// 多項式の演算を扱う。
-pub struct PolynomialOperator<const P: u32, const PR: u32> {
-    pub(crate) ntt: NTT<P, PR>,
+pub struct PolynomialOperator<P: PrimeMod> {
+    pub(crate) ntt: NTT<P>,
 }
 
-impl<const P: u32, const PR: u32> PolynomialOperator<P, PR> {
+impl<P: PrimeMod> PolynomialOperator<P> {
     /// [`NTT<P>`]を基に`PolynomialOperator<P>`を生成する。
     pub fn new() -> Self {
         Self {
-            ntt: NTT::<P, PR>::new(),
+            ntt: NTT::<P>::new(),
         }
     }
 
@@ -362,17 +363,19 @@ impl<const P: u32, const PR: u32> PolynomialOperator<P, PR> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{math::primitive_root::primitive_root, num::const_modint::ConstModIntBuilder};
+    use crate::{
+        math::{prime_mod::Prime, primitive_root::primitive_root},
+        num::const_modint::ConstModIntBuilder,
+    };
 
     use super::*;
 
-    const M: u32 = 998244353;
-    const PR: u32 = primitive_root(M);
+    type P = Prime<998244353>;
 
     #[test]
     fn test() {
-        let ff = ConstModIntBuilder::<M>;
-        let po = PolynomialOperator::<M, PR>::new();
+        let ff = ConstModIntBuilder::<P>::new();
+        let po = PolynomialOperator::<P>::new();
 
         let a: Vec<_> = vec![5, 4, 3, 2, 1]
             .into_iter()
@@ -395,7 +398,7 @@ mod tests {
     #[test]
     fn test_deg() {
         let check = |a: Vec<usize>, d: Option<usize>| {
-            assert_eq!(Polynomial::<M>::from(a).deg(), d);
+            assert_eq!(Polynomial::<P>::from(a).deg(), d);
         };
 
         check(vec![1, 2, 3], Some(2));

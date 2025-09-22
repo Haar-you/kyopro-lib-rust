@@ -12,6 +12,7 @@ use std::hash::{Hash, Hasher};
 
 use crate::iter::collect::CollectVec;
 use crate::math::ntt::*;
+use crate::math::prime_mod::Prime;
 use crate::num::ff::FFElem;
 
 /// `seq`の`|pat|`長の各連続部分列が`pat`と一致するかを判定する。
@@ -24,7 +25,7 @@ where
 
     let m = seq.len() - pat.len() + 1;
     let n = (seq.len() + pat.len() - 1).next_power_of_two();
-    let ntt = NTT998244353::new();
+    let ntt = NTT::<Prime<998244353>>::new();
 
     let mut s = vec![0.into(); n];
 

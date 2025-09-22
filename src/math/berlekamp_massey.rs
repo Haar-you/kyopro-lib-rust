@@ -73,6 +73,7 @@ mod tests {
 
     use crate::{
         iter::collect::CollectVec,
+        math::prime_mod::Prime,
         num::{const_modint::ConstModIntBuilder, one_zero::Zero},
     };
 
@@ -103,7 +104,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let ff = ConstModIntBuilder::<998244353>;
+        let ff = ConstModIntBuilder::<Prime<998244353>>::new();
 
         let a = vec![1, 2, 3, 4, 5];
         let a = a.into_iter().map(|x| ff.from_u64(x)).collect_vec();

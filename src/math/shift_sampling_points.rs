@@ -9,11 +9,12 @@
 use crate::{
     math::factorial::FactorialTable,
     math::ntt::NTT,
+    math::prime_mod::PrimeMod,
     num::const_modint::{ConstModInt, ConstModIntBuilder},
 };
 
 /// $N$次未満の多項式$f(x)$について、$f(0), f(1), \dots, f(N-1)$から$f(c), f(c + 1), \dots, f(c + M - 1)$を求める。
-pub fn shift_sampling_points<const P: u32, const PR: u32>(
+pub fn shift_sampling_points<P: PrimeMod>(
     f: Vec<impl Into<ConstModInt<P>>>,
     c: u32,
     m: usize,
@@ -21,8 +22,8 @@ pub fn shift_sampling_points<const P: u32, const PR: u32>(
     let f = f.into_iter().map(Into::into).collect::<Vec<_>>();
 
     let n = f.len();
-    let ntt = NTT::<P, PR>::new();
-    let ft = FactorialTable::new(n.max(m), ConstModIntBuilder::<P>);
+    let ntt = NTT::<P>::new();
+    let ft = FactorialTable::new(n.max(m), ConstModIntBuilder::<P>::new());
 
     let a = {
         let f = f
