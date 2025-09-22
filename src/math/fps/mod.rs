@@ -26,13 +26,15 @@ pub mod sqrt_sparse;
 mod tests {
     use super::{exp::*, inv::*, log::*, pow::*};
 
-    use crate::math::ntt::*;
     use crate::math::polynomial::*;
+    use crate::math::primitive_root::primitive_root;
+
+    const P: u32 = 998244353;
+    const PR: u32 = primitive_root(P);
 
     #[test]
     fn test_inv() {
-        let ntt = NTT998244353::new();
-        let po = PolynomialOperator::new(&ntt);
+        let po = PolynomialOperator::<P, PR>::new();
 
         let a: Vec<u32> = vec![5, 4, 3, 2, 1];
         let b = po.fps_inv(a.clone().into()).unwrap();
@@ -45,8 +47,7 @@ mod tests {
 
     #[test]
     fn test_log() {
-        let ntt = NTT998244353::new();
-        let po = PolynomialOperator::new(&ntt);
+        let po = PolynomialOperator::<P, PR>::new();
 
         let a: Vec<u32> = vec![1, 1, 499122179, 166374064, 291154613];
         let b = po.fps_log(a.clone().into()).unwrap();
@@ -56,8 +57,7 @@ mod tests {
 
     #[test]
     fn test_exp() {
-        let ntt = NTT998244353::new();
-        let po = PolynomialOperator::new(&ntt);
+        let po = PolynomialOperator::<P, PR>::new();
 
         let a: Vec<u32> = vec![0, 1, 2, 3, 4];
         let b = po.fps_exp(a.clone().into()).unwrap();
@@ -68,8 +68,7 @@ mod tests {
 
     #[test]
     fn test_pow() {
-        let ntt = NTT998244353::new();
-        let po = PolynomialOperator::new(&ntt);
+        let po = PolynomialOperator::<P, PR>::new();
 
         let a: Vec<u32> = vec![0, 0, 9, 2];
         let b = po.fps_pow(a.clone().into(), 3).unwrap();

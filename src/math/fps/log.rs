@@ -12,7 +12,7 @@ pub trait FpsLog {
     fn fps_log(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsLog for PolynomialOperator<'_, P, PR> {
+impl<const P: u32, const PR: u32> FpsLog for PolynomialOperator<P, PR> {
     type Poly = Polynomial<P>;
 
     fn fps_log(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {

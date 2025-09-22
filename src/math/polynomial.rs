@@ -224,14 +224,16 @@ impl<const P: u32> IndexMut<usize> for Polynomial<P> {
 }
 
 /// 多項式の演算を扱う。
-pub struct PolynomialOperator<'a, const P: u32, const PR: u32> {
-    pub(crate) ntt: &'a NTT<P, PR>,
+pub struct PolynomialOperator<const P: u32, const PR: u32> {
+    pub(crate) ntt: NTT<P, PR>,
 }
 
-impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
+impl<const P: u32, const PR: u32> PolynomialOperator<P, PR> {
     /// [`NTT<P>`]を基に`PolynomialOperator<P>`を生成する。
-    pub fn new(ntt: &'a NTT<P, PR>) -> Self {
-        Self { ntt }
+    pub fn new() -> Self {
+        Self {
+            ntt: NTT::<P, PR>::new(),
+        }
     }
 
     /// 多項式`a`に多項式`b`を掛ける。
@@ -360,17 +362,17 @@ impl<'a, const P: u32, const PR: u32> PolynomialOperator<'a, P, PR> {
 
 #[cfg(test)]
 mod tests {
-    use crate::num::const_modint::ConstModIntBuilder;
+    use crate::{math::primitive_root::primitive_root, num::const_modint::ConstModIntBuilder};
 
     use super::*;
 
     const M: u32 = 998244353;
+    const PR: u32 = primitive_root(M);
 
     #[test]
     fn test() {
         let ff = ConstModIntBuilder::<M>;
-        let ntt = NTT::<M, 3>::new();
-        let po = PolynomialOperator::new(&ntt);
+        let po = PolynomialOperator::<M, PR>::new();
 
         let a: Vec<_> = vec![5, 4, 3, 2, 1]
             .into_iter()

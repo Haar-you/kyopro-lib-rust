@@ -11,7 +11,7 @@ pub trait FpsExp {
     fn fps_exp(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsExp for PolynomialOperator<'_, P, PR> {
+impl<const P: u32, const PR: u32> FpsExp for PolynomialOperator<P, PR> {
     type Poly = Polynomial<P>;
 
     fn fps_exp(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {

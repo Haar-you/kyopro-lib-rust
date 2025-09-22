@@ -14,7 +14,7 @@ pub fn stirling_first<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt<
 
     let mut ret = Polynomial::<P>::from(vec![1]);
     let ntt = NTT::<P, PR>::new();
-    let op = PolynomialOperator::new(&ntt);
+    let op = PolynomialOperator::<P, PR>::new();
 
     let mut t: usize = 0;
     let mut check = false;
@@ -42,16 +42,16 @@ pub fn stirling_first<const P: u32, const PR: u32>(n: usize) -> Vec<ConstModInt<
 
 #[cfg(test)]
 mod tests {
-    use crate::math::ntt::NTT998244353;
+    use crate::math::primitive_root::primitive_root;
 
     use super::*;
 
     #[test]
     fn test() {
         const M: u32 = 998244353;
+        const PR: u32 = primitive_root(M);
         let ff = ConstModIntBuilder::<M>;
-        let ntt = NTT998244353::new();
-        let op = PolynomialOperator::new(&ntt);
+        let op = PolynomialOperator::<M, PR>::new();
 
         let n = 100;
         let mut ans = Polynomial::from(vec![ff.from_u64(1)]);

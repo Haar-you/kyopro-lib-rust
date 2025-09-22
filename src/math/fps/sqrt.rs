@@ -18,7 +18,7 @@ pub trait FpsSqrt {
     fn fps_sqrt(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<'_, P, PR> {
+impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<P, PR> {
     type Poly = Polynomial<P>;
 
     fn fps_sqrt(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {

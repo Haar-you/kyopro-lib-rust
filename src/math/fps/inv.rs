@@ -11,7 +11,7 @@ pub trait FpsInv {
     fn fps_inv(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsInv for PolynomialOperator<'_, P, PR> {
+impl<const P: u32, const PR: u32> FpsInv for PolynomialOperator<P, PR> {
     type Poly = Polynomial<P>;
 
     fn fps_inv(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {

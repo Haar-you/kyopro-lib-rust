@@ -19,7 +19,7 @@ pub trait TaylorShift {
     fn taylor_shift(&self, p: Self::Poly, c: Self::Value) -> Self::Poly;
 }
 
-impl<const P: u32, const PR: u32> TaylorShift for PolynomialOperator<'_, P, PR> {
+impl<const P: u32, const PR: u32> TaylorShift for PolynomialOperator<P, PR> {
     type Poly = Polynomial<P>;
     type Value = ConstModInt<P>;
 

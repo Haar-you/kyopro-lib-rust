@@ -3,7 +3,6 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/sharp_p_subset_sum>
 use crate::math::fps::exp::*;
-use crate::math::ntt::*;
 use crate::math::polynomial::*;
 use crate::num::const_modint::*;
 
@@ -13,8 +12,7 @@ pub fn number_of_subset_sum<const P: u32, const PR: u32>(
     t: usize,
 ) -> Vec<ConstModInt<P>> {
     let ff = ConstModIntBuilder;
-    let ntt = NTT::<P, PR>::new();
-    let fps = PolynomialOperator::new(&ntt);
+    let fps = PolynomialOperator::<P, PR>::new();
 
     let mut c = vec![0; t + 1];
     for x in s {

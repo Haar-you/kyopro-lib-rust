@@ -7,10 +7,10 @@ pub fn bostan_mori<const P: u32, const PR: u32>(
     a: Vec<ConstModInt<P>>,
     c: Vec<ConstModInt<P>>,
     mut k: u64,
-    ntt: &NTT<P, PR>,
 ) -> ConstModInt<P> {
     assert_eq!(a.len(), c.len());
 
+    let ntt = NTT::<P, PR>::new();
     let d = a.len();
 
     let mut q: Vec<ConstModInt<P>> = vec![0.into(); d + 1];

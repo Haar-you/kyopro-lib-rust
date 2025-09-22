@@ -1,7 +1,6 @@
 //! 第二種スターリング数$S(0, k), \dots, S(n, k)$を列挙する。
 use crate::math::factorial::FactorialTable;
 use crate::math::fps::pow::FpsPow;
-use crate::math::ntt::NTT;
 use crate::math::polynomial::PolynomialOperator;
 use crate::num::const_modint::*;
 
@@ -12,8 +11,7 @@ pub fn stirling_second_fixed_k<const P: u32, const PR: u32>(
 ) -> Vec<ConstModInt<P>> {
     assert!(k <= n);
 
-    let ntt = NTT::<P, PR>::new();
-    let fps = PolynomialOperator::new(&ntt);
+    let fps = PolynomialOperator::<P, PR>::new();
     let ft = FactorialTable::new(n, ConstModIntBuilder);
 
     let mut ret = vec![ConstModInt::new(0); n + 1];

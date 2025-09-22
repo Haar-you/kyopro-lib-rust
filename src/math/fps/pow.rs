@@ -12,7 +12,7 @@ pub trait FpsPow {
     fn fps_pow(&self, f: Self::Poly, m: u64) -> Result<Self::Poly, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsPow for PolynomialOperator<'_, P, PR> {
+impl<const P: u32, const PR: u32> FpsPow for PolynomialOperator<P, PR> {
     type Poly = Polynomial<P>;
 
     fn fps_pow(&self, f: Self::Poly, m: u64) -> Result<Self::Poly, &'static str> {

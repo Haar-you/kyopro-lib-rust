@@ -2,7 +2,6 @@
 use crate::math::factorial::FactorialTable;
 use crate::math::fps::pow::FpsPow;
 use crate::math::mod_ops::enum_inv::enumerate_mod_inv;
-use crate::math::ntt::NTT;
 use crate::math::polynomial::PolynomialOperator;
 use crate::num::const_modint::*;
 
@@ -13,8 +12,7 @@ pub fn stirling_first_fixed_k<const P: u32, const PR: u32>(
 ) -> Vec<ConstModInt<P>> {
     assert!(k <= n);
 
-    let ntt = NTT::<P, PR>::new();
-    let fps = PolynomialOperator::new(&ntt);
+    let fps = PolynomialOperator::<P, PR>::new();
     let ft = FactorialTable::new(n, ConstModIntBuilder);
 
     let mut ret: Vec<ConstModInt<P>> = enumerate_mod_inv(n, P as u64)

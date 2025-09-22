@@ -16,7 +16,7 @@ pub trait MultipointEval {
     fn multipoint_eval(&self, a: Self::Poly, p: Vec<Self::Value>) -> Vec<Self::Value>;
 }
 
-impl<const P: u32, const PR: u32> MultipointEval for PolynomialOperator<'_, P, PR> {
+impl<const P: u32, const PR: u32> MultipointEval for PolynomialOperator<P, PR> {
     type Poly = Polynomial<P>;
     type Value = ConstModInt<P>;
 
@@ -50,17 +50,18 @@ impl<const P: u32, const PR: u32> MultipointEval for PolynomialOperator<'_, P, P
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math::{ntt::*, polynomial::*};
+    use crate::math::polynomial::*;
+    use crate::math::primitive_root::primitive_root;
     use crate::num::const_modint::*;
     use rand::Rng;
 
     #[test]
     fn test() {
         const M: u32 = 998244353;
+        const PR: u32 = primitive_root(M);
 
         let ff = ConstModIntBuilder::<M>;
-        let ntt = NTT::<M, 3>::new();
-        let po = PolynomialOperator::new(&ntt);
+        let po = PolynomialOperator::<M, PR>::new();
 
         let mut rng = rand::thread_rng();
 
