@@ -15,7 +15,7 @@ pub fn convolution_mul_modp<const M: u32, const PR: u32>(
 ) -> Vec<ConstModInt<M>> {
     assert_eq!(a.len(), b.len());
     let p = a.len();
-    let p_root = primitive_root(p as u64).unwrap() as usize;
+    let p_root = primitive_root(p as u32) as usize;
 
     let mut index = vec![0; p];
     successors(Some(1), |&s| Some(s * p_root % p))
