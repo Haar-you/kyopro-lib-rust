@@ -10,7 +10,7 @@ pub mod mod_ops;
 pub mod nim_product;
 pub mod tetration;
 
-pub mod prime_test;
+pub mod primality;
 pub mod primitive_root;
 
 pub mod bell_number;
