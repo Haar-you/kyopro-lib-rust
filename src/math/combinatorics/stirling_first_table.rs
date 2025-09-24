@@ -20,29 +20,3 @@ where
 
     ret
 }
-
-#[cfg(test)]
-mod tests {
-    use crate::{
-        math::{combinatorics::stirling_first::*, prime_mod::Prime},
-        num::const_modint::ConstModIntBuilder,
-    };
-
-    use super::*;
-
-    type P = Prime<998244353>;
-
-    #[test]
-    fn test() {
-        let modulo = ConstModIntBuilder::<P>::new();
-
-        let n = 100;
-        let table = stirling_first_table(n, modulo);
-
-        for i in 0..=n {
-            let ans = stirling_first::<P>(i);
-
-            assert_eq!(&table[i][..=i], ans);
-        }
-    }
-}

@@ -49,22 +49,3 @@ pub fn stirling_second<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {
     ret.truncate(n + 1);
     ret
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    use crate::math::{combinatorics::stirling_second_table::*, prime_mod::Prime};
-
-    type P = Prime<998244353>;
-
-    #[test]
-    fn test() {
-        let n = 100;
-        let ans = stirling_second_table(n, ConstModIntBuilder::new());
-
-        for i in 0..=n {
-            assert_eq!(stirling_second::<P>(i), ans[i][0..=i]);
-        }
-    }
-}

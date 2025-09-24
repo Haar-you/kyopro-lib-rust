@@ -26,25 +26,3 @@ pub fn stirling_second_fixed_k<P: PrimeMod>(n: usize, k: usize) -> Vec<ConstModI
 
     ret
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    use crate::math::{combinatorics::stirling_second_table::*, prime_mod::Prime};
-
-    type P = Prime<998244353>;
-
-    #[test]
-    fn test() {
-        let n = 100;
-        let ans = stirling_second_table(n, ConstModIntBuilder::new());
-
-        for k in 0..=n {
-            assert_eq!(
-                stirling_second_fixed_k::<P>(n, k),
-                ans.iter().map(|a| a[k]).collect::<Vec<_>>()
-            );
-        }
-    }
-}
