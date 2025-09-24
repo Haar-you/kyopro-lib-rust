@@ -7,9 +7,16 @@ use crate::math::prime_mod::PrimeMod;
 use crate::{math::polynomial::shift_sampling_points::*, num::const_modint::*};
 
 /// 階乗を計算する。
+#[derive(Clone, Debug)]
 pub struct Factorial<P: PrimeMod> {
     r: u32,
     prod: Vec<ConstModInt<P>>,
+}
+
+impl<P: PrimeMod> Default for Factorial<P> {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl<P: PrimeMod> Factorial<P> {
