@@ -50,8 +50,8 @@ mod tests {
 
         let n = 100;
 
-        let a = (0..n)
-            .map(|_| rng.gen_range(-1000..=1000))
+        let a = std::iter::repeat_with(|| rng.gen_range(-1000..=1000))
+            .take(n)
             .collect::<Vec<_>>();
 
         let mut ans = i64::MIN;
@@ -74,7 +74,9 @@ mod tests {
 
         let n = 100;
 
-        let a = (0..n).map(|_| rng.gen_range(-1000..0)).collect::<Vec<_>>();
+        let a = std::iter::repeat_with(|| rng.gen_range(-1000..0))
+            .take(n)
+            .collect::<Vec<_>>();
 
         let mut ans = i64::MIN;
 

@@ -120,9 +120,13 @@ mod tests {
         let mut rng = rand::thread_rng();
         let n = 30;
         let m = 30;
-        let s = (0..n)
-            .map(|_| (0..m).map(|_| Max(rng.gen::<u64>())).collect_vec())
-            .collect_vec();
+        let s = std::iter::repeat_with(|| {
+            std::iter::repeat_with(|| Max(rng.gen::<u64>()))
+                .take(m)
+                .collect_vec()
+        })
+        .take(n)
+        .collect_vec();
         test(s);
     }
 }

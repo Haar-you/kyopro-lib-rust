@@ -236,7 +236,9 @@ mod tests {
     fn test_access() {
         let mut rng = rand::thread_rng();
         let n = 10000;
-        let b = (0..n).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let b = std::iter::repeat_with(|| rng.gen::<u64>())
+            .take(n)
+            .collect::<Vec<_>>();
 
         let wm = WM64::new(b.clone());
 
@@ -250,11 +252,13 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let m = 50;
-        let table = (0..m).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let table = std::iter::repeat_with(|| rng.gen::<u64>())
+            .take(m)
+            .collect::<Vec<_>>();
 
         let n = 300;
-        let b = (0..n)
-            .map(|_| table[rng.gen::<usize>() % m])
+        let b = std::iter::repeat_with(|| table[rng.gen::<usize>() % m])
+            .take(n)
             .collect::<Vec<_>>();
 
         let wm = WM64::new(b.clone());
@@ -275,11 +279,13 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let m = 50;
-        let table = (0..m).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let table = std::iter::repeat_with(|| rng.gen::<u64>())
+            .take(m)
+            .collect::<Vec<_>>();
 
         let n = 300;
-        let b = (0..n)
-            .map(|_| table[rng.gen::<usize>() % m])
+        let b = std::iter::repeat_with(|| table[rng.gen::<usize>() % m])
+            .take(n)
             .collect::<Vec<_>>();
 
         let wm = WM64::new(b.clone());
@@ -299,11 +305,13 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let m = 50;
-        let table = (0..m).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let table = std::iter::repeat_with(|| rng.gen::<u64>())
+            .take(m)
+            .collect::<Vec<_>>();
 
         let n = 300;
-        let b = (0..n)
-            .map(|_| table[rng.gen::<usize>() % m])
+        let b = std::iter::repeat_with(|| table[rng.gen::<usize>() % m])
+            .take(n)
             .collect::<Vec<_>>();
 
         let wm = WM64::new(b.clone());
@@ -325,11 +333,13 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let m = 50;
-        let table = (0..m).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let table = std::iter::repeat_with(|| rng.gen::<u64>())
+            .take(m)
+            .collect::<Vec<_>>();
 
         let n = 300;
-        let b = (0..n)
-            .map(|_| table[rng.gen::<usize>() % m])
+        let b = std::iter::repeat_with(|| table[rng.gen::<usize>() % m])
+            .take(n)
             .collect::<Vec<_>>();
 
         let wm = WM64::new(b.clone());
@@ -357,11 +367,13 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let m = 50;
-        let table = (0..m).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let table = std::iter::repeat_with(|| rng.gen::<u64>())
+            .take(m)
+            .collect::<Vec<_>>();
 
         let n = 300;
-        let b = (0..n)
-            .map(|_| table[rng.gen::<usize>() % m])
+        let b = std::iter::repeat_with(|| table[rng.gen::<usize>() % m])
+            .take(n)
             .collect::<Vec<_>>();
 
         let wm = WM64::new(b.clone());
@@ -391,11 +403,13 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let m = 50;
-        let table = (0..m).map(|_| rng.gen::<u64>()).collect::<Vec<_>>();
+        let table = std::iter::repeat_with(|| rng.gen::<u64>())
+            .take(m)
+            .collect::<Vec<_>>();
 
         let n = 300;
-        let b = (0..n)
-            .map(|_| table[rng.gen::<usize>() % m])
+        let b = std::iter::repeat_with(|| table[rng.gen::<usize>() % m])
+            .take(n)
             .collect::<Vec<_>>();
 
         let wm = WM64::new(b.clone());

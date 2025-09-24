@@ -27,7 +27,7 @@ impl SegmentedSieve {
         let mut data = vec![true; d];
 
         for p in primes {
-            let mut from = (l + p - 1) / p * p;
+            let mut from = l.div_ceil(p) * p;
             if p == from {
                 from = p * 2;
             }

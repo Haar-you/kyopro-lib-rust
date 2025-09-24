@@ -67,11 +67,11 @@ mod tests {
         let modulo = ConstModIntBuilder::<P>::new();
         let mut rng = rand::thread_rng();
 
-        let a = (0..p)
-            .map(|_| modulo.from_u64(rng.gen::<u64>()))
+        let a = std::iter::repeat_with(|| modulo.from_u64(rng.gen::<u64>()))
+            .take(p)
             .collect_vec();
-        let b = (0..p)
-            .map(|_| modulo.from_u64(rng.gen::<u64>()))
+        let b = std::iter::repeat_with(|| modulo.from_u64(rng.gen::<u64>()))
+            .take(p)
             .collect_vec();
 
         let mut ans = vec![modulo.from_u64(0); p];

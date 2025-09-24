@@ -43,11 +43,11 @@ mod tests {
         I: IntoIterator<Item = T>,
     {
         let a: Vec<_> = a.into_iter().collect();
-        for x in &a {
-            for y in &a {
-                for z in &a {
-                    let p = x.clone().op(y.clone().op(z.clone()));
-                    let q = (x.clone().op(y.clone())).op(z.clone());
+        for &x in &a {
+            for &y in &a {
+                for &z in &a {
+                    let p = x.op(y.op(z));
+                    let q = (x.op(y)).op(z);
                     assert_eq!(p, q)
                 }
             }

@@ -28,7 +28,6 @@ mod tests {
 
     use crate::math::polynomial::*;
     use crate::math::prime_mod::Prime;
-    use crate::math::primitive_root::primitive_root;
 
     type P = Prime<998244353>;
 

@@ -59,7 +59,9 @@ mod test {
 
         for _ in 0..100 {
             let n = rng.gen_range(0..=100);
-            let a = (0..n).map(|_| rng.gen::<u64>() % 10).collect::<Vec<_>>();
+            let a = std::iter::repeat_with(|| rng.gen::<u64>() % 10)
+                .take(n)
+                .collect::<Vec<_>>();
 
             assert_eq!(check(&a), majority_vote(&a));
         }

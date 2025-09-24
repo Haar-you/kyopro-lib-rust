@@ -204,21 +204,21 @@ mod tests {
         let mut ans2 = modint.from_u64(1);
         let mut res = montgomery.from_u64(1);
 
-        let ops = (0..1000000)
-            .map(|_| {
-                let x = rng.gen_range(1..MOD) as u64;
+        let ops = std::iter::repeat_with(|| {
+            let x = rng.gen_range(1..MOD) as u64;
 
-                let op = rng.gen_range(0..5);
-                match op {
-                    0 => Ops::Add(x),
-                    1 => Ops::Sub(x),
-                    2 => Ops::Mul(x),
-                    3 => Ops::Div(x),
-                    4 => Ops::Neg,
-                    _ => unreachable!(),
-                }
-            })
-            .collect_vec();
+            let op = rng.gen_range(0..5);
+            match op {
+                0 => Ops::Add(x),
+                1 => Ops::Sub(x),
+                2 => Ops::Mul(x),
+                3 => Ops::Div(x),
+                4 => Ops::Neg,
+                _ => unreachable!(),
+            }
+        })
+        .take(1000000)
+        .collect_vec();
 
         timer! {{
             for &op in &ops {

@@ -62,7 +62,9 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 20;
-        let a = (0..n).map(|_| rng.gen_range(-100..=100)).collect_vec();
+        let a = std::iter::repeat_with(|| rng.gen_range(-100..=100))
+            .take(n)
+            .collect_vec();
 
         let (ans, _) = crate::algo::max_partial_sum::max_partial_sum(&a).unwrap();
 

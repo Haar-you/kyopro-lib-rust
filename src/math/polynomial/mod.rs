@@ -232,6 +232,7 @@ impl<P: PrimeMod> IndexMut<usize> for Polynomial<P> {
 }
 
 /// 多項式の演算を扱う。
+#[derive(Clone, Default)]
 pub struct PolynomialOperator<P: PrimeMod> {
     pub(crate) ntt: NTT<P>,
 }

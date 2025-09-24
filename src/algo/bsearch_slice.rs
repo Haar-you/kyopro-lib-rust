@@ -59,7 +59,7 @@ mod tests {
 
     #[test]
     fn test_lower_bound() {
-        let a = vec![1, 1, 2, 3, 5, 6];
+        let a = [1, 1, 2, 3, 5, 6];
         assert_eq!(a.lower_bound(&1), 0);
         assert_eq!(a.lower_bound(&2), 2);
         assert_eq!(a.lower_bound(&0), 0);
@@ -69,7 +69,7 @@ mod tests {
 
     #[test]
     fn test_upper_bound() {
-        let a = vec![1, 1, 2, 3, 5, 6];
+        let a = [1, 1, 2, 3, 5, 6];
         assert_eq!(a.upper_bound(&1), 2);
         assert_eq!(a.upper_bound(&2), 3);
         assert_eq!(a.upper_bound(&0), 0);
@@ -79,7 +79,7 @@ mod tests {
 
     #[test]
     fn test_equal_range() {
-        let a = vec![1, 1, 3, 4, 5, 5, 5, 8];
+        let a = [1, 1, 3, 4, 5, 5, 5, 8];
         assert_eq!(a.equal_range(&1), (0, 2));
         assert_eq!(a.equal_range(&5), (4, 7));
         assert_eq!(a.equal_range(&4), (3, 4));
@@ -91,8 +91,8 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 100;
-        let a = (0..n)
-            .map(|_| rng.gen_range(0..=10))
+        let a = std::iter::repeat_with(|| rng.gen_range(0..=10))
+            .take(n)
             .scan(0, |state, x| {
                 *state += x;
                 Some(*state)

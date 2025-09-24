@@ -120,9 +120,9 @@ mod tests {
 
         let ans = stirling_second_table(n, modulo);
 
-        for i in 0..=n {
-            for j in 0..=n {
-                assert_eq!(ans[i][j], ft.stirling_second(i, j));
+        for (i, ans) in ans.into_iter().enumerate().take(n + 1) {
+            for (j, ans) in ans.into_iter().enumerate().take(n + 1) {
+                assert_eq!(ans, ft.stirling_second(i, j));
             }
         }
     }

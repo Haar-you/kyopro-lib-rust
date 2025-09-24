@@ -67,14 +67,14 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 100;
-        let a = (0..n)
-            .map(|_| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
+        let a = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
+            .take(n)
             .collect::<Vec<_>>();
         let a = Polynomial::from(a);
 
         let m = 100;
-        let p = (0..m)
-            .map(|_| ff.from_u64(rng.gen_range(0..M) as u64))
+        let p = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M) as u64))
+            .take(m)
             .collect::<Vec<_>>();
 
         let ans = p.iter().map(|p| a.eval(*p)).collect::<Vec<_>>();

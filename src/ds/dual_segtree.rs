@@ -119,12 +119,12 @@ mod tests {
         let mut rng = rand::thread_rng();
         let n = 100;
 
-        let mut a = (0..n)
-            .map(|_| {
-                let x = rng.gen_range(0..10000);
-                Sum(x)
-            })
-            .collect::<Vec<_>>();
+        let mut a = std::iter::repeat_with(|| {
+            let x = rng.gen_range(0..10000);
+            Sum(x)
+        })
+        .take(n)
+        .collect::<Vec<_>>();
         let mut seg = DualSegtree::<Sum<u32>>::from_vec(a.clone());
 
         for _ in 0..100 {

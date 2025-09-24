@@ -74,8 +74,8 @@ mod tests {
             history.push(b.clone());
         }
 
-        for time in 0..=t {
-            assert_eq!(history[time], a.iter_at(time).cloned().collect_vec());
+        for (time, h) in history.into_iter().enumerate().take(t + 1) {
+            assert_eq!(h, a.iter_at(time).cloned().collect_vec());
         }
     }
 }

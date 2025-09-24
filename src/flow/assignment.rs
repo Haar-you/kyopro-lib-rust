@@ -39,9 +39,9 @@ pub fn assignment(a: Vec<Vec<i64>>) -> (i64, Vec<usize>) {
     let size = n * 2 + 1;
     let mut edges = vec![vec![]; n * 2 + 1];
 
-    for i in 0..n {
-        for j in 0..n {
-            add_edge(&mut edges, i, n + j, a[i][j]);
+    for (i, a) in a.into_iter().enumerate().take(n) {
+        for (j, c) in a.into_iter().enumerate().take(n) {
+            add_edge(&mut edges, i, n + j, c);
         }
     }
 

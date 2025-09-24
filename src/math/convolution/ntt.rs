@@ -5,6 +5,7 @@ use crate::num::const_modint::*;
 /// 素数$P$上の数論変換 (Number Theoretic Transform)
 ///
 /// `PRIM_ROOT`は`P`の原始根。
+#[derive(Clone)]
 pub struct NTT<P: PrimeMod> {
     base: Vec<ConstModInt<P>>,
     inv_base: Vec<ConstModInt<P>>,
@@ -38,7 +39,7 @@ impl<P: PrimeMod> NTT<P> {
     }
 
     /// 数論変換を行う。
-    pub fn ntt(&self, f: &mut Vec<ConstModInt<P>>) {
+    pub fn ntt(&self, f: &mut [ConstModInt<P>]) {
         let n = f.len();
         assert!(n.is_power_of_two() && n < self.max_size);
 
@@ -78,7 +79,7 @@ impl<P: PrimeMod> NTT<P> {
     }
 
     /// `ntt`の逆変換を行う。
-    pub fn intt(&self, f: &mut Vec<ConstModInt<P>>) {
+    pub fn intt(&self, f: &mut [ConstModInt<P>]) {
         let n = f.len();
         assert!(n.is_power_of_two() && n < self.max_size);
 
@@ -200,11 +201,11 @@ mod tests {
         let n = rng.gen_range(1..1000);
         let m = rng.gen_range(1..1000);
 
-        let a = (0..n)
-            .map(|_| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
+        let a = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
+            .take(n)
             .collect::<Vec<_>>();
-        let b = (0..m)
-            .map(|_| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
+        let b = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
+            .take(m)
             .collect::<Vec<_>>();
 
         let res = ntt.convolve(a.clone(), b.clone());
