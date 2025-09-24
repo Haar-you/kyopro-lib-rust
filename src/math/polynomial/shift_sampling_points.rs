@@ -7,8 +7,8 @@
 //! - <https://judge.yosupo.jp/problem/shift_of_sampling_points_of_polynomial>
 
 use crate::{
+    math::convolution::ntt::NTT,
     math::factorial::FactorialTable,
-    math::ntt::NTT,
     math::prime_mod::PrimeMod,
     num::const_modint::{ConstModInt, ConstModIntBuilder},
 };

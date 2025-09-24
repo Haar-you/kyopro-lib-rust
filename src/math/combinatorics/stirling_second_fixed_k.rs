@@ -31,7 +31,7 @@ pub fn stirling_second_fixed_k<P: PrimeMod>(n: usize, k: usize) -> Vec<ConstModI
 mod tests {
     use super::*;
 
-    use crate::math::{prime_mod::Prime, stirling_second_table::stirling_second_table};
+    use crate::math::{combinatorics::stirling_second_table::*, prime_mod::Prime};
 
     type P = Prime<998244353>;
 

@@ -1,5 +1,5 @@
 //! 線形漸化式で表される数列の第`k`項目を求める。
-use crate::math::ntt::NTT;
+use crate::math::convolution::ntt::NTT;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::ConstModInt;
 

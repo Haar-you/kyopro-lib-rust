@@ -11,7 +11,7 @@ use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 
 use crate::iter::collect::CollectVec;
-use crate::math::ntt::*;
+use crate::math::convolution::ntt::*;
 use crate::math::prime_mod::Prime;
 use crate::num::ff::FFElem;
 

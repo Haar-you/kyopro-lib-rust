@@ -24,7 +24,7 @@ where
 #[cfg(test)]
 mod tests {
     use crate::{
-        math::{prime_mod::Prime, stirling_first::stirling_first},
+        math::{combinatorics::stirling_first::*, prime_mod::Prime},
         num::const_modint::ConstModIntBuilder,
     };
 

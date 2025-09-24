@@ -3,7 +3,7 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/stirling_number_of_the_second_kind>
 
-use crate::math::ntt::NTT;
+use crate::math::convolution::ntt::NTT;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
@@ -54,7 +54,7 @@ pub fn stirling_second<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {
 mod tests {
     use super::*;
 
-    use crate::math::{prime_mod::Prime, stirling_second_table::stirling_second_table};
+    use crate::math::{combinatorics::stirling_second_table::*, prime_mod::Prime};
 
     type P = Prime<998244353>;
 

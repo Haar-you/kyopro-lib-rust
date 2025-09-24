@@ -13,23 +13,13 @@ pub mod tetration;
 pub mod primality;
 pub mod primitive_root;
 
-pub mod bell_number;
-pub mod bell_number_table;
-pub mod bernoulli_number;
+pub mod combinatorics;
+
 pub mod binomial_coefficient;
 pub mod factorial;
 pub mod factorial_large;
-pub mod partition_number;
-pub mod stirling_first;
-pub mod stirling_first_fixed_k;
-pub mod stirling_first_table;
-pub mod stirling_second;
-pub mod stirling_second_fixed_k;
-pub mod stirling_second_table;
 
 pub mod number_of_subset_sum;
-
-pub mod montmort;
 
 pub mod convolution;
 
@@ -50,13 +40,7 @@ pub mod enumerate_quotients;
 
 pub mod linear_congruence;
 
-pub mod multipoint_eval;
-pub mod ntt;
 pub mod polynomial;
-pub mod polynomial_interpolation;
-pub mod polynomial_taylor_shift;
-pub mod shift_sampling_points;
-pub mod sparse_polynomial;
 
 pub mod closed_interval;
 

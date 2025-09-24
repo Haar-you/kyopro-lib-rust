@@ -11,6 +11,8 @@ pub mod conv_or;
 pub mod conv_xor;
 pub mod subset_conv;
 
+pub mod ntt;
+
 #[cfg(test)]
 mod tests {
     use crate::math::gcd_lcm::GcdLcm;

@@ -1,7 +1,14 @@
-//! $\mathbb{F}_p$上の多項式
+//! 多項式
+
+pub mod multipoint_eval;
+pub mod polynomial_interpolation;
+pub mod polynomial_taylor_shift;
+pub mod shift_sampling_points;
+pub mod sparse;
+
 use std::ops::{Add, AddAssign, Index, IndexMut, Sub, SubAssign};
 
-use crate::math::ntt::NTT;
+use crate::math::convolution::ntt::NTT;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 

@@ -4,7 +4,7 @@ use std::iter::successors;
 use crate::math::prime_mod::PrimeMod;
 use crate::sort_with;
 use crate::{
-    math::{ntt::NTT, primitive_root::primitive_root},
+    math::{convolution::ntt::NTT, primitive_root::primitive_root},
     num::const_modint::ConstModInt,
 };
 

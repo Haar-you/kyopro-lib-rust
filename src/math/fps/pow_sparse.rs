@@ -1,7 +1,7 @@
 //! 疎な形式的冪級数の累乗
+use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::polynomial::Polynomial;
 use crate::math::prime_mod::PrimeMod;
-use crate::math::sparse_polynomial::SparsePolynomial;
 use crate::num::const_modint::*;
 
 /// 疎な形式的冪級数の累乗
