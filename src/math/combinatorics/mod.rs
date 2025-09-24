@@ -1,3 +1,5 @@
+//! 組み合わせ論
+
 pub mod bell_number;
 pub mod bell_number_table;
 pub mod bernoulli_number;
