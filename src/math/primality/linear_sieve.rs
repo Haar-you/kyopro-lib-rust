@@ -29,6 +29,11 @@ impl LinearSieve {
 
         Self { least_factors }
     }
+
+    /// `n`の最小素因数を返す。
+    pub fn least_prime_factor(&self, n: usize) -> usize {
+        self.least_factors[n]
+    }
 }
 
 impl PrimalityTest<usize> for LinearSieve {
