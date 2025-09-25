@@ -15,7 +15,7 @@ impl<M: Monoid + Clone> Segtree<M> {
     /// **Time complexity** $O(n)$
     pub fn new(n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
-        Segtree {
+        Self {
             original_size: n,
             size,
             data: vec![M::id(); size],

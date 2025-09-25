@@ -19,8 +19,8 @@ pub enum Mode {
 impl Mode {
     fn op<T: Ord>(self, a: T, b: T) -> T {
         match self {
-            Mode::Max => max(a, b),
-            Mode::Min => min(a, b),
+            Self::Max => max(a, b),
+            Self::Min => min(a, b),
         }
     }
 }

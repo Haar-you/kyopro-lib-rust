@@ -38,7 +38,7 @@ impl<T: Elem> Node<T> {
         self.lazy = T::zero();
     }
 
-    pub fn meld(&mut self, other: Option<Box<Node<T>>>) {
+    pub fn meld(&mut self, other: Option<Box<Self>>) {
         self.propagate();
         if let Some(mut other) = other {
             other.as_mut().propagate();
@@ -74,7 +74,7 @@ impl<T: Elem> LazySkewHeap<T> {
     }
 
     /// 他の[`LazySkewHeap<T>`]を融合する。
-    pub fn meld(&mut self, other: LazySkewHeap<T>) {
+    pub fn meld(&mut self, other: Self) {
         self.size += other.size;
         match self.root.as_mut() {
             None => self.root = other.root,

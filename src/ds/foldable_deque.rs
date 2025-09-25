@@ -13,7 +13,7 @@ pub struct FoldableDeque<S: Semigroup> {
 impl<S: Semigroup + Clone> FoldableDeque<S> {
     /// 空の`FoldableDeque<S>`を生成する。
     pub fn new() -> Self {
-        FoldableDeque {
+        Self {
             front_stack: vec![],
             back_stack: vec![],
             front_sum: vec![],

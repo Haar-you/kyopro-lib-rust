@@ -123,7 +123,7 @@ impl Vector {
     }
     /// 極座標形式で`Vector`を生成する
     pub fn polar(r: f64, ang: f64) -> Self {
-        Vector(r * ang.cos(), r * ang.sin())
+        Self(r * ang.cos(), r * ang.sin())
     }
     /// `self`から`other`への角度($-\pi \le \theta \le \pi$)を返す。
     pub fn angle_diff(self, other: Self) -> f64 {
@@ -219,7 +219,7 @@ pub struct Circle {
 impl Circle {
     /// 中心`center`、半径`radius`の`Circle`を生成する
     pub fn new(center: Vector, radius: f64) -> Self {
-        Circle { center, radius }
+        Self { center, radius }
     }
 
     /// 円が等しいかを判定する

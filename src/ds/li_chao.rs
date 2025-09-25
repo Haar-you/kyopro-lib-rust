@@ -31,15 +31,15 @@ pub enum Mode {
 impl Mode {
     fn op<T: Elem>(self, a: T, b: T) -> T {
         match self {
-            Mode::Max => max(a, b),
-            Mode::Min => min(a, b),
+            Self::Max => max(a, b),
+            Self::Min => min(a, b),
         }
     }
 
     fn cmp<T: Elem>(self, a: T, b: T) -> bool {
         match self {
-            Mode::Max => a > b,
-            Mode::Min => a < b,
+            Self::Max => a > b,
+            Self::Min => a < b,
         }
     }
 }

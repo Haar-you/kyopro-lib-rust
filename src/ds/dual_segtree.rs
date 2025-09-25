@@ -19,7 +19,7 @@ impl<M: Monoid + Clone> DualSegtree<M> {
     pub fn new(n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
         let data = RefCell::new(vec![M::id(); size]);
-        DualSegtree {
+        Self {
             original_size: n,
             size,
             data,
@@ -36,7 +36,7 @@ impl<M: Monoid + Clone> DualSegtree<M> {
         for (i, e) in a.into_iter().enumerate() {
             data[i + size / 2] = e.clone();
         }
-        DualSegtree {
+        Self {
             original_size,
             size,
             data: RefCell::new(data),

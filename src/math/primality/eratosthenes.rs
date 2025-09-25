@@ -29,7 +29,7 @@ impl EratosthenesSieve {
             i += 2;
         }
 
-        EratosthenesSieve { data }
+        Self { data }
     }
 }
 

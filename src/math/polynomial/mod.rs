@@ -140,7 +140,7 @@ impl<P: PrimeMod> Polynomial<P> {
 }
 
 impl<P: PrimeMod> AddAssign for Polynomial<P> {
-    fn add_assign(&mut self, b: Polynomial<P>) {
+    fn add_assign(&mut self, b: Self) {
         if self.len() < b.len() {
             self.data.resize(b.len(), ConstModInt::new(0));
         }
@@ -152,14 +152,14 @@ impl<P: PrimeMod> AddAssign for Polynomial<P> {
 
 impl<P: PrimeMod> Add for Polynomial<P> {
     type Output = Self;
-    fn add(mut self, b: Polynomial<P>) -> Polynomial<P> {
+    fn add(mut self, b: Self) -> Self {
         self += b;
         self
     }
 }
 
 impl<P: PrimeMod> SubAssign for Polynomial<P> {
-    fn sub_assign(&mut self, b: Polynomial<P>) {
+    fn sub_assign(&mut self, b: Self) {
         if self.len() < b.len() {
             self.data.resize(b.len(), ConstModInt::new(0));
         }
@@ -171,7 +171,7 @@ impl<P: PrimeMod> SubAssign for Polynomial<P> {
 
 impl<P: PrimeMod> Sub for Polynomial<P> {
     type Output = Self;
-    fn sub(mut self, b: Polynomial<P>) -> Polynomial<P> {
+    fn sub(mut self, b: Self) -> Self {
         self -= b;
         self
     }

@@ -56,7 +56,7 @@ impl CartesianTree {
             }
         }
 
-        CartesianTree {
+        Self {
             root,
             parent: p,
             left: l,

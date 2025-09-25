@@ -73,7 +73,7 @@ impl Set for Dihedral {}
 
 impl BinaryOp for Dihedral {
     fn op(self, b: Self) -> Self {
-        Dihedral::_op(self, b)
+        Self::_op(self, b)
     }
 }
 

@@ -53,15 +53,15 @@ impl Dir {
     }
 
     /// 左方向への1マス分の移動
-    pub const L: Dir = Dir { dx: 0, dy: -1 };
+    pub const L: Self = Self { dx: 0, dy: -1 };
     /// 右方向への1マス分の移動
-    pub const R: Dir = Dir { dx: 0, dy: 1 };
+    pub const R: Self = Self { dx: 0, dy: 1 };
     /// 上方向への1マス分の移動
-    pub const U: Dir = Dir { dx: -1, dy: 0 };
+    pub const U: Self = Self { dx: -1, dy: 0 };
     /// 下方向への1マス分の移動
-    pub const D: Dir = Dir { dx: 1, dy: 0 };
+    pub const D: Self = Self { dx: 1, dy: 0 };
     /// 上下左右4方向への1マス分の移動を格納した配列
-    pub const DIR_4: [Dir; 4] = [Self::L, Self::R, Self::U, Self::D];
+    pub const DIR_4: [Self; 4] = [Self::L, Self::R, Self::U, Self::D];
 }
 
 impl std::ops::Add for Dir {

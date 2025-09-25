@@ -16,17 +16,17 @@ pub enum NumInf<T> {
 impl<T: Copy> NumInf<T> {
     /// `self`が`Value(T)`かを判定する。
     pub fn is_value(self) -> bool {
-        matches!(self, NumInf::Value(_))
+        matches!(self, Self::Value(_))
     }
 
     /// `self`が`Inf`かを判定する。
     pub fn is_inf(self) -> bool {
-        matches!(self, NumInf::Inf)
+        matches!(self, Self::Inf)
     }
 
     /// `self`が`NegInf`かを判定する。
     pub fn is_neg_inf(self) -> bool {
-        matches!(self, NumInf::NegInf)
+        matches!(self, Self::NegInf)
     }
 
     /// `self`が`Value`ならばその中身を取り出す。
@@ -36,9 +36,9 @@ impl<T: Copy> NumInf<T> {
     /// `self`が`Inf`か`NegInf`のときパニックする。
     pub fn unwrap(self) -> T {
         match self {
-            NumInf::Value(x) => x,
-            NumInf::Inf => panic!("called `NumInf::unwrap()` on a `Inf` value"),
-            NumInf::NegInf => panic!("called `NumInf::unwrap()` on a `NegInf` value"),
+            Self::Value(x) => x,
+            Self::Inf => panic!("called `NumInf::unwrap()` on a `Inf` value"),
+            Self::NegInf => panic!("called `NumInf::unwrap()` on a `NegInf` value"),
         }
     }
 }
@@ -48,8 +48,8 @@ impl<T: Add<Output = T>> Add for NumInf<T> {
 
     fn add(self, other: Self) -> Self {
         match self {
-            NumInf::Value(x) => match other {
-                NumInf::Value(y) => NumInf::Value(x + y),
+            Self::Value(x) => match other {
+                Self::Value(y) => Self::Value(x + y),
                 y => y,
             },
             y => y,
@@ -62,10 +62,10 @@ impl<T: Sub<Output = T>> Sub for NumInf<T> {
 
     fn sub(self, other: Self) -> Self {
         match self {
-            NumInf::Value(x) => match other {
-                NumInf::Value(y) => NumInf::Value(x - y),
-                NumInf::Inf => NumInf::NegInf,
-                NumInf::NegInf => NumInf::Inf,
+            Self::Value(x) => match other {
+                Self::Value(y) => Self::Value(x - y),
+                Self::Inf => Self::NegInf,
+                Self::NegInf => Self::Inf,
             },
             y => y,
         }
@@ -77,9 +77,9 @@ impl<T: Neg<Output = T>> Neg for NumInf<T> {
 
     fn neg(self) -> Self {
         match self {
-            NumInf::Value(x) => NumInf::Value(-x),
-            NumInf::Inf => NumInf::NegInf,
-            NumInf::NegInf => NumInf::Inf,
+            Self::Value(x) => Self::Value(-x),
+            Self::Inf => Self::NegInf,
+            Self::NegInf => Self::Inf,
         }
     }
 }

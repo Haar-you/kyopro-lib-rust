@@ -32,7 +32,7 @@ impl<G: Group> Index<usize> for CumulativeSum1D<G> {
 impl<G: Group + Copy> CumulativeSum1DBuilder<G> {
     /// `CumulativeSum1DBuilder`を生成する
     pub fn new(n: usize) -> Self {
-        CumulativeSum1DBuilder {
+        Self {
             data: vec![G::id(); n + 1],
         }
     }

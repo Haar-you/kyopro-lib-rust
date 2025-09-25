@@ -18,7 +18,7 @@ impl<T: Ord> Node<T> {
         }
     }
 
-    pub fn meld(&mut self, other: Option<Box<Node<T>>>) {
+    pub fn meld(&mut self, other: Option<Box<Self>>) {
         if let Some(mut other) = other {
             if self.value < other.value {
                 swap(self, other.as_mut());
@@ -51,7 +51,7 @@ impl<T: Ord> SkewHeap<T> {
     }
 
     /// 他の`SkewHeap<T>`を融合する。
-    pub fn meld(&mut self, other: SkewHeap<T>) {
+    pub fn meld(&mut self, other: Self) {
         self.size += other.size;
         match self.root.as_mut() {
             None => self.root = other.root,

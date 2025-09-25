@@ -24,5 +24,7 @@ if_then_some_else_none = "warn"
 precedence_bits = "warn"
 map_with_unused_argument_over_ranges = "warn"
 
+use_self = "warn"
+
 [lints.rust]
 missing_docs = "warn"

@@ -132,7 +132,7 @@ pub struct Graph<D, E> {
 impl<D: Direction, E: EdgeTrait + Clone> Graph<D, E> {
     /// 頂点数が`size`の空の`Graph`を構築する。
     pub fn new(size: usize) -> Self {
-        Graph {
+        Self {
             nodes: vec![GraphNode { edges: vec![] }; size],
             __phantom: PhantomData,
         }

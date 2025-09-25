@@ -37,7 +37,7 @@ impl Node {
     }
 
     /// 親ノードへの参照を返す。
-    pub fn parent(&self) -> Option<&Node> {
+    pub fn parent(&self) -> Option<&Self> {
         self.parent.map(|p| {
             assert!(!p.is_null());
             unsafe { &*p }
@@ -45,7 +45,7 @@ impl Node {
     }
 
     /// 接尾辞リンクの行き先ノードへの参照を返す。
-    pub fn suffix_link(&self) -> Option<&Node> {
+    pub fn suffix_link(&self) -> Option<&Self> {
         self.suffix_link.map(|p| {
             assert!(!p.is_null());
             unsafe { &*p }
@@ -53,7 +53,7 @@ impl Node {
     }
 
     /// 子ノードへの推移文字と子ノードへの参照へのイテレータを返す。
-    pub fn children(&self) -> impl Iterator<Item = (char, &Node)> {
+    pub fn children(&self) -> impl Iterator<Item = (char, &Self)> {
         self.children.iter().map(|(&k, &v)| {
             assert!(!v.is_null());
             (k, unsafe { &*v })
@@ -61,7 +61,7 @@ impl Node {
     }
 
     /// 接尾辞リンクを逆に辿ったノードへの参照へのイテレータを返す。
-    pub fn rev_suffix_links(&self) -> impl Iterator<Item = &Node> {
+    pub fn rev_suffix_links(&self) -> impl Iterator<Item = &Self> {
         self.reverse_suffix_links.iter().map(|&p| {
             assert!(!p.is_null());
             unsafe { &*p }
