@@ -56,7 +56,7 @@ pub fn intersect_circle_segment(
     let d1 = (c - s.from).abs();
     let d2 = (c - s.to).abs();
     let v = dist_segment_point(s, c);
-    let m = (r * r - v * v).sqrt();
+    let m = r.mul_add(r, -(v * v)).sqrt();
     let n = s.normal();
     let k = s.from + s.diff() * n.cross(c + n - s.from) / n.cross(s.diff());
 
@@ -70,8 +70,8 @@ pub fn intersect_circle_segment(
         (TWO_CROSSPOINTS, vec![k - s.unit() * m, k + s.unit() * m])
     } else {
         let b = s.unit().dot(s.from - c);
-        let a = (s.from - c).abs_sq() - r * r;
-        let x = (b * b - a).sqrt();
+        let a = r.mul_add(-r, (s.from - c).abs_sq());
+        let x = b.mul_add(b, -a).sqrt();
 
         (
             ONE_CROSSPOINT,

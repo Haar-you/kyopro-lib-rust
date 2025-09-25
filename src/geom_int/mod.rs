@@ -27,7 +27,7 @@ impl VectorInt {
     pub fn abs(self) -> f64 {
         let x = self.x as f64;
         let y = self.y as f64;
-        (x * x + y * y).sqrt()
+        x.hypot(y)
     }
     /// 絶対値の2乗を計算する
     pub fn abs_sq(self) -> i64 {
@@ -54,9 +54,9 @@ impl VectorInt {
         let r = (other.y as f64).atan2(other.x as f64) - (self.y as f64).atan2(self.x as f64);
 
         if r < -PI {
-            r + PI * 2.0
+            PI.mul_add(2.0, r)
         } else if r > PI {
-            r - PI * 2.0
+            PI.mul_add(-2.0, r)
         } else {
             r
         }

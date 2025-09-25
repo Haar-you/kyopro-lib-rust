@@ -95,19 +95,19 @@ impl_ops!(Div<f64> for Vector, |a: Self, k: f64| Self(a.0 / k, a.1 / k));
 impl Vector {
     /// 絶対値を計算する
     pub fn abs(self) -> f64 {
-        (self.0 * self.0 + self.1 * self.1).sqrt()
+        self.0.hypot(self.1)
     }
     /// 絶対値の2乗を計算する
     pub fn abs_sq(self) -> f64 {
-        self.0 * self.0 + self.1 * self.1
+        self.0.mul_add(self.0, self.1 * self.1)
     }
     /// 内積を計算する
     pub fn dot(self, other: Self) -> f64 {
-        self.0 * other.0 + self.1 * other.1
+        self.0.mul_add(other.0, self.1 * other.1)
     }
     /// 外積を計算する
     pub fn cross(self, other: Self) -> f64 {
-        self.0 * other.1 - self.1 * other.0
+        self.0.mul_add(other.1, -(self.1 * other.0))
     }
     /// 長さを`1`にしたベクトルを返す
     pub fn unit(self) -> Self {
@@ -130,9 +130,9 @@ impl Vector {
         let r = other.1.atan2(other.0) - self.1.atan2(self.0);
 
         if r < -PI {
-            r + PI * 2.0
+            PI.mul_add(2.0, r)
         } else if r > PI {
-            r - PI * 2.0
+            PI.mul_add(-2.0, r)
         } else {
             r
         }
