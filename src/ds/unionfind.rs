@@ -108,8 +108,8 @@ impl<'a, T> UnionFind<'a, T> {
 
         if let Some(f) = self.merge.as_ref() {
             let t = f(
-                self.values.as_mut().unwrap()[p].take().unwrap(),
-                self.values.as_mut().unwrap()[c].take().unwrap(),
+                self.values.as_mut().unwrap()[i].take().unwrap(),
+                self.values.as_mut().unwrap()[j].take().unwrap(),
             );
             self.values.as_mut().unwrap()[p] = Some(t);
         }
