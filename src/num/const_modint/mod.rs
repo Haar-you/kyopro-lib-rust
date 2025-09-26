@@ -59,6 +59,7 @@ impl<P: PrimeMod> Calc<P> {
 pub struct ConstModIntBuilder<P: PrimeMod>(PhantomData<P>);
 
 impl<P: PrimeMod> ConstModIntBuilder<P> {
+    /// `ConstModIntBuilder`を返す。
     pub fn new() -> Self {
         Self(PhantomData)
     }

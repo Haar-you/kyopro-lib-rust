@@ -1,3 +1,5 @@
+//! 商の列挙
+
 /// [`enumerate_quotients`]の結果
 #[derive(Copy, Debug, Eq, PartialEq, Clone)]
 pub struct Quotient {
