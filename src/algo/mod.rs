@@ -36,6 +36,7 @@ pub mod run_enumerate;
 pub mod sa;
 pub mod shakutori;
 pub mod sliding_window;
+pub mod sqrt_decomp;
 pub mod subset_sum;
 pub mod ternary_search;
 pub mod two_sat;
