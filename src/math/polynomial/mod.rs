@@ -189,6 +189,8 @@ impl<P: PrimeMod> PartialEq for Polynomial<P> {
     }
 }
 
+impl<P: PrimeMod> Eq for Polynomial<P> {}
+
 impl<P: PrimeMod> From<Polynomial<P>> for Vec<ConstModInt<P>> {
     fn from(value: Polynomial<P>) -> Self {
         value.data

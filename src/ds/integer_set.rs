@@ -9,7 +9,7 @@
 use std::collections::BTreeMap;
 
 /// 整数の追加・削除とMexを求められるデータ構造
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct IntegerSet {
     data: BTreeMap<i64, i64>,
 }

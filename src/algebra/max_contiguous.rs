@@ -7,7 +7,7 @@ use crate::algebra::traits::*;
 use crate::impl_algebra;
 
 /// 同じ値が連続する最大長を管理する。
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct MaxContiguous<T> {
     /// 最大連続長と値
     pub max: (usize, T),

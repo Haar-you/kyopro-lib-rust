@@ -4,7 +4,7 @@ use std::marker::PhantomData;
 use std::ops::Add;
 
 /// Range Add Range Min-Count用の代数的構造
-#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct AddMinCount<T, U>(PhantomData<(T, U)>);
 
 impl<T, U> Action for AddMinCount<T, U>

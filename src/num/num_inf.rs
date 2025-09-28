@@ -3,7 +3,7 @@
 use std::ops::{Add, Neg, Sub};
 
 /// 正の無限大、負の無限大をもつ数
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Debug, Hash)]
 pub enum NumInf<T> {
     /// 負の無限大
     NegInf,
@@ -81,6 +81,12 @@ impl<T: Neg<Output = T>> Neg for NumInf<T> {
             Self::Inf => Self::NegInf,
             Self::NegInf => Self::Inf,
         }
+    }
+}
+
+impl<T: Default> Default for NumInf<T> {
+    fn default() -> Self {
+        Self::Value(T::default())
     }
 }
 

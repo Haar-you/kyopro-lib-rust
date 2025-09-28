@@ -5,7 +5,7 @@ use std::marker::PhantomData;
 use std::ops::{Add, Mul};
 
 /// Range Add Range Sum用の代数的構造
-#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct AddSum<T, U = T>(PhantomData<(T, U)>);
 
 impl<T, U> Action for AddSum<T, U>

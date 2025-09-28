@@ -9,7 +9,7 @@ use crate::impl_ops;
 use std::f64::consts::PI;
 
 /// 整数値をもつ二次元ベクトル
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
 pub struct VectorInt {
     /// x座標
     pub x: i64,

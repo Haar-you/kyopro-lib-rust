@@ -8,7 +8,7 @@
 //! - <https://atcoder.jp/contests/typical90/tasks/typical90_bf>
 
 /// [`find_cycle`]の結果
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, Hash)]
 pub struct Rho {
     /// 先頭の非循環部の長さ
     pub tail: u64,

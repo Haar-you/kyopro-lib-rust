@@ -1,7 +1,7 @@
 //! 6面サイコロ
 
 /// 6面サイコロ
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Dice<T> {
     /// 上の面
     pub top: T,

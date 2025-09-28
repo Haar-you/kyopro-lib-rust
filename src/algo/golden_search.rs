@@ -1,7 +1,7 @@
 //! 黄金分割探索
 
 /// [`golden_search`]で与えられる関数が上に凸か下に凸かを指定する。
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Convex {
     /// 上に凸
     Upwards,

@@ -11,7 +11,7 @@ pub trait PrimeMod: Sized + Copy + Clone + PartialEq + Default {
 }
 
 /// 素数`P`での剰余
-#[derive(Copy, Clone, PartialEq, Debug, Default)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug, Default, PartialOrd, Ord, Hash)]
 pub struct Prime<const P: u32>;
 impl<const P: u32> PrimeMod for Prime<P> {
     const PRIME_NUM: u32 = P;

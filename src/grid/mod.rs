@@ -2,7 +2,7 @@
 pub mod to_graph;
 
 /// グリッド上の位置を表す。
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
 pub struct Position {
     x: usize,
     y: usize,
@@ -38,7 +38,7 @@ impl Position {
 }
 
 /// 移動方向
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
 pub struct Dir {
     /// x方向の移動量
     pub dx: isize,
@@ -72,7 +72,7 @@ impl std::ops::Add for Dir {
 }
 
 /// 長方形型のマス目グリッドを扱う。
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, Default)]
 pub struct Grid<T> {
     grid: Vec<Vec<T>>,
     h: usize,

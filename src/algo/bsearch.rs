@@ -2,7 +2,7 @@
 use std::ops::{Add, Div, Sub};
 
 /// [`bsearch_ng_ok`]、[`bsearch_ok_ng`]の返り値
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum SearchResult<T> {
     /// `ng`以下で条件を満たさず、`ok`以上で条件を満たす。
     NgOk {

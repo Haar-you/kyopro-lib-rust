@@ -3,7 +3,7 @@
 use crate::geom::{ccw::*, *};
 
 /// 2つの線分の位置関係
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 #[allow(non_camel_case_types)]
 pub enum IntersectSegments {
     /// 2つの線分が交差している

@@ -90,7 +90,7 @@ impl<P: PrimeMod> FF for ConstModIntBuilder<P> {
 }
 
 /// 奇素数`P`で剰余をとる構造体。
-#[derive(Copy, Clone, PartialEq, Default)]
+#[derive(Copy, Clone, PartialEq, Eq, Default, Hash)]
 pub struct ConstModInt<P: PrimeMod>(u32, PhantomData<P>);
 
 impl<P: PrimeMod> FFElem for ConstModInt<P> {

@@ -3,7 +3,7 @@
 use crate::geom::*;
 
 /// 凸包の上半分か下半分かを指定する
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum Hull {
     /// 上半分
     Upper,

@@ -4,7 +4,7 @@ use crate::num::one_zero::Zero;
 use std::{cmp::Ordering, ops::Add};
 
 /// 最小値とその個数の総和
-#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Default, Debug, PartialEq, Eq, Hash)]
 pub struct MinCount<T, U>(pub Option<T>, pub U);
 impl<T, U> Set for MinCount<T, U> {}
 impl<T: Ord, U: Add<Output = U>> BinaryOp for MinCount<T, U> {

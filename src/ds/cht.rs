@@ -16,7 +16,7 @@ trait_alias!(
 );
 
 /// 最大値クエリか最小値クエリかを表す
-#[derive(PartialEq, Eq, Copy, Clone, Debug)]
+#[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
 pub enum Mode {
     /// 最大値クエリ
     Max,

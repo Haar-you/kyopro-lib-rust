@@ -1,7 +1,7 @@
 //! 閉区間
 
 /// 両端の点を含む閉区間を扱う。
-#[derive(Clone, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Default, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct ClosedInterval<T> {
     /// 閉区間の開始地点
     pub start: T,

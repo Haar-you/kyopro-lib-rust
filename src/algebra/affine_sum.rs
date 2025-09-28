@@ -5,7 +5,7 @@ use std::marker::PhantomData;
 use std::ops::{Add, Mul};
 
 /// Range Affine Range Sum用の代数的構造
-#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct AffineSum<T, U = T>(PhantomData<(T, U)>);
 
 impl<T, U> Action for AffineSum<T, U>

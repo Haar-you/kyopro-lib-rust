@@ -4,7 +4,7 @@ pub use crate::num::one_zero::*;
 use std::ops::{Add, Mul};
 
 /// 一次関数の合成を演算とする代数的構造
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, Hash)]
 pub struct Affine<T>(pub T, pub T);
 
 impl<T> Set for Affine<T> {}

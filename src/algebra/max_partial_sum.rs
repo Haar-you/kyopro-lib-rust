@@ -10,7 +10,7 @@ use std::cmp::max;
 use std::ops::Add;
 
 /// 空ではない連続する部分列の総和を管理する。
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, Hash)]
 pub struct MaxPartialSum<T> {
     /// 列の総和
     pub sum: T,

@@ -29,7 +29,7 @@ use crate::flow::*;
 /// | `gain_if_both_red` | |
 /// | `gain_if_both_blue` | |
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct PSP {
     size: usize,
     src: usize,

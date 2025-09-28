@@ -7,7 +7,7 @@ use std::marker::PhantomData;
 ///
 /// `convert`は時間計算量が$O(\log n)$なので、
 /// 遅延セグメント木に載せる場合は、更新・取得はともに$O(\log^2 n)$の計算量になることに注意。
-#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct UpdateFold<M: Monoid>(PhantomData<M>);
 
 impl<M> Action for UpdateFold<M>

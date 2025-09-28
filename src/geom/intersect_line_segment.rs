@@ -4,7 +4,7 @@ use crate::geom::*;
 use std::cmp::Ordering::*;
 
 /// 直線と線分の位置関係
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 #[allow(non_camel_case_types)]
 pub enum IntersectLineSegment {
     /// 線分が直線の左側にある

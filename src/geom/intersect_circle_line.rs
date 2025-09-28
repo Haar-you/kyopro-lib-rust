@@ -3,7 +3,7 @@
 use crate::geom::{dist_line_point::*, *};
 
 /// 円と直線の位置関係
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 #[allow(non_camel_case_types)]
 pub enum IntersectCircleLine {
     /// 直線が円の外側にある

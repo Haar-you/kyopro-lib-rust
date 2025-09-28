@@ -51,7 +51,7 @@ pub trait EdgeTrait {
 }
 
 /// グラフの辺
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Edge<T, I> {
     /// 辺の始点
     pub from: usize,
@@ -98,10 +98,10 @@ impl<T: Clone, I> EdgeTrait for Edge<T, I> {
 /// グラフの辺の有向・無向の情報をもたせるためのトレイト。
 pub trait Direction {}
 /// 有向辺をもつ。
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct Directed;
 /// 無向辺をもつ。
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct Undirected;
 impl Direction for Directed {}
 impl Direction for Undirected {}

@@ -2,7 +2,7 @@
 use std::ops::{Add, Mul, Sub};
 
 /// $y = ax + b$の直線を表す。
-#[derive(Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Default)]
 pub struct Linear<T> {
     /// ‍直線の傾き
     pub a: T,

@@ -3,7 +3,7 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
 /// 乗算を演算とする代数的構造
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Prod<T>(pub T);
 
 macro_rules! implement {

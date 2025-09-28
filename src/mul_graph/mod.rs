@@ -12,7 +12,7 @@ use std::collections::HashMap;
 use std::hash::Hash;
 
 /// [`MulGraph`]の辺
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Edge<V, W> {
     /// 始点
     pub from: V,

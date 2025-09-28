@@ -3,7 +3,7 @@
 use crate::geom::{dist_segment_point::*, *};
 
 /// 円と線分の位置関係
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 #[allow(non_camel_case_types)]
 pub enum IntersectCircleSegment {
     /// 線分が円の内部にある

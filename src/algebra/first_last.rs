@@ -3,10 +3,10 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
 /// 最初に出現する`Some`を返す演算。
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct First<T>(pub Option<T>);
 /// 最後に出現する`Some`を返す演算。
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Last<T>(pub Option<T>);
 
 impl_algebra!(

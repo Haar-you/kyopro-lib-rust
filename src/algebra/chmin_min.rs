@@ -4,7 +4,7 @@ use std::marker::PhantomData;
 pub use crate::algebra::{action::*, min_max::Min};
 
 /// Range Chmin Range Min用の代数的構造
-#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct ChminMin<T>(PhantomData<T>);
 
 impl<T> Action for ChminMin<T>
