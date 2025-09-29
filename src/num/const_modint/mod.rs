@@ -104,32 +104,61 @@ impl<P: PrimeMod> FFElem for ConstModInt<P> {
         P::PRIME_NUM
     }
 
-    fn pow(self, mut p: u64) -> Self {
-        let mut ret = Self(Calc::<P>::make(1), PhantomData);
-        let mut a = self;
-
-        while p > 0 {
-            if (p & 1) != 0 {
-                ret *= a;
-            }
-
-            a *= a;
-            p >>= 1;
-        }
-
-        ret
+    fn pow(self, p: u64) -> Self {
+        self._pow(p)
     }
 }
 
 impl<P: PrimeMod> ConstModInt<P> {
     /// `ConstModInt<P>`を生成する。
-    pub fn new(n: u32) -> Self {
+    pub const fn new(n: u32) -> Self {
         let value = if n < P::PRIME_NUM {
             n
         } else {
             n % P::PRIME_NUM
         };
         Self(Calc::<P>::make(value), PhantomData)
+    }
+
+    pub const fn _add(self, y: Self) -> Self {
+        let mut a = self.0 + y.0;
+        if a >= P::PRIME_NUM {
+            a -= P::PRIME_NUM;
+        }
+        Self(a, PhantomData)
+    }
+
+    pub const fn _sub(self, y: Self) -> Self {
+        let a = if self.0 < y.0 {
+            self.0 + P::PRIME_NUM - y.0
+        } else {
+            self.0 - y.0
+        };
+        Self(a, PhantomData)
+    }
+
+    pub const fn _mul(self, y: Self) -> Self {
+        Self(Calc::<P>::reduce(self.0 as u64 * y.0 as u64), PhantomData)
+    }
+
+    pub const fn _pow(self, mut p: u64) -> Self {
+        let mut ret = Self(Calc::<P>::make(1), PhantomData);
+        let mut a = self;
+
+        while p > 0 {
+            if (p & 1) != 0 {
+                ret = ret._mul(a);
+            }
+
+            a = a._mul(a);
+            p >>= 1;
+        }
+
+        ret
+    }
+
+    pub const fn _inv(self) -> Self {
+        self._pow(P::PRIME_NUM as u64 - 2)
     }
 }
 
@@ -145,24 +174,9 @@ impl<P: PrimeMod> Debug for ConstModInt<P> {
     }
 }
 
-impl_ops!([P: PrimeMod]; Add for ConstModInt<P>, |x: Self, y: Self| {
-    let mut a = x.0 + y.0;
-    if a >= P::PRIME_NUM {
-        a -= P::PRIME_NUM;
-    }
-    Self(a, PhantomData)
-});
-impl_ops!([P: PrimeMod]; Sub for ConstModInt<P>, |x: Self, y: Self| {
-    let a = if x.0 < y.0 {
-        x.0 + P::PRIME_NUM - y.0
-    } else {
-        x.0 - y.0
-    };
-    Self(a, PhantomData)
-});
-impl_ops!([P: PrimeMod]; Mul for ConstModInt<P>, |x: Self, y: Self| {
-    Self(Calc::<P>::reduce(x.0 as u64 * y.0 as u64), PhantomData)
-});
+impl_ops!([P: PrimeMod]; Add for ConstModInt<P>, |x: Self, y: Self| x._add(y));
+impl_ops!([P: PrimeMod]; Sub for ConstModInt<P>, |x: Self, y: Self| x._sub(y));
+impl_ops!([P: PrimeMod]; Mul for ConstModInt<P>, |x: Self, y: Self| x._mul(y));
 impl_ops!([P: PrimeMod]; Div for ConstModInt<P>, |x: Self, y: Self| x * y.inv());
 
 impl_ops!([P: PrimeMod]; AddAssign for ConstModInt<P>, |x: &mut Self, y| *x = *x + y);
