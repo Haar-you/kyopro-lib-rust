@@ -142,10 +142,10 @@ impl<T: Elem> LiChaoTree<T> {
         while l < r {
             if r & 1 == 1 {
                 r -= 1;
-                self.update(r, segment.clone(), self.range[r].0, self.range[r].1);
+                self.update(r, segment, self.range[r].0, self.range[r].1);
             }
             if l & 1 == 1 {
-                self.update(l, segment.clone(), self.range[l].0, self.range[l].1);
+                self.update(l, segment, self.range[l].0, self.range[l].1);
                 l += 1;
             }
 

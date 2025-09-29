@@ -373,10 +373,7 @@ impl<P: PrimeMod> PolynomialOperator<P> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        math::{prime_mod::Prime, primitive_root::primitive_root},
-        num::const_modint::ConstModIntBuilder,
-    };
+    use crate::{math::prime_mod::Prime, num::const_modint::ConstModIntBuilder};
 
     use super::*;
 

@@ -18,8 +18,9 @@ pub fn ternary_search<F: Fn(f64) -> f64>(
     f: F,
 ) -> f64 {
     while loop_count > 0 {
-        let t1 = lb + (ub - lb) / 3.0;
-        let t2 = lb + (ub - lb) / 3.0 * 2.0;
+        let d = (ub - lb) / 3.0;
+        let t1 = lb + d;
+        let t2 = d.mul_add(2.0, lb);
 
         if (matches!(convex, Convex::Upwards) && f(t1) > f(t2))
             || (matches!(convex, Convex::Downwards) && f(t1) < f(t2))

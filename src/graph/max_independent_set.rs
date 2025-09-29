@@ -65,10 +65,8 @@ fn rec<E: EdgeTrait>(
         }
     }
 
-    if deg <= 1 {
-        rec(g, indep | (1 << next), cover | neighbour, set);
-    } else {
-        rec(g, indep | (1 << next), cover | neighbour, set);
+    rec(g, indep | (1 << next), cover | neighbour, set);
+    if deg > 1 {
         rec(g, indep, cover | (1 << next), set);
     }
 }
