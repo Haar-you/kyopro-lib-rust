@@ -1,4 +1,6 @@
 //! 数論変換 (Number Theoretic Transform)
+use std::marker::PhantomData;
+
 use crate::math::prime_mod::*;
 use crate::num::const_modint::*;
 
@@ -7,46 +9,59 @@ use crate::num::const_modint::*;
 /// `PRIM_ROOT`は`P`の原始根。
 #[derive(Clone)]
 pub struct NTT<P: PrimeMod> {
-    base: Vec<ConstModInt<P>>,
-    inv_base: Vec<ConstModInt<P>>,
-    max_size: usize,
+    _phantom: PhantomData<P>,
 }
 
 impl<P: PrimeMod> NTT<P> {
-    /// [`NTT<P, PRIM_ROOT>`]を作る。
-    pub fn new() -> Self {
-        let max_power = (P::PRIME_NUM as usize - 1).trailing_zeros() as usize;
-        let max_size = 1 << max_power;
+    const MAX_POWER: usize = (P::PRIME_NUM as usize - 1).trailing_zeros() as usize;
+    const MAX_SIZE: usize = 1 << Self::MAX_POWER;
+    const BASE: [ConstModInt<P>; 32] = {
+        let mut base = [ConstModInt::<P>::new(0); 32];
+        let mut t = ConstModInt::<P>::new(P::PRIM_ROOT)
+            ._pow((P::PRIME_NUM as u64 - 1) >> (Self::MAX_POWER));
 
-        let mut base = vec![ConstModInt::new(0); max_power + 1];
-        let mut inv_base = vec![ConstModInt::new(0); max_power + 1];
-
-        let mut t = ConstModInt::new(P::PRIM_ROOT).pow((P::PRIME_NUM as u64 - 1) >> (max_power));
-        let mut s = t.inv();
-
-        for i in (0..max_power).rev() {
-            t *= t;
-            s *= s;
-            base[i] = t;
-            inv_base[i] = s;
+        let mut i = Self::MAX_POWER;
+        while i > 0 {
+            t = t._mul(t);
+            base[i - 1] = t;
+            i -= 1;
         }
 
+        base
+    };
+
+    const INV_BASE: [ConstModInt<P>; 32] = {
+        let mut inv_base = [ConstModInt::<P>::new(0); 32];
+        let t = ConstModInt::<P>::new(P::PRIM_ROOT)
+            ._pow((P::PRIME_NUM as u64 - 1) >> (Self::MAX_POWER));
+        let mut s = t._inv();
+
+        let mut i = Self::MAX_POWER;
+        while i > 0 {
+            s = s._mul(s);
+            inv_base[i - 1] = s;
+            i -= 1;
+        }
+
+        inv_base
+    };
+
+    /// [`NTT<P, PRIM_ROOT>`]を作る。
+    pub fn new() -> Self {
         Self {
-            base,
-            inv_base,
-            max_size,
+            _phantom: PhantomData,
         }
     }
 
     /// 数論変換を行う。
     pub fn ntt(&self, f: &mut [ConstModInt<P>]) {
         let n = f.len();
-        assert!(n.is_power_of_two() && n < self.max_size);
+        assert!(n.is_power_of_two() && n < Self::MAX_SIZE);
 
         let mut b = n / 2;
         let mut k = n.trailing_zeros() as usize;
         while b > 0 {
-            let dw = self.base[k];
+            let dw = Self::BASE[k];
 
             let mut ws = vec![ConstModInt::new(1); b];
             for i in 1..b {
@@ -81,7 +96,7 @@ impl<P: PrimeMod> NTT<P> {
     /// `ntt`の逆変換を行う。
     pub fn intt(&self, f: &mut [ConstModInt<P>]) {
         let n = f.len();
-        assert!(n.is_power_of_two() && n < self.max_size);
+        assert!(n.is_power_of_two() && n < Self::MAX_SIZE);
 
         // let p = size_of::<usize>() * 8 - n.trailing_zeros() as usize;
         // let mut g = vec![ConstModInt::new(0); n];
@@ -94,7 +109,7 @@ impl<P: PrimeMod> NTT<P> {
         let mut b = 1;
         let mut k = 1;
         while b < n {
-            let dw = self.inv_base[k];
+            let dw = Self::INV_BASE[k];
 
             let mut ws = vec![ConstModInt::new(1); b];
             for i in 1..b {
@@ -173,7 +188,7 @@ impl<P: PrimeMod> NTT<P> {
 
     /// NTTで変換可能な配列の最大長を返す。
     pub fn max_size(&self) -> usize {
-        self.max_size
+        Self::MAX_SIZE
     }
 }
 
