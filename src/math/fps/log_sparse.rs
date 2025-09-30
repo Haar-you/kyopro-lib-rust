@@ -25,7 +25,7 @@ impl<P: PrimeMod> FpsLogSparse for SparsePolynomial<P> {
         let g = self.fps_inv_sparse(n)?;
 
         let mut h = vec![ConstModInt::new(0); n];
-        for (i, x) in f.data {
+        for (&i, &x) in f.iter() {
             for (&y, h) in g.data.iter().zip(h.iter_mut().skip(i)) {
                 *h += x * y;
             }

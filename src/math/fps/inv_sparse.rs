@@ -31,7 +31,7 @@ impl<P: PrimeMod> FpsInvSparse for SparsePolynomial<P> {
 
         for i in 1..n {
             let mut s = ConstModInt::new(0);
-            for &(j, fj) in f.data.iter() {
+            for (&j, &fj) in f.iter() {
                 if j != 0 && i >= j {
                     s += fj * g[i - j];
                 }
