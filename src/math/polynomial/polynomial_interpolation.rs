@@ -56,3 +56,22 @@ fn rec_frac<P: PrimeMod>(
 
     (nume, deno)
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::math::prime_mod::Prime;
+
+    use super::*;
+
+    type P = Prime<998244353>;
+
+    #[test]
+    fn test() {
+        let xs = vec![5, 6, 7, 8, 9];
+        let ys = vec![586, 985, 1534, 2257, 3178];
+
+        let p = polynomial_interpolation::<P>(xs, ys);
+
+        assert_eq!(p, Polynomial::from(vec![1, 2, 3, 4, 0]));
+    }
+}

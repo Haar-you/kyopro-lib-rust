@@ -154,6 +154,22 @@ impl<P: PrimeMod> Polynomial<P> {
         }
     }
 
+    pub fn pow(self, mut p: u64) -> Self {
+        let mut ret = Self::constant(1.into());
+        let mut a = self;
+
+        while p > 0 {
+            if p & 1 == 1 {
+                ret *= a.clone();
+            }
+
+            a = a.sq();
+            p >>= 1;
+        }
+
+        ret
+    }
+
     /// 多項式`a`の2乗を返す。
     pub fn sq(mut self) -> Self {
         let k = self.len() * 2 - 1;

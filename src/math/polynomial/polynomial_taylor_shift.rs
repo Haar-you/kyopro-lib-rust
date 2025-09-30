@@ -56,3 +56,29 @@ impl<P: PrimeMod> TaylorShift for Polynomial<P> {
             .into()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::math::prime_mod::Prime;
+
+    use super::*;
+
+    type P = Prime<998244353>;
+
+    #[test]
+    fn test() {
+        let coeffs = vec![1, 2, 3, 4, 5];
+        let c = 3;
+
+        let res = Polynomial::<P>::from(coeffs.clone()).taylor_shift(c.into());
+
+        let mut ans = Polynomial::zero();
+        for (i, a) in coeffs.into_iter().enumerate() {
+            let mut p = Polynomial::<P>::from(vec![c, 1]).pow(i as u64);
+            p.scale(a.into());
+            ans += p;
+        }
+
+        assert_eq!(res, ans);
+    }
+}
