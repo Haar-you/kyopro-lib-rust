@@ -9,23 +9,20 @@ use crate::num::const_modint::*;
 
 /// Polynomial Taylor shift
 pub trait TaylorShift {
-    /// 多項式の型
-    type Poly;
     /// 多項式の係数の型
     type Value;
 
     /// 多項式 `p` = $f(x) = a_0 + a_1x + \cdots + a_nx^n$に対して、<br>
     /// 多項式 $f(x + c) = a_0 + a_1(x + c) + \cdots + a_n(x + c)^n = b_0 + b_0x + \cdots + b_nx^n$
     /// を満たす、数列{$b_i$}を求める。
-    fn taylor_shift(&self, p: Self::Poly, c: Self::Value) -> Self::Poly;
+    fn taylor_shift(self, c: Self::Value) -> Self;
 }
 
-impl<P: PrimeMod> TaylorShift for PolynomialOperator<P> {
-    type Poly = Polynomial<P>;
+impl<P: PrimeMod> TaylorShift for Polynomial<P> {
     type Value = ConstModInt<P>;
 
-    fn taylor_shift(&self, p: Self::Poly, c: Self::Value) -> Self::Poly {
-        let p: Vec<_> = p.into();
+    fn taylor_shift(self, c: Self::Value) -> Self {
+        let p: Vec<_> = self.into();
         let n = p.len();
         let mut f = ConstModInt::new(1);
 
@@ -50,8 +47,7 @@ impl<P: PrimeMod> TaylorShift for PolynomialOperator<P> {
             d *= c;
         }
 
-        //    let c = ntt.convolve(a, b);
-        let c: Vec<_> = self.mul(a.into(), b.into()).into();
+        let c = Self::NTT.convolve(a, b);
         c.into_iter()
             .skip((n - 1) * 2)
             .zip(g)

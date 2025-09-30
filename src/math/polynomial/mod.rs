@@ -6,7 +6,9 @@ pub mod polynomial_taylor_shift;
 pub mod shift_sampling_points;
 pub mod sparse;
 
-use std::ops::{Add, AddAssign, Index, IndexMut, Sub, SubAssign};
+use std::ops::{
+    Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign,
+};
 
 use crate::math::convolution::ntt::NTT;
 use crate::math::prime_mod::PrimeMod;
@@ -19,6 +21,8 @@ pub struct Polynomial<P: PrimeMod> {
 }
 
 impl<P: PrimeMod> Polynomial<P> {
+    pub(crate) const NTT: NTT<P> = NTT::<P>::new();
+
     /// 零多項式を得る。
     pub fn zero() -> Self {
         Self { data: vec![] }
@@ -137,6 +141,80 @@ impl<P: PrimeMod> Polynomial<P> {
             self.data[i] = 0.into();
         }
     }
+
+    /// 多項式の列の積を計算する。
+    pub fn prod(mut a: Vec<Self>) -> Self {
+        match a.len() {
+            0 => Self::constant(1.into()),
+            1 => a.pop().unwrap(),
+            n => {
+                let b = a.split_off(n / 2);
+                Self::prod(a) * Self::prod(b)
+            }
+        }
+    }
+
+    /// 多項式`a`の2乗を返す。
+    pub fn sq(mut self) -> Self {
+        let k = self.len() * 2 - 1;
+        let n = k.next_power_of_two();
+
+        self.data.resize(n, 0.into());
+        Self::NTT.ntt(&mut self.data);
+        self.data.iter_mut().for_each(|x| *x *= *x);
+        Self::NTT.intt(&mut self.data);
+
+        self.data.truncate(k);
+        self
+    }
+
+    #[allow(missing_docs)]
+    pub fn inv(self, n: usize) -> Self {
+        let mut t = 1;
+        let mut ret = vec![self.data[0].inv()];
+        let a: Vec<_> = self.into();
+
+        while t <= n * 2 {
+            let k = (t * 2 - 1).next_power_of_two();
+
+            let mut s = ret.clone();
+            s.resize(k, 0.into());
+            Self::NTT.ntt(&mut s);
+            s.iter_mut().for_each(|x| *x *= *x);
+
+            let mut a = a[..t.min(a.len())].to_vec();
+            a.resize(k, 0.into());
+            Self::NTT.ntt(&mut a);
+
+            s.iter_mut().zip(a).for_each(|(x, y)| *x *= y);
+            Self::NTT.intt(&mut s);
+
+            ret.resize(t, 0.into());
+            ret.iter_mut()
+                .zip(s)
+                .for_each(|(x, y)| *x = *x * 2.into() - y);
+
+            t *= 2;
+        }
+
+        ret.into()
+    }
+
+    /// 多項式`a`の多項式`b`による商と剰余を返す。
+    pub fn divrem(self, b: Self) -> (Self, Self) {
+        if self.len() < b.len() {
+            return (Self::zero(), self);
+        }
+
+        let q = self.clone() / b.clone();
+
+        let d = b.len() - 1;
+        let mut r = self - b * q.clone();
+        r.data.truncate(d);
+        r.shrink();
+
+        (q, r)
+    }
 }
 
 impl<P: PrimeMod> AddAssign for Polynomial<P> {
@@ -174,6 +252,77 @@ impl<P: PrimeMod> Sub for Polynomial<P> {
     fn sub(mut self, b: Self) -> Self {
         self -= b;
         self
+    }
+}
+
+impl<P: PrimeMod> MulAssign for Polynomial<P> {
+    fn mul_assign(&mut self, mut rhs: Self) {
+        let k = self.len() + rhs.len() - 1;
+
+        let n = k.next_power_of_two();
+        self.data.resize(n, 0.into());
+        Self::NTT.ntt(&mut self.data);
+
+        rhs.data.resize(n, 0.into());
+        Self::NTT.ntt(&mut rhs.data);
+
+        self.data
+            .iter_mut()
+            .zip(rhs.data)
+            .for_each(|(x, y)| *x *= y);
+        Self::NTT.intt(&mut self.data);
+
+        self.data.truncate(k);
+    }
+}
+
+impl<P: PrimeMod> Mul for Polynomial<P> {
+    type Output = Self;
+    fn mul(mut self, rhs: Self) -> Self::Output {
+        self *= rhs;
+        self
+    }
+}
+
+impl<P: PrimeMod> DivAssign for Polynomial<P> {
+    fn div_assign(&mut self, rhs: Self) {
+        *self = self.clone() / rhs;
+    }
+}
+
+impl<P: PrimeMod> Div for Polynomial<P> {
+    type Output = Self;
+    fn div(mut self, mut rhs: Self) -> Self::Output {
+        if self.len() < rhs.len() {
+            return Self::zero();
+        }
+
+        let m = self.len() - rhs.len();
+
+        self.data.reverse();
+        rhs.data.reverse();
+
+        rhs = rhs.inv(m);
+        rhs.data.resize(m + 1, 0.into());
+
+        let mut q = self * rhs;
+        q.data.resize(m + 1, 0.into());
+        q.data.reverse();
+        q.shrink();
+        q
+    }
+}
+
+impl<P: PrimeMod> RemAssign for Polynomial<P> {
+    fn rem_assign(&mut self, rhs: Self) {
+        *self = self.clone() % rhs;
+    }
+}
+
+impl<P: PrimeMod> Rem for Polynomial<P> {
+    type Output = Self;
+    fn rem(self, rhs: Self) -> Self::Output {
+        self.divrem(rhs).1
     }
 }
 
@@ -233,144 +382,6 @@ impl<P: PrimeMod> IndexMut<usize> for Polynomial<P> {
     }
 }
 
-/// 多項式の演算を扱う。
-#[derive(Clone, Default)]
-pub struct PolynomialOperator<P: PrimeMod> {
-    pub(crate) ntt: NTT<P>,
-}
-
-impl<P: PrimeMod> PolynomialOperator<P> {
-    /// [`NTT<P>`]を基に`PolynomialOperator<P>`を生成する。
-    pub fn new() -> Self {
-        Self {
-            ntt: NTT::<P>::new(),
-        }
-    }
-
-    /// 多項式`a`に多項式`b`を掛ける。
-    pub fn mul_assign(&self, a: &mut Polynomial<P>, mut b: Polynomial<P>) {
-        let k = a.len() + b.len() - 1;
-
-        let n = k.next_power_of_two();
-        a.data.resize(n, 0.into());
-        self.ntt.ntt(&mut a.data);
-
-        b.data.resize(n, 0.into());
-        self.ntt.ntt(&mut b.data);
-
-        a.data.iter_mut().zip(b.data).for_each(|(x, y)| *x *= y);
-        self.ntt.intt(&mut a.data);
-
-        a.data.truncate(k);
-    }
-
-    /// 多項式`a`と多項式`b`の積を返す。
-    pub fn mul(&self, mut a: Polynomial<P>, b: Polynomial<P>) -> Polynomial<P> {
-        self.mul_assign(&mut a, b);
-        a
-    }
-
-    /// 多項式の列の積を計算する。
-    pub fn prod(&self, mut a: Vec<Polynomial<P>>) -> Polynomial<P> {
-        match a.len() {
-            0 => Polynomial::constant(1.into()),
-            1 => a.pop().unwrap(),
-            n => {
-                let b = a.split_off(n / 2);
-                self.mul(self.prod(a), self.prod(b))
-            }
-        }
-    }
-
-    /// 多項式`a`の2乗を返す。
-    pub fn sq(&self, mut a: Polynomial<P>) -> Polynomial<P> {
-        let k = a.len() * 2 - 1;
-        let n = k.next_power_of_two();
-
-        a.data.resize(n, 0.into());
-        self.ntt.ntt(&mut a.data);
-        a.data.iter_mut().for_each(|x| *x *= *x);
-        self.ntt.intt(&mut a.data);
-
-        a.data.truncate(k);
-        a
-    }
-
-    #[allow(missing_docs)]
-    pub fn inv(&self, a: Polynomial<P>, n: usize) -> Polynomial<P> {
-        let mut t = 1;
-        let mut ret = vec![a.data[0].inv()];
-        let a: Vec<_> = a.into();
-
-        while t <= n * 2 {
-            let k = (t * 2 - 1).next_power_of_two();
-
-            let mut s = ret.clone();
-            s.resize(k, 0.into());
-            self.ntt.ntt(&mut s);
-            s.iter_mut().for_each(|x| *x *= *x);
-
-            let mut a = a[..t.min(a.len())].to_vec();
-            a.resize(k, 0.into());
-            self.ntt.ntt(&mut a);
-
-            s.iter_mut().zip(a).for_each(|(x, y)| *x *= y);
-            self.ntt.intt(&mut s);
-
-            ret.resize(t, 0.into());
-            ret.iter_mut()
-                .zip(s)
-                .for_each(|(x, y)| *x = *x * 2.into() - y);
-
-            t *= 2;
-        }
-
-        ret.into()
-    }
-
-    /// 多項式`a`の多項式`b`による商を返す。
-    pub fn div(&self, mut a: Polynomial<P>, mut b: Polynomial<P>) -> Polynomial<P> {
-        if a.len() < b.len() {
-            return Polynomial::zero();
-        }
-
-        let m = a.len() - b.len();
-
-        a.data.reverse();
-        b.data.reverse();
-
-        b = self.inv(b, m);
-        b.data.resize(m + 1, 0.into());
-
-        let mut q = self.mul(a, b);
-        q.data.resize(m + 1, 0.into());
-        q.data.reverse();
-        q.shrink();
-        q
-    }
-
-    /// 多項式`a`の多項式`b`による剰余を返す。
-    pub fn rem(&self, a: Polynomial<P>, b: Polynomial<P>) -> Polynomial<P> {
-        self.divrem(a, b).1
-    }
-
-    /// 多項式`a`の多項式`b`による商と剰余を返す。
-    pub fn divrem(&self, a: Polynomial<P>, b: Polynomial<P>) -> (Polynomial<P>, Polynomial<P>) {
-        if a.len() < b.len() {
-            return (Polynomial::zero(), a);
-        }
-
-        let q = self.div(a.clone(), b.clone());
-
-        let d = b.len() - 1;
-        let mut r = a.sub(self.mul(b, q.clone()));
-        r.data.truncate(d);
-        r.shrink();
-
-        (q, r)
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use crate::{math::prime_mod::Prime, num::const_modint::ConstModIntBuilder};
@@ -382,7 +393,6 @@ mod tests {
     #[test]
     fn test() {
         let ff = ConstModIntBuilder::<P>::new();
-        let po = PolynomialOperator::<P>::new();
 
         let a: Vec<_> = vec![5, 4, 3, 2, 1]
             .into_iter()
@@ -396,9 +406,9 @@ mod tests {
             .collect();
         let b = Polynomial::from(b);
 
-        let (q, r) = po.divrem(a.clone(), b.clone());
+        let (q, r) = a.clone().divrem(b.clone());
 
-        let a_ = po.mul(q, b.clone()) + r;
+        let a_ = q * b.clone() + r;
         assert_eq!(a, a_);
     }
 

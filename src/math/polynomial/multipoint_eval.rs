@@ -1,43 +1,40 @@
 //! 多項式の多点評価
 
-use crate::math::polynomial::{Polynomial, PolynomialOperator};
+use crate::math::polynomial::Polynomial;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::ConstModInt;
 
 /// 多項式の多点評価
 pub trait MultipointEval {
-    /// 多項式の型
-    type Poly;
     /// 多項式の係数の型
     type Value;
 
     /// 多項式の多点評価
     ///
     /// 多項式$f(x)$に値$p_0, p_1, \cdots, p_m$を代入した結果$f(p_0), f(p_1), \cdots, f(p_m)$を求める。
-    fn multipoint_eval(&self, a: Self::Poly, p: Vec<Self::Value>) -> Vec<Self::Value>;
+    fn multipoint_eval(self, p: Vec<Self::Value>) -> Vec<Self::Value>;
 }
 
-impl<P: PrimeMod> MultipointEval for PolynomialOperator<P> {
-    type Poly = Polynomial<P>;
+impl<P: PrimeMod> MultipointEval for Polynomial<P> {
     type Value = ConstModInt<P>;
 
-    fn multipoint_eval(&self, a: Self::Poly, p: Vec<Self::Value>) -> Vec<Self::Value> {
+    fn multipoint_eval(self, p: Vec<Self::Value>) -> Vec<Self::Value> {
         let m = p.len();
 
         let k = m.next_power_of_two();
 
-        let mut f = vec![Polynomial::constant(1.into()); k * 2];
+        let mut f = vec![Self::constant(1.into()); k * 2];
         for i in 0..m {
             f[i + k] = vec![-p[i], 1.into()].into();
         }
         for i in (1..k).rev() {
-            f[i] = self.mul(f[i << 1].clone(), f[(i << 1) | 1].clone());
+            f[i] = f[i << 1].clone() * f[(i << 1) | 1].clone();
         }
 
-        f[1] = self.rem(a, f[1].clone());
+        f[1] = self % f[1].clone();
 
         for i in 2..k + m {
-            f[i] = self.rem(f[i >> 1].clone(), std::mem::take(&mut f[i]));
+            f[i] = f[i >> 1].clone() % std::mem::take(&mut f[i]);
         }
 
         f.into_iter()
@@ -62,7 +59,6 @@ mod tests {
     #[test]
     fn test() {
         let ff = ConstModIntBuilder::<P>::new();
-        let po = PolynomialOperator::<P>::new();
 
         let mut rng = rand::thread_rng();
 
@@ -78,7 +74,7 @@ mod tests {
             .collect::<Vec<_>>();
 
         let ans = p.iter().map(|p| a.eval(*p)).collect::<Vec<_>>();
-        let res = po.multipoint_eval(a, p);
+        let res = a.multipoint_eval(p);
 
         assert_eq!(res, ans);
     }

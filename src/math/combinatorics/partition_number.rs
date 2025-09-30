@@ -10,7 +10,6 @@ use crate::{
 
 /// 分割数$p(0), \dots, p(n)$を列挙する。
 pub fn partition_number<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {
-    let fps = PolynomialOperator::<P>::new();
     let ff = ConstModIntBuilder::<P>::new();
     let mut f = vec![ff.from_u64(0); n + 1];
     f[0] = ff.from_u64(1);
@@ -25,8 +24,7 @@ pub fn partition_number<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {
         f[i * (3 * i - 1) / 2] += ff.from_i64(if i % 2 == 0 { 1 } else { -1 });
     }
 
-    let f = Polynomial::from(f);
-    fps.fps_inv(f).unwrap().into()
+    Polynomial::from(f).fps_inv().unwrap().into()
 }
 
 #[cfg(test)]

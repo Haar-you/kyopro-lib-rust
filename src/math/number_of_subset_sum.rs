@@ -10,7 +10,6 @@ use crate::num::const_modint::*;
 /// $\\#_p$ Subset sum
 pub fn number_of_subset_sum<P: PrimeMod>(s: Vec<usize>, t: usize) -> Vec<ConstModInt<P>> {
     let ff = ConstModIntBuilder::<P>::new();
-    let fps = PolynomialOperator::<P>::new();
 
     let mut c = vec![0; t + 1];
     for x in s {
@@ -31,5 +30,5 @@ pub fn number_of_subset_sum<P: PrimeMod>(s: Vec<usize>, t: usize) -> Vec<ConstMo
         }
     }
 
-    fps.fps_exp(ret.into()).unwrap().into()
+    Polynomial::from(ret).fps_exp().unwrap().into()
 }

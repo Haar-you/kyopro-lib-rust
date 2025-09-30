@@ -2,7 +2,7 @@
 use crate::math::factorial::FactorialTable;
 use crate::math::fps::pow::FpsPow;
 use crate::math::mod_ops::enum_inv::enumerate_mod_inv;
-use crate::math::polynomial::PolynomialOperator;
+use crate::math::polynomial::Polynomial;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
@@ -10,7 +10,6 @@ use crate::num::const_modint::*;
 pub fn stirling_first_fixed_k<P: PrimeMod>(n: usize, k: usize) -> Vec<ConstModInt<P>> {
     assert!(k <= n);
 
-    let fps = PolynomialOperator::<P>::new();
     let ft = FactorialTable::new(n, ConstModIntBuilder::new());
 
     let mut ret: Vec<ConstModInt<P>> = enumerate_mod_inv(n, P::PRIME_NUM as u64)
@@ -22,7 +21,7 @@ pub fn stirling_first_fixed_k<P: PrimeMod>(n: usize, k: usize) -> Vec<ConstModIn
         ret[i] = -ret[i];
     }
 
-    ret = fps.fps_pow(ret.into(), k as u64).unwrap().into();
+    ret = Polynomial::from(ret).fps_pow(k as u64).unwrap().into();
 
     for (i, reti) in ret.iter_mut().enumerate().take(n + 1).skip(k) {
         *reti *= ft.inv_facto(k) * ft.facto(i);

@@ -1,22 +1,22 @@
 //! 形式的冪級数の逆数
-use crate::math::polynomial::{Polynomial, PolynomialOperator};
+use crate::math::polynomial::Polynomial;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::ff::*;
 
 /// 形式的冪級数の逆数
 pub trait FpsInv {
-    /// 多項式の型
-    type Poly;
+    /// 戻り値の型
+    type Output;
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\frac{1}{f(x)}$の先頭$n$項を求める。
-    fn fps_inv(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
+    fn fps_inv(self) -> Result<Self::Output, &'static str>;
 }
 
-impl<P: PrimeMod> FpsInv for PolynomialOperator<P> {
-    type Poly = Polynomial<P>;
+impl<P: PrimeMod> FpsInv for Polynomial<P> {
+    type Output = Self;
 
-    fn fps_inv(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {
-        let f: Vec<_> = f.into();
+    fn fps_inv(self) -> Result<Self::Output, &'static str> {
+        let f: Vec<_> = self.into();
 
         if f[0].value() == 0 {
             return Err("定数項が`0`の形式的べき級数の逆数を計算しようとした。");
@@ -30,27 +30,27 @@ impl<P: PrimeMod> FpsInv for PolynomialOperator<P> {
         loop {
             let mut f = f[0..(2 * t).min(n)].to_vec();
             f.resize(2 * t, 0.into());
-            self.ntt.ntt(&mut f);
+            Self::NTT.ntt(&mut f);
 
             let mut g = ret.clone();
             g.resize(2 * t, 0.into());
-            self.ntt.ntt(&mut g);
+            Self::NTT.ntt(&mut g);
 
             for (f, g) in f.iter_mut().zip(g.iter()) {
                 *f *= *g;
             }
-            self.ntt.intt(&mut f);
+            Self::NTT.intt(&mut f);
 
             let h = f;
 
             let mut h = h[t..2 * t].to_vec();
             h.resize(2 * t, 0.into());
-            self.ntt.ntt(&mut h);
+            Self::NTT.ntt(&mut h);
 
             for (h, g) in h.iter_mut().zip(g.iter()) {
                 *h *= *g;
             }
-            self.ntt.intt(&mut h);
+            Self::NTT.intt(&mut h);
 
             let g = h;
 

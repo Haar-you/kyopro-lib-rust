@@ -33,52 +33,41 @@ mod tests {
 
     #[test]
     fn test_inv() {
-        let po = PolynomialOperator::<P>::new();
+        let a = Polynomial::<P>::from(vec![5, 4, 3, 2, 1]);
+        let b = a.clone().fps_inv().unwrap();
 
-        let a: Vec<u32> = vec![5, 4, 3, 2, 1];
-        let b = po.fps_inv(a.clone().into()).unwrap();
-
-        assert_eq!(
-            po.mul(a.into(), b).get_until(5),
-            Polynomial::constant(1_u32.into())
-        );
+        assert_eq!((a * b).get_until(5), Polynomial::constant(1_u32.into()));
     }
 
     #[test]
     fn test_log() {
-        let po = PolynomialOperator::<P>::new();
-
-        let a: Vec<u32> = vec![1, 1, 499122179, 166374064, 291154613];
-        let b = po.fps_log(a.clone().into()).unwrap();
+        let a = Polynomial::<P>::from(vec![1, 1, 499122179, 166374064, 291154613]);
+        let b = a.fps_log().unwrap();
 
         assert_eq!(b, vec![0, 1, 2, 3, 4].into());
     }
 
     #[test]
     fn test_exp() {
-        let po = PolynomialOperator::<P>::new();
+        let a = Polynomial::<P>::from(vec![0, 1, 2, 3, 4]);
+        let b = a.clone().fps_exp().unwrap();
+        let b = b.fps_log().unwrap();
 
-        let a: Vec<u32> = vec![0, 1, 2, 3, 4];
-        let b = po.fps_exp(a.clone().into()).unwrap();
-        let b = po.fps_log(b).unwrap();
-
-        assert_eq!(b, a.into());
+        assert_eq!(b, a);
     }
 
     #[test]
     fn test_pow() {
-        let po = PolynomialOperator::<P>::new();
-
-        let a: Vec<u32> = vec![0, 0, 9, 2];
-        let b = po.fps_pow(a.clone().into(), 3).unwrap();
+        let a = Polynomial::<P>::from(vec![0, 0, 9, 2]);
+        let b = a.clone().fps_pow(3).unwrap();
         assert_eq!(b, vec![0, 0, 0, 0].into());
 
-        let a: Vec<u32> = vec![1, 1];
-        let b = po.fps_pow(a.clone().into(), 2).unwrap();
+        let a = Polynomial::<P>::from(vec![1, 1]);
+        let b = a.clone().fps_pow(2).unwrap();
         assert_eq!(b, vec![1, 2].into());
 
-        let a: Vec<u32> = vec![0, 0];
-        let b = po.fps_pow(a.clone().into(), 0).unwrap();
+        let a = Polynomial::<P>::from(vec![0, 0]);
+        let b = a.clone().fps_pow(0).unwrap();
         dbg!(b);
     }
 }

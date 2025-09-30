@@ -11,14 +11,13 @@ use crate::num::const_modint::*;
 /// ベルヌーイ数$B_0, \dots, B_n$を列挙する。
 pub fn bernoulli_number<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {
     let ft = FactorialTable::new(n + 1, ConstModIntBuilder::new());
-    let fps = PolynomialOperator::<P>::new();
     let mut x = vec![ConstModInt::new(0); n + 1];
 
     for (i, xi) in x.iter_mut().enumerate().take(n + 1) {
         *xi = ft.inv_facto(i + 1);
     }
 
-    x = fps.fps_inv(x.into()).unwrap().into();
+    x = Polynomial::from(x).fps_inv().unwrap().into();
     for (i, xi) in x.iter_mut().enumerate().take(n + 1) {
         *xi *= ft.facto(i);
     }

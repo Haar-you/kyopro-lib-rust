@@ -1,5 +1,5 @@
 //! 多項式補間
-use crate::math::polynomial::{multipoint_eval::MultipointEval, Polynomial, PolynomialOperator};
+use crate::math::polynomial::{multipoint_eval::MultipointEval, Polynomial};
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::ConstModInt;
 
@@ -14,32 +14,25 @@ pub fn polynomial_interpolation<P: PrimeMod>(
     let xs = xs.into_iter().map(Into::into).collect::<Vec<_>>();
     let ys = ys.into_iter().map(Into::into).collect::<Vec<_>>();
 
-    let po = PolynomialOperator::<P>::new();
-
-    let g = rec_g(0, n, &xs, &po);
+    let g = rec_g(0, n, &xs);
 
     let mut gd = g.clone();
     gd.differentiate();
-    let gd = po.multipoint_eval(gd, xs.clone());
+    let gd = gd.multipoint_eval(xs.clone());
 
-    let (a, b) = rec_frac(0, n, &xs, &ys, &gd, &po);
+    let (a, b) = rec_frac(0, n, &xs, &ys, &gd);
 
-    let t = po.mul(a, g);
-    po.div(t, b)
+    let t = a * g;
+    t / b
 }
 
-fn rec_g<P: PrimeMod>(
-    l: usize,
-    r: usize,
-    xs: &[ConstModInt<P>],
-    po: &PolynomialOperator<P>,
-) -> Polynomial<P> {
+fn rec_g<P: PrimeMod>(l: usize, r: usize, xs: &[ConstModInt<P>]) -> Polynomial<P> {
     if r - l == 1 {
         return vec![-xs[l], 1.into()].into();
     }
 
     let m = (l + r) / 2;
-    po.mul(rec_g(l, m, xs, po), rec_g(m, r, xs, po))
+    rec_g(l, m, xs) * rec_g(m, r, xs)
 }
 
 fn rec_frac<P: PrimeMod>(
@@ -48,7 +41,6 @@ fn rec_frac<P: PrimeMod>(
     xs: &[ConstModInt<P>],
     ys: &[ConstModInt<P>],
     gs: &[ConstModInt<P>],
-    po: &PolynomialOperator<P>,
 ) -> (Polynomial<P>, Polynomial<P>) {
     if r - l == 1 {
         return (vec![ys[l]].into(), vec![-xs[l] * gs[l], gs[l]].into());
@@ -56,11 +48,11 @@ fn rec_frac<P: PrimeMod>(
 
     let m = (l + r) / 2;
 
-    let (la, lb) = rec_frac(l, m, xs, ys, gs, po);
-    let (ra, rb) = rec_frac(m, r, xs, ys, gs, po);
+    let (la, lb) = rec_frac(l, m, xs, ys, gs);
+    let (ra, rb) = rec_frac(m, r, xs, ys, gs);
 
-    let deno = po.mul(lb.clone(), rb.clone());
-    let nume = po.mul(la, rb) + po.mul(ra, lb);
+    let deno = lb.clone() * rb.clone();
+    let nume = la * rb + ra * lb;
 
     (nume, deno)
 }
