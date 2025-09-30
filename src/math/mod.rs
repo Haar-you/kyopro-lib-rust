@@ -15,7 +15,6 @@ pub mod primitive_root;
 
 pub mod combinatorics;
 
-pub mod binomial_coefficient;
 pub mod factorial;
 pub mod factorial_large;
 

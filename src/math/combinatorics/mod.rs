@@ -12,6 +12,8 @@ pub mod stirling_second;
 pub mod stirling_second_fixed_k;
 pub mod stirling_second_table;
 
+pub mod binomial_coefficient;
+
 #[cfg(test)]
 mod tests {
 
