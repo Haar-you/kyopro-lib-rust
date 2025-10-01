@@ -1,5 +1,6 @@
 //! アルゴリズム
 
+pub mod bitwise_popcount;
 pub mod bsearch;
 pub mod bsearch_slice;
 pub mod cartesian_tree;

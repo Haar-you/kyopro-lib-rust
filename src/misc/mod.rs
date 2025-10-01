@@ -1,6 +1,5 @@
 //! 分類を放置しているもの /  便利そうなもの置き場
 
-pub mod bitwise_sum_popcount;
 pub mod dice;
 pub mod nullable_usize;
 pub mod range;
