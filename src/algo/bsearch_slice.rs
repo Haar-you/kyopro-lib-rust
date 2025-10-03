@@ -105,8 +105,7 @@ mod tests {
                 a.iter()
                     .enumerate()
                     .find(|(_, &y)| y >= x)
-                    .map(|(i, _)| i)
-                    .unwrap_or(n)
+                    .map_or(n, |(i, _)| i)
             );
 
             assert_eq!(
@@ -114,8 +113,7 @@ mod tests {
                 a.iter()
                     .enumerate()
                     .find(|(_, &y)| y > x)
-                    .map(|(i, _)| i)
-                    .unwrap_or(n)
+                    .map_or(n, |(i, _)| i)
             );
         }
     }

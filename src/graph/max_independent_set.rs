@@ -49,11 +49,7 @@ fn rec<E: EdgeTrait>(
                 .count()
         });
 
-    let next = if let Some(next) = next {
-        next
-    } else {
-        return;
-    };
+    let Some(next) = next else { return };
 
     let mut deg = 0;
     let mut neighbour: u64 = 0;
