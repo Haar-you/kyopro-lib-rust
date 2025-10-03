@@ -34,6 +34,8 @@ pub mod tsort;
 pub mod chinese_postman;
 pub mod tsp;
 
+pub mod chromatic_number;
+
 use std::marker::PhantomData;
 
 /// [`Graph`]にもたせる辺の満たすトレイト。
@@ -113,12 +115,27 @@ pub struct GraphNode<E> {
     pub edges: Vec<E>,
 }
 
+impl<E: EdgeTrait> GraphNode<E> {
+    pub fn iter(&self) -> impl Iterator<Item = &E> {
+        self.edges.iter()
+    }
+}
+
 impl<E: EdgeTrait> IntoIterator for GraphNode<E> {
     type Item = E;
     type IntoIter = std::vec::IntoIter<Self::Item>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.edges.into_iter()
+    }
+}
+
+impl<'a, E: EdgeTrait> IntoIterator for &'a GraphNode<E> {
+    type Item = &'a E;
+    type IntoIter = std::slice::Iter<'a, E>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.edges.iter()
     }
 }
 
