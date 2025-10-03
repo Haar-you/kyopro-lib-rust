@@ -2,6 +2,7 @@
 
 /// [`From`]を実装する。
 #[macro_export]
+#[doc(hidden)]
 macro_rules! impl_from {
     ($(#[$meta:meta])* [ $($t:tt)* ]; $from:ty => $into:ty, $f:expr) => {
         impl<$($t)*> From<$from> for $into {
@@ -18,6 +19,7 @@ macro_rules! impl_from {
 
 /// [`TryFrom`]を実装する。
 #[macro_export]
+#[doc(hidden)]
 macro_rules! impl_try_from {
     ($(#[$meta:meta])* [ $($t:tt)* ]; $from:ty => $into:ty, type Error = $error:ty, $f:expr) => {
         impl<$($t)*> TryFrom<$from> for $into {

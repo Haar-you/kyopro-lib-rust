@@ -2,6 +2,7 @@
 
 /// [`crate::num::one_zero::One`], [`crate::num::one_zero::Zero`]を実装する。
 #[macro_export]
+#[doc(hidden)]
 macro_rules! impl_one_zero {
     ([$($bound:tt)*]; $t:ty; zero: $e:expr; $($rest:tt)*) => {
         impl <$($bound)*> Zero for $t { fn zero() -> Self { $e } }
