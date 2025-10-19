@@ -154,6 +154,7 @@ impl<P: PrimeMod> Polynomial<P> {
         }
     }
 
+    /// 多項式の$p$乗を計算する。
     pub fn pow(self, mut p: u64) -> Self {
         let mut ret = Self::constant(1.into());
         let mut a = self;
