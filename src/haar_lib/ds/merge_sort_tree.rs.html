@@ -137,19 +137,21 @@
 <a href=#121 id=121 data-nosnippet>121</a>        <span class="kw">let </span>n = <span class="number">300</span>;
 <a href=#122 id=122 data-nosnippet>122</a>        <span class="kw">let </span>t = <span class="number">300</span>;
 <a href=#123 id=123 data-nosnippet>123</a>
-<a href=#124 id=124 data-nosnippet>124</a>        <span class="kw">let </span>a = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| rng.gen::&lt;u64&gt;() % <span class="number">10000</span>).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#125 id=125 data-nosnippet>125</a>        <span class="kw">let </span>s = MergeSortTree::new(a.clone());
-<a href=#126 id=126 data-nosnippet>126</a>
-<a href=#127 id=127 data-nosnippet>127</a>        <span class="kw">for _ in </span><span class="number">0</span>..t {
-<a href=#128 id=128 data-nosnippet>128</a>            <span class="kw">let </span>Range { start: l, end: r } = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
-<a href=#129 id=129 data-nosnippet>129</a>            <span class="kw">let </span>x = rng.gen::&lt;u64&gt;() % <span class="number">10000</span>;
-<a href=#130 id=130 data-nosnippet>130</a>
-<a href=#131 id=131 data-nosnippet>131</a>            <span class="kw">let </span>(res_sum, res_count) = s.sum_count_le(l..r, x);
-<a href=#132 id=132 data-nosnippet>132</a>            <span class="kw">let </span>ans_sum = a[l..r].iter().filter(|&amp;&amp;y| y &lt;= x).sum::&lt;u64&gt;();
-<a href=#133 id=133 data-nosnippet>133</a>            <span class="kw">let </span>ans_count = a[l..r].iter().filter(|&amp;&amp;y| y &lt;= x).count();
-<a href=#134 id=134 data-nosnippet>134</a>
-<a href=#135 id=135 data-nosnippet>135</a>            <span class="macro">assert_eq!</span>(res_sum, ans_sum);
-<a href=#136 id=136 data-nosnippet>136</a>            <span class="macro">assert_eq!</span>(res_count, ans_count);
-<a href=#137 id=137 data-nosnippet>137</a>        }
-<a href=#138 id=138 data-nosnippet>138</a>    }
-<a href=#139 id=139 data-nosnippet>139</a>}</code></pre></div></section></main></body></html>
+<a href=#124 id=124 data-nosnippet>124</a>        <span class="kw">let </span>a = std::iter::repeat_with(|| rng.gen::&lt;u64&gt;() % <span class="number">10000</span>)
+<a href=#125 id=125 data-nosnippet>125</a>            .take(n)
+<a href=#126 id=126 data-nosnippet>126</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#127 id=127 data-nosnippet>127</a>        <span class="kw">let </span>s = MergeSortTree::new(a.clone());
+<a href=#128 id=128 data-nosnippet>128</a>
+<a href=#129 id=129 data-nosnippet>129</a>        <span class="kw">for _ in </span><span class="number">0</span>..t {
+<a href=#130 id=130 data-nosnippet>130</a>            <span class="kw">let </span>Range { start: l, end: r } = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
+<a href=#131 id=131 data-nosnippet>131</a>            <span class="kw">let </span>x = rng.gen::&lt;u64&gt;() % <span class="number">10000</span>;
+<a href=#132 id=132 data-nosnippet>132</a>
+<a href=#133 id=133 data-nosnippet>133</a>            <span class="kw">let </span>(res_sum, res_count) = s.sum_count_le(l..r, x);
+<a href=#134 id=134 data-nosnippet>134</a>            <span class="kw">let </span>ans_sum = a[l..r].iter().filter(|&amp;&amp;y| y &lt;= x).sum::&lt;u64&gt;();
+<a href=#135 id=135 data-nosnippet>135</a>            <span class="kw">let </span>ans_count = a[l..r].iter().filter(|&amp;&amp;y| y &lt;= x).count();
+<a href=#136 id=136 data-nosnippet>136</a>
+<a href=#137 id=137 data-nosnippet>137</a>            <span class="macro">assert_eq!</span>(res_sum, ans_sum);
+<a href=#138 id=138 data-nosnippet>138</a>            <span class="macro">assert_eq!</span>(res_count, ans_count);
+<a href=#139 id=139 data-nosnippet>139</a>        }
+<a href=#140 id=140 data-nosnippet>140</a>    }
+<a href=#141 id=141 data-nosnippet>141</a>}</code></pre></div></section></main></body></html>

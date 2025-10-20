@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["eratosthenes","linear_sieve","miller_rabin","segmented"],"trait":["PrimalityTest"]};

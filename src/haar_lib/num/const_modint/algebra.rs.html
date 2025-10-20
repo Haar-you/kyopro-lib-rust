@@ -18,21 +18,22 @@
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">pub use </span><span class="kw">crate</span>::algebra::{prod::Prod, sum::Sum};
-<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use crate</span>::{impl_algebra, num::const_modint::ConstModInt};
-<a href=#6 id=6 data-nosnippet>6</a>
-<a href=#7 id=7 data-nosnippet>7</a><span class="macro">impl_algebra!</span>(
-<a href=#8 id=8 data-nosnippet>8</a>    [<span class="kw">const </span>M: u32]; Sum&lt;ConstModInt&lt;M&gt;&gt;;
-<a href=#9 id=9 data-nosnippet>9</a>    op: |a: <span class="self">Self</span>, b: <span class="self">Self</span>| <span class="self">Self</span>(a.<span class="number">0 </span>+ b.<span class="number">0</span>);
-<a href=#10 id=10 data-nosnippet>10</a>    id: <span class="self">Self</span>(ConstModInt::new(<span class="number">0</span>));
-<a href=#11 id=11 data-nosnippet>11</a>    inv: |a: <span class="self">Self</span>| <span class="self">Self</span>(-a.<span class="number">0</span>);
-<a href=#12 id=12 data-nosnippet>12</a>    assoc;
-<a href=#13 id=13 data-nosnippet>13</a>    commu;
-<a href=#14 id=14 data-nosnippet>14</a>);
-<a href=#15 id=15 data-nosnippet>15</a>
-<a href=#16 id=16 data-nosnippet>16</a><span class="macro">impl_algebra!</span>(
-<a href=#17 id=17 data-nosnippet>17</a>    [<span class="kw">const </span>M: u32]; Prod&lt;ConstModInt&lt;M&gt;&gt;;
-<a href=#18 id=18 data-nosnippet>18</a>    op: |a: <span class="self">Self</span>, b: <span class="self">Self</span>| <span class="self">Self</span>(a.<span class="number">0 </span>* b.<span class="number">0</span>);
-<a href=#19 id=19 data-nosnippet>19</a>    id: <span class="self">Self</span>(ConstModInt::new(<span class="number">1</span>));
-<a href=#20 id=20 data-nosnippet>20</a>    assoc;
-<a href=#21 id=21 data-nosnippet>21</a>    commu;
-<a href=#22 id=22 data-nosnippet>22</a>);</code></pre></div></section></main></body></html>
+<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span><span class="kw">crate</span>::math::prime_mod::PrimeMod;
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use crate</span>::{impl_algebra, num::const_modint::ConstModInt};
+<a href=#7 id=7 data-nosnippet>7</a>
+<a href=#8 id=8 data-nosnippet>8</a><span class="macro">impl_algebra!</span>(
+<a href=#9 id=9 data-nosnippet>9</a>    [M: PrimeMod]; Sum&lt;ConstModInt&lt;M&gt;&gt;;
+<a href=#10 id=10 data-nosnippet>10</a>    op: |a: <span class="self">Self</span>, b: <span class="self">Self</span>| <span class="self">Self</span>(a.<span class="number">0 </span>+ b.<span class="number">0</span>);
+<a href=#11 id=11 data-nosnippet>11</a>    id: <span class="self">Self</span>(ConstModInt::new(<span class="number">0</span>));
+<a href=#12 id=12 data-nosnippet>12</a>    inv: |a: <span class="self">Self</span>| <span class="self">Self</span>(-a.<span class="number">0</span>);
+<a href=#13 id=13 data-nosnippet>13</a>    assoc;
+<a href=#14 id=14 data-nosnippet>14</a>    commu;
+<a href=#15 id=15 data-nosnippet>15</a>);
+<a href=#16 id=16 data-nosnippet>16</a>
+<a href=#17 id=17 data-nosnippet>17</a><span class="macro">impl_algebra!</span>(
+<a href=#18 id=18 data-nosnippet>18</a>    [M: PrimeMod]; Prod&lt;ConstModInt&lt;M&gt;&gt;;
+<a href=#19 id=19 data-nosnippet>19</a>    op: |a: <span class="self">Self</span>, b: <span class="self">Self</span>| <span class="self">Self</span>(a.<span class="number">0 </span>* b.<span class="number">0</span>);
+<a href=#20 id=20 data-nosnippet>20</a>    id: <span class="self">Self</span>(ConstModInt::new(<span class="number">1</span>));
+<a href=#21 id=21 data-nosnippet>21</a>    assoc;
+<a href=#22 id=22 data-nosnippet>22</a>    commu;
+<a href=#23 id=23 data-nosnippet>23</a>);</code></pre></div></section></main></body></html>

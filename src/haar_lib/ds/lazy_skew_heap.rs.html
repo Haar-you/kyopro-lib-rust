@@ -54,7 +54,7 @@
 <a href=#38 id=38 data-nosnippet>38</a>        <span class="self">self</span>.lazy = T::zero();
 <a href=#39 id=39 data-nosnippet>39</a>    }
 <a href=#40 id=40 data-nosnippet>40</a>
-<a href=#41 id=41 data-nosnippet>41</a>    <span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="prelude-ty">Option</span>&lt;Box&lt;Node&lt;T&gt;&gt;&gt;) {
+<a href=#41 id=41 data-nosnippet>41</a>    <span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="prelude-ty">Option</span>&lt;Box&lt;<span class="self">Self</span>&gt;&gt;) {
 <a href=#42 id=42 data-nosnippet>42</a>        <span class="self">self</span>.propagate();
 <a href=#43 id=43 data-nosnippet>43</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>other) = other {
 <a href=#44 id=44 data-nosnippet>44</a>            other.as_mut().propagate();
@@ -90,7 +90,7 @@
 <a href=#74 id=74 data-nosnippet>74</a>    }
 <a href=#75 id=75 data-nosnippet>75</a>
 <a href=#76 id=76 data-nosnippet>76</a>    <span class="doccomment">/// 他の[`LazySkewHeap&lt;T&gt;`]を融合する。
-<a href=#77 id=77 data-nosnippet>77</a>    </span><span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: LazySkewHeap&lt;T&gt;) {
+<a href=#77 id=77 data-nosnippet>77</a>    </span><span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="self">Self</span>) {
 <a href=#78 id=78 data-nosnippet>78</a>        <span class="self">self</span>.size += other.size;
 <a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">match </span><span class="self">self</span>.root.as_mut() {
 <a href=#80 id=80 data-nosnippet>80</a>            <span class="prelude-val">None </span>=&gt; <span class="self">self</span>.root = other.root,

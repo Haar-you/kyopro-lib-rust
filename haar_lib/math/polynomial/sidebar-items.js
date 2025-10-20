@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Polynomial","PolynomialOperator"]};
+window.SIDEBAR_ITEMS = {"mod":["multipoint_eval","polynomial_interpolation","polynomial_taylor_shift","shift_sampling_points","sparse"],"struct":["Polynomial"]};

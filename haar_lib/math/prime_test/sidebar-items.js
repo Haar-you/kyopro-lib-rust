@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["eratosthenes","miller_rabin","segmented"],"trait":["CheckPrime"]};

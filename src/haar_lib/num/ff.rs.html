@@ -31,19 +31,20 @@
 <a href=#15 id=15 data-nosnippet>15</a>    </span><span class="kw">fn </span>frac(<span class="kw-2">&amp;</span><span class="self">self</span>, a: i64, b: i64) -&gt; <span class="self">Self</span>::Element {
 <a href=#16 id=16 data-nosnippet>16</a>        <span class="self">self</span>.from_i64(a) / <span class="self">self</span>.from_i64(b)
 <a href=#17 id=17 data-nosnippet>17</a>    }
-<a href=#18 id=18 data-nosnippet>18</a>    <span class="kw">fn </span>modulo(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32;
-<a href=#19 id=19 data-nosnippet>19</a>}
-<a href=#20 id=20 data-nosnippet>20</a>
-<a href=#21 id=21 data-nosnippet>21</a><span class="doccomment">/// 有限体の元
-<a href=#22 id=22 data-nosnippet>22</a></span><span class="kw">pub trait </span>FFElem: Sized + Copy + Neg&lt;Output = <span class="self">Self</span>&gt; + PartialEq + Arithmetic {
-<a href=#23 id=23 data-nosnippet>23</a>    <span class="doccomment">/// 内部の値を取り出す。
-<a href=#24 id=24 data-nosnippet>24</a>    </span><span class="kw">fn </span>value(<span class="self">self</span>) -&gt; u32;
-<a href=#25 id=25 data-nosnippet>25</a>    <span class="doccomment">/// 剰余の除数を返す。
-<a href=#26 id=26 data-nosnippet>26</a>    </span><span class="kw">fn </span>modulo(<span class="self">self</span>) -&gt; u32;
-<a href=#27 id=27 data-nosnippet>27</a>    <span class="doccomment">/// `self`の`p`乗を返す。
-<a href=#28 id=28 data-nosnippet>28</a>    </span><span class="kw">fn </span>pow(<span class="self">self</span>, p: u64) -&gt; <span class="self">Self</span>;
-<a href=#29 id=29 data-nosnippet>29</a>    <span class="doccomment">/// `self`の乗法の逆元を返す。
-<a href=#30 id=30 data-nosnippet>30</a>    </span><span class="kw">fn </span>inv(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
-<a href=#31 id=31 data-nosnippet>31</a>        <span class="self">self</span>.pow(<span class="self">self</span>.modulo() <span class="kw">as </span>u64 - <span class="number">2</span>)
-<a href=#32 id=32 data-nosnippet>32</a>    }
-<a href=#33 id=33 data-nosnippet>33</a>}</code></pre></div></section></main></body></html>
+<a href=#18 id=18 data-nosnippet>18</a>    <span class="doccomment">/// 剰余の除数を返す。
+<a href=#19 id=19 data-nosnippet>19</a>    </span><span class="kw">fn </span>modulo(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32;
+<a href=#20 id=20 data-nosnippet>20</a>}
+<a href=#21 id=21 data-nosnippet>21</a>
+<a href=#22 id=22 data-nosnippet>22</a><span class="doccomment">/// 有限体の元
+<a href=#23 id=23 data-nosnippet>23</a></span><span class="kw">pub trait </span>FFElem: Sized + Copy + Neg&lt;Output = <span class="self">Self</span>&gt; + PartialEq + Arithmetic {
+<a href=#24 id=24 data-nosnippet>24</a>    <span class="doccomment">/// 内部の値を取り出す。
+<a href=#25 id=25 data-nosnippet>25</a>    </span><span class="kw">fn </span>value(<span class="self">self</span>) -&gt; u32;
+<a href=#26 id=26 data-nosnippet>26</a>    <span class="doccomment">/// 剰余の除数を返す。
+<a href=#27 id=27 data-nosnippet>27</a>    </span><span class="kw">fn </span>modulo(<span class="self">self</span>) -&gt; u32;
+<a href=#28 id=28 data-nosnippet>28</a>    <span class="doccomment">/// `self`の`p`乗を返す。
+<a href=#29 id=29 data-nosnippet>29</a>    </span><span class="kw">fn </span>pow(<span class="self">self</span>, p: u64) -&gt; <span class="self">Self</span>;
+<a href=#30 id=30 data-nosnippet>30</a>    <span class="doccomment">/// `self`の乗法の逆元を返す。
+<a href=#31 id=31 data-nosnippet>31</a>    </span><span class="kw">fn </span>inv(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+<a href=#32 id=32 data-nosnippet>32</a>        <span class="self">self</span>.pow(<span class="self">self</span>.modulo() <span class="kw">as </span>u64 - <span class="number">2</span>)
+<a href=#33 id=33 data-nosnippet>33</a>    }
+<a href=#34 id=34 data-nosnippet>34</a>}</code></pre></div></section></main></body></html>

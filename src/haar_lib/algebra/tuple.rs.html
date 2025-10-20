@@ -20,7 +20,7 @@
 <a href=#4 id=4 data-nosnippet>4</a><span class="macro">macro_rules!</span> impl_tuple {
 <a href=#5 id=5 data-nosnippet>5</a>    ($(<span class="attr">#[<span class="macro-nonterminal">$meta</span>:meta]</span>)* <span class="macro-nonterminal">$a</span>:ident; $(<span class="macro-nonterminal">$t</span>:tt),<span class="kw-2">*</span>; $(<span class="macro-nonterminal">$i</span>:tt),<span class="kw-2">*</span>) =&gt; {
 <a href=#6 id=6 data-nosnippet>6</a>        $(<span class="attr">#[<span class="macro-nonterminal">$meta</span>]</span>)*
-<a href=#7 id=7 data-nosnippet>7</a>        <span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+<a href=#7 id=7 data-nosnippet>7</a>        <span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 <a href=#8 id=8 data-nosnippet>8</a>        </span><span class="kw">pub struct </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt;($(<span class="kw">pub </span><span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>);
 <a href=#9 id=9 data-nosnippet>9</a>
 <a href=#10 id=10 data-nosnippet>10</a>        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Set),<span class="kw-2">*</span>&gt; Set <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {}

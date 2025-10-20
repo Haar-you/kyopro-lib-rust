@@ -192,90 +192,91 @@
 <a href=#176 id=176 data-nosnippet>176</a></span><span class="kw">mod </span>tests {
 <a href=#177 id=177 data-nosnippet>177</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#178 id=178 data-nosnippet>178</a>    <span class="kw">use </span><span class="kw">crate</span>::iter::collect::CollectVec;
-<a href=#179 id=179 data-nosnippet>179</a>    <span class="kw">use </span><span class="kw">crate</span>::num::{const_modint::<span class="kw-2">*</span>, modint::<span class="kw-2">*</span>};
-<a href=#180 id=180 data-nosnippet>180</a>    <span class="kw">use </span><span class="kw">crate</span>::timer;
-<a href=#181 id=181 data-nosnippet>181</a>    <span class="kw">use </span>rand::Rng;
-<a href=#182 id=182 data-nosnippet>182</a>
-<a href=#183 id=183 data-nosnippet>183</a>    <span class="attr">#[derive(Clone, Copy, Debug)]
-<a href=#184 id=184 data-nosnippet>184</a>    </span><span class="kw">enum </span>Ops {
-<a href=#185 id=185 data-nosnippet>185</a>        Add(u64),
-<a href=#186 id=186 data-nosnippet>186</a>        Sub(u64),
-<a href=#187 id=187 data-nosnippet>187</a>        Mul(u64),
-<a href=#188 id=188 data-nosnippet>188</a>        Div(u64),
-<a href=#189 id=189 data-nosnippet>189</a>        Neg,
-<a href=#190 id=190 data-nosnippet>190</a>    }
-<a href=#191 id=191 data-nosnippet>191</a>
-<a href=#192 id=192 data-nosnippet>192</a>    <span class="attr">#[test]
-<a href=#193 id=193 data-nosnippet>193</a>    </span><span class="kw">fn </span>test() {
-<a href=#194 id=194 data-nosnippet>194</a>        <span class="kw">const </span>MOD: u32 = <span class="number">998244353</span>;
-<a href=#195 id=195 data-nosnippet>195</a>
-<a href=#196 id=196 data-nosnippet>196</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-<a href=#197 id=197 data-nosnippet>197</a>
-<a href=#198 id=198 data-nosnippet>198</a>        <span class="kw">let </span>constmodint = ConstModIntBuilder::&lt;MOD&gt;;
-<a href=#199 id=199 data-nosnippet>199</a>        <span class="kw">let </span>modint = ModIntBuilder::new(MOD);
-<a href=#200 id=200 data-nosnippet>200</a>        <span class="kw">let </span>montgomery = MontgomeryBuilder::new(MOD);
-<a href=#201 id=201 data-nosnippet>201</a>
-<a href=#202 id=202 data-nosnippet>202</a>        <span class="kw">let </span><span class="kw-2">mut </span>ans = constmodint.from_u64(<span class="number">1</span>);
-<a href=#203 id=203 data-nosnippet>203</a>        <span class="kw">let </span><span class="kw-2">mut </span>ans2 = modint.from_u64(<span class="number">1</span>);
-<a href=#204 id=204 data-nosnippet>204</a>        <span class="kw">let </span><span class="kw-2">mut </span>res = montgomery.from_u64(<span class="number">1</span>);
-<a href=#205 id=205 data-nosnippet>205</a>
-<a href=#206 id=206 data-nosnippet>206</a>        <span class="kw">let </span>ops = (<span class="number">0</span>..<span class="number">1000000</span>)
-<a href=#207 id=207 data-nosnippet>207</a>            .map(|<span class="kw">_</span>| {
-<a href=#208 id=208 data-nosnippet>208</a>                <span class="kw">let </span>x = rng.gen_range(<span class="number">1</span>..MOD) <span class="kw">as </span>u64;
+<a href=#179 id=179 data-nosnippet>179</a>    <span class="kw">use </span><span class="kw">crate</span>::math::prime_mod::Prime;
+<a href=#180 id=180 data-nosnippet>180</a>    <span class="kw">use </span><span class="kw">crate</span>::num::{const_modint::<span class="kw-2">*</span>, modint::<span class="kw-2">*</span>};
+<a href=#181 id=181 data-nosnippet>181</a>    <span class="kw">use </span><span class="kw">crate</span>::timer;
+<a href=#182 id=182 data-nosnippet>182</a>    <span class="kw">use </span>rand::Rng;
+<a href=#183 id=183 data-nosnippet>183</a>
+<a href=#184 id=184 data-nosnippet>184</a>    <span class="attr">#[derive(Clone, Copy, Debug)]
+<a href=#185 id=185 data-nosnippet>185</a>    </span><span class="kw">enum </span>Ops {
+<a href=#186 id=186 data-nosnippet>186</a>        Add(u64),
+<a href=#187 id=187 data-nosnippet>187</a>        Sub(u64),
+<a href=#188 id=188 data-nosnippet>188</a>        Mul(u64),
+<a href=#189 id=189 data-nosnippet>189</a>        Div(u64),
+<a href=#190 id=190 data-nosnippet>190</a>        Neg,
+<a href=#191 id=191 data-nosnippet>191</a>    }
+<a href=#192 id=192 data-nosnippet>192</a>
+<a href=#193 id=193 data-nosnippet>193</a>    <span class="attr">#[test]
+<a href=#194 id=194 data-nosnippet>194</a>    </span><span class="kw">fn </span>test() {
+<a href=#195 id=195 data-nosnippet>195</a>        <span class="kw">const </span>MOD: u32 = <span class="number">998244353</span>;
+<a href=#196 id=196 data-nosnippet>196</a>
+<a href=#197 id=197 data-nosnippet>197</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#198 id=198 data-nosnippet>198</a>
+<a href=#199 id=199 data-nosnippet>199</a>        <span class="kw">let </span>constmodint = ConstModIntBuilder::&lt;Prime&lt;MOD&gt;&gt;::new();
+<a href=#200 id=200 data-nosnippet>200</a>        <span class="kw">let </span>modint = ModIntBuilder::new(MOD);
+<a href=#201 id=201 data-nosnippet>201</a>        <span class="kw">let </span>montgomery = MontgomeryBuilder::new(MOD);
+<a href=#202 id=202 data-nosnippet>202</a>
+<a href=#203 id=203 data-nosnippet>203</a>        <span class="kw">let </span><span class="kw-2">mut </span>ans = constmodint.from_u64(<span class="number">1</span>);
+<a href=#204 id=204 data-nosnippet>204</a>        <span class="kw">let </span><span class="kw-2">mut </span>ans2 = modint.from_u64(<span class="number">1</span>);
+<a href=#205 id=205 data-nosnippet>205</a>        <span class="kw">let </span><span class="kw-2">mut </span>res = montgomery.from_u64(<span class="number">1</span>);
+<a href=#206 id=206 data-nosnippet>206</a>
+<a href=#207 id=207 data-nosnippet>207</a>        <span class="kw">let </span>ops = std::iter::repeat_with(|| {
+<a href=#208 id=208 data-nosnippet>208</a>            <span class="kw">let </span>x = rng.gen_range(<span class="number">1</span>..MOD) <span class="kw">as </span>u64;
 <a href=#209 id=209 data-nosnippet>209</a>
-<a href=#210 id=210 data-nosnippet>210</a>                <span class="kw">let </span>op = rng.gen_range(<span class="number">0</span>..<span class="number">5</span>);
-<a href=#211 id=211 data-nosnippet>211</a>                <span class="kw">match </span>op {
-<a href=#212 id=212 data-nosnippet>212</a>                    <span class="number">0 </span>=&gt; Ops::Add(x),
-<a href=#213 id=213 data-nosnippet>213</a>                    <span class="number">1 </span>=&gt; Ops::Sub(x),
-<a href=#214 id=214 data-nosnippet>214</a>                    <span class="number">2 </span>=&gt; Ops::Mul(x),
-<a href=#215 id=215 data-nosnippet>215</a>                    <span class="number">3 </span>=&gt; Ops::Div(x),
-<a href=#216 id=216 data-nosnippet>216</a>                    <span class="number">4 </span>=&gt; Ops::Neg,
-<a href=#217 id=217 data-nosnippet>217</a>                    <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
-<a href=#218 id=218 data-nosnippet>218</a>                }
-<a href=#219 id=219 data-nosnippet>219</a>            })
-<a href=#220 id=220 data-nosnippet>220</a>            .collect_vec();
-<a href=#221 id=221 data-nosnippet>221</a>
-<a href=#222 id=222 data-nosnippet>222</a>        <span class="macro">timer!</span> {{
-<a href=#223 id=223 data-nosnippet>223</a>            <span class="kw">for </span><span class="kw-2">&amp;</span>op <span class="kw">in </span><span class="kw-2">&amp;</span>ops {
-<a href=#224 id=224 data-nosnippet>224</a>                <span class="kw">match </span>op {
-<a href=#225 id=225 data-nosnippet>225</a>                    Ops::Add(x) =&gt; ans += constmodint.from_u64(x),
-<a href=#226 id=226 data-nosnippet>226</a>                    Ops::Sub(x) =&gt; ans -= constmodint.from_u64(x),
-<a href=#227 id=227 data-nosnippet>227</a>                    Ops::Mul(x) =&gt; ans <span class="kw-2">*</span>= constmodint.from_u64(x),
-<a href=#228 id=228 data-nosnippet>228</a>                    Ops::Div(x) =&gt; ans /= constmodint.from_u64(x),
-<a href=#229 id=229 data-nosnippet>229</a>                    Ops::Neg =&gt; ans = -ans
-<a href=#230 id=230 data-nosnippet>230</a>                }
-<a href=#231 id=231 data-nosnippet>231</a>            }
-<a href=#232 id=232 data-nosnippet>232</a>        }};
-<a href=#233 id=233 data-nosnippet>233</a>
-<a href=#234 id=234 data-nosnippet>234</a>        <span class="macro">timer!</span> {{
-<a href=#235 id=235 data-nosnippet>235</a>            <span class="kw">for </span><span class="kw-2">&amp;</span>op <span class="kw">in </span><span class="kw-2">&amp;</span>ops {
-<a href=#236 id=236 data-nosnippet>236</a>                <span class="kw">match </span>op {
-<a href=#237 id=237 data-nosnippet>237</a>                    Ops::Add(x) =&gt; ans2 += modint.from_u64(x),
-<a href=#238 id=238 data-nosnippet>238</a>                    Ops::Sub(x) =&gt; ans2 -= modint.from_u64(x),
-<a href=#239 id=239 data-nosnippet>239</a>                    Ops::Mul(x) =&gt; ans2 <span class="kw-2">*</span>= modint.from_u64(x),
-<a href=#240 id=240 data-nosnippet>240</a>                    Ops::Div(x) =&gt; ans2 /= modint.from_u64(x),
-<a href=#241 id=241 data-nosnippet>241</a>                    Ops::Neg =&gt; ans2 = -ans2
-<a href=#242 id=242 data-nosnippet>242</a>                }
-<a href=#243 id=243 data-nosnippet>243</a>            }
-<a href=#244 id=244 data-nosnippet>244</a>        }};
-<a href=#245 id=245 data-nosnippet>245</a>
-<a href=#246 id=246 data-nosnippet>246</a>        <span class="macro">timer!</span> {{
-<a href=#247 id=247 data-nosnippet>247</a>            <span class="kw">for </span><span class="kw-2">&amp;</span>op <span class="kw">in </span><span class="kw-2">&amp;</span>ops {
-<a href=#248 id=248 data-nosnippet>248</a>                <span class="kw">match </span>op {
-<a href=#249 id=249 data-nosnippet>249</a>                    Ops::Add(x) =&gt; res += montgomery.from_u64(x),
-<a href=#250 id=250 data-nosnippet>250</a>                    Ops::Sub(x) =&gt; res -= montgomery.from_u64(x),
-<a href=#251 id=251 data-nosnippet>251</a>                    Ops::Mul(x) =&gt; res <span class="kw-2">*</span>= montgomery.from_u64(x),
-<a href=#252 id=252 data-nosnippet>252</a>                    Ops::Div(x) =&gt; res /= montgomery.from_u64(x),
-<a href=#253 id=253 data-nosnippet>253</a>                    Ops::Neg =&gt; res = -res
-<a href=#254 id=254 data-nosnippet>254</a>                }
-<a href=#255 id=255 data-nosnippet>255</a>            }
-<a href=#256 id=256 data-nosnippet>256</a>        }};
-<a href=#257 id=257 data-nosnippet>257</a>
-<a href=#258 id=258 data-nosnippet>258</a>        <span class="macro">dbg!</span>(ans.value());
-<a href=#259 id=259 data-nosnippet>259</a>        <span class="macro">dbg!</span>(ans2.value());
-<a href=#260 id=260 data-nosnippet>260</a>        <span class="macro">dbg!</span>(res.value());
-<a href=#261 id=261 data-nosnippet>261</a>
-<a href=#262 id=262 data-nosnippet>262</a>        <span class="macro">assert_eq!</span>(ans.value(), ans2.value());
-<a href=#263 id=263 data-nosnippet>263</a>        <span class="macro">assert_eq!</span>(ans.value(), res.value());
-<a href=#264 id=264 data-nosnippet>264</a>    }
-<a href=#265 id=265 data-nosnippet>265</a>}</code></pre></div></section></main></body></html>
+<a href=#210 id=210 data-nosnippet>210</a>            <span class="kw">let </span>op = rng.gen_range(<span class="number">0</span>..<span class="number">5</span>);
+<a href=#211 id=211 data-nosnippet>211</a>            <span class="kw">match </span>op {
+<a href=#212 id=212 data-nosnippet>212</a>                <span class="number">0 </span>=&gt; Ops::Add(x),
+<a href=#213 id=213 data-nosnippet>213</a>                <span class="number">1 </span>=&gt; Ops::Sub(x),
+<a href=#214 id=214 data-nosnippet>214</a>                <span class="number">2 </span>=&gt; Ops::Mul(x),
+<a href=#215 id=215 data-nosnippet>215</a>                <span class="number">3 </span>=&gt; Ops::Div(x),
+<a href=#216 id=216 data-nosnippet>216</a>                <span class="number">4 </span>=&gt; Ops::Neg,
+<a href=#217 id=217 data-nosnippet>217</a>                <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+<a href=#218 id=218 data-nosnippet>218</a>            }
+<a href=#219 id=219 data-nosnippet>219</a>        })
+<a href=#220 id=220 data-nosnippet>220</a>        .take(<span class="number">1000000</span>)
+<a href=#221 id=221 data-nosnippet>221</a>        .collect_vec();
+<a href=#222 id=222 data-nosnippet>222</a>
+<a href=#223 id=223 data-nosnippet>223</a>        <span class="macro">timer!</span> {{
+<a href=#224 id=224 data-nosnippet>224</a>            <span class="kw">for </span><span class="kw-2">&amp;</span>op <span class="kw">in </span><span class="kw-2">&amp;</span>ops {
+<a href=#225 id=225 data-nosnippet>225</a>                <span class="kw">match </span>op {
+<a href=#226 id=226 data-nosnippet>226</a>                    Ops::Add(x) =&gt; ans += constmodint.from_u64(x),
+<a href=#227 id=227 data-nosnippet>227</a>                    Ops::Sub(x) =&gt; ans -= constmodint.from_u64(x),
+<a href=#228 id=228 data-nosnippet>228</a>                    Ops::Mul(x) =&gt; ans <span class="kw-2">*</span>= constmodint.from_u64(x),
+<a href=#229 id=229 data-nosnippet>229</a>                    Ops::Div(x) =&gt; ans /= constmodint.from_u64(x),
+<a href=#230 id=230 data-nosnippet>230</a>                    Ops::Neg =&gt; ans = -ans
+<a href=#231 id=231 data-nosnippet>231</a>                }
+<a href=#232 id=232 data-nosnippet>232</a>            }
+<a href=#233 id=233 data-nosnippet>233</a>        }};
+<a href=#234 id=234 data-nosnippet>234</a>
+<a href=#235 id=235 data-nosnippet>235</a>        <span class="macro">timer!</span> {{
+<a href=#236 id=236 data-nosnippet>236</a>            <span class="kw">for </span><span class="kw-2">&amp;</span>op <span class="kw">in </span><span class="kw-2">&amp;</span>ops {
+<a href=#237 id=237 data-nosnippet>237</a>                <span class="kw">match </span>op {
+<a href=#238 id=238 data-nosnippet>238</a>                    Ops::Add(x) =&gt; ans2 += modint.from_u64(x),
+<a href=#239 id=239 data-nosnippet>239</a>                    Ops::Sub(x) =&gt; ans2 -= modint.from_u64(x),
+<a href=#240 id=240 data-nosnippet>240</a>                    Ops::Mul(x) =&gt; ans2 <span class="kw-2">*</span>= modint.from_u64(x),
+<a href=#241 id=241 data-nosnippet>241</a>                    Ops::Div(x) =&gt; ans2 /= modint.from_u64(x),
+<a href=#242 id=242 data-nosnippet>242</a>                    Ops::Neg =&gt; ans2 = -ans2
+<a href=#243 id=243 data-nosnippet>243</a>                }
+<a href=#244 id=244 data-nosnippet>244</a>            }
+<a href=#245 id=245 data-nosnippet>245</a>        }};
+<a href=#246 id=246 data-nosnippet>246</a>
+<a href=#247 id=247 data-nosnippet>247</a>        <span class="macro">timer!</span> {{
+<a href=#248 id=248 data-nosnippet>248</a>            <span class="kw">for </span><span class="kw-2">&amp;</span>op <span class="kw">in </span><span class="kw-2">&amp;</span>ops {
+<a href=#249 id=249 data-nosnippet>249</a>                <span class="kw">match </span>op {
+<a href=#250 id=250 data-nosnippet>250</a>                    Ops::Add(x) =&gt; res += montgomery.from_u64(x),
+<a href=#251 id=251 data-nosnippet>251</a>                    Ops::Sub(x) =&gt; res -= montgomery.from_u64(x),
+<a href=#252 id=252 data-nosnippet>252</a>                    Ops::Mul(x) =&gt; res <span class="kw-2">*</span>= montgomery.from_u64(x),
+<a href=#253 id=253 data-nosnippet>253</a>                    Ops::Div(x) =&gt; res /= montgomery.from_u64(x),
+<a href=#254 id=254 data-nosnippet>254</a>                    Ops::Neg =&gt; res = -res
+<a href=#255 id=255 data-nosnippet>255</a>                }
+<a href=#256 id=256 data-nosnippet>256</a>            }
+<a href=#257 id=257 data-nosnippet>257</a>        }};
+<a href=#258 id=258 data-nosnippet>258</a>
+<a href=#259 id=259 data-nosnippet>259</a>        <span class="macro">dbg!</span>(ans.value());
+<a href=#260 id=260 data-nosnippet>260</a>        <span class="macro">dbg!</span>(ans2.value());
+<a href=#261 id=261 data-nosnippet>261</a>        <span class="macro">dbg!</span>(res.value());
+<a href=#262 id=262 data-nosnippet>262</a>
+<a href=#263 id=263 data-nosnippet>263</a>        <span class="macro">assert_eq!</span>(ans.value(), ans2.value());
+<a href=#264 id=264 data-nosnippet>264</a>        <span class="macro">assert_eq!</span>(ans.value(), res.value());
+<a href=#265 id=265 data-nosnippet>265</a>    }
+<a href=#266 id=266 data-nosnippet>266</a>}</code></pre></div></section></main></body></html>

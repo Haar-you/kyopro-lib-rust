@@ -27,15 +27,15 @@
 <a href=#11 id=11 data-nosnippet>11</a>    <span class="kw">let </span>r_sum = a.radius + b.radius;
 <a href=#12 id=12 data-nosnippet>12</a>
 <a href=#13 id=13 data-nosnippet>13</a>    <span class="kw">if </span>eps.eq(r_sum, d) {
-<a href=#14 id=14 data-nosnippet>14</a>        <span class="kw">let </span>t = cc.normal() * (cc.abs_sq() - r_diff * r_diff).sqrt();
+<a href=#14 id=14 data-nosnippet>14</a>        <span class="kw">let </span>t = cc.normal() * r_diff.mul_add(-r_diff, cc.abs_sq()).sqrt();
 <a href=#15 id=15 data-nosnippet>15</a>        <span class="macro">vec!</span>[
 <a href=#16 id=16 data-nosnippet>16</a>            a.center + (cc * r_diff + t) * a.radius / cc.abs_sq(),
 <a href=#17 id=17 data-nosnippet>17</a>            a.center + (cc * r_diff - t) * a.radius / cc.abs_sq(),
 <a href=#18 id=18 data-nosnippet>18</a>            a.center + n * a.radius,
 <a href=#19 id=19 data-nosnippet>19</a>        ]
 <a href=#20 id=20 data-nosnippet>20</a>    } <span class="kw">else if </span>eps.lt(r_sum, d) {
-<a href=#21 id=21 data-nosnippet>21</a>        <span class="kw">let </span>t_diff = cc.normal() * (cc.abs_sq() - r_diff * r_diff).sqrt();
-<a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">let </span>t_sum = cc.normal() * (cc.abs_sq() - r_sum * r_sum).sqrt();
+<a href=#21 id=21 data-nosnippet>21</a>        <span class="kw">let </span>t_diff = cc.normal() * r_diff.mul_add(-r_diff, cc.abs_sq()).sqrt();
+<a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">let </span>t_sum = cc.normal() * r_sum.mul_add(-r_sum, cc.abs_sq()).sqrt();
 <a href=#23 id=23 data-nosnippet>23</a>
 <a href=#24 id=24 data-nosnippet>24</a>        <span class="macro">vec!</span>[
 <a href=#25 id=25 data-nosnippet>25</a>            a.center + (cc * r_diff + t_diff) * a.radius / cc.abs_sq(),
@@ -44,7 +44,7 @@
 <a href=#28 id=28 data-nosnippet>28</a>            a.center + (cc * r_sum - t_sum) * a.radius / cc.abs_sq(),
 <a href=#29 id=29 data-nosnippet>29</a>        ]
 <a href=#30 id=30 data-nosnippet>30</a>    } <span class="kw">else if </span>eps.gt(r_sum, d) &amp;&amp; eps.gt(d, (a.radius - b.radius).abs()) {
-<a href=#31 id=31 data-nosnippet>31</a>        <span class="kw">let </span>t = cc.normal() * (cc.abs_sq() - r_diff * r_diff).sqrt();
+<a href=#31 id=31 data-nosnippet>31</a>        <span class="kw">let </span>t = cc.normal() * r_diff.mul_add(-r_diff, cc.abs_sq()).sqrt();
 <a href=#32 id=32 data-nosnippet>32</a>        <span class="macro">vec!</span>[
 <a href=#33 id=33 data-nosnippet>33</a>            a.center + (cc * r_diff + t) * a.radius / cc.abs_sq(),
 <a href=#34 id=34 data-nosnippet>34</a>            a.center + (cc * r_diff - t) * a.radius / cc.abs_sq(),

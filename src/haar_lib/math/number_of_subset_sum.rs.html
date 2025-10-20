@@ -19,37 +19,32 @@
 <a href=#3 id=3 data-nosnippet>3</a>//! # Problems
 <a href=#4 id=4 data-nosnippet>4</a>//! - &lt;https://judge.yosupo.jp/problem/sharp_p_subset_sum&gt;
 <a href=#5 id=5 data-nosnippet>5</a></span><span class="kw">use </span><span class="kw">crate</span>::math::fps::exp::<span class="kw-2">*</span>;
-<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span><span class="kw">crate</span>::math::ntt::<span class="kw-2">*</span>;
-<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span><span class="kw">crate</span>::math::polynomial::<span class="kw-2">*</span>;
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span><span class="kw">crate</span>::math::polynomial::<span class="kw-2">*</span>;
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span><span class="kw">crate</span>::math::prime_mod::PrimeMod;
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span><span class="kw">crate</span>::num::const_modint::<span class="kw-2">*</span>;
 <a href=#9 id=9 data-nosnippet>9</a>
 <a href=#10 id=10 data-nosnippet>10</a><span class="doccomment">/// $\\#_p$ Subset sum
-<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub fn </span>number_of_subset_sum&lt;<span class="kw">const </span>P: u32, <span class="kw">const </span>PR: u32&gt;(
-<a href=#12 id=12 data-nosnippet>12</a>    s: Vec&lt;usize&gt;,
-<a href=#13 id=13 data-nosnippet>13</a>    t: usize,
-<a href=#14 id=14 data-nosnippet>14</a>) -&gt; Vec&lt;ConstModInt&lt;P&gt;&gt; {
-<a href=#15 id=15 data-nosnippet>15</a>    <span class="kw">let </span>ff = ConstModIntBuilder;
-<a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">let </span>ntt = NTT::&lt;P, PR&gt;::new();
-<a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">let </span>fps = PolynomialOperator::new(<span class="kw-2">&amp;</span>ntt);
+<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub fn </span>number_of_subset_sum&lt;P: PrimeMod&gt;(s: Vec&lt;usize&gt;, t: usize) -&gt; Vec&lt;ConstModInt&lt;P&gt;&gt; {
+<a href=#12 id=12 data-nosnippet>12</a>    <span class="kw">let </span>ff = ConstModIntBuilder::&lt;P&gt;::new();
+<a href=#13 id=13 data-nosnippet>13</a>
+<a href=#14 id=14 data-nosnippet>14</a>    <span class="kw">let </span><span class="kw-2">mut </span>c = <span class="macro">vec!</span>[<span class="number">0</span>; t + <span class="number">1</span>];
+<a href=#15 id=15 data-nosnippet>15</a>    <span class="kw">for </span>x <span class="kw">in </span>s {
+<a href=#16 id=16 data-nosnippet>16</a>        c[x] += <span class="number">1</span>;
+<a href=#17 id=17 data-nosnippet>17</a>    }
 <a href=#18 id=18 data-nosnippet>18</a>
-<a href=#19 id=19 data-nosnippet>19</a>    <span class="kw">let </span><span class="kw-2">mut </span>c = <span class="macro">vec!</span>[<span class="number">0</span>; t + <span class="number">1</span>];
-<a href=#20 id=20 data-nosnippet>20</a>    <span class="kw">for </span>x <span class="kw">in </span>s {
-<a href=#21 id=21 data-nosnippet>21</a>        c[x] += <span class="number">1</span>;
-<a href=#22 id=22 data-nosnippet>22</a>    }
-<a href=#23 id=23 data-nosnippet>23</a>
-<a href=#24 id=24 data-nosnippet>24</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[ff.from_u64(<span class="number">0</span>); t + <span class="number">1</span>];
-<a href=#25 id=25 data-nosnippet>25</a>
-<a href=#26 id=26 data-nosnippet>26</a>    <span class="kw">for </span>(i, c) <span class="kw">in </span>c.into_iter().enumerate().skip(<span class="number">1</span>) {
-<a href=#27 id=27 data-nosnippet>27</a>        <span class="kw">if </span>c != <span class="number">0 </span>{
-<a href=#28 id=28 data-nosnippet>28</a>            <span class="kw">for </span>j <span class="kw">in </span>(<span class="number">1</span>..).take_while(|<span class="kw-2">&amp;</span>j| i * j &lt;= t) {
-<a href=#29 id=29 data-nosnippet>29</a>                <span class="kw">let </span>k = j * i;
-<a href=#30 id=30 data-nosnippet>30</a>                <span class="kw">let </span>x = ff.from_i64(<span class="kw">if </span>j % <span class="number">2 </span>== <span class="number">1 </span>{ <span class="number">1 </span>} <span class="kw">else </span>{ -<span class="number">1 </span>})
-<a href=#31 id=31 data-nosnippet>31</a>                    * ff.from_u64(i <span class="kw">as </span>u64)
-<a href=#32 id=32 data-nosnippet>32</a>                    * ff.from_u64(k <span class="kw">as </span>u64).inv();
-<a href=#33 id=33 data-nosnippet>33</a>                ret[k] += x * ff.from_u64(c <span class="kw">as </span>u64);
-<a href=#34 id=34 data-nosnippet>34</a>            }
-<a href=#35 id=35 data-nosnippet>35</a>        }
-<a href=#36 id=36 data-nosnippet>36</a>    }
-<a href=#37 id=37 data-nosnippet>37</a>
-<a href=#38 id=38 data-nosnippet>38</a>    fps.fps_exp(ret.into()).unwrap().into()
-<a href=#39 id=39 data-nosnippet>39</a>}</code></pre></div></section></main></body></html>
+<a href=#19 id=19 data-nosnippet>19</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[ff.from_u64(<span class="number">0</span>); t + <span class="number">1</span>];
+<a href=#20 id=20 data-nosnippet>20</a>
+<a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">for </span>(i, c) <span class="kw">in </span>c.into_iter().enumerate().skip(<span class="number">1</span>) {
+<a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">if </span>c != <span class="number">0 </span>{
+<a href=#23 id=23 data-nosnippet>23</a>            <span class="kw">for </span>j <span class="kw">in </span>(<span class="number">1</span>..).take_while(|<span class="kw-2">&amp;</span>j| i * j &lt;= t) {
+<a href=#24 id=24 data-nosnippet>24</a>                <span class="kw">let </span>k = j * i;
+<a href=#25 id=25 data-nosnippet>25</a>                <span class="kw">let </span>x = ff.from_i64(<span class="kw">if </span>j % <span class="number">2 </span>== <span class="number">1 </span>{ <span class="number">1 </span>} <span class="kw">else </span>{ -<span class="number">1 </span>})
+<a href=#26 id=26 data-nosnippet>26</a>                    * ff.from_u64(i <span class="kw">as </span>u64)
+<a href=#27 id=27 data-nosnippet>27</a>                    * ff.from_u64(k <span class="kw">as </span>u64).inv();
+<a href=#28 id=28 data-nosnippet>28</a>                ret[k] += x * ff.from_u64(c <span class="kw">as </span>u64);
+<a href=#29 id=29 data-nosnippet>29</a>            }
+<a href=#30 id=30 data-nosnippet>30</a>        }
+<a href=#31 id=31 data-nosnippet>31</a>    }
+<a href=#32 id=32 data-nosnippet>32</a>
+<a href=#33 id=33 data-nosnippet>33</a>    Polynomial::from(ret).fps_exp().unwrap().into()
+<a href=#34 id=34 data-nosnippet>34</a>}</code></pre></div></section></main></body></html>

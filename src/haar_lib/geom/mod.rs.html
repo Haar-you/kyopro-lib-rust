@@ -111,20 +111,20 @@
 <a href=#95 id=95 data-nosnippet>95</a><span class="kw">impl </span>Vector {
 <a href=#96 id=96 data-nosnippet>96</a>    <span class="doccomment">/// 絶対値を計算する
 <a href=#97 id=97 data-nosnippet>97</a>    </span><span class="kw">pub fn </span>abs(<span class="self">self</span>) -&gt; f64 {
-<a href=#98 id=98 data-nosnippet>98</a>        (<span class="self">self</span>.<span class="number">0 </span>* <span class="self">self</span>.<span class="number">0 </span>+ <span class="self">self</span>.<span class="number">1 </span>* <span class="self">self</span>.<span class="number">1</span>).sqrt()
+<a href=#98 id=98 data-nosnippet>98</a>        <span class="self">self</span>.<span class="number">0</span>.hypot(<span class="self">self</span>.<span class="number">1</span>)
 <a href=#99 id=99 data-nosnippet>99</a>    }
 <a href=#100 id=100 data-nosnippet>100</a>    <span class="doccomment">/// 絶対値の2乗を計算する
 <a href=#101 id=101 data-nosnippet>101</a>    </span><span class="kw">pub fn </span>abs_sq(<span class="self">self</span>) -&gt; f64 {
-<a href=#102 id=102 data-nosnippet>102</a>        <span class="self">self</span>.<span class="number">0 </span>* <span class="self">self</span>.<span class="number">0 </span>+ <span class="self">self</span>.<span class="number">1 </span>* <span class="self">self</span>.<span class="number">1
-<a href=#103 id=103 data-nosnippet>103</a>    </span>}
+<a href=#102 id=102 data-nosnippet>102</a>        <span class="self">self</span>.<span class="number">0</span>.mul_add(<span class="self">self</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1 </span>* <span class="self">self</span>.<span class="number">1</span>)
+<a href=#103 id=103 data-nosnippet>103</a>    }
 <a href=#104 id=104 data-nosnippet>104</a>    <span class="doccomment">/// 内積を計算する
 <a href=#105 id=105 data-nosnippet>105</a>    </span><span class="kw">pub fn </span>dot(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; f64 {
-<a href=#106 id=106 data-nosnippet>106</a>        <span class="self">self</span>.<span class="number">0 </span>* other.<span class="number">0 </span>+ <span class="self">self</span>.<span class="number">1 </span>* other.<span class="number">1
-<a href=#107 id=107 data-nosnippet>107</a>    </span>}
+<a href=#106 id=106 data-nosnippet>106</a>        <span class="self">self</span>.<span class="number">0</span>.mul_add(other.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1 </span>* other.<span class="number">1</span>)
+<a href=#107 id=107 data-nosnippet>107</a>    }
 <a href=#108 id=108 data-nosnippet>108</a>    <span class="doccomment">/// 外積を計算する
 <a href=#109 id=109 data-nosnippet>109</a>    </span><span class="kw">pub fn </span>cross(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; f64 {
-<a href=#110 id=110 data-nosnippet>110</a>        <span class="self">self</span>.<span class="number">0 </span>* other.<span class="number">1 </span>- <span class="self">self</span>.<span class="number">1 </span>* other.<span class="number">0
-<a href=#111 id=111 data-nosnippet>111</a>    </span>}
+<a href=#110 id=110 data-nosnippet>110</a>        <span class="self">self</span>.<span class="number">0</span>.mul_add(other.<span class="number">1</span>, -(<span class="self">self</span>.<span class="number">1 </span>* other.<span class="number">0</span>))
+<a href=#111 id=111 data-nosnippet>111</a>    }
 <a href=#112 id=112 data-nosnippet>112</a>    <span class="doccomment">/// 長さを`1`にしたベクトルを返す
 <a href=#113 id=113 data-nosnippet>113</a>    </span><span class="kw">pub fn </span>unit(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
 <a href=#114 id=114 data-nosnippet>114</a>        <span class="self">self </span>/ <span class="self">self</span>.abs()
@@ -139,17 +139,17 @@
 <a href=#123 id=123 data-nosnippet>123</a>    }
 <a href=#124 id=124 data-nosnippet>124</a>    <span class="doccomment">/// 極座標形式で`Vector`を生成する
 <a href=#125 id=125 data-nosnippet>125</a>    </span><span class="kw">pub fn </span>polar(r: f64, ang: f64) -&gt; <span class="self">Self </span>{
-<a href=#126 id=126 data-nosnippet>126</a>        Vector(r * ang.cos(), r * ang.sin())
+<a href=#126 id=126 data-nosnippet>126</a>        <span class="self">Self</span>(r * ang.cos(), r * ang.sin())
 <a href=#127 id=127 data-nosnippet>127</a>    }
 <a href=#128 id=128 data-nosnippet>128</a>    <span class="doccomment">/// `self`から`other`への角度($-\pi \le \theta \le \pi$)を返す。
 <a href=#129 id=129 data-nosnippet>129</a>    </span><span class="kw">pub fn </span>angle_diff(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; f64 {
 <a href=#130 id=130 data-nosnippet>130</a>        <span class="kw">let </span>r = other.<span class="number">1</span>.atan2(other.<span class="number">0</span>) - <span class="self">self</span>.<span class="number">1</span>.atan2(<span class="self">self</span>.<span class="number">0</span>);
 <a href=#131 id=131 data-nosnippet>131</a>
 <a href=#132 id=132 data-nosnippet>132</a>        <span class="kw">if </span>r &lt; -PI {
-<a href=#133 id=133 data-nosnippet>133</a>            r + PI * <span class="number">2.0
-<a href=#134 id=134 data-nosnippet>134</a>        </span>} <span class="kw">else if </span>r &gt; PI {
-<a href=#135 id=135 data-nosnippet>135</a>            r - PI * <span class="number">2.0
-<a href=#136 id=136 data-nosnippet>136</a>        </span>} <span class="kw">else </span>{
+<a href=#133 id=133 data-nosnippet>133</a>            PI.mul_add(<span class="number">2.0</span>, r)
+<a href=#134 id=134 data-nosnippet>134</a>        } <span class="kw">else if </span>r &gt; PI {
+<a href=#135 id=135 data-nosnippet>135</a>            PI.mul_add(-<span class="number">2.0</span>, r)
+<a href=#136 id=136 data-nosnippet>136</a>        } <span class="kw">else </span>{
 <a href=#137 id=137 data-nosnippet>137</a>            r
 <a href=#138 id=138 data-nosnippet>138</a>        }
 <a href=#139 id=139 data-nosnippet>139</a>    }
@@ -235,7 +235,7 @@
 <a href=#219 id=219 data-nosnippet>219</a><span class="kw">impl </span>Circle {
 <a href=#220 id=220 data-nosnippet>220</a>    <span class="doccomment">/// 中心`center`、半径`radius`の`Circle`を生成する
 <a href=#221 id=221 data-nosnippet>221</a>    </span><span class="kw">pub fn </span>new(center: Vector, radius: f64) -&gt; <span class="self">Self </span>{
-<a href=#222 id=222 data-nosnippet>222</a>        Circle { center, radius }
+<a href=#222 id=222 data-nosnippet>222</a>        <span class="self">Self </span>{ center, radius }
 <a href=#223 id=223 data-nosnippet>223</a>    }
 <a href=#224 id=224 data-nosnippet>224</a>
 <a href=#225 id=225 data-nosnippet>225</a>    <span class="doccomment">/// 円が等しいかを判定する

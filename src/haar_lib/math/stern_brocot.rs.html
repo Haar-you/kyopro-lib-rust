@@ -30,16 +30,16 @@
 <a href=#14 id=14 data-nosnippet>14</a></span><span class="kw">pub struct </span>Frac(<span class="kw">pub </span>u64, <span class="kw">pub </span>u64);
 <a href=#15 id=15 data-nosnippet>15</a>
 <a href=#16 id=16 data-nosnippet>16</a><span class="kw">impl </span>PartialEq <span class="kw">for </span>Frac {
-<a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, Frac(c, d): <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
-<a href=#18 id=18 data-nosnippet>18</a>        <span class="kw">let </span>Frac(a, b) = <span class="self">self</span>;
+<a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="self">Self</span>(c, d): <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
+<a href=#18 id=18 data-nosnippet>18</a>        <span class="kw">let </span><span class="self">Self</span>(a, b) = <span class="self">self</span>;
 <a href=#19 id=19 data-nosnippet>19</a>        a * d == b * c
 <a href=#20 id=20 data-nosnippet>20</a>    }
 <a href=#21 id=21 data-nosnippet>21</a>}
 <a href=#22 id=22 data-nosnippet>22</a><span class="kw">impl </span>Eq <span class="kw">for </span>Frac {}
 <a href=#23 id=23 data-nosnippet>23</a><span class="kw">impl </span>PartialOrd <span class="kw">for </span>Frac {
 <a href=#24 id=24 data-nosnippet>24</a>    <span class="kw">fn </span>partial_cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;std::cmp::Ordering&gt; {
-<a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">let </span>Frac(a, b) = <span class="self">self</span>;
-<a href=#26 id=26 data-nosnippet>26</a>        <span class="kw">let </span>Frac(c, d) = other;
+<a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">let </span><span class="self">Self</span>(a, b) = <span class="self">self</span>;
+<a href=#26 id=26 data-nosnippet>26</a>        <span class="kw">let </span><span class="self">Self</span>(c, d) = other;
 <a href=#27 id=27 data-nosnippet>27</a>        (a * d).partial_cmp(<span class="kw-2">&amp;</span>(b * c))
 <a href=#28 id=28 data-nosnippet>28</a>    }
 <a href=#29 id=29 data-nosnippet>29</a>}

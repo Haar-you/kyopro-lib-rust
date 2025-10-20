@@ -32,7 +32,7 @@
 <a href=#16 id=16 data-nosnippet>16</a>);
 <a href=#17 id=17 data-nosnippet>17</a>
 <a href=#18 id=18 data-nosnippet>18</a><span class="doccomment">/// 最大値クエリか最小値クエリかを表す
-<a href=#19 id=19 data-nosnippet>19</a></span><span class="attr">#[derive(PartialEq, Eq, Copy, Clone, Debug)]
+<a href=#19 id=19 data-nosnippet>19</a></span><span class="attr">#[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
 <a href=#20 id=20 data-nosnippet>20</a></span><span class="kw">pub enum </span>Mode {
 <a href=#21 id=21 data-nosnippet>21</a>    <span class="doccomment">/// 最大値クエリ
 <a href=#22 id=22 data-nosnippet>22</a>    </span>Max,
@@ -43,8 +43,8 @@
 <a href=#27 id=27 data-nosnippet>27</a><span class="kw">impl </span>Mode {
 <a href=#28 id=28 data-nosnippet>28</a>    <span class="kw">fn </span>cmp&lt;T: PartialOrd + Copy&gt;(<span class="self">self</span>, a: T, b: T) -&gt; bool {
 <a href=#29 id=29 data-nosnippet>29</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#30 id=30 data-nosnippet>30</a>            Mode::Max =&gt; a &lt;= b,
-<a href=#31 id=31 data-nosnippet>31</a>            Mode::Min =&gt; a &gt;= b,
+<a href=#30 id=30 data-nosnippet>30</a>            <span class="self">Self</span>::Max =&gt; a &lt;= b,
+<a href=#31 id=31 data-nosnippet>31</a>            <span class="self">Self</span>::Min =&gt; a &gt;= b,
 <a href=#32 id=32 data-nosnippet>32</a>        }
 <a href=#33 id=33 data-nosnippet>33</a>    }
 <a href=#34 id=34 data-nosnippet>34</a>}

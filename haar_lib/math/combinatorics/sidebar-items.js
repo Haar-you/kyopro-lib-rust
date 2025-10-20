@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["bell_number","bell_number_table","bernoulli_number","binomial_coefficient","montmort","partition_number","stirling_first","stirling_first_fixed_k","stirling_first_table","stirling_second","stirling_second_fixed_k","stirling_second_table"]};

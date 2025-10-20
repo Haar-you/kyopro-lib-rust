@@ -66,8 +66,8 @@
 <a href=#50 id=50 data-nosnippet>50</a>
 <a href=#51 id=51 data-nosnippet>51</a>        <span class="kw">let </span>n = <span class="number">100</span>;
 <a href=#52 id=52 data-nosnippet>52</a>
-<a href=#53 id=53 data-nosnippet>53</a>        <span class="kw">let </span>a = (<span class="number">0</span>..n)
-<a href=#54 id=54 data-nosnippet>54</a>            .map(|<span class="kw">_</span>| rng.gen_range(-<span class="number">1000</span>..=<span class="number">1000</span>))
+<a href=#53 id=53 data-nosnippet>53</a>        <span class="kw">let </span>a = std::iter::repeat_with(|| rng.gen_range(-<span class="number">1000</span>..=<span class="number">1000</span>))
+<a href=#54 id=54 data-nosnippet>54</a>            .take(n)
 <a href=#55 id=55 data-nosnippet>55</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 <a href=#56 id=56 data-nosnippet>56</a>
 <a href=#57 id=57 data-nosnippet>57</a>        <span class="kw">let </span><span class="kw-2">mut </span>ans = i64::MIN;
@@ -90,19 +90,21 @@
 <a href=#74 id=74 data-nosnippet>74</a>
 <a href=#75 id=75 data-nosnippet>75</a>        <span class="kw">let </span>n = <span class="number">100</span>;
 <a href=#76 id=76 data-nosnippet>76</a>
-<a href=#77 id=77 data-nosnippet>77</a>        <span class="kw">let </span>a = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| rng.gen_range(-<span class="number">1000</span>..<span class="number">0</span>)).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#78 id=78 data-nosnippet>78</a>
-<a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">let </span><span class="kw-2">mut </span>ans = i64::MIN;
+<a href=#77 id=77 data-nosnippet>77</a>        <span class="kw">let </span>a = std::iter::repeat_with(|| rng.gen_range(-<span class="number">1000</span>..<span class="number">0</span>))
+<a href=#78 id=78 data-nosnippet>78</a>            .take(n)
+<a href=#79 id=79 data-nosnippet>79</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 <a href=#80 id=80 data-nosnippet>80</a>
-<a href=#81 id=81 data-nosnippet>81</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
-<a href=#82 id=82 data-nosnippet>82</a>            <span class="kw">for </span>j <span class="kw">in </span>i + <span class="number">1</span>..=n {
-<a href=#83 id=83 data-nosnippet>83</a>                ans = ans.max(a[i..j].iter().sum());
-<a href=#84 id=84 data-nosnippet>84</a>            }
-<a href=#85 id=85 data-nosnippet>85</a>        }
-<a href=#86 id=86 data-nosnippet>86</a>
-<a href=#87 id=87 data-nosnippet>87</a>        <span class="kw">let </span>(res, range) = max_partial_sum(<span class="kw-2">&amp;</span>a).unwrap();
+<a href=#81 id=81 data-nosnippet>81</a>        <span class="kw">let </span><span class="kw-2">mut </span>ans = i64::MIN;
+<a href=#82 id=82 data-nosnippet>82</a>
+<a href=#83 id=83 data-nosnippet>83</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
+<a href=#84 id=84 data-nosnippet>84</a>            <span class="kw">for </span>j <span class="kw">in </span>i + <span class="number">1</span>..=n {
+<a href=#85 id=85 data-nosnippet>85</a>                ans = ans.max(a[i..j].iter().sum());
+<a href=#86 id=86 data-nosnippet>86</a>            }
+<a href=#87 id=87 data-nosnippet>87</a>        }
 <a href=#88 id=88 data-nosnippet>88</a>
-<a href=#89 id=89 data-nosnippet>89</a>        <span class="macro">assert_eq!</span>(res, ans);
-<a href=#90 id=90 data-nosnippet>90</a>        <span class="macro">assert_eq!</span>(a[range].iter().sum::&lt;i64&gt;(), ans);
-<a href=#91 id=91 data-nosnippet>91</a>    }
-<a href=#92 id=92 data-nosnippet>92</a>}</code></pre></div></section></main></body></html>
+<a href=#89 id=89 data-nosnippet>89</a>        <span class="kw">let </span>(res, range) = max_partial_sum(<span class="kw-2">&amp;</span>a).unwrap();
+<a href=#90 id=90 data-nosnippet>90</a>
+<a href=#91 id=91 data-nosnippet>91</a>        <span class="macro">assert_eq!</span>(res, ans);
+<a href=#92 id=92 data-nosnippet>92</a>        <span class="macro">assert_eq!</span>(a[range].iter().sum::&lt;i64&gt;(), ans);
+<a href=#93 id=93 data-nosnippet>93</a>    }
+<a href=#94 id=94 data-nosnippet>94</a>}</code></pre></div></section></main></body></html>

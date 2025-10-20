@@ -161,12 +161,12 @@
 <a href=#145 id=145 data-nosnippet>145</a>        <span class="kw">let </span>init = |prefix: <span class="kw-2">&amp;</span>Vec&lt;char&gt;| -&gt; u32 { prefix.len() <span class="kw">as </span>u32 };
 <a href=#146 id=146 data-nosnippet>146</a>
 <a href=#147 id=147 data-nosnippet>147</a>        <span class="kw">let </span>proc = |value: <span class="kw-2">&amp;mut </span>u32, prefix: <span class="kw-2">&amp;</span>Vec&lt;char&gt;| {
-<a href=#148 id=148 data-nosnippet>148</a>            <span class="macro">println!</span>(<span class="string">"{:?}"</span>, prefix);
+<a href=#148 id=148 data-nosnippet>148</a>            <span class="macro">println!</span>(<span class="string">"{prefix:?}"</span>);
 <a href=#149 id=149 data-nosnippet>149</a>            <span class="kw-2">*</span>value += <span class="number">1</span>;
 <a href=#150 id=150 data-nosnippet>150</a>        };
 <a href=#151 id=151 data-nosnippet>151</a>
 <a href=#152 id=152 data-nosnippet>152</a>        <span class="kw">let </span>rproc = |<span class="kw">_</span>: <span class="kw-2">&amp;mut </span>u32, prefix: <span class="kw-2">&amp;</span>Vec&lt;char&gt;| {
-<a href=#153 id=153 data-nosnippet>153</a>            <span class="macro">println!</span>(<span class="string">"{:?}"</span>, prefix);
+<a href=#153 id=153 data-nosnippet>153</a>            <span class="macro">println!</span>(<span class="string">"{prefix:?}"</span>);
 <a href=#154 id=154 data-nosnippet>154</a>        };
 <a href=#155 id=155 data-nosnippet>155</a>
 <a href=#156 id=156 data-nosnippet>156</a>        trie.add(<span class="string">"abc"</span>.chars(), init, proc, rproc);

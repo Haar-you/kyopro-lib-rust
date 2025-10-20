@@ -22,7 +22,7 @@
 <a href=#6 id=6 data-nosnippet>6</a></span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
 <a href=#7 id=7 data-nosnippet>7</a>
 <a href=#8 id=8 data-nosnippet>8</a><span class="doccomment">/// 二面体群$D_n$の元
-<a href=#9 id=9 data-nosnippet>9</a></span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+<a href=#9 id=9 data-nosnippet>9</a></span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 <a href=#10 id=10 data-nosnippet>10</a></span><span class="kw">pub enum </span>DihedralValue {
 <a href=#11 id=11 data-nosnippet>11</a>    <span class="doccomment">/// 回転
 <a href=#12 id=12 data-nosnippet>12</a>    </span>R(usize),
@@ -89,7 +89,7 @@
 <a href=#73 id=73 data-nosnippet>73</a>
 <a href=#74 id=74 data-nosnippet>74</a><span class="kw">impl </span>BinaryOp <span class="kw">for </span>Dihedral {
 <a href=#75 id=75 data-nosnippet>75</a>    <span class="kw">fn </span>op(<span class="self">self</span>, b: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
-<a href=#76 id=76 data-nosnippet>76</a>        Dihedral::_op(<span class="self">self</span>, b)
+<a href=#76 id=76 data-nosnippet>76</a>        <span class="self">Self</span>::_op(<span class="self">self</span>, b)
 <a href=#77 id=77 data-nosnippet>77</a>    }
 <a href=#78 id=78 data-nosnippet>78</a>}
 <a href=#79 id=79 data-nosnippet>79</a>

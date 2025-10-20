@@ -17,7 +17,7 @@
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">haar_lib/algo/</div>ternary_search.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! 三分探索
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a>/// [`ternary_search`]で与えられる関数が上に凸か下に凸かを指定する。
-<a href=#4 id=4 data-nosnippet>4</a></span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq)]
+<a href=#4 id=4 data-nosnippet>4</a></span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 <a href=#5 id=5 data-nosnippet>5</a></span><span class="kw">pub enum </span>Convex {
 <a href=#6 id=6 data-nosnippet>6</a>    <span class="doccomment">/// 上に凸
 <a href=#7 id=7 data-nosnippet>7</a>    </span>Upwards,
@@ -34,19 +34,20 @@
 <a href=#18 id=18 data-nosnippet>18</a>    f: F,
 <a href=#19 id=19 data-nosnippet>19</a>) -&gt; f64 {
 <a href=#20 id=20 data-nosnippet>20</a>    <span class="kw">while </span>loop_count &gt; <span class="number">0 </span>{
-<a href=#21 id=21 data-nosnippet>21</a>        <span class="kw">let </span>t1 = lb + (ub - lb) / <span class="number">3.0</span>;
-<a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">let </span>t2 = lb + (ub - lb) / <span class="number">3.0 </span>* <span class="number">2.0</span>;
-<a href=#23 id=23 data-nosnippet>23</a>
-<a href=#24 id=24 data-nosnippet>24</a>        <span class="kw">if </span>(<span class="macro">matches!</span>(convex, Convex::Upwards) &amp;&amp; f(t1) &gt; f(t2))
-<a href=#25 id=25 data-nosnippet>25</a>            || (<span class="macro">matches!</span>(convex, Convex::Downwards) &amp;&amp; f(t1) &lt; f(t2))
-<a href=#26 id=26 data-nosnippet>26</a>        {
-<a href=#27 id=27 data-nosnippet>27</a>            ub = t2;
-<a href=#28 id=28 data-nosnippet>28</a>        } <span class="kw">else </span>{
-<a href=#29 id=29 data-nosnippet>29</a>            lb = t1;
-<a href=#30 id=30 data-nosnippet>30</a>        }
-<a href=#31 id=31 data-nosnippet>31</a>
-<a href=#32 id=32 data-nosnippet>32</a>        loop_count -= <span class="number">1</span>;
-<a href=#33 id=33 data-nosnippet>33</a>    }
-<a href=#34 id=34 data-nosnippet>34</a>
-<a href=#35 id=35 data-nosnippet>35</a>    lb
-<a href=#36 id=36 data-nosnippet>36</a>}</code></pre></div></section></main></body></html>
+<a href=#21 id=21 data-nosnippet>21</a>        <span class="kw">let </span>d = (ub - lb) / <span class="number">3.0</span>;
+<a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">let </span>t1 = lb + d;
+<a href=#23 id=23 data-nosnippet>23</a>        <span class="kw">let </span>t2 = d.mul_add(<span class="number">2.0</span>, lb);
+<a href=#24 id=24 data-nosnippet>24</a>
+<a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">if </span>(<span class="macro">matches!</span>(convex, Convex::Upwards) &amp;&amp; f(t1) &gt; f(t2))
+<a href=#26 id=26 data-nosnippet>26</a>            || (<span class="macro">matches!</span>(convex, Convex::Downwards) &amp;&amp; f(t1) &lt; f(t2))
+<a href=#27 id=27 data-nosnippet>27</a>        {
+<a href=#28 id=28 data-nosnippet>28</a>            ub = t2;
+<a href=#29 id=29 data-nosnippet>29</a>        } <span class="kw">else </span>{
+<a href=#30 id=30 data-nosnippet>30</a>            lb = t1;
+<a href=#31 id=31 data-nosnippet>31</a>        }
+<a href=#32 id=32 data-nosnippet>32</a>
+<a href=#33 id=33 data-nosnippet>33</a>        loop_count -= <span class="number">1</span>;
+<a href=#34 id=34 data-nosnippet>34</a>    }
+<a href=#35 id=35 data-nosnippet>35</a>
+<a href=#36 id=36 data-nosnippet>36</a>    lb
+<a href=#37 id=37 data-nosnippet>37</a>}</code></pre></div></section></main></body></html>

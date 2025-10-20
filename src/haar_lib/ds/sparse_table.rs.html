@@ -107,31 +107,39 @@
 <a href=#91 id=91 data-nosnippet>91</a>    </span><span class="kw">fn </span>test_max() {
 <a href=#92 id=92 data-nosnippet>92</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
 <a href=#93 id=93 data-nosnippet>93</a>        <span class="kw">let </span>n = <span class="number">100</span>;
-<a href=#94 id=94 data-nosnippet>94</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| Max(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#95 id=95 data-nosnippet>95</a>        test(s);
-<a href=#96 id=96 data-nosnippet>96</a>    }
-<a href=#97 id=97 data-nosnippet>97</a>
-<a href=#98 id=98 data-nosnippet>98</a>    <span class="attr">#[test]
-<a href=#99 id=99 data-nosnippet>99</a>    </span><span class="kw">fn </span>test_min() {
-<a href=#100 id=100 data-nosnippet>100</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-<a href=#101 id=101 data-nosnippet>101</a>        <span class="kw">let </span>n = <span class="number">100</span>;
-<a href=#102 id=102 data-nosnippet>102</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| Min(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#103 id=103 data-nosnippet>103</a>        test(s);
-<a href=#104 id=104 data-nosnippet>104</a>    }
-<a href=#105 id=105 data-nosnippet>105</a>
-<a href=#106 id=106 data-nosnippet>106</a>    <span class="attr">#[test]
-<a href=#107 id=107 data-nosnippet>107</a>    </span><span class="kw">fn </span>test_bitand() {
-<a href=#108 id=108 data-nosnippet>108</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-<a href=#109 id=109 data-nosnippet>109</a>        <span class="kw">let </span>n = <span class="number">100</span>;
-<a href=#110 id=110 data-nosnippet>110</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| BitAnd(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#111 id=111 data-nosnippet>111</a>        test(s);
-<a href=#112 id=112 data-nosnippet>112</a>    }
-<a href=#113 id=113 data-nosnippet>113</a>
-<a href=#114 id=114 data-nosnippet>114</a>    <span class="attr">#[test]
-<a href=#115 id=115 data-nosnippet>115</a>    </span><span class="kw">fn </span>test_bitor() {
-<a href=#116 id=116 data-nosnippet>116</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-<a href=#117 id=117 data-nosnippet>117</a>        <span class="kw">let </span>n = <span class="number">100</span>;
-<a href=#118 id=118 data-nosnippet>118</a>        <span class="kw">let </span>s = (<span class="number">0</span>..n).map(|<span class="kw">_</span>| BitOr(rng.gen::&lt;u64&gt;())).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#119 id=119 data-nosnippet>119</a>        test(s);
-<a href=#120 id=120 data-nosnippet>120</a>    }
-<a href=#121 id=121 data-nosnippet>121</a>}</code></pre></div></section></main></body></html>
+<a href=#94 id=94 data-nosnippet>94</a>        <span class="kw">let </span>s = std::iter::repeat_with(|| Max(rng.gen::&lt;u64&gt;()))
+<a href=#95 id=95 data-nosnippet>95</a>            .take(n)
+<a href=#96 id=96 data-nosnippet>96</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#97 id=97 data-nosnippet>97</a>        test(s);
+<a href=#98 id=98 data-nosnippet>98</a>    }
+<a href=#99 id=99 data-nosnippet>99</a>
+<a href=#100 id=100 data-nosnippet>100</a>    <span class="attr">#[test]
+<a href=#101 id=101 data-nosnippet>101</a>    </span><span class="kw">fn </span>test_min() {
+<a href=#102 id=102 data-nosnippet>102</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#103 id=103 data-nosnippet>103</a>        <span class="kw">let </span>n = <span class="number">100</span>;
+<a href=#104 id=104 data-nosnippet>104</a>        <span class="kw">let </span>s = std::iter::repeat_with(|| Min(rng.gen::&lt;u64&gt;()))
+<a href=#105 id=105 data-nosnippet>105</a>            .take(n)
+<a href=#106 id=106 data-nosnippet>106</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#107 id=107 data-nosnippet>107</a>        test(s);
+<a href=#108 id=108 data-nosnippet>108</a>    }
+<a href=#109 id=109 data-nosnippet>109</a>
+<a href=#110 id=110 data-nosnippet>110</a>    <span class="attr">#[test]
+<a href=#111 id=111 data-nosnippet>111</a>    </span><span class="kw">fn </span>test_bitand() {
+<a href=#112 id=112 data-nosnippet>112</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">let </span>n = <span class="number">100</span>;
+<a href=#114 id=114 data-nosnippet>114</a>        <span class="kw">let </span>s = std::iter::repeat_with(|| BitAnd(rng.gen::&lt;u64&gt;()))
+<a href=#115 id=115 data-nosnippet>115</a>            .take(n)
+<a href=#116 id=116 data-nosnippet>116</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#117 id=117 data-nosnippet>117</a>        test(s);
+<a href=#118 id=118 data-nosnippet>118</a>    }
+<a href=#119 id=119 data-nosnippet>119</a>
+<a href=#120 id=120 data-nosnippet>120</a>    <span class="attr">#[test]
+<a href=#121 id=121 data-nosnippet>121</a>    </span><span class="kw">fn </span>test_bitor() {
+<a href=#122 id=122 data-nosnippet>122</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#123 id=123 data-nosnippet>123</a>        <span class="kw">let </span>n = <span class="number">100</span>;
+<a href=#124 id=124 data-nosnippet>124</a>        <span class="kw">let </span>s = std::iter::repeat_with(|| BitOr(rng.gen::&lt;u64&gt;()))
+<a href=#125 id=125 data-nosnippet>125</a>            .take(n)
+<a href=#126 id=126 data-nosnippet>126</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#127 id=127 data-nosnippet>127</a>        test(s);
+<a href=#128 id=128 data-nosnippet>128</a>    }
+<a href=#129 id=129 data-nosnippet>129</a>}</code></pre></div></section></main></body></html>

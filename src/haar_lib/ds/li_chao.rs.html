@@ -47,15 +47,15 @@
 <a href=#31 id=31 data-nosnippet>31</a><span class="kw">impl </span>Mode {
 <a href=#32 id=32 data-nosnippet>32</a>    <span class="kw">fn </span>op&lt;T: Elem&gt;(<span class="self">self</span>, a: T, b: T) -&gt; T {
 <a href=#33 id=33 data-nosnippet>33</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#34 id=34 data-nosnippet>34</a>            Mode::Max =&gt; max(a, b),
-<a href=#35 id=35 data-nosnippet>35</a>            Mode::Min =&gt; min(a, b),
+<a href=#34 id=34 data-nosnippet>34</a>            <span class="self">Self</span>::Max =&gt; max(a, b),
+<a href=#35 id=35 data-nosnippet>35</a>            <span class="self">Self</span>::Min =&gt; min(a, b),
 <a href=#36 id=36 data-nosnippet>36</a>        }
 <a href=#37 id=37 data-nosnippet>37</a>    }
 <a href=#38 id=38 data-nosnippet>38</a>
 <a href=#39 id=39 data-nosnippet>39</a>    <span class="kw">fn </span>cmp&lt;T: Elem&gt;(<span class="self">self</span>, a: T, b: T) -&gt; bool {
 <a href=#40 id=40 data-nosnippet>40</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#41 id=41 data-nosnippet>41</a>            Mode::Max =&gt; a &gt; b,
-<a href=#42 id=42 data-nosnippet>42</a>            Mode::Min =&gt; a &lt; b,
+<a href=#41 id=41 data-nosnippet>41</a>            <span class="self">Self</span>::Max =&gt; a &gt; b,
+<a href=#42 id=42 data-nosnippet>42</a>            <span class="self">Self</span>::Min =&gt; a &lt; b,
 <a href=#43 id=43 data-nosnippet>43</a>        }
 <a href=#44 id=44 data-nosnippet>44</a>    }
 <a href=#45 id=45 data-nosnippet>45</a>}
@@ -158,10 +158,10 @@
 <a href=#142 id=142 data-nosnippet>142</a>        <span class="kw">while </span>l &lt; r {
 <a href=#143 id=143 data-nosnippet>143</a>            <span class="kw">if </span>r &amp; <span class="number">1 </span>== <span class="number">1 </span>{
 <a href=#144 id=144 data-nosnippet>144</a>                r -= <span class="number">1</span>;
-<a href=#145 id=145 data-nosnippet>145</a>                <span class="self">self</span>.update(r, segment.clone(), <span class="self">self</span>.range[r].<span class="number">0</span>, <span class="self">self</span>.range[r].<span class="number">1</span>);
+<a href=#145 id=145 data-nosnippet>145</a>                <span class="self">self</span>.update(r, segment, <span class="self">self</span>.range[r].<span class="number">0</span>, <span class="self">self</span>.range[r].<span class="number">1</span>);
 <a href=#146 id=146 data-nosnippet>146</a>            }
 <a href=#147 id=147 data-nosnippet>147</a>            <span class="kw">if </span>l &amp; <span class="number">1 </span>== <span class="number">1 </span>{
-<a href=#148 id=148 data-nosnippet>148</a>                <span class="self">self</span>.update(l, segment.clone(), <span class="self">self</span>.range[l].<span class="number">0</span>, <span class="self">self</span>.range[l].<span class="number">1</span>);
+<a href=#148 id=148 data-nosnippet>148</a>                <span class="self">self</span>.update(l, segment, <span class="self">self</span>.range[l].<span class="number">0</span>, <span class="self">self</span>.range[l].<span class="number">1</span>);
 <a href=#149 id=149 data-nosnippet>149</a>                l += <span class="number">1</span>;
 <a href=#150 id=150 data-nosnippet>150</a>            }
 <a href=#151 id=151 data-nosnippet>151</a>

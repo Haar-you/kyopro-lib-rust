@@ -42,11 +42,11 @@
 <a href=#26 id=26 data-nosnippet>26</a><span class="attr">#[cfg(test)]
 <a href=#27 id=27 data-nosnippet>27</a></span><span class="kw">mod </span>tests {
 <a href=#28 id=28 data-nosnippet>28</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#29 id=29 data-nosnippet>29</a>    <span class="kw">use </span><span class="kw">crate</span>::num::const_modint::<span class="kw-2">*</span>;
+<a href=#29 id=29 data-nosnippet>29</a>    <span class="kw">use crate</span>::{math::prime_mod::Prime, num::const_modint::<span class="kw-2">*</span>};
 <a href=#30 id=30 data-nosnippet>30</a>
 <a href=#31 id=31 data-nosnippet>31</a>    <span class="attr">#[test]
 <a href=#32 id=32 data-nosnippet>32</a>    </span><span class="kw">fn </span>test() {
-<a href=#33 id=33 data-nosnippet>33</a>        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;;
+<a href=#33 id=33 data-nosnippet>33</a>        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;Prime&lt;<span class="number">1000000007</span>&gt;&gt;::new();
 <a href=#34 id=34 data-nosnippet>34</a>        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">100</span>, modulo);
 <a href=#35 id=35 data-nosnippet>35</a>
 <a href=#36 id=36 data-nosnippet>36</a>        <span class="kw">let </span>catalans = (<span class="number">0</span>..=<span class="number">30</span>).map(|i| ft.catalan_number(i)).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();

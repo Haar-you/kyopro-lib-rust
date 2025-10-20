@@ -35,7 +35,7 @@
 <a href=#19 id=19 data-nosnippet>19</a>    </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
 <a href=#20 id=20 data-nosnippet>20</a>        <span class="kw">let </span>size = n.next_power_of_two() * <span class="number">2</span>;
 <a href=#21 id=21 data-nosnippet>21</a>        <span class="kw">let </span>data = RefCell::new(<span class="macro">vec!</span>[M::id(); size]);
-<a href=#22 id=22 data-nosnippet>22</a>        DualSegtree {
+<a href=#22 id=22 data-nosnippet>22</a>        <span class="self">Self </span>{
 <a href=#23 id=23 data-nosnippet>23</a>            original_size: n,
 <a href=#24 id=24 data-nosnippet>24</a>            size,
 <a href=#25 id=25 data-nosnippet>25</a>            data,
@@ -52,7 +52,7 @@
 <a href=#36 id=36 data-nosnippet>36</a>        <span class="kw">for </span>(i, e) <span class="kw">in </span>a.into_iter().enumerate() {
 <a href=#37 id=37 data-nosnippet>37</a>            data[i + size / <span class="number">2</span>] = e.clone();
 <a href=#38 id=38 data-nosnippet>38</a>        }
-<a href=#39 id=39 data-nosnippet>39</a>        DualSegtree {
+<a href=#39 id=39 data-nosnippet>39</a>        <span class="self">Self </span>{
 <a href=#40 id=40 data-nosnippet>40</a>            original_size,
 <a href=#41 id=41 data-nosnippet>41</a>            size,
 <a href=#42 id=42 data-nosnippet>42</a>            data: RefCell::new(data),
@@ -135,12 +135,12 @@
 <a href=#119 id=119 data-nosnippet>119</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
 <a href=#120 id=120 data-nosnippet>120</a>        <span class="kw">let </span>n = <span class="number">100</span>;
 <a href=#121 id=121 data-nosnippet>121</a>
-<a href=#122 id=122 data-nosnippet>122</a>        <span class="kw">let </span><span class="kw-2">mut </span>a = (<span class="number">0</span>..n)
-<a href=#123 id=123 data-nosnippet>123</a>            .map(|<span class="kw">_</span>| {
-<a href=#124 id=124 data-nosnippet>124</a>                <span class="kw">let </span>x = rng.gen_range(<span class="number">0</span>..<span class="number">10000</span>);
-<a href=#125 id=125 data-nosnippet>125</a>                Sum(x)
-<a href=#126 id=126 data-nosnippet>126</a>            })
-<a href=#127 id=127 data-nosnippet>127</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#122 id=122 data-nosnippet>122</a>        <span class="kw">let </span><span class="kw-2">mut </span>a = std::iter::repeat_with(|| {
+<a href=#123 id=123 data-nosnippet>123</a>            <span class="kw">let </span>x = rng.gen_range(<span class="number">0</span>..<span class="number">10000</span>);
+<a href=#124 id=124 data-nosnippet>124</a>            Sum(x)
+<a href=#125 id=125 data-nosnippet>125</a>        })
+<a href=#126 id=126 data-nosnippet>126</a>        .take(n)
+<a href=#127 id=127 data-nosnippet>127</a>        .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 <a href=#128 id=128 data-nosnippet>128</a>        <span class="kw">let </span><span class="kw-2">mut </span>seg = DualSegtree::&lt;Sum&lt;u32&gt;&gt;::from_vec(a.clone());
 <a href=#129 id=129 data-nosnippet>129</a>
 <a href=#130 id=130 data-nosnippet>130</a>        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{

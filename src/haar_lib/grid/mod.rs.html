@@ -18,7 +18,7 @@
 <a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">pub mod </span>to_graph;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="doccomment">/// グリッド上の位置を表す。
-<a href=#5 id=5 data-nosnippet>5</a></span><span class="attr">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+<a href=#5 id=5 data-nosnippet>5</a></span><span class="attr">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
 <a href=#6 id=6 data-nosnippet>6</a></span><span class="kw">pub struct </span>Position {
 <a href=#7 id=7 data-nosnippet>7</a>    x: usize,
 <a href=#8 id=8 data-nosnippet>8</a>    y: usize,
@@ -54,7 +54,7 @@
 <a href=#38 id=38 data-nosnippet>38</a>}
 <a href=#39 id=39 data-nosnippet>39</a>
 <a href=#40 id=40 data-nosnippet>40</a><span class="doccomment">/// 移動方向
-<a href=#41 id=41 data-nosnippet>41</a></span><span class="attr">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+<a href=#41 id=41 data-nosnippet>41</a></span><span class="attr">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
 <a href=#42 id=42 data-nosnippet>42</a></span><span class="kw">pub struct </span>Dir {
 <a href=#43 id=43 data-nosnippet>43</a>    <span class="doccomment">/// x方向の移動量
 <a href=#44 id=44 data-nosnippet>44</a>    </span><span class="kw">pub </span>dx: isize,
@@ -69,15 +69,15 @@
 <a href=#53 id=53 data-nosnippet>53</a>    }
 <a href=#54 id=54 data-nosnippet>54</a>
 <a href=#55 id=55 data-nosnippet>55</a>    <span class="doccomment">/// 左方向への1マス分の移動
-<a href=#56 id=56 data-nosnippet>56</a>    </span><span class="kw">pub const </span>L: Dir = Dir { dx: <span class="number">0</span>, dy: -<span class="number">1 </span>};
+<a href=#56 id=56 data-nosnippet>56</a>    </span><span class="kw">pub const </span>L: <span class="self">Self </span>= <span class="self">Self </span>{ dx: <span class="number">0</span>, dy: -<span class="number">1 </span>};
 <a href=#57 id=57 data-nosnippet>57</a>    <span class="doccomment">/// 右方向への1マス分の移動
-<a href=#58 id=58 data-nosnippet>58</a>    </span><span class="kw">pub const </span>R: Dir = Dir { dx: <span class="number">0</span>, dy: <span class="number">1 </span>};
+<a href=#58 id=58 data-nosnippet>58</a>    </span><span class="kw">pub const </span>R: <span class="self">Self </span>= <span class="self">Self </span>{ dx: <span class="number">0</span>, dy: <span class="number">1 </span>};
 <a href=#59 id=59 data-nosnippet>59</a>    <span class="doccomment">/// 上方向への1マス分の移動
-<a href=#60 id=60 data-nosnippet>60</a>    </span><span class="kw">pub const </span>U: Dir = Dir { dx: -<span class="number">1</span>, dy: <span class="number">0 </span>};
+<a href=#60 id=60 data-nosnippet>60</a>    </span><span class="kw">pub const </span>U: <span class="self">Self </span>= <span class="self">Self </span>{ dx: -<span class="number">1</span>, dy: <span class="number">0 </span>};
 <a href=#61 id=61 data-nosnippet>61</a>    <span class="doccomment">/// 下方向への1マス分の移動
-<a href=#62 id=62 data-nosnippet>62</a>    </span><span class="kw">pub const </span>D: Dir = Dir { dx: <span class="number">1</span>, dy: <span class="number">0 </span>};
+<a href=#62 id=62 data-nosnippet>62</a>    </span><span class="kw">pub const </span>D: <span class="self">Self </span>= <span class="self">Self </span>{ dx: <span class="number">1</span>, dy: <span class="number">0 </span>};
 <a href=#63 id=63 data-nosnippet>63</a>    <span class="doccomment">/// 上下左右4方向への1マス分の移動を格納した配列
-<a href=#64 id=64 data-nosnippet>64</a>    </span><span class="kw">pub const </span>DIR_4: [Dir; <span class="number">4</span>] = [<span class="self">Self</span>::L, <span class="self">Self</span>::R, <span class="self">Self</span>::U, <span class="self">Self</span>::D];
+<a href=#64 id=64 data-nosnippet>64</a>    </span><span class="kw">pub const </span>DIR_4: [<span class="self">Self</span>; <span class="number">4</span>] = [<span class="self">Self</span>::L, <span class="self">Self</span>::R, <span class="self">Self</span>::U, <span class="self">Self</span>::D];
 <a href=#65 id=65 data-nosnippet>65</a>}
 <a href=#66 id=66 data-nosnippet>66</a>
 <a href=#67 id=67 data-nosnippet>67</a><span class="kw">impl </span>std::ops::Add <span class="kw">for </span>Dir {
@@ -88,7 +88,7 @@
 <a href=#72 id=72 data-nosnippet>72</a>}
 <a href=#73 id=73 data-nosnippet>73</a>
 <a href=#74 id=74 data-nosnippet>74</a><span class="doccomment">/// 長方形型のマス目グリッドを扱う。
-<a href=#75 id=75 data-nosnippet>75</a></span><span class="attr">#[derive(Clone, Debug)]
+<a href=#75 id=75 data-nosnippet>75</a></span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, Default)]
 <a href=#76 id=76 data-nosnippet>76</a></span><span class="kw">pub struct </span>Grid&lt;T&gt; {
 <a href=#77 id=77 data-nosnippet>77</a>    grid: Vec&lt;Vec&lt;T&gt;&gt;,
 <a href=#78 id=78 data-nosnippet>78</a>    h: usize,

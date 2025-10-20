@@ -94,7 +94,7 @@
 <a href=#78 id=78 data-nosnippet>78</a>    <span class="kw">fn </span>into_iter(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
 <a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">let </span>k = <span class="self">self</span>.real_index(<span class="number">0</span>);
 <a href=#80 id=80 data-nosnippet>80</a>        <span class="kw">let </span>a = <span class="self">self</span>.data.split_off(k);
-<a href=#81 id=81 data-nosnippet>81</a>        a.into_iter().chain(<span class="self">self</span>.data.into_iter())
+<a href=#81 id=81 data-nosnippet>81</a>        a.into_iter().chain(<span class="self">self</span>.data)
 <a href=#82 id=82 data-nosnippet>82</a>    }
 <a href=#83 id=83 data-nosnippet>83</a>}
 <a href=#84 id=84 data-nosnippet>84</a>

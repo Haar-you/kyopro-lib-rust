@@ -110,35 +110,36 @@
 <a href=#94 id=94 data-nosnippet>94</a></span><span class="kw">mod </span>tests {
 <a href=#95 id=95 data-nosnippet>95</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#96 id=96 data-nosnippet>96</a>    <span class="kw">use crate</span>::{
-<a href=#97 id=97 data-nosnippet>97</a>        math::stirling_second_table::stirling_second_table, num::const_modint::<span class="kw-2">*</span>, num::modint::<span class="kw-2">*</span>,
-<a href=#98 id=98 data-nosnippet>98</a>    };
-<a href=#99 id=99 data-nosnippet>99</a>
-<a href=#100 id=100 data-nosnippet>100</a>    <span class="attr">#[test]
-<a href=#101 id=101 data-nosnippet>101</a>    </span><span class="kw">fn </span>test() {
-<a href=#102 id=102 data-nosnippet>102</a>        <span class="kw">let </span>modulo = ModIntBuilder::new(<span class="number">1000000007</span>);
-<a href=#103 id=103 data-nosnippet>103</a>        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">2000000</span>, modulo.clone());
-<a href=#104 id=104 data-nosnippet>104</a>
-<a href=#105 id=105 data-nosnippet>105</a>        <span class="comment">// https://yukicoder.me/problems/no/117
-<a href=#106 id=106 data-nosnippet>106</a>        </span><span class="macro">assert_eq!</span>(ft.comb(<span class="number">1</span>, <span class="number">1000000</span>), modulo.from_u64(<span class="number">0</span>));
-<a href=#107 id=107 data-nosnippet>107</a>        <span class="macro">assert_eq!</span>(ft.comb(<span class="number">0</span>, <span class="number">0</span>), modulo.from_u64(<span class="number">1</span>));
-<a href=#108 id=108 data-nosnippet>108</a>        <span class="macro">assert_eq!</span>(ft.perm(<span class="number">1000000</span>, <span class="number">1000000</span>), modulo.from_u64(<span class="number">641102369</span>));
-<a href=#109 id=109 data-nosnippet>109</a>        <span class="macro">assert_eq!</span>(ft.perm(<span class="number">1</span>, <span class="number">10</span>), modulo.from_u64(<span class="number">0</span>));
-<a href=#110 id=110 data-nosnippet>110</a>    }
-<a href=#111 id=111 data-nosnippet>111</a>
-<a href=#112 id=112 data-nosnippet>112</a>    <span class="attr">#[test]
-<a href=#113 id=113 data-nosnippet>113</a>    </span><span class="kw">fn </span>test_stirling_second() {
-<a href=#114 id=114 data-nosnippet>114</a>        <span class="kw">use </span><span class="kw">super</span>::stirling_second::StirlingSecond;
-<a href=#115 id=115 data-nosnippet>115</a>
-<a href=#116 id=116 data-nosnippet>116</a>        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;<span class="number">1000000007</span>&gt;;
-<a href=#117 id=117 data-nosnippet>117</a>        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">2000000</span>, modulo);
-<a href=#118 id=118 data-nosnippet>118</a>        <span class="kw">let </span>n = <span class="number">100</span>;
-<a href=#119 id=119 data-nosnippet>119</a>
-<a href=#120 id=120 data-nosnippet>120</a>        <span class="kw">let </span>ans = stirling_second_table(n, modulo);
-<a href=#121 id=121 data-nosnippet>121</a>
-<a href=#122 id=122 data-nosnippet>122</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..=n {
-<a href=#123 id=123 data-nosnippet>123</a>            <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..=n {
-<a href=#124 id=124 data-nosnippet>124</a>                <span class="macro">assert_eq!</span>(ans[i][j], ft.stirling_second(i, j));
-<a href=#125 id=125 data-nosnippet>125</a>            }
-<a href=#126 id=126 data-nosnippet>126</a>        }
-<a href=#127 id=127 data-nosnippet>127</a>    }
-<a href=#128 id=128 data-nosnippet>128</a>}</code></pre></div></section></main></body></html>
+<a href=#97 id=97 data-nosnippet>97</a>        math::{combinatorics::stirling_second_table::<span class="kw-2">*</span>, prime_mod::Prime},
+<a href=#98 id=98 data-nosnippet>98</a>        num::{const_modint::<span class="kw-2">*</span>, modint::<span class="kw-2">*</span>},
+<a href=#99 id=99 data-nosnippet>99</a>    };
+<a href=#100 id=100 data-nosnippet>100</a>
+<a href=#101 id=101 data-nosnippet>101</a>    <span class="attr">#[test]
+<a href=#102 id=102 data-nosnippet>102</a>    </span><span class="kw">fn </span>test() {
+<a href=#103 id=103 data-nosnippet>103</a>        <span class="kw">let </span>modulo = ModIntBuilder::new(<span class="number">1000000007</span>);
+<a href=#104 id=104 data-nosnippet>104</a>        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">2000000</span>, modulo.clone());
+<a href=#105 id=105 data-nosnippet>105</a>
+<a href=#106 id=106 data-nosnippet>106</a>        <span class="comment">// https://yukicoder.me/problems/no/117
+<a href=#107 id=107 data-nosnippet>107</a>        </span><span class="macro">assert_eq!</span>(ft.comb(<span class="number">1</span>, <span class="number">1000000</span>), modulo.from_u64(<span class="number">0</span>));
+<a href=#108 id=108 data-nosnippet>108</a>        <span class="macro">assert_eq!</span>(ft.comb(<span class="number">0</span>, <span class="number">0</span>), modulo.from_u64(<span class="number">1</span>));
+<a href=#109 id=109 data-nosnippet>109</a>        <span class="macro">assert_eq!</span>(ft.perm(<span class="number">1000000</span>, <span class="number">1000000</span>), modulo.from_u64(<span class="number">641102369</span>));
+<a href=#110 id=110 data-nosnippet>110</a>        <span class="macro">assert_eq!</span>(ft.perm(<span class="number">1</span>, <span class="number">10</span>), modulo.from_u64(<span class="number">0</span>));
+<a href=#111 id=111 data-nosnippet>111</a>    }
+<a href=#112 id=112 data-nosnippet>112</a>
+<a href=#113 id=113 data-nosnippet>113</a>    <span class="attr">#[test]
+<a href=#114 id=114 data-nosnippet>114</a>    </span><span class="kw">fn </span>test_stirling_second() {
+<a href=#115 id=115 data-nosnippet>115</a>        <span class="kw">use </span><span class="kw">super</span>::stirling_second::StirlingSecond;
+<a href=#116 id=116 data-nosnippet>116</a>
+<a href=#117 id=117 data-nosnippet>117</a>        <span class="kw">let </span>modulo = ConstModIntBuilder::&lt;Prime&lt;<span class="number">1000000007</span>&gt;&gt;::new();
+<a href=#118 id=118 data-nosnippet>118</a>        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">2000000</span>, modulo);
+<a href=#119 id=119 data-nosnippet>119</a>        <span class="kw">let </span>n = <span class="number">100</span>;
+<a href=#120 id=120 data-nosnippet>120</a>
+<a href=#121 id=121 data-nosnippet>121</a>        <span class="kw">let </span>ans = stirling_second_table(n, modulo);
+<a href=#122 id=122 data-nosnippet>122</a>
+<a href=#123 id=123 data-nosnippet>123</a>        <span class="kw">for </span>(i, ans) <span class="kw">in </span>ans.into_iter().enumerate().take(n + <span class="number">1</span>) {
+<a href=#124 id=124 data-nosnippet>124</a>            <span class="kw">for </span>(j, ans) <span class="kw">in </span>ans.into_iter().enumerate().take(n + <span class="number">1</span>) {
+<a href=#125 id=125 data-nosnippet>125</a>                <span class="macro">assert_eq!</span>(ans, ft.stirling_second(i, j));
+<a href=#126 id=126 data-nosnippet>126</a>            }
+<a href=#127 id=127 data-nosnippet>127</a>        }
+<a href=#128 id=128 data-nosnippet>128</a>    }
+<a href=#129 id=129 data-nosnippet>129</a>}</code></pre></div></section></main></body></html>

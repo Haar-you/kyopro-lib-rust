@@ -34,7 +34,7 @@
 <a href=#18 id=18 data-nosnippet>18</a>        }
 <a href=#19 id=19 data-nosnippet>19</a>    }
 <a href=#20 id=20 data-nosnippet>20</a>
-<a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="prelude-ty">Option</span>&lt;Box&lt;Node&lt;T&gt;&gt;&gt;) {
+<a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="prelude-ty">Option</span>&lt;Box&lt;<span class="self">Self</span>&gt;&gt;) {
 <a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>other) = other {
 <a href=#23 id=23 data-nosnippet>23</a>            <span class="kw">if </span><span class="self">self</span>.value &lt; other.value {
 <a href=#24 id=24 data-nosnippet>24</a>                swap(<span class="self">self</span>, other.as_mut());
@@ -67,7 +67,7 @@
 <a href=#51 id=51 data-nosnippet>51</a>    }
 <a href=#52 id=52 data-nosnippet>52</a>
 <a href=#53 id=53 data-nosnippet>53</a>    <span class="doccomment">/// 他の`SkewHeap&lt;T&gt;`を融合する。
-<a href=#54 id=54 data-nosnippet>54</a>    </span><span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: SkewHeap&lt;T&gt;) {
+<a href=#54 id=54 data-nosnippet>54</a>    </span><span class="kw">pub fn </span>meld(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="self">Self</span>) {
 <a href=#55 id=55 data-nosnippet>55</a>        <span class="self">self</span>.size += other.size;
 <a href=#56 id=56 data-nosnippet>56</a>        <span class="kw">match </span><span class="self">self</span>.root.as_mut() {
 <a href=#57 id=57 data-nosnippet>57</a>            <span class="prelude-val">None </span>=&gt; <span class="self">self</span>.root = other.root,

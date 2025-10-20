@@ -20,7 +20,7 @@
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>std::f64::consts::PI;
 <a href=#5 id=5 data-nosnippet>5</a>
 <a href=#6 id=6 data-nosnippet>6</a><span class="doccomment">/// 点と多角形の位置関係
-<a href=#7 id=7 data-nosnippet>7</a></span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+<a href=#7 id=7 data-nosnippet>7</a></span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 <a href=#8 id=8 data-nosnippet>8</a>#[allow(non_camel_case_types)]
 <a href=#9 id=9 data-nosnippet>9</a></span><span class="kw">pub enum </span>PointPolygon {
 <a href=#10 id=10 data-nosnippet>10</a>    <span class="doccomment">/// 点が多角形の内部にある
@@ -81,7 +81,7 @@
 <a href=#65 id=65 data-nosnippet>65</a>        d += ang;
 <a href=#66 id=66 data-nosnippet>66</a>    }
 <a href=#67 id=67 data-nosnippet>67</a>
-<a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">if </span>eps.eq((d.abs() - <span class="number">2.0 </span>* PI).abs(), <span class="number">0.0</span>) {
+<a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">if </span>eps.eq(<span class="number">2.0_f64</span>.mul_add(-PI, d.abs()).abs(), <span class="number">0.0</span>) {
 <a href=#69 id=69 data-nosnippet>69</a>        INCLUSION
 <a href=#70 id=70 data-nosnippet>70</a>    } <span class="kw">else </span>{
 <a href=#71 id=71 data-nosnippet>71</a>        EXCLUSION

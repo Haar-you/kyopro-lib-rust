@@ -19,7 +19,7 @@
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span><span class="kw">crate</span>::impl_algebra;
 <a href=#4 id=4 data-nosnippet>4</a>
 <a href=#5 id=5 data-nosnippet>5</a><span class="doccomment">/// 自明な群
-<a href=#6 id=6 data-nosnippet>6</a></span><span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+<a href=#6 id=6 data-nosnippet>6</a></span><span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 <a href=#7 id=7 data-nosnippet>7</a></span><span class="kw">pub struct </span>Trivial;
 <a href=#8 id=8 data-nosnippet>8</a>
 <a href=#9 id=9 data-nosnippet>9</a><span class="macro">impl_algebra!</span>(Trivial; op: |<span class="kw">_</span>, <span class="kw">_</span>| <span class="self">Self</span>; id: <span class="self">Self</span>; inv: |<span class="kw">_</span>| <span class="self">Self</span>; assoc; commu; idem;);</code></pre></div></section></main></body></html>
