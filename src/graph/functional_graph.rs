@@ -11,7 +11,7 @@ pub struct FunctionalGraphBuilder {
 }
 
 /// 頂点の種類
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Kind {
     /// 閉路を構成している頂点。
     Loop,

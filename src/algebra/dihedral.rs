@@ -6,7 +6,7 @@
 pub use crate::algebra::traits::*;
 
 /// 二面体群$D_n$の元
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum DihedralValue {
     /// 回転
     R(usize),
@@ -73,7 +73,7 @@ impl Set for Dihedral {}
 
 impl BinaryOp for Dihedral {
     fn op(self, b: Self) -> Self {
-        Dihedral::_op(self, b)
+        Self::_op(self, b)
     }
 }
 

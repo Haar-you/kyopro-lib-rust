@@ -4,7 +4,7 @@ pub use crate::algebra::traits::*;
 macro_rules! impl_tuple {
     ($(#[$meta:meta])* $a:ident; $($t:tt),*; $($i:tt),*) => {
         $(#[$meta])*
-        #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+        #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
         pub struct $a<$($t),*>($(pub $t),*);
 
         impl<$($t:Set),*> Set for $a<$($t),*> {}

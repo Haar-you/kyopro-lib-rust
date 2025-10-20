@@ -21,7 +21,7 @@ pub struct PseudoTree {
 }
 
 /// [`PseudoTree`]の頂点の種類
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Hash)]
 pub enum Kind {
     /// 閉路を構成する頂点。
     Loop,

@@ -4,7 +4,7 @@ use crate::geom::{ccw::*, *};
 use std::f64::consts::PI;
 
 /// 点と多角形の位置関係
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 #[allow(non_camel_case_types)]
 pub enum PointPolygon {
     /// 点が多角形の内部にある
@@ -65,7 +65,7 @@ pub fn point_in_polygon(p: Vector, pl: &[Vector], eps: Eps) -> PointPolygon {
         d += ang;
     }
 
-    if eps.eq((d.abs() - 2.0 * PI).abs(), 0.0) {
+    if eps.eq(2.0_f64.mul_add(-PI, d.abs()).abs(), 0.0) {
         INCLUSION
     } else {
         EXCLUSION

@@ -19,7 +19,7 @@ impl<M: Monoid + Clone> DualSegtree<M> {
     pub fn new(n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
         let data = RefCell::new(vec![M::id(); size]);
-        DualSegtree {
+        Self {
             original_size: n,
             size,
             data,
@@ -36,7 +36,7 @@ impl<M: Monoid + Clone> DualSegtree<M> {
         for (i, e) in a.into_iter().enumerate() {
             data[i + size / 2] = e.clone();
         }
-        DualSegtree {
+        Self {
             original_size,
             size,
             data: RefCell::new(data),
@@ -119,12 +119,12 @@ mod tests {
         let mut rng = rand::thread_rng();
         let n = 100;
 
-        let mut a = (0..n)
-            .map(|_| {
-                let x = rng.gen_range(0..10000);
-                Sum(x)
-            })
-            .collect::<Vec<_>>();
+        let mut a = std::iter::repeat_with(|| {
+            let x = rng.gen_range(0..10000);
+            Sum(x)
+        })
+        .take(n)
+        .collect::<Vec<_>>();
         let mut seg = DualSegtree::<Sum<u32>>::from_vec(a.clone());
 
         for _ in 0..100 {

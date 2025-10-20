@@ -3,15 +3,15 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
 /// 論理積を演算とする代数的構造
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct BitAnd<T>(pub T);
 
 /// 論理和を演算とする代数的構造
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct BitOr<T>(pub T);
 
 /// 排他的論理和を演算とする代数的構造
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct BitXor<T>(pub T);
 
 macro_rules! implement {

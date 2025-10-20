@@ -23,7 +23,7 @@ impl Poly {
     }
 
     fn add(a: Self, b: Self) -> Self {
-        let mut ret = Poly::new();
+        let mut ret = Self::new();
         for i in 0..=10 {
             ret.data[i] = a.data[i] + b.data[i];
         }
@@ -31,7 +31,7 @@ impl Poly {
     }
 
     fn mul(a: Self, b: Self) -> Self {
-        let mut ret = Poly::new();
+        let mut ret = Self::new();
         for i in 0..=10 {
             for j in 0..=10 {
                 if i + j <= 10 {
@@ -43,7 +43,7 @@ impl Poly {
     }
 
     fn differentiate(a: Self) -> Self {
-        let mut ret = Poly::new();
+        let mut ret = Self::new();
         for i in 0..10 {
             ret.data[i] = a.data[i + 1] * (i + 1) as i64;
         }

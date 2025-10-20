@@ -98,8 +98,8 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 100;
-        let a = (0..n)
-            .map(|_| Sum(rng.gen::<u32>() % 10000))
+        let a = std::iter::repeat_with(|| Sum(rng.gen::<u32>() % 10000))
+            .take(n)
             .collect::<Vec<_>>();
         let s = DisjointSparseTable::<Sum<u32>>::new(a.clone());
 

@@ -1,5 +1,7 @@
+//! 商の列挙
+
 /// [`enumerate_quotients`]の結果
-#[derive(Copy, Debug, Eq, PartialEq, Clone)]
+#[derive(Copy, Debug, Eq, PartialEq, Clone, Hash)]
 pub struct Quotient {
     /// `floor(N/x)`の値
     pub q: u64,

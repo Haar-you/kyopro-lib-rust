@@ -6,7 +6,7 @@ pub struct NullableUsize(pub usize);
 
 impl NullableUsize {
     /// NULLとして扱う値(`usize`の最大値)
-    pub const NULL: NullableUsize = Self(!0);
+    pub const NULL: Self = Self(!0);
 
     /// `NULL`ならば`true`を返す
     pub fn is_null(self) -> bool {

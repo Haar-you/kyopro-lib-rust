@@ -14,16 +14,16 @@ use crate::math::continued_fraction::*;
 pub struct Frac(pub u64, pub u64);
 
 impl PartialEq for Frac {
-    fn eq(&self, Frac(c, d): &Self) -> bool {
-        let Frac(a, b) = self;
+    fn eq(&self, Self(c, d): &Self) -> bool {
+        let Self(a, b) = self;
         a * d == b * c
     }
 }
 impl Eq for Frac {}
 impl PartialOrd for Frac {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        let Frac(a, b) = self;
-        let Frac(c, d) = other;
+        let Self(a, b) = self;
+        let Self(c, d) = other;
         (a * d).partial_cmp(&(b * c))
     }
 }

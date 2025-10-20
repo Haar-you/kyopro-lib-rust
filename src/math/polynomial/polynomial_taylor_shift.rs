@@ -4,27 +4,25 @@
 //! - <https://judge.yosupo.jp/problem/polynomial_taylor_shift>
 
 use crate::math::polynomial::*;
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// Polynomial Taylor shift
 pub trait TaylorShift {
-    /// 多項式の型
-    type Poly;
     /// 多項式の係数の型
     type Value;
 
     /// 多項式 `p` = $f(x) = a_0 + a_1x + \cdots + a_nx^n$に対して、<br>
     /// 多項式 $f(x + c) = a_0 + a_1(x + c) + \cdots + a_n(x + c)^n = b_0 + b_0x + \cdots + b_nx^n$
     /// を満たす、数列{$b_i$}を求める。
-    fn taylor_shift(&self, p: Self::Poly, c: Self::Value) -> Self::Poly;
+    fn taylor_shift(self, c: Self::Value) -> Self;
 }
 
-impl<const P: u32, const PR: u32> TaylorShift for PolynomialOperator<'_, P, PR> {
-    type Poly = Polynomial<P>;
+impl<P: PrimeMod> TaylorShift for Polynomial<P> {
     type Value = ConstModInt<P>;
 
-    fn taylor_shift(&self, p: Self::Poly, c: Self::Value) -> Self::Poly {
-        let p: Vec<_> = p.into();
+    fn taylor_shift(self, c: Self::Value) -> Self {
+        let p: Vec<_> = self.into();
         let n = p.len();
         let mut f = ConstModInt::new(1);
 
@@ -49,13 +47,38 @@ impl<const P: u32, const PR: u32> TaylorShift for PolynomialOperator<'_, P, PR> 
             d *= c;
         }
 
-        //    let c = ntt.convolve(a, b);
-        let c: Vec<_> = self.mul(a.into(), b.into()).into();
+        let c = Self::NTT.convolve(a, b);
         c.into_iter()
             .skip((n - 1) * 2)
             .zip(g)
             .map(|(c, g)| c * g)
             .collect::<Vec<_>>()
             .into()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::math::prime_mod::Prime;
+
+    use super::*;
+
+    type P = Prime<998244353>;
+
+    #[test]
+    fn test() {
+        let coeffs = vec![1, 2, 3, 4, 5];
+        let c = 3;
+
+        let res = Polynomial::<P>::from(coeffs.clone()).taylor_shift(c.into());
+
+        let mut ans = Polynomial::zero();
+        for (i, a) in coeffs.into_iter().enumerate() {
+            let mut p = Polynomial::<P>::from(vec![c, 1]).pow(i as u64);
+            p.scale(a.into());
+            ans += p;
+        }
+
+        assert_eq!(res, ans);
     }
 }

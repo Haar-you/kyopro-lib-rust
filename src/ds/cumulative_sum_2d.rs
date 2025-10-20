@@ -4,12 +4,13 @@ pub use crate::algebra::traits::Group;
 use std::ops::{Index, Range};
 
 /// 2次元の累積和を扱う
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, Hash)]
 pub struct CumulativeSum2D<G: Group> {
     data: Vec<Vec<G>>,
 }
 
 /// [`CumulativeSum2D`]を構築する
+#[derive(Debug, Clone, PartialEq, Eq, Default, Hash)]
 pub struct CumulativeSum2DBuilder<G: Group> {
     data: Vec<Vec<G>>,
     n: usize,
@@ -43,7 +44,7 @@ impl<G: Group> Index<(usize, usize)> for CumulativeSum2D<G> {
 impl<G: Group + Copy> CumulativeSum2DBuilder<G> {
     /// `CumulativeSum2DBuilder`を生成する
     pub fn new(n: usize, m: usize) -> Self {
-        CumulativeSum2DBuilder {
+        Self {
             data: vec![vec![G::id(); m + 1]; n + 1],
             n,
             m,

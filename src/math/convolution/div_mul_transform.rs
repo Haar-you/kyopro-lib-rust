@@ -89,10 +89,10 @@ mod tests {
             .collect_vec();
 
         let mut g = vec![0; n + 1];
-        for j in 1..=n {
-            for i in 1..=n {
+        for (j, gj) in g.iter_mut().enumerate().take(n + 1).skip(1) {
+            for (i, fi) in f.iter().enumerate().take(n + 1).skip(1) {
                 if j % i == 0 {
-                    g[j] += f[i];
+                    *gj += fi;
                 }
             }
         }
@@ -117,9 +117,10 @@ mod tests {
             .collect_vec();
 
         let mut g = vec![0; n + 1];
-        for j in 1..=n {
+
+        for (j, gj) in g.iter_mut().enumerate().take(n + 1).skip(1) {
             for i in (j..=n).step_by(j) {
-                g[j] += f[i];
+                *gj += f[i];
             }
         }
 

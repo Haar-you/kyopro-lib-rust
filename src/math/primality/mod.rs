@@ -1,18 +1,20 @@
 //! 素数判定
 
 pub mod eratosthenes;
+pub mod linear_sieve;
 pub mod miller_rabin;
 pub mod segmented;
 
 /// 素数判定
-pub trait CheckPrime<T> {
+pub trait PrimalityTest<T> {
     /// `value`が素数ならば`true`を返す。
     fn is_prime(&self, value: T) -> bool;
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{eratosthenes::*, miller_rabin::*, CheckPrime};
+
+    use super::{eratosthenes::*, linear_sieve::LinearSieve, miller_rabin::*, PrimalityTest};
 
     #[test]
     fn test_eratosthenes() {
@@ -28,6 +30,17 @@ mod tests {
                 83, 89, 97
             ]
         );
+    }
+
+    #[test]
+    fn test_linear_sieve() {
+        let n = 10000;
+        let sieve1 = EratosthenesSieve::new(n);
+        let sieve2 = LinearSieve::new(n);
+
+        for i in 1..=n {
+            assert_eq!(sieve1.is_prime(i), sieve2.is_prime(i));
+        }
     }
 
     #[test]

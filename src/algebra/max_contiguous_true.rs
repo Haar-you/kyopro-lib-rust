@@ -9,7 +9,7 @@ use crate::impl_algebra;
 use std::cmp::max;
 
 /// 連続する`true`列の最大長を管理する。
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, Hash)]
 pub struct MaxContiguousTrue {
     /// 最大連続長
     pub count: usize,

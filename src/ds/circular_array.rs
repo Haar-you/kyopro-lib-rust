@@ -78,7 +78,7 @@ impl<T> IntoIterator for CircularArray<T> {
     fn into_iter(mut self) -> Self::IntoIter {
         let k = self.real_index(0);
         let a = self.data.split_off(k);
-        a.into_iter().chain(self.data.into_iter())
+        a.into_iter().chain(self.data)
     }
 }
 

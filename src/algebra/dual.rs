@@ -2,7 +2,7 @@
 pub use crate::algebra::traits::*;
 
 /// 演算の順序を逆にした代数的構造
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Dual<S>(pub S);
 
 impl<S: Set> Set for Dual<S> {}

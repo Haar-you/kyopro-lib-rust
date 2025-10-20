@@ -123,7 +123,9 @@ mod tests {
     fn test_rank() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let b = (0..n).map(|_| rng.gen::<bool>()).collect::<Vec<_>>();
+        let b = std::iter::repeat_with(|| rng.gen::<bool>())
+            .take(n)
+            .collect::<Vec<_>>();
 
         let s = SuccinctBitVec::new(b.clone());
 
@@ -140,7 +142,9 @@ mod tests {
     fn test_count() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let b = (0..n).map(|_| rng.gen::<bool>()).collect::<Vec<_>>();
+        let b = std::iter::repeat_with(|| rng.gen::<bool>())
+            .take(n)
+            .collect::<Vec<_>>();
 
         let s = SuccinctBitVec::new(b.clone());
 
@@ -159,7 +163,9 @@ mod tests {
     fn test_select() {
         let mut rng = rand::thread_rng();
         let n = 30;
-        let b = (0..n).map(|_| rng.gen::<bool>()).collect::<Vec<_>>();
+        let b = std::iter::repeat_with(|| rng.gen::<bool>())
+            .take(n)
+            .collect::<Vec<_>>();
 
         let s = SuccinctBitVec::new(b.clone());
 

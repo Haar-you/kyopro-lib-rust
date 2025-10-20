@@ -3,7 +3,7 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
 /// 加法を演算とする代数的構造
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Sum<T>(pub T);
 
 macro_rules! implement {

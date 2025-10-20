@@ -65,7 +65,7 @@ mod tests {
 
     #[test]
     fn mobius() {
-        let f = |p: u64, k: u32| if k == 1 { -1 } else { 0 };
+        let f = |_p: u64, k: u32| if k == 1 { -1 } else { 0 };
 
         for n in [1, 10, 100, 1000, 10000, 100000, 1000000] {
             let _res = timer! {n, {

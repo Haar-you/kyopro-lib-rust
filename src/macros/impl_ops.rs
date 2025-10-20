@@ -2,6 +2,7 @@
 
 /// [`Add`](std::ops::Add), [`Sub`](std::ops::Sub), [`Mul`](std::ops::Mul), [`Div`](std::ops::Div), [`Rem`](std::ops::Rem), [`AddAssign`](std::ops::AddAssign), [`SubAssign`](std::ops::SubAssign), [`MulAssign`](std::ops::MulAssign), [`DivAssign`](std::ops::DivAssign), [`RemAssign`](std::ops::RemAssign), [`Neg`](std::ops::Neg)を実装する。
 #[macro_export]
+#[doc(hidden)]
 macro_rules! impl_ops {
     (@inner, $(#[$meta:meta])* [$($bound:tt)*]; $tr:ty, $rhs:ty, $a:ty, $f:expr, $fn:tt) => {
         impl <$($bound)*> $tr for $a {

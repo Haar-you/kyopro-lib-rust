@@ -5,6 +5,7 @@
 /// [`Commutative`](crate::algebra::traits::Commutative), [`Associative`](crate::algebra::traits::Associative),
 /// [`Idempotence`](crate::algebra::traits::Idempotence)を実装する。
 #[macro_export]
+#[doc(hidden)]
 macro_rules! impl_algebra {
     (@inner [$($bound:tt)*]; $t:ty;) => {
         impl <$($bound)*> Set for $t {}

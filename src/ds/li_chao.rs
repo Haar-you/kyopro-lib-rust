@@ -31,15 +31,15 @@ pub enum Mode {
 impl Mode {
     fn op<T: Elem>(self, a: T, b: T) -> T {
         match self {
-            Mode::Max => max(a, b),
-            Mode::Min => min(a, b),
+            Self::Max => max(a, b),
+            Self::Min => min(a, b),
         }
     }
 
     fn cmp<T: Elem>(self, a: T, b: T) -> bool {
         match self {
-            Mode::Max => a > b,
-            Mode::Min => a < b,
+            Self::Max => a > b,
+            Self::Min => a < b,
         }
     }
 }
@@ -142,10 +142,10 @@ impl<T: Elem> LiChaoTree<T> {
         while l < r {
             if r & 1 == 1 {
                 r -= 1;
-                self.update(r, segment.clone(), self.range[r].0, self.range[r].1);
+                self.update(r, segment, self.range[r].0, self.range[r].1);
             }
             if l & 1 == 1 {
-                self.update(l, segment.clone(), self.range[l].0, self.range[l].1);
+                self.update(l, segment, self.range[l].0, self.range[l].1);
                 l += 1;
             }
 

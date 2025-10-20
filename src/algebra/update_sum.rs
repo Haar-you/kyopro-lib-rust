@@ -5,7 +5,7 @@ use std::marker::PhantomData;
 use std::ops::Mul;
 
 /// Range Update Range Sum用の代数的構造
-#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct UpdateSum<T>(PhantomData<T>);
 
 impl<T> Action for UpdateSum<T>

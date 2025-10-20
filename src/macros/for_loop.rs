@@ -21,7 +21,7 @@ mod tests {
     fn test() {
         let mut x = 0;
         for_loop!(x += 1; x < 100; x += 1; {
-            println!("{}", x);
+            println!("{x}");
         });
     }
 }

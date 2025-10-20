@@ -1,6 +1,6 @@
 //! Eratosthenesの篩
 
-pub use crate::math::prime_test::CheckPrime;
+pub use crate::math::primality::PrimalityTest;
 
 /// Eratosthenesの篩
 pub struct EratosthenesSieve {
@@ -29,11 +29,11 @@ impl EratosthenesSieve {
             i += 2;
         }
 
-        EratosthenesSieve { data }
+        Self { data }
     }
 }
 
-impl CheckPrime<usize> for EratosthenesSieve {
+impl PrimalityTest<usize> for EratosthenesSieve {
     fn is_prime(&self, i: usize) -> bool {
         if i == 2 {
             true

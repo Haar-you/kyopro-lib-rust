@@ -22,7 +22,12 @@ mod tests {
         let n = rng.gen_range(10..100);
         let m = rng.gen_range(10..100);
 
-        let mut a = vec![(0..m).map(|_| rng.gen::<u64>()).collect::<Vec<_>>(); n];
+        let mut a = vec![
+            std::iter::repeat_with(|| rng.gen::<u64>())
+                .take(m)
+                .collect::<Vec<_>>();
+            n
+        ];
 
         for _ in 0..1000 {
             let i1 = rng.gen_range(0..n);

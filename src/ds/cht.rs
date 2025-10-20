@@ -16,7 +16,7 @@ trait_alias!(
 );
 
 /// 最大値クエリか最小値クエリかを表す
-#[derive(PartialEq, Eq, Copy, Clone, Debug)]
+#[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
 pub enum Mode {
     /// 最大値クエリ
     Max,
@@ -27,8 +27,8 @@ pub enum Mode {
 impl Mode {
     fn cmp<T: PartialOrd + Copy>(self, a: T, b: T) -> bool {
         match self {
-            Mode::Max => a <= b,
-            Mode::Min => a >= b,
+            Self::Max => a <= b,
+            Self::Min => a >= b,
         }
     }
 }

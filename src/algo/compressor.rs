@@ -63,7 +63,7 @@ impl<T: Ord + Eq> Compressor<T> {
 impl<T: Ord + Eq> CompressorBuilder<T> {
     /// `CompressorBuilder<T>`を生成する。
     pub fn new() -> Self {
-        CompressorBuilder { data: vec![] }
+        Self { data: vec![] }
     }
 
     /// 座標圧縮対象に`value`を追加する。

@@ -121,7 +121,9 @@ mod tests {
         let n = 300;
         let t = 300;
 
-        let a = (0..n).map(|_| rng.gen::<u64>() % 10000).collect::<Vec<_>>();
+        let a = std::iter::repeat_with(|| rng.gen::<u64>() % 10000)
+            .take(n)
+            .collect::<Vec<_>>();
         let s = MergeSortTree::new(a.clone());
 
         for _ in 0..t {

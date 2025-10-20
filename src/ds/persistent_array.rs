@@ -165,7 +165,7 @@ impl<T: Clone> Index<usize> for PersistentArray<T> {
 }
 
 impl<T: Clone> From<&PersistentArray<T>> for Vec<T> {
-    fn from(from: &PersistentArray<T>) -> Vec<T> {
+    fn from(from: &PersistentArray<T>) -> Self {
         let mut ret = vec![];
         PersistentArray::<T>::_traverse(&from.root, &mut ret);
         ret

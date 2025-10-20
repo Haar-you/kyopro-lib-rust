@@ -52,7 +52,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::num::const_modint::*;
+    use crate::{math::prime_mod::Prime, num::const_modint::*};
 
     fn convert<U, T>(a: Vec<Vec<T>>) -> Vec<Vec<U>>
     where
@@ -63,10 +63,10 @@ mod tests {
             .collect()
     }
 
+    type P = Prime<998244353>;
+
     #[test]
     fn test() {
-        const P: u32 = 998244353;
-
         let a = vec![vec![3, 1, 4], vec![1, 5, 9], vec![2, 6, 5]];
         let a = convert::<ConstModInt<P>, _>(a);
         assert_eq!(determinant(a).value(), 998244263);

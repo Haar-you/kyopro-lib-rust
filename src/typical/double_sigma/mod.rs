@@ -15,9 +15,10 @@ mod tests {
 
     use rand::Rng;
 
-    use crate::num::const_modint::*;
+    use crate::{math::prime_mod::Prime, num::const_modint::*};
 
-    const M998244353: u32 = 998244353;
+    const M: u32 = 998244353;
+    type P = Prime<M>;
 
     fn solve<T, U, F>(a: Vec<T>, init: U, mut f: F) -> U
     where
@@ -57,7 +58,9 @@ mod tests {
     fn test_difference() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let a = (0..n).map(|_| rng.gen::<i32>() as i64).collect::<Vec<_>>();
+        let a = std::iter::repeat_with(|| rng.gen::<i32>() as i64)
+            .take(n)
+            .collect::<Vec<_>>();
 
         let res = super::difference::sum_of_sum_of_difference(a.clone());
         let ans = solve(a, 0, |a, i, j| (a[i] - a[j]).abs());
@@ -69,7 +72,9 @@ mod tests {
     fn test_xor() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let a = (0..n).map(|_| rng.gen::<u32>() as u64).collect::<Vec<_>>();
+        let a = std::iter::repeat_with(|| rng.gen::<u32>() as u64)
+            .take(n)
+            .collect::<Vec<_>>();
 
         let res = super::xor::sum_of_sum_of_xor(a.clone()) as u64;
         let ans = solve(a, 0, |a, i, j| a[i] ^ a[j]);
@@ -81,8 +86,8 @@ mod tests {
     fn test_range_xor() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let a = (0..n)
-            .map(|_| rng.gen::<u64>() % 2_u64.pow(32))
+        let a = std::iter::repeat_with(|| rng.gen::<u64>() % 2_u64.pow(32))
+            .take(n)
             .collect::<Vec<_>>();
 
         let res = super::range_xor::sum_of_sum_of_range_xor(a.clone()) as u64;
@@ -95,9 +100,9 @@ mod tests {
     fn test_sum() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let modulo = ConstModIntBuilder::<M998244353>;
-        let a = (0..n)
-            .map(|_| modulo.from_i64(rng.gen::<i64>()))
+        let modulo = ConstModIntBuilder::<P>::new();
+        let a = std::iter::repeat_with(|| modulo.from_i64(rng.gen::<i64>()))
+            .take(n)
             .collect::<Vec<_>>();
 
         let res = super::sum::sum_of_sum_of_sum(a.clone());
@@ -110,9 +115,9 @@ mod tests {
     fn test_prod() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let modulo = ConstModIntBuilder::<M998244353>;
-        let a = (0..n)
-            .map(|_| modulo.from_i64(rng.gen::<i64>()))
+        let modulo = ConstModIntBuilder::<P>::new();
+        let a = std::iter::repeat_with(|| modulo.from_i64(rng.gen::<i64>()))
+            .take(n)
             .collect::<Vec<_>>();
 
         let res = super::prod::sum_of_sum_of_prod(a.clone());
@@ -125,7 +130,9 @@ mod tests {
     fn test_range_sum() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let a = (0..n).map(|_| rng.gen::<i32>() as i64).collect::<Vec<_>>();
+        let a = std::iter::repeat_with(|| rng.gen::<i32>() as i64)
+            .take(n)
+            .collect::<Vec<_>>();
 
         let res = super::range_sum::sum_of_sum_of_range_sum(a.clone());
         let ans = solve_range(a, 0, |a, i, j| a[i..j].iter().sum());
@@ -137,7 +144,9 @@ mod tests {
     fn test_max() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let a = (0..n).map(|_| rng.gen::<i32>() as i64).collect::<Vec<_>>();
+        let a = std::iter::repeat_with(|| rng.gen::<i32>() as i64)
+            .take(n)
+            .collect::<Vec<_>>();
 
         let res = super::max::sum_of_sum_of_max(a.clone());
         let ans = solve(a, 0, |a, i, j| a[i].max(a[j]));
@@ -149,9 +158,9 @@ mod tests {
     fn test_range_prod() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let modulo = ConstModIntBuilder::<M998244353>;
-        let a = (0..n)
-            .map(|_| modulo.from_i64(rng.gen::<i64>()))
+        let modulo = ConstModIntBuilder::<P>::new();
+        let a = std::iter::repeat_with(|| modulo.from_i64(rng.gen::<i64>()))
+            .take(n)
             .collect::<Vec<_>>();
 
         let res = super::range_prod::sum_of_sum_of_range_prod(a.clone());

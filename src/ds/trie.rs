@@ -145,12 +145,12 @@ mod tests {
         let init = |prefix: &Vec<char>| -> u32 { prefix.len() as u32 };
 
         let proc = |value: &mut u32, prefix: &Vec<char>| {
-            println!("{:?}", prefix);
+            println!("{prefix:?}");
             *value += 1;
         };
 
         let rproc = |_: &mut u32, prefix: &Vec<char>| {
-            println!("{:?}", prefix);
+            println!("{prefix:?}");
         };
 
         trie.add("abc".chars(), init, proc, rproc);

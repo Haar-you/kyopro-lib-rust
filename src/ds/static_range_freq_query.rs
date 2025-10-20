@@ -49,7 +49,9 @@ mod tests {
         let n = 1000;
         let q = 100;
 
-        let a = (0..n).map(|_| rng.gen_range(0..m)).collect::<Vec<_>>();
+        let a = std::iter::repeat_with(|| rng.gen_range(0..m))
+            .take(n)
+            .collect::<Vec<_>>();
         let sfq = StaticRangeFreqQuery::new(a.clone());
 
         for _ in 0..q {

@@ -47,7 +47,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::num::const_modint::*;
+    use crate::{math::prime_mod::Prime, num::const_modint::*};
     use my_testtools::rand_range;
 
     use super::*;
@@ -57,7 +57,7 @@ mod tests {
     fn test() {
         let mut rng = rand::thread_rng();
 
-        let ff = ConstModIntBuilder::<1000000007>;
+        let ff = ConstModIntBuilder::<Prime<1000000007>>::new();
 
         let n = 100;
         let t = 100;

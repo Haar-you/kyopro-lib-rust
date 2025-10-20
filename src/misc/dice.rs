@@ -1,7 +1,7 @@
 //! 6面サイコロ
 
 /// 6面サイコロ
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Dice<T> {
     /// 上の面
     pub top: T,
@@ -23,7 +23,7 @@ where
 {
     /// [`Dice<T>`]を生成する。
     pub fn new(top: T, bottom: T, front: T, back: T, right: T, left: T) -> Self {
-        Dice {
+        Self {
             top,
             bottom,
             front,
@@ -35,7 +35,7 @@ where
 
     /// サイコロを左の面が下になるように回転する。
     pub fn rot_left(&self) -> Self {
-        let Dice {
+        let Self {
             top,
             bottom,
             front,
@@ -43,12 +43,12 @@ where
             right,
             left,
         } = self.clone();
-        Dice::new(right, left, front, back, bottom, top)
+        Self::new(right, left, front, back, bottom, top)
     }
 
     /// サイコロを右の面が下になるように回転する。
     pub fn rot_right(&self) -> Self {
-        let Dice {
+        let Self {
             top,
             bottom,
             front,
@@ -56,12 +56,12 @@ where
             right,
             left,
         } = self.clone();
-        Dice::new(left, right, front, back, top, bottom)
+        Self::new(left, right, front, back, top, bottom)
     }
 
     /// サイコロを前の面が下になるように回転する。
     pub fn rot_front(&self) -> Self {
-        let Dice {
+        let Self {
             top,
             bottom,
             front,
@@ -69,12 +69,12 @@ where
             right,
             left,
         } = self.clone();
-        Dice::new(back, front, top, bottom, right, left)
+        Self::new(back, front, top, bottom, right, left)
     }
 
     /// サイコロを後ろの面が下になるように回転する。
     pub fn rot_back(&self) -> Self {
-        let Dice {
+        let Self {
             top,
             bottom,
             front,
@@ -82,12 +82,12 @@ where
             right,
             left,
         } = self.clone();
-        Dice::new(front, back, bottom, top, right, left)
+        Self::new(front, back, bottom, top, right, left)
     }
 
     /// サイコロを上からみて時計回りに回転する。
     pub fn rot_clockwise(&self) -> Self {
-        let Dice {
+        let Self {
             top,
             bottom,
             front,
@@ -95,12 +95,12 @@ where
             right,
             left,
         } = self.clone();
-        Dice::new(top, bottom, right, left, back, front)
+        Self::new(top, bottom, right, left, back, front)
     }
 
     /// サイコロを上からみて反時計回りに回転する。
     pub fn rot_counterclockwise(&self) -> Self {
-        let Dice {
+        let Self {
             top,
             bottom,
             front,
@@ -108,7 +108,7 @@ where
             right,
             left,
         } = self.clone();
-        Dice::new(top, bottom, left, right, front, back)
+        Self::new(top, bottom, left, right, front, back)
     }
 }
 

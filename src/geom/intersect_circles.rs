@@ -3,7 +3,7 @@
 use crate::geom::*;
 
 /// 2つの円の位置関係
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 #[allow(non_camel_case_types)]
 pub enum IntersectCircles {
     /// 2つの円が同じである

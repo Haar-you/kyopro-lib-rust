@@ -28,6 +28,16 @@ impl UnionFind<'_, ()> {
             merge: None,
         }
     }
+
+    /// 大きさが`1`の集合を1つ追加する。
+    pub fn extend_one(&mut self) {
+        let k = self.n;
+        self.n += 1;
+        self.count += 1;
+        self.parent.push(Cell::new(k));
+        self.depth.push(1);
+        self.size.push(1);
+    }
 }
 
 impl<'a, T> UnionFind<'a, T> {
@@ -45,6 +55,17 @@ impl<'a, T> UnionFind<'a, T> {
             values: Some(values.into_iter().map(Option::Some).collect()),
             merge: Some(Box::new(merge)),
         }
+    }
+
+    /// 値`value`を割り当てられた、大きさが`1`の集合を1つ追加する。
+    pub fn extend_one_with_value(&mut self, value: T) {
+        let k = self.n;
+        self.n += 1;
+        self.count += 1;
+        self.parent.push(Cell::new(k));
+        self.depth.push(1);
+        self.size.push(1);
+        self.values.as_mut().unwrap().push(Some(value));
     }
 
     /// `i`の属する集合の根を返す。
@@ -87,13 +108,23 @@ impl<'a, T> UnionFind<'a, T> {
 
         if let Some(f) = self.merge.as_ref() {
             let t = f(
-                self.values.as_mut().unwrap()[p].take().unwrap(),
-                self.values.as_mut().unwrap()[c].take().unwrap(),
+                self.values.as_mut().unwrap()[i].take().unwrap(),
+                self.values.as_mut().unwrap()[j].take().unwrap(),
             );
             self.values.as_mut().unwrap()[p] = Some(t);
         }
 
         p
+    }
+
+    /// UnionFindの要素数を返す。
+    pub fn len(&self) -> usize {
+        self.n
+    }
+
+    /// UnionFindが要素を持たないとき、`true`を返す。
+    pub fn is_empty(&self) -> bool {
+        self.n == 0
     }
 
     /// `i`の属する集合の大きさを返す。

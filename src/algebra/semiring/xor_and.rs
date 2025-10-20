@@ -2,7 +2,7 @@
 pub use crate::algebra::semiring::Semiring;
 
 /// XorとAndの半環
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct XorAndSemiring<T>(pub T);
 
 macro_rules! impl_semiring {

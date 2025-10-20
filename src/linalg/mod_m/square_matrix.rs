@@ -302,12 +302,12 @@ mod tests {
     use super::*;
     use rand::Rng;
 
-    use crate::num::const_modint::*;
+    use crate::{math::prime_mod::Prime, num::const_modint::*};
 
     #[test]
     fn test() {
         let mut rng = rand::thread_rng();
-        let modulo = ConstModIntBuilder::<1000000007>;
+        let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
 
         let size = 300;
 
@@ -333,7 +333,7 @@ mod tests {
         use crate::get_time;
 
         let mut rng = rand::thread_rng();
-        let modulo = ConstModIntBuilder::<1000000007>;
+        let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
 
         let mut straight = vec![];
         let mut strassen = vec![];

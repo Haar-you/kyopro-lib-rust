@@ -1,28 +1,25 @@
 //! 形式的冪級数の平方根
 use crate::num::ff::*;
 use crate::{
-    math::{
-        fps::inv::FpsInv,
-        mod_ops::sqrt::mod_sqrt,
-        polynomial::{Polynomial, PolynomialOperator},
-    },
+    math::prime_mod::PrimeMod,
+    math::{fps::inv::FpsInv, mod_ops::sqrt::mod_sqrt, polynomial::Polynomial},
     num::const_modint::ConstModInt,
 };
 
 /// 形式的冪級数の平方根
 pub trait FpsSqrt {
-    /// 多項式の型
-    type Poly;
+    /// 戻り値の型
+    type Output;
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\sqrt{f(x)}$の先頭$n$項を求める。
-    fn fps_sqrt(&self, f: Self::Poly) -> Result<Self::Poly, &'static str>;
+    fn fps_sqrt(self) -> Result<Self::Output, &'static str>;
 }
 
-impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<'_, P, PR> {
-    type Poly = Polynomial<P>;
+impl<P: PrimeMod> FpsSqrt for Polynomial<P> {
+    type Output = Self;
 
-    fn fps_sqrt(&self, f: Self::Poly) -> Result<Self::Poly, &'static str> {
-        let f: Vec<_> = f.into();
+    fn fps_sqrt(self) -> Result<Self::Output, &'static str> {
+        let f: Vec<_> = self.into();
 
         let n = f.len();
         let k = f
@@ -38,7 +35,7 @@ impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<'_, P, PR> {
             return Err("最小次数が偶数ではない。");
         }
 
-        let x = mod_sqrt(f[k].value() as u64, P as u64)
+        let x = mod_sqrt(f[k].value() as u64, P::PRIME_NUM as u64)
             .ok_or("最小次数項の係数に平方根が存在しない。")?;
         let m = n - k;
 
@@ -51,8 +48,8 @@ impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<'_, P, PR> {
             f.resize(t, 0.into());
 
             ret.resize(t, 0.into());
-            let h = self.fps_inv(ret.clone().into())?;
-            let h = self.mul(f.into(), h);
+            let h = Self::from(ret.clone()).fps_inv()?;
+            let h = Self::from(f) * h;
             let h: Vec<_> = h.into();
 
             for (x, y) in ret.iter_mut().zip(h) {
@@ -67,7 +64,7 @@ impl<const P: u32, const PR: u32> FpsSqrt for PolynomialOperator<'_, P, PR> {
         }
 
         ret.resize(n, 0.into());
-        let mut ret: Polynomial<P> = ret.into();
+        let mut ret: Self = ret.into();
         ret.shift_higher(k / 2);
         Ok(ret)
     }

@@ -1,7 +1,8 @@
 //! 疎な形式的冪級数の平方根
 use crate::math::mod_ops::sqrt::mod_sqrt;
+use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::polynomial::Polynomial;
-use crate::math::sparse_polynomial::SparsePolynomial;
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// 疎な形式的冪級数の平方根
@@ -13,7 +14,7 @@ pub trait FpsSqrtSparse {
     fn fps_sqrt_sparse(self, n: usize) -> Result<Self::Output, &'static str>;
 }
 
-impl<const P: u32> FpsSqrtSparse for SparsePolynomial<P> {
+impl<P: PrimeMod> FpsSqrtSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
     /// **Time complexity** $O(nk)$
@@ -28,8 +29,8 @@ impl<const P: u32> FpsSqrtSparse for SparsePolynomial<P> {
 
         let a = self.coeff_of(k);
         let sr = ConstModInt::new(
-            mod_sqrt(a.value() as u64, P as u64).ok_or("最小次数項の係数に平方根が存在しない。")?
-                as u32,
+            mod_sqrt(a.value() as u64, P::PRIME_NUM as u64)
+                .ok_or("最小次数項の係数に平方根が存在しない。")? as u32,
         );
 
         let mut f = self;
@@ -42,7 +43,7 @@ impl<const P: u32> FpsSqrtSparse for SparsePolynomial<P> {
 
         let mut invs = vec![ConstModInt::new(1); n + 1];
         for i in 2..=n {
-            invs[i] = -invs[P as usize % i] * ConstModInt::new(P / i as u32);
+            invs[i] = -invs[P::PRIME_NUM as usize % i] * ConstModInt::new(P::PRIME_NUM / i as u32);
         }
 
         let half = ConstModInt::new(2).inv();
@@ -50,7 +51,7 @@ impl<const P: u32> FpsSqrtSparse for SparsePolynomial<P> {
         for i in 0..n - 1 {
             let mut s = ConstModInt::new(0);
 
-            for &(j, fj) in f.data.iter() {
+            for (&j, &fj) in f.iter() {
                 if j != 0 {
                     if i >= j {
                         s -= fj * g[i - j];

@@ -4,12 +4,13 @@ pub use crate::algebra::traits::Group;
 use std::ops::{Index, Range};
 
 /// 1次元の累積和を扱う
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, Hash)]
 pub struct CumulativeSum1D<G: Group> {
     data: Vec<G>,
 }
 
 /// [`CumulativeSum1D`]を構築する
+#[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
 pub struct CumulativeSum1DBuilder<G: Group> {
     data: Vec<G>,
 }
@@ -32,7 +33,7 @@ impl<G: Group> Index<usize> for CumulativeSum1D<G> {
 impl<G: Group + Copy> CumulativeSum1DBuilder<G> {
     /// `CumulativeSum1DBuilder`を生成する
     pub fn new(n: usize) -> Self {
-        CumulativeSum1DBuilder {
+        Self {
             data: vec![G::id(); n + 1],
         }
     }

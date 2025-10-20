@@ -34,6 +34,8 @@ pub mod tsort;
 pub mod chinese_postman;
 pub mod tsp;
 
+pub mod chromatic_number;
+
 use std::marker::PhantomData;
 
 /// [`Graph`]にもたせる辺の満たすトレイト。
@@ -51,7 +53,7 @@ pub trait EdgeTrait {
 }
 
 /// グラフの辺
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Edge<T, I> {
     /// 辺の始点
     pub from: usize,
@@ -98,10 +100,10 @@ impl<T: Clone, I> EdgeTrait for Edge<T, I> {
 /// グラフの辺の有向・無向の情報をもたせるためのトレイト。
 pub trait Direction {}
 /// 有向辺をもつ。
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct Directed;
 /// 無向辺をもつ。
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct Undirected;
 impl Direction for Directed {}
 impl Direction for Undirected {}
@@ -113,12 +115,27 @@ pub struct GraphNode<E> {
     pub edges: Vec<E>,
 }
 
+impl<E: EdgeTrait> GraphNode<E> {
+    pub fn iter(&self) -> impl Iterator<Item = &E> {
+        self.edges.iter()
+    }
+}
+
 impl<E: EdgeTrait> IntoIterator for GraphNode<E> {
     type Item = E;
     type IntoIter = std::vec::IntoIter<Self::Item>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.edges.into_iter()
+    }
+}
+
+impl<'a, E: EdgeTrait> IntoIterator for &'a GraphNode<E> {
+    type Item = &'a E;
+    type IntoIter = std::slice::Iter<'a, E>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.edges.iter()
     }
 }
 
@@ -132,7 +149,7 @@ pub struct Graph<D, E> {
 impl<D: Direction, E: EdgeTrait + Clone> Graph<D, E> {
     /// 頂点数が`size`の空の`Graph`を構築する。
     pub fn new(size: usize) -> Self {
-        Graph {
+        Self {
             nodes: vec![GraphNode { edges: vec![] }; size],
             __phantom: PhantomData,
         }

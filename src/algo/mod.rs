@@ -1,5 +1,6 @@
 //! アルゴリズム
 
+pub mod bitwise_popcount;
 pub mod bsearch;
 pub mod bsearch_slice;
 pub mod cartesian_tree;
@@ -36,6 +37,7 @@ pub mod run_enumerate;
 pub mod sa;
 pub mod shakutori;
 pub mod sliding_window;
+pub mod sqrt_decomp;
 pub mod subset_sum;
 pub mod ternary_search;
 pub mod two_sat;

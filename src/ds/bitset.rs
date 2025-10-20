@@ -6,7 +6,7 @@ type B = u64;
 const B_SIZE: usize = 64;
 
 /// 任意サイズのbit列を扱う。
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
 pub struct Bitset {
     pub(crate) data: Vec<B>,
     size: usize,

@@ -289,12 +289,12 @@ pub struct EulerTourTree<M> {
 impl<M: Monoid + Clone> EulerTourTree<M> {
     /// `n`個の頂点のみからなる森を構築する。
     pub fn new(n: usize) -> Self {
-        let vertices = (0..n)
-            .map(|_| {
-                let p = Box::new(Node::new(M::id()));
-                Box::into_raw(p)
-            })
-            .collect::<Vec<_>>();
+        let vertices = std::iter::repeat_with(|| {
+            let p = Box::new(Node::new(M::id()));
+            Box::into_raw(p)
+        })
+        .take(n)
+        .collect::<Vec<_>>();
 
         let edges = (0..n).map(|i| HashMap::from([(i, vertices[i])])).collect();
 

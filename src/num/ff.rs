@@ -15,6 +15,7 @@ pub trait FF: Clone {
     fn frac(&self, a: i64, b: i64) -> Self::Element {
         self.from_i64(a) / self.from_i64(b)
     }
+    /// 剰余の除数を返す。
     fn modulo(&self) -> u32;
 }
 

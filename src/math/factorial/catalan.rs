@@ -26,11 +26,11 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::num::const_modint::*;
+    use crate::{math::prime_mod::Prime, num::const_modint::*};
 
     #[test]
     fn test() {
-        let modulo = ConstModIntBuilder::<1000000007>;
+        let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
         let ft = FactorialTable::new(100, modulo);
 
         let catalans = (0..=30).map(|i| ft.catalan_number(i)).collect::<Vec<_>>();

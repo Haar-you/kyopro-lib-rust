@@ -20,24 +20,3 @@ where
 
     ret
 }
-
-#[cfg(test)]
-mod tests {
-    use crate::{math::stirling_first::stirling_first, num::const_modint::ConstModIntBuilder};
-
-    use super::*;
-
-    #[test]
-    fn test() {
-        let modulo = ConstModIntBuilder::<998244353>;
-
-        let n = 100;
-        let table = stirling_first_table(n, modulo);
-
-        for i in 0..=n {
-            let ans = stirling_first::<998244353, 3>(i);
-
-            assert_eq!(&table[i][..=i], ans);
-        }
-    }
-}

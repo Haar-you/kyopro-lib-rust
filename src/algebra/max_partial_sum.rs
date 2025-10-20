@@ -10,7 +10,7 @@ use std::cmp::max;
 use std::ops::Add;
 
 /// 空ではない連続する部分列の総和を管理する。
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, Hash)]
 pub struct MaxPartialSum<T> {
     /// 列の総和
     pub sum: T,
@@ -62,7 +62,9 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 20;
-        let a = (0..n).map(|_| rng.gen_range(-100..=100)).collect_vec();
+        let a = std::iter::repeat_with(|| rng.gen_range(-100..=100))
+            .take(n)
+            .collect_vec();
 
         let (ans, _) = crate::algo::max_partial_sum::max_partial_sum(&a).unwrap();
 

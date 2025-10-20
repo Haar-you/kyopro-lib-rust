@@ -6,7 +6,7 @@
 use crate::geom::*;
 
 /// 点と線分の位置関係
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 #[allow(non_camel_case_types)]
 pub enum CCW {
     /// 点が線分と同一直線上にあり、かつ、点が線分の方向に対して後ろにある。

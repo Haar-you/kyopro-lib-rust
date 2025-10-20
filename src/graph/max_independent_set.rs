@@ -49,11 +49,7 @@ fn rec<E: EdgeTrait>(
                 .count()
         });
 
-    let next = if let Some(next) = next {
-        next
-    } else {
-        return;
-    };
+    let Some(next) = next else { return };
 
     let mut deg = 0;
     let mut neighbour: u64 = 0;
@@ -65,10 +61,8 @@ fn rec<E: EdgeTrait>(
         }
     }
 
-    if deg <= 1 {
-        rec(g, indep | (1 << next), cover | neighbour, set);
-    } else {
-        rec(g, indep | (1 << next), cover | neighbour, set);
+    rec(g, indep | (1 << next), cover | neighbour, set);
+    if deg > 1 {
         rec(g, indep, cover | (1 << next), set);
     }
 }

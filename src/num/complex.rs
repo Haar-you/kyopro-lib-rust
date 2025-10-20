@@ -19,7 +19,7 @@ impl Complex {
 
     /// 絶対値$|z| = \sqrt{a^2 + b^2}$を返す。
     pub fn abs(self) -> f64 {
-        (self.re * self.re + self.im * self.im).sqrt()
+        self.re.hypot(self.im)
     }
 
     /// 偏角$\arg z \in (-\pi, \pi]$を返す。
@@ -47,12 +47,12 @@ impl Complex {
 impl_ops!(Add for Complex, |a: Self, b: Self| Self::new(a.re + b.re, a.im + b.im));
 impl_ops!(Sub for Complex, |a: Self, b: Self| Self::new(a.re - b.re, a.im - b.im));
 impl_ops!(Mul for Complex, |a: Self, b: Self| Self::new(
-    a.re * b.re - a.im * b.im,
-    a.re * b.im + a.im * b.re
+    a.re.mul_add(b.re, -(a.im * b.im)),
+    a.re.mul_add(b.im, a.im * b.re)
 ));
 impl_ops!(Div for Complex, |a: Self, b: Self| Self::new(
-    (a.re * b.re + a.im * b.im) / (b.re * b.re + b.im * b.im),
-    (a.im * b.re - a.re * b.im) / (b.re * b.re + b.im * b.im)
+    a.re.mul_add(b.re, a.im * b.im) / b.re.mul_add(b.re, b.im * b.im),
+    a.im.mul_add(b.re, -(a.re * b.im)) / b.re.mul_add(b.re, b.im * b.im)
 ));
 impl_ops!(Neg for Complex, |a: Self| Self::new(-a.re, -a.im));
 

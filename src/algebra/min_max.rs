@@ -3,11 +3,11 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
 /// 最小値を演算とする代数的構造
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Min<T>(pub T);
 
 /// 最大値を演算とする代数的構造
-#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Max<T>(pub T);
 
 macro_rules! implement {

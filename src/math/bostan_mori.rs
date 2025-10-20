@@ -1,16 +1,17 @@
 //! 線形漸化式で表される数列の第`k`項目を求める。
-use crate::math::ntt::NTT;
+use crate::math::convolution::ntt::NTT;
+use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::ConstModInt;
 
 /// $a_i = \sum_{j = 1}^d c_j a_{i-j}$を満たす数列$a$の初め$d$項と係数$c$から、数列の第`k`項$a_k$を求める。
-pub fn bostan_mori<const P: u32, const PR: u32>(
+pub fn bostan_mori<P: PrimeMod>(
     a: Vec<ConstModInt<P>>,
     c: Vec<ConstModInt<P>>,
     mut k: u64,
-    ntt: &NTT<P, PR>,
 ) -> ConstModInt<P> {
     assert_eq!(a.len(), c.len());
 
+    let ntt = NTT::<P>::new();
     let d = a.len();
 
     let mut q: Vec<ConstModInt<P>> = vec![0.into(); d + 1];
