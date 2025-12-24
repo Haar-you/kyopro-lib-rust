@@ -31,7 +31,7 @@ impl PartiallyPersistentUnionFind {
     }
 
     /// 時刻tでの状態
-    pub fn at(&self, t: usize) -> At {
+    pub fn at(&self, t: usize) -> At<'_> {
         assert!(t <= self.time);
         At {
             time: t,
@@ -41,7 +41,7 @@ impl PartiallyPersistentUnionFind {
     }
 
     /// 最新時点の状態
-    pub fn latest(&self) -> At {
+    pub fn latest(&self) -> At<'_> {
         self.at(self.time)
     }
 

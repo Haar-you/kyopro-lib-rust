@@ -28,7 +28,7 @@ impl RollingHash {
     }
 
     /// 文字列`s`からハッシュ計算テーブルを作る。
-    pub fn hash_table(&self, s: &str) -> Table {
+    pub fn hash_table(&self, s: &str) -> Table<'_> {
         let mut ret = vec![1; s.len() + 1];
 
         for (i, c) in s.as_bytes().iter().enumerate() {
