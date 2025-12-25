@@ -36,6 +36,8 @@ pub mod tsp;
 
 pub mod chromatic_number;
 
+pub mod matrix_tree;
+
 use std::marker::PhantomData;
 
 /// [`Graph`]にもたせる辺の満たすトレイト。
