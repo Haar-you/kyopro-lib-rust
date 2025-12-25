@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["count_directed_spanning_tree","count_undirected_spanning_tree"]};
