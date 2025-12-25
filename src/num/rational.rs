@@ -107,7 +107,7 @@ impl_ops!(Neg for Rational, |s: Self| Self::new(
 
 impl PartialOrd for Rational {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some((self.numerator * other.denominator).cmp(&(other.numerator * self.denominator)))
+        Some(self.cmp(other))
     }
 }
 

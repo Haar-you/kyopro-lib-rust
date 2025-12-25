@@ -141,17 +141,19 @@ impl<P: PrimeMod> NTT<P> {
     /// 2つの`Vec`を畳み込む。
     ///
     /// $(f \ast g)(k) = \sum_{k = i + j} f(i) \times g(j)$
-    pub fn convolve(
-        &self,
-        mut f: Vec<ConstModInt<P>>,
-        mut g: Vec<ConstModInt<P>>,
-    ) -> Vec<ConstModInt<P>> {
+    pub fn convolve<T>(&self, f: Vec<T>, g: Vec<T>) -> Vec<ConstModInt<P>>
+    where
+        T: Into<ConstModInt<P>>,
+    {
         if f.is_empty() || g.is_empty() {
             return vec![];
         }
 
         let m = f.len() + g.len() - 1;
         let n = m.next_power_of_two();
+
+        let mut f: Vec<_> = f.into_iter().map(Into::into).collect();
+        let mut g: Vec<_> = g.into_iter().map(Into::into).collect();
 
         f.resize(n, ConstModInt::new(0));
         self.ntt(&mut f);

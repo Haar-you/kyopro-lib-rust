@@ -36,6 +36,8 @@ pub mod tsp;
 
 pub mod chromatic_number;
 
+pub mod matrix_tree;
+
 use std::marker::PhantomData;
 
 /// [`Graph`]にもたせる辺の満たすトレイト。
@@ -116,8 +118,14 @@ pub struct GraphNode<E> {
 }
 
 impl<E: EdgeTrait> GraphNode<E> {
-    pub fn iter(&self) -> impl Iterator<Item = &E> {
+    /// 隣接辺を列挙するイテレータを返す。
+    pub fn neighbors(&self) -> impl DoubleEndedIterator<Item = &E> {
         self.edges.iter()
+    }
+
+    /// 隣接辺の個数を返す。
+    pub fn neighbors_size(&self) -> usize {
+        self.edges.len()
     }
 }
 
