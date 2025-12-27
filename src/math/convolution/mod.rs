@@ -6,6 +6,7 @@ pub mod zeta;
 pub mod conv_and;
 pub mod conv_gcd;
 pub mod conv_lcm;
+pub mod conv_mul_mod2n;
 pub mod conv_mul_modp;
 pub mod conv_or;
 pub mod conv_xor;
