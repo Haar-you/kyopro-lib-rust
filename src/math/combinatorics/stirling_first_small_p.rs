@@ -14,7 +14,7 @@ pub struct StirlingFirstSmallP {
 }
 
 impl StirlingFirstSmallP {
-    /// $\mod p$で前計算をする。
+    /// $\mod p$ ($p$は素数)で前計算をする。
     ///
     /// **Time complexity** $O(p^2)$
     ///
