@@ -11,6 +11,7 @@ pub mod stirling_first_small_p;
 pub mod stirling_first_table;
 pub mod stirling_second;
 pub mod stirling_second_fixed_k;
+pub mod stirling_second_small_p;
 pub mod stirling_second_table;
 
 pub mod binomial_coefficient;
