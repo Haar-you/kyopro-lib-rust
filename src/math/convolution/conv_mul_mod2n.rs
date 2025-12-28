@@ -51,8 +51,8 @@ pub fn convolution_mul_mod2n<P: PrimeMod>(
 
         let mask2 = (1 << k) - 1;
 
-        for j in 0..1 << (k - 2) {
-            let r = cycle[j] & mask2;
+        for (j, c) in cycle.iter().enumerate().take(1 << (k - 2)) {
+            let r = c & mask2;
             s[0][i][j] = a[r << i];
             t[0][i][j] = b[r << i];
             s[1][i][j] = a[((len - r) & mask2) << i];
@@ -78,10 +78,10 @@ pub fn convolution_mul_mod2n<P: PrimeMod>(
             if slen <= 1 || tlen <= 1 {
                 for x in 0..slen {
                     for y in 0..tlen {
-                        ret[(cycle[(x + y) % cycle.len()] << (i + j)) & mask] +=
-                            s[0][i][x] * t[0][j][y] + s[1][i][x] * t[1][j][y];
-                        ret[(len - (cycle[(x + y) % cycle.len()] << (i + j)) & mask) & mask] +=
-                            s[1][i][x] * t[0][j][y] + s[0][i][x] * t[1][j][y];
+                        let g = cycle[(x + y) % cycle.len()] << (i + j);
+                        ret[g & mask] += s[0][i][x] * t[0][j][y] + s[1][i][x] * t[1][j][y];
+                        let mg = if g == 0 { 0 } else { len - g };
+                        ret[mg & mask] += s[1][i][x] * t[0][j][y] + s[0][i][x] * t[1][j][y];
                     }
                 }
 
@@ -91,8 +91,8 @@ pub fn convolution_mul_mod2n<P: PrimeMod>(
             let w = std::cmp::max(slen, tlen);
 
             if w > slen {
-                s0 = s[0][i as usize].clone();
-                s1 = s[1][i as usize].clone();
+                s0 = s[0][i].clone();
+                s1 = s[1][i].clone();
                 s0.resize(w, 0.into());
                 s1.resize(w, 0.into());
                 ntt.ntt(&mut s0);
@@ -118,7 +118,8 @@ pub fn convolution_mul_mod2n<P: PrimeMod>(
             ntt.intt(&mut c);
 
             c.into_iter().zip(cycle.iter()).for_each(|(x, r)| {
-                ret[(r << (i + j)) & mask] += x;
+                let index = r << (i + j);
+                ret[index & mask] += x;
             });
 
             let mut c = (0..w)
@@ -127,7 +128,9 @@ pub fn convolution_mul_mod2n<P: PrimeMod>(
             ntt.intt(&mut c);
 
             c.into_iter().zip(cycle.iter()).for_each(|(x, r)| {
-                ret[(len - (r << (i + j)) & mask) & mask] += x;
+                let index = r << (i + j);
+                let index = if index == 0 { 0 } else { len - index };
+                ret[index & mask] += x;
             });
         }
     }
