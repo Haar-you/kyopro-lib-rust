@@ -42,7 +42,9 @@ impl ExtLucas {
 
     /// $_nC_k \pmod{p^q}$を計算する。
     pub fn calc(&self, mut n: u64, mut k: u64) -> u64 {
-        assert!(n >= k);
+        if n < k {
+            return 0;
+        }
 
         let mut r = n - k;
         let mut e = 0;
