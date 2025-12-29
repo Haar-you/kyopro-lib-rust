@@ -120,7 +120,7 @@ impl<P: PrimeMod> ConstModInt<P> {
         Self(Calc::<P>::make(value), PhantomData)
     }
 
-    pub const fn _add(self, y: Self) -> Self {
+    pub(crate) const fn _add(self, y: Self) -> Self {
         let mut a = self.0 + y.0;
         if a >= P::PRIME_NUM {
             a -= P::PRIME_NUM;
@@ -128,7 +128,7 @@ impl<P: PrimeMod> ConstModInt<P> {
         Self(a, PhantomData)
     }
 
-    pub const fn _sub(self, y: Self) -> Self {
+    pub(crate) const fn _sub(self, y: Self) -> Self {
         let a = if self.0 < y.0 {
             self.0 + P::PRIME_NUM - y.0
         } else {
@@ -137,11 +137,11 @@ impl<P: PrimeMod> ConstModInt<P> {
         Self(a, PhantomData)
     }
 
-    pub const fn _mul(self, y: Self) -> Self {
+    pub(crate) const fn _mul(self, y: Self) -> Self {
         Self(Calc::<P>::reduce(self.0 as u64 * y.0 as u64), PhantomData)
     }
 
-    pub const fn _pow(self, mut p: u64) -> Self {
+    pub(crate) const fn _pow(self, mut p: u64) -> Self {
         let mut ret = Self(Calc::<P>::make(1), PhantomData);
         let mut a = self;
 
@@ -157,7 +157,7 @@ impl<P: PrimeMod> ConstModInt<P> {
         ret
     }
 
-    pub const fn _inv(self) -> Self {
+    pub(crate) const fn _inv(self) -> Self {
         self._pow(P::PRIME_NUM as u64 - 2)
     }
 }
