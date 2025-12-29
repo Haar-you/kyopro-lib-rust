@@ -56,13 +56,11 @@ impl StirlingSecondSmallP {
         }
         let a = (n - i - b) / (self.p - 1);
 
-        let ret = if b == self.p - 1 {
+        if b == self.p - 1 {
             self.bc.calc(a, i) * self.s[self.p as usize - 1][j as usize] % self.p
                 + self.bc.calc(a, i - 1) * self.s[0][j as usize] % self.p
         } else {
             self.bc.calc(a, i) * self.s[b as usize][j as usize] % self.p
-        };
-
-        ret
+        }
     }
 }
