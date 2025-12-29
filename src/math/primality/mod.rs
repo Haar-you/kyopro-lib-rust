@@ -13,6 +13,7 @@ pub trait PrimalityTest<T> {
 
 #[cfg(test)]
 mod tests {
+    use crate::timer;
 
     use super::{eratosthenes::*, linear_sieve::LinearSieve, miller_rabin::*, PrimalityTest};
 
@@ -56,5 +57,27 @@ mod tests {
                 .collect::<Vec<_>>(),
             primes
         );
+    }
+
+    #[test]
+    fn benchmark() {
+        let ns = [
+            1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000,
+            //100_000_000,
+        ];
+
+        eprintln!("Sieve of Eratosthenes");
+        for &n in &ns {
+            timer!(n, {
+                let _ = EratosthenesSieve::new(n);
+            })
+        }
+
+        eprintln!("Linear sieve");
+        for &n in &ns {
+            timer!(n, {
+                let _ = LinearSieve::new(n);
+            })
+        }
     }
 }
