@@ -13,6 +13,18 @@ pub struct MatrixModM<Modulo: FF> {
     data: Vec<Vec<Modulo::Element>>,
 }
 
+impl<Modulo: FF> Matrix for MatrixModM<Modulo>
+where
+    Modulo::Element: FFElem + Copy,
+{
+    fn width(&self) -> usize {
+        self.w
+    }
+    fn height(&self) -> usize {
+        self.h
+    }
+}
+
 impl<Modulo: FF> MatrixModM<Modulo>
 where
     Modulo::Element: FFElem + Copy,
@@ -58,20 +70,6 @@ where
             data: other,
             modulo,
         }
-    }
-
-    /// 行列の行数を返す。
-    pub fn height(&self) -> usize {
-        self.h
-    }
-
-    /// 行列の列数を返す。
-    pub fn width(&self) -> usize {
-        self.w
-    }
-
-    pub fn is_square(&self) -> bool {
-        self.h == self.w
     }
 
     /// `w`×`h`の転置行列を作る。
