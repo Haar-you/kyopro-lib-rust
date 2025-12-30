@@ -1,18 +1,30 @@
+//! トレイト
+
+/// 失敗可能性のある足し算を表す。
 pub trait TryAdd<Rhs = Self> {
+    /// 返り値の型
     type Output;
+    /// 失敗可能性のある足し算を行う。
     fn try_add(self, rhs: Rhs) -> Option<Self::Output>;
 }
 
+/// 失敗可能性のある引き算を表す。
 pub trait TrySub<Rhs = Self> {
+    /// 返り値の型
     type Output;
+    /// 失敗可能性のある引き算を行う。
     fn try_sub(self, rhs: Rhs) -> Option<Self::Output>;
 }
 
+/// 失敗可能性のある掛け算を表す。
 pub trait TryMul<Rhs = Self> {
+    /// 返り値の型
     type Output;
+    /// 失敗可能性のある掛け算を行う。
     fn try_mul(self, rhs: Rhs) -> Option<Self::Output>;
 }
 
+/// 行列
 pub trait Matrix {
     /// 行列の列数を返す。
     fn width(&self) -> usize;
