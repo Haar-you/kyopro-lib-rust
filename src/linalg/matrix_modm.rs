@@ -1,10 +1,10 @@
-//! `h`×`w`行列
+//! $\mathbb{Z} / m \mathbb{Z}$ 上の行列
 use crate::impl_ops;
 pub use crate::linalg::traits::*;
 use crate::num::ff::*;
 use std::ops::{Index, Neg};
 
-/// `h`×`w`行列
+/// $\mathbb{Z} / m \mathbb{Z}$ 上の行列
 #[derive(Clone, PartialEq, Eq)]
 pub struct MatrixModM<Modulo: FF> {
     h: usize,

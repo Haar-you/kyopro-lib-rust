@@ -1,10 +1,10 @@
-//! 行列 (mod 2)
+//! $\mathbb{Z} / 2 \mathbb{Z}$上の行列
 use crate::ds::bitset::Bitset;
 use crate::impl_ops;
 pub use crate::linalg::traits::*;
 use std::ops::Index;
 
-/// 行列 (mod 2)
+/// $\mathbb{Z} / 2 \mathbb{Z}$上の行列
 #[derive(Clone)]
 pub struct MatrixMod2 {
     h: usize,
@@ -37,7 +37,7 @@ impl MatrixTranspose for MatrixMod2 {
 }
 
 impl MatrixMod2 {
-    /// `h`行`w`列の`MatrixMod2`を生成
+    /// `h`行`w`列の零行列を作る。
     pub fn zero(h: usize, w: usize) -> Self {
         Self {
             h,
@@ -46,6 +46,7 @@ impl MatrixMod2 {
         }
     }
 
+    /// `n`行`n`列の単位行列を作る。
     pub fn unit(n: usize) -> Self {
         let mut ret = Self::zero(n, n);
         for i in 0..n {
