@@ -46,7 +46,7 @@ where
     Modulo::Element: FFElem + Copy,
 {
     /// `h`×`w`の零行列を作る。
-    pub fn new(h: usize, w: usize, modulo: Modulo) -> Self {
+    pub fn zero(h: usize, w: usize, modulo: Modulo) -> Self {
         Self {
             h,
             w,
@@ -57,7 +57,7 @@ where
 
     /// `size`×`size`の単位行列を作る。
     pub fn unit(size: usize, modulo: Modulo) -> Self {
-        let mut ret = Self::new(size, size, modulo.clone());
+        let mut ret = Self::zero(size, size, modulo.clone());
         for i in 0..size {
             ret.data[i][i] = modulo.from_u64(1);
         }
@@ -110,6 +110,12 @@ where
         }
     }
 
+    /// `i`行`j`列の要素への参照を返す。
+    pub fn get(&mut self, i: usize, j: usize) -> Option<&Modulo::Element> {
+        let a = self.data.get(i)?;
+        a.get(j)
+    }
+
     /// `i`行`j`列の要素への可変参照を返す。
     pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Element> {
         let a = self.data.get_mut(i)?;
@@ -125,7 +131,7 @@ where
         let n = self.h;
         let l = rhs.w;
         let rhs = rhs.transpose();
-        let mut ret = Self::new(n, l, self.modulo);
+        let mut ret = Self::zero(n, l, self.modulo);
 
         for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
             for (x, c) in r.iter_mut().zip(rhs.data.iter()) {
@@ -154,15 +160,15 @@ where
 
         let m = n.div_ceil(2);
 
-        let mut a11 = Self::new(m, m, a.modulo.clone());
-        let mut a12 = Self::new(m, m, a.modulo.clone());
-        let mut a21 = Self::new(m, m, a.modulo.clone());
-        let mut a22 = Self::new(m, m, a.modulo.clone());
+        let mut a11 = Self::zero(m, m, a.modulo.clone());
+        let mut a12 = Self::zero(m, m, a.modulo.clone());
+        let mut a21 = Self::zero(m, m, a.modulo.clone());
+        let mut a22 = Self::zero(m, m, a.modulo.clone());
 
-        let mut b11 = Self::new(m, m, a.modulo.clone());
-        let mut b12 = Self::new(m, m, a.modulo.clone());
-        let mut b21 = Self::new(m, m, a.modulo.clone());
-        let mut b22 = Self::new(m, m, a.modulo.clone());
+        let mut b11 = Self::zero(m, m, a.modulo.clone());
+        let mut b12 = Self::zero(m, m, a.modulo.clone());
+        let mut b21 = Self::zero(m, m, a.modulo.clone());
+        let mut b22 = Self::zero(m, m, a.modulo.clone());
 
         for i in 0..m {
             for j in 0..m {

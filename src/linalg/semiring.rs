@@ -55,21 +55,24 @@ impl<T: Semiring + Copy> SemiringMatrix<T> {
     }
 
     /// 行列`a`の`n`乗を求める。
-    pub fn pow(self, mut n: u64) -> Self {
-        let mut a = self;
-        assert_eq!(a.h, a.w);
+    pub fn pow(self, mut n: u64) -> Option<Self> {
+        if !self.is_square() {
+            None
+        } else {
+            let mut a = self;
 
-        let mut ret = Self::unit(a.h);
+            let mut ret = Self::unit(a.h);
 
-        while n > 0 {
-            if n % 2 == 1 {
-                ret = ret.try_mul(a.clone()).unwrap();
+            while n > 0 {
+                if n % 2 == 1 {
+                    ret = ret.try_mul(a.clone()).unwrap();
+                }
+                a = a.clone().try_mul(a).unwrap();
+                n >>= 1;
             }
-            a = a.clone().try_mul(a).unwrap();
-            n >>= 1;
-        }
 
-        ret
+            Some(ret)
+        }
     }
 
     /// `i`行`j`列の要素への可変参照を返す。

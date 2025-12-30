@@ -24,7 +24,7 @@ impl Matrix for MatrixMod2 {
 impl MatrixTranspose for MatrixMod2 {
     type Output = Self;
     fn transpose(self) -> Self::Output {
-        let mut ret = Self::new(self.w, self.h);
+        let mut ret = Self::zero(self.w, self.h);
         for i in 0..self.h {
             for j in 0..self.w {
                 if self.data[i].test(j) {
@@ -38,12 +38,20 @@ impl MatrixTranspose for MatrixMod2 {
 
 impl MatrixMod2 {
     /// `h`行`w`列の`MatrixMod2`を生成
-    pub fn new(h: usize, w: usize) -> Self {
+    pub fn zero(h: usize, w: usize) -> Self {
         Self {
             h,
             w,
             data: vec![Bitset::new(w); h],
         }
+    }
+
+    pub fn unit(n: usize) -> Self {
+        let mut ret = Self::zero(n, n);
+        for i in 0..n {
+            ret.data[i].flip(i);
+        }
+        ret
     }
 
     /// [`Bitset`]の`Vec`から`MatrixMod2`を生成する
@@ -54,6 +62,28 @@ impl MatrixMod2 {
         assert!(other.iter().all(|r| r.len() == w));
 
         Self { h, w, data: other }
+    }
+
+    /// 行列の`p`乗を求める。
+    pub fn pow(self, mut p: u64) -> Option<Self> {
+        if !self.is_square() {
+            None
+        } else {
+            let size = self.w;
+            let mut ret = Self::unit(size);
+            let mut a = self;
+
+            while p > 0 {
+                if p & 1 != 0 {
+                    ret *= a.clone();
+                }
+                a *= a.clone();
+
+                p >>= 1;
+            }
+
+            Some(ret)
+        }
     }
 
     /// `i`行`j`列の成分を返す
@@ -94,7 +124,7 @@ impl TryMul for MatrixMod2 {
             let l = rhs.w;
             let rhs = rhs.transpose();
 
-            let mut ret = Self::new(n, l);
+            let mut ret = Self::zero(n, l);
 
             for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
                 for (i, c) in rhs.data.chunks(Bitset::B_SIZE).enumerate() {
