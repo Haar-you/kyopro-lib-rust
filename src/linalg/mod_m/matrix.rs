@@ -1,6 +1,8 @@
 //! `h`×`w`行列
+use crate::impl_ops;
+pub use crate::linalg::traits::*;
 use crate::num::ff::*;
-use std::ops::{Add, AddAssign, Index, Mul, MulAssign, Neg, Sub, SubAssign};
+use std::ops::{Index, Neg};
 
 /// `h`×`w`行列
 #[derive(Clone, PartialEq, Eq)]
@@ -81,89 +83,78 @@ where
     }
 }
 
-impl<Modulo: FF> AddAssign for Matrix<Modulo>
-where
-    Modulo::Element: FFElem + Copy,
-{
-    fn add_assign(&mut self, other: Self) {
-        assert!(self.h == other.h && self.w == other.h);
-        for i in 0..self.h {
-            for j in 0..self.w {
-                self.data[i][j] = self.data[i][j] + other.data[i][j];
-            }
-        }
-    }
-}
-
-impl<Modulo: FF> SubAssign for Matrix<Modulo>
-where
-    Modulo::Element: FFElem + Copy,
-{
-    fn sub_assign(&mut self, other: Self) {
-        assert!(self.h == other.h && self.w == other.h);
-        for i in 0..self.h {
-            for j in 0..self.w {
-                self.data[i][j] = self.data[i][j] - other.data[i][j];
-            }
-        }
-    }
-}
-
-impl<Modulo: FF> MulAssign for Matrix<Modulo>
-where
-    Modulo::Element: FFElem + Copy,
-{
-    fn mul_assign(&mut self, other: Self) {
-        *self = self.clone() * other;
-    }
-}
-
-impl<Modulo: FF> Add for Matrix<Modulo>
+impl<Modulo: FF> TryAdd for Matrix<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
     type Output = Self;
-    fn add(mut self, other: Self) -> Self {
-        self += other;
-        self
-    }
-}
-
-impl<Modulo: FF> Sub for Matrix<Modulo>
-where
-    Modulo::Element: FFElem + Copy,
-{
-    type Output = Self;
-    fn sub(mut self, other: Self) -> Self {
-        self -= other;
-        self
-    }
-}
-
-impl<Modulo: FF> Mul for Matrix<Modulo>
-where
-    Modulo::Element: FFElem + Copy,
-{
-    type Output = Self;
-    fn mul(self, other: Self) -> Self {
-        assert!(self.w == other.h);
-
-        let n = self.h;
-        let l = other.w;
-        let other = other.transpose();
-        let mut ret = Self::new(n, l, self.modulo);
-
-        for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
-            for (x, c) in r.iter_mut().zip(other.data.iter()) {
-                for (y, z) in r2.iter().zip(c.iter()) {
-                    *x += *y * *z;
+    fn try_add(mut self, rhs: Self) -> Option<Self::Output> {
+        if self.h != rhs.h || self.w != rhs.h {
+            None
+        } else {
+            for i in 0..self.h {
+                for j in 0..self.w {
+                    self.data[i][j] += rhs.data[i][j];
                 }
             }
+            Some(self)
         }
-
-        ret
     }
 }
+
+impl<Modulo: FF> TrySub for Matrix<Modulo>
+where
+    Modulo::Element: FFElem + Copy,
+{
+    type Output = Self;
+    fn try_sub(mut self, rhs: Self) -> Option<Self::Output> {
+        if self.h != rhs.h || self.w != rhs.h {
+            None
+        } else {
+            for i in 0..self.h {
+                for j in 0..self.w {
+                    self.data[i][j] -= rhs.data[i][j];
+                }
+            }
+            Some(self)
+        }
+    }
+}
+
+impl<Modulo: FF> TryMul for Matrix<Modulo>
+where
+    Modulo::Element: FFElem + Copy,
+{
+    type Output = Self;
+    fn try_mul(self, rhs: Self) -> Option<Self::Output> {
+        if self.w != rhs.h {
+            None
+        } else {
+            let n = self.h;
+            let l = rhs.w;
+            let rhs = rhs.transpose();
+            let mut ret = Self::new(n, l, self.modulo);
+
+            for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
+                for (x, c) in r.iter_mut().zip(rhs.data.iter()) {
+                    for (y, z) in r2.iter().zip(c.iter()) {
+                        *x += *y * *z;
+                    }
+                }
+            }
+
+            Some(ret)
+        }
+    }
+}
+
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; AddAssign for Matrix<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; SubAssign for Matrix<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; MulAssign for Matrix<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
+
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Add for Matrix<Modulo>, |x: Self, y| x.try_add(y).unwrap());
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Sub for Matrix<Modulo>, |x: Self, y| x.try_sub(y).unwrap());
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Mul for Matrix<Modulo>, |x: Self, y| x.try_mul(y).unwrap());
 
 impl<Modulo: FF> Neg for Matrix<Modulo>
 where
