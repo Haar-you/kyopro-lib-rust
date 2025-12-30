@@ -1,8 +1,8 @@
 //! 行列 (mod 2)
-use std::ops::Index;
-use std::ops::Mul;
-
 use crate::ds::bitset::Bitset;
+use crate::impl_ops;
+pub use crate::linalg::traits::*;
+use std::ops::Index;
 
 /// 行列 (mod 2)
 #[derive(Clone)]
@@ -10,6 +10,15 @@ pub struct MatrixMod2 {
     h: usize,
     w: usize,
     data: Vec<Bitset>,
+}
+
+impl Matrix for MatrixMod2 {
+    fn width(&self) -> usize {
+        self.w
+    }
+    fn height(&self) -> usize {
+        self.h
+    }
 }
 
 impl MatrixMod2 {
@@ -52,37 +61,69 @@ impl MatrixMod2 {
     }
 }
 
-impl Mul for MatrixMod2 {
+impl TryAdd for MatrixMod2 {
     type Output = Self;
-
-    fn mul(self, rhs: Self) -> Self::Output {
-        assert_eq!(self.w, rhs.h);
-
-        let n = self.h;
-        let l = rhs.w;
-        let rhs = rhs.transpose();
-
-        let mut ret = Self::new(n, l);
-
-        for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
-            for (i, c) in rhs.data.chunks(Bitset::B_SIZE).enumerate() {
-                let mut a = 0;
-
-                for (j, x) in c.iter().enumerate() {
-                    let t = r2.and_count_ones(x) & 1;
-
-                    if t != 0 {
-                        a |= 1 << j;
-                    }
-                }
-
-                r.data[i] = a;
+    fn try_add(mut self, rhs: Self) -> Option<Self::Output> {
+        if self.h != rhs.h || self.w != rhs.h {
+            None
+        } else {
+            for (x, y) in self.data.iter_mut().zip(rhs.data) {
+                *x |= y;
             }
+            Some(self)
         }
-
-        ret
     }
 }
+
+impl TrySub for MatrixMod2 {
+    type Output = Self;
+    fn try_sub(self, rhs: Self) -> Option<Self::Output> {
+        self.try_add(rhs)
+    }
+}
+
+impl TryMul for MatrixMod2 {
+    type Output = Self;
+    fn try_mul(self, rhs: Self) -> Option<Self::Output> {
+        if self.w != rhs.h {
+            None
+        } else {
+            let n = self.h;
+            let l = rhs.w;
+            let rhs = rhs.transpose();
+
+            let mut ret = Self::new(n, l);
+
+            for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
+                for (i, c) in rhs.data.chunks(Bitset::B_SIZE).enumerate() {
+                    let mut a = 0;
+
+                    for (j, x) in c.iter().enumerate() {
+                        let t = r2.and_count_ones(x) & 1;
+
+                        if t != 0 {
+                            a |= 1 << j;
+                        }
+                    }
+
+                    r.data[i] = a;
+                }
+            }
+
+            Some(ret)
+        }
+    }
+}
+
+impl_ops!(AddAssign for MatrixMod2, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
+impl_ops!(SubAssign for MatrixMod2, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
+impl_ops!(MulAssign for MatrixMod2, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
+
+impl_ops!(Add for MatrixMod2, |x: Self, y| x.try_add(y).unwrap());
+impl_ops!(Sub for MatrixMod2, |x: Self, y| x.try_sub(y).unwrap());
+impl_ops!(Mul for MatrixMod2, |x: Self, y| x.try_mul(y).unwrap());
+
+impl_ops!(Neg for MatrixMod2, |x: Self| x);
 
 impl Index<usize> for MatrixMod2 {
     type Output = Bitset;
