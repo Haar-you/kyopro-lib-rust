@@ -21,6 +21,21 @@ impl Matrix for MatrixMod2 {
     }
 }
 
+impl MatrixTranspose for MatrixMod2 {
+    type Output = Self;
+    fn transpose(self) -> Self::Output {
+        let mut ret = Self::new(self.w, self.h);
+        for i in 0..self.h {
+            for j in 0..self.w {
+                if self.data[i].test(j) {
+                    ret.data[j].flip(i);
+                }
+            }
+        }
+        ret
+    }
+}
+
 impl MatrixMod2 {
     /// `h`行`w`列の`MatrixMod2`を生成
     pub fn new(h: usize, w: usize) -> Self {
@@ -39,19 +54,6 @@ impl MatrixMod2 {
         assert!(other.iter().all(|r| r.len() == w));
 
         Self { h, w, data: other }
-    }
-
-    /// 行列の転置を得る
-    pub fn transpose(self) -> Self {
-        let mut ret = Self::new(self.w, self.h);
-        for i in 0..self.h {
-            for j in 0..self.w {
-                if self.data[i].test(j) {
-                    ret.data[j].flip(i);
-                }
-            }
-        }
-        ret
     }
 
     /// `i`行`j`列の成分を返す

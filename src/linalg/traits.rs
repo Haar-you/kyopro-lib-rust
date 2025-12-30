@@ -35,3 +35,11 @@ pub trait Matrix {
         self.width() == self.height()
     }
 }
+
+/// 行列の転置
+pub trait MatrixTranspose {
+    /// 転置行列の型
+    type Output;
+    /// 転置した行列を返す。
+    fn transpose(self) -> Self::Output;
+}

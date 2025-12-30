@@ -24,6 +24,20 @@ impl<T: Semiring + Copy> Matrix for SemiringMatrix<T> {
     }
 }
 
+impl<T: Semiring + Copy> MatrixTranspose for SemiringMatrix<T> {
+    type Output = Self;
+    fn transpose(self) -> Self::Output {
+        let a = self;
+        let mut ret = Self::zero(a.w, a.h);
+        for i in 0..a.h {
+            for j in 0..a.w {
+                ret.data[j][i] = a.data[i][j];
+            }
+        }
+        ret
+    }
+}
+
 impl<T: Semiring + Copy> SemiringMatrix<T> {
     /// `h`×`w`の零行列を返す。
     pub fn zero(h: usize, w: usize) -> Self {
@@ -38,18 +52,6 @@ impl<T: Semiring + Copy> SemiringMatrix<T> {
             this.data[i][i] = T::one();
         }
         this
-    }
-
-    /// `w`×`h`の転置行列を作る。
-    pub fn transpose(self) -> Self {
-        let a = self;
-        let mut ret = Self::zero(a.w, a.h);
-        for i in 0..a.h {
-            for j in 0..a.w {
-                ret.data[j][i] = a.data[i][j];
-            }
-        }
-        ret
     }
 
     /// 行列`a`の`n`乗を求める。

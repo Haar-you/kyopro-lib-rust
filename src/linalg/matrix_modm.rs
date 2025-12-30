@@ -25,6 +25,22 @@ where
     }
 }
 
+impl<Modulo: FF> MatrixTranspose for MatrixModM<Modulo>
+where
+    Modulo::Element: FFElem + Copy,
+{
+    type Output = Self;
+    fn transpose(self) -> Self::Output {
+        let mut ret = Self::zero(self.w, self.h, self.modulo);
+        for i in 0..self.h {
+            for j in 0..self.w {
+                ret.data[j][i] = self.data[i][j];
+            }
+        }
+        ret
+    }
+}
+
 impl<Modulo: FF> MatrixModM<Modulo>
 where
     Modulo::Element: FFElem + Copy,
@@ -70,17 +86,6 @@ where
             data: other,
             modulo,
         }
-    }
-
-    /// `w`×`h`の転置行列を作る。
-    pub fn transpose(self) -> Self {
-        let mut ret = Self::new(self.w, self.h, self.modulo);
-        for i in 0..self.h {
-            for j in 0..self.w {
-                ret.data[j][i] = self.data[i][j];
-            }
-        }
-        ret
     }
 
     /// 行列の`p`乗を求める。
