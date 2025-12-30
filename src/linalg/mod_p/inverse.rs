@@ -1,7 +1,7 @@
-//! 逆行列 (mod 素数)
+//! $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上の逆行列
 use crate::num::{ff::FFElem, one_zero::*};
 
-/// 素数mod p上での逆行列を求める。
+/// $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上での逆行列を求める。
 ///
 /// **Time complexity** $O(n^3)$
 pub fn inverse<T>(mut b: Vec<Vec<T>>) -> Option<Vec<Vec<T>>>

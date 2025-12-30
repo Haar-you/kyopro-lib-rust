@@ -1,10 +1,10 @@
-//! 連立一次方程式$A \boldsymbol{x} = \boldsymbol{b} \pmod 2$を解く。
+//! $\mathbb{Z} / 2 \mathbb{Z}$上の連立一次方程式。
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/system_of_linear_equations_mod_2>
 use crate::{ds::bitset::Bitset, linalg::mod_2::gaussian_elim::*};
 
-/// 連立一次方程式$A \boldsymbol{x} = \boldsymbol{b} \pmod 2$を解く。
+/// $\mathbb{Z} / 2 \mathbb{Z}$上で連立一次方程式$A \boldsymbol{x} = \boldsymbol{b}$を解く。
 ///
 /// ここで、$A$は$n \times m$の行列、$\boldsymbol{x}$は$m$行の縦ベクトル、$\boldsymbol{b}$は$n$行の縦ベクトル。
 ///

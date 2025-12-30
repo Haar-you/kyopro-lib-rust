@@ -1,4 +1,4 @@
-//! 連立一次方程式$A \boldsymbol{x} = \boldsymbol{b} \pmod p$を解く。
+//! $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上の連立一次方程式
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/system_of_linear_equations>
@@ -7,7 +7,7 @@ use crate::{
     num::{ff::FFElem, one_zero::*},
 };
 
-/// 連立一次方程式$A \boldsymbol{x} = \boldsymbol{b} \pmod p$を解く。
+/// $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上で連立一次方程式$A \boldsymbol{x} = \boldsymbol{b}$を解く。
 ///
 /// ここで、$A$は$n \times m$の行列、$\boldsymbol{x}$は$m$行の縦ベクトル、$\boldsymbol{b}$は$n$行の縦ベクトル。
 ///
