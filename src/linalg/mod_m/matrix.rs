@@ -6,14 +6,14 @@ use std::ops::{Index, Neg};
 
 /// `h`×`w`行列
 #[derive(Clone, PartialEq, Eq)]
-pub struct Matrix<Modulo: FF> {
+pub struct MatrixModM<Modulo: FF> {
     h: usize,
     w: usize,
     modulo: Modulo,
     data: Vec<Vec<Modulo::Element>>,
 }
 
-impl<Modulo: FF> Matrix<Modulo>
+impl<Modulo: FF> MatrixModM<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
@@ -215,7 +215,7 @@ where
     }
 }
 
-impl<Modulo: FF> TryAdd for Matrix<Modulo>
+impl<Modulo: FF> TryAdd for MatrixModM<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
@@ -234,7 +234,7 @@ where
     }
 }
 
-impl<Modulo: FF> TrySub for Matrix<Modulo>
+impl<Modulo: FF> TrySub for MatrixModM<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
@@ -253,7 +253,7 @@ where
     }
 }
 
-impl<Modulo: FF> TryMul for Matrix<Modulo>
+impl<Modulo: FF> TryMul for MatrixModM<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
@@ -269,15 +269,15 @@ where
     }
 }
 
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; AddAssign for Matrix<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; SubAssign for Matrix<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; MulAssign for Matrix<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; AddAssign for MatrixModM<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; SubAssign for MatrixModM<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; MulAssign for MatrixModM<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
 
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Add for Matrix<Modulo>, |x: Self, y| x.try_add(y).unwrap());
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Sub for Matrix<Modulo>, |x: Self, y| x.try_sub(y).unwrap());
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Mul for Matrix<Modulo>, |x: Self, y| x.try_mul(y).unwrap());
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Add for MatrixModM<Modulo>, |x: Self, y| x.try_add(y).unwrap());
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Sub for MatrixModM<Modulo>, |x: Self, y| x.try_sub(y).unwrap());
+impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Mul for MatrixModM<Modulo>, |x: Self, y| x.try_mul(y).unwrap());
 
-impl<Modulo: FF> Neg for Matrix<Modulo>
+impl<Modulo: FF> Neg for MatrixModM<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
@@ -292,7 +292,7 @@ where
     }
 }
 
-impl<Modulo: FF> Index<usize> for Matrix<Modulo>
+impl<Modulo: FF> Index<usize> for MatrixModM<Modulo>
 where
     Modulo::Element: FFElem + Copy,
 {
@@ -302,13 +302,13 @@ where
     }
 }
 
-impl<Modulo: FF> From<Matrix<Modulo>> for Vec<Vec<Modulo::Element>> {
-    fn from(value: Matrix<Modulo>) -> Self {
+impl<Modulo: FF> From<MatrixModM<Modulo>> for Vec<Vec<Modulo::Element>> {
+    fn from(value: MatrixModM<Modulo>) -> Self {
         value.data
     }
 }
 
-impl<Modulo: FF> AsRef<[Vec<Modulo::Element>]> for Matrix<Modulo> {
+impl<Modulo: FF> AsRef<[Vec<Modulo::Element>]> for MatrixModM<Modulo> {
     fn as_ref(&self) -> &[Vec<Modulo::Element>] {
         &self.data
     }
@@ -338,8 +338,8 @@ mod tests {
             }
         }
 
-        let a = Matrix::from_vec_2d(a, modulo);
-        let b = Matrix::from_vec_2d(b, modulo);
+        let a = MatrixModM::from_vec_2d(a, modulo);
+        let b = MatrixModM::from_vec_2d(b, modulo);
 
         assert!(a.clone().straight_mul(b.clone()) == a.strassen_mul(b));
     }
@@ -366,8 +366,8 @@ mod tests {
                 }
             }
 
-            let a = Matrix::from_vec_2d(a, modulo);
-            let b = Matrix::from_vec_2d(b, modulo);
+            let a = MatrixModM::from_vec_2d(a, modulo);
+            let b = MatrixModM::from_vec_2d(b, modulo);
 
             straight.push(get_time!({
                 a.clone().straight_mul(b.clone());
