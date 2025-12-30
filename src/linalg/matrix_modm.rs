@@ -90,9 +90,7 @@ where
 
     /// 行列の`p`乗を求める。
     pub fn pow(self, mut p: u64) -> Option<Self> {
-        if !self.is_square() {
-            None
-        } else {
+        self.is_square().then(|| {
             let size = self.w;
             let mut ret = Self::unit(size, self.modulo.clone());
             let mut a = self;
@@ -106,8 +104,8 @@ where
                 p >>= 1;
             }
 
-            Some(ret)
-        }
+            ret
+        })
     }
 
     /// `i`行`j`列の要素への参照を返す。
@@ -230,16 +228,14 @@ where
 {
     type Output = Self;
     fn try_add(mut self, rhs: Self) -> Option<Self::Output> {
-        if self.h != rhs.h || self.w != rhs.h {
-            None
-        } else {
+        (self.size() == rhs.size()).then(|| {
             for i in 0..self.h {
                 for j in 0..self.w {
                     self.data[i][j] += rhs.data[i][j];
                 }
             }
-            Some(self)
-        }
+            self
+        })
     }
 }
 
@@ -249,16 +245,14 @@ where
 {
     type Output = Self;
     fn try_sub(mut self, rhs: Self) -> Option<Self::Output> {
-        if self.h != rhs.h || self.w != rhs.h {
-            None
-        } else {
+        (self.size() == rhs.size()).then(|| {
             for i in 0..self.h {
                 for j in 0..self.w {
                     self.data[i][j] -= rhs.data[i][j];
                 }
             }
-            Some(self)
-        }
+            self
+        })
     }
 }
 

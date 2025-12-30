@@ -30,6 +30,10 @@ pub trait Matrix {
     fn width(&self) -> usize;
     /// 行列の行数を返す。
     fn height(&self) -> usize;
+    /// 行数の行数と列数のペアを返す。
+    fn size(&self) -> (usize, usize) {
+        (self.width(), self.height())
+    }
     /// 行列が正方であるかどうかを判定する。
     fn is_square(&self) -> bool {
         self.width() == self.height()

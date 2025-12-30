@@ -56,11 +56,8 @@ impl<T: Semiring + Copy> SemiringMatrix<T> {
 
     /// 行列`a`の`n`乗を求める。
     pub fn pow(self, mut n: u64) -> Option<Self> {
-        if !self.is_square() {
-            None
-        } else {
+        self.is_square().then(|| {
             let mut a = self;
-
             let mut ret = Self::unit(a.h);
 
             while n > 0 {
@@ -71,8 +68,8 @@ impl<T: Semiring + Copy> SemiringMatrix<T> {
                 n >>= 1;
             }
 
-            Some(ret)
-        }
+            ret
+        })
     }
 
     /// `i`行`j`列の要素への可変参照を返す。
@@ -91,16 +88,14 @@ impl<T: Semiring + Copy> SemiringMatrix<T> {
 impl<T: Semiring + Copy> TryAdd for SemiringMatrix<T> {
     type Output = Self;
     fn try_add(mut self, rhs: Self) -> Option<Self::Output> {
-        if self.h != rhs.h || self.w != rhs.h {
-            None
-        } else {
+        (self.size() == rhs.size()).then(|| {
             for i in 0..self.h {
                 for j in 0..self.w {
                     self.data[i][j] = T::add(self.data[i][j], rhs.data[i][j]);
                 }
             }
-            Some(self)
-        }
+            self
+        })
     }
 }
 
@@ -109,24 +104,22 @@ impl<T: Semiring + Copy> TryMul for SemiringMatrix<T> {
     fn try_mul(self, rhs: Self) -> Option<Self::Output> {
         let a = self;
         let b = rhs;
-        if a.w != b.h {
-            return None;
-        }
+        (a.w == b.h).then(|| {
+            let n = a.h;
+            let l = b.w;
+            let b = b.transpose();
+            let mut ret = Self::zero(n, l);
 
-        let n = a.h;
-        let l = b.w;
-        let b = b.transpose();
-        let mut ret = Self::zero(n, l);
-
-        for (r, r2) in ret.data.iter_mut().zip(a.data.iter()) {
-            for (x, c) in r.iter_mut().zip(b.data.iter()) {
-                for (y, z) in r2.iter().zip(c.iter()) {
-                    *x = T::add(*x, T::mul(*y, *z));
+            for (r, r2) in ret.data.iter_mut().zip(a.data.iter()) {
+                for (x, c) in r.iter_mut().zip(b.data.iter()) {
+                    for (y, z) in r2.iter().zip(c.iter()) {
+                        *x = T::add(*x, T::mul(*y, *z));
+                    }
                 }
             }
-        }
 
-        Some(ret)
+            ret
+        })
     }
 }
 

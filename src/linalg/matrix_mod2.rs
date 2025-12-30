@@ -67,9 +67,7 @@ impl MatrixMod2 {
 
     /// 行列の`p`乗を求める。
     pub fn pow(self, mut p: u64) -> Option<Self> {
-        if !self.is_square() {
-            None
-        } else {
+        self.is_square().then(|| {
             let size = self.w;
             let mut ret = Self::unit(size);
             let mut a = self;
@@ -83,8 +81,8 @@ impl MatrixMod2 {
                 p >>= 1;
             }
 
-            Some(ret)
-        }
+            ret
+        })
     }
 
     /// `i`行`j`列の成分を返す
@@ -97,14 +95,12 @@ impl MatrixMod2 {
 impl TryAdd for MatrixMod2 {
     type Output = Self;
     fn try_add(mut self, rhs: Self) -> Option<Self::Output> {
-        if self.h != rhs.h || self.w != rhs.h {
-            None
-        } else {
+        (self.size() == rhs.size()).then(|| {
             for (x, y) in self.data.iter_mut().zip(rhs.data) {
                 *x ^= y;
             }
-            Some(self)
-        }
+            self
+        })
     }
 }
 
@@ -118,9 +114,7 @@ impl TrySub for MatrixMod2 {
 impl TryMul for MatrixMod2 {
     type Output = Self;
     fn try_mul(self, rhs: Self) -> Option<Self::Output> {
-        if self.w != rhs.h {
-            None
-        } else {
+        (self.w == rhs.h).then(|| {
             let n = self.h;
             let l = rhs.w;
             let rhs = rhs.transpose();
@@ -143,8 +137,8 @@ impl TryMul for MatrixMod2 {
                 }
             }
 
-            Some(ret)
-        }
+            ret
+        })
     }
 }
 
