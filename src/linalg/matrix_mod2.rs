@@ -101,7 +101,7 @@ impl TryAdd for MatrixMod2 {
             None
         } else {
             for (x, y) in self.data.iter_mut().zip(rhs.data) {
-                *x |= y;
+                *x ^= y;
             }
             Some(self)
         }
