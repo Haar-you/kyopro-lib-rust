@@ -2,9 +2,10 @@
 //!
 //! # Problems
 //! - <https://atcoder.jp/contests/abc009/tasks/abc009_4>
-use std::ops::Index;
-
 use crate::algebra::semiring::Semiring;
+use crate::impl_ops;
+pub use crate::linalg::traits::*;
+use std::ops::Index;
 
 /// 半環上の行列
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -12,6 +13,29 @@ pub struct SemiringMatrix<T> {
     data: Vec<Vec<T>>,
     h: usize,
     w: usize,
+}
+
+impl<T: Semiring + Copy> Matrix for SemiringMatrix<T> {
+    fn width(&self) -> usize {
+        self.w
+    }
+    fn height(&self) -> usize {
+        self.h
+    }
+}
+
+impl<T: Semiring + Copy> MatrixTranspose for SemiringMatrix<T> {
+    type Output = Self;
+    fn transpose(self) -> Self::Output {
+        let a = self;
+        let mut ret = Self::zero(a.w, a.h);
+        for i in 0..a.h {
+            for j in 0..a.w {
+                ret.data[j][i] = a.data[i][j];
+            }
+        }
+        ret
+    }
 }
 
 impl<T: Semiring + Copy> SemiringMatrix<T> {
@@ -30,59 +54,22 @@ impl<T: Semiring + Copy> SemiringMatrix<T> {
         this
     }
 
-    /// `w`×`h`の転置行列を作る。
-    pub fn transpose(self) -> Self {
-        let a = self;
-        let mut ret = Self::zero(a.w, a.h);
-        for i in 0..a.h {
-            for j in 0..a.w {
-                ret.data[j][i] = a.data[i][j];
-            }
-        }
-        ret
-    }
-
-    /// 行列積$ab$を求める。
-    ///
-    /// $a$の列数と$b$の行数が一致していないとき、行列積は定義されないので、`None`を返す。
-    pub fn try_mul(self, b: Self) -> Option<Self> {
-        let a = self;
-        if a.w != b.h {
-            return None;
-        }
-
-        let n = a.h;
-        let l = b.w;
-        let b = b.transpose();
-        let mut ret = Self::zero(n, l);
-
-        for (r, r2) in ret.data.iter_mut().zip(a.data.iter()) {
-            for (x, c) in r.iter_mut().zip(b.data.iter()) {
-                for (y, z) in r2.iter().zip(c.iter()) {
-                    *x = T::add(*x, T::mul(*y, *z));
-                }
-            }
-        }
-
-        Some(ret)
-    }
-
     /// 行列`a`の`n`乗を求める。
-    pub fn pow(self, mut n: u64) -> Self {
-        let mut a = self;
-        assert_eq!(a.h, a.w);
+    pub fn pow(self, mut n: u64) -> Option<Self> {
+        self.is_square().then(|| {
+            let mut a = self;
+            let mut ret = Self::unit(a.h);
 
-        let mut ret = Self::unit(a.h);
-
-        while n > 0 {
-            if n % 2 == 1 {
-                ret = ret.try_mul(a.clone()).unwrap();
+            while n > 0 {
+                if n % 2 == 1 {
+                    ret = ret.try_mul(a.clone()).unwrap();
+                }
+                a = a.clone().try_mul(a).unwrap();
+                n >>= 1;
             }
-            a = a.clone().try_mul(a).unwrap();
-            n >>= 1;
-        }
 
-        ret
+            ret
+        })
     }
 
     /// `i`行`j`列の要素への可変参照を返す。
@@ -97,6 +84,50 @@ impl<T: Semiring + Copy> SemiringMatrix<T> {
         a.get(j)
     }
 }
+
+impl<T: Semiring + Copy> TryAdd for SemiringMatrix<T> {
+    type Output = Self;
+    fn try_add(mut self, rhs: Self) -> Option<Self::Output> {
+        (self.size() == rhs.size()).then(|| {
+            for i in 0..self.h {
+                for j in 0..self.w {
+                    self.data[i][j] = T::add(self.data[i][j], rhs.data[i][j]);
+                }
+            }
+            self
+        })
+    }
+}
+
+impl<T: Semiring + Copy> TryMul for SemiringMatrix<T> {
+    type Output = Self;
+    fn try_mul(self, rhs: Self) -> Option<Self::Output> {
+        let a = self;
+        let b = rhs;
+        (a.w == b.h).then(|| {
+            let n = a.h;
+            let l = b.w;
+            let b = b.transpose();
+            let mut ret = Self::zero(n, l);
+
+            for (r, r2) in ret.data.iter_mut().zip(a.data.iter()) {
+                for (x, c) in r.iter_mut().zip(b.data.iter()) {
+                    for (y, z) in r2.iter().zip(c.iter()) {
+                        *x = T::add(*x, T::mul(*y, *z));
+                    }
+                }
+            }
+
+            ret
+        })
+    }
+}
+
+impl_ops!([T: Semiring + Copy]; AddAssign for SemiringMatrix<T>, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
+impl_ops!([T: Semiring + Copy]; MulAssign for SemiringMatrix<T>, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
+
+impl_ops!([T: Semiring + Copy]; Add for SemiringMatrix<T>, |x: Self, y| x.try_add(y).unwrap());
+impl_ops!([T: Semiring + Copy]; Mul for SemiringMatrix<T>, |x: Self, y| x.try_mul(y).unwrap());
 
 impl<T> Index<usize> for SemiringMatrix<T> {
     type Output = [T];

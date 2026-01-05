@@ -1,7 +1,7 @@
-//! 行列式 (mod 素数)
+//! $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上の行列式
 use crate::num::{ff::FFElem, one_zero::*};
 
-/// 素数mod p上での行列式を求める。
+/// $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上で行列式を求める。
 ///
 /// **Time complexity** $O(n^3)$
 pub fn determinant<T>(mut a: Vec<Vec<T>>) -> T

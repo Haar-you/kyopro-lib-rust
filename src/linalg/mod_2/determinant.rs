@@ -1,7 +1,7 @@
-//! 行列式 (mod 2)
+//! $\mathbb{Z} / 2 \mathbb{Z}$上の行列式
 use crate::ds::bitset::*;
 
-/// mod 2上で行列式を求める
+/// $\mathbb{Z} / 2 \mathbb{Z}$上で行列式を求める。
 pub fn determinant(mut a: Vec<Bitset>) -> u64 {
     let n = a.len();
 

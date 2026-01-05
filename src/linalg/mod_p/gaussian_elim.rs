@@ -1,7 +1,7 @@
-//! ガウスの消去法 (mod p)
+//! $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上のガウスの消去法
 use crate::num::ff::FFElem;
 
-/// mod p上で行列を掃き出し、ランクを求める。
+/// $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上で行列を掃き出し、ランクを求める。
 pub fn gaussian_elim<T>(mut a: Vec<Vec<T>>) -> (usize, Vec<Vec<T>>)
 where
     T: FFElem + Copy,
