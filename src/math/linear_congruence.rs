@@ -1,4 +1,4 @@
-//! 一次合同方程式を解く。
+//! 一次合同方程式$ax + b = 0 \pmod m$
 use crate::math::{gcd_lcm::*, mod_ops::inv::*};
 
 /// ax + b = 0 (mod m) を満たすxを求める。
