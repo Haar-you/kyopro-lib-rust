@@ -17,7 +17,7 @@ pub fn linear_indeterminate_equation(a: i64, b: i64, c: i64) -> Option<(i64, i64
     assert_ne!(a, 0);
     assert_ne!(b, 0);
 
-    let (g, mut x, _) = ext_gcd(a.abs() as u64, b.abs() as u64);
+    let (g, mut x, _) = ext_gcd(a.unsigned_abs(), b.unsigned_abs());
 
     if c % g != 0 {
         return None;
