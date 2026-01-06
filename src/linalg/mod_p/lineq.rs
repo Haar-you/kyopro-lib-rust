@@ -38,7 +38,7 @@ where
 
     let b: Vec<_> = a.iter_mut().map(|r| r.pop().unwrap()).collect();
 
-    if a[rank - 1].iter().all(|x| x.value() == 0) {
+    if rank > 0 && a[rank - 1].iter().all(|x| x.value() == 0) {
         return None;
     }
 
