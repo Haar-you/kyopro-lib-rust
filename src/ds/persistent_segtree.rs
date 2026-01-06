@@ -164,7 +164,7 @@ impl<M: Monoid + Clone> PersistentSegtree<M> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{algebra::sum::*, misc::vec_map::VecMap};
+    use crate::{algebra::sum::*, misc::map::Map};
 
     #[test]
     fn test() {
