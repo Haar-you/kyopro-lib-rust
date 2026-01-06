@@ -1,8 +1,6 @@
 //! 2要素のXORの総和
 
-/// 2要素のXORの総和
-///
-/// Σ{i = 1 ~ N - 1}Σ{j = i + 1 ~ N} aᵢ ⊕ aⱼ
+/// 2要素のXORの総和 $\sum_{i = 1}^{N - 1} \sum_{j = i + 1}^N a_i \oplus a_j$
 ///
 /// **Time complexity** $O(64 * |a|)$
 ///
