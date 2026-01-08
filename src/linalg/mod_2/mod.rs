@@ -2,5 +2,6 @@
 
 pub mod determinant;
 pub mod gaussian_elim;
+pub mod intersection_vector_space;
 pub mod inverse;
 pub mod lineq;
