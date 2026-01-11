@@ -9,6 +9,7 @@ use crate::flow::*;
 /// - [AOJ 3058 Ghost](http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=3058)
 /// - [AOJ 2903 Board](http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2903)
 /// - [ABC 193 F - Zebraness](https://atcoder.jp/contests/abc193/tasks/abc193_f)
+/// - [競プロ典型 90 問 040 - Get More Money](https://atcoder.jp/contests/typical90/tasks/typical90_an)
 ///
 /// # References
 /// - [https://ferin-tech.hatenablog.com/entry/2019/10/28/燃やす埋める問題](https://ferin-tech.hatenablog.com/entry/2019/10/28/%E7%87%83%E3%82%84%E3%81%99%E5%9F%8B%E3%82%81%E3%82%8B%E5%95%8F%E9%A1%8C)
@@ -17,17 +18,17 @@ use crate::flow::*;
 /// # Verification
 /// | function | verify |
 /// | -------- | ------ |
-/// | `penalty_if_red` | |
-/// | `penalty_if_blue` | [ARC085 #27489484](https://atcoder.jp/contests/arc085/submissions/27489484) |
-/// | `gain_if_red` | |
-/// | `gain_if_blue` | [ARC085 #27489484](https://atcoder.jp/contests/arc085/submissions/27489484) |
-/// | `penalty_if_red_blue` | |
-/// | `penalty_if_different` | |
-/// | `must_be_red` | |
-/// | `must_be_blue` | |
-/// | `if_red_then_must_be_red` | [ARC085 #27489484](https://atcoder.jp/contests/arc085/submissions/27489484) |
-/// | `gain_if_both_red` | |
-/// | `gain_if_both_blue` | |
+/// | [`penalty_if_red`](Self::penalty_if_red) | [競プロ典型 90 問 040 #72402366](https://atcoder.jp/contests/typical90/submissions/72402366) |
+/// | [`penalty_if_blue`](Self::penalty_if_blue) | [ARC085 #27489484](https://atcoder.jp/contests/arc085/submissions/27489484) |
+/// | [`gain_if_red`](Self::gain_if_red) | [競プロ典型 90 問 040 #72402366](https://atcoder.jp/contests/typical90/submissions/72402366) |
+/// | [`gain_if_blue`](Self::gain_if_blue) | [ARC085 #27489484](https://atcoder.jp/contests/arc085/submissions/27489484) |
+/// | [`penalty_if_red_blue`](Self::penalty_if_red_blue) | |
+/// | [`penalty_if_different`](Self::penalty_if_different) | [ABC193-F #72397880](https://atcoder.jp/contests/abc193/submissions/72397880) |
+/// | [`must_be_red`](Self::must_be_red) | [ABC193-F #72397880](https://atcoder.jp/contests/abc193/submissions/72397880) |
+/// | [`must_be_blue`](Self::must_be_blue) | [ABC193-F #72397880](https://atcoder.jp/contests/abc193/submissions/72397880) |
+/// | [`if_red_then_must_be_red`](Self::if_red_then_must_be_red) | [ARC085 #27489484](https://atcoder.jp/contests/arc085/submissions/27489484) |
+/// | [`gain_if_both_red`](Self::gain_if_both_red) | |
+/// | [`gain_if_both_blue`](Self::gain_if_both_blue) | |
 
 #[derive(Clone, Debug)]
 pub struct PSP {
@@ -52,64 +53,64 @@ impl PSP {
         }
     }
 
-    /// 頂点iが<font color="red"><b>赤</b></font>ならばcの損失になる。
+    /// 頂点`i`が<font color="red"><b>赤</b></font>ならば`c`の損失になる。
     pub fn penalty_if_red(&mut self, i: usize, c: u64) {
         assert!(i < self.size);
         self.edges.push((i, self.sink, c));
     }
 
-    /// 頂点iが<font color="blue"><b>青</b></font>ならばcの損失になる。
+    /// 頂点`i`が<font color="blue"><b>青</b></font>ならば`c`の損失になる。
     pub fn penalty_if_blue(&mut self, i: usize, c: u64) {
         assert!(i < self.size);
         self.edges.push((self.src, i, c));
     }
 
-    /// 頂点iが<font color="red"><b>赤</b></font>ならばcの利益を得る。
+    /// 頂点`i`が<font color="red"><b>赤</b></font>ならば`c`の利益を得る。
     pub fn gain_if_red(&mut self, i: usize, c: u64) {
         assert!(i < self.size);
         self.default_gain += c;
         self.penalty_if_blue(i, c);
     }
 
-    /// 頂点iが<font color="blue"><b>青</b></font>ならばcの利益を得る。
+    /// 頂点`i`が<font color="blue"><b>青</b></font>ならば`c`の利益を得る。
     pub fn gain_if_blue(&mut self, i: usize, c: u64) {
         assert!(i < self.size);
         self.default_gain += c;
         self.penalty_if_red(i, c);
     }
 
-    /// 頂点iが<font color="red"><b>赤</b></font>かつ頂点jが<font color="blue"><b>青</b></font>ならばcの損失となる。
+    /// 頂点`i`が<font color="red"><b>赤</b></font>かつ頂点`j`が<font color="blue"><b>青</b></font>ならば`c`の損失となる。
     pub fn penalty_if_red_blue(&mut self, i: usize, j: usize, c: u64) {
         assert!(i < self.size && j < self.size);
         self.edges.push((i, j, c));
     }
 
-    /// 頂点iとjが異なる色ならばcの損失となる。
+    /// 頂点`i`と`j`が異なる色ならば`c`の損失となる。
     pub fn penalty_if_different(&mut self, i: usize, j: usize, c: u64) {
         assert!(i < self.size && j < self.size);
         self.edges.push((i, j, c));
         self.edges.push((j, i, c));
     }
 
-    /// 頂点iは<font color="red"><b>赤</b></font>でなければならない。
+    /// 頂点`i`は<font color="red"><b>赤</b></font>でなければならない。
     pub fn must_be_red(&mut self, i: usize) {
         assert!(i < self.size);
         self.penalty_if_blue(i, u64::MAX);
     }
 
-    /// 頂点iは<font color="blue"><b>青</b></font>でなければならない。
+    /// 頂点`i`は<font color="blue"><b>青</b></font>でなければならない。
     pub fn must_be_blue(&mut self, i: usize) {
         assert!(i < self.size);
         self.penalty_if_red(i, u64::MAX);
     }
 
-    /// 頂点iが<font color="red"><b>赤</b></font>ならば、頂点jも<font color="red"><b>赤</b></font>でなければならない。
+    /// 頂点`i`が<font color="red"><b>赤</b></font>ならば、頂点`j`も<font color="red"><b>赤</b></font>でなければならない。
     pub fn if_red_then_must_be_red(&mut self, i: usize, j: usize) {
         assert!(i < self.size && j < self.size);
         self.penalty_if_red_blue(i, j, u64::MAX);
     }
 
-    /// 頂点iとjがともに<font color="red"><b>赤</b></font>ならばcの利益を得る。
+    /// 頂点`i`と`j`がともに<font color="red"><b>赤</b></font>ならば`c`の利益を得る。
     pub fn gain_if_both_red(&mut self, i: usize, j: usize, c: u64) {
         assert!(i < self.size && j < self.size);
         self.default_gain += c;
@@ -121,7 +122,7 @@ impl PSP {
         self.edges.push((w, j, u64::MAX));
     }
 
-    /// 頂点iとjがともに<font color="blue"><b>青</b></font>ならばcの利益を得る。
+    /// 頂点`i`と`j`がともに<font color="blue"><b>青</b></font>ならば`c`の利益を得る。
     pub fn gain_if_both_blue(&mut self, i: usize, j: usize, c: u64) {
         assert!(i < self.size && j < self.size);
         self.default_gain += c;
