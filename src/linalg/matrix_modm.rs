@@ -6,17 +6,14 @@ use std::ops::{Index, Neg};
 
 /// $\mathbb{Z} / m \mathbb{Z}$ 上の行列
 #[derive(Clone, PartialEq, Eq)]
-pub struct MatrixModM<Modulo: FF> {
+pub struct MatrixModM<R: ZZ> {
     h: usize,
     w: usize,
-    modulo: Modulo,
-    data: Vec<Vec<Modulo::Element>>,
+    modulo: R,
+    data: Vec<Vec<R::Element>>,
 }
 
-impl<Modulo: FF> Matrix for MatrixModM<Modulo>
-where
-    Modulo::Element: FFElem + Copy,
-{
+impl<R: ZZ> Matrix for MatrixModM<R> {
     fn width(&self) -> usize {
         self.w
     }
@@ -25,9 +22,9 @@ where
     }
 }
 
-impl<Modulo: FF> MatrixTranspose for MatrixModM<Modulo>
+impl<R: ZZ> MatrixTranspose for MatrixModM<R>
 where
-    Modulo::Element: FFElem + Copy,
+    R::Element: ZZElem + Copy,
 {
     type Output = Self;
     fn transpose(self) -> Self::Output {
@@ -41,31 +38,31 @@ where
     }
 }
 
-impl<Modulo: FF> MatrixModM<Modulo>
+impl<R: ZZ> MatrixModM<R>
 where
-    Modulo::Element: FFElem + Copy,
+    R::Element: ZZElem + Copy,
 {
     /// `h`×`w`の零行列を作る。
-    pub fn zero(h: usize, w: usize, modulo: Modulo) -> Self {
+    pub fn zero(h: usize, w: usize, modulo: R) -> Self {
         Self {
             h,
             w,
-            data: vec![vec![modulo.from_u64(0); w]; h],
+            data: vec![vec![modulo.zero(); w]; h],
             modulo,
         }
     }
 
     /// `size`×`size`の単位行列を作る。
-    pub fn unit(size: usize, modulo: Modulo) -> Self {
+    pub fn unit(size: usize, modulo: R) -> Self {
         let mut ret = Self::zero(size, size, modulo.clone());
         for i in 0..size {
-            ret.data[i][i] = modulo.from_u64(1);
+            ret.data[i][i] = modulo.one();
         }
         ret
     }
 
     /// [`Vec<Vec<u32>>`]から[`Matrix<Modulo>`]を作る。
-    pub fn from_vec_2d(other: Vec<Vec<u32>>, modulo: Modulo) -> Self {
+    pub fn from_vec_2d(other: Vec<Vec<u32>>, modulo: R) -> Self {
         let h = other.len();
         assert!(h > 0);
         let w = other[0].len();
@@ -109,13 +106,13 @@ where
     }
 
     /// `i`行`j`列の要素への参照を返す。
-    pub fn get(&mut self, i: usize, j: usize) -> Option<&Modulo::Element> {
+    pub fn get(&mut self, i: usize, j: usize) -> Option<&R::Element> {
         let a = self.data.get(i)?;
         a.get(j)
     }
 
     /// `i`行`j`列の要素への可変参照を返す。
-    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut Modulo::Element> {
+    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut R::Element> {
         let a = self.data.get_mut(i)?;
         a.get_mut(j)
     }
@@ -222,9 +219,9 @@ where
     }
 }
 
-impl<Modulo: FF> TryAdd for MatrixModM<Modulo>
+impl<R: ZZ> TryAdd for MatrixModM<R>
 where
-    Modulo::Element: FFElem + Copy,
+    R::Element: ZZElem + Copy,
 {
     type Output = Self;
     fn try_add(mut self, rhs: Self) -> Option<Self::Output> {
@@ -239,9 +236,9 @@ where
     }
 }
 
-impl<Modulo: FF> TrySub for MatrixModM<Modulo>
+impl<R: ZZ> TrySub for MatrixModM<R>
 where
-    Modulo::Element: FFElem + Copy,
+    R::Element: ZZElem + Copy,
 {
     type Output = Self;
     fn try_sub(mut self, rhs: Self) -> Option<Self::Output> {
@@ -256,9 +253,9 @@ where
     }
 }
 
-impl<Modulo: FF> TryMul for MatrixModM<Modulo>
+impl<R: ZZ> TryMul for MatrixModM<R>
 where
-    Modulo::Element: FFElem + Copy,
+    R::Element: ZZElem + Copy,
 {
     type Output = Self;
     fn try_mul(self, rhs: Self) -> Option<Self::Output> {
@@ -272,17 +269,17 @@ where
     }
 }
 
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; AddAssign for MatrixModM<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; SubAssign for MatrixModM<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; MulAssign for MatrixModM<Modulo>, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
+impl_ops!([R: ZZ<Element: ZZElem + Copy>]; AddAssign for MatrixModM<R>, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
+impl_ops!([R: ZZ<Element: ZZElem + Copy>]; SubAssign for MatrixModM<R>, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
+impl_ops!([R: ZZ<Element: ZZElem + Copy>]; MulAssign for MatrixModM<R>, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
 
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Add for MatrixModM<Modulo>, |x: Self, y| x.try_add(y).unwrap());
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Sub for MatrixModM<Modulo>, |x: Self, y| x.try_sub(y).unwrap());
-impl_ops!([Modulo: FF<Element: FFElem + Copy>]; Mul for MatrixModM<Modulo>, |x: Self, y| x.try_mul(y).unwrap());
+impl_ops!([R: ZZ<Element: ZZElem + Copy>]; Add for MatrixModM<R>, |x: Self, y| x.try_add(y).unwrap());
+impl_ops!([R: ZZ<Element: ZZElem + Copy>]; Sub for MatrixModM<R>, |x: Self, y| x.try_sub(y).unwrap());
+impl_ops!([R: ZZ<Element: ZZElem + Copy>]; Mul for MatrixModM<R>, |x: Self, y| x.try_mul(y).unwrap());
 
-impl<Modulo: FF> Neg for MatrixModM<Modulo>
+impl<R: ZZ> Neg for MatrixModM<R>
 where
-    Modulo::Element: FFElem + Copy,
+    R::Element: ZZElem + Copy,
 {
     type Output = Self;
     fn neg(mut self) -> Self {
@@ -295,24 +292,24 @@ where
     }
 }
 
-impl<Modulo: FF> Index<usize> for MatrixModM<Modulo>
+impl<R: ZZ> Index<usize> for MatrixModM<R>
 where
-    Modulo::Element: FFElem + Copy,
+    R::Element: ZZElem + Copy,
 {
-    type Output = [Modulo::Element];
+    type Output = [R::Element];
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[i]
     }
 }
 
-impl<Modulo: FF> From<MatrixModM<Modulo>> for Vec<Vec<Modulo::Element>> {
-    fn from(value: MatrixModM<Modulo>) -> Self {
+impl<R: ZZ> From<MatrixModM<R>> for Vec<Vec<R::Element>> {
+    fn from(value: MatrixModM<R>) -> Self {
         value.data
     }
 }
 
-impl<Modulo: FF> AsRef<[Vec<Modulo::Element>]> for MatrixModM<Modulo> {
-    fn as_ref(&self) -> &[Vec<Modulo::Element>] {
+impl<R: ZZ> AsRef<[Vec<R::Element>]> for MatrixModM<R> {
+    fn as_ref(&self) -> &[Vec<R::Element>] {
         &self.data
     }
 }
