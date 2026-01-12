@@ -2,8 +2,6 @@
 use crate::num::zz::{ZZElem, ZZ};
 
 /// $\mathbb{Z} / m \mathbb{Z}$上で行列式を求める。
-///
-/// **Time complexity** $O(n^3)$
 pub fn determinant<R>(mut a: Vec<Vec<R::Element>>, ring: R) -> R::Element
 where
     R: ZZ + Copy,
