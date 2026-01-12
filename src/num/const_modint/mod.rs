@@ -1,7 +1,5 @@
 //! コンパイル時にmod Mが決まるModInt
 
-pub mod algebra;
-
 use crate::impl_from;
 use crate::impl_one_zero;
 use crate::impl_ops;

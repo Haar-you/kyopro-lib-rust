@@ -1,7 +1,5 @@
 //! 実行時にmod Mが決まるModInt
 
-pub mod algebra;
-
 use crate::impl_ops;
 pub use crate::num::ff::*;
 use std::{

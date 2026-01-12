@@ -1,27 +1,31 @@
-//! [`ModInt`]の代数的構造
+//! `mod m`の代数的構造
 
 pub use crate::algebra::traits::*;
-use crate::{impl_algebra, num::modint::*};
+use crate::{impl_algebra, num::ff::*};
 
 /// `mod m`上の加法
 #[derive(Clone, Copy, Default, Debug)]
-pub struct SumModM(Option<ModInt>);
-impl SumModM {
-    pub fn new(a: ModInt) -> Self {
+pub struct SumMod<T>(Option<T>);
+impl<T: ZZElem> SumMod<T> {
+    /// 値を`SumMod`に入れる。
+    pub fn new(a: T) -> Self {
         Self(Some(a))
     }
+    /// 値を`u32`として返す。
     pub fn value(self) -> u32 {
-        self.0.map_or(0, |a| a.value)
+        self.0.map_or(0, |a| a.value())
     }
 }
-impl PartialEq for SumModM {
+impl<T: ZZElem> PartialEq for SumMod<T> {
     fn eq(&self, other: &Self) -> bool {
         self.value() == other.value()
     }
 }
-impl Eq for SumModM {}
+impl<T: ZZElem> Eq for SumMod<T> {}
 impl_algebra!(
-    SumModM;
+    [T: ZZElem];
+    SumMod<T>;
+    set;
     op: |a: Self, b: Self| match (a.0, b.0) {
         (Some(a), Some(b)) => Self(Some(a + b)),
         (a, None) | (None, a) => Self(a),
@@ -34,23 +38,27 @@ impl_algebra!(
 
 /// `mod m`上の乗法
 #[derive(Clone, Copy, Default, Debug)]
-pub struct ProdModM(Option<ModInt>);
-impl ProdModM {
-    pub fn new(a: ModInt) -> Self {
+pub struct ProdMod<T>(Option<T>);
+impl<T: ZZElem> ProdMod<T> {
+    /// 値を`ProdMod`に入れる。
+    pub fn new(a: T) -> Self {
         Self(Some(a))
     }
+    /// 値を`u32`として返す。
     pub fn value(self) -> u32 {
-        self.0.map_or(1, |a| a.value)
+        self.0.map_or(1, |a| a.value())
     }
 }
-impl PartialEq for ProdModM {
+impl<T: ZZElem> PartialEq for ProdMod<T> {
     fn eq(&self, other: &Self) -> bool {
         self.value() == other.value()
     }
 }
-impl Eq for ProdModM {}
+impl<T: ZZElem> Eq for ProdMod<T> {}
 impl_algebra!(
-    ProdModM;
+    [T: ZZElem];
+    ProdMod<T>;
+    set;
     op: |a: Self, b: Self| match (a.0, b.0) {
         (Some(a), Some(b)) => Self(Some(a * b)),
         (a, None) | (None, a) => Self(a),
@@ -59,3 +67,4 @@ impl_algebra!(
     assoc;
     commu;
 );
+impl_algebra!([T: FFElem]; ProdMod<T>; inv: |a: Self| Self(a.0.map(|x| x.inv())););
