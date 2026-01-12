@@ -53,7 +53,7 @@ mod tests {
     use crate::{
         iter::collect::CollectVec,
         math::prime_mod::Prime,
-        num::{const_modint::ConstModIntBuilder, ff::FF},
+        num::{const_modint::ConstModIntBuilder, ff::*},
     };
 
     use super::*;

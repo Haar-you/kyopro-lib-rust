@@ -11,7 +11,7 @@ use std::{
 };
 
 /// [`ModInt`]を生成するための構造体。
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct ModIntBuilder {
     modulo: u32,
 }
@@ -24,7 +24,7 @@ impl ModIntBuilder {
     }
 }
 
-impl FF for ModIntBuilder {
+impl ZZ for ModIntBuilder {
     type Element = ModInt;
     fn from_u64(&self, value: u64) -> Self::Element {
         ModInt::new((value % self.modulo as u64) as u32, self.modulo)
@@ -39,6 +39,8 @@ impl FF for ModIntBuilder {
     }
 }
 
+impl FF for ModIntBuilder {}
+
 /// `modulo`を法として剰余をとる構造体。
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub struct ModInt {
@@ -46,7 +48,7 @@ pub struct ModInt {
     modulo: u32,
 }
 
-impl FFElem for ModInt {
+impl ZZElem for ModInt {
     #[inline]
     fn value(self) -> u32 {
         self.value
@@ -76,6 +78,8 @@ impl FFElem for ModInt {
         Self::new_unchecked(ret as u32, self.modulo)
     }
 }
+
+impl FFElem for ModInt {}
 
 impl ModInt {
     /// `value`を値にもち、`modulo`を法とする`ModInt`を生成する。

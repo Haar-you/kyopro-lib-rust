@@ -65,7 +65,7 @@ impl<P: PrimeMod> ConstModIntBuilder<P> {
     }
 }
 
-impl<P: PrimeMod> FF for ConstModIntBuilder<P> {
+impl<P: PrimeMod> ZZ for ConstModIntBuilder<P> {
     type Element = ConstModInt<P>;
     fn from_u64(&self, mut value: u64) -> Self::Element {
         if value >= P::PRIME_NUM as u64 {
@@ -89,11 +89,13 @@ impl<P: PrimeMod> FF for ConstModIntBuilder<P> {
     }
 }
 
+impl<P: PrimeMod> FF for ConstModIntBuilder<P> {}
+
 /// 奇素数`P`で剰余をとる構造体。
 #[derive(Copy, Clone, PartialEq, Eq, Default, Hash)]
 pub struct ConstModInt<P: PrimeMod>(u32, PhantomData<P>);
 
-impl<P: PrimeMod> FFElem for ConstModInt<P> {
+impl<P: PrimeMod> ZZElem for ConstModInt<P> {
     #[inline]
     fn value(self) -> u32 {
         Calc::<P>::reduce(self.0 as u64)
@@ -108,6 +110,8 @@ impl<P: PrimeMod> FFElem for ConstModInt<P> {
         self._pow(p)
     }
 }
+
+impl<P: PrimeMod> FFElem for ConstModInt<P> {}
 
 impl<P: PrimeMod> ConstModInt<P> {
     /// `ConstModInt<P>`を生成する。
