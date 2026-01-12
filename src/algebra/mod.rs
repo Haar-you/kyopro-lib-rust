@@ -106,11 +106,11 @@ mod tests {
 
     #[test]
     fn test_sum_modint() {
-        use crate::num::modint::{algebra::*, *};
+        use crate::num::{algebra::*, modint::*};
 
         let m: u32 = 73;
         let ff = ModIntBuilder::new(m);
-        let a = (0..m as u64).map(|x| SumModM::new(ff.from_u64(x)));
+        let a = (0..m as u64).map(|x| SumMod::new(ff.from_u64(x)));
 
         associative_law(a.clone());
         inverse_law(a.clone());
@@ -120,11 +120,11 @@ mod tests {
 
     #[test]
     fn test_prod_modint() {
-        use crate::num::modint::{algebra::*, *};
+        use crate::num::{algebra::*, modint::*};
 
         let m: u32 = 73;
         let ff = ModIntBuilder::new(m);
-        let a = (0..m as u64).map(|x| ProdModM::new(ff.from_u64(x)));
+        let a = (0..m as u64).map(|x| ProdMod::new(ff.from_u64(x)));
 
         associative_law(a.clone());
         identity_law(a.clone());
