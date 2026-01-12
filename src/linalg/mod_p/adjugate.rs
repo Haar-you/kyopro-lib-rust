@@ -60,3 +60,32 @@ where
             .collect()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::num::modint::ModIntBuilder;
+
+    use super::*;
+
+    fn check(a: Vec<Vec<i64>>, m: u32, ans: Vec<Vec<i64>>) {
+        let m = ModIntBuilder::new(m);
+        let a = a
+            .into_iter()
+            .map(|b| b.into_iter().map(|x| m.from_i64(x)).collect())
+            .collect();
+        let ans = ans
+            .into_iter()
+            .map(|b| b.into_iter().map(|x| m.from_i64(x)).collect::<Vec<_>>())
+            .collect::<Vec<_>>();
+        assert_eq!(adjugate(a, &m), ans);
+    }
+
+    #[test]
+    fn test() {
+        check(
+            vec![vec![3, 1, 4], vec![1, 5, 9], vec![2, 6, 5]],
+            998244353,
+            vec![vec![-29, 19, -11], vec![13, 7, -23], vec![-4, -16, 14]],
+        );
+    }
+}

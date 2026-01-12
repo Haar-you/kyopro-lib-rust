@@ -121,34 +121,29 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{math::prime_mod::Prime, num::const_modint::*};
+    use crate::num::modint::*;
 
-    fn convert<U, T>(a: Vec<Vec<T>>) -> Vec<Vec<U>>
-    where
-        U: From<T>,
-    {
-        a.into_iter()
-            .map(|b| b.into_iter().map(From::from).collect())
-            .collect()
+    fn check(a: Vec<Vec<i64>>, m: u32, ans: u32) {
+        let m = ModIntBuilder::new(m);
+        let a = a
+            .into_iter()
+            .map(|b| b.into_iter().map(|x| m.from_i64(x)).collect())
+            .collect();
+        assert_eq!(pfaffian(a, &m).value(), ans);
     }
-
-    type P = Prime<998244353>;
 
     #[test]
     fn test() {
-        let m = ConstModIntBuilder::<P>::new();
-
-        let a = vec![
-            vec![0, 1, 2, 3],
-            vec![-1, 0, 4, 5],
-            vec![-2, -4, 0, 6],
-            vec![-3, -5, -6, 0],
-        ];
-        let a = convert::<ConstModInt<P>, _>(a);
-        assert_eq!(pfaffian(a, &m).value(), 8);
-
-        let a = vec![vec![0, 1], vec![-1, 0]];
-        let a = convert::<ConstModInt<P>, _>(a);
-        assert_eq!(pfaffian(a, &m).value(), 1);
+        check(
+            vec![
+                vec![0, 1, 2, 3],
+                vec![-1, 0, 4, 5],
+                vec![-2, -4, 0, 6],
+                vec![-3, -5, -6, 0],
+            ],
+            998244353,
+            8,
+        );
+        check(vec![vec![0, 1], vec![-1, 0]], 998244353, 1);
     }
 }
