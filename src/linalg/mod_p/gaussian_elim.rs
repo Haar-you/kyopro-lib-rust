@@ -1,10 +1,10 @@
 //! $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上のガウスの消去法
-use crate::num::ff::FFElem;
+use crate::num::ff::*;
 
 /// $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上で行列を掃き出し、ランクを求める。
 pub fn gaussian_elim<T>(mut a: Vec<Vec<T>>) -> (usize, Vec<Vec<T>>)
 where
-    T: FFElem + Copy,
+    T: FFElem,
 {
     let n = a.len();
     let Some(m) = a.first().map(|a| a.len()) else {

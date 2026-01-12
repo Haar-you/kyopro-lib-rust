@@ -1,25 +1,26 @@
 //! $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上の行列式
-use crate::num::{ff::FFElem, one_zero::*};
+use crate::num::ff::*;
 
 /// $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上で行列式を求める。
 ///
 /// **Time complexity** $O(n^3)$
-pub fn determinant<T>(mut a: Vec<Vec<T>>) -> T
+pub fn determinant<F>(mut a: Vec<Vec<F::Element>>, modulo: &F) -> F::Element
 where
-    T: FFElem + Copy + Zero + One,
+    F: FF,
+    F::Element: FFElem,
 {
     let n = a.len();
 
     assert!(a.iter().all(|r| r.len() == n));
 
-    let mut s = 0;
+    let mut minus = false;
     for i in 0..n {
         if a[i][i].value() == 0 {
             if let Some(j) = (i + 1..n).find(|&j| a[j][i].value() != 0) {
                 a.swap(i, j);
-                s ^= 1;
+                minus = !minus;
             } else {
-                return T::zero();
+                return modulo.zero();
             }
         }
 
@@ -28,7 +29,7 @@ where
 
         for aj in a.iter_mut().skip(i) {
             let t = aj[i] * d;
-            for (x, y) in aj.iter_mut().zip(ai.iter()) {
+            for (x, y) in aj.iter_mut().skip(i).zip(ai.iter().skip(i)) {
                 *x -= *y * t;
             }
         }
@@ -37,12 +38,12 @@ where
         a.swap(i, n - 1);
     }
 
-    let mut ret = T::one();
+    let mut ret = modulo.one();
     for (i, a) in a.into_iter().enumerate() {
         ret *= a[i];
     }
 
-    if s == 1 {
+    if minus {
         ret = -ret;
     }
 
@@ -67,16 +68,18 @@ mod tests {
 
     #[test]
     fn test() {
+        let m = ConstModIntBuilder::<P>::new();
+
         let a = vec![vec![3, 1, 4], vec![1, 5, 9], vec![2, 6, 5]];
         let a = convert::<ConstModInt<P>, _>(a);
-        assert_eq!(determinant(a).value(), 998244263);
+        assert_eq!(determinant(a, &m).value(), 998244263);
 
         let a = vec![vec![1, 2, 3], vec![4, 5, 6], vec![7, 8, 9]];
         let a = convert::<ConstModInt<P>, _>(a);
-        assert_eq!(determinant(a).value(), 0);
+        assert_eq!(determinant(a, &m).value(), 0);
 
         let a = vec![vec![0, 1], vec![1, 0]];
         let a = convert::<ConstModInt<P>, _>(a);
-        assert_eq!(determinant(a).value(), 998244352);
+        assert_eq!(determinant(a, &m).value(), 998244352);
     }
 }

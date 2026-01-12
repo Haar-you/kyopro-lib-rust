@@ -1,20 +1,21 @@
 //! $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上の逆行列
-use crate::num::{ff::FFElem, one_zero::*};
+use crate::num::ff::*;
 
 /// $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上での逆行列を求める。
 ///
 /// **Time complexity** $O(n^3)$
-pub fn inverse<T>(mut b: Vec<Vec<T>>) -> Option<Vec<Vec<T>>>
+pub fn inverse<F>(mut b: Vec<Vec<F::Element>>, modulo: &F) -> Option<Vec<Vec<F::Element>>>
 where
-    T: FFElem + Copy + Zero + One,
+    F: FF,
+    F::Element: FFElem,
 {
     let n = b.len();
 
     assert!(b.iter().all(|r| r.len() == n));
 
     for (i, bi) in b.iter_mut().enumerate() {
-        bi.resize(2 * n, T::zero());
-        bi[i + n] = T::one();
+        bi.resize(2 * n, modulo.zero());
+        bi[i + n] = modulo.one();
     }
 
     for i in 0..n {
@@ -67,9 +68,11 @@ mod tests {
 
     #[test]
     fn test() {
+        let m = ConstModIntBuilder::<P>::new();
+
         let a = vec![vec![3, 1, 4], vec![1, 5, 9], vec![2, 6, 5]];
         let a = convert::<ConstModInt<P>, _>(a);
-        let res = inverse(a);
+        let res = inverse(a, m);
         let res = res.map(convert::<u32, _>);
         assert_eq!(
             res,
@@ -82,13 +85,13 @@ mod tests {
 
         let a = vec![vec![1, 2, 3], vec![4, 5, 6], vec![7, 8, 9]];
         let a = convert::<ConstModInt<P>, _>(a);
-        let res = inverse(a);
+        let res = inverse(a, m);
         let res = res.map(convert::<u32, _>);
         assert_eq!(res, None);
 
         let a = vec![vec![0, 1], vec![1, 0]];
         let a = convert::<ConstModInt<P>, _>(a);
-        let res = inverse(a);
+        let res = inverse(a, m);
         let res = res.map(convert::<u32, _>);
         assert_eq!(res, Some(vec![vec![0, 1], vec![1, 0]]));
     }

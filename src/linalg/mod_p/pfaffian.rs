@@ -6,11 +6,11 @@
 //! - <https://judge.yosupo.jp/problem/pfaffian_of_matrix>
 
 use crate::misc::swap::swap_vv;
-use crate::num::{ff::FFElem, one_zero::*};
+use crate::num::ff::*;
 
 fn swap<T>(a: &mut [Vec<T>], i: usize, j: usize)
 where
-    T: FFElem + Copy,
+    T: FFElem,
 {
     assert!(i < j);
 
@@ -33,7 +33,7 @@ where
 
 fn add<T>(a: &mut [Vec<T>], s: T, i: usize, j: usize)
 where
-    T: FFElem + Copy,
+    T: FFElem,
 {
     assert!(i < j);
 
@@ -64,9 +64,10 @@ where
 /// 入力の行列は、$n \times n$($n$は偶数)の[歪対称行列](https://en.wikipedia.org/wiki/Skew-symmetric_matrix)である。
 ///
 /// **Time complexity** $O(n^3)$
-pub fn pfaffian<T>(mut a: Vec<Vec<T>>) -> T
+pub fn pfaffian<F>(mut a: Vec<Vec<F::Element>>, modulo: &F) -> F::Element
 where
-    T: FFElem + Copy + Zero + One + std::fmt::Debug,
+    F: FF,
+    F::Element: FFElem + std::fmt::Debug,
 {
     let n = a.len();
 
@@ -85,16 +86,16 @@ where
 
     let mut minus = false;
     for i in (0..n).step_by(2) {
-        if a[i + 1][i] == T::zero() {
-            if let Some(j) = (i + 2..n).find(|&j| a[j][i] != T::zero()) {
+        if a[i + 1][i].value() == 0 {
+            if let Some(j) = (i + 2..n).find(|&j| a[j][i].value() != 0) {
                 swap(&mut a, i + 1, j);
                 minus = !minus;
             } else {
-                return T::zero();
+                return modulo.zero();
             }
         }
 
-        assert_ne!(a[i + 1][i], T::zero());
+        assert_ne!(a[i + 1][i], modulo.zero());
         let t = a[i + 1][i].inv();
         for j in i + 2..n {
             let c = -a[j][i] * t;
@@ -105,7 +106,7 @@ where
         }
     }
 
-    let mut ret = T::one();
+    let mut ret = modulo.one();
 
     for i in (0..n).step_by(2) {
         ret *= -a[i + 1][i];
@@ -135,6 +136,8 @@ mod tests {
 
     #[test]
     fn test() {
+        let m = ConstModIntBuilder::<P>::new();
+
         let a = vec![
             vec![0, 1, 2, 3],
             vec![-1, 0, 4, 5],
@@ -142,10 +145,10 @@ mod tests {
             vec![-3, -5, -6, 0],
         ];
         let a = convert::<ConstModInt<P>, _>(a);
-        assert_eq!(pfaffian(a).value(), 8);
+        assert_eq!(pfaffian(a, &m).value(), 8);
 
         let a = vec![vec![0, 1], vec![-1, 0]];
         let a = convert::<ConstModInt<P>, _>(a);
-        assert_eq!(pfaffian(a).value(), 1);
+        assert_eq!(pfaffian(a, &m).value(), 1);
     }
 }

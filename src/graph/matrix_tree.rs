@@ -29,7 +29,7 @@ pub fn count_undirected_spanning_tree<P: PrimeMod>(
         }
     }
 
-    determinant(lap)
+    determinant(lap, &modulo)
 }
 
 /// 有向グラフにおいて、頂点`root`を終点根とするような、有向全域木の個数を数える。
@@ -63,5 +63,5 @@ pub fn count_directed_spanning_tree<P: PrimeMod>(
         lap[from][to] -= modulo.from_u64(1);
     }
 
-    determinant(lap)
+    determinant(lap, &modulo)
 }

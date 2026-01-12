@@ -2,7 +2,7 @@
 use crate::num::zz::{ZZElem, ZZ};
 
 /// $\mathbb{Z} / m \mathbb{Z}$上で行列式を求める。
-pub fn determinant<R>(mut a: Vec<Vec<R::Element>>, ring: R) -> R::Element
+pub fn determinant<R>(mut a: Vec<Vec<R::Element>>, ring: &R) -> R::Element
 where
     R: ZZ + Copy,
     R::Element: ZZElem,
