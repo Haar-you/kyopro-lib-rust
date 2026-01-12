@@ -69,6 +69,7 @@ impl PartialEq for Transformation {
 
 impl_algebra!(
     Transformation;
+    set;
     op: |a: Self, b: Self| a.compose(b);
     id: Self { value: None };
     assoc;

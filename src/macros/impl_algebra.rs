@@ -7,8 +7,10 @@
 #[macro_export]
 #[doc(hidden)]
 macro_rules! impl_algebra {
-    (@inner [$($bound:tt)*]; $t:ty;) => {
+    (@inner [$($bound:tt)*]; $t:ty;) => {};
+    (@inner [$($bound:tt)*]; $t:ty; set; $($rest:tt)*) => {
         impl <$($bound)*> Set for $t {}
+        impl_algebra!(@inner [$($bound)*]; $t; $($rest)*);
     };
     (@inner [$($bound:tt)*]; $t:ty; op: $f:expr; $($rest:tt)*) => {
         impl <$($bound)*> BinaryOp for $t {

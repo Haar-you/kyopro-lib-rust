@@ -78,5 +78,6 @@ impl<T: Copy + Eq> BinaryOp for MaxContiguous<T> {
 
 impl_algebra!(
     [T: Copy + Eq]; MaxContiguous<T>;
+    set;
     assoc;
 );

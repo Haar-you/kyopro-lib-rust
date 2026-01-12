@@ -12,8 +12,8 @@ pub struct Max<T>(pub T);
 
 macro_rules! implement {
     ($($t:tt),*) => {
-        $(impl_algebra!(Min<$t>; op: |a: Self, b: Self| Self(a.0.min(b.0)); id: Self($t::MAX); commu; assoc; idem;);)*
-        $(impl_algebra!(Max<$t>; op: |a: Self, b: Self| Self(a.0.max(b.0)); id: Self($t::MIN); commu; assoc; idem;);)*
+        $(impl_algebra!(Min<$t>; set; op: |a: Self, b: Self| Self(a.0.min(b.0)); id: Self($t::MAX); commu; assoc; idem;);)*
+        $(impl_algebra!(Max<$t>; set; op: |a: Self, b: Self| Self(a.0.max(b.0)); id: Self($t::MIN); commu; assoc; idem;);)*
     };
 }
 

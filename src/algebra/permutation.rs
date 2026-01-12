@@ -87,6 +87,7 @@ impl PartialEq for Permutation {
 
 impl_algebra!(
     Permutation;
+    set;
     op: |a: Self, b: Self| a.compose(b);
     inv: |a: Self| a.inv();
     id: Self { value: None };

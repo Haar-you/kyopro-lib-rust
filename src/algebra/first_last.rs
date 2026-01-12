@@ -11,6 +11,7 @@ pub struct Last<T>(pub Option<T>);
 
 impl_algebra!(
     [T]; First<T>;
+    set;
     op: |a: Self, b| match a.0 {
         Some(_) => a,
         None => b
@@ -21,6 +22,7 @@ impl_algebra!(
 );
 impl_algebra!(
     [T]; Last<T>;
+    set;
     op: |a, b: Self| match b.0 {
         Some(_) => b,
         None => a

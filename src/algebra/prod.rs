@@ -8,7 +8,7 @@ pub struct Prod<T>(pub T);
 
 macro_rules! implement {
     ($($t:ty),*) => {
-        $(impl_algebra!(Prod<$t>; op: |a: Self, b: Self| Self(a.0 * b.0); id: Self(1 as $t); commu; assoc;);)*
+        $(impl_algebra!(Prod<$t>; set; op: |a: Self, b: Self| Self(a.0 * b.0); id: Self(1 as $t); commu; assoc;);)*
     };
 }
 

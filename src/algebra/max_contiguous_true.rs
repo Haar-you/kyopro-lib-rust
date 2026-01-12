@@ -36,6 +36,7 @@ impl MaxContiguousTrue {
 
 impl_algebra!(
     MaxContiguousTrue;
+    set;
     op: |a: Self, b: Self| {
         let count = max(a.count, b.count).max(a.right + b.left);
         let left = if a.count == a.length {

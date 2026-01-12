@@ -16,9 +16,9 @@ pub struct BitXor<T>(pub T);
 
 macro_rules! implement {
     ($($t:tt),*) => {
-        $(impl_algebra!(BitAnd<$t>; op: |a: Self, b: Self| Self(a.0 & b.0); id: Self(!0); commu; assoc; idem;);)*
-        $(impl_algebra!(BitOr<$t>; op: |a: Self, b: Self| Self(a.0 | b.0); id: Self(0); commu; assoc; idem;);)*
-        $(impl_algebra!(BitXor<$t>; op: |a: Self, b: Self| Self(a.0 ^ b.0); id: Self(0); inv: |a| a; commu; assoc;);)*
+        $(impl_algebra!(BitAnd<$t>; set; op: |a: Self, b: Self| Self(a.0 & b.0); id: Self(!0); commu; assoc; idem;);)*
+        $(impl_algebra!(BitOr<$t>; set; op: |a: Self, b: Self| Self(a.0 | b.0); id: Self(0); commu; assoc; idem;);)*
+        $(impl_algebra!(BitXor<$t>; set; op: |a: Self, b: Self| Self(a.0 ^ b.0); id: Self(0); inv: |a| a; commu; assoc;);)*
     };
 }
 

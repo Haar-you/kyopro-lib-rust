@@ -8,10 +8,10 @@ pub struct Sum<T>(pub T);
 
 macro_rules! implement {
     (signed; $($t:ty),*) => {
-        $(impl_algebra!(Sum<$t>; op: |a: Self, b: Self| Self(a.0 + b.0); id: Self(0 as $t); inv: |a: Self| Self(-a.0); commu; assoc;);)*
+        $(impl_algebra!(Sum<$t>; set; op: |a: Self, b: Self| Self(a.0 + b.0); id: Self(0 as $t); inv: |a: Self| Self(-a.0); commu; assoc;);)*
     };
     (unsigned; $($t:ty),*) => {
-        $(impl_algebra!(Sum<$t>; op: |a: Self, b: Self| Self(a.0 + b.0); id: Self(0 as $t); commu; assoc;);)*
+        $(impl_algebra!(Sum<$t>; set; op: |a: Self, b: Self| Self(a.0 + b.0); id: Self(0 as $t); commu; assoc;);)*
     };
 }
 
