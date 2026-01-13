@@ -10,6 +10,7 @@ pub mod conv_mul_mod2n;
 pub mod conv_mul_modp;
 pub mod conv_or;
 pub mod conv_xor;
+pub mod min_plus_conv_convex;
 pub mod subset_conv;
 
 pub mod ntt;
