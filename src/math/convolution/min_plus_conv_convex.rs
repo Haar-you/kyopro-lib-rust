@@ -1,4 +1,4 @@
-//! $c_k = \min_{i + j = k} (a_i + b_j)$を満たす$c$を求める。
+//! 和の最小値で畳み込み
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/min_plus_convolution_convex_arbitrary>
@@ -10,7 +10,7 @@ use crate::algo::monotone_minima::*;
 /// `a`は下に凸な列である。
 ///
 /// # Return
-/// $|c| = |a| + |b| - 1$
+/// `c.len` = `a.len() + b.len() - 1`
 pub fn min_plus_conv_convex(a: Vec<i64>, b: Vec<i64>) -> Vec<i64> {
     assert!(!a.is_empty());
     assert!(!b.is_empty());

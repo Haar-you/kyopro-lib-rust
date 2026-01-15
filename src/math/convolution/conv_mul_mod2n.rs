@@ -1,4 +1,4 @@
-//! $c_k = \sum_{i \times j = k \pmod {2^N}} a_i b_j$を満たす$c$を求める。
+//! 添字積$\pmod {2^N}$畳み込み
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/mul_mod2n_convolution>

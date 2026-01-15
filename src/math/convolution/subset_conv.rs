@@ -1,13 +1,14 @@
-//! $\mathtt{a_k} = \sum_{\mathtt{i \lor j = k, i \land j = 0}} \mathtt{f_i} * \mathtt{g_j}$
-//! を満たす`a`を求める。
+//! 添字部分集合畳み込み
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/subset_convolution>
 use crate::math::convolution::{mobius::*, zeta::*};
 use std::ops::{Add, Mul, Sub};
 
-/// $\mathtt{a_k} = \sum_{\mathtt{i \lor j = k, i \land j = 0}} \mathtt{f_i} * \mathtt{g_j}$
-/// を満たす`a`を求める。
+/// $h_k = \sum_{i \lor j = k, i \land j = 0} f_i g_j$を満たす$h$を求める。
+///
+/// # Requirements
+/// `f.len()` = `g.len()`は2の累乗
 #[allow(clippy::needless_range_loop, clippy::manual_memcpy)]
 pub fn subset_convolution<T>(f: Vec<T>, g: Vec<T>) -> Vec<T>
 where

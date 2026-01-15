@@ -1,9 +1,12 @@
-//! $\mathtt{a_{i \oplus j}} = \sum \mathtt{f_{i}} * \mathtt{g_{j}}$を満たす`a`を求める。
+//! 添字XOR畳み込み
 use std::ops::{Add, Sub};
 
 use crate::num::ff::*;
 
-/// $\mathtt{a_{i \oplus j}} = \sum \mathtt{f_{i}} * \mathtt{g_{j}}$を満たす`a`を求める。
+/// $h_{i \oplus j} = \sum f_i g_j$を満たす$h$を求める。
+///
+/// # Requirements
+/// `f.len()` = `g.len()`
 pub fn convolution_xor<Modulo: FF>(
     mut f: Vec<Modulo::Element>,
     mut g: Vec<Modulo::Element>,
