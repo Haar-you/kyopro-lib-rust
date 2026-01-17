@@ -11,43 +11,48 @@ use std::ptr;
 
 use crate::algebra::traits::Monoid;
 
-struct Node<M> {
-    value: M,
-    sum: M,
+struct Node<M: Monoid> {
+    monoid: M,
+    value: M::Element,
+    sum: M::Element,
     size: usize,
     lc: *mut Node<M>,
     rc: *mut Node<M>,
     par: *mut Node<M>,
 }
 
-impl<M: Monoid + Clone> Node<M> {
-    fn new(value: M) -> Self {
+impl<M: Monoid> Node<M>
+where
+    M::Element: Clone,
+{
+    fn new(monoid: M, value: M::Element) -> Self {
         Self {
             value,
-            sum: M::id(),
+            sum: monoid.id(),
             size: 1,
             lc: ptr::null_mut(),
             rc: ptr::null_mut(),
             par: ptr::null_mut(),
+            monoid,
         }
     }
 
-    fn get_sum(this: *mut Self) -> M {
+    fn get_sum(this: *mut Self) -> M::Element {
         assert!(!this.is_null());
         unsafe { (*this).sum.clone() }
     }
 
-    fn set_value(this: *mut Self, value: M) {
+    fn set_value(this: *mut Self, value: M::Element) {
         assert!(!this.is_null());
         unsafe {
             (*this).value = value;
         }
     }
 
-    fn update_value(this: *mut Self, value: M) {
+    fn update_value(this: *mut Self, value: M::Element) {
         assert!(!this.is_null());
         unsafe {
-            (*this).value = (*this).value.clone().op(value);
+            (*this).value = (*this).monoid.op((*this).value.clone(), value);
         }
     }
 
@@ -112,10 +117,14 @@ impl<M: Monoid + Clone> Node<M> {
 
             (*this).sum = (*this).value.clone();
             if !(*this).lc.is_null() {
-                (*this).sum = M::op(Self::get_sum(this), Self::get_sum((*this).lc));
+                (*this).sum = (*this)
+                    .monoid
+                    .op(Self::get_sum(this), Self::get_sum((*this).lc));
             }
             if !(*this).rc.is_null() {
-                (*this).sum = M::op(Self::get_sum(this), Self::get_sum((*this).rc));
+                (*this).sum = (*this)
+                    .monoid
+                    .op(Self::get_sum(this), Self::get_sum((*this).rc));
             }
         }
     }
@@ -281,16 +290,20 @@ impl<M: Monoid + Clone> Node<M> {
 }
 
 /// Euler tour tree
-pub struct EulerTourTree<M> {
+pub struct EulerTourTree<M: Monoid> {
+    monoid: M,
     vertices: Vec<*mut Node<M>>,
     edges: Vec<HashMap<usize, *mut Node<M>>>,
 }
 
-impl<M: Monoid + Clone> EulerTourTree<M> {
+impl<M: Monoid + Clone> EulerTourTree<M>
+where
+    M::Element: Clone,
+{
     /// `n`個の頂点のみからなる森を構築する。
-    pub fn new(n: usize) -> Self {
+    pub fn new(monoid: M, n: usize) -> Self {
         let vertices = std::iter::repeat_with(|| {
-            let p = Box::new(Node::new(M::id()));
+            let p = Box::new(Node::new(monoid.clone(), monoid.id()));
             Box::into_raw(p)
         })
         .take(n)
@@ -298,7 +311,11 @@ impl<M: Monoid + Clone> EulerTourTree<M> {
 
         let edges = (0..n).map(|i| HashMap::from([(i, vertices[i])])).collect();
 
-        Self { vertices, edges }
+        Self {
+            monoid,
+            vertices,
+            edges,
+        }
     }
 
     /// 頂点`r`をそれの属する木の根にする。
@@ -343,10 +360,10 @@ impl<M: Monoid + Clone> EulerTourTree<M> {
         Node::splay(pi);
         Node::splay(pj);
 
-        let eij = Box::into_raw(Box::new(Node::new(M::id())));
+        let eij = Box::into_raw(Box::new(Node::new(self.monoid.clone(), self.monoid.id())));
         self.edges[i].insert(j, eij);
 
-        let eji = Box::into_raw(Box::new(Node::new(M::id())));
+        let eji = Box::into_raw(Box::new(Node::new(self.monoid.clone(), self.monoid.id())));
         self.edges[j].insert(i, eji);
 
         let t = Node::merge(pi, eij);
@@ -390,7 +407,7 @@ impl<M: Monoid + Clone> EulerTourTree<M> {
     }
 
     /// 頂点`i`の値を`value`に設定する。
-    pub fn set(&mut self, i: usize, value: M) {
+    pub fn set(&mut self, i: usize, value: M::Element) {
         let p = self.vertices[i];
         Node::splay(p);
         Node::set_value(p, value);
@@ -398,7 +415,7 @@ impl<M: Monoid + Clone> EulerTourTree<M> {
     }
 
     /// 頂点`i`の値をモノイドの演算と値`value`で更新する。
-    pub fn update(&mut self, i: usize, value: M) {
+    pub fn update(&mut self, i: usize, value: M::Element) {
         let p = self.vertices[i];
         Node::splay(p);
         Node::update_value(p, value);
@@ -406,7 +423,7 @@ impl<M: Monoid + Clone> EulerTourTree<M> {
     }
 
     /// 頂点`p`を親とする頂点`v`について、`v`を根とする部分木の値を集積して返す。
-    pub fn subtree_sum(&mut self, v: usize, p: usize) -> Result<M, &'static str> {
+    pub fn subtree_sum(&mut self, v: usize, p: usize) -> Result<M::Element, &'static str> {
         self.cut(v, p)?;
 
         let rv = self.vertices[v];
@@ -427,7 +444,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut ett = EulerTourTree::<Trivial>::new(10);
+        let mut ett = EulerTourTree::new(Trivial, 10);
 
         ett.link(1, 2).unwrap();
         ett.link(3, 5).unwrap();

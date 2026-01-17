@@ -5,6 +5,7 @@ use std::ops::RangeBounds;
 
 /// モノイド列の区間更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 pub struct LazySegtree<A: Action> {
+    action: A,
     size: usize,
     original_size: usize,
     data: Vec<A::Output>,
@@ -17,27 +18,29 @@ where
     A::Lazy: Clone + PartialEq,
 {
     /// 長さ`n`の[`LazySegtree`]を生成する。
-    pub fn new(n: usize) -> Self {
+    pub fn new(action: A, n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
         Self {
             size,
             original_size: n,
-            data: vec![A::fold_id(); size],
-            lazy: vec![A::update_id(); size],
+            data: vec![action.fold_id(); size],
+            lazy: vec![action.update_id(); size],
+            action,
         }
     }
 
     /// [`Vec`]から[`LazySegtree`]を構築する。
     ///
     /// **Time complexity** $O(|s|)$
-    pub fn from_vec(s: Vec<A::Output>) -> Self {
+    pub fn from_vec(action: A, s: Vec<A::Output>) -> Self {
         let n = s.len();
         let size = n.next_power_of_two() * 2;
         let mut this = Self {
             size,
             original_size: n,
-            data: vec![A::fold_id(); size],
-            lazy: vec![A::update_id(); size],
+            data: vec![action.fold_id(); size],
+            lazy: vec![action.update_id(); size],
+            action,
         };
 
         for (i, x) in s.into_iter().enumerate() {
@@ -45,7 +48,9 @@ where
         }
 
         for i in (1..size / 2).rev() {
-            this.data[i] = A::fold(this.data[i << 1].clone(), this.data[(i << 1) | 1].clone());
+            this.data[i] = this
+                .action
+                .fold(this.data[i << 1].clone(), this.data[(i << 1) | 1].clone());
         }
 
         this
@@ -63,19 +68,25 @@ where
     }
 
     fn propagate(&mut self, i: usize) {
-        if self.lazy[i] == A::update_id() {
+        if self.lazy[i] == self.action.update_id() {
             return;
         }
         if i < self.size / 2 {
             let l = i << 1;
             let r = (i << 1) | 1;
 
-            self.lazy[l] = A::update(self.lazy[l].clone(), self.lazy[i].clone());
-            self.lazy[r] = A::update(self.lazy[r].clone(), self.lazy[i].clone());
+            self.lazy[l] = self
+                .action
+                .update(self.lazy[l].clone(), self.lazy[i].clone());
+            self.lazy[r] = self
+                .action
+                .update(self.lazy[r].clone(), self.lazy[i].clone());
         }
         let len = (self.size / 2) >> (31 - (i as u32).leading_zeros());
-        self.data[i] = A::convert(self.data[i].clone(), self.lazy[i].clone(), len);
-        self.lazy[i] = A::update_id();
+        self.data[i] = self
+            .action
+            .convert(self.data[i].clone(), self.lazy[i].clone(), len);
+        self.lazy[i] = self.action.update_id();
     }
 
     fn propagate_top_down(&mut self, mut i: usize) {
@@ -95,7 +106,9 @@ where
             i >>= 1;
             self.propagate(i << 1);
             self.propagate((i << 1) | 1);
-            self.data[i] = A::fold(self.data[i << 1].clone(), self.data[(i << 1) | 1].clone());
+            self.data[i] = self
+                .action
+                .fold(self.data[i << 1].clone(), self.data[(i << 1) | 1].clone());
         }
     }
 
@@ -114,8 +127,8 @@ where
             self.propagate_top_down(r + self.size / 2);
         }
 
-        let mut ret_l = A::fold_id();
-        let mut ret_r = A::fold_id();
+        let mut ret_l = self.action.fold_id();
+        let mut ret_r = self.action.fold_id();
 
         let mut l = l + self.size / 2;
         let mut r = r + self.size / 2;
@@ -124,18 +137,18 @@ where
             if r & 1 == 1 {
                 r -= 1;
                 self.propagate(r);
-                ret_r = A::fold(self.data[r].clone(), ret_r.clone());
+                ret_r = self.action.fold(self.data[r].clone(), ret_r.clone());
             }
             if l & 1 == 1 {
                 self.propagate(l);
-                ret_l = A::fold(ret_l.clone(), self.data[l].clone());
+                ret_l = self.action.fold(ret_l.clone(), self.data[l].clone());
                 l += 1;
             }
             r >>= 1;
             l >>= 1;
         }
 
-        A::fold(ret_l, ret_r)
+        self.action.fold(ret_l, ret_r)
     }
 
     /// `i`番目の値を`value`で置き換える。
@@ -161,10 +174,10 @@ where
             while l < r {
                 if r & 1 == 1 {
                     r -= 1;
-                    self.lazy[r] = A::update(self.lazy[r].clone(), x.clone());
+                    self.lazy[r] = self.action.update(self.lazy[r].clone(), x.clone());
                 }
                 if l & 1 == 1 {
-                    self.lazy[l] = A::update(self.lazy[l].clone(), x.clone());
+                    self.lazy[l] = self.action.update(self.lazy[l].clone(), x.clone());
                     l += 1;
                 }
                 r >>= 1;
@@ -193,8 +206,10 @@ mod tests {
         let q = 100;
         let range = 1000;
 
-        let mut seg = LazySegtree::<AddSum<u64>>::new(n);
-        let mut vec = vec![Sum::id(); n];
+        let action = AddSum(Sum::<u64>::new(), Sum::<u64>::new());
+
+        let mut seg = LazySegtree::new(action, n);
+        let mut vec = vec![action.fold_id(); n];
 
         let mut rng = rand::thread_rng();
 
@@ -205,11 +220,16 @@ mod tests {
                 0 => {
                     let x = rng.gen_range(0..range);
 
-                    seg.update(lr.clone(), Sum(x));
-                    vec[lr].iter_mut().for_each(|y| y.op_assign_r(Sum(x)));
+                    seg.update(lr.clone(), x);
+                    vec[lr]
+                        .iter_mut()
+                        .for_each(|y| action.monoid_lazy().op_assign_r(y, x));
                 }
                 1 => {
-                    assert_eq!(seg.fold(lr.clone()), vec[lr].iter().cloned().fold_m());
+                    assert_eq!(
+                        seg.fold(lr.clone()),
+                        vec[lr].iter().cloned().fold_m(action.monoid_output())
+                    );
                 }
                 _ => unreachable!(),
             }

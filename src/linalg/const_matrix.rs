@@ -121,21 +121,21 @@ where
 }
 
 impl_algebra!(
-    [T: Copy + One + Zero + Add<Output = T> + Mul<Output = T>, const N: usize];
+    [T: Copy + One + Zero + Add<Output = T> + Mul<Output = T> + PartialEq, const N: usize];
     Prod<Matrix<T, N, N>>;
-    set;
-    op: |a: Self, b: Self| Self(a.0 * b.0);
-    id: Self(Matrix::unit());
+    set: Matrix<T, N, N>;
+    op: |_, a: Self::Element, b: Self::Element| a * b;
+    id: |_| Matrix::unit(), |_, a| a == &Matrix::unit();
     assoc;
 );
 
 impl_algebra!(
-    [T: Copy + Zero + Add<Output = T> + Neg<Output = T>, const R: usize, const C: usize];
+    [T: Copy + Zero + Add<Output = T> + Neg<Output = T> + PartialEq, const R: usize, const C: usize];
     Sum<Matrix<T, R, C>>;
-    set;
-    op: |a: Self, b: Self| Self(a.0 + b.0);
-    id: Self(Matrix::new());
-    inv: |a: Self| Self(-a.0);
+    set: Matrix<T, R, C>;
+    op: |_, a: Self::Element, b: Self::Element| a + b;
+    id: |_| Matrix::new(), |_, a| a == &Matrix::new();
+    inv: |_, a: Self::Element| -a;
     assoc;
     commu;
 );

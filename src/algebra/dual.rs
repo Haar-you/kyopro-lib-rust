@@ -5,23 +5,28 @@ pub use crate::algebra::traits::*;
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Dual<S>(pub S);
 
-impl<S: Set> Set for Dual<S> {}
+impl<S: Set> Set for Dual<S> {
+    type Element = S::Element;
+}
 
 impl<S: BinaryOp> BinaryOp for Dual<S> {
-    fn op(self, b: Self) -> Self {
-        Self(b.0.op(self.0))
+    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
+        self.0.op(b, a)
     }
 }
 
 impl<S: Identity> Identity for Dual<S> {
-    fn id() -> Self {
-        Self(S::id())
+    fn id(&self) -> Self::Element {
+        self.0.id()
+    }
+    fn is_id(&self, a: &Self::Element) -> bool {
+        self.0.is_id(a)
     }
 }
 
 impl<S: Inverse> Inverse for Dual<S> {
-    fn inv(self) -> Self {
-        Self(self.0.inv())
+    fn inv(&self, a: Self::Element) -> Self::Element {
+        self.0.inv(a)
     }
 }
 

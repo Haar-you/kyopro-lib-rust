@@ -8,30 +8,35 @@
 #[doc(hidden)]
 macro_rules! impl_algebra {
     (@inner [$($bound:tt)*]; $t:ty;) => {};
-    (@inner [$($bound:tt)*]; $t:ty; set; $($rest:tt)*) => {
-        impl <$($bound)*> Set for $t {}
+    (@inner [$($bound:tt)*]; $t:ty; set: $f:ty; $($rest:tt)*) => {
+        impl <$($bound)*> Set for $t {
+            type Element = $f;
+        }
         impl_algebra!(@inner [$($bound)*]; $t; $($rest)*);
     };
     (@inner [$($bound:tt)*]; $t:ty; op: $f:expr; $($rest:tt)*) => {
         impl <$($bound)*> BinaryOp for $t {
-            fn op(self, b: Self) -> Self {
-                $f(self, b)
+            fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
+                $f(self, a, b)
             }
         }
         impl_algebra!(@inner [$($bound)*]; $t; $($rest)*);
     };
-    (@inner [$($bound:tt)*]; $t:ty; id: $f:expr; $($rest:tt)*) => {
+    (@inner [$($bound:tt)*]; $t:ty; id: $f:expr, $g:expr; $($rest:tt)*) => {
         impl <$($bound)*> Identity for $t {
-            fn id() -> Self {
-                $f
+            fn id(&self) -> Self::Element {
+                $f(self)
+            }
+            fn is_id(&self, a: &Self::Element) -> bool {
+                $g(self, a)
             }
         }
         impl_algebra!(@inner [$($bound)*]; $t; $($rest)*);
     };
     (@inner [$($bound:tt)*]; $t:ty; inv: $f:expr; $($rest:tt)*) => {
         impl <$($bound)*> Inverse for $t {
-            fn inv(self) -> Self {
-                $f(self)
+            fn inv(&self, a: Self::Element) -> Self::Element {
+                $f(self, a)
             }
         }
         impl_algebra!(@inner [$($bound)*]; $t; $($rest)*);

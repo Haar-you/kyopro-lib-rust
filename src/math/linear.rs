@@ -10,6 +10,13 @@ pub struct Linear<T> {
     pub b: T,
 }
 
+impl<T> Linear<T> {
+    /// $y = ax + b$の一次関数を返す。
+    pub fn new(a: T, b: T) -> Self {
+        Self { a, b }
+    }
+}
+
 impl<T: Add<Output = T> + Mul<Output = T> + Copy> Linear<T> {
     /// `x`に値を代入した結果を返す。
     pub fn apply(&self, x: T) -> T {

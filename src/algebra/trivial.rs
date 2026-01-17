@@ -6,4 +6,4 @@ use crate::impl_algebra;
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Trivial;
 
-impl_algebra!(Trivial; set; op: |_, _| Self; id: Self; inv: |_| Self; assoc; commu; idem;);
+impl_algebra!(Trivial; set: (); op: |_, _, _| (); id: |_| (), |_, _| true; inv: |_, _| (); assoc; commu; idem;);

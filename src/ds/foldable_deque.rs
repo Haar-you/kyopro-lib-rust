@@ -4,16 +4,21 @@ pub use crate::algebra::traits::*;
 #[derive(Clone, Default, Debug)]
 /// 半群で畳み込み可能なdeque
 pub struct FoldableDeque<S: Semigroup> {
-    front_stack: Vec<S>,
-    back_stack: Vec<S>,
-    front_sum: Vec<S>,
-    back_sum: Vec<S>,
+    semigroup: S,
+    front_stack: Vec<S::Element>,
+    back_stack: Vec<S::Element>,
+    front_sum: Vec<S::Element>,
+    back_sum: Vec<S::Element>,
 }
 
-impl<S: Semigroup + Clone> FoldableDeque<S> {
+impl<S: Semigroup> FoldableDeque<S>
+where
+    S::Element: Clone,
+{
     /// 空の`FoldableDeque<S>`を生成する。
-    pub fn new() -> Self {
+    pub fn new(semigroup: S) -> Self {
         Self {
+            semigroup,
             front_stack: vec![],
             back_stack: vec![],
             front_sum: vec![],
@@ -21,16 +26,16 @@ impl<S: Semigroup + Clone> FoldableDeque<S> {
         }
     }
 
-    fn f(&self, a: Option<S>, b: Option<S>) -> Option<S> {
+    fn f(&self, a: Option<S::Element>, b: Option<S::Element>) -> Option<S::Element> {
         match (a, b) {
-            (Some(a), Some(b)) => Some(S::op(a, b)),
+            (Some(a), Some(b)) => Some(self.semigroup.op(a, b)),
             (x, None) => x,
             (None, x) => x,
         }
     }
 
     /// すべての要素を`S`の演算で畳み込んだ結果を返す。
-    pub fn fold(&self) -> Option<S> {
+    pub fn fold(&self) -> Option<S::Element> {
         self.f(
             self.front_sum.last().cloned(),
             self.back_sum.last().cloned(),
@@ -38,14 +43,14 @@ impl<S: Semigroup + Clone> FoldableDeque<S> {
     }
 
     /// 末尾に`value`を追加する。
-    pub fn push_back(&mut self, value: S) {
+    pub fn push_back(&mut self, value: S::Element) {
         self.back_stack.push(value.clone());
         self.back_sum
             .push(self.f(self.back_sum.last().cloned(), Some(value)).unwrap());
     }
 
     /// 先頭に`value`を追加する。
-    pub fn push_front(&mut self, value: S) {
+    pub fn push_front(&mut self, value: S::Element) {
         self.front_stack.push(value.clone());
         self.front_sum
             .push(self.f(Some(value), self.front_sum.last().cloned()).unwrap());
@@ -68,7 +73,7 @@ impl<S: Semigroup + Clone> FoldableDeque<S> {
     }
 
     /// 先頭の要素を削除して返す。
-    pub fn pop_front(&mut self) -> Option<S> {
+    pub fn pop_front(&mut self) -> Option<S::Element> {
         if self.front_stack.is_empty() {
             self.back_sum.clear();
 
@@ -89,7 +94,7 @@ impl<S: Semigroup + Clone> FoldableDeque<S> {
     }
 
     /// 末尾の要素を削除して返す。
-    pub fn pop_back(&mut self) -> Option<S> {
+    pub fn pop_back(&mut self) -> Option<S::Element> {
         if self.back_stack.is_empty() {
             self.front_sum.clear();
 
@@ -110,12 +115,12 @@ impl<S: Semigroup + Clone> FoldableDeque<S> {
     }
 
     /// 先頭の要素への参照を返す。
-    pub fn front(&self) -> Option<&S> {
+    pub fn front(&self) -> Option<&S::Element> {
         self.front_stack.last().or_else(|| self.back_stack.first())
     }
 
     /// 末尾の要素への参照を返す。
-    pub fn back(&self) -> Option<&S> {
+    pub fn back(&self) -> Option<&S::Element> {
         self.back_stack.last().or_else(|| self.front_stack.first())
     }
 
@@ -133,7 +138,11 @@ impl<S: Semigroup + Clone> FoldableDeque<S> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{algebra::affine::*, math::prime_mod::Prime, num::const_modint::ConstModInt};
+    use crate::{
+        algebra::affine::*,
+        math::{linear::Linear, prime_mod::Prime},
+        num::const_modint::ConstModInt,
+    };
     use rand::Rng;
     use std::collections::VecDeque;
 
@@ -144,8 +153,10 @@ mod tests {
     fn test() {
         let mut rng = rand::thread_rng();
 
-        let mut deq = VecDeque::<Affine<Mint>>::new();
-        let mut swag = FoldableDeque::<Affine<Mint>>::new();
+        let mut deq = VecDeque::<Linear<Mint>>::new();
+
+        let m = Composition::<Mint>::new();
+        let mut swag = FoldableDeque::new(m);
 
         for _ in 0..1000 {
             assert_eq!(deq.front(), swag.front());
@@ -158,14 +169,14 @@ mod tests {
                 0 => {
                     let a = Mint::new(rng.gen_range(0..M));
                     let b = Mint::new(rng.gen_range(0..M));
-                    deq.push_front(Affine(a, b));
-                    swag.push_front(Affine(a, b));
+                    deq.push_front(Linear::new(a, b));
+                    swag.push_front(Linear::new(a, b));
                 }
                 1 => {
                     let a = Mint::new(rng.gen_range(0..M));
                     let b = Mint::new(rng.gen_range(0..M));
-                    deq.push_back(Affine(a, b));
-                    swag.push_back(Affine(a, b));
+                    deq.push_back(Linear::new(a, b));
+                    swag.push_back(Linear::new(a, b));
                 }
                 2 => {
                     assert_eq!(deq.pop_front(), swag.pop_front());
@@ -175,8 +186,8 @@ mod tests {
                 }
                 4 => {
                     assert_eq!(
-                        deq.iter().cloned().fold_m(),
-                        swag.fold().unwrap_or(Affine::id())
+                        deq.iter().cloned().fold_m(&m),
+                        swag.fold().unwrap_or(m.id())
                     );
                 }
                 _ => unreachable!(),

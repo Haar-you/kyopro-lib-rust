@@ -11,6 +11,7 @@ use std::ptr;
 use crate::algebra::action::*;
 
 struct Node<A: Action> {
+    action: A,
     value: A::Output,
     sum: A::Output,
     lazy: A::Lazy,
@@ -26,16 +27,17 @@ where
     A::Output: Clone,
     A::Lazy: Clone + PartialEq,
 {
-    fn new(value: A::Output) -> Self {
+    fn new(action: A, value: A::Output) -> Self {
         Self {
             value,
-            sum: A::fold_id(),
-            lazy: A::update_id(),
+            sum: action.fold_id(),
+            lazy: action.update_id(),
             size: 1,
             rev: false,
             lc: ptr::null_mut(),
             rc: ptr::null_mut(),
             par: ptr::null_mut(),
+            action,
         }
     }
 
@@ -120,22 +122,26 @@ where
                 this.rev = false;
             }
 
-            if this.lazy != A::update_id() {
+            if !this.action.monoid_lazy().is_id(&this.lazy) {
                 let lc = this.lc;
                 if !lc.is_null() {
                     let lc = unsafe { &mut *lc };
-                    lc.lazy = A::update(lc.lazy.clone(), this.lazy.clone());
+                    lc.lazy = this.action.update(lc.lazy.clone(), this.lazy.clone());
                 }
 
                 let rc = this.rc;
                 if !rc.is_null() {
                     let rc = unsafe { &mut *rc };
-                    rc.lazy = A::update(rc.lazy.clone(), this.lazy.clone());
+                    rc.lazy = this.action.update(rc.lazy.clone(), this.lazy.clone());
                 }
 
-                this.value = A::convert(this.value.clone(), this.lazy.clone(), 1);
-                this.sum = A::convert(this.sum.clone(), this.lazy.clone(), this.size);
-                this.lazy = A::update_id();
+                this.value = this
+                    .action
+                    .convert(this.value.clone(), this.lazy.clone(), 1);
+                this.sum = this
+                    .action
+                    .convert(this.sum.clone(), this.lazy.clone(), this.size);
+                this.lazy = this.action.update_id();
             }
         }
     }
@@ -153,12 +159,12 @@ where
 
         if !this.lc.is_null() {
             let lc = unsafe { &mut *this.lc };
-            this.sum = A::fold(this.sum.clone(), lc.sum.clone());
+            this.sum = this.action.fold(this.sum.clone(), lc.sum.clone());
         }
 
         if !this.rc.is_null() {
             let rc = unsafe { &mut *this.rc };
-            this.sum = A::fold(this.sum.clone(), rc.sum.clone());
+            this.sum = this.action.fold(this.sum.clone(), rc.sum.clone());
         }
     }
 
@@ -294,26 +300,27 @@ where
 
 /// 遅延スプレー木
 pub struct LazySplayTree<A: Action> {
+    action: A,
     root: Cell<*mut Node<A>>,
 }
 
 impl<A: Action> LazySplayTree<A> {
     /// `LazySplayTree<A>`を生成
-    pub fn new() -> Self {
+    pub fn new(action: A) -> Self {
         let root = Cell::new(ptr::null_mut());
-        Self { root }
+        Self { action, root }
     }
 }
 
-impl<A: Action> LazySplayTree<A>
+impl<A: Action + Clone> LazySplayTree<A>
 where
     A::Output: Clone,
     A::Lazy: Clone + PartialEq,
 {
     /// 値`value`をもつノード一つのみからなる`SplayTree<M>`を生成
-    pub fn singleton(value: A::Output) -> Self {
-        let root = Cell::new(Box::into_raw(Box::new(Node::new(value))));
-        Self { root }
+    pub fn singleton(action: A, value: A::Output) -> Self {
+        let root = Cell::new(Box::into_raw(Box::new(Node::new(action.clone(), value))));
+        Self { action, root }
     }
 
     /// スプレーツリーの要素数を返す
@@ -364,13 +371,22 @@ where
     pub fn split(self, index: usize) -> (Self, Self) {
         let (l, r) = Node::split(self.root.get(), index);
         self.root.set(ptr::null_mut());
-        (Self { root: Cell::new(l) }, Self { root: Cell::new(r) })
+        (
+            Self {
+                action: self.action.clone(),
+                root: Cell::new(l),
+            },
+            Self {
+                action: self.action.clone(),
+                root: Cell::new(r),
+            },
+        )
     }
 
     /// 要素を`index`番目になるように挿入する
     pub fn insert(&mut self, index: usize, value: A::Output) {
         let (l, r) = Node::split(self.root.get(), index);
-        let node = Box::into_raw(Box::new(Node::new(value)));
+        let node = Box::into_raw(Box::new(Node::new(self.action.clone(), value)));
         let root = Node::merge(l, Node::merge(node, r));
         self.root.set(root);
     }
@@ -408,7 +424,7 @@ where
     pub fn fold(&self, Range { start, end }: Range<usize>) -> A::Output {
         let (l, m, r) = self.range(start, end);
         let ret = if m.is_null() {
-            A::fold_id()
+            self.action.fold_id()
         } else {
             unsafe { (*m).sum.clone() }
         };
@@ -429,12 +445,12 @@ where
 
     /// 先頭に値を追加する
     pub fn push_first(&mut self, value: A::Output) {
-        let left = Self::singleton(value);
+        let left = Self::singleton(self.action.clone(), value);
         self.merge_left(left);
     }
     /// 末尾に値を追加する
     pub fn push_last(&mut self, value: A::Output) {
-        let right = Self::singleton(value);
+        let right = Self::singleton(self.action.clone(), value);
         self.merge_right(right);
     }
     /// 先頭の値を削除する
@@ -448,11 +464,5 @@ where
         } else {
             self.remove(self.len() - 1)
         }
-    }
-}
-
-impl<A: Action> Default for LazySplayTree<A> {
-    fn default() -> Self {
-        Self::new()
     }
 }
