@@ -1,8 +1,6 @@
 //! 大きさがコンパイル時固定の行列
 use std::ops::{Add, Mul, Neg, Sub};
 
-use crate::algebra::{prod::*, sum::*};
-use crate::impl_algebra;
 use crate::num::one_zero::{One, Zero};
 
 /// `R`×`C`の行列
@@ -119,26 +117,6 @@ where
         ret
     }
 }
-
-impl_algebra!(
-    [T: Copy + One + Zero + Add<Output = T> + Mul<Output = T> + PartialEq, const N: usize];
-    Prod<Matrix<T, N, N>>;
-    set: Matrix<T, N, N>;
-    op: |_, a: Self::Element, b: Self::Element| a * b;
-    id: |_| Matrix::unit(), |_, a| a == &Matrix::unit();
-    assoc;
-);
-
-impl_algebra!(
-    [T: Copy + Zero + Add<Output = T> + Neg<Output = T> + PartialEq, const R: usize, const C: usize];
-    Sum<Matrix<T, R, C>>;
-    set: Matrix<T, R, C>;
-    op: |_, a: Self::Element, b: Self::Element| a + b;
-    id: |_| Matrix::new(), |_, a| a == &Matrix::new();
-    inv: |_, a: Self::Element| -a;
-    assoc;
-    commu;
-);
 
 #[cfg(test)]
 mod tests {

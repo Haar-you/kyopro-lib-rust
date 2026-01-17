@@ -32,7 +32,7 @@ pub trait Matrix {
     fn height(&self) -> usize;
     /// 行数の行数と列数のペアを返す。
     fn size(&self) -> (usize, usize) {
-        (self.width(), self.height())
+        (self.height(), self.width())
     }
     /// 行列が正方であるかどうかを判定する。
     fn is_square(&self) -> bool {

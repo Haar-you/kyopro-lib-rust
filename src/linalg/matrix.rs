@@ -1,19 +1,18 @@
 //! $\mathbb{Z} / m \mathbb{Z}$ 上の行列
-use crate::impl_ops;
 pub use crate::linalg::traits::*;
-use crate::num::ff::*;
+use crate::{algebra::semiring::*, impl_ops};
 use std::ops::{Index, Neg};
 
 /// $\mathbb{Z} / m \mathbb{Z}$ 上の行列
 #[derive(Clone, PartialEq, Eq)]
-pub struct MatrixModM<R: ZZ> {
+pub struct MatrixOnRing<R: Ring> {
     h: usize,
     w: usize,
-    modulo: R,
+    ring: R,
     data: Vec<Vec<R::Element>>,
 }
 
-impl<R: ZZ> Matrix for MatrixModM<R> {
+impl<R: Ring> Matrix for MatrixOnRing<R> {
     fn width(&self) -> usize {
         self.w
     }
@@ -22,13 +21,13 @@ impl<R: ZZ> Matrix for MatrixModM<R> {
     }
 }
 
-impl<R: ZZ> MatrixTranspose for MatrixModM<R>
+impl<R: Ring> MatrixTranspose for MatrixOnRing<R>
 where
-    R::Element: ZZElem + Copy,
+    R::Element: Copy,
 {
     type Output = Self;
     fn transpose(self) -> Self::Output {
-        let mut ret = Self::zero(self.w, self.h, self.modulo);
+        let mut ret = Self::zero(self.ring, self.w, self.h);
         for i in 0..self.h {
             for j in 0..self.w {
                 ret.data[j][i] = self.data[i][j];
@@ -38,58 +37,52 @@ where
     }
 }
 
-impl<R: ZZ> MatrixModM<R>
+impl<R: Ring> MatrixOnRing<R>
 where
-    R::Element: ZZElem + Copy,
+    R::Element: Copy,
 {
     /// `h`×`w`の零行列を作る。
-    pub fn zero(h: usize, w: usize, modulo: R) -> Self {
+    pub fn zero(ring: R, h: usize, w: usize) -> Self {
         Self {
             h,
             w,
-            data: vec![vec![modulo.zero(); w]; h],
-            modulo,
+            data: vec![vec![ring.zero(); w]; h],
+            ring,
         }
     }
 
     /// `size`×`size`の単位行列を作る。
-    pub fn unit(size: usize, modulo: R) -> Self {
-        let mut ret = Self::zero(size, size, modulo.clone());
+    pub fn unit(ring: R, size: usize) -> Self {
+        let one = ring.one();
+        let mut ret = Self::zero(ring, size, size);
         for i in 0..size {
-            ret.data[i][i] = modulo.one();
+            ret.data[i][i] = one;
         }
         ret
     }
 
-    /// [`Vec<Vec<u32>>`]から[`Matrix<Modulo>`]を作る。
-    pub fn from_vec_2d(other: Vec<Vec<u32>>, modulo: R) -> Self {
-        let h = other.len();
-        assert!(h > 0);
-        let w = other[0].len();
-        assert!(other.iter().all(|r| r.len() == w));
-
-        let other = other
-            .into_iter()
-            .map(|a| {
-                a.into_iter()
-                    .map(|x| modulo.from_u64(x as u64))
-                    .collect::<Vec<_>>()
-            })
-            .collect();
-
-        Self {
-            h,
-            w,
-            data: other,
-            modulo,
-        }
+    /// `i`行`j`列の要素への参照を返す。
+    pub fn get(&mut self, i: usize, j: usize) -> Option<&R::Element> {
+        let a = self.data.get(i)?;
+        a.get(j)
     }
 
+    /// `i`行`j`列の要素への可変参照を返す。
+    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut R::Element> {
+        let a = self.data.get_mut(i)?;
+        a.get_mut(j)
+    }
+}
+
+impl<R: Ring + Clone> MatrixOnRing<R>
+where
+    R::Element: Copy,
+{
     /// 行列の`p`乗を求める。
     pub fn pow(self, mut p: u64) -> Option<Self> {
         self.is_square().then(|| {
             let size = self.w;
-            let mut ret = Self::unit(size, self.modulo.clone());
+            let mut ret = Self::unit(self.ring.clone(), size);
             let mut a = self;
 
             while p > 0 {
@@ -105,18 +98,6 @@ where
         })
     }
 
-    /// `i`行`j`列の要素への参照を返す。
-    pub fn get(&mut self, i: usize, j: usize) -> Option<&R::Element> {
-        let a = self.data.get(i)?;
-        a.get(j)
-    }
-
-    /// `i`行`j`列の要素への可変参照を返す。
-    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut R::Element> {
-        let a = self.data.get_mut(i)?;
-        a.get_mut(j)
-    }
-
     /// 愚直に行列積を求める。
     ///
     /// **Time complexity** $O(n^3)$
@@ -126,12 +107,13 @@ where
         let n = self.h;
         let l = rhs.w;
         let rhs = rhs.transpose();
-        let mut ret = Self::zero(n, l, self.modulo);
+        let mut ret = Self::zero(self.ring.clone(), n, l);
+        let s = &self.ring;
 
         for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
             for (x, c) in r.iter_mut().zip(rhs.data.iter()) {
                 for (y, z) in r2.iter().zip(c.iter()) {
-                    *x += *y * *z;
+                    *x = s.add(*x, s.mul(*y, *z));
                 }
             }
         }
@@ -155,15 +137,14 @@ where
 
         let m = n.div_ceil(2);
 
-        let mut a11 = Self::zero(m, m, a.modulo.clone());
-        let mut a12 = Self::zero(m, m, a.modulo.clone());
-        let mut a21 = Self::zero(m, m, a.modulo.clone());
-        let mut a22 = Self::zero(m, m, a.modulo.clone());
-
-        let mut b11 = Self::zero(m, m, a.modulo.clone());
-        let mut b12 = Self::zero(m, m, a.modulo.clone());
-        let mut b21 = Self::zero(m, m, a.modulo.clone());
-        let mut b22 = Self::zero(m, m, a.modulo.clone());
+        let mut a11 = Self::zero(a.ring.clone(), m, m);
+        let mut a12 = Self::zero(a.ring.clone(), m, m);
+        let mut a21 = Self::zero(a.ring.clone(), m, m);
+        let mut a22 = Self::zero(a.ring.clone(), m, m);
+        let mut b11 = Self::zero(a.ring.clone(), m, m);
+        let mut b12 = Self::zero(a.ring.clone(), m, m);
+        let mut b21 = Self::zero(a.ring.clone(), m, m);
+        let mut b22 = Self::zero(a.ring.clone(), m, m);
 
         for i in 0..m {
             for j in 0..m {
@@ -219,16 +200,16 @@ where
     }
 }
 
-impl<R: ZZ> TryAdd for MatrixModM<R>
+impl<R: Ring> TryAdd for MatrixOnRing<R>
 where
-    R::Element: ZZElem + Copy,
+    R::Element: Copy,
 {
     type Output = Self;
     fn try_add(mut self, rhs: Self) -> Option<Self::Output> {
         (self.size() == rhs.size()).then(|| {
             for i in 0..self.h {
                 for j in 0..self.w {
-                    self.data[i][j] += rhs.data[i][j];
+                    self.data[i][j] = self.ring.add(self.data[i][j], rhs.data[i][j]);
                 }
             }
             self
@@ -236,16 +217,16 @@ where
     }
 }
 
-impl<R: ZZ> TrySub for MatrixModM<R>
+impl<R: Ring> TrySub for MatrixOnRing<R>
 where
-    R::Element: ZZElem + Copy,
+    R::Element: Copy,
 {
     type Output = Self;
     fn try_sub(mut self, rhs: Self) -> Option<Self::Output> {
         (self.size() == rhs.size()).then(|| {
             for i in 0..self.h {
                 for j in 0..self.w {
-                    self.data[i][j] -= rhs.data[i][j];
+                    self.data[i][j] = self.ring.sub(self.data[i][j], rhs.data[i][j]);
                 }
             }
             self
@@ -253,9 +234,9 @@ where
     }
 }
 
-impl<R: ZZ> TryMul for MatrixModM<R>
+impl<R: Ring + Clone> TryMul for MatrixOnRing<R>
 where
-    R::Element: ZZElem + Copy,
+    R::Element: Copy,
 {
     type Output = Self;
     fn try_mul(self, rhs: Self) -> Option<Self::Output> {
@@ -269,46 +250,43 @@ where
     }
 }
 
-impl_ops!([R: ZZ<Element: ZZElem + Copy>]; AddAssign for MatrixModM<R>, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
-impl_ops!([R: ZZ<Element: ZZElem + Copy>]; SubAssign for MatrixModM<R>, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
-impl_ops!([R: ZZ<Element: ZZElem + Copy>]; MulAssign for MatrixModM<R>, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
+impl_ops!([R: Ring<Element: Copy> + Clone]; AddAssign for MatrixOnRing<R>, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
+impl_ops!([R: Ring<Element: Copy> + Clone]; SubAssign for MatrixOnRing<R>, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
+impl_ops!([R: Ring<Element: Copy> + Clone]; MulAssign for MatrixOnRing<R>, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
 
-impl_ops!([R: ZZ<Element: ZZElem + Copy>]; Add for MatrixModM<R>, |x: Self, y| x.try_add(y).unwrap());
-impl_ops!([R: ZZ<Element: ZZElem + Copy>]; Sub for MatrixModM<R>, |x: Self, y| x.try_sub(y).unwrap());
-impl_ops!([R: ZZ<Element: ZZElem + Copy>]; Mul for MatrixModM<R>, |x: Self, y| x.try_mul(y).unwrap());
+impl_ops!([R: Ring<Element: Copy> + Clone]; Add for MatrixOnRing<R>, |x: Self, y| x.try_add(y).unwrap());
+impl_ops!([R: Ring<Element: Copy> + Clone]; Sub for MatrixOnRing<R>, |x: Self, y| x.try_sub(y).unwrap());
+impl_ops!([R: Ring<Element: Copy> + Clone]; Mul for MatrixOnRing<R>, |x: Self, y| x.try_mul(y).unwrap());
 
-impl<R: ZZ> Neg for MatrixModM<R>
+impl<R: Ring> Neg for MatrixOnRing<R>
 where
-    R::Element: ZZElem + Copy,
+    R::Element: Copy,
 {
     type Output = Self;
     fn neg(mut self) -> Self {
         self.data.iter_mut().for_each(|r| {
             r.iter_mut().for_each(|x| {
-                *x = -*x;
+                *x = self.ring.neg(*x);
             })
         });
         self
     }
 }
 
-impl<R: ZZ> Index<usize> for MatrixModM<R>
-where
-    R::Element: ZZElem + Copy,
-{
+impl<R: Ring> Index<usize> for MatrixOnRing<R> {
     type Output = [R::Element];
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[i]
     }
 }
 
-impl<R: ZZ> From<MatrixModM<R>> for Vec<Vec<R::Element>> {
-    fn from(value: MatrixModM<R>) -> Self {
+impl<R: Ring> From<MatrixOnRing<R>> for Vec<Vec<R::Element>> {
+    fn from(value: MatrixOnRing<R>) -> Self {
         value.data
     }
 }
 
-impl<R: ZZ> AsRef<[Vec<R::Element>]> for MatrixModM<R> {
+impl<R: Ring> AsRef<[Vec<R::Element>]> for MatrixOnRing<R> {
     fn as_ref(&self) -> &[Vec<R::Element>] {
         &self.data
     }
@@ -319,27 +297,49 @@ mod tests {
     use super::*;
     use rand::Rng;
 
-    use crate::{math::prime_mod::Prime, num::const_modint::*};
+    use crate::{
+        algebra::semiring::{add_mul_mod::AddMulMod, xor_and::XorAnd},
+        math::prime_mod::Prime,
+        num::const_modint::*,
+    };
 
     #[test]
     fn test() {
         let mut rng = rand::thread_rng();
         let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
+        let ring = AddMulMod::new(modulo);
 
         let size = 300;
 
-        let mut a = vec![vec![0; size]; size];
-        let mut b = vec![vec![0; size]; size];
+        let mut a = MatrixOnRing::zero(ring, size, size);
+        let mut b = MatrixOnRing::zero(ring, size, size);
 
         for i in 0..size {
             for j in 0..size {
-                a[i][j] = rng.gen::<u32>();
-                b[i][j] = rng.gen::<u32>();
+                *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
+                *b.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
             }
         }
 
-        let a = MatrixModM::from_vec_2d(a, modulo);
-        let b = MatrixModM::from_vec_2d(b, modulo);
+        assert!(a.clone().straight_mul(b.clone()) == a.strassen_mul(b));
+    }
+
+    #[test]
+    fn test_xor_and() {
+        let mut rng = rand::thread_rng();
+        let ring = XorAnd::<u64>::new();
+
+        let size = 300;
+
+        let mut a = MatrixOnRing::zero(ring, size, size);
+        let mut b = MatrixOnRing::zero(ring, size, size);
+
+        for i in 0..size {
+            for j in 0..size {
+                *a.get_mut(i, j).unwrap() = rng.gen::<u64>();
+                *b.get_mut(i, j).unwrap() = rng.gen::<u64>();
+            }
+        }
 
         assert!(a.clone().straight_mul(b.clone()) == a.strassen_mul(b));
     }
@@ -351,23 +351,21 @@ mod tests {
 
         let mut rng = rand::thread_rng();
         let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
+        let ring = AddMulMod::new(modulo);
 
         let mut straight = vec![];
         let mut strassen = vec![];
 
         for &size in &[1, 10, 100, 300, 500] {
-            let mut a = vec![vec![0; size]; size];
-            let mut b = vec![vec![0; size]; size];
+            let mut a = MatrixOnRing::zero(ring, size, size);
+            let mut b = MatrixOnRing::zero(ring, size, size);
 
             for i in 0..size {
                 for j in 0..size {
-                    a[i][j] = rng.gen::<u32>();
-                    b[i][j] = rng.gen::<u32>();
+                    *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
+                    *b.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
                 }
             }
-
-            let a = MatrixModM::from_vec_2d(a, modulo);
-            let b = MatrixModM::from_vec_2d(b, modulo);
 
             straight.push(get_time!({
                 a.clone().straight_mul(b.clone());
