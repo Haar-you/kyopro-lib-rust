@@ -12,6 +12,7 @@ pub mod max_contiguous_true;
 pub mod max_partial_sum;
 pub mod min_count;
 pub mod min_max;
+pub mod modint;
 pub mod option;
 pub mod permutation;
 pub mod prod;
@@ -109,12 +110,13 @@ mod tests {
 
     #[test]
     fn test_sum_modint() {
-        use crate::num::{algebra::*, modint::*};
+        use crate::algebra::modint::*;
+        use crate::num::modint::*;
 
         let n: u32 = 73;
-        let m = SumMod::new();
-
         let ff = ModIntBuilder::new(n);
+
+        let m = SumMod::new(ff);
         let a = (0..n as u64).map(|x| ff.from_u64(x));
 
         associative_law(&m, a.clone());
@@ -125,12 +127,13 @@ mod tests {
 
     #[test]
     fn test_prod_modint() {
-        use crate::num::{algebra::*, modint::*};
+        use crate::algebra::modint::*;
+        use crate::num::modint::*;
 
         let n: u32 = 73;
-        let m = ProdMod::new();
-
         let ff = ModIntBuilder::new(n);
+
+        let m = ProdMod::new(ff);
         let a = (0..n as u64).map(|x| ff.from_u64(x));
 
         associative_law(&m, a.clone());
