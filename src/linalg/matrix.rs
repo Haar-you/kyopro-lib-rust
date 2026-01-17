@@ -62,7 +62,7 @@ where
     }
 
     /// `i`行`j`列の要素への参照を返す。
-    pub fn get(&mut self, i: usize, j: usize) -> Option<&R::Element> {
+    pub fn get(&self, i: usize, j: usize) -> Option<&R::Element> {
         let a = self.data.get(i)?;
         a.get(j)
     }

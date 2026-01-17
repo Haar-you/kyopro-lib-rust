@@ -10,7 +10,7 @@ use std::ops::{Add, Mul};
 #[derive(Clone, Default, Debug, PartialEq, Eq, Hash)]
 pub struct AffineSum<S, U>(S, Dual<Composition<U>>);
 impl<S, U> AffineSum<S, U> {
-    /// 加算のモノイドと[`affine::Composition`]から[`AffineSum`]を生成する。
+    /// 加算のモノイドと[`Composition`]から[`AffineSum`]を生成する。
     pub fn new(sum: S, affine: Composition<U>) -> Self {
         Self(sum, Dual(affine))
     }
