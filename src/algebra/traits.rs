@@ -56,6 +56,8 @@ trait_alias!(#[doc = "可換モノイド"] AbelianMonoid: Monoid + Commutative);
 trait_alias!(#[doc = "群"] Group: Monoid + Inverse);
 trait_alias!(#[doc = "可換群"] AbelianGroup: Group + Commutative);
 
+trait_alias!(#[doc = "半束"] Semilattice: Semigroup + Commutative + Idempotence);
+
 /// 値に二項演算を複数回適用する。
 pub trait Times: BinaryOp + Identity
 where

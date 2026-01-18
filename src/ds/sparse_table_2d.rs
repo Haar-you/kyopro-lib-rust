@@ -6,13 +6,13 @@ use std::{
 };
 
 /// 冪等性と結合性をもつ2次元列の区間取得($O(1)$)ができる。
-pub struct SparseTable2D<A: Semigroup + Idempotence> {
+pub struct SparseTable2D<A: Semilattice> {
     semilattice: A,
     data: Vec<Vec<Vec<Vec<A::Element>>>>,
     log_table: Vec<usize>,
 }
 
-impl<A: Semigroup + Idempotence> SparseTable2D<A>
+impl<A: Semilattice> SparseTable2D<A>
 where
     A::Element: Clone + Default,
 {
@@ -101,7 +101,7 @@ mod tests {
 
     fn test<A>(a: A, s: Vec<Vec<A::Element>>)
     where
-        A: Semigroup + Idempotence + Identity + Clone,
+        A: Semilattice + Identity + Clone,
         A::Element: Copy + Default + PartialEq + Debug,
     {
         let st = SparseTable2D::new(a.clone(), s.clone());

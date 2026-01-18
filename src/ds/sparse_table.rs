@@ -5,14 +5,14 @@ use crate::misc::range::range_bounds_to_range;
 use std::{cmp::min, ops::RangeBounds};
 
 /// 冪等性と結合性をもつ列の区間取得($O(1)$)ができる。
-pub struct SparseTable<A: Semigroup + Idempotence> {
+pub struct SparseTable<A: Semilattice> {
     semilattice: A,
     data: Vec<Vec<A::Element>>,
     log_table: Vec<usize>,
     original_size: usize,
 }
 
-impl<A: Semigroup + Idempotence> SparseTable<A>
+impl<A: Semilattice> SparseTable<A>
 where
     A::Element: Clone + Default,
 {
@@ -79,7 +79,7 @@ mod tests {
 
     fn test<A>(a: A, s: Vec<A::Element>)
     where
-        A: Semigroup + Idempotence + Identity + Clone,
+        A: Semilattice + Identity + Clone,
         A::Element: Copy + Default + PartialEq + Debug,
     {
         let st = SparseTable::new(a.clone(), s.clone());
