@@ -125,10 +125,10 @@ where
 
             if let Some(inv) = self.inverse.as_ref() {
                 let mut inv = inv.borrow_mut();
-                potential[ri] = [pj, p.clone(), inv[i].clone()].into_iter().fold_m(g);
-                inv[ri] = [pi, g.inv(p), inv[j].clone()].into_iter().fold_m(g);
+                potential[ri] = g.fold_m([pj, p.clone(), inv[i].clone()]);
+                inv[ri] = g.fold_m([pi, g.inv(p), inv[j].clone()]);
             } else {
-                potential[ri] = [pj, p, g.inv(pi)].into_iter().fold_m(g);
+                potential[ri] = g.fold_m([pj, p, g.inv(pi)]);
             }
 
             j
@@ -138,10 +138,10 @@ where
 
             if let Some(inv) = self.inverse.as_ref() {
                 let mut inv = inv.borrow_mut();
-                potential[rj] = [pi, g.inv(p.clone()), inv[j].clone()].into_iter().fold_m(g);
-                inv[rj] = [pj, p, inv[i].clone()].into_iter().fold_m(g);
+                potential[rj] = g.fold_m([pi, g.inv(p.clone()), inv[j].clone()]);
+                inv[rj] = g.fold_m([pj, p, inv[i].clone()]);
             } else {
-                potential[rj] = [pi, g.inv(p), g.inv(pj)].into_iter().fold_m(g);
+                potential[rj] = g.fold_m([pi, g.inv(p), g.inv(pj)]);
             }
 
             if self.depth[ri] == self.depth[rj] {

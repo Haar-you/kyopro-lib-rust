@@ -1,6 +1,5 @@
 //! 2次元累積和
 
-use crate::algebra::traits::FoldM;
 pub use crate::algebra::traits::Group;
 use std::ops::{Index, Range};
 
@@ -36,7 +35,7 @@ where
         let c = self.data[l][d];
         let d = self.data[r][u];
 
-        [a, b, c, d].into_iter().fold_m(g)
+        g.fold_m([a, b, c, d])
     }
 }
 

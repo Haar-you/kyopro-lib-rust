@@ -50,23 +50,35 @@ pub trait Associative {}
 /// 冪等性をもつ
 pub trait Idempotence {}
 
-trait_alias!(#[doc = "半群"] Semigroup: BinaryOp + Associative);
-trait_alias!(#[doc = "モノイド"] Monoid: Semigroup + Identity);
-trait_alias!(#[doc = "可換モノイド"] AbelianMonoid: Monoid + Commutative);
-trait_alias!(#[doc = "群"] Group: Monoid + Inverse);
-trait_alias!(#[doc = "可換群"] AbelianGroup: Group + Commutative);
+/// 半群
+pub trait Semigroup: BinaryOp + Associative {
+    /// `iter`が空のとき、`None`を返す。
+    /// そうでないとき、`iter`の中身を二項演算で畳み込んで`Some`で返す。
+    fn reduce<I>(&self, iter: I) -> Option<Self::Element>
+    where
+        I: IntoIterator<Item = Self::Element>,
+    {
+        iter.into_iter().reduce(|a, b| self.op(a, b))
+    }
+}
+impl<T: BinaryOp + Associative> Semigroup for T {}
 
-trait_alias!(#[doc = "半束"] Semilattice: Semigroup + Commutative + Idempotence);
+/// モノイド
+pub trait Monoid: Semigroup + Identity {
+    /// `iter`が空のとき、モノイドの単位元を返す。
+    /// そうでないとき、`iter`の中身を二項演算で畳み込んで返す。
+    fn fold_m<I>(&self, iter: I) -> Self::Element
+    where
+        I: IntoIterator<Item = Self::Element>,
+    {
+        self.reduce(iter).unwrap_or(self.id())
+    }
 
-/// 値に二項演算を複数回適用する。
-pub trait Times: BinaryOp + Identity
-where
-    Self::Element: Clone,
-{
     /// $\underbrace{a \circ a \circ \dots \circ a \circ a}_{n}$を計算する。
-    ///
-    /// **Time complexity** $O(\log n)$
-    fn times(&self, mut a: Self::Element, mut n: u64) -> Self::Element {
+    fn times(&self, mut a: Self::Element, mut n: u64) -> Self::Element
+    where
+        Self::Element: Clone,
+    {
         let mut ret = self.id();
 
         while n > 0 {
@@ -80,7 +92,13 @@ where
         ret
     }
 }
-impl<A: BinaryOp + Identity> Times for A where A::Element: Clone {}
+impl<T: Semigroup + Identity> Monoid for T {}
+
+trait_alias!(#[doc = "可換モノイド"] AbelianMonoid: Monoid + Commutative);
+trait_alias!(#[doc = "群"] Group: Monoid + Inverse);
+trait_alias!(#[doc = "可換群"] AbelianGroup: Group + Commutative);
+
+trait_alias!(#[doc = "半束"] Semilattice: Semigroup + Commutative + Idempotence);
 
 /// `fold_m`を提供する。
 pub trait FoldM: Iterator {
@@ -90,7 +108,7 @@ pub trait FoldM: Iterator {
         Self: Sized,
         M: Monoid<Element = Self::Item>,
     {
-        self.fold(monoid.id(), |a, b| monoid.op(a, b))
+        monoid.fold_m(self)
     }
 }
 
