@@ -3,7 +3,7 @@ use crate::trait_alias;
 
 /// 集合
 pub trait Set: Sized {
-    /// 元
+    /// 集合の元
     type Element;
 }
 

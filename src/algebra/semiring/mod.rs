@@ -6,7 +6,7 @@ pub mod xor_and;
 
 /// 半環
 pub trait Semiring {
-    /// 元
+    /// 集合の元
     type Element;
     /// 加法の単位元
     fn zero(&self) -> Self::Element;
