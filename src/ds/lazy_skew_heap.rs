@@ -1,13 +1,7 @@
 //! 遅延加算付き融合可能ヒープ
 
 use crate::num::one_zero::Zero;
-use crate::trait_alias;
 use std::{mem::swap, ops::AddAssign};
-
-trait_alias!(
-    /// [`LazySkewHeap<T>`]が扱える型
-    Elem: Ord + Copy + Zero + AddAssign
-);
 
 #[derive(Debug, Clone)]
 struct Node<T> {
@@ -17,7 +11,10 @@ struct Node<T> {
     right: Option<Box<Node<T>>>,
 }
 
-impl<T: Elem> Node<T> {
+impl<T> Node<T>
+where
+    T: Ord + Copy + Zero + AddAssign,
+{
     pub fn new(value: T) -> Self {
         Self {
             value,
@@ -64,7 +61,10 @@ pub struct LazySkewHeap<T> {
     size: usize,
 }
 
-impl<T: Elem> LazySkewHeap<T> {
+impl<T> LazySkewHeap<T>
+where
+    T: Ord + Copy + Zero + AddAssign,
+{
     /// 空の[`LazySkewHeap`]を生成する。
     pub fn new() -> Self {
         Self {

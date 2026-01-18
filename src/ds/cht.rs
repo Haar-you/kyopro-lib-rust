@@ -4,16 +4,10 @@
 //! - [EDPC Z - Frog 3](https://atcoder.jp/contests/dp/submissions/54932537)
 
 use crate::math::linear::*;
-use crate::trait_alias;
 use std::{
     collections::VecDeque,
     ops::{Add, Mul, Sub},
 };
-
-trait_alias!(
-    /// [`ConvexHullTrick<T>`]がt扱える型
-    Elem: Copy + PartialEq + PartialOrd + Sub<Output = Self> + Mul<Output = Self> + Add<Output = Self>
-);
 
 /// 最大値クエリか最小値クエリかを表す
 #[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
@@ -25,7 +19,7 @@ pub enum Mode {
 }
 
 impl Mode {
-    fn cmp<T: PartialOrd + Copy>(self, a: T, b: T) -> bool {
+    fn cmp<T: Ord + Copy>(self, a: T, b: T) -> bool {
         match self {
             Self::Max => a <= b,
             Self::Min => a >= b,
@@ -33,7 +27,10 @@ impl Mode {
     }
 }
 
-fn is_needless<T: Elem>(a: &Linear<T>, b: &Linear<T>, c: &Linear<T>) -> bool {
+fn is_needless<T>(a: &Linear<T>, b: &Linear<T>, c: &Linear<T>) -> bool
+where
+    T: Copy + Ord + Sub<Output = T> + Mul<Output = T>,
+{
     (a.b - b.b) * (a.a - c.a) >= (a.b - c.b) * (a.a - b.a)
 }
 
@@ -46,7 +43,10 @@ pub struct ConvexHullTrick<T> {
     last_slope: Option<T>,
 }
 
-impl<T: Elem> ConvexHullTrick<T> {
+impl<T> ConvexHullTrick<T>
+where
+    T: Copy + Ord + Sub<Output = T> + Mul<Output = T> + Add<Output = T>,
+{
     /// 最小値クエリ・最大値クエリを指定して空の[`ConvexHullTrick`]を用意する。
     pub fn new(mode: Mode) -> Self {
         Self {
@@ -57,6 +57,8 @@ impl<T: Elem> ConvexHullTrick<T> {
         }
     }
 
+    /// 直線を追加する。
+    ///
     /// 最小値を求めたいならば、傾きは単調減少でなければならない。
     ///
     /// 最大値を求めたいならば、傾きは単調増加でなければならない。
@@ -89,6 +91,8 @@ impl<T: Elem> ConvexHullTrick<T> {
         self.lines.push_back(line);
     }
 
+    /// `x`での最小値/最大値を求める。
+    ///
     /// クエリの座標は単調増加でなければならない。
     pub fn query(&mut self, x: T) -> T {
         if let Some(p) = self.last_query {

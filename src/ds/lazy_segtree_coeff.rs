@@ -2,14 +2,8 @@
 
 use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
-use crate::trait_alias;
 use std::cell::Cell;
 use std::ops::{Add, Mul, RangeBounds};
-
-trait_alias!(
-    /// [`LazySegtreeCoeff<T>`]が扱える型
-    Elem: Copy + Zero + Add<Output = Self> + Mul<Output = Self> + PartialEq
-);
 
 /// 係数乗算付き区間加算区間総和遅延セグ木
 pub struct LazySegtreeCoeff<T> {
@@ -20,7 +14,10 @@ pub struct LazySegtreeCoeff<T> {
     coeff: Vec<T>,
 }
 
-impl<T: Elem> LazySegtreeCoeff<T> {
+impl<T> LazySegtreeCoeff<T>
+where
+    T: Copy + Zero + Add<Output = T> + Mul<Output = T> + PartialEq,
+{
     /// ‍係数`coefficients`を設定した[`LazySegtreeCoeff`]を構築する。
     pub fn new(n: usize, coefficients: Vec<T>) -> Self {
         let size = n.next_power_of_two() * 2;
