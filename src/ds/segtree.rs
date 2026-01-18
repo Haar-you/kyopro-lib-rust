@@ -119,7 +119,15 @@ impl<M: Monoid> Index<usize> for Segtree<M> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::algebra::bit::BitXor;
+    use crate::algebra::matrix::ProdMatrix;
+    use crate::algebra::min_max::{Max, Min};
+    use crate::algebra::semiring::add_mul_mod::AddMulMod;
+    use crate::algebra::sum::Sum;
     use crate::algebra::traits::*;
+    use crate::linalg::matrix::MatrixOnRing;
+    use crate::num::{ff::*, modint::ModIntBuilder};
+
     use my_testtools::*;
     use rand::Rng;
 
@@ -158,10 +166,6 @@ mod tests {
         assert_eq!(Vec::from(&s), other);
     }
 
-    use crate::algebra::bit::BitXor;
-    use crate::algebra::min_max::{Max, Min};
-    use crate::algebra::sum::Sum;
-
     #[test]
     fn test_sum() {
         let mut rng = rand::thread_rng();
@@ -184,5 +188,26 @@ mod tests {
     fn test_max() {
         let mut rng = rand::thread_rng();
         random_test_helper(Max::<i32>::new(), 10, || rng.gen::<i32>() % 10000);
+    }
+
+    #[test]
+    fn test_matrix_prod() {
+        let mut rng = rand::thread_rng();
+
+        let n = 10;
+
+        let modulo = ModIntBuilder::new(10_u32.pow(9) + 7);
+        let ring = AddMulMod::new(modulo);
+        let monoid = ProdMatrix::new(ring, n);
+
+        random_test_helper(monoid, 100, || {
+            let mut a = MatrixOnRing::zero(ring, n, n);
+            for i in 0..n {
+                for j in 0..n {
+                    *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen());
+                }
+            }
+            a
+        });
     }
 }
