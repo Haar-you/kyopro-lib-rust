@@ -1,5 +1,5 @@
 //! Range Add Range Sum
-pub use crate::algebra::{action::Action, sum::Sum, traits::*};
+pub use crate::algebra::{action::Action, traits::*};
 use std::fmt::Debug;
 use std::ops::{Add, Mul};
 

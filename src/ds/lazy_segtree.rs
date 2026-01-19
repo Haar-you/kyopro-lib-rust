@@ -195,7 +195,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::algebra::add_sum::*;
+    use crate::algebra::action::add_sum::*;
     use crate::algebra::sum::*;
     use my_testtools::*;
     use rand::Rng;

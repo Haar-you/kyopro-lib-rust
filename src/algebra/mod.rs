@@ -24,14 +24,6 @@ pub mod tuple;
 
 pub mod action;
 
-pub mod add_min_count;
-pub mod add_sum;
-pub mod affine_sum;
-pub mod chmax_max;
-pub mod chmin_min;
-pub mod update_fold;
-pub mod update_sum;
-
 pub mod semiring;
 
 #[cfg(test)]
