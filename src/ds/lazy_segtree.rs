@@ -1,46 +1,51 @@
 //! モノイド列の区間更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
-use crate::algebra::action::Action;
+use crate::algebra::{act::Act, traits::*};
 use crate::misc::range::range_bounds_to_range;
 use std::ops::RangeBounds;
 
 /// モノイド列の区間更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
-pub struct LazySegtree<A: Action> {
-    action: A,
+pub struct LazySegtree<M: Monoid, A: Act<M>> {
+    monoid: M,
+    act: A,
     size: usize,
     original_size: usize,
-    data: Vec<A::Output>,
-    lazy: Vec<A::Lazy>,
+    data: Vec<M::Element>,
+    lazy: Vec<A::Element>,
 }
 
-impl<A: Action> LazySegtree<A>
+impl<M, A> LazySegtree<M, A>
 where
-    A::Output: Clone + PartialEq,
-    A::Lazy: Clone + PartialEq,
+    M: Monoid,
+    A: Act<M>,
+    M::Element: Clone + PartialEq,
+    A::Element: Clone + PartialEq,
 {
     /// 長さ`n`の[`LazySegtree`]を生成する。
-    pub fn new(action: A, n: usize) -> Self {
+    pub fn new(monoid: M, act: A, n: usize) -> Self {
         let size = n.next_power_of_two() * 2;
         Self {
             size,
             original_size: n,
-            data: vec![action.fold_id(); size],
-            lazy: vec![action.update_id(); size],
-            action,
+            data: vec![monoid.id(); size],
+            lazy: vec![act.monoid().id(); size],
+            monoid,
+            act,
         }
     }
 
     /// [`Vec`]から[`LazySegtree`]を構築する。
     ///
     /// **Time complexity** $O(|s|)$
-    pub fn from_vec(action: A, s: Vec<A::Output>) -> Self {
+    pub fn from_vec(monoid: M, act: A, s: Vec<M::Element>) -> Self {
         let n = s.len();
         let size = n.next_power_of_two() * 2;
         let mut this = Self {
             size,
             original_size: n,
-            data: vec![action.fold_id(); size],
-            lazy: vec![action.update_id(); size],
-            action,
+            data: vec![monoid.id(); size],
+            lazy: vec![act.id(); size],
+            monoid,
+            act,
         };
 
         for (i, x) in s.into_iter().enumerate() {
@@ -49,8 +54,8 @@ where
 
         for i in (1..size / 2).rev() {
             this.data[i] = this
-                .action
-                .fold(this.data[i << 1].clone(), this.data[(i << 1) | 1].clone());
+                .monoid
+                .op(this.data[i << 1].clone(), this.data[(i << 1) | 1].clone());
         }
 
         this
@@ -59,7 +64,7 @@ where
     /// 遅延操作を完了させたモノイド列をスライスで返す。
     ///
     /// **Time complexity** $O(n)$
-    pub fn to_slice(&mut self) -> &[A::Output] {
+    pub fn to_slice(&mut self) -> &[M::Element] {
         for i in 1..self.size {
             self.propagate(i);
         }
@@ -68,25 +73,24 @@ where
     }
 
     fn propagate(&mut self, i: usize) {
-        if self.lazy[i] == self.action.update_id() {
+        if self.lazy[i] == self.act.id() {
             return;
         }
         if i < self.size / 2 {
             let l = i << 1;
             let r = (i << 1) | 1;
 
-            self.lazy[l] = self
-                .action
-                .update(self.lazy[l].clone(), self.lazy[i].clone());
-            self.lazy[r] = self
-                .action
-                .update(self.lazy[r].clone(), self.lazy[i].clone());
+            self.lazy[l] = self.act.op(self.lazy[l].clone(), self.lazy[i].clone());
+            self.lazy[r] = self.act.op(self.lazy[r].clone(), self.lazy[i].clone());
         }
         let len = (self.size / 2) >> (31 - (i as u32).leading_zeros());
-        self.data[i] = self
-            .action
-            .convert(self.data[i].clone(), self.lazy[i].clone(), len);
-        self.lazy[i] = self.action.update_id();
+        self.data[i] = self.act.act_n(
+            &self.monoid,
+            self.data[i].clone(),
+            self.lazy[i].clone(),
+            len,
+        );
+        self.lazy[i] = self.act.id();
     }
 
     fn propagate_top_down(&mut self, mut i: usize) {
@@ -107,19 +111,19 @@ where
             self.propagate(i << 1);
             self.propagate((i << 1) | 1);
             self.data[i] = self
-                .action
-                .fold(self.data[i << 1].clone(), self.data[(i << 1) | 1].clone());
+                .monoid
+                .op(self.data[i << 1].clone(), self.data[(i << 1) | 1].clone());
         }
     }
 
     /// `i`番目の値を返す。
-    pub fn get(&mut self, i: usize) -> A::Output {
+    pub fn get(&mut self, i: usize) -> M::Element {
         self.propagate_top_down(i + self.size / 2);
         self.data[i + self.size / 2].clone()
     }
 
     /// 区間`range`で計算を集約して返す。
-    pub fn fold(&mut self, range: impl RangeBounds<usize>) -> A::Output {
+    pub fn fold(&mut self, range: impl RangeBounds<usize>) -> M::Element {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
         self.propagate_top_down(l + self.size / 2);
@@ -127,8 +131,8 @@ where
             self.propagate_top_down(r + self.size / 2);
         }
 
-        let mut ret_l = self.action.fold_id();
-        let mut ret_r = self.action.fold_id();
+        let mut ret_l = self.monoid.id();
+        let mut ret_r = self.monoid.id();
 
         let mut l = l + self.size / 2;
         let mut r = r + self.size / 2;
@@ -137,29 +141,29 @@ where
             if r & 1 == 1 {
                 r -= 1;
                 self.propagate(r);
-                ret_r = self.action.fold(self.data[r].clone(), ret_r.clone());
+                ret_r = self.monoid.op(self.data[r].clone(), ret_r.clone());
             }
             if l & 1 == 1 {
                 self.propagate(l);
-                ret_l = self.action.fold(ret_l.clone(), self.data[l].clone());
+                ret_l = self.monoid.op(ret_l.clone(), self.data[l].clone());
                 l += 1;
             }
             r >>= 1;
             l >>= 1;
         }
 
-        self.action.fold(ret_l, ret_r)
+        self.monoid.op(ret_l, ret_r)
     }
 
     /// `i`番目の値を`value`で置き換える。
-    pub fn assign(&mut self, i: usize, value: A::Output) {
+    pub fn assign(&mut self, i: usize, value: M::Element) {
         self.propagate_top_down(i + self.size / 2);
         self.data[i + self.size / 2] = value;
         self.bottom_up(i + self.size / 2);
     }
 
     /// 区間`range`を値`x`で更新する。
-    pub fn update(&mut self, range: impl RangeBounds<usize>, x: A::Lazy) {
+    pub fn update(&mut self, range: impl RangeBounds<usize>, x: A::Element) {
         let (l, r) = range_bounds_to_range(range, 0, self.original_size);
 
         self.propagate_top_down(l + self.size / 2);
@@ -174,10 +178,10 @@ where
             while l < r {
                 if r & 1 == 1 {
                     r -= 1;
-                    self.lazy[r] = self.action.update(self.lazy[r].clone(), x.clone());
+                    self.lazy[r] = self.act.op(self.lazy[r].clone(), x.clone());
                 }
                 if l & 1 == 1 {
-                    self.lazy[l] = self.action.update(self.lazy[l].clone(), x.clone());
+                    self.lazy[l] = self.act.op(self.lazy[l].clone(), x.clone());
                     l += 1;
                 }
                 r >>= 1;
@@ -195,21 +199,17 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::algebra::action::add_sum::*;
-    use crate::algebra::sum::*;
     use my_testtools::*;
     use rand::Rng;
 
-    #[test]
-    fn add_sum() {
-        let n = 100;
-        let q = 100;
-        let range = 1000;
-
-        let action = AddSum(Sum::<u64>::new(), Sum::<u64>::new());
-
-        let mut seg = LazySegtree::new(action, n);
-        let mut vec = vec![action.fold_id(); n];
+    fn test<M, A, F>(n: usize, q: usize, monoid: M, act: A, mut gen: F)
+    where
+        M: Monoid<Element: Copy + PartialEq + std::fmt::Debug> + Clone,
+        A: Act<M, Element: Copy + PartialEq> + Clone,
+        F: FnMut() -> A::Element,
+    {
+        let mut seg = LazySegtree::new(monoid.clone(), act.clone(), n);
+        let mut vec = vec![monoid.id(); n];
 
         let mut rng = rand::thread_rng();
 
@@ -218,21 +218,50 @@ mod tests {
 
             match rng.gen::<u32>() % 2 {
                 0 => {
-                    let x = rng.gen_range(0..range);
+                    let x = gen();
 
                     seg.update(lr.clone(), x);
                     vec[lr]
                         .iter_mut()
-                        .for_each(|y| action.monoid_lazy().op_assign_r(y, x));
+                        .for_each(|y| *y = act.act(&monoid, *y, x));
                 }
                 1 => {
                     assert_eq!(
                         seg.fold(lr.clone()),
-                        vec[lr].iter().cloned().fold_m(action.monoid_output())
+                        vec[lr].iter().cloned().fold_m(&monoid)
                     );
                 }
                 _ => unreachable!(),
             }
         }
+    }
+
+    use crate::algebra;
+
+    #[test]
+    fn add_sum() {
+        let mut rng = rand::thread_rng();
+        let m = algebra::sum::Sum::<u64>::new();
+        test(100, 100, m, algebra::act::add_sum::AddSum(m), || {
+            rng.gen_range(0..1000)
+        });
+    }
+
+    #[test]
+    fn chmax_max() {
+        let mut rng = rand::thread_rng();
+        let m = algebra::min_max::Max::<i64>::new();
+        test(100, 100, m, algebra::act::chmax_max::ChmaxMax(m), || {
+            rng.gen_range(-1000..1000)
+        });
+    }
+
+    #[test]
+    fn chmin_min() {
+        let mut rng = rand::thread_rng();
+        let m = algebra::min_max::Min::<i64>::new();
+        test(100, 100, m, algebra::act::chmin_min::ChminMin(m), || {
+            rng.gen_range(-1000..1000)
+        });
     }
 }

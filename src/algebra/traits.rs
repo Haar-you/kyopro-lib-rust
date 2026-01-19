@@ -50,6 +50,9 @@ pub trait Associative {}
 /// 冪等性をもつ
 pub trait Idempotence {}
 
+/// 二項演算が加法的
+pub trait Additive {}
+
 /// 半群
 pub trait Semigroup: BinaryOp + Associative {
     /// `iter`が空のとき、`None`を返す。

@@ -8,40 +8,42 @@ use std::cmp::Ordering;
 use std::ops::Range;
 use std::ptr;
 
-use crate::algebra::action::*;
+use crate::algebra::act::*;
 
-struct Node<A: Action> {
-    action: A,
-    value: A::Output,
-    sum: A::Output,
-    lazy: A::Lazy,
+struct Node<M: Monoid, A: Act<M>> {
+    monoid: M,
+    act: A,
+    value: M::Element,
+    sum: M::Element,
+    lazy: A::Element,
     size: usize,
     rev: bool,
-    lc: *mut Node<A>,
-    rc: *mut Node<A>,
-    par: *mut Node<A>,
+    lc: *mut Node<M, A>,
+    rc: *mut Node<M, A>,
+    par: *mut Node<M, A>,
 }
 
-impl<A: Action> Node<A>
+impl<M: Monoid, A: Act<M>> Node<M, A>
 where
-    A::Output: Clone,
-    A::Lazy: Clone + PartialEq,
+    M::Element: Clone,
+    A::Element: Clone + PartialEq,
 {
-    fn new(action: A, value: A::Output) -> Self {
+    fn new(monoid: M, act: A, value: M::Element) -> Self {
         Self {
             value,
-            sum: action.fold_id(),
-            lazy: action.update_id(),
+            sum: monoid.id(),
+            lazy: act.id(),
             size: 1,
             rev: false,
             lc: ptr::null_mut(),
             rc: ptr::null_mut(),
             par: ptr::null_mut(),
-            action,
+            monoid,
+            act,
         }
     }
 
-    fn set_value(this: *mut Self, value: A::Output) {
+    fn set_value(this: *mut Self, value: M::Element) {
         if !this.is_null() {
             unsafe {
                 (*this).value = value;
@@ -122,26 +124,26 @@ where
                 this.rev = false;
             }
 
-            if !this.action.monoid_lazy().is_id(&this.lazy) {
+            if !this.act.monoid().is_id(&this.lazy) {
                 let lc = this.lc;
                 if !lc.is_null() {
                     let lc = unsafe { &mut *lc };
-                    lc.lazy = this.action.update(lc.lazy.clone(), this.lazy.clone());
+                    lc.lazy = this.act.op(lc.lazy.clone(), this.lazy.clone());
                 }
 
                 let rc = this.rc;
                 if !rc.is_null() {
                     let rc = unsafe { &mut *rc };
-                    rc.lazy = this.action.update(rc.lazy.clone(), this.lazy.clone());
+                    rc.lazy = this.act.op(rc.lazy.clone(), this.lazy.clone());
                 }
 
                 this.value = this
-                    .action
-                    .convert(this.value.clone(), this.lazy.clone(), 1);
-                this.sum = this
-                    .action
-                    .convert(this.sum.clone(), this.lazy.clone(), this.size);
-                this.lazy = this.action.update_id();
+                    .act
+                    .act_n(&this.monoid, this.value.clone(), this.lazy.clone(), 1);
+                this.sum =
+                    this.act
+                        .act_n(&this.monoid, this.sum.clone(), this.lazy.clone(), this.size);
+                this.lazy = this.act.id();
             }
         }
     }
@@ -159,12 +161,12 @@ where
 
         if !this.lc.is_null() {
             let lc = unsafe { &mut *this.lc };
-            this.sum = this.action.fold(this.sum.clone(), lc.sum.clone());
+            this.sum = this.monoid.op(this.sum.clone(), lc.sum.clone());
         }
 
         if !this.rc.is_null() {
             let rc = unsafe { &mut *this.rc };
-            this.sum = this.action.fold(this.sum.clone(), rc.sum.clone());
+            this.sum = this.monoid.op(this.sum.clone(), rc.sum.clone());
         }
     }
 
@@ -299,28 +301,33 @@ where
 }
 
 /// 遅延スプレー木
-pub struct LazySplayTree<A: Action> {
-    action: A,
-    root: Cell<*mut Node<A>>,
+pub struct LazySplayTree<M: Monoid, A: Act<M>> {
+    monoid: M,
+    act: A,
+    root: Cell<*mut Node<M, A>>,
 }
 
-impl<A: Action> LazySplayTree<A> {
+impl<M: Monoid, A: Act<M>> LazySplayTree<M, A> {
     /// `LazySplayTree<A>`を生成
-    pub fn new(action: A) -> Self {
+    pub fn new(monoid: M, act: A) -> Self {
         let root = Cell::new(ptr::null_mut());
-        Self { action, root }
+        Self { monoid, act, root }
     }
 }
 
-impl<A: Action + Clone> LazySplayTree<A>
+impl<M: Monoid + Clone, A: Act<M> + Clone> LazySplayTree<M, A>
 where
-    A::Output: Clone,
-    A::Lazy: Clone + PartialEq,
+    M::Element: Clone,
+    A::Element: Clone + PartialEq,
 {
     /// 値`value`をもつノード一つのみからなる`SplayTree<M>`を生成
-    pub fn singleton(action: A, value: A::Output) -> Self {
-        let root = Cell::new(Box::into_raw(Box::new(Node::new(action.clone(), value))));
-        Self { action, root }
+    pub fn singleton(monoid: M, act: A, value: M::Element) -> Self {
+        let root = Cell::new(Box::into_raw(Box::new(Node::new(
+            monoid.clone(),
+            act.clone(),
+            value,
+        ))));
+        Self { monoid, act, root }
     }
 
     /// スプレーツリーの要素数を返す
@@ -334,7 +341,7 @@ where
     }
 
     /// `index`番目の要素の参照を返す
-    pub fn get(&self, index: usize) -> Option<&A::Output> {
+    pub fn get(&self, index: usize) -> Option<&M::Element> {
         let node = Node::get(self.root.get(), index);
         self.root.set(node);
 
@@ -346,7 +353,7 @@ where
     }
 
     /// `index`番目の要素を`value`に変更する
-    pub fn set(&mut self, index: usize, value: A::Output) {
+    pub fn set(&mut self, index: usize, value: M::Element) {
         let root = Node::get(self.root.get(), index);
         Node::set_value(root, value);
         Node::update(root);
@@ -373,26 +380,32 @@ where
         self.root.set(ptr::null_mut());
         (
             Self {
-                action: self.action.clone(),
+                monoid: self.monoid.clone(),
+                act: self.act.clone(),
                 root: Cell::new(l),
             },
             Self {
-                action: self.action.clone(),
+                monoid: self.monoid.clone(),
+                act: self.act.clone(),
                 root: Cell::new(r),
             },
         )
     }
 
     /// 要素を`index`番目になるように挿入する
-    pub fn insert(&mut self, index: usize, value: A::Output) {
+    pub fn insert(&mut self, index: usize, value: M::Element) {
         let (l, r) = Node::split(self.root.get(), index);
-        let node = Box::into_raw(Box::new(Node::new(self.action.clone(), value)));
+        let node = Box::into_raw(Box::new(Node::new(
+            self.monoid.clone(),
+            self.act.clone(),
+            value,
+        )));
         let root = Node::merge(l, Node::merge(node, r));
         self.root.set(root);
     }
 
     /// `index`番目の要素を削除して、値を返す
-    pub fn remove(&mut self, index: usize) -> Option<A::Output> {
+    pub fn remove(&mut self, index: usize) -> Option<M::Element> {
         let (l, r) = Node::split(self.root.get(), index);
         let (m, r) = Node::split(r, 1);
 
@@ -407,7 +420,11 @@ where
         ret
     }
 
-    fn range(&self, start: usize, end: usize) -> (*mut Node<A>, *mut Node<A>, *mut Node<A>) {
+    fn range(
+        &self,
+        start: usize,
+        end: usize,
+    ) -> (*mut Node<M, A>, *mut Node<M, A>, *mut Node<M, A>) {
         let (m, r) = Node::split(self.root.get(), end);
         let (l, m) = Node::split(m, start);
         (l, m, r)
@@ -421,10 +438,10 @@ where
     }
 
     /// `start..end`の範囲でのモノイドの演算の結果を返す
-    pub fn fold(&self, Range { start, end }: Range<usize>) -> A::Output {
+    pub fn fold(&self, Range { start, end }: Range<usize>) -> M::Element {
         let (l, m, r) = self.range(start, end);
         let ret = if m.is_null() {
-            self.action.fold_id()
+            self.monoid.id()
         } else {
             unsafe { (*m).sum.clone() }
         };
@@ -433,7 +450,7 @@ where
     }
 
     /// `start..end`の範囲にモノイドの演算を施す。
-    pub fn update(&self, Range { start, end }: Range<usize>, lazy: A::Lazy) {
+    pub fn update(&self, Range { start, end }: Range<usize>, lazy: A::Element) {
         let (l, m, r) = self.range(start, end);
         if !m.is_null() {
             unsafe {
@@ -444,21 +461,21 @@ where
     }
 
     /// 先頭に値を追加する
-    pub fn push_first(&mut self, value: A::Output) {
-        let left = Self::singleton(self.action.clone(), value);
+    pub fn push_first(&mut self, value: M::Element) {
+        let left = Self::singleton(self.monoid.clone(), self.act.clone(), value);
         self.merge_left(left);
     }
     /// 末尾に値を追加する
-    pub fn push_last(&mut self, value: A::Output) {
-        let right = Self::singleton(self.action.clone(), value);
+    pub fn push_last(&mut self, value: M::Element) {
+        let right = Self::singleton(self.monoid.clone(), self.act.clone(), value);
         self.merge_right(right);
     }
     /// 先頭の値を削除する
-    pub fn pop_first(&mut self) -> Option<A::Output> {
+    pub fn pop_first(&mut self) -> Option<M::Element> {
         self.remove(0)
     }
     /// 末尾の値を削除する
-    pub fn pop_last(&mut self) -> Option<A::Output> {
+    pub fn pop_last(&mut self) -> Option<M::Element> {
         if self.is_empty() {
             None
         } else {

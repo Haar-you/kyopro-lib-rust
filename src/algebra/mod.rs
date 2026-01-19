@@ -22,7 +22,7 @@ pub mod transform;
 pub mod trivial;
 pub mod tuple;
 
-pub mod action;
+pub mod act;
 
 pub mod semiring;
 

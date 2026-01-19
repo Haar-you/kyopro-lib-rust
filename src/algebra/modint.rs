@@ -13,6 +13,8 @@ impl<T: ZZ> SumMod<T> {
     }
 }
 
+impl<T: ZZ> Additive for SumMod<T> {}
+
 impl_algebra!(
     [T: ZZ];
     SumMod<T>;
