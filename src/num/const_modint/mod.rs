@@ -176,26 +176,26 @@ impl<P: PrimeMod> Debug for ConstModInt<P> {
     }
 }
 
-impl_ops!([P: PrimeMod]; Add for ConstModInt<P>, |x: Self, y: Self| x._add(y));
-impl_ops!([P: PrimeMod]; Sub for ConstModInt<P>, |x: Self, y: Self| x._sub(y));
-impl_ops!([P: PrimeMod]; Mul for ConstModInt<P>, |x: Self, y: Self| x._mul(y));
-impl_ops!([P: PrimeMod]; Div for ConstModInt<P>, |x: Self, y: Self| x * y.inv());
+impl_ops!({P: PrimeMod} Add for ConstModInt<P>, |x: Self, y: Self| x._add(y));
+impl_ops!({P: PrimeMod} Sub for ConstModInt<P>, |x: Self, y: Self| x._sub(y));
+impl_ops!({P: PrimeMod} Mul for ConstModInt<P>, |x: Self, y: Self| x._mul(y));
+impl_ops!({P: PrimeMod} Div for ConstModInt<P>, |x: Self, y: Self| x * y.inv());
 
-impl_ops!([P: PrimeMod]; AddAssign for ConstModInt<P>, |x: &mut Self, y| *x = *x + y);
-impl_ops!([P: PrimeMod]; SubAssign for ConstModInt<P>, |x: &mut Self, y| *x = *x - y);
-impl_ops!([P: PrimeMod]; MulAssign for ConstModInt<P>, |x: &mut Self, y| *x = *x * y);
-impl_ops!([P: PrimeMod]; DivAssign for ConstModInt<P>, |x: &mut Self, y| *x = *x / y);
+impl_ops!({P: PrimeMod} AddAssign for ConstModInt<P>, |x: &mut Self, y| *x = *x + y);
+impl_ops!({P: PrimeMod} SubAssign for ConstModInt<P>, |x: &mut Self, y| *x = *x - y);
+impl_ops!({P: PrimeMod} MulAssign for ConstModInt<P>, |x: &mut Self, y| *x = *x * y);
+impl_ops!({P: PrimeMod} DivAssign for ConstModInt<P>, |x: &mut Self, y| *x = *x / y);
 
-impl_ops!([P: PrimeMod]; Neg for ConstModInt<P>, |x: Self| Self(0, PhantomData) - x);
+impl_ops!({P: PrimeMod} Neg for ConstModInt<P>, |x: Self| Self(0, PhantomData) - x);
 
-impl_from!([P: PrimeMod]; ConstModInt<P> => u32, |value: ConstModInt<P>| value.value());
+impl_from!({P: PrimeMod} ConstModInt<P> => u32, |value: ConstModInt<P>| value.value());
 
-impl_from!([P: PrimeMod]; usize => ConstModInt<P>, |value| ConstModIntBuilder::new().from_u64(value as u64));
-impl_from!([P: PrimeMod]; u64 => ConstModInt<P>, |value| ConstModIntBuilder::new().from_u64(value));
-impl_from!([P: PrimeMod]; u32 => ConstModInt<P>, |value| ConstModIntBuilder::new().from_u64(value as u64));
+impl_from!({P: PrimeMod} usize => ConstModInt<P>, |value| ConstModIntBuilder::new().from_u64(value as u64));
+impl_from!({P: PrimeMod} u64 => ConstModInt<P>, |value| ConstModIntBuilder::new().from_u64(value));
+impl_from!({P: PrimeMod} u32 => ConstModInt<P>, |value| ConstModIntBuilder::new().from_u64(value as u64));
 
-impl_from!([P: PrimeMod]; isize => ConstModInt<P>, |value| ConstModIntBuilder::new().from_i64(value as i64));
-impl_from!([P: PrimeMod]; i64 => ConstModInt<P>, |value| ConstModIntBuilder::new().from_i64(value));
-impl_from!([P: PrimeMod]; i32 => ConstModInt<P>, |value| ConstModIntBuilder::new().from_i64(value as i64));
+impl_from!({P: PrimeMod} isize => ConstModInt<P>, |value| ConstModIntBuilder::new().from_i64(value as i64));
+impl_from!({P: PrimeMod} i64 => ConstModInt<P>, |value| ConstModIntBuilder::new().from_i64(value));
+impl_from!({P: PrimeMod} i32 => ConstModInt<P>, |value| ConstModIntBuilder::new().from_i64(value as i64));
 
-impl_one_zero!([P: PrimeMod]; ConstModInt<P>; one: Self::new(1); zero: Self(0, PhantomData););
+impl_one_zero!({P: PrimeMod} ConstModInt<P>; one: Self::new(1); zero: Self(0, PhantomData););

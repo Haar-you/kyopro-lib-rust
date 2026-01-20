@@ -250,13 +250,13 @@ where
     }
 }
 
-impl_ops!([R: Ring<Element: Copy> + Clone]; AddAssign for MatrixOnRing<R>, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
-impl_ops!([R: Ring<Element: Copy> + Clone]; SubAssign for MatrixOnRing<R>, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
-impl_ops!([R: Ring<Element: Copy> + Clone]; MulAssign for MatrixOnRing<R>, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
+impl_ops!({R: Ring + Clone} AddAssign for MatrixOnRing<R> where {R::Element: Copy}, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
+impl_ops!({R: Ring + Clone} SubAssign for MatrixOnRing<R> where {R::Element: Copy}, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
+impl_ops!({R: Ring + Clone} MulAssign for MatrixOnRing<R> where {R::Element: Copy}, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
 
-impl_ops!([R: Ring<Element: Copy> + Clone]; Add for MatrixOnRing<R>, |x: Self, y| x.try_add(y).unwrap());
-impl_ops!([R: Ring<Element: Copy> + Clone]; Sub for MatrixOnRing<R>, |x: Self, y| x.try_sub(y).unwrap());
-impl_ops!([R: Ring<Element: Copy> + Clone]; Mul for MatrixOnRing<R>, |x: Self, y| x.try_mul(y).unwrap());
+impl_ops!({R: Ring + Clone} Add for MatrixOnRing<R> where {R::Element: Copy}, |x: Self, y| x.try_add(y).unwrap());
+impl_ops!({R: Ring + Clone} Sub for MatrixOnRing<R> where {R::Element: Copy}, |x: Self, y| x.try_sub(y).unwrap());
+impl_ops!({R: Ring + Clone} Mul for MatrixOnRing<R> where {R::Element: Copy}, |x: Self, y| x.try_mul(y).unwrap());
 
 impl<R: Ring> Neg for MatrixOnRing<R>
 where
