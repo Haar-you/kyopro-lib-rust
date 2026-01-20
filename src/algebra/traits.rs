@@ -2,40 +2,45 @@
 use crate::trait_alias;
 
 /// 集合
-pub trait Set {}
+pub trait Set: Sized {
+    /// 集合の元
+    type Element;
+}
 
 /// 二項演算をもつ
 pub trait BinaryOp: Set {
     /// 二項演算
-    fn op(self, other: Self) -> Self;
+    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element;
 
     /// 二項演算$\circ$で(右側から)代入操作($a \leftarrow a \circ b$)をする。
-    fn op_assign_r(&mut self, b: Self)
+    fn op_assign_r(&self, a: &mut Self::Element, b: Self::Element)
     where
-        Self: Clone,
+        Self::Element: Clone,
     {
-        *self = Self::op(self.clone(), b);
+        *a = self.op(a.clone(), b);
     }
 
     /// 二項演算$\circ$で(左側から)代入操作($a \leftarrow b \circ a$)をする。
-    fn op_assign_l(&mut self, b: Self)
+    fn op_assign_l(&self, a: &mut Self::Element, b: Self::Element)
     where
-        Self: Clone,
+        Self::Element: Clone,
     {
-        *self = Self::op(b, self.clone());
+        *a = self.op(b, a.clone());
     }
 }
 
 /// 単位元をもつ
 pub trait Identity: Set {
     /// 単位元
-    fn id() -> Self;
+    fn id(&self) -> Self::Element;
+    /// 単位元の判定
+    fn is_id(&self, a: &Self::Element) -> bool;
 }
 
 /// 逆元をもつ
 pub trait Inverse: Set {
     /// 逆元
-    fn inv(self) -> Self;
+    fn inv(&self, a: Self::Element) -> Self::Element;
 }
 
 /// 可換性をもつ
@@ -45,43 +50,70 @@ pub trait Associative {}
 /// 冪等性をもつ
 pub trait Idempotence {}
 
-trait_alias!(#[doc = "半群"] Semigroup: BinaryOp + Associative);
-trait_alias!(#[doc = "モノイド"] Monoid: Semigroup + Identity);
-trait_alias!(#[doc = "可換モノイド"] AbelianMonoid: Monoid + Commutative);
-trait_alias!(#[doc = "群"] Group: Monoid + Inverse);
-trait_alias!(#[doc = "可換群"] AbelianGroup: Group + Commutative);
+/// 二項演算が加法的
+pub trait Additive: BinaryOp {
+    fn times(&self, a: Self::Element, n: u64) -> Self::Element;
+}
 
-/// 値に二項演算を複数回適用する。
-pub trait Times: BinaryOp + Identity + Clone {
+/// 半群
+pub trait Semigroup: BinaryOp + Associative {
+    /// `iter`が空のとき、`None`を返す。
+    /// そうでないとき、`iter`の中身を二項演算で畳み込んで`Some`で返す。
+    fn reduce<I>(&self, iter: I) -> Option<Self::Element>
+    where
+        I: IntoIterator<Item = Self::Element>,
+    {
+        iter.into_iter().reduce(|a, b| self.op(a, b))
+    }
+}
+impl<T: BinaryOp + Associative> Semigroup for T {}
+
+/// モノイド
+pub trait Monoid: Semigroup + Identity {
+    /// `iter`が空のとき、モノイドの単位元を返す。
+    /// そうでないとき、`iter`の中身を二項演算で畳み込んで返す。
+    fn fold_m<I>(&self, iter: I) -> Self::Element
+    where
+        I: IntoIterator<Item = Self::Element>,
+    {
+        self.reduce(iter).unwrap_or(self.id())
+    }
+
     /// $\underbrace{a \circ a \circ \dots \circ a \circ a}_{n}$を計算する。
-    ///
-    /// **Time complexity** $O(\log n)$
-    fn times(self, mut n: u64) -> Self {
-        let mut ret = Self::id();
-        let mut a = self;
+    fn times(&self, mut a: Self::Element, mut n: u64) -> Self::Element
+    where
+        Self::Element: Clone,
+    {
+        let mut ret = self.id();
 
         while n > 0 {
             if n & 1 == 1 {
-                ret = Self::op(ret, a.clone());
+                ret = self.op(ret, a.clone());
             }
-            a = Self::op(a.clone(), a);
+            a = self.op(a.clone(), a);
             n >>= 1;
         }
 
         ret
     }
 }
-impl<A: BinaryOp + Identity + Clone> Times for A {}
+impl<T: Semigroup + Identity> Monoid for T {}
+
+trait_alias!(#[doc = "可換モノイド"] AbelianMonoid: Monoid + Commutative);
+trait_alias!(#[doc = "群"] Group: Monoid + Inverse);
+trait_alias!(#[doc = "可換群"] AbelianGroup: Group + Commutative);
+
+trait_alias!(#[doc = "半束"] Semilattice: Semigroup + Commutative + Idempotence);
 
 /// `fold_m`を提供する。
 pub trait FoldM: Iterator {
     /// モノイドで畳み込んだ結果を返す。
-    fn fold_m(self) -> Self::Item
+    fn fold_m<M>(self, monoid: &M) -> Self::Item
     where
         Self: Sized,
-        Self::Item: Monoid,
+        M: Monoid<Element = Self::Item>,
     {
-        self.fold(Self::Item::id(), Self::Item::op)
+        monoid.fold_m(self)
     }
 }
 

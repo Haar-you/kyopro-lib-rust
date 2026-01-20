@@ -3,13 +3,7 @@
 use crate::math::linear::*;
 use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
-use crate::trait_alias;
 use std::ops::{Add, AddAssign, Mul, RangeBounds};
-
-trait_alias!(
-    /// [`SegtreeLinearAddRangeSum<T>`]が扱える型
-    Elem: Copy + Zero + Add<Output = Self> + Mul<Output = Self> + AddAssign + PartialEq + From<u32>
-);
 
 /// 区間一次関数加算区間総和セグメントツリー
 pub struct SegtreeLinearAddRangeSum<T> {
@@ -19,7 +13,10 @@ pub struct SegtreeLinearAddRangeSum<T> {
     original_size: usize,
 }
 
-impl<T: Elem> SegtreeLinearAddRangeSum<T> {
+impl<T> SegtreeLinearAddRangeSum<T>
+where
+    T: Copy + Zero + Add<Output = T> + Mul<Output = T> + AddAssign + PartialEq + From<u32>,
+{
     /// **Time complexity** $O(n)$
     ///
     /// **Space complexity** $O(n)$

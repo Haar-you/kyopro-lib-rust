@@ -1,31 +1,42 @@
 //! First, Lastモノイド
+use std::marker::PhantomData;
+
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
 /// 最初に出現する`Some`を返す演算。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct First<T>(pub Option<T>);
+pub struct First<T>(PhantomData<T>);
 /// 最後に出現する`Some`を返す演算。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Last<T>(pub Option<T>);
+pub struct Last<T>(PhantomData<T>);
+
+impl<T> First<T> {
+    /// [`First<T>`]を返す。
+    pub fn new() -> Self {
+        Self(PhantomData)
+    }
+}
+impl<T> Last<T> {
+    /// [`Last<T>`]を返す。
+    pub fn new() -> Self {
+        Self(PhantomData)
+    }
+}
 
 impl_algebra!(
-    [T]; First<T>;
-    op: |a: Self, b| match a.0 {
-        Some(_) => a,
-        None => b
-    };
-    id: Self(None);
+    {T} First<T>;
+    set: Option<T>;
+    op: |_, a: Option<T>, b| a.or(b);
+    id: |_| None, |_, a: &Option<T>| a.is_none();
     assoc;
     idem;
 );
 impl_algebra!(
-    [T]; Last<T>;
-    op: |a, b: Self| match b.0 {
-        Some(_) => b,
-        None => a
-    };
-    id: Self(None);
+    {T} Last<T>;
+    set: Option<T>;
+    op: |_, a, b: Option<T>| b.or(a);
+    id: |_| None, |_, a: &Option<T>| a.is_none();
     assoc;
     idem;
 );
@@ -38,10 +49,7 @@ mod tests {
     fn test() {
         let a = [None, None, Some(1), None, Some(3), Some(5)];
 
-        let b: Vec<_> = a.into_iter().map(First).collect();
-        dbg!(b.iter().fold(First::id(), |x, y| First::op(x, *y)));
-
-        let b: Vec<_> = a.into_iter().map(Last).collect();
-        dbg!(b.iter().fold(Last::id(), |x, y| Last::op(x, *y)));
+        assert_eq!(a.iter().cloned().fold_m(&First::new()), Some(1));
+        assert_eq!(a.iter().cloned().fold_m(&Last::new()), Some(5));
     }
 }

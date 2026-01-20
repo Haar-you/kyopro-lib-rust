@@ -7,17 +7,11 @@
 
 use crate::algo::bsearch_slice::BinarySearch;
 use crate::math::linear::*;
-use crate::trait_alias;
 use std::{
     cmp::{max, min},
     mem::swap,
     ops::{Add, Mul, RangeInclusive},
 };
-
-trait_alias!(
-    /// [`LiChaoTree<T>`]が扱える型
-    Elem: Copy + Ord + Add<Output = Self> + Mul<Output = Self>
-);
 
 /// 最大値クエリか最小値クエリかを表す
 #[derive(PartialEq, Eq, Copy, Clone, Debug)]
@@ -29,14 +23,14 @@ pub enum Mode {
 }
 
 impl Mode {
-    fn op<T: Elem>(self, a: T, b: T) -> T {
+    fn op<T: Ord>(self, a: T, b: T) -> T {
         match self {
             Self::Max => max(a, b),
             Self::Min => min(a, b),
         }
     }
 
-    fn cmp<T: Elem>(self, a: T, b: T) -> bool {
+    fn cmp<T: Ord>(self, a: T, b: T) -> bool {
         match self {
             Self::Max => a > b,
             Self::Min => a < b,
@@ -53,7 +47,10 @@ pub struct LiChaoTree<T> {
     mode: Mode,
 }
 
-impl<T: Elem> LiChaoTree<T> {
+impl<T> LiChaoTree<T>
+where
+    T: Copy + Ord + Add<Output = T> + Mul<Output = T>,
+{
     fn init_range(
         range: &mut Vec<(usize, usize)>,
         size: usize,

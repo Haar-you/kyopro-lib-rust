@@ -1,20 +1,21 @@
-//! 逆行列 (mod 素数)
-use crate::num::{ff::FFElem, one_zero::*};
+//! $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上の逆行列
+use crate::num::ff::*;
 
-/// 素数mod p上での逆行列を求める。
+/// $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上での逆行列を求める。
 ///
 /// **Time complexity** $O(n^3)$
-pub fn inverse<T>(mut b: Vec<Vec<T>>) -> Option<Vec<Vec<T>>>
+pub fn inverse<F>(mut b: Vec<Vec<F::Element>>, modulo: &F) -> Option<Vec<Vec<F::Element>>>
 where
-    T: FFElem + Copy + Zero + One,
+    F: FF,
+    F::Element: FFElem,
 {
     let n = b.len();
 
     assert!(b.iter().all(|r| r.len() == n));
 
     for (i, bi) in b.iter_mut().enumerate() {
-        bi.resize(2 * n, T::zero());
-        bi[i + n] = T::one();
+        bi.resize(2 * n, modulo.zero());
+        bi[i + n] = modulo.one();
     }
 
     for i in 0..n {
@@ -52,44 +53,42 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{math::prime_mod::Prime, num::const_modint::*};
+    use crate::num::modint::*;
 
-    fn convert<U, T>(a: Vec<Vec<T>>) -> Vec<Vec<U>>
-    where
-        U: From<T>,
-    {
-        a.into_iter()
-            .map(|b| b.into_iter().map(From::from).collect())
-            .collect()
+    fn check(a: Vec<Vec<i64>>, m: u32, ans: Option<Vec<Vec<i64>>>) {
+        let m = ModIntBuilder::new(m);
+        let a = a
+            .into_iter()
+            .map(|b| b.into_iter().map(|x| m.from_i64(x)).collect())
+            .collect();
+        let ans = ans.map(|a| {
+            a.into_iter()
+                .map(|b| b.into_iter().map(|x| m.from_i64(x)).collect())
+                .collect()
+        });
+        assert_eq!(inverse(a, &m), ans);
     }
-
-    type P = Prime<998244353>;
 
     #[test]
     fn test() {
-        let a = vec![vec![3, 1, 4], vec![1, 5, 9], vec![2, 6, 5]];
-        let a = convert::<ConstModInt<P>, _>(a);
-        let res = inverse(a);
-        let res = res.map(convert::<u32, _>);
-        assert_eq!(
-            res,
+        check(
+            vec![vec![3, 1, 4], vec![1, 5, 9], vec![2, 6, 5]],
+            998244353,
             Some(vec![
                 vec![188557267, 255106890, 587855008],
                 vec![122007643, 987152749, 321656514],
-                vec![576763404, 310564910, 976061145]
-            ])
+                vec![576763404, 310564910, 976061145],
+            ]),
         );
-
-        let a = vec![vec![1, 2, 3], vec![4, 5, 6], vec![7, 8, 9]];
-        let a = convert::<ConstModInt<P>, _>(a);
-        let res = inverse(a);
-        let res = res.map(convert::<u32, _>);
-        assert_eq!(res, None);
-
-        let a = vec![vec![0, 1], vec![1, 0]];
-        let a = convert::<ConstModInt<P>, _>(a);
-        let res = inverse(a);
-        let res = res.map(convert::<u32, _>);
-        assert_eq!(res, Some(vec![vec![0, 1], vec![1, 0]]));
+        check(
+            vec![vec![1, 2, 3], vec![4, 5, 6], vec![7, 8, 9]],
+            998244353,
+            None,
+        );
+        check(
+            vec![vec![0, 1], vec![1, 0]],
+            998244353,
+            Some(vec![vec![0, 1], vec![1, 0]]),
+        );
     }
 }

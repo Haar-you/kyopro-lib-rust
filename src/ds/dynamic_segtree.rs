@@ -26,24 +26,23 @@ impl<T> Node<T> {
 /// 動的セグメント木
 #[derive(Debug)]
 pub struct DynamicSegtree<M: Monoid> {
-    data: Vec<Node<M>>,
+    monoid: M,
+    data: Vec<Node<M::Element>>,
     root: NullableUsize,
     to: usize,
 }
 
-impl<M: Monoid + Clone> Default for DynamicSegtree<M> {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl<M: Monoid + Clone> DynamicSegtree<M> {
+impl<M: Monoid> DynamicSegtree<M>
+where
+    M::Element: Clone,
+{
     /// [`DynamicSegtree<M>`]を生成する。
-    pub fn new() -> Self {
+    pub fn new(monoid: M) -> Self {
         Self {
-            data: vec![Node::new(M::id())],
+            data: vec![Node::new(monoid.id())],
             root: NullableUsize(0),
             to: 1,
+            monoid,
         }
     }
 
@@ -53,7 +52,7 @@ impl<M: Monoid + Clone> DynamicSegtree<M> {
         cur_from: usize,
         cur_to: usize,
         i: usize,
-        value: M,
+        value: M::Element,
     ) {
         if cur_to - cur_from == 1 {
             self.data[cur_id.0].value = value;
@@ -78,14 +77,14 @@ impl<M: Monoid + Clone> DynamicSegtree<M> {
             let left = self.data[cur_id.0].left;
             let right = self.data[cur_id.0].right;
 
-            self.data[cur_id.0].value = M::op(
+            self.data[cur_id.0].value = self.monoid.op(
                 if left.is_null() {
-                    M::id()
+                    self.monoid.id()
                 } else {
                     self.data[left.0].value.clone()
                 },
                 if right.is_null() {
-                    M::id()
+                    self.monoid.id()
                 } else {
                     self.data[right.0].value.clone()
                 },
@@ -94,7 +93,7 @@ impl<M: Monoid + Clone> DynamicSegtree<M> {
     }
 
     /// `i`番目の要素を`value`で更新する。
-    pub fn assign(&mut self, i: usize, value: M) {
+    pub fn assign(&mut self, i: usize, value: M::Element) {
         loop {
             if i < self.to {
                 break;
@@ -117,32 +116,32 @@ impl<M: Monoid + Clone> DynamicSegtree<M> {
         cur_to: usize,
         from: usize,
         to: usize,
-    ) -> M {
+    ) -> M::Element {
         let cur = &self.data[cur_id.0];
 
         if cur_to <= from || to <= cur_from {
-            M::id()
+            self.monoid.id()
         } else if from <= cur_from && cur_to <= to {
             cur.value.clone()
         } else {
             let mid = (cur_from + cur_to) / 2;
             let lv = if cur.left.is_null() {
-                M::id()
+                self.monoid.id()
             } else {
                 self.fold_dfs(cur.left, cur_from, mid, from, to)
             };
             let rv = if cur.right.is_null() {
-                M::id()
+                self.monoid.id()
             } else {
                 self.fold_dfs(cur.right, mid, cur_to, from, to)
             };
 
-            M::op(lv, rv)
+            self.monoid.op(lv, rv)
         }
     }
 
     /// 範囲`start..end`で計算を集約する。
-    pub fn fold(&self, Range { start, end }: Range<usize>) -> M {
+    pub fn fold(&self, Range { start, end }: Range<usize>) -> M::Element {
         self.fold_dfs(self.root, 0, self.to, start, end)
     }
 }
@@ -160,8 +159,10 @@ mod tests {
     fn test() {
         let mut rng = rand::thread_rng();
 
-        let mut seg = DynamicSegtree::<Sum<u64>>::new();
-        let mut map = BTreeMap::<usize, Sum<u64>>::new();
+        let m = Sum::<u64>::new();
+
+        let mut seg = DynamicSegtree::new(m);
+        let mut map = BTreeMap::<usize, u64>::new();
 
         let t = 100;
 
@@ -169,13 +170,13 @@ mod tests {
             let i = rng.gen_range::<usize, _>(0..usize::MAX / 2);
             let x = rng.gen::<u64>() % 1000000;
 
-            seg.assign(i, Sum(x));
-            map.entry(i).or_insert(Sum::id()).op_assign_r(Sum(x));
+            seg.assign(i, x);
+            m.op_assign_r(map.entry(i).or_insert(m.id()), x);
 
             let lr = rand_range(&mut rng, 0..usize::MAX / 2);
 
             let res = seg.fold(lr.clone());
-            let ans = map.range(lr).map(|(_, v)| v).cloned().fold_m();
+            let ans = map.range(lr).map(|(_, v)| v).cloned().fold_m(&m);
 
             assert_eq!(res, ans);
         }

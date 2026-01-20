@@ -3,12 +3,12 @@ pub mod div_mul_transform;
 pub mod mobius;
 pub mod zeta;
 
-pub mod conv_and;
-pub mod conv_gcd;
-pub mod conv_lcm;
+pub mod conv_and_or;
+pub mod conv_gcd_lcm;
+pub mod conv_mul_mod2n;
 pub mod conv_mul_modp;
-pub mod conv_or;
 pub mod conv_xor;
+pub mod min_plus_conv_convex;
 pub mod subset_conv;
 
 pub mod ntt;
@@ -20,9 +20,8 @@ mod tests {
     use crate::{iter::collect::CollectVec, num::const_modint::*};
     use rand::Rng;
 
-    use super::conv_and::convolution_and;
-    use super::conv_gcd::convolution_gcd;
-    use super::conv_or::convolution_or;
+    use super::conv_and_or::{convolution_and, convolution_or};
+    use super::conv_gcd_lcm::convolution_gcd;
     use super::conv_xor::convolution_xor;
     use super::mobius::*;
     use super::subset_conv::subset_convolution;

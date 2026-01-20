@@ -1,4 +1,3 @@
-//! 任意mod
+//! $\mathbb{Z} / m \mathbb{Z}$
 
-pub mod matrix;
-pub mod square_matrix;
+pub mod determinant;

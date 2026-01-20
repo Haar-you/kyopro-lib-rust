@@ -1,24 +1,39 @@
 //! 一次関数の合成
 pub use crate::algebra::traits::*;
+use crate::math::linear::Linear;
 pub use crate::num::one_zero::*;
-use std::ops::{Add, Mul};
+use std::{
+    marker::PhantomData,
+    ops::{Add, Mul},
+};
 
-/// 一次関数の合成を演算とする代数的構造
+/// [`Linear`]の合成
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, Hash)]
-pub struct Affine<T>(pub T, pub T);
-
-impl<T> Set for Affine<T> {}
-
-impl<T: Add<Output = T> + Mul<Output = T> + Copy> BinaryOp for Affine<T> {
-    fn op(self, b: Self) -> Self {
-        Self(self.0 * b.0, self.0 * b.1 + self.1)
+pub struct Composition<T>(PhantomData<T>);
+impl<T> Composition<T> {
+    /// [`Composition`]を返す。
+    pub fn new() -> Self {
+        Self(PhantomData)
     }
 }
 
-impl<T: One + Zero + Copy> Identity for Affine<T> {
-    fn id() -> Self {
-        Self(T::one(), T::zero())
+impl<T> Set for Composition<T> {
+    type Element = Linear<T>;
+}
+
+impl<T: Add<Output = T> + Mul<Output = T> + Copy> BinaryOp for Composition<T> {
+    fn op(&self, f: Self::Element, g: Self::Element) -> Self::Element {
+        Linear::new(f.a * g.a, f.a * g.b + f.b)
     }
 }
 
-impl<T> Associative for Affine<T> {}
+impl<T: One + Zero + Copy + PartialEq> Identity for Composition<T> {
+    fn id(&self) -> Self::Element {
+        Linear::new(T::one(), T::zero())
+    }
+    fn is_id(&self, a: &Self::Element) -> bool {
+        a == &self.id()
+    }
+}
+
+impl<T> Associative for Composition<T> {}

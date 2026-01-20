@@ -3,44 +3,36 @@ pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
 /// 変換操作
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Transformation {
-    value: Option<Vec<usize>>,
+    value: Vec<usize>,
 }
 
 impl Transformation {
+    /// 恒等変換を返す。
+    pub fn id(n: usize) -> Self {
+        Self {
+            value: (0..n).collect(),
+        }
+    }
+
     /// `i`番目の要素を返す。
     pub fn get(&self, i: usize) -> usize {
-        self.value.as_ref().map_or_else(|| i, |a| a[i])
+        self.value[i]
     }
 
     /// $b_i = a_{T_i}$を満たすbを返す。
     pub fn apply<T: Clone>(&self, a: Vec<T>) -> Vec<T> {
-        self.value
-            .as_ref()
-            .map(|t| t.iter().map(|&i| a[i].clone()).collect())
-            .unwrap_or(a)
-    }
-
-    /// 単位元であるとき、`true`を返す。
-    pub fn is_identity(&self) -> bool {
-        self.value
-            .as_ref()
-            .is_none_or(|a| a.iter().enumerate().all(|(i, &x)| i == x))
+        self.value.iter().map(|&i| a[i].clone()).collect()
     }
 
     /// 操作を合成する。
     pub fn compose(self, other: Self) -> Self {
+        let (a, b) = (self.value, other.value);
+        let n = a.len();
+        assert_eq!(a.len(), b.len());
         Self {
-            value: match (self.value, other.value) {
-                (Some(a), Some(b)) => {
-                    let n = a.len();
-                    assert_eq!(a.len(), b.len());
-                    Some((0..n).map(|i| a[b[i]]).collect())
-                }
-                (a, None) => a,
-                (None, b) => b,
-            },
+            value: (0..n).map(|i| a[b[i]]).collect(),
         }
     }
 }
@@ -53,23 +45,19 @@ impl TryFrom<Vec<usize>> for Transformation {
         value
             .iter()
             .all(|&i| i < n)
-            .then_some(Self { value: Some(value) })
+            .then_some(Self { value })
             .ok_or("すべての値は`.len()`未満でなければならない。")
     }
 }
 
-impl PartialEq for Transformation {
-    fn eq(&self, other: &Self) -> bool {
-        match (&self.value, &other.value) {
-            (Some(a), Some(b)) => a == b,
-            _ => self.is_identity() && other.is_identity(),
-        }
-    }
-}
+/// [`Transformation`]の合成
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub struct Composition(pub usize);
 
 impl_algebra!(
-    Transformation;
-    op: |a: Self, b: Self| a.compose(b);
-    id: Self { value: None };
+    Composition;
+    set: Transformation;
+    op: |_, a: Transformation, b: Transformation| a.compose(b);
+    id: |s: &Self| Transformation::id(s.0), |s: &Self, a| a == &s.id() ;
     assoc;
 );

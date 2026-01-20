@@ -5,24 +5,28 @@ use std::ops::{Range, RangeTo};
 /// 可換群の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 #[derive(Clone, Default)]
 pub struct FenwickTree<G: AbelianGroup> {
-    data: Vec<G>,
+    group: G,
+    data: Vec<G::Element>,
     size: usize,
 }
 
-impl<G: AbelianGroup + Clone> FenwickTree<G> {
+impl<G: AbelianGroup> FenwickTree<G>
+where
+    G::Element: Clone,
+{
     /// 長さ`size`、可換群`group`から[`FenwickTree<G>`]を生成する。
-    pub fn new(size: usize) -> Self {
-        let data = vec![G::id(); size + 1];
-        Self { data, size }
+    pub fn new(group: G, size: usize) -> Self {
+        let data = vec![group.id(); size + 1];
+        Self { group, data, size }
     }
 
     /// `i`番目の要素を`value`で更新する。
     ///
     /// **Time complexity** $O(\log n)$
-    pub fn update(&mut self, mut i: usize, value: G) {
+    pub fn update(&mut self, mut i: usize, value: G::Element) {
         i += 1;
         while i <= self.size {
-            self.data[i] = G::op(self.data[i].clone(), value.clone());
+            self.data[i] = self.group.op(self.data[i].clone(), value.clone());
             i += i & (!i + 1);
         }
     }
@@ -30,11 +34,11 @@ impl<G: AbelianGroup + Clone> FenwickTree<G> {
     /// 範囲`0..r`で計算を集約した結果を返す。
     ///
     /// **Time complexity** $O(\log n)$
-    pub fn fold_to(&self, RangeTo { end: mut i }: RangeTo<usize>) -> G {
-        let mut ret = G::id();
+    pub fn fold_to(&self, RangeTo { end: mut i }: RangeTo<usize>) -> G::Element {
+        let mut ret = self.group.id();
 
         while i > 0 {
-            ret = G::op(ret.clone(), self.data[i].clone());
+            ret = self.group.op(ret.clone(), self.data[i].clone());
             i -= i & (!i + 1);
         }
 
@@ -44,7 +48,8 @@ impl<G: AbelianGroup + Clone> FenwickTree<G> {
     /// 範囲`l..r`で計算を集約した結果を返す。
     ///
     /// **Time complexity** $O(\log n)$
-    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> G {
-        G::op(self.fold_to(..r), self.fold_to(..l).inv())
+    pub fn fold(&self, Range { start: l, end: r }: Range<usize>) -> G::Element {
+        self.group
+            .op(self.fold_to(..r), self.group.inv(self.fold_to(..l)))
     }
 }

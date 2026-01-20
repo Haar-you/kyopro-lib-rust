@@ -54,7 +54,7 @@ fn reduce(value: u64, modulo: u64, m: u64) -> u64 {
     ret
 }
 
-impl FF for MontgomeryBuilder {
+impl ZZ for MontgomeryBuilder {
     type Element = Montgomery;
     fn from_u64(&self, mut value: u64) -> Self::Element {
         if value >= self.modulo as u64 {
@@ -79,6 +79,8 @@ impl FF for MontgomeryBuilder {
     }
 }
 
+impl FF for MontgomeryBuilder {}
+
 /// `modulo`を法として剰余をとる構造体。
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub struct Montgomery {
@@ -88,7 +90,7 @@ pub struct Montgomery {
     m: u64,
 }
 
-impl FFElem for Montgomery {
+impl ZZElem for Montgomery {
     #[inline]
     fn value(self) -> u32 {
         reduce(self.value, self.modulo, self.m) as u32
@@ -114,6 +116,8 @@ impl FFElem for Montgomery {
         Self { value, ..self }
     }
 }
+
+impl FFElem for Montgomery {}
 
 impl Montgomery {
     fn __new(value: u64, modulo: u64, r2: u64, m: u64) -> Self {

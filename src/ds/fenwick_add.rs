@@ -1,12 +1,6 @@
 //! 可換な加減算に特化したFenwickTree
 use crate::num::one_zero::Zero;
-use crate::trait_alias;
 use std::ops::{Add, Range, RangeTo, Sub};
-
-trait_alias!(
-    /// [`FenwickTreeAdd<T>`]が扱える型
-    Elem: Copy + Zero + Add<Output = Self> + Sub<Output = Self>
-);
 
 /// 可換な加減算に特化したFenwickTree
 pub struct FenwickTreeAdd<T> {
@@ -14,7 +8,10 @@ pub struct FenwickTreeAdd<T> {
     size: usize,
 }
 
-impl<T: Elem> FenwickTreeAdd<T> {
+impl<T> FenwickTreeAdd<T>
+where
+    T: Copy + Zero + Add<Output = T> + Sub<Output = T>,
+{
     /// 長さ`size`の[`FenwickTreeAdd<T>`]を生成する。
     pub fn new(size: usize) -> Self {
         Self {
@@ -67,7 +64,10 @@ impl<T: Elem> FenwickTreeAdd<T> {
     }
 }
 
-impl<T: Elem + Ord> FenwickTreeAdd<T> {
+impl<T> FenwickTreeAdd<T>
+where
+    T: Copy + Zero + Add<Output = T> + Sub<Output = T> + Ord,
+{
     /// 列の接頭辞の総和が単調増加であるとき、接頭辞の総和が`value`以上となる位置を返す。
     pub fn lower_bound(&self, value: T) -> usize {
         let n = self.size;

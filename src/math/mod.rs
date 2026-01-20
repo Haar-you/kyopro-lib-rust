@@ -38,6 +38,7 @@ pub mod count_coprime;
 pub mod enumerate_quotients;
 
 pub mod linear_congruence;
+pub mod linear_indeterminate_equation;
 
 pub mod polynomial;
 

@@ -3,6 +3,8 @@
 //! # Problems
 //! - <https://atcoder.jp/contests/abc415/tasks/abc415_f>
 
+use std::marker::PhantomData;
+
 use crate::algebra::traits::*;
 use crate::impl_algebra;
 
@@ -47,10 +49,18 @@ fn join<T: Eq>(a: (usize, T), b: (usize, T)) -> (usize, T) {
     }
 }
 
-impl<T: Copy + Eq> BinaryOp for MaxContiguous<T> {
-    fn op(self, other: Self) -> Self {
-        let (a, b) = (self, other);
+/// [`MaxContiguous`]の合成
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq, Hash)]
+pub struct Composition<T>(PhantomData<T>);
+impl<T> Composition<T> {
+    /// [`Composition<T>`]を返す。
+    pub fn new() -> Self {
+        Self(PhantomData)
+    }
+}
 
+impl<T: Copy + Eq> BinaryOp for Composition<T> {
+    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
         let max = max(max(a.max, b.max), join(a.right, b.left));
 
         let left = if a.left.0 == a.length && a.left.1 == b.left.1 {
@@ -67,7 +77,7 @@ impl<T: Copy + Eq> BinaryOp for MaxContiguous<T> {
 
         let length = a.length + b.length;
 
-        Self {
+        MaxContiguous {
             max,
             left,
             right,
@@ -77,6 +87,7 @@ impl<T: Copy + Eq> BinaryOp for MaxContiguous<T> {
 }
 
 impl_algebra!(
-    [T: Copy + Eq]; MaxContiguous<T>;
+    {T: Copy + Eq} Composition<T>;
+    set: MaxContiguous<T>;
     assoc;
 );

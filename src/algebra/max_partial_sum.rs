@@ -7,6 +7,7 @@ pub use crate::algebra::traits::*;
 use crate::max;
 
 use std::cmp::max;
+use std::marker::PhantomData;
 use std::ops::Add;
 
 /// 空ではない連続する部分列の総和を管理する。
@@ -34,12 +35,23 @@ impl<T: Copy> MaxPartialSum<T> {
     }
 }
 
-impl<T> Set for MaxPartialSum<T> {}
+/// [`MaxPartialSum`]の合成
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq, Hash)]
+pub struct Composition<T>(PhantomData<T>);
+impl<T> Composition<T> {
+    /// [`Composition<T>`]を返す。
+    pub fn new() -> Self {
+        Self(PhantomData)
+    }
+}
 
-impl<T: Copy + Ord + Add<Output = T>> BinaryOp for MaxPartialSum<T> {
-    fn op(self, b: Self) -> Self {
-        let a = self;
-        Self {
+impl<T> Set for Composition<T> {
+    type Element = MaxPartialSum<T>;
+}
+
+impl<T: Copy + Ord + Add<Output = T>> BinaryOp for Composition<T> {
+    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
+        MaxPartialSum {
             sum: a.sum + b.sum,
             left_max: a.left_max.max(a.sum + max(b.left_max, b.sum)),
             right_max: b.right_max.max(b.sum + max(a.right_max, a.sum)),
@@ -48,11 +60,11 @@ impl<T: Copy + Ord + Add<Output = T>> BinaryOp for MaxPartialSum<T> {
     }
 }
 
-impl<T> Associative for MaxPartialSum<T> {}
+impl<T> Associative for Composition<T> {}
 
 #[cfg(test)]
 mod tests {
-    use crate::iter::collect::CollectVec;
+    use crate::{algebra::option::AppendId, iter::collect::CollectVec};
 
     use super::*;
     use rand::Rng;
@@ -68,10 +80,12 @@ mod tests {
 
         let (ans, _) = crate::algo::max_partial_sum::max_partial_sum(&a).unwrap();
 
+        let m = AppendId(Composition::new());
+
         let res = a
             .iter()
             .map(|&x| Some(MaxPartialSum::new(x)))
-            .fold(Option::id(), |x, y| x.op(y))
+            .fold(m.id(), |x, y| m.op(x, y))
             .unwrap();
 
         assert_eq!(ans, res.partial_max);

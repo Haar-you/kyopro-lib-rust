@@ -7,17 +7,11 @@
 use crate::math::linear::*;
 use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
-use crate::trait_alias;
 use std::{
     cell::Cell,
     mem::size_of,
     ops::{Add, Mul, RangeBounds},
 };
-
-trait_alias!(
-    /// [`SegtreeLinearAdd<T>`]が扱える型
-    Elem: Copy + Add<Output = Self> + Mul<Output = Self> + Zero + From<u32>
-);
 
 /// 区間一次関数加算セグメントツリー
 pub struct SegtreeLinearAdd<T> {
@@ -31,7 +25,10 @@ fn add<T: Add<Output = T>>((a, b): (T, T), (c, d): (T, T)) -> (T, T) {
     (a + c, b + d)
 }
 
-impl<T: Elem> SegtreeLinearAdd<T> {
+impl<T> SegtreeLinearAdd<T>
+where
+    T: Copy + Add<Output = T> + Mul<Output = T> + Zero + From<u32>,
+{
     /// **Time complexity** $O(n)$
     pub fn new(n: usize) -> Self {
         let size = n.next_power_of_two() * 2;

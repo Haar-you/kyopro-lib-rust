@@ -4,14 +4,14 @@
 //! - <https://manabitimes.jp/math/892>
 #![allow(clippy::needless_range_loop)]
 
-use crate::num::ff::*;
+use crate::num::zz::*;
 
 /// ベル数$B(0, 0), \dots, B(n, n)$を求める。
-pub fn bell_number_table<Modulo: FF>(n: usize, modulo: Modulo) -> Vec<Vec<Modulo::Element>>
+pub fn bell_number_table<R: ZZ>(n: usize, modulo: R) -> Vec<Vec<R::Element>>
 where
-    Modulo::Element: FFElem + Copy,
+    R::Element: ZZElem + Copy,
 {
-    let mut ret = vec![vec![modulo.from_u64(0); n + 1]; n + 1];
+    let mut ret = vec![vec![modulo.zero(); n + 1]; n + 1];
     ret[0][0] = modulo.from_u64(1);
 
     for i in 1..=n {

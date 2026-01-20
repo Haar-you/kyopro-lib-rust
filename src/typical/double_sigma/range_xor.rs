@@ -1,8 +1,6 @@
 //! 区間XORの総和
 
-/// 区間XORの総和
-///
-/// Σ{i = 1 ~ N}Σ{j = i ~ N} aᵢ ⊕ aᵢ ₊ ₁ ⊕ ... ⊕ aⱼ
+/// 区間XORの総和 $\sum_{i = 1}^N \sum_{j = i}^N a_i \oplus a_{i+1} \oplus \dots \oplus a_j$
 ///
 /// **Time complexity** $O(64 * |a|)$
 ///

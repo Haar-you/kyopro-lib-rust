@@ -13,7 +13,7 @@ use std::hash::{Hash, Hasher};
 use crate::iter::collect::CollectVec;
 use crate::math::convolution::ntt::*;
 use crate::math::prime_mod::Prime;
-use crate::num::ff::FFElem;
+use crate::num::ff::*;
 
 /// `seq`の`|pat|`長の各連続部分列が`pat`と一致するかを判定する。
 /// `wildcard`はワイルドカードとして扱う。

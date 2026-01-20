@@ -1,7 +1,7 @@
-//! ガウスの消去法 (mod 2)
+//! $\mathbb{Z} / 2 \mathbb{Z}$上のガウスの消去法
 use crate::ds::bitset::*;
 
-/// mod 2上で行列を掃き出し、ランクを求める。
+/// $\mathbb{Z} / 2 \mathbb{Z}$上で行列を掃き出し、ランクを求める。
 pub fn gaussian_elim(mut a: Vec<Bitset>) -> (usize, Vec<Bitset>) {
     let n = a.len();
     let Some(m) = a.first().map(|a| a.len()) else {

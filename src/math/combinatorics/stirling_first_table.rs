@@ -1,12 +1,12 @@
 //! 符号付き第一種スターリング数$s(0,0), \dots, s(n,n)$を列挙する。
-use crate::num::ff::*;
+use crate::num::zz::*;
 
 /// 符号付き第一種スターリング数$s(0,0), \dots, s(n,n)$を列挙する。
 ///
 /// **Time complexity** $O(n^2)$
-pub fn stirling_first_table<Modulo: FF>(n: usize, modulo: Modulo) -> Vec<Vec<Modulo::Element>>
+pub fn stirling_first_table<R: ZZ>(n: usize, modulo: R) -> Vec<Vec<R::Element>>
 where
-    Modulo::Element: Copy,
+    R::Element: Copy,
 {
     let mut ret = vec![vec![modulo.from_u64(0); n + 1]; n + 1];
 

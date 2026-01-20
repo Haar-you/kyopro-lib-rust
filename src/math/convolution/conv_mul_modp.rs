@@ -1,4 +1,4 @@
-//! 素数$P$に対して、$c_k = \sum_{i \times j = k \pmod P} a_i b_j$を満たす$c$を求める。
+//! 添字積$\pmod p$畳み込み
 use std::iter::successors;
 
 use crate::math::prime_mod::PrimeMod;
@@ -8,7 +8,10 @@ use crate::{
     num::const_modint::ConstModInt,
 };
 
-/// 素数$M$に対して、$c_k = \sum_{i \times j = k \pmod M} a_i b_j$を満たす$c$を求める。
+/// 素数$P$に対して、$c_k = \sum_{i \times j = k \pmod P} a_i b_j$を満たす$c$を求める。
+///
+/// # Requirements
+/// `f.len()` = `g.len()`
 pub fn convolution_mul_modp<P: PrimeMod>(
     mut a: Vec<ConstModInt<P>>,
     mut b: Vec<ConstModInt<P>>,
@@ -53,7 +56,7 @@ mod tests {
     use crate::{
         iter::collect::CollectVec,
         math::prime_mod::Prime,
-        num::{const_modint::ConstModIntBuilder, ff::FF},
+        num::{const_modint::ConstModIntBuilder, ff::*},
     };
 
     use super::*;

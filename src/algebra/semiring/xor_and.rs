@@ -1,24 +1,39 @@
 //! XorとAndの半環
-pub use crate::algebra::semiring::Semiring;
+use std::marker::PhantomData;
+
+pub use crate::algebra::semiring::*;
 
 /// XorとAndの半環
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct XorAndSemiring<T>(pub T);
+pub struct XorAnd<T>(PhantomData<T>);
+impl<T> XorAnd<T> {
+    /// [`XorAnd`]を返す。
+    pub fn new() -> Self {
+        Self(PhantomData)
+    }
+}
 
 macro_rules! impl_semiring {
     ($($t:ty),*) => {
-        $(impl Semiring for XorAndSemiring<$t> {
-            fn zero() -> Self {
-                Self(0)
+        $(impl Semiring for XorAnd<$t> {
+            type Element = $t;
+            fn zero(&self) -> Self::Element {
+                0
             }
-            fn one() -> Self {
-                Self(!0)
+            fn one(&self) -> Self::Element {
+                !0
             }
-            fn add(self, b: Self) -> Self {
-                Self(self.0 ^ b.0)
+            fn add(&self, a: Self::Element, b: Self::Element) -> Self::Element {
+                a ^ b
             }
-            fn mul(self, b: Self) -> Self {
-                Self(self.0 & b.0)
+            fn mul(&self, a: Self::Element, b: Self::Element) -> Self::Element {
+                a & b
+            }
+        })*
+
+        $(impl Ring for XorAnd<$t> {
+            fn neg(&self, a: Self::Element) -> Self::Element {
+                a
             }
         })*
     };

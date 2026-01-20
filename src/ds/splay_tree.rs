@@ -15,8 +15,9 @@ use std::ptr;
 use crate::algebra::traits::Monoid;
 
 struct Node<M: Monoid> {
-    value: M,
-    sum: M,
+    monoid: M,
+    value: M::Element,
+    sum: M::Element,
     size: usize,
     rev: bool,
     lc: *mut Node<M>,
@@ -24,11 +25,15 @@ struct Node<M: Monoid> {
     par: *mut Node<M>,
 }
 
-impl<M: Monoid + Clone> Node<M> {
-    fn new(value: M) -> Self {
+impl<M: Monoid + Clone> Node<M>
+where
+    M::Element: Clone,
+{
+    fn new(monoid: M, value: M::Element) -> Self {
         Self {
+            monoid: monoid.clone(),
             value,
-            sum: M::id(),
+            sum: monoid.id(),
             size: 1,
             rev: false,
             lc: ptr::null_mut(),
@@ -37,12 +42,12 @@ impl<M: Monoid + Clone> Node<M> {
         }
     }
 
-    fn get_sum(this: *mut Self) -> M {
+    fn get_sum(this: *mut Self) -> M::Element {
         assert!(!this.is_null());
         unsafe { (*this).sum.clone() }
     }
 
-    fn set_value(this: *mut Self, value: M) {
+    fn set_value(this: *mut Self, value: M::Element) {
         assert!(!this.is_null());
         unsafe {
             (*this).value = value;
@@ -126,10 +131,14 @@ impl<M: Monoid + Clone> Node<M> {
 
             (*this).sum = (*this).value.clone();
             if !(*this).lc.is_null() {
-                (*this).sum = M::op(Self::get_sum(this), Self::get_sum((*this).lc));
+                (*this).sum = (*this)
+                    .monoid
+                    .op(Self::get_sum(this), Self::get_sum((*this).lc));
             }
             if !(*this).rc.is_null() {
-                (*this).sum = M::op(Self::get_sum(this), Self::get_sum((*this).rc));
+                (*this).sum = (*this)
+                    .monoid
+                    .op(Self::get_sum(this), Self::get_sum((*this).rc));
             }
         }
     }
@@ -222,7 +231,7 @@ impl<M: Monoid + Clone> Node<M> {
         (left, cur)
     }
 
-    fn traverse(cur: *mut Self, f: &mut impl FnMut(&M)) {
+    fn traverse(cur: *mut Self, f: &mut impl FnMut(&M::Element)) {
         if !cur.is_null() {
             Self::pushdown(cur);
             Self::traverse(Self::left_of(cur).unwrap(), f);
@@ -288,28 +297,28 @@ impl<M: Monoid> Node<M> {
 
 /// スプレーツリー
 pub struct SplayTree<M: Monoid> {
+    monoid: M,
     root: Cell<*mut Node<M>>,
 }
 
-impl<M: Monoid + Clone> Default for SplayTree<M> {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl<M: Monoid + Clone> SplayTree<M> {
+impl<M: Monoid + Clone> SplayTree<M>
+where
+    M::Element: Clone,
+{
     /// モノイド`m`をもつ`SplayTree<M>`を生成
-    pub fn new() -> Self {
+    pub fn new(monoid: M) -> Self {
         Self {
+            monoid,
             root: Cell::new(ptr::null_mut()),
         }
     }
 
     /// 値`value`をもつノード一つのみからなる`SplayTree<M>`を生成
-    pub fn singleton(value: M) -> Self {
-        let root = Box::new(Node::new(value));
+    pub fn singleton(monoid: M, value: M::Element) -> Self {
+        let root = Box::new(Node::new(monoid.clone(), value));
 
         Self {
+            monoid,
             root: Cell::new(Box::into_raw(root)),
         }
     }
@@ -325,7 +334,7 @@ impl<M: Monoid + Clone> SplayTree<M> {
     }
 
     /// `index`番目の要素の参照を返す
-    pub fn get(&self, index: usize) -> Option<&M> {
+    pub fn get(&self, index: usize) -> Option<&M::Element> {
         self.root.set(Node::get(self.root.get(), index));
         let node = self.root.get();
 
@@ -337,7 +346,7 @@ impl<M: Monoid + Clone> SplayTree<M> {
     }
 
     /// `index`番目の要素を`value`に変更する
-    pub fn set(&mut self, index: usize, value: M) {
+    pub fn set(&mut self, index: usize, value: M::Element) {
         let root = Node::get(self.root.get(), index);
         Node::set_value(root, value);
         Node::update(root);
@@ -362,19 +371,28 @@ impl<M: Monoid + Clone> SplayTree<M> {
     pub fn split(self, index: usize) -> (Self, Self) {
         let (l, r) = Node::split(self.root.get(), index);
         self.root.set(ptr::null_mut());
-        (Self { root: Cell::new(l) }, Self { root: Cell::new(r) })
+        (
+            Self {
+                monoid: self.monoid.clone(),
+                root: Cell::new(l),
+            },
+            Self {
+                monoid: self.monoid.clone(),
+                root: Cell::new(r),
+            },
+        )
     }
 
     /// 要素を`index`番目になるように挿入する
-    pub fn insert(&mut self, index: usize, value: M) {
+    pub fn insert(&mut self, index: usize, value: M::Element) {
         let (l, r) = Node::split(self.root.get(), index);
-        let node = Box::into_raw(Box::new(Node::new(value)));
+        let node = Box::into_raw(Box::new(Node::new(self.monoid.clone(), value)));
         let root = Node::merge(l, Node::merge(node, r));
         self.root.set(root);
     }
 
     /// `index`番目の要素を削除して、値を返す
-    pub fn remove(&mut self, index: usize) -> Option<M> {
+    pub fn remove(&mut self, index: usize) -> Option<M::Element> {
         let (l, r) = Node::split(self.root.get(), index);
         let (m, r) = Node::split(r, 1);
 
@@ -405,12 +423,12 @@ impl<M: Monoid + Clone> SplayTree<M> {
     }
 
     /// `start..end`の範囲でのモノイドの演算の結果を返す
-    pub fn fold(&self, Range { start, end }: Range<usize>) -> M {
+    pub fn fold(&self, Range { start, end }: Range<usize>) -> M::Element {
         let (m, r) = Node::split(self.root.get(), end);
         let (l, m) = Node::split(m, start);
 
         let ret = if m.is_null() {
-            M::id()
+            self.monoid.id()
         } else {
             Node::get_sum(m)
         };
@@ -423,21 +441,21 @@ impl<M: Monoid + Clone> SplayTree<M> {
     }
 
     /// 先頭に値を追加する
-    pub fn push_first(&mut self, value: M) {
-        let left = Self::singleton(value);
+    pub fn push_first(&mut self, value: M::Element) {
+        let left = Self::singleton(self.monoid.clone(), value);
         self.merge_left(left);
     }
     /// 末尾に値を追加する
-    pub fn push_last(&mut self, value: M) {
-        let right = Self::singleton(value);
+    pub fn push_last(&mut self, value: M::Element) {
+        let right = Self::singleton(self.monoid.clone(), value);
         self.merge_right(right);
     }
     /// 先頭の値を削除する
-    pub fn pop_first(&mut self) -> Option<M> {
+    pub fn pop_first(&mut self) -> Option<M::Element> {
         self.remove(0)
     }
     /// 末尾の値を削除する
-    pub fn pop_last(&mut self) -> Option<M> {
+    pub fn pop_last(&mut self) -> Option<M::Element> {
         if self.is_empty() {
             None
         } else {
@@ -446,7 +464,7 @@ impl<M: Monoid + Clone> SplayTree<M> {
     }
 
     /// 列の要素を始めから辿り、その参照を`f`に渡す。
-    pub fn for_each(&self, mut f: impl FnMut(&M)) {
+    pub fn for_each(&self, mut f: impl FnMut(&M::Element)) {
         Node::traverse(self.root.get(), &mut f);
     }
 }
@@ -472,15 +490,16 @@ mod tests {
 
         let mut rng = rand::thread_rng();
 
+        let m = Sum::<u64>::new();
         let mut a = vec![];
-        let mut st = SplayTree::<Sum<u64>>::new();
+        let mut st = SplayTree::new(m);
 
         for _ in 0..t {
             assert_eq!(a.len(), st.len());
             let n = a.len();
 
             let i = rng.gen_range(0..=n);
-            let x = Sum(rng.gen::<u32>() as u64);
+            let x = rng.gen::<u32>() as u64;
 
             a.insert(i, x);
             st.insert(i, x);
@@ -489,7 +508,7 @@ mod tests {
             let n = a.len();
 
             let Range { start: l, end: r } = rand_range(&mut rng, 0..n);
-            assert_eq!(a[l..r].iter().cloned().fold_m(), st.fold(l..r));
+            assert_eq!(a[l..r].iter().cloned().fold_m(&m), st.fold(l..r));
         }
     }
 }

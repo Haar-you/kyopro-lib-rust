@@ -7,12 +7,15 @@ pub mod bit;
 pub mod dihedral;
 pub mod dual;
 pub mod first_last;
+pub mod matrix;
 pub mod max_contiguous;
 pub mod max_contiguous_true;
 pub mod max_partial_sum;
 pub mod min_count;
 pub mod min_max;
+pub mod modint;
 pub mod option;
+pub mod parenthesis;
 pub mod permutation;
 pub mod prod;
 pub mod sum;
@@ -20,71 +23,65 @@ pub mod transform;
 pub mod trivial;
 pub mod tuple;
 
-pub mod action;
-
-pub mod add_min_count;
-pub mod add_sum;
-pub mod affine_sum;
-pub mod chmax_max;
-pub mod chmin_min;
-pub mod update_fold;
-pub mod update_sum;
+pub mod act;
 
 pub mod semiring;
 
 #[cfg(test)]
 mod tests {
+    use crate::algebra::dihedral;
+
     use super::traits::*;
     use std::fmt::Debug;
 
-    fn associative_law<T, I>(a: I)
+    fn associative_law<T, I>(m: &T, a: I)
     where
-        T: BinaryOp + Associative + Copy + PartialEq + Debug,
-        I: IntoIterator<Item = T>,
+        T: BinaryOp<Element: Copy + PartialEq + Debug> + Associative,
+        I: IntoIterator<Item = T::Element>,
     {
         let a: Vec<_> = a.into_iter().collect();
         for &x in &a {
             for &y in &a {
                 for &z in &a {
-                    let p = x.op(y.op(z));
-                    let q = (x.op(y)).op(z);
+                    let p = m.op(x, m.op(y, z));
+                    let q = m.op(m.op(x, y), z);
                     assert_eq!(p, q)
                 }
             }
         }
     }
 
-    fn inverse_law<T, I>(a: I)
+    fn inverse_law<T, I>(m: &T, a: I)
     where
-        T: BinaryOp + Inverse + Identity + Copy + PartialEq + Debug,
-        I: IntoIterator<Item = T>,
+        T: BinaryOp<Element: Copy + PartialEq + Debug> + Inverse + Identity,
+        I: IntoIterator<Item = T::Element>,
     {
         for x in a {
-            assert_eq!(x.op(x.inv()), T::id());
-            assert_eq!(x.inv().op(x), T::id());
+            assert!(m.is_id(&m.op(x, m.inv(x))));
+            assert!(m.is_id(&m.op(m.inv(x), x)));
         }
     }
 
-    fn identity_law<T, I>(a: I)
+    fn identity_law<T, I>(m: &T, a: I)
     where
-        T: BinaryOp + Identity + Copy + PartialEq + Debug,
-        I: IntoIterator<Item = T>,
+        T: BinaryOp<Element: Copy + PartialEq + Debug> + Identity,
+        I: IntoIterator<Item = T::Element>,
     {
         for x in a {
-            assert_eq!(x.op(T::id()), x);
-            assert_eq!(T::id().op(x), x);
+            assert_eq!(m.op(x, m.id()), x);
+            assert_eq!(m.op(m.id(), x), x);
         }
     }
 
-    fn commutative_law<T, I>(a: I)
+    fn commutative_law<T, I>(m: &T, a: I)
     where
-        T: BinaryOp + Commutative + Copy + PartialEq + Debug,
-        I: IntoIterator<Item = T>,
+        T: BinaryOp<Element: Copy + PartialEq + Debug> + Commutative,
+        I: IntoIterator<Item = T::Element>,
     {
         let a: Vec<_> = a.into_iter().collect();
         for x in &a {
             for y in &a {
-                assert_eq!(x.op(*y), y.op(*x));
+                assert_eq!(m.op(*x, *y), m.op(*y, *x));
             }
         }
     }
@@ -94,40 +91,47 @@ mod tests {
         use crate::algebra::dihedral::*;
 
         let k = 20;
+        let m = dihedral::Composition::new(k);
 
         let a = (0..k)
             .map(|i| Dihedral::r(i, k))
             .chain((0..k).map(|i| Dihedral::s(i, k)));
 
-        associative_law(a.clone());
-        inverse_law(a.clone());
-        identity_law(a);
+        associative_law(&m, a.clone());
+        inverse_law(&m, a.clone());
+        identity_law(&m, a);
     }
 
     #[test]
     fn test_sum_modint() {
-        use crate::num::modint::{algebra::*, *};
+        use crate::algebra::modint::*;
+        use crate::num::modint::*;
 
-        let m: u32 = 73;
-        let ff = ModIntBuilder::new(m);
-        let a = (0..m as u64).map(|x| SumModM::new(ff.from_u64(x)));
+        let n: u32 = 73;
+        let ff = ModIntBuilder::new(n);
 
-        associative_law(a.clone());
-        inverse_law(a.clone());
-        identity_law(a.clone());
-        commutative_law(a);
+        let m = SumMod::new(ff);
+        let a = (0..n as u64).map(|x| ff.from_u64(x));
+
+        associative_law(&m, a.clone());
+        inverse_law(&m, a.clone());
+        identity_law(&m, a.clone());
+        commutative_law(&m, a);
     }
 
     #[test]
     fn test_prod_modint() {
-        use crate::num::modint::{algebra::*, *};
+        use crate::algebra::modint::*;
+        use crate::num::modint::*;
 
-        let m: u32 = 73;
-        let ff = ModIntBuilder::new(m);
-        let a = (0..m as u64).map(|x| ProdModM::new(ff.from_u64(x)));
+        let n: u32 = 73;
+        let ff = ModIntBuilder::new(n);
 
-        associative_law(a.clone());
-        identity_law(a.clone());
-        commutative_law(a);
+        let m = ProdMod::new(ff);
+        let a = (0..n as u64).map(|x| ff.from_u64(x));
+
+        associative_law(&m, a.clone());
+        identity_law(&m, a.clone());
+        commutative_law(&m, a);
     }
 }
