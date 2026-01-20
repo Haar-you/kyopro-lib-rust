@@ -13,7 +13,11 @@ impl<T: ZZ> SumMod<T> {
     }
 }
 
-impl<T: ZZ> Additive for SumMod<T> {}
+impl<T: ZZ> Additive for SumMod<T> {
+    fn times(&self, a: Self::Element, n: u64) -> Self::Element {
+        a * self.0.from_u64(n)
+    }
+}
 
 impl_algebra!(
     {T: ZZ} SumMod<T>;

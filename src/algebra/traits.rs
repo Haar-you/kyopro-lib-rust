@@ -51,7 +51,9 @@ pub trait Associative {}
 pub trait Idempotence {}
 
 /// 二項演算が加法的
-pub trait Additive {}
+pub trait Additive: BinaryOp {
+    fn times(&self, a: Self::Element, n: u64) -> Self::Element;
+}
 
 /// 半群
 pub trait Semigroup: BinaryOp + Associative {

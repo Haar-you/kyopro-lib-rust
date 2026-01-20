@@ -19,14 +19,21 @@ macro_rules! implement {
         $(impl_algebra!(Sum<$t>; set: $t; op: |_, a: $t, b: $t| a + b;
                         id: |_| 0 as $t, |_, &a| a == 0 as $t;
                         inv: |_, a: $t| -a; commu; assoc;);)*
-        $(impl Additive for Sum<$t> {})*
+        $(impl Additive for Sum<$t> { fn times(&self, a: $t, n: u64) -> $t { a * <$t>::try_from(n).unwrap() }})*
     };
     (unsigned; $($t:ty),*) => {
         $(impl_algebra!(Sum<$t>; set: $t; op: |_, a: $t, b: $t| a + b;
                         id: |_| 0 as $t, |_, &a| a == 0 as $t; commu; assoc;);)*
-        $(impl Additive for Sum<$t> {})*
+        $(impl Additive for Sum<$t> { fn times(&self, a: $t, n: u64) -> $t { a * <$t>::try_from(n).unwrap() }})*
     };
+    (float; $($t:ty),*) => {
+        $(impl_algebra!(Sum<$t>; set: $t; op: |_, a: $t, b: $t| a + b;
+                        id: |_| 0 as $t, |_, &a| a == 0 as $t;
+                        inv: |_, a: $t| -a; commu; assoc;);)*
+        $(impl Additive for Sum<$t> { fn times(&self, a: $t, n: u64) -> $t { a * n as $t }})*
+    }
 }
 
-implement!(signed; i8, i16, i32, i64, i128, isize, f32, f64);
+implement!(signed; i8, i16, i32, i64, i128, isize);
 implement!(unsigned; u8, u16, u32, u64, u128, usize);
+implement!(float; f32, f64);
