@@ -4,7 +4,7 @@ use crate::{algebra::semiring::*, impl_ops};
 use std::ops::{Index, Neg};
 
 /// $\mathbb{Z} / m \mathbb{Z}$ 上の行列
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct MatrixOnRing<R: Ring> {
     h: usize,
     w: usize,
