@@ -4,6 +4,7 @@
 //! - <https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0390>
 
 pub use crate::algebra::traits::*;
+use crate::impl_algebra;
 
 /// 対称変換
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -24,11 +25,12 @@ pub struct Dihedral {
 }
 
 impl Dihedral {
-    fn _op(a: Self, b: Self) -> Self {
-        let n = a.size;
-        assert_eq!(b.size, a.size);
+    /// 元の合成
+    pub fn compose(self, b: Self) -> Self {
+        let n = self.size;
+        assert_eq!(b.size, self.size);
 
-        let value = match (a.value, b.value) {
+        let value = match (self.value, b.value) {
             (R(x), R(y)) => R((x + y) % n),
             (R(x), S(y)) => S((n + y - x) % n),
             (S(x), R(y)) => S((x + y) % n),
@@ -36,6 +38,21 @@ impl Dihedral {
         };
 
         Self { size: n, value }
+    }
+
+    /// 単位元
+    pub fn id(size: usize) -> Self {
+        Self { size, value: R(0) }
+    }
+
+    /// 逆元
+    pub fn inv(self) -> Self {
+        let Self { size, value } = self;
+        let value = match value {
+            R(x) => R(if x == 0 { 0 } else { size - x }),
+            S(_) => value,
+        };
+        Self { size, value }
     }
 
     /// $D_n$の回転を表す元$R_i$を返す。
@@ -69,37 +86,9 @@ impl Composition {
     }
 }
 
-impl Set for Composition {
-    type Element = Dihedral;
-}
-
-impl BinaryOp for Composition {
-    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
-        Dihedral::_op(a, b)
-    }
-}
-
-impl Identity for Composition {
-    fn id(&self) -> Self::Element {
-        Dihedral {
-            size: self.0,
-            value: R(0),
-        }
-    }
-    fn is_id(&self, a: &Self::Element) -> bool {
-        a == &self.id()
-    }
-}
-
-impl Inverse for Composition {
-    fn inv(&self, a: Self::Element) -> Self::Element {
-        let Dihedral { size, value } = a;
-        let value = match value {
-            R(x) => R(if x == 0 { 0 } else { size - x }),
-            S(_) => value,
-        };
-        Dihedral { size, value }
-    }
-}
-
-impl Associative for Composition {}
+impl_algebra!(Composition; set: Dihedral;
+    op: |_, a: Dihedral, b: Dihedral| a.compose(b);
+    id: |s: &Self| Dihedral::id(s.0), |s: &Self, a| a == &s.id();
+    inv: |_, a: Dihedral| a.inv();
+    assoc;
+);

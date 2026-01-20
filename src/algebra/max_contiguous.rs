@@ -87,7 +87,7 @@ impl<T: Copy + Eq> BinaryOp for Composition<T> {
 }
 
 impl_algebra!(
-    [T: Copy + Eq]; Composition<T>;
+    {T: Copy + Eq} Composition<T>;
     set: MaxContiguous<T>;
     assoc;
 );

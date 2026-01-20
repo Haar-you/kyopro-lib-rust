@@ -1,35 +1,15 @@
 //! 演算の順序を逆にした代数的構造
 pub use crate::algebra::traits::*;
+use crate::impl_algebra;
 
 /// 演算の順序を逆にした代数的構造
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Dual<S>(pub S);
 
-impl<S: Set> Set for Dual<S> {
-    type Element = S::Element;
-}
-
-impl<S: BinaryOp> BinaryOp for Dual<S> {
-    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
-        self.0.op(b, a)
-    }
-}
-
-impl<S: Identity> Identity for Dual<S> {
-    fn id(&self) -> Self::Element {
-        self.0.id()
-    }
-    fn is_id(&self, a: &Self::Element) -> bool {
-        self.0.is_id(a)
-    }
-}
-
-impl<S: Inverse> Inverse for Dual<S> {
-    fn inv(&self, a: Self::Element) -> Self::Element {
-        self.0.inv(a)
-    }
-}
-
-impl<S: Commutative> Commutative for Dual<S> {}
-impl<S: Associative> Associative for Dual<S> {}
-impl<S: Idempotence> Idempotence for Dual<S> {}
+impl_algebra!({S: Set} Dual<S>; set: S::Element;);
+impl_algebra!({S: BinaryOp} Dual<S>; op: |s: &Self, a, b| s.0.op(b, a););
+impl_algebra!({S: Identity} Dual<S>; id: |s: &Self| s.0.id(), |s: &Self, a| s.0.is_id(a););
+impl_algebra!({S: Inverse} Dual<S>; inv: |s: &Self, a| s.0.inv(a););
+impl_algebra!({S: Commutative} Dual<S>; commu;);
+impl_algebra!({S: Associative} Dual<S>; assoc;);
+impl_algebra!({S: Idempotence} Dual<S>; idem;);

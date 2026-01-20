@@ -16,8 +16,7 @@ impl<T: ZZ> SumMod<T> {
 impl<T: ZZ> Additive for SumMod<T> {}
 
 impl_algebra!(
-    [T: ZZ];
-    SumMod<T>;
+    {T: ZZ} SumMod<T>;
     set: T::Element;
     op: |_, a: T::Element, b: T::Element| a + b;
     id: |s: &Self| s.0.zero(), |_, a: &T::Element| a.value() == 0;
@@ -37,12 +36,11 @@ impl<T: ZZ> ProdMod<T> {
 }
 
 impl_algebra!(
-    [T: ZZ];
-    ProdMod<T>;
+    {T: ZZ} ProdMod<T>;
     set: T::Element;
     op: |_, a: T::Element, b: T::Element|  a * b;
     id: |s: &Self| s.0.one(), |_, a: &T::Element| a.value() == 1;
     assoc;
     commu;
 );
-impl_algebra!([T: FF<Element: FFElem>]; ProdMod<T>; inv: |_, a: T::Element| a.inv(););
+impl_algebra!({T: FF} ProdMod<T> where {T::Element: FFElem}; inv: |_, a: T::Element| a.inv(););

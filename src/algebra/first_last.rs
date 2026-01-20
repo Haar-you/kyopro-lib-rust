@@ -25,7 +25,7 @@ impl<T> Last<T> {
 }
 
 impl_algebra!(
-    [T]; First<T>;
+    {T} First<T>;
     set: Option<T>;
     op: |_, a: Option<T>, b| a.or(b);
     id: |_| None, |_, a: &Option<T>| a.is_none();
@@ -33,7 +33,7 @@ impl_algebra!(
     idem;
 );
 impl_algebra!(
-    [T]; Last<T>;
+    {T} Last<T>;
     set: Option<T>;
     op: |_, a, b: Option<T>| b.or(a);
     id: |_| None, |_, a: &Option<T>| a.is_none();

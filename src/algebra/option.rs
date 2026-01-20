@@ -1,31 +1,20 @@
 //! 単位元を追加したモノイド
 
 pub use crate::algebra::traits::*;
+use crate::impl_algebra;
 
 /// 単位元を追加したモノイド
 pub struct AppendId<M>(pub M);
 
-impl<M: Set> Set for AppendId<M> {
-    type Element = Option<M::Element>;
-}
-
-impl<M: BinaryOp> BinaryOp for AppendId<M> {
-    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
+impl_algebra!({M: Set} AppendId<M>; set: Option<M::Element>; id: |_| None, |_, a: &Option<_>| a.is_none(););
+impl_algebra!({M: BinaryOp} AppendId<M>;
+    op: |s: &Self, a, b|
         match (a, b) {
-            (Some(a), Some(b)) => Some(self.0.op(a, b)),
+            (Some(a), Some(b)) => Some(s.0.op(a, b)),
             (a, None) => a,
             (None, b) => b,
-        }
-    }
-}
-impl<M: Set> Identity for AppendId<M> {
-    fn id(&self) -> Self::Element {
-        None
-    }
-    fn is_id(&self, a: &Self::Element) -> bool {
-        a.is_none()
-    }
-}
-impl<M: Associative> Associative for AppendId<M> {}
-impl<M: Commutative> Commutative for AppendId<M> {}
-impl<M: Idempotence> Idempotence for AppendId<M> {}
+    };
+);
+impl_algebra!({M: Associative} AppendId<M>; assoc;);
+impl_algebra!({M: Commutative} AppendId<M>; commu;);
+impl_algebra!({M: Idempotence} AppendId<M>; idem;);
