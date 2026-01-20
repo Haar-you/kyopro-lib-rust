@@ -15,6 +15,7 @@ pub mod min_count;
 pub mod min_max;
 pub mod modint;
 pub mod option;
+pub mod parenthesis;
 pub mod permutation;
 pub mod prod;
 pub mod sum;
