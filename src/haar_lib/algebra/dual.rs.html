@@ -16,31 +16,16 @@
 
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">haar_lib/algebra/</div>dual.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! 演算の順序を逆にした代数的構造
 <a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">pub use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
-<a href=#3 id=3 data-nosnippet>3</a>
-<a href=#4 id=4 data-nosnippet>4</a><span class="doccomment">/// 演算の順序を逆にした代数的構造
-<a href=#5 id=5 data-nosnippet>5</a></span><span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-<a href=#6 id=6 data-nosnippet>6</a></span><span class="kw">pub struct </span>Dual&lt;S&gt;(<span class="kw">pub </span>S);
-<a href=#7 id=7 data-nosnippet>7</a>
-<a href=#8 id=8 data-nosnippet>8</a><span class="kw">impl</span>&lt;S: Set&gt; Set <span class="kw">for </span>Dual&lt;S&gt; {}
-<a href=#9 id=9 data-nosnippet>9</a>
-<a href=#10 id=10 data-nosnippet>10</a><span class="kw">impl</span>&lt;S: BinaryOp&gt; BinaryOp <span class="kw">for </span>Dual&lt;S&gt; {
-<a href=#11 id=11 data-nosnippet>11</a>    <span class="kw">fn </span>op(<span class="self">self</span>, b: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
-<a href=#12 id=12 data-nosnippet>12</a>        <span class="self">Self</span>(b.<span class="number">0</span>.op(<span class="self">self</span>.<span class="number">0</span>))
-<a href=#13 id=13 data-nosnippet>13</a>    }
-<a href=#14 id=14 data-nosnippet>14</a>}
-<a href=#15 id=15 data-nosnippet>15</a>
-<a href=#16 id=16 data-nosnippet>16</a><span class="kw">impl</span>&lt;S: Identity&gt; Identity <span class="kw">for </span>Dual&lt;S&gt; {
-<a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">fn </span>id() -&gt; <span class="self">Self </span>{
-<a href=#18 id=18 data-nosnippet>18</a>        <span class="self">Self</span>(S::id())
-<a href=#19 id=19 data-nosnippet>19</a>    }
-<a href=#20 id=20 data-nosnippet>20</a>}
-<a href=#21 id=21 data-nosnippet>21</a>
-<a href=#22 id=22 data-nosnippet>22</a><span class="kw">impl</span>&lt;S: Inverse&gt; Inverse <span class="kw">for </span>Dual&lt;S&gt; {
-<a href=#23 id=23 data-nosnippet>23</a>    <span class="kw">fn </span>inv(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
-<a href=#24 id=24 data-nosnippet>24</a>        <span class="self">Self</span>(<span class="self">self</span>.<span class="number">0</span>.inv())
-<a href=#25 id=25 data-nosnippet>25</a>    }
-<a href=#26 id=26 data-nosnippet>26</a>}
-<a href=#27 id=27 data-nosnippet>27</a>
-<a href=#28 id=28 data-nosnippet>28</a><span class="kw">impl</span>&lt;S: Commutative&gt; Commutative <span class="kw">for </span>Dual&lt;S&gt; {}
-<a href=#29 id=29 data-nosnippet>29</a><span class="kw">impl</span>&lt;S: Associative&gt; Associative <span class="kw">for </span>Dual&lt;S&gt; {}
-<a href=#30 id=30 data-nosnippet>30</a><span class="kw">impl</span>&lt;S: Idempotence&gt; Idempotence <span class="kw">for </span>Dual&lt;S&gt; {}</code></pre></div></section></main></body></html>
+<a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span><span class="kw">crate</span>::impl_algebra;
+<a href=#4 id=4 data-nosnippet>4</a>
+<a href=#5 id=5 data-nosnippet>5</a><span class="doccomment">/// 演算の順序を逆にした代数的構造
+<a href=#6 id=6 data-nosnippet>6</a></span><span class="attr">#[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+<a href=#7 id=7 data-nosnippet>7</a></span><span class="kw">pub struct </span>Dual&lt;S&gt;(<span class="kw">pub </span>S);
+<a href=#8 id=8 data-nosnippet>8</a>
+<a href=#9 id=9 data-nosnippet>9</a><span class="macro">impl_algebra!</span>({S: Set} Dual&lt;S&gt;; set: S::Element;);
+<a href=#10 id=10 data-nosnippet>10</a><span class="macro">impl_algebra!</span>({S: BinaryOp} Dual&lt;S&gt;; op: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>, a, b| s.<span class="number">0</span>.op(b, a););
+<a href=#11 id=11 data-nosnippet>11</a><span class="macro">impl_algebra!</span>({S: Identity} Dual&lt;S&gt;; id: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>| s.<span class="number">0</span>.id(), |s: <span class="kw-2">&amp;</span><span class="self">Self</span>, a| s.<span class="number">0</span>.is_id(a););
+<a href=#12 id=12 data-nosnippet>12</a><span class="macro">impl_algebra!</span>({S: Inverse} Dual&lt;S&gt;; inv: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>, a| s.<span class="number">0</span>.inv(a););
+<a href=#13 id=13 data-nosnippet>13</a><span class="macro">impl_algebra!</span>({S: Commutative} Dual&lt;S&gt;; commu;);
+<a href=#14 id=14 data-nosnippet>14</a><span class="macro">impl_algebra!</span>({S: Associative} Dual&lt;S&gt;; assoc;);
+<a href=#15 id=15 data-nosnippet>15</a><span class="macro">impl_algebra!</span>({S: Idempotence} Dual&lt;S&gt;; idem;);</code></pre></div></section></main></body></html>

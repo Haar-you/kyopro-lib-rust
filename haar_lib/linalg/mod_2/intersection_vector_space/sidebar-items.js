@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["intersection_vector_space"]};

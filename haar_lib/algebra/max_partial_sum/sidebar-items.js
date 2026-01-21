@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["MaxPartialSum"]};
+window.SIDEBAR_ITEMS = {"struct":["Composition","MaxPartialSum"]};

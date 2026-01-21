@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["XorAndSemiring"]};
+window.SIDEBAR_ITEMS = {"struct":["XorAnd"]};

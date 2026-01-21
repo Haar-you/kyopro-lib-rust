@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["add_min_count","add_sum","affine_sum","chmax_max","chmin_min","update_fold","update_sum"],"trait":["Act"]};

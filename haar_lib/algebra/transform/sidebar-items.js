@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Transformation"]};
+window.SIDEBAR_ITEMS = {"struct":["Composition","Transformation"]};

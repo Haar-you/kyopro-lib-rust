@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["MaxContiguousTrue"]};
+window.SIDEBAR_ITEMS = {"struct":["Composition","MaxContiguousTrue"]};

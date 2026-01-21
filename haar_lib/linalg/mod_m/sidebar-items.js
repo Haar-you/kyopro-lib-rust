@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["matrix","square_matrix"]};
+window.SIDEBAR_ITEMS = {"mod":["determinant"]};

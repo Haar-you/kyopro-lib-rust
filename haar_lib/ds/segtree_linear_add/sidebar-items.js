@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["SegtreeLinearAdd"],"trait":["Elem"]};
+window.SIDEBAR_ITEMS = {"struct":["SegtreeLinearAdd"]};

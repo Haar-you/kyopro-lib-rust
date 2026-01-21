@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["determinant","gaussian_elim","inverse","lineq","matrix"]};
+window.SIDEBAR_ITEMS = {"mod":["determinant","gaussian_elim","intersection_vector_space","inverse","lineq"]};

@@ -15,14 +15,14 @@
 </script>
 
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">haar_lib/math/combinatorics/</div>stirling_first_table.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! 符号付き第一種スターリング数$s(0,0), \dots, s(n,n)$を列挙する。
-<a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">use </span><span class="kw">crate</span>::num::ff::<span class="kw-2">*</span>;
+<a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">use </span><span class="kw">crate</span>::num::zz::<span class="kw-2">*</span>;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="doccomment">/// 符号付き第一種スターリング数$s(0,0), \dots, s(n,n)$を列挙する。
 <a href=#5 id=5 data-nosnippet>5</a>///
 <a href=#6 id=6 data-nosnippet>6</a>/// **Time complexity** $O(n^2)$
-<a href=#7 id=7 data-nosnippet>7</a></span><span class="kw">pub fn </span>stirling_first_table&lt;Modulo: FF&gt;(n: usize, modulo: Modulo) -&gt; Vec&lt;Vec&lt;Modulo::Element&gt;&gt;
+<a href=#7 id=7 data-nosnippet>7</a></span><span class="kw">pub fn </span>stirling_first_table&lt;R: ZZ&gt;(n: usize, modulo: R) -&gt; Vec&lt;Vec&lt;R::Element&gt;&gt;
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">where
-<a href=#9 id=9 data-nosnippet>9</a>    </span>Modulo::Element: Copy,
+<a href=#9 id=9 data-nosnippet>9</a>    </span>R::Element: Copy,
 <a href=#10 id=10 data-nosnippet>10</a>{
 <a href=#11 id=11 data-nosnippet>11</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="macro">vec!</span>[modulo.from_u64(<span class="number">0</span>); n + <span class="number">1</span>]; n + <span class="number">1</span>];
 <a href=#12 id=12 data-nosnippet>12</a>

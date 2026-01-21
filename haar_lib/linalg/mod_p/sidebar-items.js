@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["determinant","gaussian_elim","inverse","lineq"]};
+window.SIDEBAR_ITEMS = {"mod":["adjugate","determinant","gaussian_elim","inverse","lineq","pfaffian"]};

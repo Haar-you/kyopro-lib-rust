@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["SegtreeLinearAddRangeSum"],"trait":["Elem"]};
+window.SIDEBAR_ITEMS = {"struct":["SegtreeLinearAddRangeSum"]};

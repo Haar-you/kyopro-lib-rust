@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["AddMulSemiring"]};
+window.SIDEBAR_ITEMS = {"struct":["AddMul"]};
