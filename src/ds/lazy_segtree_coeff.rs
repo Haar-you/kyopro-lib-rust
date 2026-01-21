@@ -78,7 +78,8 @@ where
         let t = self.update_internal(i << 1, l, (l + r) / 2, s, t, value)
             + self.update_internal((i << 1) | 1, (l + r) / 2, r, s, t, value);
 
-        self.data[i].replace(t)
+        self.data[i].set(t);
+        t
     }
 
     fn get_internal(&self, i: usize, l: usize, r: usize, x: usize, y: usize) -> T {
