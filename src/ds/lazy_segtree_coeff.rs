@@ -6,23 +6,24 @@ use std::cell::Cell;
 use std::ops::{Add, Mul, RangeBounds};
 
 /// 係数乗算付き区間加算区間総和遅延セグ木
-pub struct LazySegtreeCoeff<T> {
+pub struct LazySegtreeCoeff<T, U = T> {
     size: usize,
     original_size: usize,
     data: Vec<Cell<T>>,
     lazy: Vec<Cell<T>>,
-    coeff: Vec<T>,
+    coeff: Vec<U>,
 }
 
-impl<T> LazySegtreeCoeff<T>
+impl<T, U> LazySegtreeCoeff<T, U>
 where
-    T: Copy + Zero + Add<Output = T> + Mul<Output = T> + PartialEq,
+    T: Copy + Zero + Add<Output = T> + Mul<U, Output = T> + PartialEq,
+    U: Copy + Default + Add<Output = U>,
 {
     /// ‍係数`coefficients`を設定した[`LazySegtreeCoeff`]を構築する。
-    pub fn new(n: usize, coefficients: Vec<T>) -> Self {
+    pub fn new(n: usize, coefficients: Vec<U>) -> Self {
         let size = n.next_power_of_two() * 2;
 
-        let mut coeff = vec![T::zero(); size];
+        let mut coeff = vec![U::default(); size];
 
         for i in 0..coefficients.len() {
             coeff[i + size / 2] = coefficients[i];
@@ -64,7 +65,7 @@ where
         }
     }
 
-    fn update_internal(&mut self, i: usize, l: usize, r: usize, s: usize, t: usize, value: T) -> T {
+    fn _update(&mut self, i: usize, l: usize, r: usize, s: usize, t: usize, value: T) -> T {
         self.propagate(i);
         if r <= s || t <= l {
             return self.data[i].get();
@@ -75,14 +76,15 @@ where
             return self.data[i].get();
         }
 
-        let t = self.update_internal(i << 1, l, (l + r) / 2, s, t, value)
-            + self.update_internal((i << 1) | 1, (l + r) / 2, r, s, t, value);
+        let m = (l + r) / 2;
+        let t =
+            self._update(i << 1, l, m, s, t, value) + self._update((i << 1) | 1, m, r, s, t, value);
 
         self.data[i].set(t);
         t
     }
 
-    fn get_internal(&self, i: usize, l: usize, r: usize, x: usize, y: usize) -> T {
+    fn _fold(&self, i: usize, l: usize, r: usize, x: usize, y: usize) -> T {
         self.propagate(i);
         if r <= x || y <= l {
             return T::zero();
@@ -90,19 +92,72 @@ where
         if x <= l && r <= y {
             return self.data[i].get();
         }
-        self.get_internal(i << 1, l, (l + r) / 2, x, y)
-            + self.get_internal((i << 1) | 1, (l + r) / 2, r, x, y)
+
+        let m = (l + r) / 2;
+        self._fold(i << 1, l, m, x, y) + self._fold((i << 1) | 1, m, r, x, y)
     }
 
     /// 範囲`range`に値`value`を加算する。
     pub fn update(&mut self, range: impl RangeBounds<usize>, value: T) {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
-        self.update_internal(1, 0, self.size / 2, start, end, value);
+        self._update(1, 0, self.size / 2, start, end, value);
     }
 
     /// 範囲`range`で総和を取る。
     pub fn fold(&self, range: impl RangeBounds<usize>) -> T {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
-        self.get_internal(1, 0, self.size / 2, start, end)
+        self._fold(1, 0, self.size / 2, start, end)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::iter::repeat_with;
+
+    use crate::{iter::collect::CollectVec, math::prime_mod::Prime, num::const_modint::*};
+
+    use super::*;
+    use my_testtools::rand_range;
+    use rand::Rng;
+
+    #[test]
+    fn test() {
+        let n = 100;
+        let q = 1000;
+
+        let modulo = ConstModIntBuilder::<Prime<998244353>>::new();
+
+        let mut rng = rand::thread_rng();
+
+        let mut a = repeat_with(|| modulo.from_u64(rng.gen_range(0..10)))
+            .take(n)
+            .collect_vec();
+
+        let c = repeat_with(|| modulo.from_u64(rng.gen_range(0..10)))
+            .take(n)
+            .collect_vec();
+
+        let mut seg = LazySegtreeCoeff::new(n, c.clone());
+        seg.set_vec(a.clone());
+
+        for _ in 0..q {
+            let range = rand_range(&mut rng, 0..n);
+
+            let value = modulo.from_u64(rng.gen_range(0..10));
+            seg.update(range.clone(), value);
+
+            for i in range {
+                a[i] += c[i] * value;
+            }
+
+            let range = rand_range(&mut rng, 0..n);
+
+            let mut ans = modulo.from_u64(0);
+            for i in range.clone() {
+                ans += a[i];
+            }
+
+            assert_eq!(seg.fold(range), ans);
+        }
     }
 }
