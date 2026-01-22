@@ -1,6 +1,7 @@
 //! Range Affine Range Sum
 use crate::algebra::affine::Composition;
 use crate::algebra::dual::Dual;
+use crate::algebra::semiring::Semiring;
 pub use crate::algebra::{act::Act, traits::*};
 use crate::math::linear::Linear;
 
@@ -9,26 +10,28 @@ use std::ops::Mul;
 
 /// Range Affine Range Sum 用のモノイド作用
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
-pub struct AffineSum<T>(pub Dual<Composition<T>>);
+pub struct AffineSum<S: Semiring>(pub Dual<Composition<S>>);
 
-impl<T, M> Act<M> for AffineSum<T>
+impl<T, S, M> Act<M> for AffineSum<S>
 where
     M: Monoid<Element = T> + Additive,
-    Dual<Composition<T>>: Monoid<Element = Linear<T>>,
-    T: Mul<Output = T> + TryFrom<usize, Error: Debug>,
+    S: Semiring<Element = T>,
+    Dual<Composition<S>>: Monoid<Element = Linear<T>>,
 {
-    type Monoid = Dual<Composition<T>>;
+    type Monoid = Dual<Composition<S>>;
     type Element = Linear<T>;
 
     fn monoid(&self) -> &Self::Monoid {
         &self.0
     }
-    fn act(&self, m: &M, val: M::Element, a: Self::Element) -> M::Element {
+    fn act(&self, _m: &M, val: M::Element, a: Self::Element) -> M::Element {
+        let Self(Dual(Composition(ref s))) = &self;
         let Linear { a, b } = a;
-        m.op(a * val, b)
+        s.add(s.mul(a, val), b)
     }
     fn act_n(&self, m: &M, val: M::Element, a: Self::Element, len: usize) -> M::Element {
+        let Self(Dual(Composition(ref s))) = &self;
         let Linear { a, b } = a;
-        m.op(a * val, b * T::try_from(len).unwrap())
+        s.add(s.mul(a, val), Additive::times(m, b, len as u64))
     }
 }
