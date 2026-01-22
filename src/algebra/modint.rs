@@ -39,6 +39,8 @@ impl<T: ZZ> ProdMod<T> {
     }
 }
 
+impl<T: ZZ> Multiplicative for ProdMod<T> {}
+
 impl_algebra!(
     {T: ZZ} ProdMod<T>;
     set: T::Element;

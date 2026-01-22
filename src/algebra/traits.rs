@@ -55,6 +55,8 @@ pub trait Additive: BinaryOp {
     fn times(&self, a: Self::Element, n: u64) -> Self::Element;
 }
 
+/// 二項演算が乗法的
+pub trait Multiplicative: BinaryOp {}
 /// 半群
 pub trait Semigroup: BinaryOp + Associative {
     /// `iter`が空のとき、`None`を返す。
