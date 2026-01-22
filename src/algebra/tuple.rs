@@ -21,9 +21,6 @@ macro_rules! impl_tuple {
             fn id(&self) -> Self::Element {
                 ($(self.$i.id()),*)
             }
-            fn is_id(&self, a: &Self::Element) -> bool {
-                $(self.$i.is_id(&a.$i))&&*
-            }
         }
 
         impl<$($t:Inverse),*> Inverse for $a<$($t),*> {

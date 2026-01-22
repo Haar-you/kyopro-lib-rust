@@ -72,7 +72,7 @@ impl_algebra!(
     set: Permutation;
     op: |_, a: Permutation, b: Permutation| a.compose(b);
     inv: |_, a: Permutation| a.inv();
-    id: |s: &Self| Permutation::id(s.0), |s: &Self, a| a == &s.id();
+    id: |s: &Self| Permutation::id(s.0);
     assoc;
 );
 

@@ -18,7 +18,7 @@ macro_rules! implement {
     ($($t:ty),*) => {
         $(impl_algebra!(
             Prod<$t>; set: $t; op: |_, a: $t, b: $t| a * b;
-            id: |_| 1 as $t, |_, &a| a == 1 as $t; commu; assoc;);)*
+            id: |_| 1 as $t; commu; assoc;);)*
         $(impl Multiplicative for Prod<$t> {})*
     };
 }

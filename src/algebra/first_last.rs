@@ -24,22 +24,10 @@ impl<T> Last<T> {
     }
 }
 
-impl_algebra!(
-    {T} First<T>;
-    set: Option<T>;
-    op: |_, a: Option<T>, b| a.or(b);
-    id: |_| None, |_, a: &Option<T>| a.is_none();
-    assoc;
-    idem;
-);
-impl_algebra!(
-    {T} Last<T>;
-    set: Option<T>;
-    op: |_, a, b: Option<T>| b.or(a);
-    id: |_| None, |_, a: &Option<T>| a.is_none();
-    assoc;
-    idem;
-);
+impl_algebra!({T} First<T>; set: Option<T>; op: |_, a: Option<T>, b| a.or(b);
+    id: |_| None; assoc; idem;);
+impl_algebra!({T} Last<T>; set: Option<T>; op: |_, a, b: Option<T>| b.or(a);
+    id: |_| None; assoc; idem;);
 
 #[cfg(test)]
 mod tests {

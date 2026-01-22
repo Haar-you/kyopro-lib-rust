@@ -23,7 +23,7 @@ impl_algebra!(
     {T: ZZ} SumMod<T>;
     set: T::Element;
     op: |_, a: T::Element, b: T::Element| a + b;
-    id: |s: &Self| s.0.zero(), |_, a: &T::Element| a.value() == 0;
+    id: |s: &Self| s.0.zero();
     inv: |_, a: T::Element| -a;
     assoc;
     commu;
@@ -45,7 +45,7 @@ impl_algebra!(
     {T: ZZ} ProdMod<T>;
     set: T::Element;
     op: |_, a: T::Element, b: T::Element|  a * b;
-    id: |s: &Self| s.0.one(), |_, a: &T::Element| a.value() == 1;
+    id: |s: &Self| s.0.one();
     assoc;
     commu;
 );

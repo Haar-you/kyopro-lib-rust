@@ -34,7 +34,12 @@ pub trait Identity: Set {
     /// 単位元
     fn id(&self) -> Self::Element;
     /// 単位元の判定
-    fn is_id(&self, a: &Self::Element) -> bool;
+    fn is_id(&self, a: &Self::Element) -> bool
+    where
+        Self::Element: PartialEq,
+    {
+        a == &self.id()
+    }
 }
 
 /// 逆元をもつ

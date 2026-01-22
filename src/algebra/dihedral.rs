@@ -88,7 +88,7 @@ impl Composition {
 
 impl_algebra!(Composition; set: Dihedral;
     op: |_, a: Dihedral, b: Dihedral| a.compose(b);
-    id: |s: &Self| Dihedral::id(s.0), |s: &Self, a| a == &s.id();
+    id: |s: &Self| Dihedral::id(s.0);
     inv: |_, a: Dihedral| a.inv();
     assoc;
 );

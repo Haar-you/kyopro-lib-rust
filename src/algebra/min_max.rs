@@ -27,9 +27,9 @@ impl<T> Max<T> {
 macro_rules! implement {
     ($($t:tt),*) => {
         $(impl_algebra!(Min<$t>; set: $t; op: |_, a: $t, b: $t| a.min(b);
-                        id: |_| $t::MAX, |_, &a| a == $t::MAX; commu; assoc; idem;);)*
+                        id: |_| $t::MAX; commu; assoc; idem;);)*
         $(impl_algebra!(Max<$t>; set: $t; op: |_, a: $t, b: $t| a.max(b);
-                        id: |_| $t::MIN, |_, &a| a == $t::MIN; commu; assoc; idem;);)*
+                        id: |_| $t::MIN; commu; assoc; idem;);)*
 
         $(impl Ordered for Min<$t> {})*
         $(impl Ordered for Max<$t> {})*

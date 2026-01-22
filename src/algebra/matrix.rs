@@ -17,7 +17,7 @@ impl_algebra!(
     {R: Ring + Clone + PartialEq} SumMatrix<R> where {R::Element: Copy + PartialEq};
     set: MatrixOnRing<R>;
     op: |_, a: Self::Element, b: Self::Element| a + b;
-    id: |s: &Self| MatrixOnRing::zero(s.0.clone(), s.1, s.2), |s: &Self, a| a == &s.id();
+    id: |s: &Self| MatrixOnRing::zero(s.0.clone(), s.1, s.2);
     inv: |_, a: Self::Element| -a;
     assoc;
     commu;
@@ -37,6 +37,6 @@ impl_algebra!(
     {R: Ring + Clone + PartialEq} ProdMatrix<R> where {R::Element: Copy + PartialEq};
     set: MatrixOnRing<R>;
     op: |_, a: Self::Element, b: Self::Element| a * b;
-    id: |s: &Self| MatrixOnRing::unit(s.0.clone(), s.1), |s: &Self, a| a == &s.id();
+    id: |s: &Self| MatrixOnRing::unit(s.0.clone(), s.1);
     assoc;
 );

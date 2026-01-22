@@ -59,6 +59,6 @@ impl_algebra!(
             count, left, right, length
         }
     };
-    id: |_| MaxContiguousTrue { count: 0, left: 0, right: 0, length: 0 }, |s: &Self, a| a == &s.id();
+    id: |_| MaxContiguousTrue { count: 0, left: 0, right: 0, length: 0 };
     assoc;
 );
