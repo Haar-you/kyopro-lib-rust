@@ -20,11 +20,13 @@ macro_rules! implement {
                         id: |_| 0 as $t, |_, &a| a == 0 as $t;
                         inv: |_, a: $t| -a; commu; assoc;);)*
         $(impl Additive for Sum<$t> { fn times(&self, a: $t, n: u64) -> $t { a * <$t>::try_from(n).unwrap() }})*
+        $(impl Ordered for Sum<$t>{})*
     };
     (unsigned; $($t:ty),*) => {
         $(impl_algebra!(Sum<$t>; set: $t; op: |_, a: $t, b: $t| a + b;
                         id: |_| 0 as $t, |_, &a| a == 0 as $t; commu; assoc;);)*
         $(impl Additive for Sum<$t> { fn times(&self, a: $t, n: u64) -> $t { a * <$t>::try_from(n).unwrap() }})*
+        $(impl Ordered for Sum<$t>{})*
     };
     (float; $($t:ty),*) => {
         $(impl_algebra!(Sum<$t>; set: $t; op: |_, a: $t, b: $t| a + b;

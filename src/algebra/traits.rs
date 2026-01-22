@@ -57,6 +57,12 @@ pub trait Additive: BinaryOp {
 
 /// 二項演算が乗法的
 pub trait Multiplicative: BinaryOp {}
+
+/// 二項演算で順序が変化しない。
+///
+/// $a < b \implies a \circ m < b \circ m$
+pub trait Ordered: BinaryOp<Element: Ord> {}
+
 /// 半群
 pub trait Semigroup: BinaryOp + Associative {
     /// `iter`が空のとき、`None`を返す。
