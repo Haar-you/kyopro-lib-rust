@@ -17,7 +17,7 @@ impl<M, A> LazySegtree<M, A>
 where
     M: Monoid,
     A: Act<M>,
-    M::Element: Clone + PartialEq,
+    M::Element: Clone,
     A::Element: Clone + PartialEq,
 {
     /// 長さ`n`の[`LazySegtree`]を生成する。

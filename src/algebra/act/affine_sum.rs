@@ -5,9 +5,6 @@ use crate::algebra::semiring::Semiring;
 pub use crate::algebra::{act::Act, traits::*};
 use crate::math::linear::Linear;
 
-use std::fmt::Debug;
-use std::ops::Mul;
-
 /// Range Affine Range Sum 用のモノイド作用
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct AffineSum<S: Semiring>(pub Dual<Composition<S>>);

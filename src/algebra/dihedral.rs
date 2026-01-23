@@ -82,6 +82,7 @@ pub struct Composition(usize);
 impl Composition {
     /// 位数`2n`の二面体群を作る。
     pub fn new(n: usize) -> Self {
+        assert!(n >= 1);
         Self(n)
     }
 }

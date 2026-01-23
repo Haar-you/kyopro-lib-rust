@@ -4,13 +4,7 @@ use crate::num::ff::*;
 
 /// $\mathbb{Z} / m \mathbb{Z}$の環
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct AddMulMod<T>(T);
-impl<T: ZZ> AddMulMod<T> {
-    /// [`AddMulMod`]を返す。
-    pub fn new(m: T) -> Self {
-        Self(m)
-    }
-}
+pub struct AddMulMod<T: ZZ>(pub T);
 
 impl<T: ZZ> Semiring for AddMulMod<T> {
     type Element = T::Element;

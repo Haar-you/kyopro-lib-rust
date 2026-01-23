@@ -197,7 +197,7 @@ mod tests {
         let n = 10;
 
         let modulo = ModIntBuilder::new(10_u32.pow(9) + 7);
-        let ring = AddMulMod::new(modulo);
+        let ring = AddMulMod(modulo);
         let monoid = ProdMatrix::new(ring, n);
 
         random_test_helper(monoid, 100, || {

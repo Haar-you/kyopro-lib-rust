@@ -1,6 +1,5 @@
 //! Range Update Range ~~~
 pub use crate::algebra::{act::Act, first_last::Last, traits::*};
-use std::fmt::Debug;
 
 /// Range Update Range ~~~ 用のモノイド作用
 ///

@@ -19,7 +19,7 @@ where
         &self.0
     }
     fn act(&self, _m: &MinCount<T, U>, val: (Option<T>, U), a: Self::Element) -> (Option<T>, U) {
-        (val.0.map(|x| x + a), val.1)
+        (val.0.map(|x| self.0.op(x, a)), val.1)
     }
     fn act_n(
         &self,
@@ -28,6 +28,6 @@ where
         a: Self::Element,
         _len: usize,
     ) -> (Option<T>, U) {
-        (val.0.map(|x| x + a), val.1)
+        (val.0.map(|x| self.0.op(x, a)), val.1)
     }
 }

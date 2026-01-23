@@ -1,8 +1,6 @@
 //! Range Add Range Sum
 pub use crate::algebra::{act::Act, traits::*};
-
 use std::fmt::Debug;
-use std::ops::Mul;
 
 /// Range Add Range Sum 用のモノイド作用
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -13,7 +11,6 @@ where
     M: Monoid + Additive,
     A: Monoid + Additive,
     M::Element: TryFrom<A::Element, Error: Debug>,
-    A::Element: Mul<Output = A::Element> + TryFrom<usize, Error: Debug>,
 {
     type Monoid = A;
     type Element = A::Element;
@@ -27,7 +24,7 @@ where
     fn act_n(&self, m: &M, val: M::Element, a: Self::Element, len: usize) -> M::Element {
         m.op(
             val,
-            M::Element::try_from(a * A::Element::try_from(len).unwrap()).unwrap(),
+            M::Element::try_from(Additive::times(&self.0, a, len as u64)).unwrap(),
         )
     }
 }

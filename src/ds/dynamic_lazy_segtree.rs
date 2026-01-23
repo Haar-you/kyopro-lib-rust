@@ -45,7 +45,7 @@ impl<M: Monoid, A: Act<M>> DynamicLazySegtree<M, A> {
 
 impl<M: Monoid, A: Act<M>> DynamicLazySegtree<M, A>
 where
-    M::Element: Clone + PartialEq,
+    M::Element: Clone,
     A::Element: Clone + PartialEq,
 {
     fn _propagate(&self, t: *mut Node<M, A>, from: usize, to: usize) {

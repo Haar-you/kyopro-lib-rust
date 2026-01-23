@@ -307,7 +307,7 @@ mod tests {
     fn test() {
         let mut rng = rand::thread_rng();
         let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
-        let ring = AddMulMod::new(modulo);
+        let ring = AddMulMod(modulo);
 
         let size = 300;
 
@@ -351,7 +351,7 @@ mod tests {
 
         let mut rng = rand::thread_rng();
         let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
-        let ring = AddMulMod::new(modulo);
+        let ring = AddMulMod(modulo);
 
         let mut straight = vec![];
         let mut strassen = vec![];

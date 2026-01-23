@@ -139,9 +139,9 @@ where
 mod tests {
     use super::*;
     use crate::{
-        algebra::affine::*,
+        algebra::{affine::*, semiring::add_mul_mod::AddMulMod},
         math::{linear::Linear, prime_mod::Prime},
-        num::const_modint::ConstModInt,
+        num::const_modint::{ConstModInt, ConstModIntBuilder},
     };
     use rand::Rng;
     use std::collections::VecDeque;
@@ -155,7 +155,7 @@ mod tests {
 
         let mut deq = VecDeque::<Linear<Mint>>::new();
 
-        let m = Composition::<Mint>::new();
+        let m = Composition(AddMulMod(ConstModIntBuilder::new()));
         let mut swag = FoldableDeque::new(m);
 
         for _ in 0..1000 {

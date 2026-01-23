@@ -21,7 +21,7 @@ pub struct MaxContiguous<T> {
     pub length: usize,
 }
 
-impl<T: Copy> MaxContiguous<T> {
+impl<T: Copy + Eq> MaxContiguous<T> {
     /// 値`value`をただ一つだけもつ列。
     pub fn unit(value: T) -> Self {
         Self {
@@ -29,6 +29,33 @@ impl<T: Copy> MaxContiguous<T> {
             left: (1, value),
             right: (1, value),
             length: 1,
+        }
+    }
+
+    /// `MaxContiguous`を合成する。
+    pub fn compose(self, b: Self) -> Self {
+        let a = self;
+        let max = max(max(a.max, b.max), join(a.right, b.left));
+
+        let left = if a.left.0 == a.length && a.left.1 == b.left.1 {
+            (a.left.0 + b.left.0, a.left.1)
+        } else {
+            a.left
+        };
+
+        let right = if b.right.0 == b.length && a.right.1 == b.right.1 {
+            (a.right.0 + b.right.0, b.right.1)
+        } else {
+            b.right
+        };
+
+        let length = a.length + b.length;
+
+        Self {
+            max,
+            left,
+            right,
+            length,
         }
     }
 }
@@ -59,35 +86,9 @@ impl<T> Composition<T> {
     }
 }
 
-impl<T: Copy + Eq> BinaryOp for Composition<T> {
-    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
-        let max = max(max(a.max, b.max), join(a.right, b.left));
-
-        let left = if a.left.0 == a.length && a.left.1 == b.left.1 {
-            (a.left.0 + b.left.0, a.left.1)
-        } else {
-            a.left
-        };
-
-        let right = if b.right.0 == b.length && a.right.1 == b.right.1 {
-            (a.right.0 + b.right.0, b.right.1)
-        } else {
-            b.right
-        };
-
-        let length = a.length + b.length;
-
-        MaxContiguous {
-            max,
-            left,
-            right,
-            length,
-        }
-    }
-}
-
 impl_algebra!(
     {T: Copy + Eq} Composition<T>;
     set: MaxContiguous<T>;
+    op: |_, a: MaxContiguous<T>, b| a.compose(b);
     assoc;
 );
