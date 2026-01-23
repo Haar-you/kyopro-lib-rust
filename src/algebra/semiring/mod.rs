@@ -2,6 +2,8 @@
 
 pub mod add_mul;
 pub mod add_mul_mod;
+pub mod max_add;
+pub mod min_add;
 pub mod xor_and;
 
 /// 半環
