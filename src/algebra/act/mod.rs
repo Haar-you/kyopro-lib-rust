@@ -18,11 +18,17 @@ pub trait Act<M: Monoid> {
 
     /// 作用させるモノイドへの参照を返す。
     fn monoid(&self) -> &Self::Monoid;
-    /// モノイド`Self`を別のモノイド`M`へ作用させる。
-    fn act(&self, m: &M, val: M::Element, a: Self::Element) -> M::Element;
-    /// $val = x_0 + x_1 + \dots + x_{len}$としたときに、
-    /// $(x_0 * a) + (x_1 * a) + \dots + (x_{len} * a)$を求める。
-    fn act_n(&self, m: &M, val: M::Element, a: Self::Element, len: usize) -> M::Element;
+
+    /// $val$を`n`個の値からなる列をモノイド$(\circ, e)$で畳み込んだ値であるとしたとき、
+    /// 列の各値に$a$を作用させて畳み込んだ値を求める。
+    ///
+    /// 畳み込んだ値が同一になるような、長さ`n`のいかなる列に対しても、$a$を作用させて畳み込んだ値はすべて同一でなければならない。
+    fn act(&self, m: &M, val: M::Element, a: Self::Element, n: usize) -> M::Element;
+
+    /// `self.act(m, val, a, 1)`
+    fn act_one(&self, m: &M, val: M::Element, a: Self::Element) -> M::Element {
+        self.act(m, val, a, 1)
+    }
 
     /// 二項演算
     fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {

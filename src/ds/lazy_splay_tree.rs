@@ -139,10 +139,10 @@ where
 
                 this.value = this
                     .act
-                    .act_n(&this.monoid, this.value.clone(), this.lazy.clone(), 1);
+                    .act(&this.monoid, this.value.clone(), this.lazy.clone(), 1);
                 this.sum =
                     this.act
-                        .act_n(&this.monoid, this.sum.clone(), this.lazy.clone(), this.size);
+                        .act(&this.monoid, this.sum.clone(), this.lazy.clone(), this.size);
                 this.lazy = this.act.id();
             }
         }

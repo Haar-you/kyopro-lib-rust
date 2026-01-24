@@ -72,7 +72,7 @@ where
         }
         let len = to - from;
         unsafe {
-            (*t).value = self.act.act_n(&self.monoid, (*t).value.clone(), lazy, len);
+            (*t).value = self.act.act(&self.monoid, (*t).value.clone(), lazy, len);
             (*t).lazy = self.act.id();
         }
     }

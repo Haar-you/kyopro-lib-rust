@@ -18,10 +18,7 @@ where
     fn monoid(&self) -> &Self::Monoid {
         &self.0
     }
-    fn act(&self, m: &M, val: M::Element, a: Self::Element) -> M::Element {
-        m.op(val, M::Element::try_from(a).unwrap())
-    }
-    fn act_n(&self, m: &M, val: M::Element, a: Self::Element, len: usize) -> M::Element {
+    fn act(&self, m: &M, val: M::Element, a: Self::Element, len: usize) -> M::Element {
         m.op(
             val,
             M::Element::try_from(Additive::times(&self.0, a, len as u64)).unwrap(),

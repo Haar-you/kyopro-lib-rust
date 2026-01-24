@@ -84,7 +84,7 @@ where
             self.lazy[r] = self.act.op(self.lazy[r].clone(), self.lazy[i].clone());
         }
         let len = (self.size / 2) >> (31 - (i as u32).leading_zeros());
-        self.data[i] = self.act.act_n(
+        self.data[i] = self.act.act(
             &self.monoid,
             self.data[i].clone(),
             self.lazy[i].clone(),
@@ -223,7 +223,7 @@ mod tests {
                     seg.update(lr.clone(), x);
                     vec[lr]
                         .iter_mut()
-                        .for_each(|y| *y = act.act(&monoid, *y, x));
+                        .for_each(|y| *y = act.act_one(&monoid, *y, x));
                 }
                 1 => {
                     assert_eq!(

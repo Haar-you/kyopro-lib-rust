@@ -21,12 +21,7 @@ where
     fn monoid(&self) -> &Self::Monoid {
         &self.0
     }
-    fn act(&self, _m: &M, val: M::Element, a: Self::Element) -> M::Element {
-        let Self(Dual(Composition(ref s))) = &self;
-        let Linear { a, b } = a;
-        s.add(s.mul(a, val), b)
-    }
-    fn act_n(&self, m: &M, val: M::Element, a: Self::Element, len: usize) -> M::Element {
+    fn act(&self, m: &M, val: M::Element, a: Self::Element, len: usize) -> M::Element {
         let Self(Dual(Composition(ref s))) = &self;
         let Linear { a, b } = a;
         s.add(s.mul(a, val), Additive::times(m, b, len as u64))

@@ -14,10 +14,7 @@ where
     fn monoid(&self) -> &Self::Monoid {
         &self.0
     }
-    fn act(&self, m: &Max<T>, val: T, a: T) -> T {
-        m.op(val, a)
-    }
-    fn act_n(&self, m: &Max<T>, val: T, a: T, _len: usize) -> T {
+    fn act(&self, m: &Max<T>, val: T, a: T, _len: usize) -> T {
         m.op(val, a)
     }
 }
