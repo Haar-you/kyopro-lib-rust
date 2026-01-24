@@ -29,6 +29,9 @@ macro_rules! impl_semiring {
             fn mul(&self, a: Self::Element, b: Self::Element) -> Self::Element {
                 a * b
             }
+            fn times(&self, a: Self::Element, n: u64) -> Self::Element {
+                a * <$t>::try_from(n).unwrap()
+            }
         })*
     };
 }

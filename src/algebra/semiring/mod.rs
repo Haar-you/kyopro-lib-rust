@@ -18,6 +18,8 @@ pub trait Semiring {
     fn add(&self, a: Self::Element, b: Self::Element) -> Self::Element;
     /// 乗法$\otimes$
     fn mul(&self, a: Self::Element, b: Self::Element) -> Self::Element;
+    /// $\underbrace{a \oplus a \oplus  \dots \oplus a \oplus a}_{n}$を計算する。
+    fn times(&self, a: Self::Element, n: u64) -> Self::Element;
 }
 
 /// 環

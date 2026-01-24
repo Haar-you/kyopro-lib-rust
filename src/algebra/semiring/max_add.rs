@@ -32,6 +32,9 @@ macro_rules! impl_semiring {
             fn mul(&self, a: Self::Element, b: Self::Element) -> Self::Element {
                 a.zip(b).map(|(a, b)| a + b)
             }
+            fn times(&self, a: Self::Element, n: u64) -> Self::Element {
+                if n == 0 { None } else { a }
+            }
         })*
     };
 }

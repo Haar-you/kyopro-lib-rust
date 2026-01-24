@@ -20,6 +20,9 @@ impl<T: ZZ> Semiring for AddMulMod<T> {
     fn mul(&self, a: Self::Element, b: Self::Element) -> Self::Element {
         a * b
     }
+    fn times(&self, a: Self::Element, n: u64) -> Self::Element {
+        a * self.0.from_u64(n)
+    }
 }
 
 impl<T: ZZ> Ring for AddMulMod<T> {
