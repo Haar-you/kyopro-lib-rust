@@ -4,6 +4,7 @@ pub mod add_sum;
 pub mod affine_sum;
 pub mod chmax_max;
 pub mod chmin_min;
+pub mod mul_sum;
 pub mod update_fold;
 pub mod update_sum;
 
