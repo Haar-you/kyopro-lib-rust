@@ -61,6 +61,24 @@ where
         ret
     }
 
+    /// `Vec<Vec<T>>`から`MatrixOnRing`を作る。
+    pub fn from_vec<T>(ring: R, a: Vec<Vec<T>>) -> Self
+    where
+        T: Into<R::Element>,
+    {
+        let h = a.len();
+        assert!(h > 0);
+        let w = a[0].len();
+        assert!(a.iter().all(|r| r.len() == w));
+
+        let data = a
+            .into_iter()
+            .map(|r| r.into_iter().map(T::into).collect())
+            .collect();
+
+        Self { ring, data, h, w }
+    }
+
     /// `i`行`j`列の要素への参照を返す。
     pub fn get(&self, i: usize, j: usize) -> Option<&R::Element> {
         let a = self.data.get(i)?;
