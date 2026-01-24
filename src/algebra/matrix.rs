@@ -19,6 +19,14 @@ impl<R> SumMatrix<R> {
         Self { ring, h, w }
     }
 }
+impl<R: Ring + Clone + PartialEq> Additive for SumMatrix<R>
+where
+    R::Element: Copy + PartialEq,
+{
+    fn times(&self, a: Self::Element, n: u64) -> Self::Element {
+        a.times(n)
+    }
+}
 impl_algebra!(
     {R: Ring + Clone + PartialEq} SumMatrix<R> where {R::Element: Copy + PartialEq};
     set: MatrixOnRing<R>;
@@ -43,6 +51,8 @@ impl<R> ProdMatrix<R> {
         Self { ring, n }
     }
 }
+impl<R: Ring + Clone + PartialEq> Multiplicative for ProdMatrix<R> where R::Element: Copy + PartialEq
+{}
 impl_algebra!(
     {R: Ring + Clone + PartialEq} ProdMatrix<R> where {R::Element: Copy + PartialEq};
     set: MatrixOnRing<R>;

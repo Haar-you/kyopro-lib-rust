@@ -79,6 +79,14 @@ where
         Self { ring, data, h, w }
     }
 
+    /// `self`を`n`回足した行列を求める。
+    pub fn times(mut self, n: u64) -> Self {
+        self.data
+            .iter_mut()
+            .for_each(|r| r.iter_mut().for_each(|a| *a = self.ring.times(*a, n)));
+        self
+    }
+
     /// `i`行`j`列の要素への参照を返す。
     pub fn get(&self, i: usize, j: usize) -> Option<&R::Element> {
         let a = self.data.get(i)?;
