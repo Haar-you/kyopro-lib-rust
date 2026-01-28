@@ -21,6 +21,7 @@ impl<P: PrimeMod> NTT<P> {
             ._pow((P::PRIME_NUM as u64 - 1) >> (Self::MAX_POWER));
 
         let mut i = Self::MAX_POWER;
+        base[i] = t;
         while i > 0 {
             t = t._mul(t);
             base[i - 1] = t;
@@ -37,6 +38,7 @@ impl<P: PrimeMod> NTT<P> {
         let mut s = t._inv();
 
         let mut i = Self::MAX_POWER;
+        inv_base[i] = s;
         while i > 0 {
             s = s._mul(s);
             inv_base[i - 1] = s;
@@ -56,20 +58,20 @@ impl<P: PrimeMod> NTT<P> {
     /// 数論変換を行う。
     pub fn ntt(&self, f: &mut [ConstModInt<P>]) {
         let n = f.len();
-        assert!(n.is_power_of_two() && n < Self::MAX_SIZE);
+        assert!(n.is_power_of_two() && n <= Self::MAX_SIZE);
 
-        let mut b = n / 2;
+        let mut width = n;
         let mut k = n.trailing_zeros() as usize;
-        while b > 0 {
+        while width > 1 {
             let dw = Self::BASE[k];
 
-            let mut ws = vec![ConstModInt::new(1); b];
-            for i in 1..b {
+            let mut ws = vec![ConstModInt::new(1); width / 2];
+            for i in 1..width / 2 {
                 ws[i] = ws[i - 1] * dw;
             }
 
-            for a in f.chunks_exact_mut(2 * b) {
-                let (x, y) = a.split_at_mut(b);
+            for a in f.chunks_exact_mut(width) {
+                let (x, y) = a.split_at_mut(width / 2);
 
                 for ((s, t), &w) in x.iter_mut().zip(y.iter_mut()).zip(ws.iter()) {
                     let p = *s + *t;
@@ -81,7 +83,7 @@ impl<P: PrimeMod> NTT<P> {
             }
 
             k -= 1;
-            b >>= 1;
+            width >>= 1;
         }
 
         // let p = size_of::<usize>() * 8 - n.trailing_zeros() as usize;
@@ -96,7 +98,7 @@ impl<P: PrimeMod> NTT<P> {
     /// `ntt`の逆変換を行う。
     pub fn intt(&self, f: &mut [ConstModInt<P>]) {
         let n = f.len();
-        assert!(n.is_power_of_two() && n < Self::MAX_SIZE);
+        assert!(n.is_power_of_two() && n <= Self::MAX_SIZE);
 
         // let p = size_of::<usize>() * 8 - n.trailing_zeros() as usize;
         // let mut g = vec![ConstModInt::new(0); n];
@@ -106,18 +108,18 @@ impl<P: PrimeMod> NTT<P> {
         // }
         // std::mem::swap(f, &mut g);
 
-        let mut b = 1;
+        let mut width = 2;
         let mut k = 1;
-        while b < n {
+        while width <= n {
             let dw = Self::INV_BASE[k];
 
-            let mut ws = vec![ConstModInt::new(1); b];
-            for i in 1..b {
+            let mut ws = vec![ConstModInt::new(1); width / 2];
+            for i in 1..width / 2 {
                 ws[i] = ws[i - 1] * dw;
             }
 
-            for a in f.chunks_exact_mut(2 * b) {
-                let (x, y) = a.split_at_mut(b);
+            for a in f.chunks_exact_mut(width) {
+                let (x, y) = a.split_at_mut(width / 2);
 
                 for ((s, t), &w) in x.iter_mut().zip(y.iter_mut()).zip(ws.iter()) {
                     let p = *s + *t * w;
@@ -129,7 +131,7 @@ impl<P: PrimeMod> NTT<P> {
             }
 
             k += 1;
-            b <<= 1;
+            width <<= 1;
         }
 
         let t = ConstModInt::new(n as u32).inv();
