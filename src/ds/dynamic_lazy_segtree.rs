@@ -7,8 +7,8 @@ use std::ptr;
 struct Node<M: Monoid, A: Act<M>> {
     value: M::Element,
     lazy: A::Element,
-    left: *mut Node<M, A>,
-    right: *mut Node<M, A>,
+    left: *mut Self,
+    right: *mut Self,
 }
 
 impl<M: Monoid, A: Act<M>> Node<M, A> {
@@ -50,31 +50,29 @@ where
 {
     fn _propagate(&self, t: *mut Node<M, A>, from: usize, to: usize) {
         assert!(!t.is_null());
-        let lazy = unsafe { (*t).lazy.clone() };
+        let t = unsafe { &mut *t };
 
-        if lazy == self.act.id() {
+        if t.lazy == self.act.id() {
             return;
         }
         if to - from > 1 {
-            unsafe {
-                if (*t).left.is_null() {
-                    (*t).left = Box::into_raw(Box::new(Node::new(&self.monoid, &self.act)));
-                }
-                let left = (*t).left;
-                (*left).lazy = self.act.op((*left).lazy.clone(), lazy.clone());
-
-                if (*t).right.is_null() {
-                    (*t).right = Box::into_raw(Box::new(Node::new(&self.monoid, &self.act)));
-                }
-                let right = (*t).right;
-                (*right).lazy = self.act.op((*right).lazy.clone(), lazy.clone());
+            if t.left.is_null() {
+                t.left = Box::into_raw(Box::new(Node::new(&self.monoid, &self.act)));
             }
+            let left = unsafe { &mut *t.left };
+            left.lazy = self.act.op(left.lazy.clone(), t.lazy.clone());
+
+            if t.right.is_null() {
+                t.right = Box::into_raw(Box::new(Node::new(&self.monoid, &self.act)));
+            }
+            let right = unsafe { &mut *t.right };
+            right.lazy = self.act.op(right.lazy.clone(), t.lazy.clone());
         }
         let len = to - from;
-        unsafe {
-            (*t).value = self.act.act(&self.monoid, (*t).value.clone(), lazy, len);
-            (*t).lazy = self.act.id();
-        }
+        t.value = self
+            .act
+            .act(&self.monoid, t.value.clone(), t.lazy.clone(), len);
+        t.lazy = self.act.id();
     }
 
     fn _update(
@@ -89,14 +87,13 @@ where
         if cur.is_null() {
             cur = Box::into_raw(Box::new(Node::new(&self.monoid, &self.act)));
         }
+        let cur = unsafe { &mut *cur };
 
         self._propagate(cur, from, to);
 
         if to - from == 1 {
             if s <= from && to <= t {
-                unsafe {
-                    (*cur).lazy = self.act.op((*cur).lazy.clone(), value);
-                }
+                cur.lazy = self.act.op(cur.lazy.clone(), value);
             }
             self._propagate(cur, from, to);
             return cur;
@@ -106,21 +103,18 @@ where
             return cur;
         }
         if s <= from && to <= t {
-            unsafe {
-                (*cur).lazy = self.act.op((*cur).lazy.clone(), value);
-            }
+            cur.lazy = self.act.op(cur.lazy.clone(), value);
             self._propagate(cur, from, to);
             return cur;
         }
 
         let mid = (from + to) / 2;
-        unsafe {
-            (*cur).left = self._update((*cur).left, from, mid, s, t, value.clone());
-            (*cur).right = self._update((*cur).right, mid, to, s, t, value);
-            (*cur).value = self
-                .monoid
-                .op((*(*cur).left).value.clone(), (*(*cur).right).value.clone());
-        }
+        cur.left = self._update(cur.left, from, mid, s, t, value.clone());
+        cur.right = self._update(cur.right, mid, to, s, t, value);
+        assert!(!cur.left.is_null() && !cur.right.is_null());
+        let left = unsafe { &*cur.left };
+        let right = unsafe { &*cur.right };
+        cur.value = self.monoid.op(left.value.clone(), right.value.clone());
         cur
     }
 
@@ -153,17 +147,19 @@ where
             return self.monoid.id();
         }
 
+        let cur = unsafe { &mut *cur };
+
         self._propagate(cur, from, to);
         if to <= s || t <= from {
             return self.monoid.id();
         }
         if s <= from && to <= t {
-            return unsafe { (*cur).value.clone() };
+            return cur.value.clone();
         }
 
         let mid = (from + to) / 2;
-        let lv = self._fold(unsafe { (*cur).left }, from, mid, s, t);
-        let rv = self._fold(unsafe { (*cur).right }, mid, to, s, t);
+        let lv = self._fold(cur.left, from, mid, s, t);
+        let rv = self._fold(cur.right, mid, to, s, t);
 
         self.monoid.op(lv, rv)
     }
