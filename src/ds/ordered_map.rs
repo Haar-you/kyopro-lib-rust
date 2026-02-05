@@ -35,8 +35,8 @@ impl<K, V> Node<K, V> {
     }
 
     fn rotate(this: *mut Self) {
-        let p = Self::get_par(this).unwrap();
-        let pp = Self::get_par(p).unwrap();
+        let p = Self::par_of(this).unwrap();
+        let pp = Self::par_of(p).unwrap();
 
         if Self::left_of(p).unwrap() == this {
             let c = Self::right_of(this).unwrap();
@@ -48,34 +48,33 @@ impl<K, V> Node<K, V> {
             Self::set_left(this, p);
         }
 
-        unsafe {
-            if !pp.is_null() {
-                if (*pp).lc == p {
-                    (*pp).lc = this;
-                }
-                if (*pp).rc == p {
-                    (*pp).rc = this;
-                }
+        if !pp.is_null() {
+            let pp = unsafe { &mut *pp };
+            if pp.lc == p {
+                pp.lc = this;
             }
-
-            assert!(!this.is_null());
-            (*this).par = pp;
+            if pp.rc == p {
+                pp.rc = this;
+            }
         }
+
+        assert!(!this.is_null());
+        unsafe { (*this).par = pp };
 
         Self::update(p);
         Self::update(this);
     }
 
     fn status(this: *mut Self) -> i32 {
-        let par = Self::get_par(this).unwrap();
-
+        let par = Self::par_of(this).unwrap();
         if par.is_null() {
             return 0;
         }
-        if unsafe { (*par).lc } == this {
+        let par = unsafe { &mut *par };
+        if par.lc == this {
             return 1;
         }
-        if unsafe { (*par).rc } == this {
+        if par.rc == this {
             return -1;
         }
 
@@ -90,14 +89,13 @@ impl<K, V> Node<K, V> {
 
     fn update(this: *mut Self) {
         assert!(!this.is_null());
-        unsafe {
-            (*this).size = 1 + Self::size_of((*this).lc) + Self::size_of((*this).rc);
-        }
+        let this = unsafe { &mut *this };
+        this.size = 1 + Self::size_of(this.lc) + Self::size_of(this.rc);
     }
 
     fn splay(this: *mut Self) {
         while Self::status(this) != 0 {
-            let par = Self::get_par(this).unwrap();
+            let par = Self::par_of(this).unwrap();
 
             if Self::status(par) == 0 {
                 Self::rotate(this);
@@ -169,15 +167,10 @@ impl<K, V> Node<K, V> {
         let left = Self::left_of(cur).unwrap();
 
         if !left.is_null() {
-            unsafe {
-                (*left).par = ptr::null_mut();
-            }
+            Self::set_par(left, ptr::null_mut());
             Self::update(left);
         }
-        assert!(!cur.is_null());
-        unsafe {
-            (*cur).lc = ptr::null_mut();
-        }
+        Self::set_left(cur, ptr::null_mut());
         Self::update(cur);
 
         (left, cur)
@@ -185,38 +178,33 @@ impl<K, V> Node<K, V> {
 
     fn traverse(cur: *mut Self, f: &mut impl FnMut(&K, &mut V)) {
         if !cur.is_null() {
+            let cur = unsafe { &mut *cur };
             Self::pushdown(cur);
             Self::traverse(Self::left_of(cur).unwrap(), f);
-            f(unsafe { &(*cur).key }, unsafe { &mut (*cur).value });
+            f(&cur.key, &mut cur.value);
             Self::traverse(Self::right_of(cur).unwrap(), f);
         }
     }
 
     fn set_left(this: *mut Self, left: *mut Self) {
         assert!(!this.is_null());
-        unsafe {
-            (*this).lc = left;
-            if !left.is_null() {
-                (*left).par = this;
-            }
+        unsafe { (*this).lc = left };
+        if !left.is_null() {
+            unsafe { (*left).par = this };
         }
     }
 
     fn set_right(this: *mut Self, right: *mut Self) {
         assert!(!this.is_null());
-        unsafe {
-            (*this).rc = right;
-            if !right.is_null() {
-                (*right).par = this;
-            }
+        unsafe { (*this).rc = right };
+        if !right.is_null() {
+            unsafe { (*right).par = this };
         }
     }
 
     fn set_par(this: *mut Self, par: *mut Self) {
         if !this.is_null() {
-            unsafe {
-                (*this).par = par;
-            }
+            unsafe { (*this).par = par };
         }
     }
 
@@ -229,15 +217,15 @@ impl<K, V> Node<K, V> {
     }
 
     fn left_of(this: *mut Self) -> Option<*mut Self> {
-        (!this.is_null()).then_some(unsafe { (*this).lc })
+        (!this.is_null()).then(|| unsafe { (*this).lc })
     }
 
     fn right_of(this: *mut Self) -> Option<*mut Self> {
-        (!this.is_null()).then_some(unsafe { (*this).rc })
+        (!this.is_null()).then(|| unsafe { (*this).rc })
     }
 
-    fn get_par(this: *mut Self) -> Option<*mut Self> {
-        (!this.is_null()).then_some(unsafe { (*this).par })
+    fn par_of(this: *mut Self) -> Option<*mut Self> {
+        (!this.is_null()).then(|| unsafe { (*this).par })
     }
 
     fn clear(this: *mut Self) {
@@ -254,6 +242,20 @@ impl<K, V> Node<K, V> {
 
     fn key_of<'a>(this: *mut Self) -> Option<&'a K> {
         (!this.is_null()).then(|| unsafe { &(*this).key })
+    }
+
+    fn val_of<'a>(this: *mut Self) -> Option<&'a V> {
+        (!this.is_null()).then(|| unsafe { &(*this).value })
+    }
+
+    fn val_mut_of<'a>(this: *mut Self) -> Option<&'a mut V> {
+        (!this.is_null()).then(|| unsafe { &mut (*this).value })
+    }
+
+    fn from_ptr(this: *mut Self) -> Self {
+        assert!(!this.is_null());
+        let this = unsafe { Box::from_raw(this) };
+        *this
     }
 }
 
@@ -313,32 +315,37 @@ impl<K: Ord, V> OrderedMap<K, V> {
         self.root.get().is_null()
     }
 
-    /// `key`が存在するとき、それが何番目のキーであるかを`Ok`で返す。
+    /// `key`が存在するとき、それが何番目のキーであるかと値への参照を`Ok`で返す。
     /// そうでないとき、仮に`key`があったとき何番目のキーであったか、を`Err`で返す。
-    pub fn binary_search(&self, key: &K) -> Result<usize, usize> {
+    pub fn binary_search(&self, key: &K) -> Result<(usize, &V), usize> {
         let (root, index) = Node::binary_search(self.root.get(), key);
         self.root.set(root);
-        index
+        assert!(index.is_err() || Node::key_of(root).unwrap() == key);
+        index.map(|i| (i, Node::val_of(root).unwrap()))
+    }
+
+    /// `key`が存在するとき、それが何番目のキーであるかと値への可変参照を`Ok`で返す。
+    /// そうでないとき、仮に`key`があったとき何番目のキーであったか、を`Err`で返す。
+    pub fn binary_search_mut(&self, key: &K) -> Result<(usize, &mut V), usize> {
+        let (root, index) = Node::binary_search(self.root.get(), key);
+        self.root.set(root);
+        assert!(index.is_err() || Node::key_of(root).unwrap() == key);
+        index.map(|i| (i, Node::val_mut_of(root).unwrap()))
     }
 
     /// `key`以下の最大のキーをもつキーと値のペアを返す。
-    pub fn max_le(&self, key: &K) -> Option<(&K, &V)> {
+    pub fn max_le<'a>(&'a self, key: &'a K) -> Option<(&'a K, &'a V)> {
         match self.binary_search(key) {
-            Ok(i) => self.get_by_index(i),
-            Err(i) => {
-                if i > 0 {
-                    self.get_by_index(i - 1)
-                } else {
-                    None
-                }
-            }
+            Ok((_, value)) => Some((key, value)),
+            Err(i) => self.get_by_index(i.checked_sub(1)?),
         }
     }
 
     /// `key`以上の最小のキーをもつキーと値のペアを返す。
-    pub fn min_ge(&self, key: &K) -> Option<(&K, &V)> {
+    pub fn min_ge<'a>(&'a self, key: &'a K) -> Option<(&'a K, &'a V)> {
         match self.binary_search(key) {
-            Ok(i) | Err(i) => self.get_by_index(i),
+            Ok((_, value)) => Some((key, value)),
+            Err(i) => self.get_by_index(i),
         }
     }
 
@@ -369,14 +376,14 @@ impl<K: Ord, V> OrderedMap<K, V> {
 
     /// キー`key`に対応する値の参照を返す。
     pub fn get(&self, key: &K) -> Option<&V> {
-        let k = self.binary_search(key).ok()?;
-        self.get_by_index(k).map(|(_, v)| v)
+        let (_, value) = self.binary_search(key).ok()?;
+        Some(value)
     }
 
     /// キー`key`に対応する値の可変参照を返す
     pub fn get_mut(&mut self, key: &K) -> Option<&mut V> {
-        let k = self.binary_search(key).ok()?;
-        self.get_value_mut_by_index(k)
+        let (_, value) = self.binary_search_mut(key).ok()?;
+        Some(value)
     }
 
     /// キー`key`があれば、そのキーと対応する値を削除して、その値を`Some`で返す。
@@ -396,10 +403,7 @@ impl<K: Ord, V> OrderedMap<K, V> {
 
         self.root.set(Node::merge(left, right));
 
-        (!m.is_null()).then(|| unsafe {
-            let m = Box::from_raw(m);
-            m.value
-        })
+        (!m.is_null()).then(|| Node::from_ptr(m).value)
     }
 
     /// `i`番目のキーとその対応する値のペアへの参照を返す。
@@ -409,7 +413,18 @@ impl<K: Ord, V> OrderedMap<K, V> {
         } else {
             let t = Node::get(self.root.get(), i);
             self.root.set(t);
-            (!t.is_null()).then(|| unsafe { (&(*t).key, &(*t).value) })
+            (!t.is_null()).then(|| (Node::key_of(t).unwrap(), Node::val_of(t).unwrap()))
+        }
+    }
+
+    /// `i`番目のキーとその対応する値の可変参照のペアを返す。
+    pub fn get_mut_by_index(&self, i: usize) -> Option<(&K, &mut V)> {
+        if i >= self.len() {
+            None
+        } else {
+            let t = Node::get(self.root.get(), i);
+            self.root.set(t);
+            (!t.is_null()).then(|| (Node::key_of(t).unwrap(), Node::val_mut_of(t).unwrap()))
         }
     }
 
@@ -425,13 +440,7 @@ impl<K: Ord, V> OrderedMap<K, V> {
 
     /// `i`番目のキーに対応する値への可変参照を返す。
     pub fn get_value_mut_by_index(&mut self, i: usize) -> Option<&mut V> {
-        if i >= self.len() {
-            None
-        } else {
-            let t = Node::get(self.root.get(), i);
-            self.root.set(t);
-            (!t.is_null()).then(|| unsafe { &mut (*t).value })
-        }
+        self.get_mut_by_index(i).map(|(_, v)| v)
     }
 
     /// `i`番目の要素を削除して、そのキーと値のペアを返す。
@@ -440,10 +449,9 @@ impl<K: Ord, V> OrderedMap<K, V> {
         let (m, r) = Node::split(r, 1);
         self.root.set(Node::merge(l, r));
 
-        (!m.is_null()).then(|| unsafe {
-            let m = Box::from_raw(m);
-            let node = *m;
-            (node.key, node.value)
+        (!m.is_null()).then(|| {
+            let m = Node::from_ptr(m);
+            (m.key, m.value)
         })
     }
 
@@ -452,12 +460,30 @@ impl<K: Ord, V> OrderedMap<K, V> {
         Node::traverse(self.root.get(), &mut f);
     }
 
-    // pub fn pop_first(&mut self) -> Option<V>
-    // pub fn pop_last(&mut self) -> Option<V>
-    // pub fn first(&self) -> Option<&V>
-    // pub fn last(&self) -> Option<&V>
-    // pub fn first_mut(&mut self) -> Option<&mut V>
-    // pub fn last_mut(&mut self) -> Option<&mut V>
+    /// 先頭の要素を削除して返す。
+    pub fn pop_first(&mut self) -> Option<(K, V)> {
+        self.remove_by_index(0)
+    }
+    /// 末尾の要素を削除して返す。
+    pub fn pop_last(&mut self) -> Option<(K, V)> {
+        self.remove_by_index(self.len().checked_sub(1)?)
+    }
+    /// 先頭の要素の参照を返す。
+    pub fn first(&self) -> Option<(&K, &V)> {
+        self.get_by_index(0)
+    }
+    /// 末尾の要素の参照を返す。
+    pub fn last(&self) -> Option<(&K, &V)> {
+        self.get_by_index(self.len().checked_sub(1)?)
+    }
+    /// 先頭の要素の可変参照を返す。
+    pub fn first_mut(&mut self) -> Option<(&K, &mut V)> {
+        self.get_mut_by_index(0)
+    }
+    /// 末尾の要素の可変参照を返す。
+    pub fn last_mut(&mut self) -> Option<(&K, &mut V)> {
+        self.get_mut_by_index(self.len().checked_sub(1)?)
+    }
 }
 
 impl<K, V> std::ops::Drop for OrderedMap<K, V> {
@@ -480,19 +506,31 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_empty() {
+        let mut map = OrderedMap::<u32, Vec<u32>>::new();
+
+        assert!(map.first().is_none());
+        assert!(map.last().is_none());
+        assert!(map.first_mut().is_none());
+        assert!(map.last_mut().is_none());
+        assert!(map.pop_first().is_none());
+        assert!(map.pop_last().is_none());
+    }
+
+    #[test]
     fn test() {
         let mut rng = rand::thread_rng();
 
-        let mut map = OrderedMap::<u32, u32>::new();
-        let mut ans = BTreeMap::<u32, u32>::new();
+        let mut map = OrderedMap::<u32, Vec<u32>>::new();
+        let mut ans = BTreeMap::<u32, Vec<u32>>::new();
 
         let q = 10000;
 
         for _ in 0..q {
             let x: u32 = rng.gen_range(0..1000);
-            let y: u32 = rng.gen();
+            let y: Vec<u32> = vec![rng.gen()];
 
-            assert_eq!(map.insert(x, y), ans.insert(x, y));
+            assert_eq!(map.insert(x, y.clone()), ans.insert(x, y));
 
             let x = rng.gen_range(0..1000);
 

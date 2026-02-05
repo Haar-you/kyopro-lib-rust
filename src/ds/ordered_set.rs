@@ -28,7 +28,7 @@ impl<K: Ord> OrderedSet<K> {
     /// `key`が存在するとき、それが何番目のキーであるかを`Ok`で返す。
     /// そうでないとき、仮に`key`があったとき何番目のキーであったか、を`Err`で返す。
     pub fn binary_search(&self, key: &K) -> Result<usize, usize> {
-        self.map.binary_search(key)
+        self.map.binary_search(key).map(|(k, _)| k)
     }
 
     /// `l`以上`r`未満の値の個数を返す。
@@ -43,12 +43,12 @@ impl<K: Ord> OrderedSet<K> {
     }
 
     /// `key`以下の最大のキーをもつキーを返す。
-    pub fn max_le(&self, key: &K) -> Option<&K> {
+    pub fn max_le<'a>(&'a self, key: &'a K) -> Option<&'a K> {
         self.map.max_le(key).map(|(k, _)| k)
     }
 
     /// `key`以上の最小のキーをもつキーを返す。
-    pub fn min_ge(&self, key: &K) -> Option<&K> {
+    pub fn min_ge<'a>(&'a self, key: &'a K) -> Option<&'a K> {
         self.map.min_ge(key).map(|(k, _)| k)
     }
 
@@ -82,8 +82,20 @@ impl<K: Ord> OrderedSet<K> {
         self.map.for_each(|k, _| f(k));
     }
 
-    // pub fn pop_first(&mut self) -> Option<K>
-    // pub fn pop_last(&mut self) -> Option<K>
-    // pub fn first(&self) -> Option<&K>
-    // pub fn last(&self) -> Option<&K>
+    /// 先頭の要素を削除して返す。
+    pub fn pop_first(&mut self) -> Option<K> {
+        self.map.pop_first().map(|(k, _)| k)
+    }
+    /// 末尾の要素を削除して返す。
+    pub fn pop_last(&mut self) -> Option<K> {
+        self.map.pop_last().map(|(k, _)| k)
+    }
+    /// 先頭の要素の参照を返す。
+    pub fn first(&self) -> Option<&K> {
+        self.map.first().map(|(k, _)| k)
+    }
+    /// 末尾の要素の参照を返す。
+    pub fn last(&self) -> Option<&K> {
+        self.map.last().map(|(k, _)| k)
+    }
 }
