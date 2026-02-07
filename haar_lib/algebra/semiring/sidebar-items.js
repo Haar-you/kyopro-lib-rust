@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["add_mul","add_mul_mod","xor_and"],"trait":["Field","Ring","Semiring"]};
+window.SIDEBAR_ITEMS = {"mod":["add_mul","add_mul_mod","max_add","min_add","xor_and"],"trait":["Field","Ring","Semiring"]};

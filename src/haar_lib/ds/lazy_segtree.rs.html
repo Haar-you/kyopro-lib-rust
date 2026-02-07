@@ -33,7 +33,7 @@
 <a href=#17 id=17 data-nosnippet>17</a><span class="kw">where
 <a href=#18 id=18 data-nosnippet>18</a>    </span>M: Monoid,
 <a href=#19 id=19 data-nosnippet>19</a>    A: Act&lt;M&gt;,
-<a href=#20 id=20 data-nosnippet>20</a>    M::Element: Clone + PartialEq,
+<a href=#20 id=20 data-nosnippet>20</a>    M::Element: Clone,
 <a href=#21 id=21 data-nosnippet>21</a>    A::Element: Clone + PartialEq,
 <a href=#22 id=22 data-nosnippet>22</a>{
 <a href=#23 id=23 data-nosnippet>23</a>    <span class="doccomment">/// 長さ`n`の[`LazySegtree`]を生成する。
@@ -100,7 +100,7 @@
 <a href=#84 id=84 data-nosnippet>84</a>            <span class="self">self</span>.lazy[r] = <span class="self">self</span>.act.op(<span class="self">self</span>.lazy[r].clone(), <span class="self">self</span>.lazy[i].clone());
 <a href=#85 id=85 data-nosnippet>85</a>        }
 <a href=#86 id=86 data-nosnippet>86</a>        <span class="kw">let </span>len = (<span class="self">self</span>.size / <span class="number">2</span>) &gt;&gt; (<span class="number">31 </span>- (i <span class="kw">as </span>u32).leading_zeros());
-<a href=#87 id=87 data-nosnippet>87</a>        <span class="self">self</span>.data[i] = <span class="self">self</span>.act.act_n(
+<a href=#87 id=87 data-nosnippet>87</a>        <span class="self">self</span>.data[i] = <span class="self">self</span>.act.act(
 <a href=#88 id=88 data-nosnippet>88</a>            <span class="kw-2">&amp;</span><span class="self">self</span>.monoid,
 <a href=#89 id=89 data-nosnippet>89</a>            <span class="self">self</span>.data[i].clone(),
 <a href=#90 id=90 data-nosnippet>90</a>            <span class="self">self</span>.lazy[i].clone(),
@@ -239,7 +239,7 @@
 <a href=#223 id=223 data-nosnippet>223</a>                    seg.update(lr.clone(), x);
 <a href=#224 id=224 data-nosnippet>224</a>                    vec[lr]
 <a href=#225 id=225 data-nosnippet>225</a>                        .iter_mut()
-<a href=#226 id=226 data-nosnippet>226</a>                        .for_each(|y| <span class="kw-2">*</span>y = act.act(<span class="kw-2">&amp;</span>monoid, <span class="kw-2">*</span>y, x));
+<a href=#226 id=226 data-nosnippet>226</a>                        .for_each(|y| <span class="kw-2">*</span>y = act.act_one(<span class="kw-2">&amp;</span>monoid, <span class="kw-2">*</span>y, x));
 <a href=#227 id=227 data-nosnippet>227</a>                }
 <a href=#228 id=228 data-nosnippet>228</a>                <span class="number">1 </span>=&gt; {
 <a href=#229 id=229 data-nosnippet>229</a>                    <span class="macro">assert_eq!</span>(

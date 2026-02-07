@@ -37,24 +37,21 @@
 <a href=#21 id=21 data-nosnippet>21</a>            <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Element {
 <a href=#22 id=22 data-nosnippet>22</a>                ($(<span class="self">self</span>.<span class="macro-nonterminal">$i</span>.id()),<span class="kw-2">*</span>)
 <a href=#23 id=23 data-nosnippet>23</a>            }
-<a href=#24 id=24 data-nosnippet>24</a>            <span class="kw">fn </span>is_id(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="kw-2">&amp;</span><span class="self">Self</span>::Element) -&gt; bool {
-<a href=#25 id=25 data-nosnippet>25</a>                $(<span class="self">self</span>.<span class="macro-nonterminal">$i</span>.is_id(<span class="kw-2">&amp;</span>a.<span class="macro-nonterminal">$i</span>))&amp;&amp;*
-<a href=#26 id=26 data-nosnippet>26</a>            }
-<a href=#27 id=27 data-nosnippet>27</a>        }
-<a href=#28 id=28 data-nosnippet>28</a>
-<a href=#29 id=29 data-nosnippet>29</a>        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Inverse),<span class="kw-2">*</span>&gt; Inverse <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {
-<a href=#30 id=30 data-nosnippet>30</a>            <span class="kw">fn </span>inv(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="self">Self</span>::Element) -&gt; <span class="self">Self</span>::Element {
-<a href=#31 id=31 data-nosnippet>31</a>                ($(<span class="self">self</span>.<span class="macro-nonterminal">$i</span>.inv(a.<span class="macro-nonterminal">$i</span>)),<span class="kw-2">*</span>)
-<a href=#32 id=32 data-nosnippet>32</a>            }
-<a href=#33 id=33 data-nosnippet>33</a>        }
-<a href=#34 id=34 data-nosnippet>34</a>
-<a href=#35 id=35 data-nosnippet>35</a>        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Associative),<span class="kw-2">*</span>&gt; Associative <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {}
-<a href=#36 id=36 data-nosnippet>36</a>        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Commutative),<span class="kw-2">*</span>&gt; Commutative <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {}
-<a href=#37 id=37 data-nosnippet>37</a>        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Idempotence),<span class="kw-2">*</span>&gt; Idempotence <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {}
-<a href=#38 id=38 data-nosnippet>38</a>    };
-<a href=#39 id=39 data-nosnippet>39</a>}
-<a href=#40 id=40 data-nosnippet>40</a>
-<a href=#41 id=41 data-nosnippet>41</a><span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">"2つの集合の直積"</span>] </span>Tuple2; T0, T1; <span class="number">0</span>, <span class="number">1</span>);
-<a href=#42 id=42 data-nosnippet>42</a><span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">"3つの集合の直積"</span>] </span>Tuple3; T0, T1, T2; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
-<a href=#43 id=43 data-nosnippet>43</a><span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">"4つの集合の直積"</span>] </span>Tuple4; T0, T1, T2, T3; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);
-<a href=#44 id=44 data-nosnippet>44</a><span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">"5つの集合の直積"</span>] </span>Tuple5; T0, T1, T2, T3, T4; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</code></pre></div></section></main></body></html>
+<a href=#24 id=24 data-nosnippet>24</a>        }
+<a href=#25 id=25 data-nosnippet>25</a>
+<a href=#26 id=26 data-nosnippet>26</a>        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Inverse),<span class="kw-2">*</span>&gt; Inverse <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {
+<a href=#27 id=27 data-nosnippet>27</a>            <span class="kw">fn </span>inv(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="self">Self</span>::Element) -&gt; <span class="self">Self</span>::Element {
+<a href=#28 id=28 data-nosnippet>28</a>                ($(<span class="self">self</span>.<span class="macro-nonterminal">$i</span>.inv(a.<span class="macro-nonterminal">$i</span>)),<span class="kw-2">*</span>)
+<a href=#29 id=29 data-nosnippet>29</a>            }
+<a href=#30 id=30 data-nosnippet>30</a>        }
+<a href=#31 id=31 data-nosnippet>31</a>
+<a href=#32 id=32 data-nosnippet>32</a>        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Associative),<span class="kw-2">*</span>&gt; Associative <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {}
+<a href=#33 id=33 data-nosnippet>33</a>        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Commutative),<span class="kw-2">*</span>&gt; Commutative <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {}
+<a href=#34 id=34 data-nosnippet>34</a>        <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$t</span>:Idempotence),<span class="kw-2">*</span>&gt; Idempotence <span class="kw">for </span><span class="macro-nonterminal">$a</span>&lt;$(<span class="macro-nonterminal">$t</span>),<span class="kw-2">*</span>&gt; {}
+<a href=#35 id=35 data-nosnippet>35</a>    };
+<a href=#36 id=36 data-nosnippet>36</a>}
+<a href=#37 id=37 data-nosnippet>37</a>
+<a href=#38 id=38 data-nosnippet>38</a><span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">"2つの集合の直積"</span>] </span>Tuple2; T0, T1; <span class="number">0</span>, <span class="number">1</span>);
+<a href=#39 id=39 data-nosnippet>39</a><span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">"3つの集合の直積"</span>] </span>Tuple3; T0, T1, T2; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
+<a href=#40 id=40 data-nosnippet>40</a><span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">"4つの集合の直積"</span>] </span>Tuple4; T0, T1, T2, T3; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);
+<a href=#41 id=41 data-nosnippet>41</a><span class="macro">impl_tuple!</span>(<span class="attr">#[doc = <span class="string">"5つの集合の直積"</span>] </span>Tuple5; T0, T1, T2, T3, T4; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</code></pre></div></section></main></body></html>

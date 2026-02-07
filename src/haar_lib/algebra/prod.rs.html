@@ -34,8 +34,9 @@
 <a href=#18 id=18 data-nosnippet>18</a>    ($(<span class="macro-nonterminal">$t</span>:ty),<span class="kw-2">*</span>) =&gt; {
 <a href=#19 id=19 data-nosnippet>19</a>        $(<span class="macro">impl_algebra!</span>(
 <a href=#20 id=20 data-nosnippet>20</a>            Prod&lt;<span class="macro-nonterminal">$t</span>&gt;; set: <span class="macro-nonterminal">$t</span>; op: |<span class="kw">_</span>, a: <span class="macro-nonterminal">$t</span>, b: <span class="macro-nonterminal">$t</span>| a * b;
-<a href=#21 id=21 data-nosnippet>21</a>            id: |<span class="kw">_</span>| <span class="number">1 </span><span class="kw">as </span><span class="macro-nonterminal">$t</span>, |<span class="kw">_</span>, <span class="kw-2">&amp;</span>a| a == <span class="number">1 </span><span class="kw">as </span><span class="macro-nonterminal">$t</span>; commu; assoc;);)*
-<a href=#22 id=22 data-nosnippet>22</a>    };
-<a href=#23 id=23 data-nosnippet>23</a>}
-<a href=#24 id=24 data-nosnippet>24</a>
-<a href=#25 id=25 data-nosnippet>25</a><span class="macro">implement!</span>(i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize, f32, f64);</code></pre></div></section></main></body></html>
+<a href=#21 id=21 data-nosnippet>21</a>            id: |<span class="kw">_</span>| <span class="number">1 </span><span class="kw">as </span><span class="macro-nonterminal">$t</span>; commu; assoc;);)*
+<a href=#22 id=22 data-nosnippet>22</a>        $(<span class="kw">impl </span>Multiplicative <span class="kw">for </span>Prod&lt;<span class="macro-nonterminal">$t</span>&gt; {})*
+<a href=#23 id=23 data-nosnippet>23</a>    };
+<a href=#24 id=24 data-nosnippet>24</a>}
+<a href=#25 id=25 data-nosnippet>25</a>
+<a href=#26 id=26 data-nosnippet>26</a><span class="macro">implement!</span>(i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize, f32, f64);</code></pre></div></section></main></body></html>

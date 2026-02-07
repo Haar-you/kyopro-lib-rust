@@ -24,7 +24,7 @@
 <a href=#8 id=8 data-nosnippet>8</a>
 <a href=#9 id=9 data-nosnippet>9</a><span class="macro">impl_algebra!</span>({S: Set} Dual&lt;S&gt;; set: S::Element;);
 <a href=#10 id=10 data-nosnippet>10</a><span class="macro">impl_algebra!</span>({S: BinaryOp} Dual&lt;S&gt;; op: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>, a, b| s.<span class="number">0</span>.op(b, a););
-<a href=#11 id=11 data-nosnippet>11</a><span class="macro">impl_algebra!</span>({S: Identity} Dual&lt;S&gt;; id: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>| s.<span class="number">0</span>.id(), |s: <span class="kw-2">&amp;</span><span class="self">Self</span>, a| s.<span class="number">0</span>.is_id(a););
+<a href=#11 id=11 data-nosnippet>11</a><span class="macro">impl_algebra!</span>({S: Identity} Dual&lt;S&gt;; id: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>| s.<span class="number">0</span>.id(););
 <a href=#12 id=12 data-nosnippet>12</a><span class="macro">impl_algebra!</span>({S: Inverse} Dual&lt;S&gt;; inv: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>, a| s.<span class="number">0</span>.inv(a););
 <a href=#13 id=13 data-nosnippet>13</a><span class="macro">impl_algebra!</span>({S: Commutative} Dual&lt;S&gt;; commu;);
 <a href=#14 id=14 data-nosnippet>14</a><span class="macro">impl_algebra!</span>({S: Associative} Dual&lt;S&gt;; assoc;);

@@ -98,13 +98,14 @@
 <a href=#82 id=82 data-nosnippet>82</a><span class="kw">impl </span>Composition {
 <a href=#83 id=83 data-nosnippet>83</a>    <span class="doccomment">/// 位数`2n`の二面体群を作る。
 <a href=#84 id=84 data-nosnippet>84</a>    </span><span class="kw">pub fn </span>new(n: usize) -&gt; <span class="self">Self </span>{
-<a href=#85 id=85 data-nosnippet>85</a>        <span class="self">Self</span>(n)
-<a href=#86 id=86 data-nosnippet>86</a>    }
-<a href=#87 id=87 data-nosnippet>87</a>}
-<a href=#88 id=88 data-nosnippet>88</a>
-<a href=#89 id=89 data-nosnippet>89</a><span class="macro">impl_algebra!</span>(Composition; set: Dihedral;
-<a href=#90 id=90 data-nosnippet>90</a>    op: |<span class="kw">_</span>, a: Dihedral, b: Dihedral| a.compose(b);
-<a href=#91 id=91 data-nosnippet>91</a>    id: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>| Dihedral::id(s.<span class="number">0</span>), |s: <span class="kw-2">&amp;</span><span class="self">Self</span>, a| a == <span class="kw-2">&amp;</span>s.id();
-<a href=#92 id=92 data-nosnippet>92</a>    inv: |<span class="kw">_</span>, a: Dihedral| a.inv();
-<a href=#93 id=93 data-nosnippet>93</a>    assoc;
-<a href=#94 id=94 data-nosnippet>94</a>);</code></pre></div></section></main></body></html>
+<a href=#85 id=85 data-nosnippet>85</a>        <span class="macro">assert!</span>(n &gt;= <span class="number">1</span>);
+<a href=#86 id=86 data-nosnippet>86</a>        <span class="self">Self</span>(n)
+<a href=#87 id=87 data-nosnippet>87</a>    }
+<a href=#88 id=88 data-nosnippet>88</a>}
+<a href=#89 id=89 data-nosnippet>89</a>
+<a href=#90 id=90 data-nosnippet>90</a><span class="macro">impl_algebra!</span>(Composition; set: Dihedral;
+<a href=#91 id=91 data-nosnippet>91</a>    op: |<span class="kw">_</span>, a: Dihedral, b: Dihedral| a.compose(b);
+<a href=#92 id=92 data-nosnippet>92</a>    id: |s: <span class="kw-2">&amp;</span><span class="self">Self</span>| Dihedral::id(s.<span class="number">0</span>);
+<a href=#93 id=93 data-nosnippet>93</a>    inv: |<span class="kw">_</span>, a: Dihedral| a.inv();
+<a href=#94 id=94 data-nosnippet>94</a>    assoc;
+<a href=#95 id=95 data-nosnippet>95</a>);</code></pre></div></section></main></body></html>

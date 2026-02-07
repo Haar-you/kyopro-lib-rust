@@ -155,9 +155,9 @@
 <a href=#139 id=139 data-nosnippet>139</a></span><span class="kw">mod </span>tests {
 <a href=#140 id=140 data-nosnippet>140</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#141 id=141 data-nosnippet>141</a>    <span class="kw">use crate</span>::{
-<a href=#142 id=142 data-nosnippet>142</a>        algebra::affine::<span class="kw-2">*</span>,
+<a href=#142 id=142 data-nosnippet>142</a>        algebra::{affine::<span class="kw-2">*</span>, semiring::add_mul_mod::AddMulMod},
 <a href=#143 id=143 data-nosnippet>143</a>        math::{linear::Linear, prime_mod::Prime},
-<a href=#144 id=144 data-nosnippet>144</a>        num::const_modint::ConstModInt,
+<a href=#144 id=144 data-nosnippet>144</a>        num::const_modint::{ConstModInt, ConstModIntBuilder},
 <a href=#145 id=145 data-nosnippet>145</a>    };
 <a href=#146 id=146 data-nosnippet>146</a>    <span class="kw">use </span>rand::Rng;
 <a href=#147 id=147 data-nosnippet>147</a>    <span class="kw">use </span>std::collections::VecDeque;
@@ -171,7 +171,7 @@
 <a href=#155 id=155 data-nosnippet>155</a>
 <a href=#156 id=156 data-nosnippet>156</a>        <span class="kw">let </span><span class="kw-2">mut </span>deq = VecDeque::&lt;Linear&lt;Mint&gt;&gt;::new();
 <a href=#157 id=157 data-nosnippet>157</a>
-<a href=#158 id=158 data-nosnippet>158</a>        <span class="kw">let </span>m = Composition::&lt;Mint&gt;::new();
+<a href=#158 id=158 data-nosnippet>158</a>        <span class="kw">let </span>m = Composition(AddMulMod(ConstModIntBuilder::new()));
 <a href=#159 id=159 data-nosnippet>159</a>        <span class="kw">let </span><span class="kw-2">mut </span>swag = FoldableDeque::new(m);
 <a href=#160 id=160 data-nosnippet>160</a>
 <a href=#161 id=161 data-nosnippet>161</a>        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">1000 </span>{
