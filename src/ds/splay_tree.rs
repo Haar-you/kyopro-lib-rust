@@ -80,11 +80,11 @@ where
 
         if !pp.is_null() {
             let pp = unsafe { &mut *pp };
-            if (*pp).lc == p {
-                (*pp).lc = this;
+            if pp.lc == p {
+                pp.lc = this;
             }
-            if (*pp).rc == p {
-                (*pp).rc = this;
+            if pp.rc == p {
+                pp.rc = this;
             }
         }
 
