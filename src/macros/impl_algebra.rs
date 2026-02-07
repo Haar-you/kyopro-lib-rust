@@ -22,13 +22,10 @@ macro_rules! impl_algebra {
         }
         impl_algebra!(@inner {$($bound)*} $t $({$($where)*})?; $($rest)*);
     };
-    (@inner {$($bound:tt)*} $t:ty $({$($where:tt)*})?; id: $f:expr, $g:expr; $($rest:tt)*) => {
+    (@inner {$($bound:tt)*} $t:ty $({$($where:tt)*})?; id: $f:expr; $($rest:tt)*) => {
         impl <$($bound)*> Identity for $t $(where $($where)*)? {
             fn id(&self) -> Self::Element {
                 $f(self)
-            }
-            fn is_id(&self, a: &Self::Element) -> bool {
-                $g(self, a)
             }
         }
         impl_algebra!(@inner {$($bound)*} $t $({$($where)*})?; $($rest)*);

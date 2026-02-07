@@ -52,6 +52,5 @@ impl ParenSeq {
 pub struct Composition;
 
 impl_algebra!(Composition; set: ParenSeq; op: |_, a: ParenSeq, b| a.concat(b);
-              id: |_| ParenSeq::empty(), |_, a: &ParenSeq| a.is_correct();
-              assoc;
+              id: |_| ParenSeq::empty(); assoc;
 );

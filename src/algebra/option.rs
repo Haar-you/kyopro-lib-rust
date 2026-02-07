@@ -6,7 +6,7 @@ use crate::impl_algebra;
 /// 単位元を追加したモノイド
 pub struct AppendId<M>(pub M);
 
-impl_algebra!({M: Set} AppendId<M>; set: Option<M::Element>; id: |_| None, |_, a: &Option<_>| a.is_none(););
+impl_algebra!({M: Set} AppendId<M>; set: Option<M::Element>; id: |_| None;);
 impl_algebra!({M: BinaryOp} AppendId<M>;
     op: |s: &Self, a, b|
         match (a, b) {

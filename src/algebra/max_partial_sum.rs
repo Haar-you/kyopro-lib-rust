@@ -4,7 +4,7 @@
 //! - <https://yukicoder.me/problems/no/776>
 pub use crate::algebra::traits::*;
 
-use crate::max;
+use crate::{impl_algebra, max};
 
 use std::cmp::max;
 use std::marker::PhantomData;
@@ -23,7 +23,10 @@ pub struct MaxPartialSum<T> {
     pub partial_max: T,
 }
 
-impl<T: Copy> MaxPartialSum<T> {
+impl<T> MaxPartialSum<T>
+where
+    T: Copy + Ord + Add<Output = T>,
+{
     /// 値`value`をもつ長さ`1`の列に対応する[`MaxPartialSum`]を生成する。
     pub fn new(value: T) -> Self {
         Self {
@@ -31,6 +34,16 @@ impl<T: Copy> MaxPartialSum<T> {
             left_max: value,
             right_max: value,
             partial_max: value,
+        }
+    }
+
+    /// `MaxPartialSum`を合成する。
+    pub fn compose(self, b: Self) -> Self {
+        Self {
+            sum: self.sum + b.sum,
+            left_max: self.left_max.max(self.sum + max(b.left_max, b.sum)),
+            right_max: b.right_max.max(b.sum + max(self.right_max, self.sum)),
+            partial_max: max!(self.partial_max, b.partial_max, self.right_max + b.left_max),
         }
     }
 }
@@ -45,22 +58,8 @@ impl<T> Composition<T> {
     }
 }
 
-impl<T> Set for Composition<T> {
-    type Element = MaxPartialSum<T>;
-}
-
-impl<T: Copy + Ord + Add<Output = T>> BinaryOp for Composition<T> {
-    fn op(&self, a: Self::Element, b: Self::Element) -> Self::Element {
-        MaxPartialSum {
-            sum: a.sum + b.sum,
-            left_max: a.left_max.max(a.sum + max(b.left_max, b.sum)),
-            right_max: b.right_max.max(b.sum + max(a.right_max, a.sum)),
-            partial_max: max!(a.partial_max, b.partial_max, a.right_max + b.left_max),
-        }
-    }
-}
-
-impl<T> Associative for Composition<T> {}
+impl_algebra!({T: Copy + Ord + Add<Output = T>} Composition<T>; set: MaxPartialSum<T>;
+              op: |_, a: Self::Element, b| a.compose(b); assoc;);
 
 #[cfg(test)]
 mod tests {

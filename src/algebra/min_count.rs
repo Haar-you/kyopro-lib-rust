@@ -34,9 +34,6 @@ impl<T, U: Zero + PartialEq> Identity for MinCount<T, U> {
     fn id(&self) -> Self::Element {
         (None, U::zero())
     }
-    fn is_id(&self, a: &Self::Element) -> bool {
-        a.0.is_none() && a.1 == U::zero()
-    }
 }
 impl<T, U> Associative for MinCount<T, U> {}
 impl<T, U> Commutative for MinCount<T, U> {}

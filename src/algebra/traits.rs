@@ -34,7 +34,12 @@ pub trait Identity: Set {
     /// 単位元
     fn id(&self) -> Self::Element;
     /// 単位元の判定
-    fn is_id(&self, a: &Self::Element) -> bool;
+    fn is_id(&self, a: &Self::Element) -> bool
+    where
+        Self::Element: PartialEq,
+    {
+        a == &self.id()
+    }
 }
 
 /// 逆元をもつ
@@ -54,6 +59,14 @@ pub trait Idempotence {}
 pub trait Additive: BinaryOp {
     fn times(&self, a: Self::Element, n: u64) -> Self::Element;
 }
+
+/// 二項演算が乗法的
+pub trait Multiplicative: BinaryOp {}
+
+/// 二項演算で順序が変化しない。
+///
+/// $a < b \implies a \circ m < b \circ m$
+pub trait Ordered: BinaryOp<Element: Ord> {}
 
 /// 半群
 pub trait Semigroup: BinaryOp + Associative {

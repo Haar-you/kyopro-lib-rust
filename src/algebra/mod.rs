@@ -7,6 +7,8 @@ pub mod bit;
 pub mod dihedral;
 pub mod dual;
 pub mod first_last;
+pub mod gcd_lcm;
+pub mod list;
 pub mod matrix;
 pub mod max_contiguous;
 pub mod max_contiguous_true;

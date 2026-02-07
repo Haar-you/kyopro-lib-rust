@@ -42,7 +42,7 @@ pub fn manacher_even<T: PartialEq>(s: &[T]) -> Vec<usize> {
         .into_iter()
         .skip(1)
         .step_by(2)
-        .map(|l| (l / 2 + 1) / 2 * 2)
+        .map(|l| (l / 2).div_ceil(2) * 2)
         .collect()
 }
 

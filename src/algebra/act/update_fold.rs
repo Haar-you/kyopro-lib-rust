@@ -1,6 +1,5 @@
 //! Range Update Range ~~~
 pub use crate::algebra::{act::Act, first_last::Last, traits::*};
-use std::fmt::Debug;
 
 /// Range Update Range ~~~ 用のモノイド作用
 ///
@@ -20,13 +19,7 @@ where
     fn monoid(&self) -> &Self::Monoid {
         &self.0
     }
-    fn act(&self, _m: &M, val: M::Element, a: Self::Element) -> M::Element {
-        match a {
-            Some(a) => a,
-            _ => val,
-        }
-    }
-    fn act_n(&self, m: &M, val: <M>::Element, a: Self::Element, len: usize) -> <M>::Element {
+    fn act(&self, m: &M, val: <M>::Element, a: Self::Element, len: usize) -> <M>::Element {
         match a {
             Some(a) => m.times(a, len as u64),
             _ => val,

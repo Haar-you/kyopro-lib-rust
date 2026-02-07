@@ -10,40 +10,46 @@ use std::ptr;
 
 use crate::algebra::act::*;
 
-struct Node<M: Monoid, A: Act<M>> {
+#[derive(Clone)]
+struct Manager<M, A> {
     monoid: M,
     act: A,
+}
+
+struct Node<M: Monoid, A: Act<M>> {
     value: M::Element,
     sum: M::Element,
     lazy: A::Element,
     size: usize,
     rev: bool,
-    lc: *mut Node<M, A>,
-    rc: *mut Node<M, A>,
-    par: *mut Node<M, A>,
+    lc: *mut Self,
+    rc: *mut Self,
+    par: *mut Self,
 }
 
-impl<M: Monoid, A: Act<M>> Node<M, A>
+impl<M: Monoid, A: Act<M>> Manager<M, A>
 where
     M::Element: Clone,
     A::Element: Clone + PartialEq,
 {
-    fn new(monoid: M, act: A, value: M::Element) -> Self {
-        Self {
+    fn new(monoid: M, act: A) -> Self {
+        Self { monoid, act }
+    }
+
+    fn create(&self, value: M::Element) -> Node<M, A> {
+        Node {
             value,
-            sum: monoid.id(),
-            lazy: act.id(),
+            sum: self.monoid.id(),
+            lazy: self.act.id(),
             size: 1,
             rev: false,
             lc: ptr::null_mut(),
             rc: ptr::null_mut(),
             par: ptr::null_mut(),
-            monoid,
-            act,
         }
     }
 
-    fn set_value(this: *mut Self, value: M::Element) {
+    fn set_value(&self, this: *mut Node<M, A>, value: M::Element) {
         if !this.is_null() {
             unsafe {
                 (*this).value = value;
@@ -51,61 +57,62 @@ where
         }
     }
 
-    fn rotate(this: *mut Self) {
-        let p = Self::par_of(this).unwrap();
-        let pp = Self::par_of(p).unwrap();
+    fn rotate(&self, this: *mut Node<M, A>) {
+        let p = self.par_of(this).unwrap();
+        let pp = self.par_of(p).unwrap();
 
-        Self::pushdown(this);
+        self.pushdown(this);
 
-        if Self::left_of(p).unwrap() == this {
-            let c = Self::right_of(this).unwrap();
-            Self::set_left(p, c);
-            Self::set_right(this, p);
+        if self.left_of(p).unwrap() == this {
+            let c = self.right_of(this).unwrap();
+            self.set_left(p, c);
+            self.set_right(this, p);
         } else {
-            let c = Self::left_of(this).unwrap();
-            Self::set_right(p, c);
-            Self::set_left(this, p);
+            let c = self.left_of(this).unwrap();
+            self.set_right(p, c);
+            self.set_left(this, p);
         }
 
-        unsafe {
-            if !pp.is_null() {
-                if (*pp).lc == p {
-                    (*pp).lc = this;
-                }
-                if (*pp).rc == p {
-                    (*pp).rc = this;
-                }
+        if !pp.is_null() {
+            let pp = unsafe { &mut *pp };
+            if pp.lc == p {
+                pp.lc = this;
             }
-
-            assert!(!this.is_null());
-            (*this).par = pp;
+            if pp.rc == p {
+                pp.rc = this;
+            }
         }
 
-        unsafe {
-            std::mem::swap(&mut (*this).sum, &mut (*p).sum);
-            std::mem::swap(&mut (*this).lazy, &mut (*p).lazy);
-        }
+        assert!(!this.is_null());
+        let this = unsafe { &mut *this };
+        this.par = pp;
 
-        Self::update(p);
+        assert!(!p.is_null());
+        let p = unsafe { &mut *p };
+
+        std::mem::swap(&mut this.sum, &mut p.sum);
+        std::mem::swap(&mut this.lazy, &mut p.lazy);
+
+        self.update(p);
     }
 
-    fn status(this: *mut Self) -> i32 {
-        let par = Self::par_of(this).unwrap();
-
+    fn status(&self, this: *mut Node<M, A>) -> i32 {
+        let par = self.par_of(this).unwrap();
         if par.is_null() {
             return 0;
         }
-        if unsafe { (*par).lc } == this {
+        let par = unsafe { &*par };
+        if par.lc == this {
             return 1;
         }
-        if unsafe { (*par).rc } == this {
+        if par.rc == this {
             return -1;
         }
 
         unreachable!()
     }
 
-    fn reverse(this: *mut Self) {
+    fn reverse(&self, this: *mut Node<M, A>) {
         if !this.is_null() {
             unsafe {
                 (*this).rev ^= true;
@@ -113,80 +120,78 @@ where
         }
     }
 
-    fn pushdown(this: *mut Self) {
+    fn pushdown(&self, this: *mut Node<M, A>) {
         if !this.is_null() {
             let this = unsafe { &mut *this };
 
             if this.rev {
                 std::mem::swap(&mut this.lc, &mut this.rc);
-                Self::reverse(this.lc);
-                Self::reverse(this.rc);
+                self.reverse(this.lc);
+                self.reverse(this.rc);
                 this.rev = false;
             }
 
-            if !this.act.monoid().is_id(&this.lazy) {
-                let lc = this.lc;
-                if !lc.is_null() {
-                    let lc = unsafe { &mut *lc };
-                    lc.lazy = this.act.op(lc.lazy.clone(), this.lazy.clone());
+            if !self.act.monoid().is_id(&this.lazy) {
+                if !this.lc.is_null() {
+                    let lc = unsafe { &mut *this.lc };
+                    lc.lazy = self.act.op(lc.lazy.clone(), this.lazy.clone());
                 }
 
-                let rc = this.rc;
-                if !rc.is_null() {
-                    let rc = unsafe { &mut *rc };
-                    rc.lazy = this.act.op(rc.lazy.clone(), this.lazy.clone());
+                if !this.rc.is_null() {
+                    let rc = unsafe { &mut *this.rc };
+                    rc.lazy = self.act.op(rc.lazy.clone(), this.lazy.clone());
                 }
 
-                this.value = this
+                this.value = self
                     .act
-                    .act_n(&this.monoid, this.value.clone(), this.lazy.clone(), 1);
+                    .act(&self.monoid, this.value.clone(), this.lazy.clone(), 1);
                 this.sum =
-                    this.act
-                        .act_n(&this.monoid, this.sum.clone(), this.lazy.clone(), this.size);
-                this.lazy = this.act.id();
+                    self.act
+                        .act(&self.monoid, this.sum.clone(), this.lazy.clone(), this.size);
+                this.lazy = self.act.id();
             }
         }
     }
 
-    fn update(this: *mut Self) {
+    fn update(&self, this: *mut Node<M, A>) {
         assert!(!this.is_null());
 
         let this = unsafe { &mut *this };
-        Self::pushdown(this.lc);
-        Self::pushdown(this.rc);
+        self.pushdown(this.lc);
+        self.pushdown(this.rc);
 
-        this.size = 1 + Self::size_of(this.lc) + Self::size_of(this.rc);
+        this.size = 1 + self.size_of(this.lc) + self.size_of(this.rc);
 
         this.sum = this.value.clone();
 
         if !this.lc.is_null() {
             let lc = unsafe { &mut *this.lc };
-            this.sum = this.monoid.op(this.sum.clone(), lc.sum.clone());
+            this.sum = self.monoid.op(this.sum.clone(), lc.sum.clone());
         }
 
         if !this.rc.is_null() {
             let rc = unsafe { &mut *this.rc };
-            this.sum = this.monoid.op(this.sum.clone(), rc.sum.clone());
+            this.sum = self.monoid.op(this.sum.clone(), rc.sum.clone());
         }
     }
 
-    fn splay(this: *mut Self) {
-        while Self::status(this) != 0 {
-            let par = Self::par_of(this).unwrap();
+    fn splay(&self, this: *mut Node<M, A>) {
+        while self.status(this) != 0 {
+            let par = self.par_of(this).unwrap();
 
-            if Self::status(par) == 0 {
-                Self::rotate(this);
-            } else if Self::status(this) == Self::status(par) {
-                Self::rotate(par);
-                Self::rotate(this);
+            if self.status(par) == 0 {
+                self.rotate(this);
+            } else if self.status(this) == self.status(par) {
+                self.rotate(par);
+                self.rotate(this);
             } else {
-                Self::rotate(this);
-                Self::rotate(this);
+                self.rotate(this);
+                self.rotate(this);
             }
         }
     }
 
-    fn get(root: *mut Self, mut index: usize) -> *mut Self {
+    fn get(&self, root: *mut Node<M, A>, mut index: usize) -> *mut Node<M, A> {
         if root.is_null() {
             return root;
         }
@@ -194,28 +199,28 @@ where
         let mut cur = root;
 
         loop {
-            Self::pushdown(cur);
+            self.pushdown(cur);
 
-            let left = Self::left_of(cur).unwrap();
-            let lsize = Self::size_of(left);
+            let left = self.left_of(cur).unwrap();
+            let lsize = self.size_of(left);
 
             match index.cmp(&lsize) {
                 Ordering::Less => {
                     cur = left;
                 }
                 Ordering::Equal => {
-                    Self::splay(cur);
+                    self.splay(cur);
                     return cur;
                 }
                 Ordering::Greater => {
-                    cur = Self::right_of(cur).unwrap();
+                    cur = self.right_of(cur).unwrap();
                     index -= lsize + 1;
                 }
             }
         }
     }
 
-    fn merge(left: *mut Self, right: *mut Self) -> *mut Self {
+    fn merge(&self, left: *mut Node<M, A>, right: *mut Node<M, A>) -> *mut Node<M, A> {
         if left.is_null() {
             return right;
         }
@@ -223,63 +228,59 @@ where
             return left;
         }
 
-        let cur = Self::get(left, Self::size_of(left) - 1);
+        let cur = self.get(left, self.size_of(left) - 1);
 
-        Self::set_right(cur, right);
+        self.set_right(cur, right);
 
-        Self::update(right);
-        Self::update(cur);
+        self.update(right);
+        self.update(cur);
 
         cur
     }
 
-    fn split(root: *mut Self, index: usize) -> (*mut Self, *mut Self) {
+    fn split(&self, root: *mut Node<M, A>, index: usize) -> (*mut Node<M, A>, *mut Node<M, A>) {
         if root.is_null() {
             return (ptr::null_mut(), ptr::null_mut());
         }
-        if index >= Self::size_of(root) {
+        if index >= self.size_of(root) {
             return (root, ptr::null_mut());
         }
 
-        let cur = Self::get(root, index);
-        let left = Self::left_of(cur).unwrap();
+        let cur = self.get(root, index);
+        let left = self.left_of(cur).unwrap();
 
         if !left.is_null() {
-            unsafe {
-                (*left).par = ptr::null_mut();
-            }
-            Self::update(left);
+            self.set_par(left, ptr::null_mut());
+            self.update(left);
         }
-        assert!(!cur.is_null());
-        unsafe {
-            (*cur).lc = ptr::null_mut();
-        }
-        Self::update(cur);
+        self.set_left(cur, ptr::null_mut());
+        self.update(cur);
 
         (left, cur)
     }
 
-    fn set_left(this: *mut Self, left: *mut Self) {
+    fn set_left(&self, this: *mut Node<M, A>, left: *mut Node<M, A>) {
         assert!(!this.is_null());
-        unsafe {
-            (*this).lc = left;
-            if !left.is_null() {
-                (*left).par = this;
-            }
+        unsafe { (*this).lc = left };
+        if !left.is_null() {
+            unsafe { (*left).par = this };
         }
     }
 
-    fn set_right(this: *mut Self, right: *mut Self) {
+    fn set_right(&self, this: *mut Node<M, A>, right: *mut Node<M, A>) {
         assert!(!this.is_null());
-        unsafe {
-            (*this).rc = right;
-            if !right.is_null() {
-                (*right).par = this;
-            }
+        unsafe { (*this).rc = right };
+        if !right.is_null() {
+            unsafe { (*right).par = this };
         }
     }
 
-    fn size_of(this: *mut Self) -> usize {
+    fn set_par(&self, this: *mut Node<M, A>, par: *mut Node<M, A>) {
+        assert!(!this.is_null());
+        unsafe { (*this).par = par };
+    }
+
+    fn size_of(&self, this: *mut Node<M, A>) -> usize {
         if this.is_null() {
             0
         } else {
@@ -287,32 +288,23 @@ where
         }
     }
 
-    fn left_of(this: *mut Self) -> Option<*mut Self> {
-        (!this.is_null()).then_some(unsafe { (*this).lc })
+    fn left_of(&self, this: *mut Node<M, A>) -> Option<*mut Node<M, A>> {
+        (!this.is_null()).then(|| unsafe { (*this).lc })
     }
 
-    fn right_of(this: *mut Self) -> Option<*mut Self> {
-        (!this.is_null()).then_some(unsafe { (*this).rc })
+    fn right_of(&self, this: *mut Node<M, A>) -> Option<*mut Node<M, A>> {
+        (!this.is_null()).then(|| unsafe { (*this).rc })
     }
 
-    fn par_of(this: *mut Self) -> Option<*mut Self> {
-        (!this.is_null()).then_some(unsafe { (*this).par })
+    fn par_of(&self, this: *mut Node<M, A>) -> Option<*mut Node<M, A>> {
+        (!this.is_null()).then(|| unsafe { (*this).par })
     }
 }
 
 /// 遅延スプレー木
 pub struct LazySplayTree<M: Monoid, A: Act<M>> {
-    monoid: M,
-    act: A,
+    man: Manager<M, A>,
     root: Cell<*mut Node<M, A>>,
-}
-
-impl<M: Monoid, A: Act<M>> LazySplayTree<M, A> {
-    /// `LazySplayTree<A>`を生成
-    pub fn new(monoid: M, act: A) -> Self {
-        let root = Cell::new(ptr::null_mut());
-        Self { monoid, act, root }
-    }
 }
 
 impl<M: Monoid + Clone, A: Act<M> + Clone> LazySplayTree<M, A>
@@ -320,19 +312,29 @@ where
     M::Element: Clone,
     A::Element: Clone + PartialEq,
 {
+    /// `LazySplayTree<A>`を生成
+    pub fn new(monoid: M, act: A) -> Self {
+        let man = Manager::new(monoid, act);
+        let root = Cell::new(ptr::null_mut());
+        Self { man, root }
+    }
+
     /// 値`value`をもつノード一つのみからなる`SplayTree<M>`を生成
     pub fn singleton(monoid: M, act: A, value: M::Element) -> Self {
-        let root = Cell::new(Box::into_raw(Box::new(Node::new(
-            monoid.clone(),
-            act.clone(),
-            value,
-        ))));
-        Self { monoid, act, root }
+        let man = Manager::new(monoid, act);
+        let root = Cell::new(Box::into_raw(Box::new(man.create(value))));
+        Self { man, root }
+    }
+
+    fn make_singleton(&self, value: M::Element) -> Self {
+        let man = self.man.clone();
+        let root = Cell::new(Box::into_raw(Box::new(man.create(value))));
+        Self { man, root }
     }
 
     /// スプレーツリーの要素数を返す
     pub fn len(&self) -> usize {
-        Node::size_of(self.root.get())
+        self.man.size_of(self.root.get())
     }
 
     /// スプレーツリーが要素を持たなければ`true`を返す
@@ -342,51 +344,45 @@ where
 
     /// `index`番目の要素の参照を返す
     pub fn get(&self, index: usize) -> Option<&M::Element> {
-        let node = Node::get(self.root.get(), index);
+        let node = self.man.get(self.root.get(), index);
         self.root.set(node);
 
-        if node.is_null() {
-            None
-        } else {
-            unsafe { Some(&(*node).value) }
-        }
+        (!node.is_null()).then(|| unsafe { &(*node).value })
     }
 
     /// `index`番目の要素を`value`に変更する
     pub fn set(&mut self, index: usize, value: M::Element) {
-        let root = Node::get(self.root.get(), index);
-        Node::set_value(root, value);
-        Node::update(root);
+        let root = self.man.get(self.root.get(), index);
+        self.man.set_value(root, value);
+        self.man.update(root);
         self.root.set(root);
     }
 
     /// 右側にスプレーツリーを結合する
     pub fn merge_right(&mut self, right: Self) {
-        let root = Node::merge(self.root.get(), right.root.get());
+        let root = self.man.merge(self.root.get(), right.root.get());
         right.root.set(ptr::null_mut());
         self.root.set(root);
     }
 
     /// 左側にスプレーツリーを結合する
     pub fn merge_left(&mut self, left: Self) {
-        let root = Node::merge(left.root.get(), self.root.get());
+        let root = self.man.merge(left.root.get(), self.root.get());
         left.root.set(ptr::null_mut());
         self.root.set(root);
     }
 
     /// 左側に`index`個の要素があるように、左右で分割する
     pub fn split(self, index: usize) -> (Self, Self) {
-        let (l, r) = Node::split(self.root.get(), index);
+        let (l, r) = self.man.split(self.root.get(), index);
         self.root.set(ptr::null_mut());
         (
             Self {
-                monoid: self.monoid.clone(),
-                act: self.act.clone(),
+                man: self.man.clone(),
                 root: Cell::new(l),
             },
             Self {
-                monoid: self.monoid.clone(),
-                act: self.act.clone(),
+                man: self.man,
                 root: Cell::new(r),
             },
         )
@@ -394,30 +390,23 @@ where
 
     /// 要素を`index`番目になるように挿入する
     pub fn insert(&mut self, index: usize, value: M::Element) {
-        let (l, r) = Node::split(self.root.get(), index);
-        let node = Box::into_raw(Box::new(Node::new(
-            self.monoid.clone(),
-            self.act.clone(),
-            value,
-        )));
-        let root = Node::merge(l, Node::merge(node, r));
+        let (l, r) = self.man.split(self.root.get(), index);
+        let node = Box::into_raw(Box::new(self.man.create(value)));
+        let root = self.man.merge(l, self.man.merge(node, r));
         self.root.set(root);
     }
 
     /// `index`番目の要素を削除して、値を返す
     pub fn remove(&mut self, index: usize) -> Option<M::Element> {
-        let (l, r) = Node::split(self.root.get(), index);
-        let (m, r) = Node::split(r, 1);
+        let (l, r) = self.man.split(self.root.get(), index);
+        let (m, r) = self.man.split(r, 1);
 
-        let ret = if m.is_null() {
-            None
-        } else {
+        self.root.set(self.man.merge(l, r));
+
+        (!m.is_null()).then(|| {
             let m = unsafe { Box::from_raw(m) };
-            Some(m.value)
-        };
-
-        self.root.set(Node::merge(l, r));
-        ret
+            m.value
+        })
     }
 
     fn range(
@@ -425,27 +414,27 @@ where
         start: usize,
         end: usize,
     ) -> (*mut Node<M, A>, *mut Node<M, A>, *mut Node<M, A>) {
-        let (m, r) = Node::split(self.root.get(), end);
-        let (l, m) = Node::split(m, start);
+        let (m, r) = self.man.split(self.root.get(), end);
+        let (l, m) = self.man.split(m, start);
         (l, m, r)
     }
 
     /// `start..end`の範囲を反転させる
     pub fn reverse(&mut self, Range { start, end }: Range<usize>) {
         let (l, m, r) = self.range(start, end);
-        Node::reverse(m);
-        self.root.set(Node::merge(Node::merge(l, m), r));
+        self.man.reverse(m);
+        self.root.set(self.man.merge(self.man.merge(l, m), r));
     }
 
     /// `start..end`の範囲でのモノイドの演算の結果を返す
     pub fn fold(&self, Range { start, end }: Range<usize>) -> M::Element {
         let (l, m, r) = self.range(start, end);
         let ret = if m.is_null() {
-            self.monoid.id()
+            self.man.monoid.id()
         } else {
             unsafe { (*m).sum.clone() }
         };
-        self.root.set(Node::merge(Node::merge(l, m), r));
+        self.root.set(self.man.merge(self.man.merge(l, m), r));
         ret
     }
 
@@ -457,17 +446,17 @@ where
                 (*m).lazy = lazy;
             }
         };
-        self.root.set(Node::merge(Node::merge(l, m), r));
+        self.root.set(self.man.merge(self.man.merge(l, m), r));
     }
 
     /// 先頭に値を追加する
     pub fn push_first(&mut self, value: M::Element) {
-        let left = Self::singleton(self.monoid.clone(), self.act.clone(), value);
+        let left = self.make_singleton(value);
         self.merge_left(left);
     }
     /// 末尾に値を追加する
     pub fn push_last(&mut self, value: M::Element) {
-        let right = Self::singleton(self.monoid.clone(), self.act.clone(), value);
+        let right = self.make_singleton(value);
         self.merge_right(right);
     }
     /// 先頭の値を削除する
@@ -476,10 +465,23 @@ where
     }
     /// 末尾の値を削除する
     pub fn pop_last(&mut self) -> Option<M::Element> {
-        if self.is_empty() {
-            None
-        } else {
-            self.remove(self.len() - 1)
-        }
+        self.remove(self.len().checked_sub(1)?)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::algebra::{act::add_sum::AddSum, sum::Sum};
+
+    use super::*;
+
+    #[test]
+    fn test_empty() {
+        let monoid = Sum::<u64>::new();
+        let act = AddSum(monoid);
+        let mut s = LazySplayTree::new(monoid, act);
+
+        assert!(s.pop_first().is_none());
+        assert!(s.pop_last().is_none());
     }
 }

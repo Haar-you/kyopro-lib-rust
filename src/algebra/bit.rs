@@ -37,11 +37,11 @@ impl<T> BitXor<T> {
 macro_rules! implement {
     ($($t:tt),*) => {
         $(impl_algebra!(BitAnd<$t>; set: $t; op: |_, a: $t, b: $t| a & b;
-                        id: |_| !0, |_, &a| a == !0; commu; assoc; idem;);)*
+                        id: |_| !0; commu; assoc; idem;);)*
         $(impl_algebra!(BitOr<$t>; set: $t; op: |_, a: $t, b: $t| a | b;
-                        id: |_| 0, |_, &a| a == 0; commu; assoc; idem;);)*
+                        id: |_| 0; commu; assoc; idem;);)*
         $(impl_algebra!(BitXor<$t>; set: $t; op: |_, a: $t, b: $t| a ^ b;
-                        id: |_| 0, |_, &a| a == 0; inv: |_, a| a; commu; assoc;);)*
+                        id: |_| 0; inv: |_, a| a; commu; assoc;);)*
     };
 }
 

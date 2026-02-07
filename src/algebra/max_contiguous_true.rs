@@ -32,16 +32,10 @@ impl MaxContiguousTrue {
             length: 1,
         }
     }
-}
 
-/// [`MaxContiguousTrue`]の合成
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct Composition;
-
-impl_algebra!(
-    Composition;
-    set: MaxContiguousTrue;
-    op: |_, a: Self::Element, b: Self::Element| {
+    /// `MaxContiguousTrue`を合成する。
+    pub fn compose(self, b: Self) -> Self {
+        let a = self;
         let count = max(a.count, b.count).max(a.right + b.left);
         let left = if a.count == a.length {
             a.count + b.left
@@ -55,10 +49,23 @@ impl_algebra!(
         };
         let length = a.length + b.length;
 
-        MaxContiguousTrue {
-            count, left, right, length
+        Self {
+            count,
+            left,
+            right,
+            length,
         }
-    };
-    id: |_| MaxContiguousTrue { count: 0, left: 0, right: 0, length: 0 }, |s: &Self, a| a == &s.id();
+    }
+}
+
+/// [`MaxContiguousTrue`]の合成
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub struct Composition;
+
+impl_algebra!(
+    Composition;
+    set: MaxContiguousTrue;
+    op: |_, a: Self::Element, b: Self::Element| a.compose(b);
+    id: |_| MaxContiguousTrue { count: 0, left: 0, right: 0, length: 0 };
     assoc;
 );

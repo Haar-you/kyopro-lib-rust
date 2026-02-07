@@ -69,7 +69,9 @@ mod tests {
 
                 a
             };
-            let b = (0..m).map(|_| rng.gen_range(-1000..=1000)).collect_vec();
+            let b = std::iter::repeat_with(|| rng.gen_range(-1000..=1000))
+                .take(m)
+                .collect_vec();
 
             let mut ans = vec![i64::MAX; n + m - 1];
             for i in 0..n {

@@ -58,6 +58,6 @@ impl_algebra!(
     Composition;
     set: Transformation;
     op: |_, a: Transformation, b: Transformation| a.compose(b);
-    id: |s: &Self| Transformation::id(s.0), |s: &Self, a| a == &s.id() ;
+    id: |s: &Self| Transformation::id(s.0);
     assoc;
 );

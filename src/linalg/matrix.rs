@@ -61,6 +61,32 @@ where
         ret
     }
 
+    /// `Vec<Vec<T>>`から`MatrixOnRing`を作る。
+    pub fn from_vec<T>(ring: R, a: Vec<Vec<T>>) -> Self
+    where
+        T: Into<R::Element>,
+    {
+        let h = a.len();
+        assert!(h > 0);
+        let w = a[0].len();
+        assert!(a.iter().all(|r| r.len() == w));
+
+        let data = a
+            .into_iter()
+            .map(|r| r.into_iter().map(T::into).collect())
+            .collect();
+
+        Self { ring, data, h, w }
+    }
+
+    /// `self`を`n`回足した行列を求める。
+    pub fn times(mut self, n: u64) -> Self {
+        self.data
+            .iter_mut()
+            .for_each(|r| r.iter_mut().for_each(|a| *a = self.ring.times(*a, n)));
+        self
+    }
+
     /// `i`行`j`列の要素への参照を返す。
     pub fn get(&self, i: usize, j: usize) -> Option<&R::Element> {
         let a = self.data.get(i)?;
@@ -307,7 +333,7 @@ mod tests {
     fn test() {
         let mut rng = rand::thread_rng();
         let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
-        let ring = AddMulMod::new(modulo);
+        let ring = AddMulMod(modulo);
 
         let size = 300;
 
@@ -351,7 +377,7 @@ mod tests {
 
         let mut rng = rand::thread_rng();
         let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
-        let ring = AddMulMod::new(modulo);
+        let ring = AddMulMod(modulo);
 
         let mut straight = vec![];
         let mut strassen = vec![];
