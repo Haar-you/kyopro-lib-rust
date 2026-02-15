@@ -125,7 +125,7 @@ mod tests {
     use crate::algebra::semiring::add_mul_mod::AddMulMod;
     use crate::algebra::sum::Sum;
     use crate::algebra::traits::*;
-    use crate::linalg::matrix::MatrixOnRing;
+    use crate::linalg::matrix::MatrixOnSemiring;
     use crate::num::{ff::*, modint::ModIntBuilder};
 
     use my_testtools::*;
@@ -201,7 +201,7 @@ mod tests {
         let monoid = ProdMatrix::new(ring, n);
 
         random_test_helper(monoid, 100, || {
-            let mut a = MatrixOnRing::zero(ring, n, n);
+            let mut a = MatrixOnSemiring::zero(ring, n, n);
             for i in 0..n {
                 for j in 0..n {
                     *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen());

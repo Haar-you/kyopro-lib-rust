@@ -1,18 +1,18 @@
-//! $\mathbb{Z} / m \mathbb{Z}$ 上の行列
+//! 半環上の行列
 pub use crate::linalg::traits::*;
 use crate::{algebra::semiring::*, impl_ops};
 use std::ops::{Index, Neg};
 
-/// $\mathbb{Z} / m \mathbb{Z}$ 上の行列
+/// 半環上の行列
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct MatrixOnRing<R: Ring> {
+pub struct MatrixOnSemiring<R: Semiring> {
     h: usize,
     w: usize,
-    ring: R,
+    semiring: R,
     data: Vec<Vec<R::Element>>,
 }
 
-impl<R: Ring> Matrix for MatrixOnRing<R> {
+impl<R: Semiring> Matrix for MatrixOnSemiring<R> {
     fn width(&self) -> usize {
         self.w
     }
@@ -21,13 +21,13 @@ impl<R: Ring> Matrix for MatrixOnRing<R> {
     }
 }
 
-impl<R: Ring> MatrixTranspose for MatrixOnRing<R>
+impl<R: Semiring> MatrixTranspose for MatrixOnSemiring<R>
 where
     R::Element: Copy,
 {
     type Output = Self;
     fn transpose(self) -> Self::Output {
-        let mut ret = Self::zero(self.ring, self.w, self.h);
+        let mut ret = Self::zero(self.semiring, self.w, self.h);
         for i in 0..self.h {
             for j in 0..self.w {
                 ret.data[j][i] = self.data[i][j];
@@ -37,24 +37,24 @@ where
     }
 }
 
-impl<R: Ring> MatrixOnRing<R>
+impl<R: Semiring> MatrixOnSemiring<R>
 where
     R::Element: Copy,
 {
     /// `h`×`w`の零行列を作る。
-    pub fn zero(ring: R, h: usize, w: usize) -> Self {
+    pub fn zero(semiring: R, h: usize, w: usize) -> Self {
         Self {
             h,
             w,
-            data: vec![vec![ring.zero(); w]; h],
-            ring,
+            data: vec![vec![semiring.zero(); w]; h],
+            semiring,
         }
     }
 
     /// `size`×`size`の単位行列を作る。
-    pub fn unit(ring: R, size: usize) -> Self {
-        let one = ring.one();
-        let mut ret = Self::zero(ring, size, size);
+    pub fn unit(semiring: R, size: usize) -> Self {
+        let one = semiring.one();
+        let mut ret = Self::zero(semiring, size, size);
         for i in 0..size {
             ret.data[i][i] = one;
         }
@@ -62,7 +62,7 @@ where
     }
 
     /// `Vec<Vec<T>>`から`MatrixOnRing`を作る。
-    pub fn from_vec<T>(ring: R, a: Vec<Vec<T>>) -> Self
+    pub fn from_vec<T>(semiring: R, a: Vec<Vec<T>>) -> Self
     where
         T: Into<R::Element>,
     {
@@ -76,14 +76,19 @@ where
             .map(|r| r.into_iter().map(T::into).collect())
             .collect();
 
-        Self { ring, data, h, w }
+        Self {
+            semiring,
+            data,
+            h,
+            w,
+        }
     }
 
     /// `self`を`n`回足した行列を求める。
     pub fn times(mut self, n: u64) -> Self {
         self.data
             .iter_mut()
-            .for_each(|r| r.iter_mut().for_each(|a| *a = self.ring.times(*a, n)));
+            .for_each(|r| r.iter_mut().for_each(|a| *a = self.semiring.times(*a, n)));
         self
     }
 
@@ -100,7 +105,7 @@ where
     }
 }
 
-impl<R: Ring + Clone> MatrixOnRing<R>
+impl<R: Semiring + Clone> MatrixOnSemiring<R>
 where
     R::Element: Copy,
 {
@@ -108,7 +113,7 @@ where
     pub fn pow(self, mut p: u64) -> Option<Self> {
         self.is_square().then(|| {
             let size = self.w;
-            let mut ret = Self::unit(self.ring.clone(), size);
+            let mut ret = Self::unit(self.semiring.clone(), size);
             let mut a = self;
 
             while p > 0 {
@@ -133,8 +138,8 @@ where
         let n = self.h;
         let l = rhs.w;
         let rhs = rhs.transpose();
-        let mut ret = Self::zero(self.ring.clone(), n, l);
-        let s = &self.ring;
+        let mut ret = Self::zero(self.semiring.clone(), n, l);
+        let s = &self.semiring;
 
         for (r, r2) in ret.data.iter_mut().zip(self.data.iter()) {
             for (x, c) in r.iter_mut().zip(rhs.data.iter()) {
@@ -146,14 +151,17 @@ where
 
         ret
     }
+}
 
+impl<R: Ring + Clone> MatrixOnSemiring<R>
+where
+    R::Element: Copy,
+{
     /// Strassenのアルゴリズムによる行列乗算
-    fn strassen_mul(self, b: Self) -> Self {
+    pub fn strassen_mul(self, b: Self) -> Self {
         let mut a = self;
 
-        assert_eq!(a.width(), b.width());
-        assert_eq!(a.height(), b.height());
-        assert_eq!(a.width(), a.height());
+        assert!(a.is_square() && b.is_square() && a.size() == b.size());
 
         let n = a.width();
 
@@ -163,14 +171,14 @@ where
 
         let m = n.div_ceil(2);
 
-        let mut a11 = Self::zero(a.ring.clone(), m, m);
-        let mut a12 = Self::zero(a.ring.clone(), m, m);
-        let mut a21 = Self::zero(a.ring.clone(), m, m);
-        let mut a22 = Self::zero(a.ring.clone(), m, m);
-        let mut b11 = Self::zero(a.ring.clone(), m, m);
-        let mut b12 = Self::zero(a.ring.clone(), m, m);
-        let mut b21 = Self::zero(a.ring.clone(), m, m);
-        let mut b22 = Self::zero(a.ring.clone(), m, m);
+        let mut a11 = Self::zero(a.semiring.clone(), m, m);
+        let mut a12 = Self::zero(a.semiring.clone(), m, m);
+        let mut a21 = Self::zero(a.semiring.clone(), m, m);
+        let mut a22 = Self::zero(a.semiring.clone(), m, m);
+        let mut b11 = Self::zero(a.semiring.clone(), m, m);
+        let mut b12 = Self::zero(a.semiring.clone(), m, m);
+        let mut b21 = Self::zero(a.semiring.clone(), m, m);
+        let mut b22 = Self::zero(a.semiring.clone(), m, m);
 
         for i in 0..m {
             for j in 0..m {
@@ -226,7 +234,7 @@ where
     }
 }
 
-impl<R: Ring> TryAdd for MatrixOnRing<R>
+impl<R: Semiring> TryAdd for MatrixOnSemiring<R>
 where
     R::Element: Copy,
 {
@@ -235,7 +243,7 @@ where
         (self.size() == rhs.size()).then(|| {
             for i in 0..self.h {
                 for j in 0..self.w {
-                    self.data[i][j] = self.ring.add(self.data[i][j], rhs.data[i][j]);
+                    self.data[i][j] = self.semiring.add(self.data[i][j], rhs.data[i][j]);
                 }
             }
             self
@@ -243,7 +251,7 @@ where
     }
 }
 
-impl<R: Ring> TrySub for MatrixOnRing<R>
+impl<R: Ring> TrySub for MatrixOnSemiring<R>
 where
     R::Element: Copy,
 {
@@ -252,7 +260,7 @@ where
         (self.size() == rhs.size()).then(|| {
             for i in 0..self.h {
                 for j in 0..self.w {
-                    self.data[i][j] = self.ring.sub(self.data[i][j], rhs.data[i][j]);
+                    self.data[i][j] = self.semiring.sub(self.data[i][j], rhs.data[i][j]);
                 }
             }
             self
@@ -260,7 +268,7 @@ where
     }
 }
 
-impl<R: Ring + Clone> TryMul for MatrixOnRing<R>
+impl<R: Semiring + Clone> TryMul for MatrixOnSemiring<R>
 where
     R::Element: Copy,
 {
@@ -268,23 +276,21 @@ where
     fn try_mul(self, rhs: Self) -> Option<Self::Output> {
         if self.w != rhs.h {
             None
-        } else if self.is_square() && rhs.is_square() {
-            Some(self.strassen_mul(rhs))
         } else {
             Some(self.straight_mul(rhs))
         }
     }
 }
 
-impl_ops!({R: Ring + Clone} AddAssign for MatrixOnRing<R> where {R::Element: Copy}, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
-impl_ops!({R: Ring + Clone} SubAssign for MatrixOnRing<R> where {R::Element: Copy}, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
-impl_ops!({R: Ring + Clone} MulAssign for MatrixOnRing<R> where {R::Element: Copy}, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
+impl_ops!({R: Semiring + Clone} AddAssign for MatrixOnSemiring<R> where {R::Element: Copy}, |x: &mut Self, y: Self| *x = x.clone().try_add(y).unwrap());
+impl_ops!({R: Ring + Clone} SubAssign for MatrixOnSemiring<R> where {R::Element: Copy}, |x: &mut Self, y: Self| *x = x.clone().try_sub(y).unwrap());
+impl_ops!({R: Semiring + Clone} MulAssign for MatrixOnSemiring<R> where {R::Element: Copy}, |x: &mut Self, y: Self| *x = x.clone().try_mul(y).unwrap());
 
-impl_ops!({R: Ring + Clone} Add for MatrixOnRing<R> where {R::Element: Copy}, |x: Self, y| x.try_add(y).unwrap());
-impl_ops!({R: Ring + Clone} Sub for MatrixOnRing<R> where {R::Element: Copy}, |x: Self, y| x.try_sub(y).unwrap());
-impl_ops!({R: Ring + Clone} Mul for MatrixOnRing<R> where {R::Element: Copy}, |x: Self, y| x.try_mul(y).unwrap());
+impl_ops!({R: Semiring + Clone} Add for MatrixOnSemiring<R> where {R::Element: Copy}, |x: Self, y| x.try_add(y).unwrap());
+impl_ops!({R: Ring + Clone} Sub for MatrixOnSemiring<R> where {R::Element: Copy}, |x: Self, y| x.try_sub(y).unwrap());
+impl_ops!({R: Semiring + Clone} Mul for MatrixOnSemiring<R> where {R::Element: Copy}, |x: Self, y| x.try_mul(y).unwrap());
 
-impl<R: Ring> Neg for MatrixOnRing<R>
+impl<R: Ring> Neg for MatrixOnSemiring<R>
 where
     R::Element: Copy,
 {
@@ -292,27 +298,27 @@ where
     fn neg(mut self) -> Self {
         self.data.iter_mut().for_each(|r| {
             r.iter_mut().for_each(|x| {
-                *x = self.ring.neg(*x);
+                *x = self.semiring.neg(*x);
             })
         });
         self
     }
 }
 
-impl<R: Ring> Index<usize> for MatrixOnRing<R> {
+impl<R: Semiring> Index<usize> for MatrixOnSemiring<R> {
     type Output = [R::Element];
     fn index(&self, i: usize) -> &Self::Output {
         &self.data[i]
     }
 }
 
-impl<R: Ring> From<MatrixOnRing<R>> for Vec<Vec<R::Element>> {
-    fn from(value: MatrixOnRing<R>) -> Self {
+impl<R: Semiring> From<MatrixOnSemiring<R>> for Vec<Vec<R::Element>> {
+    fn from(value: MatrixOnSemiring<R>) -> Self {
         value.data
     }
 }
 
-impl<R: Ring> AsRef<[Vec<R::Element>]> for MatrixOnRing<R> {
+impl<R: Semiring> AsRef<[Vec<R::Element>]> for MatrixOnSemiring<R> {
     fn as_ref(&self) -> &[Vec<R::Element>] {
         &self.data
     }
@@ -337,8 +343,8 @@ mod tests {
 
         let size = 300;
 
-        let mut a = MatrixOnRing::zero(ring, size, size);
-        let mut b = MatrixOnRing::zero(ring, size, size);
+        let mut a = MatrixOnSemiring::zero(ring, size, size);
+        let mut b = MatrixOnSemiring::zero(ring, size, size);
 
         for i in 0..size {
             for j in 0..size {
@@ -357,8 +363,8 @@ mod tests {
 
         let size = 300;
 
-        let mut a = MatrixOnRing::zero(ring, size, size);
-        let mut b = MatrixOnRing::zero(ring, size, size);
+        let mut a = MatrixOnSemiring::zero(ring, size, size);
+        let mut b = MatrixOnSemiring::zero(ring, size, size);
 
         for i in 0..size {
             for j in 0..size {
@@ -383,8 +389,8 @@ mod tests {
         let mut strassen = vec![];
 
         for &size in &[1, 10, 100, 300, 500] {
-            let mut a = MatrixOnRing::zero(ring, size, size);
-            let mut b = MatrixOnRing::zero(ring, size, size);
+            let mut a = MatrixOnSemiring::zero(ring, size, size);
+            let mut b = MatrixOnSemiring::zero(ring, size, size);
 
             for i in 0..size {
                 for j in 0..size {
