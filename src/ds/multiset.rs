@@ -2,7 +2,7 @@
 //!
 //! # Problems
 //! - <https://atcoder.jp/contests/abc308/tasks/abc308_f>
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, ops::Bound};
 
 /// 同一要素を複数個挿入可能な`Set`
 #[derive(Debug, Clone, Default)]
@@ -106,5 +106,63 @@ impl<T: Ord + Eq + Clone> MultiSet<T> {
     /// 要素数が0ならば、`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.map.is_empty()
+    }
+
+    /// `value`以上の最小の要素を返す。
+    pub fn ge(&self, value: &T) -> Option<&T> {
+        self.map.range(value..).next().map(|(k, _)| k)
+    }
+
+    /// `value`以下の最大の要素を返す。
+    pub fn le(&self, value: &T) -> Option<&T> {
+        self.map.range(..=value).next_back().map(|(k, _)| k)
+    }
+
+    /// `value`より大きい最小の要素を返す。
+    pub fn gt(&self, value: &T) -> Option<&T> {
+        self.map
+            .range((Bound::Excluded(value), Bound::Unbounded))
+            .next()
+            .map(|(k, _)| k)
+    }
+
+    /// `value`より小さい最大の要素を返す。
+    pub fn lt(&self, value: &T) -> Option<&T> {
+        self.map.range(..value).next_back().map(|(k, _)| k)
+    }
+}
+
+impl<T: Ord + Eq + Clone> FromIterator<T> for MultiSet<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
+        let mut ret = Self::new();
+        for x in iter {
+            ret.insert(x);
+        }
+        ret
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let set = MultiSet::from_iter([1, 1, 2, 3, 5, 5, 6, 7, 10]);
+
+        assert_eq!(set.ge(&1), Some(&1));
+        assert_eq!(set.le(&1), Some(&1));
+        assert_eq!(set.gt(&1), Some(&2));
+        assert_eq!(set.lt(&1), None);
+
+        assert_eq!(set.ge(&10), Some(&10));
+        assert_eq!(set.le(&10), Some(&10));
+        assert_eq!(set.gt(&10), None);
+        assert_eq!(set.lt(&10), Some(&7));
+
+        assert_eq!(set.ge(&4), Some(&5));
+        assert_eq!(set.le(&4), Some(&3));
+        assert_eq!(set.gt(&4), Some(&5));
+        assert_eq!(set.lt(&4), Some(&3));
     }
 }
