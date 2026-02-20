@@ -2,20 +2,16 @@
 
 use std::ops::Mul;
 
-use crate::num::one_zero::One;
-
 /// 乗法的関数を列挙する。
 ///
 /// `f(p, k)`は乗法的関数の$p^k$での値を返す。
-pub fn multiplicative_table<T, F>(n: usize, f: F) -> Vec<T>
+pub fn multiplicative_table<T, F>(n: usize, one: T, f: F) -> Vec<T>
 where
-    T: Copy + Default + Mul<Output = T> + One,
+    T: Copy + Mul<Output = T>,
     F: Fn(u64, u32) -> T,
 {
-    let mut ret = vec![T::default(); n + 1];
+    let mut ret = vec![one; n + 1];
     let mut p = vec![(0, 0, 0); n + 1];
-
-    ret[1] = T::one();
 
     for i in 2..=n {
         if p[i] == (0, 0, 0) {
@@ -54,12 +50,12 @@ mod tests {
 
         for n in [1, 10, 100, 1000, 10000, 100000, 1000000] {
             let res = timer! {n, {
-                multiplicative_table(n, f)
+                multiplicative_table(n, 1, f)
             }};
 
             let ans = totient_table(n);
 
-            assert_eq!(res, ans);
+            assert_eq!(res[1..], ans[1..]);
         }
     }
 
@@ -69,7 +65,7 @@ mod tests {
 
         for n in [1, 10, 100, 1000, 10000, 100000, 1000000] {
             let _res = timer! {n, {
-                multiplicative_table(n, f)
+                multiplicative_table(n, 1, f)
             }};
         }
     }
