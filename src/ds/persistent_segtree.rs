@@ -1,8 +1,7 @@
 //! 永続セグメントツリー
 
-use std::cell::RefCell;
 use std::ops::RangeBounds;
-use std::rc::Rc;
+use std::ptr;
 
 use crate::algebra::traits::Monoid;
 use crate::misc::range::range_bounds_to_range;
@@ -10,16 +9,16 @@ use crate::misc::range::range_bounds_to_range;
 #[derive(Clone, Debug)]
 struct Node<T> {
     value: T,
-    left: Option<Rc<RefCell<Node<T>>>>,
-    right: Option<Rc<RefCell<Node<T>>>>,
+    left: *mut Self,
+    right: *mut Self,
 }
 
 impl<T> Node<T> {
     fn new(value: T) -> Self {
         Self {
             value,
-            left: None,
-            right: None,
+            left: ptr::null_mut(),
+            right: ptr::null_mut(),
         }
     }
 }
@@ -28,7 +27,7 @@ impl<T> Node<T> {
 #[derive(Clone, Debug)]
 pub struct PersistentSegtree<M: Monoid> {
     monoid: M,
-    root: Option<Rc<RefCell<Node<M::Element>>>>,
+    root: *mut Node<M::Element>,
     to: usize,
     original_size: usize,
 }
@@ -47,7 +46,7 @@ where
     pub fn from_vec(monoid: M, a: Vec<M::Element>) -> Self {
         let n = a.len();
         let to = n.next_power_of_two();
-        let root = Some(Self::__init(&monoid, 0, to, &a));
+        let root = Self::__init(&monoid, 0, to, &a);
         Self {
             monoid,
             root,
@@ -56,98 +55,92 @@ where
         }
     }
 
-    fn __init(
-        monoid: &M,
-        from: usize,
-        to: usize,
-        seq: &[M::Element],
-    ) -> Rc<RefCell<Node<M::Element>>> {
+    fn __init(monoid: &M, from: usize, to: usize, seq: &[M::Element]) -> *mut Node<M::Element> {
         if to - from == 1 {
-            Rc::new(RefCell::new(Node::new(seq[from].clone())))
+            Box::into_raw(Box::new(Node::new(seq[from].clone())))
         } else {
             let mid = (from + to) / 2;
             let mut node = Node::new(monoid.id());
 
             let lv = if seq.len() > from {
                 let left = Self::__init(monoid, from, mid, seq);
-                let lv = left.borrow().value.clone();
-                node.left = Some(left);
-                lv
+                node.left = left;
+                assert!(!left.is_null());
+                unsafe { (*left).value.clone() }
             } else {
                 monoid.id()
             };
 
             let rv = if seq.len() > mid {
                 let right = Self::__init(monoid, mid, to, seq);
-                let rv = right.borrow().value.clone();
-                node.right = Some(right);
-                rv
+                node.right = right;
+                assert!(!right.is_null());
+                unsafe { (*right).value.clone() }
             } else {
                 monoid.id()
             };
 
             node.value = monoid.op(lv, rv);
 
-            Rc::new(RefCell::new(node))
+            Box::into_raw(Box::new(node))
         }
     }
 
     fn __set(
         monoid: &M,
-        node: Rc<RefCell<Node<M::Element>>>,
+        node: *mut Node<M::Element>,
         from: usize,
         to: usize,
         pos: usize,
         value: &M::Element,
-    ) -> Rc<RefCell<Node<M::Element>>> {
+    ) -> *mut Node<M::Element> {
+        assert!(!node.is_null());
+
         if to <= pos || pos < from {
             node
         } else if pos <= from && to <= pos + 1 {
-            Rc::new(RefCell::new(Node::new(value.clone())))
+            Box::into_raw(Box::new(Node::new(value.clone())))
         } else {
             let mid = (from + to) / 2;
 
-            let lp = node
-                .borrow()
-                .left
-                .clone()
-                .map(|left| Self::__set(monoid, left, from, mid, pos, value));
-            let rp = node
-                .borrow()
-                .right
-                .clone()
-                .map(|right| Self::__set(monoid, right, mid, to, pos, value));
+            let left = unsafe { (*node).left };
+            let right = unsafe { (*node).right };
 
-            let mut s = Node::new(
-                monoid.op(
-                    lp.as_ref()
-                        .map_or(monoid.id(), |l| l.borrow().value.clone()),
-                    rp.as_ref()
-                        .map_or(monoid.id(), |r| r.borrow().value.clone()),
-                ),
-            );
+            let lp = if !left.is_null() {
+                Self::__set(monoid, left, from, mid, pos, value)
+            } else {
+                left
+            };
 
+            let rp = if !right.is_null() {
+                Self::__set(monoid, right, mid, to, pos, value)
+            } else {
+                right
+            };
+
+            let mut value = monoid.id();
+            if !lp.is_null() {
+                value = monoid.op(value, unsafe { (*lp).value.clone() });
+            }
+            if !rp.is_null() {
+                value = monoid.op(value, unsafe { (*rp).value.clone() });
+            }
+
+            let mut s = Node::new(value);
             s.left = lp;
             s.right = rp;
 
-            Rc::new(RefCell::new(s))
+            Box::into_raw(Box::new(s))
         }
     }
 
     /// `i`番目の要素を`value`にする。
     pub fn assign(&self, i: usize, value: M::Element) -> Self {
-        let new_root = Self::__set(
-            &self.monoid,
-            self.root.clone().unwrap(),
-            0,
-            self.to,
-            i,
-            &value,
-        );
+        let new_root = Self::__set(&self.monoid, self.root, 0, self.to, i, &value);
 
         Self {
             monoid: self.monoid.clone(),
-            root: Some(new_root),
+            root: new_root,
             to: self.to,
             original_size: self.original_size,
         }
@@ -155,26 +148,35 @@ where
 
     fn __fold(
         monoid: &M,
-        node: Rc<RefCell<Node<M::Element>>>,
+        node: *mut Node<M::Element>,
         from: usize,
         to: usize,
         l: usize,
         r: usize,
     ) -> M::Element {
+        assert!(!node.is_null());
+
         if l <= from && to <= r {
-            node.borrow().value.clone()
+            unsafe { (*node).value.clone() }
         } else if to <= l || r <= from {
             monoid.id()
         } else {
             let mid = (from + to) / 2;
 
-            let lv = node.borrow().left.clone().map_or(monoid.id(), |left| {
-                Self::__fold(monoid, left, from, mid, l, r)
-            });
+            let left = unsafe { (*node).left };
+            let right = unsafe { (*node).right };
 
-            let rv = node.borrow().right.clone().map_or(monoid.id(), |right| {
+            let lv = if left.is_null() {
+                monoid.id()
+            } else {
+                Self::__fold(monoid, left, from, mid, l, r)
+            };
+
+            let rv = if right.is_null() {
+                monoid.id()
+            } else {
                 Self::__fold(monoid, right, mid, to, l, r)
-            });
+            };
 
             monoid.op(lv, rv)
         }
@@ -183,14 +185,7 @@ where
     /// 範囲`range`で計算を集約して返す。
     pub fn fold(&self, range: impl RangeBounds<usize>) -> M::Element {
         let (start, end) = range_bounds_to_range(range, 0, self.original_size);
-        Self::__fold(
-            &self.monoid,
-            self.root.clone().unwrap(),
-            0,
-            self.to,
-            start,
-            end,
-        )
+        Self::__fold(&self.monoid, self.root, 0, self.to, start, end)
     }
 }
 
