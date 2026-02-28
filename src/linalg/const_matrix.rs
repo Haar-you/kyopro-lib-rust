@@ -1,57 +1,71 @@
 //! 大きさがコンパイル時固定の行列
 use std::ops::{Add, Mul, Neg, Sub};
 
-use crate::num::one_zero::{One, Zero};
+use crate::algebra::semiring::*;
+pub use crate::linalg::traits::*;
 
-/// `R`×`C`の行列
+/// $R \times C$の行列
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Matrix<T, const R: usize, const C: usize> {
-    data: [[T; C]; R],
+pub struct ConstMatrix<S: Semiring, const R: usize, const C: usize> {
+    sr: S,
+    data: [[S::Element; C]; R],
 }
 
-impl<T: Copy + Zero, const R: usize, const C: usize> Matrix<T, R, C> {
+impl<S: Semiring, const R: usize, const C: usize> ConstMatrix<S, R, C>
+where
+    S::Element: Copy,
+{
     /// ゼロ行列を返す。
-    pub fn new() -> Self {
-        let data = [[T::zero(); C]; R];
-        Self { data }
+    pub fn zero(semiring: S) -> Self {
+        let data = [[semiring.zero(); C]; R];
+        Self { sr: semiring, data }
     }
 }
 
-impl<T: Copy + Zero, const R: usize, const C: usize> Default for Matrix<T, R, C> {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl<T: Copy + Zero + One, const N: usize> Matrix<T, N, N> {
+impl<S: Semiring, const N: usize> ConstMatrix<S, N, N>
+where
+    S::Element: Copy,
+{
     /// 単位行列を返す。
-    pub fn unit() -> Self {
-        let mut data = [[T::zero(); N]; N];
+    pub fn unit(semiring: S) -> Self {
+        let mut data = [[semiring.zero(); N]; N];
         for (i, r) in data.iter_mut().enumerate() {
-            r[i] = T::one();
+            r[i] = semiring.one();
         }
-        Self { data }
+        Self { sr: semiring, data }
     }
 }
 
-impl<T, const R: usize, const C: usize> Matrix<T, R, C> {
+impl<S: Semiring, const R: usize, const C: usize> Matrix for ConstMatrix<S, R, C> {
+    fn width(&self) -> usize {
+        C
+    }
+    fn height(&self) -> usize {
+        R
+    }
+}
+
+impl<S: Semiring, const R: usize, const C: usize> ConstMatrix<S, R, C> {
     /// `i`行`j`列の要素への参照を返す。
-    pub fn get(&self, i: usize, j: usize) -> Option<&T> {
+    pub fn get(&self, i: usize, j: usize) -> Option<&S::Element> {
         let a = self.data.get(i)?;
         a.get(j)
     }
 
     /// `i`行`j`列の要素への可変参照を返す。
-    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut T> {
+    pub fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut S::Element> {
         let a = self.data.get_mut(i)?;
         a.get_mut(j)
     }
 }
 
-impl<T: Copy + Zero, const R: usize, const C: usize> Matrix<T, R, C> {
-    /// 転置行列を返す。
-    pub fn transpose(self) -> Matrix<T, C, R> {
-        let mut ret = Matrix::<T, C, R>::new();
+impl<S: Semiring, const R: usize, const C: usize> MatrixTranspose for ConstMatrix<S, R, C>
+where
+    S::Element: Copy,
+{
+    type Output = ConstMatrix<S, C, R>;
+    fn transpose(self) -> Self::Output {
+        let mut ret = ConstMatrix::<S, C, R>::zero(self.sr);
         for i in 0..R {
             for j in 0..C {
                 ret.data[j][i] = self.data[i][j];
@@ -61,55 +75,65 @@ impl<T: Copy + Zero, const R: usize, const C: usize> Matrix<T, R, C> {
     }
 }
 
-impl<T: Copy + Add<Output = T>, const R: usize, const C: usize> Add for Matrix<T, R, C> {
+impl<S: Semiring, const R: usize, const C: usize> Add for ConstMatrix<S, R, C>
+where
+    S::Element: Copy,
+{
     type Output = Self;
     fn add(mut self, other: Self) -> Self {
         for (a, b) in self.data.iter_mut().zip(other.data) {
             for (x, y) in a.iter_mut().zip(b) {
-                *x = *x + y;
+                *x = self.sr.add(*x, y);
             }
         }
         self
     }
 }
 
-impl<T: Copy + Sub<Output = T>, const R: usize, const C: usize> Sub for Matrix<T, R, C> {
+impl<S: Ring, const R: usize, const C: usize> Sub for ConstMatrix<S, R, C>
+where
+    S::Element: Copy,
+{
     type Output = Self;
     fn sub(mut self, other: Self) -> Self {
         for (a, b) in self.data.iter_mut().zip(other.data) {
             for (x, y) in a.iter_mut().zip(b) {
-                *x = *x - y;
+                *x = self.sr.sub(*x, y);
             }
         }
         self
     }
 }
 
-impl<T: Copy + Neg<Output = T>, const R: usize, const C: usize> Neg for Matrix<T, R, C> {
+impl<S: Ring, const R: usize, const C: usize> Neg for ConstMatrix<S, R, C>
+where
+    S::Element: Copy,
+{
     type Output = Self;
     fn neg(mut self) -> Self {
         for a in self.data.iter_mut() {
             for x in a.iter_mut() {
-                *x = -*x;
+                *x = self.sr.neg(*x);
             }
         }
         self
     }
 }
 
-impl<T, const R: usize, const C: usize, const C2: usize> Mul<Matrix<T, C, C2>> for Matrix<T, R, C>
+impl<S: Semiring + Clone, const R: usize, const C: usize, const C2: usize>
+    Mul<ConstMatrix<S, C, C2>> for ConstMatrix<S, R, C>
 where
-    T: Copy + Zero + Add<Output = T> + Mul<Output = T>,
+    S::Element: Copy,
 {
-    type Output = Matrix<T, R, C2>;
-    fn mul(self, other: Matrix<T, C, C2>) -> Self::Output {
+    type Output = ConstMatrix<S, R, C2>;
+    fn mul(self, other: ConstMatrix<S, C, C2>) -> Self::Output {
         let b = other.transpose();
-        let mut ret = Matrix::new();
+        let mut ret = ConstMatrix::zero(self.sr.clone());
 
         for (r, r2) in ret.data.iter_mut().zip(self.data) {
             for (x, c) in r.iter_mut().zip(b.data.iter()) {
                 for (y, z) in r2.iter().zip(c.iter()) {
-                    *x = *x + *y * *z;
+                    *x = self.sr.add(*x, self.sr.mul(*y, *z));
                 }
             }
         }
@@ -120,12 +144,15 @@ where
 
 #[cfg(test)]
 mod tests {
+    use crate::algebra::semiring::add_mul::AddMul;
+
     use super::*;
 
     #[test]
     fn test() {
-        let a = Matrix::<u32, 5, 5>::unit();
-        let b = Matrix::<u32, 5, 3>::new();
+        let r = AddMul::<u32>::new();
+        let a = ConstMatrix::<_, 5, 5>::unit(r);
+        let b = ConstMatrix::<_, 5, 3>::zero(r);
 
         dbg!(a * b);
     }
