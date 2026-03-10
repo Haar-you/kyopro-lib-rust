@@ -141,7 +141,7 @@
 <a href=#125 id=125 data-nosnippet>125</a>    <span class="kw">use </span><span class="kw">crate</span>::algebra::semiring::add_mul_mod::AddMulMod;
 <a href=#126 id=126 data-nosnippet>126</a>    <span class="kw">use </span><span class="kw">crate</span>::algebra::sum::Sum;
 <a href=#127 id=127 data-nosnippet>127</a>    <span class="kw">use </span><span class="kw">crate</span>::algebra::traits::<span class="kw-2">*</span>;
-<a href=#128 id=128 data-nosnippet>128</a>    <span class="kw">use </span><span class="kw">crate</span>::linalg::matrix::MatrixOnRing;
+<a href=#128 id=128 data-nosnippet>128</a>    <span class="kw">use </span><span class="kw">crate</span>::linalg::matrix::MatrixOnSemiring;
 <a href=#129 id=129 data-nosnippet>129</a>    <span class="kw">use </span><span class="kw">crate</span>::num::{ff::<span class="kw-2">*</span>, modint::ModIntBuilder};
 <a href=#130 id=130 data-nosnippet>130</a>
 <a href=#131 id=131 data-nosnippet>131</a>    <span class="kw">use </span>my_testtools::<span class="kw-2">*</span>;
@@ -217,7 +217,7 @@
 <a href=#201 id=201 data-nosnippet>201</a>        <span class="kw">let </span>monoid = ProdMatrix::new(ring, n);
 <a href=#202 id=202 data-nosnippet>202</a>
 <a href=#203 id=203 data-nosnippet>203</a>        random_test_helper(monoid, <span class="number">100</span>, || {
-<a href=#204 id=204 data-nosnippet>204</a>            <span class="kw">let </span><span class="kw-2">mut </span>a = MatrixOnRing::zero(ring, n, n);
+<a href=#204 id=204 data-nosnippet>204</a>            <span class="kw">let </span><span class="kw-2">mut </span>a = MatrixOnSemiring::zero(ring, n, n);
 <a href=#205 id=205 data-nosnippet>205</a>            <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
 <a href=#206 id=206 data-nosnippet>206</a>                <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..n {
 <a href=#207 id=207 data-nosnippet>207</a>                    <span class="kw-2">*</span>a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen());

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["MatrixOnRing"]};
+window.SIDEBAR_ITEMS = {"struct":["MatrixOnSemiring"]};
