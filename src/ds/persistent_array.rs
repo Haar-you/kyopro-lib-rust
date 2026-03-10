@@ -1,159 +1,211 @@
 //! 永続配列
 
+use std::cmp::Ordering;
 use std::ops::Index;
-use std::rc::Rc;
+use std::ptr;
 
-#[derive(Clone)]
-enum Node<T> {
-    Terminal {
-        value: T,
-    },
-    Internal {
-        size: usize,
-        l_ch: Option<Rc<Node<T>>>,
-        r_ch: Option<Rc<Node<T>>>,
-    },
+enum Value<T> {
+    Value(T),
+    Ptr(*const Node<T>),
+}
+
+struct Node<T> {
+    value: Value<T>,
+    index: usize,
+    left: *const Self,
+    right: *const Self,
+}
+
+impl<T> Node<T> {
+    fn new(value: Value<T>, index: usize, left: *const Self, right: *const Self) -> Self {
+        Self {
+            value,
+            index,
+            left,
+            right,
+        }
+    }
+
+    fn ref_value<'a>(node: *const Self) -> &'a T {
+        assert!(!node.is_null());
+        let node = unsafe { &*node };
+
+        match &node.value {
+            Value::Value(x) => x,
+            &Value::Ptr(p) => {
+                assert!(!p.is_null());
+                match unsafe { &(*p).value } {
+                    Value::Value(x) => x,
+                    _ => unreachable!(),
+                }
+            }
+        }
+    }
 }
 
 /// 永続配列
 #[derive(Clone)]
 pub struct PersistentArray<T> {
     size: usize,
-    root: Option<Rc<Node<T>>>,
-}
-
-fn get_size<T>(node: &Option<Rc<Node<T>>>) -> usize {
-    node.as_ref().map_or(0, |node| match node.as_ref() {
-        Node::Terminal { .. } => 1,
-        Node::Internal { size, .. } => *size,
-    })
+    root: *const Node<T>,
 }
 
 impl<T> PersistentArray<T>
 where
     T: Clone,
 {
+    /// `n`個の`value`からなる永続配列を作る。
+    ///
     /// **Time complexity** $O(n)$
-    pub fn new(size: usize, value: T) -> Self {
-        if size == 0 {
+    pub fn new(n: usize, value: T) -> Self {
+        Self::from_vec(vec![value; n])
+    }
+
+    fn _traverse(node: *const Node<T>, ret: &mut Vec<T>) {
+        if !node.is_null() {
+            let node = unsafe { &*node };
+            Self::_traverse(node.left, ret);
+            ret.push(Node::ref_value(node).clone());
+            Self::_traverse(node.right, ret);
+        }
+    }
+
+    /// `Vec`へ変換する。
+    ///
+    /// **Time complexity** $O(n)$
+    pub fn into_vec(&self) -> Vec<T> {
+        let mut ret = vec![];
+        Self::_traverse(self.root, &mut ret);
+        ret
+    }
+}
+
+impl<T> PersistentArray<T> {
+    /// `Vec`から永続配列を作る。
+    ///
+    /// **Time complexity** $O(n)$
+    pub fn from_vec(v: Vec<T>) -> Self {
+        if v.is_empty() {
             Self {
                 size: 0,
-                root: None,
+                root: ptr::null_mut(),
             }
         } else {
-            let depth = usize::BITS - (size - 1_usize).leading_zeros() + 1;
-            let values = vec![value; size];
-            let root = Self::_init(0, size, &values, depth);
+            let size = v.len();
 
+            let mut a = v
+                .into_iter()
+                .enumerate()
+                .map(|(i, x)| {
+                    Box::into_raw(Box::new(Node::new(
+                        Value::Value(x),
+                        i,
+                        ptr::null(),
+                        ptr::null(),
+                    )))
+                })
+                .collect::<Vec<_>>();
+
+            let max = (size + 1).next_power_of_two();
+
+            let get_par = |i: usize| {
+                let lowest = 1 << i.trailing_zeros();
+                i ^ lowest | (lowest << 1)
+            };
+
+            for i in 0..size {
+                let i = i + 1;
+
+                let mut par = get_par(i);
+                while par <= max {
+                    if par <= size {
+                        let p = unsafe { &mut *a[par - 1] };
+                        if par < i {
+                            p.right = a[i - 1];
+                        } else {
+                            p.left = a[i - 1];
+                        }
+
+                        break;
+                    }
+                    par = get_par(par);
+                }
+            }
+
+            let root = a[(max >> 1) - 1];
             Self { size, root }
         }
     }
 
-    fn _init(l: usize, r: usize, values: &[T], depth: u32) -> Option<Rc<Node<T>>> {
-        if l == r {
-            return None;
-        }
-        if depth == 1 {
-            Some(Rc::new(Node::Terminal {
-                value: values[l].clone(),
-            }))
-        } else {
-            let mid = (l + r) / 2;
-            let l_ch = Self::_init(l, mid, values, depth - 1);
-            let r_ch = Self::_init(mid, r, values, depth - 1);
+    fn _set(prev: *const Node<T>, i: usize, val: T) -> *const Node<T> {
+        assert!(!prev.is_null());
+        let prev = unsafe { &*prev };
 
-            let t = Node::Internal {
-                size: get_size(&l_ch) + get_size(&r_ch),
-                l_ch,
-                r_ch,
-            };
-
-            Some(Rc::new(t))
-        }
-    }
-
-    fn _traverse(node: &Option<Rc<Node<T>>>, ret: &mut Vec<T>) {
-        if let Some(node) = node {
-            match node.as_ref() {
-                Node::Terminal { value } => {
-                    ret.push(value.clone());
-                }
-                Node::Internal { l_ch, r_ch, .. } => {
-                    Self::_traverse(l_ch, ret);
-                    Self::_traverse(r_ch, ret);
-                }
-            }
-        }
-    }
-
-    fn _set(prev: &Rc<Node<T>>, i: usize, value: T) -> Rc<Node<T>> {
-        match prev.as_ref() {
-            Node::Terminal { .. } => Rc::new(Node::Terminal { value }),
-            Node::Internal { l_ch, r_ch, .. } => {
-                let (l_ch, r_ch) = {
-                    let k = get_size(l_ch);
-                    if i < k {
-                        (
-                            Some(Self::_set(l_ch.as_ref().unwrap(), i, value)),
-                            r_ch.clone(),
-                        )
-                    } else {
-                        (
-                            l_ch.clone(),
-                            Some(Self::_set(r_ch.as_ref().unwrap(), i - k, value)),
-                        )
-                    }
+        let (left, right, value);
+        match i.cmp(&prev.index) {
+            Ordering::Less => {
+                left = Self::_set(prev.left, i, val);
+                right = prev.right;
+                value = match prev.value {
+                    Value::Value(_) => Value::Ptr(prev as *const _),
+                    Value::Ptr(p) => Value::Ptr(p),
                 };
-
-                Rc::new(Node::Internal {
-                    size: get_size(&l_ch) + get_size(&r_ch),
-                    l_ch,
-                    r_ch,
-                })
+            }
+            Ordering::Greater => {
+                left = prev.left;
+                right = Self::_set(prev.right, i, val);
+                value = match prev.value {
+                    Value::Value(_) => Value::Ptr(prev as *const _),
+                    Value::Ptr(p) => Value::Ptr(p),
+                };
+            }
+            Ordering::Equal => {
+                left = prev.left;
+                right = prev.right;
+                value = Value::Value(val);
             }
         }
+
+        let node = Box::new(Node::new(value, prev.index, left, right));
+        Box::into_raw(node)
     }
 
+    /// `i`番目の要素を`value`に変更した永続配列を返す。
+    ///
     /// **Time complexity** $O(\log n)$
     pub fn set(&self, i: usize, value: T) -> Self {
         assert!(
             i < self.size,
-            "index out of bounds: the len is {} but the index is {}",
+            "index out of bounds: the len is {} but the index is {i}",
             self.size,
-            i
         );
         Self {
             size: self.size,
-            root: Some(Self::_set(self.root.as_ref().unwrap(), i, value)),
+            root: Self::_set(self.root, i, value),
         }
     }
 
-    fn _get(node: &Rc<Node<T>>, i: usize) -> &Node<T> {
-        match node.as_ref() {
-            Node::Terminal { .. } => node.as_ref(),
-            Node::Internal { l_ch, r_ch, .. } => {
-                let k = get_size(l_ch);
-                if i < k {
-                    Self::_get(l_ch.as_ref().unwrap(), i)
-                } else {
-                    Self::_get(r_ch.as_ref().unwrap(), i - k)
-                }
-            }
+    fn _get<'a>(node: *const Node<T>, i: usize) -> &'a T {
+        assert!(!node.is_null());
+        let node = unsafe { &*node };
+
+        match i.cmp(&node.index) {
+            Ordering::Less => Self::_get(node.left, i),
+            Ordering::Greater => Self::_get(node.right, i),
+            Ordering::Equal => Node::ref_value(node),
         }
     }
 
+    /// `i`番目の要素を返す。
+    ///
     /// **Time complexity** $O(\log n)$
     pub fn get(&self, i: usize) -> &T {
         assert!(
             i < self.size,
-            "index out of bounds: the len is {} but the index is {}",
-            self.size,
-            i
+            "index out of bounds: the len is {} but the index is {i}",
+            self.size
         );
-        match Self::_get(self.root.as_ref().unwrap(), i) {
-            Node::Terminal { value } => value,
-            _ => unreachable!(),
-        }
+        Self::_get(self.root, i)
     }
 }
 
@@ -164,55 +216,30 @@ impl<T: Clone> Index<usize> for PersistentArray<T> {
     }
 }
 
-impl<T: Clone> From<&PersistentArray<T>> for Vec<T> {
-    fn from(from: &PersistentArray<T>) -> Self {
-        let mut ret = vec![];
-        PersistentArray::<T>::_traverse(&from.root, &mut ret);
-        ret
-    }
-}
-
-impl<T: Clone> From<Vec<T>> for PersistentArray<T> {
-    fn from(value: Vec<T>) -> Self {
-        let size = value.len();
-        if size == 0 {
-            Self {
-                size: 0,
-                root: None,
-            }
-        } else {
-            let depth = usize::BITS - (size - 1_usize).leading_zeros() + 1;
-            let root = Self::_init(0, size, &value, depth);
-
-            Self { size, root }
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test() {
-        let a = PersistentArray::<i32>::from(vec![1, 2, 3, 4, 5]);
-        assert_eq!(Vec::<i32>::from(&a), [1, 2, 3, 4, 5]);
+        let a = PersistentArray::<i32>::from_vec(vec![1, 2, 3, 4, 5]);
+        assert_eq!(a.into_vec(), [1, 2, 3, 4, 5]);
 
         let b = a.set(0, 4);
-        assert_eq!(Vec::<i32>::from(&b), [4, 2, 3, 4, 5]);
+        assert_eq!(b.into_vec(), [4, 2, 3, 4, 5]);
 
         let c = b.set(2, 6);
-        assert_eq!(Vec::<i32>::from(&c), [4, 2, 6, 4, 5]);
+        assert_eq!(c.into_vec(), [4, 2, 6, 4, 5]);
 
         let d = b.set(2, 9);
-        assert_eq!(Vec::<i32>::from(&d), [4, 2, 9, 4, 5]);
+        assert_eq!(d.into_vec(), [4, 2, 9, 4, 5]);
 
         let e = c.set(4, -3);
 
-        assert_eq!(Vec::<i32>::from(&a), [1, 2, 3, 4, 5]);
-        assert_eq!(Vec::<i32>::from(&b), [4, 2, 3, 4, 5]);
-        assert_eq!(Vec::<i32>::from(&c), [4, 2, 6, 4, 5]);
-        assert_eq!(Vec::<i32>::from(&d), [4, 2, 9, 4, 5]);
-        assert_eq!(Vec::<i32>::from(&e), [4, 2, 6, 4, -3]);
+        assert_eq!(a.into_vec(), [1, 2, 3, 4, 5]);
+        assert_eq!(b.into_vec(), [4, 2, 3, 4, 5]);
+        assert_eq!(c.into_vec(), [4, 2, 6, 4, 5]);
+        assert_eq!(d.into_vec(), [4, 2, 9, 4, 5]);
+        assert_eq!(e.into_vec(), [4, 2, 6, 4, -3]);
     }
 }
