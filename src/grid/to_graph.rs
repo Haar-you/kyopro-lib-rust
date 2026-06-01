@@ -23,11 +23,11 @@ pub fn grid_to_graph<T: Clone>(
             for d in dirs {
                 let q = p.mov(*d);
 
-                if let Some(q) = q {
-                    if let Some(c) = edge(p, q) {
-                        let e = Edge::new(index(p), index(q), c, ());
-                        g.add(e);
-                    }
+                if let Some(q) = q
+                    && let Some(c) = edge(p, q)
+                {
+                    let e = Edge::new(index(p), index(q), c, ());
+                    g.add(e);
                 }
             }
         }

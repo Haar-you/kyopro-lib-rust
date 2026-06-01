@@ -27,10 +27,10 @@ impl<T: Copy + Signed + Zero + Add<Output = T> + Sub<Output = T>> Imos2D<T> {
         value: T,
     ) {
         self.data[l][u] = self.data[l][u] + value;
-        if let Some(a) = self.data.get_mut(r) {
-            if let Some(x) = a.get_mut(d) {
-                *x = *x + value;
-            }
+        if let Some(a) = self.data.get_mut(r)
+            && let Some(x) = a.get_mut(d)
+        {
+            *x = *x + value;
         }
 
         if let Some(x) = self.data[l].get_mut(d) {

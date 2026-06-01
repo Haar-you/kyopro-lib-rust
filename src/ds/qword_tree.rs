@@ -40,9 +40,9 @@ impl QwordTree {
 
         let x = x as usize;
 
-        *self.v3.get_unchecked_mut(x >> 6) |= 1 << (x & 0x3f);
-        *self.v2.get_unchecked_mut(x >> 12) |= 1 << ((x >> 6) & 0x3f);
-        *self.v1.get_unchecked_mut(x >> 18) |= 1 << ((x >> 12) & 0x3f);
+        *unsafe { self.v3.get_unchecked_mut(x >> 6) } |= 1 << (x & 0x3f);
+        *unsafe { self.v2.get_unchecked_mut(x >> 12) } |= 1 << ((x >> 6) & 0x3f);
+        *unsafe { self.v1.get_unchecked_mut(x >> 18) } |= 1 << ((x >> 12) & 0x3f);
         self.v0 |= 1 << (x >> 18);
     }
 
@@ -69,14 +69,14 @@ impl QwordTree {
 
         let x = x as usize;
 
-        *self.v3.get_unchecked_mut(x >> 6) &= !(1 << (x & 0x3f));
-        if *self.v3.get_unchecked(x >> 6) == 0 {
-            *self.v2.get_unchecked_mut(x >> 12) &= !(1 << ((x >> 6) & 0x3f));
+        *unsafe { self.v3.get_unchecked_mut(x >> 6) } &= !(1 << (x & 0x3f));
+        if *unsafe { self.v3.get_unchecked(x >> 6) } == 0 {
+            *unsafe { self.v2.get_unchecked_mut(x >> 12) } &= !(1 << ((x >> 6) & 0x3f));
         }
-        if *self.v2.get_unchecked(x >> 12) == 0 {
-            *self.v1.get_unchecked_mut(x >> 18) &= !(1 << ((x >> 12) & 0x3f));
+        if *unsafe { self.v2.get_unchecked(x >> 12) } == 0 {
+            *unsafe { self.v1.get_unchecked_mut(x >> 18) } &= !(1 << ((x >> 12) & 0x3f));
         }
-        if *self.v1.get_unchecked(x >> 18) == 0 {
+        if *unsafe { self.v1.get_unchecked(x >> 18) } == 0 {
             self.v0 &= !(1 << (x >> 18));
         }
     }

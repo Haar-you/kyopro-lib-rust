@@ -49,10 +49,10 @@ impl<E: EdgeTrait + Clone> UndirectedEulerianTrail<E> {
             if from != to {
                 self.graph[to].swap_remove(rindex);
 
-                if let Some((index, e)) = self.graph[to].get(rindex).cloned() {
-                    if e.from() != e.to() {
-                        self.graph[e.to()][index].0 = rindex;
-                    }
+                if let Some((index, e)) = self.graph[to].get(rindex).cloned()
+                    && e.from() != e.to()
+                {
+                    self.graph[e.to()][index].0 = rindex;
                 }
             }
 

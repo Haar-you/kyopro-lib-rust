@@ -26,10 +26,11 @@ impl IntegerSet {
     ///
     /// **Time complexity** $O(\log n)$
     pub fn interval(&self, x: i64) -> Option<(i64, i64)> {
-        if let Some((&k, &v)) = self.data.range(..=x).next_back() {
-            if k <= x && x < v {
-                return Some((k, v));
-            }
+        if let Some((&k, &v)) = self.data.range(..=x).next_back()
+            && k <= x
+            && x < v
+        {
+            return Some((k, v));
         }
         None
     }
