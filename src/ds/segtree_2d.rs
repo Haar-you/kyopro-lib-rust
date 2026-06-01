@@ -137,7 +137,7 @@ mod tests {
 
         for i in 0..w {
             for j in 0..h {
-                let x = rng.gen::<u64>() % 10000;
+                let x = rng.gen_range(0..10000);
 
                 a[i][j] = x;
                 seg.assign(i, j, x);
@@ -145,9 +145,9 @@ mod tests {
         }
 
         for _ in 0..100 {
-            let i = rng.gen::<usize>() % w;
-            let j = rng.gen::<usize>() % h;
-            let x = rng.gen::<u64>() % 10000;
+            let i = rng.gen_range(0..w);
+            let j = rng.gen_range(0..h);
+            let x = rng.gen_range(0..10000);
 
             seg.assign(i, j, x);
             a[i][j] = x;

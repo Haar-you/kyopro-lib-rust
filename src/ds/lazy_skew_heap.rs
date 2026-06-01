@@ -169,7 +169,7 @@ mod tests {
         bheap = bheap.into_iter().map(|a| a + x).collect::<BinaryHeap<_>>();
 
         for _ in 0..100 {
-            let x = rng.gen::<u32>();
+            let x = rng.r#gen::<u32>();
             heap2.push(x);
             bheap2.push(x);
         }

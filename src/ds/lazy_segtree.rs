@@ -202,7 +202,7 @@ mod tests {
     use my_testtools::*;
     use rand::Rng;
 
-    fn test<M, A, F>(n: usize, q: usize, monoid: M, act: A, mut gen: F)
+    fn test<M, A, F>(n: usize, q: usize, monoid: M, act: A, mut r#gen: F)
     where
         M: Monoid<Element: Copy + PartialEq + std::fmt::Debug> + Clone,
         A: Act<M, Element: Copy + PartialEq> + Clone,
@@ -216,9 +216,9 @@ mod tests {
         for _ in 0..q {
             let lr = rand_range(&mut rng, 0..n);
 
-            match rng.gen::<u32>() % 2 {
+            match rng.gen_range(0..2) {
                 0 => {
-                    let x = gen();
+                    let x = r#gen();
 
                     seg.update(lr.clone(), x);
                     vec[lr]

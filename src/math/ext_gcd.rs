@@ -21,8 +21,8 @@ mod tests {
     fn test() {
         for _ in 0..100 {
             let mut rng = rand::thread_rng();
-            let n = rng.gen::<u64>() % 1000;
-            let m = rng.gen::<u64>() % 1000;
+            let n = rng.gen_range(0..1000);
+            let m = rng.gen_range(0..1000);
             let (g, p, q) = ext_gcd(n, m);
 
             assert_eq!(n as i64 * p + m as i64 * q, g);

@@ -127,13 +127,13 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         for _ in 0..100 {
-            let x = rng.gen::<u32>();
+            let x = rng.r#gen::<u32>();
             heap.push(x);
             bheap.push(x);
         }
 
         for _ in 0..100 {
-            let x = rng.gen::<u32>();
+            let x = rng.r#gen::<u32>();
             heap2.push(x);
             bheap2.push(x);
         }

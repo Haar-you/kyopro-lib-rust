@@ -123,7 +123,7 @@ mod tests {
     fn test_rank() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let b = std::iter::repeat_with(|| rng.gen::<bool>())
+        let b = std::iter::repeat_with(|| rng.r#gen::<bool>())
             .take(n)
             .collect::<Vec<_>>();
 
@@ -142,7 +142,7 @@ mod tests {
     fn test_count() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let b = std::iter::repeat_with(|| rng.gen::<bool>())
+        let b = std::iter::repeat_with(|| rng.r#gen::<bool>())
             .take(n)
             .collect::<Vec<_>>();
 
@@ -163,7 +163,7 @@ mod tests {
     fn test_select() {
         let mut rng = rand::thread_rng();
         let n = 30;
-        let b = std::iter::repeat_with(|| rng.gen::<bool>())
+        let b = std::iter::repeat_with(|| rng.r#gen::<bool>())
             .take(n)
             .collect::<Vec<_>>();
 

@@ -528,7 +528,7 @@ mod tests {
 
         for _ in 0..q {
             let x: u32 = rng.gen_range(0..1000);
-            let y: Vec<u32> = vec![rng.gen()];
+            let y: Vec<u32> = vec![rng.r#gen()];
 
             assert_eq!(map.insert(x, y.clone()), ans.insert(x, y));
 

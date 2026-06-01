@@ -348,8 +348,8 @@ mod tests {
 
         for i in 0..size {
             for j in 0..size {
-                *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
-                *b.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
+                *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.r#gen::<u32>() as u64);
+                *b.get_mut(i, j).unwrap() = modulo.from_u64(rng.r#gen::<u32>() as u64);
             }
         }
 
@@ -368,8 +368,8 @@ mod tests {
 
         for i in 0..size {
             for j in 0..size {
-                *a.get_mut(i, j).unwrap() = rng.gen::<u64>();
-                *b.get_mut(i, j).unwrap() = rng.gen::<u64>();
+                *a.get_mut(i, j).unwrap() = rng.r#gen::<u64>();
+                *b.get_mut(i, j).unwrap() = rng.r#gen::<u64>();
             }
         }
 
@@ -394,8 +394,8 @@ mod tests {
 
             for i in 0..size {
                 for j in 0..size {
-                    *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
-                    *b.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
+                    *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.r#gen::<u32>() as u64);
+                    *b.get_mut(i, j).unwrap() = modulo.from_u64(rng.r#gen::<u32>() as u64);
                 }
             }
 

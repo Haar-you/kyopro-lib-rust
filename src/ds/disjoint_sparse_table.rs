@@ -107,7 +107,7 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 100;
-        let a = std::iter::repeat_with(|| rng.gen::<u32>() % 10000)
+        let a = std::iter::repeat_with(|| rng.gen_range(0..10000))
             .take(n)
             .collect::<Vec<_>>();
 

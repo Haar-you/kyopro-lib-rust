@@ -169,25 +169,25 @@ mod tests {
     #[test]
     fn test_sum() {
         let mut rng = rand::thread_rng();
-        random_test_helper(Sum::<i32>::new(), 10, || rng.gen::<i32>() % 10000);
+        random_test_helper(Sum::<i32>::new(), 10, || rng.gen_range(0..10000));
     }
 
     #[test]
     fn test_xor() {
         let mut rng = rand::thread_rng();
-        random_test_helper(BitXor::<u32>::new(), 10, || rng.gen::<u32>() % 10000);
+        random_test_helper(BitXor::<u32>::new(), 10, || rng.gen_range(0..10000));
     }
 
     #[test]
     fn test_min() {
         let mut rng = rand::thread_rng();
-        random_test_helper(Min::<i32>::new(), 10, || rng.gen::<i32>() % 10000);
+        random_test_helper(Min::<i32>::new(), 10, || rng.gen_range(0..10000));
     }
 
     #[test]
     fn test_max() {
         let mut rng = rand::thread_rng();
-        random_test_helper(Max::<i32>::new(), 10, || rng.gen::<i32>() % 10000);
+        random_test_helper(Max::<i32>::new(), 10, || rng.gen_range(0..10000));
     }
 
     #[test]
@@ -204,7 +204,7 @@ mod tests {
             let mut a = MatrixOnSemiring::zero(ring, n, n);
             for i in 0..n {
                 for j in 0..n {
-                    *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen());
+                    *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.r#gen());
                 }
             }
             a

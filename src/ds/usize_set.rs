@@ -145,7 +145,7 @@ mod tests {
         let U: Vec<usize> = (0..usize::BITS as usize).collect();
 
         for _ in 0..100 {
-            let count = rng.gen::<usize>() % 65;
+            let count = rng.gen_range(0..=64);
             let a: Vec<_> = U.choose_multiple(&mut rng, count).cloned().collect();
             let b: Vec<_> = U.choose_multiple(&mut rng, count).cloned().collect();
 

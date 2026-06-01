@@ -23,7 +23,7 @@ mod tests {
         let m = rng.gen_range(10..100);
 
         let mut a = vec![
-            std::iter::repeat_with(|| rng.gen::<u64>())
+            std::iter::repeat_with(|| rng.r#gen::<u64>())
                 .take(m)
                 .collect::<Vec<_>>();
             n

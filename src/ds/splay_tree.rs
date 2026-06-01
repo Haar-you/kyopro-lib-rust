@@ -492,7 +492,7 @@ mod tests {
             let n = a.len();
 
             let i = rng.gen_range(0..=n);
-            let x = rng.gen::<u32>() as u64;
+            let x = rng.r#gen::<u32>() as u64;
 
             a.insert(i, x);
             st.insert(i, x);

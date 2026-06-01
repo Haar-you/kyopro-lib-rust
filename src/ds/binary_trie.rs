@@ -193,7 +193,7 @@ mod tests {
             bt.insert(x);
             *m.entry(x).or_insert(0) += 1;
 
-            let y = rng.gen::<u64>();
+            let y = rng.r#gen::<u64>();
 
             assert_eq!(
                 bt.min(y),

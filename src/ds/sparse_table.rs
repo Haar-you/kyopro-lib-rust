@@ -96,7 +96,7 @@ mod tests {
     fn test_max() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let s = std::iter::repeat_with(|| rng.gen::<u64>())
+        let s = std::iter::repeat_with(|| rng.r#gen::<u64>())
             .take(n)
             .collect::<Vec<_>>();
         test(Max::<u64>::new(), s);
@@ -106,7 +106,7 @@ mod tests {
     fn test_min() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let s = std::iter::repeat_with(|| rng.gen::<u64>())
+        let s = std::iter::repeat_with(|| rng.r#gen::<u64>())
             .take(n)
             .collect::<Vec<_>>();
         test(Min::<u64>::new(), s);
@@ -116,7 +116,7 @@ mod tests {
     fn test_bitand() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let s = std::iter::repeat_with(|| rng.gen::<u64>())
+        let s = std::iter::repeat_with(|| rng.r#gen::<u64>())
             .take(n)
             .collect::<Vec<_>>();
         test(BitAnd::<u64>::new(), s);
@@ -126,7 +126,7 @@ mod tests {
     fn test_bitor() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let s = std::iter::repeat_with(|| rng.gen::<u64>())
+        let s = std::iter::repeat_with(|| rng.r#gen::<u64>())
             .take(n)
             .collect::<Vec<_>>();
         test(BitOr::<u64>::new(), s);

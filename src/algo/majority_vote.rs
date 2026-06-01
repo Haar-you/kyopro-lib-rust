@@ -59,7 +59,7 @@ mod test {
 
         for _ in 0..100 {
             let n = rng.gen_range(0..=100);
-            let a = std::iter::repeat_with(|| rng.gen::<u64>() % 10)
+            let a = std::iter::repeat_with(|| rng.gen_range(0..10))
                 .take(n)
                 .collect::<Vec<_>>();
 

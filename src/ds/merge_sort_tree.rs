@@ -121,14 +121,14 @@ mod tests {
         let n = 300;
         let t = 300;
 
-        let a = std::iter::repeat_with(|| rng.gen::<u64>() % 10000)
+        let a = std::iter::repeat_with(|| rng.gen_range(0..10000))
             .take(n)
             .collect::<Vec<_>>();
         let s = MergeSortTree::new(a.clone());
 
         for _ in 0..t {
             let Range { start: l, end: r } = rand_range(&mut rng, 0..n);
-            let x = rng.gen::<u64>() % 10000;
+            let x = rng.gen_range(0..10000);
 
             let (res_sum, res_count) = s.sum_count_le(l..r, x);
             let ans_sum = a[l..r].iter().filter(|&&y| y <= x).sum::<u64>();

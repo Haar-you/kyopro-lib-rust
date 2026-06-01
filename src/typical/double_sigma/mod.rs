@@ -58,7 +58,7 @@ mod tests {
     fn test_difference() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let a = std::iter::repeat_with(|| rng.gen::<i32>() as i64)
+        let a = std::iter::repeat_with(|| rng.r#gen::<i32>() as i64)
             .take(n)
             .collect::<Vec<_>>();
 
@@ -72,7 +72,7 @@ mod tests {
     fn test_xor() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let a = std::iter::repeat_with(|| rng.gen::<u32>() as u64)
+        let a = std::iter::repeat_with(|| rng.r#gen::<u32>() as u64)
             .take(n)
             .collect::<Vec<_>>();
 
@@ -86,7 +86,7 @@ mod tests {
     fn test_range_xor() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let a = std::iter::repeat_with(|| rng.gen::<u64>() % 2_u64.pow(32))
+        let a = std::iter::repeat_with(|| rng.gen_range(0..2_u64.pow(32)))
             .take(n)
             .collect::<Vec<_>>();
 
@@ -101,7 +101,7 @@ mod tests {
         let mut rng = rand::thread_rng();
         let n = 300;
         let modulo = ConstModIntBuilder::<P>::new();
-        let a = std::iter::repeat_with(|| modulo.from_i64(rng.gen::<i64>()))
+        let a = std::iter::repeat_with(|| modulo.from_i64(rng.r#gen::<i64>()))
             .take(n)
             .collect::<Vec<_>>();
 
@@ -116,7 +116,7 @@ mod tests {
         let mut rng = rand::thread_rng();
         let n = 300;
         let modulo = ConstModIntBuilder::<P>::new();
-        let a = std::iter::repeat_with(|| modulo.from_i64(rng.gen::<i64>()))
+        let a = std::iter::repeat_with(|| modulo.from_i64(rng.r#gen::<i64>()))
             .take(n)
             .collect::<Vec<_>>();
 
@@ -130,7 +130,7 @@ mod tests {
     fn test_range_sum() {
         let mut rng = rand::thread_rng();
         let n = 100;
-        let a = std::iter::repeat_with(|| rng.gen::<i32>() as i64)
+        let a = std::iter::repeat_with(|| rng.r#gen::<i32>() as i64)
             .take(n)
             .collect::<Vec<_>>();
 
@@ -144,7 +144,7 @@ mod tests {
     fn test_max() {
         let mut rng = rand::thread_rng();
         let n = 300;
-        let a = std::iter::repeat_with(|| rng.gen::<i32>() as i64)
+        let a = std::iter::repeat_with(|| rng.r#gen::<i32>() as i64)
             .take(n)
             .collect::<Vec<_>>();
 
@@ -159,7 +159,7 @@ mod tests {
         let mut rng = rand::thread_rng();
         let n = 100;
         let modulo = ConstModIntBuilder::<P>::new();
-        let a = std::iter::repeat_with(|| modulo.from_i64(rng.gen::<i64>()))
+        let a = std::iter::repeat_with(|| modulo.from_i64(rng.r#gen::<i64>()))
             .take(n)
             .collect::<Vec<_>>();
 

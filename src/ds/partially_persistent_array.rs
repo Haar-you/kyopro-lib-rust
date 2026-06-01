@@ -66,7 +66,7 @@ mod tests {
 
         for _ in 0..t {
             let i = rng.gen_range(0..n);
-            let x = rng.gen::<u32>();
+            let x = rng.r#gen::<u32>();
 
             b[i] = x;
             a.set(i, x);

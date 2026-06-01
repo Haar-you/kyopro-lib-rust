@@ -98,7 +98,7 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         let n = 100;
-        let a: Vec<u64> = std::iter::repeat_with(|| rng.gen()).take(n).collect();
+        let a: Vec<u64> = std::iter::repeat_with(|| rng.r#gen()).take(n).collect();
 
         let mut sriq = StaticRangeInversionsQuery::new(&a);
 

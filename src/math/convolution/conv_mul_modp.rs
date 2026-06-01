@@ -70,10 +70,10 @@ mod tests {
         let modulo = ConstModIntBuilder::<P>::new();
         let mut rng = rand::thread_rng();
 
-        let a = std::iter::repeat_with(|| modulo.from_u64(rng.gen::<u64>()))
+        let a = std::iter::repeat_with(|| modulo.from_u64(rng.r#gen::<u64>()))
             .take(p)
             .collect_vec();
-        let b = std::iter::repeat_with(|| modulo.from_u64(rng.gen::<u64>()))
+        let b = std::iter::repeat_with(|| modulo.from_u64(rng.r#gen::<u64>()))
             .take(p)
             .collect_vec();
 

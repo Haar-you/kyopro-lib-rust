@@ -168,7 +168,7 @@ mod tests {
 
         for _ in 0..t {
             let i = rng.gen_range::<usize, _>(0..usize::MAX / 2);
-            let x = rng.gen::<u64>() % 1000000;
+            let x = rng.gen_range(0..1000000);
 
             seg.assign(i, x);
             m.op_assign_r(map.entry(i).or_insert(m.id()), x);
