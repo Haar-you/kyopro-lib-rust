@@ -104,7 +104,7 @@ mod tests {
                 a.lower_bound(&x),
                 a.iter()
                     .enumerate()
-                    .find(|(_, &y)| y >= x)
+                    .find(|&(_, &y)| y >= x)
                     .map_or(n, |(i, _)| i)
             );
 
@@ -112,7 +112,7 @@ mod tests {
                 a.upper_bound(&x),
                 a.iter()
                     .enumerate()
-                    .find(|(_, &y)| y > x)
+                    .find(|&(_, &y)| y > x)
                     .map_or(n, |(i, _)| i)
             );
         }

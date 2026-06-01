@@ -22,7 +22,7 @@ where
         &self.0
     }
     fn act(&self, m: &M, val: M::Element, a: Self::Element, len: usize) -> M::Element {
-        let Self(Dual(Composition(ref s))) = &self;
+        let Self(Dual(Composition(s))) = &self;
         let Linear { a, b } = a;
         s.add(s.mul(a, val), Additive::times(m, b, len as u64))
     }

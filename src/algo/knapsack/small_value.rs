@@ -30,7 +30,7 @@ pub fn knapsack_small_value(cap: u64, ws: &[u64], vs: &[usize]) -> usize {
         .iter()
         .enumerate()
         .rev()
-        .find(|(_, &x)| x <= cap)
+        .find(|&(_, &x)| x <= cap)
         .unwrap()
         .0
 }

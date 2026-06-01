@@ -25,7 +25,7 @@ impl<P: PrimeMod> FpsSqrt for Polynomial<P> {
         let k = f
             .iter()
             .enumerate()
-            .find(|(_, &x)| x.value() != 0)
+            .find(|&(_, &x)| x.value() != 0)
             .map_or(n, |(k, _)| k);
 
         if k == n {
