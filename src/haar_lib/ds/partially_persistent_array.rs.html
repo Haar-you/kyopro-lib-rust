@@ -67,11 +67,11 @@
 <a href=#51 id=51 data-nosnippet>51</a>    <span class="kw">use </span><span class="kw">crate</span>::iter::collect::CollectVec;
 <a href=#52 id=52 data-nosnippet>52</a>
 <a href=#53 id=53 data-nosnippet>53</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#54 id=54 data-nosnippet>54</a>    <span class="kw">use </span>rand::Rng;
+<a href=#54 id=54 data-nosnippet>54</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#55 id=55 data-nosnippet>55</a>
 <a href=#56 id=56 data-nosnippet>56</a>    <span class="attr">#[test]
 <a href=#57 id=57 data-nosnippet>57</a>    </span><span class="kw">fn </span>test() {
-<a href=#58 id=58 data-nosnippet>58</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#58 id=58 data-nosnippet>58</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#59 id=59 data-nosnippet>59</a>
 <a href=#60 id=60 data-nosnippet>60</a>        <span class="kw">let </span>n = <span class="number">10</span>;
 <a href=#61 id=61 data-nosnippet>61</a>        <span class="kw">let </span>t = <span class="number">100</span>;
@@ -81,8 +81,8 @@
 <a href=#65 id=65 data-nosnippet>65</a>        <span class="kw">let </span><span class="kw-2">mut </span>history = <span class="macro">vec!</span>[b.clone()];
 <a href=#66 id=66 data-nosnippet>66</a>
 <a href=#67 id=67 data-nosnippet>67</a>        <span class="kw">for _ in </span><span class="number">0</span>..t {
-<a href=#68 id=68 data-nosnippet>68</a>            <span class="kw">let </span>i = rng.gen_range(<span class="number">0</span>..n);
-<a href=#69 id=69 data-nosnippet>69</a>            <span class="kw">let </span>x = rng.gen::&lt;u32&gt;();
+<a href=#68 id=68 data-nosnippet>68</a>            <span class="kw">let </span>i = rng.random_range(<span class="number">0</span>..n);
+<a href=#69 id=69 data-nosnippet>69</a>            <span class="kw">let </span>x = rng.random::&lt;u32&gt;();
 <a href=#70 id=70 data-nosnippet>70</a>
 <a href=#71 id=71 data-nosnippet>71</a>            b[i] = x;
 <a href=#72 id=72 data-nosnippet>72</a>            a.set(i, x);

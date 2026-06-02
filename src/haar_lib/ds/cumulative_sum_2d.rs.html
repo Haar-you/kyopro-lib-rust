@@ -112,11 +112,11 @@
 <a href=#96 id=96 data-nosnippet>96</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#97 id=97 data-nosnippet>97</a>    <span class="kw">use </span><span class="kw">crate</span>::algebra::sum::<span class="kw-2">*</span>;
 <a href=#98 id=98 data-nosnippet>98</a>    <span class="kw">use </span>my_testtools::<span class="kw-2">*</span>;
-<a href=#99 id=99 data-nosnippet>99</a>    <span class="kw">use </span>rand::Rng;
+<a href=#99 id=99 data-nosnippet>99</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#100 id=100 data-nosnippet>100</a>
 <a href=#101 id=101 data-nosnippet>101</a>    <span class="attr">#[test]
 <a href=#102 id=102 data-nosnippet>102</a>    </span><span class="kw">fn </span>test() {
-<a href=#103 id=103 data-nosnippet>103</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#103 id=103 data-nosnippet>103</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#104 id=104 data-nosnippet>104</a>
 <a href=#105 id=105 data-nosnippet>105</a>        <span class="kw">let </span>n = <span class="number">20</span>;
 <a href=#106 id=106 data-nosnippet>106</a>        <span class="kw">let </span>m = <span class="number">30</span>;
@@ -127,9 +127,9 @@
 <a href=#111 id=111 data-nosnippet>111</a>        <span class="kw">let </span><span class="kw-2">mut </span>other = <span class="macro">vec!</span>[<span class="macro">vec!</span>[g.id(); m]; n];
 <a href=#112 id=112 data-nosnippet>112</a>
 <a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">1000 </span>{
-<a href=#114 id=114 data-nosnippet>114</a>            <span class="kw">let </span>i = rng.gen_range(<span class="number">0</span>..n);
-<a href=#115 id=115 data-nosnippet>115</a>            <span class="kw">let </span>j = rng.gen_range(<span class="number">0</span>..m);
-<a href=#116 id=116 data-nosnippet>116</a>            <span class="kw">let </span>x = rng.gen_range(-<span class="number">1000</span>..=<span class="number">1000</span>);
+<a href=#114 id=114 data-nosnippet>114</a>            <span class="kw">let </span>i = rng.random_range(<span class="number">0</span>..n);
+<a href=#115 id=115 data-nosnippet>115</a>            <span class="kw">let </span>j = rng.random_range(<span class="number">0</span>..m);
+<a href=#116 id=116 data-nosnippet>116</a>            <span class="kw">let </span>x = rng.random_range(-<span class="number">1000</span>..=<span class="number">1000</span>);
 <a href=#117 id=117 data-nosnippet>117</a>
 <a href=#118 id=118 data-nosnippet>118</a>            csb.update(i, j, x);
 <a href=#119 id=119 data-nosnippet>119</a>            g.op_assign_r(<span class="kw-2">&amp;mut </span>other[i][j], x);

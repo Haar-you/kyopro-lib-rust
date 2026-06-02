@@ -178,7 +178,7 @@
 <a href=#162 id=162 data-nosnippet>162</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#163 id=163 data-nosnippet>163</a>    <span class="kw">use </span><span class="kw">crate</span>::algebra::sum::<span class="kw-2">*</span>;
 <a href=#164 id=164 data-nosnippet>164</a>    <span class="kw">use </span>my_testtools::<span class="kw-2">*</span>;
-<a href=#165 id=165 data-nosnippet>165</a>    <span class="kw">use </span>rand::Rng;
+<a href=#165 id=165 data-nosnippet>165</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#166 id=166 data-nosnippet>166</a>
 <a href=#167 id=167 data-nosnippet>167</a>    <span class="attr">#[test]
 <a href=#168 id=168 data-nosnippet>168</a>    </span><span class="kw">fn </span>test() {
@@ -188,11 +188,11 @@
 <a href=#172 id=172 data-nosnippet>172</a>        <span class="kw">let </span><span class="kw-2">mut </span>a = <span class="macro">vec!</span>[m.id(); n];
 <a href=#173 id=173 data-nosnippet>173</a>        <span class="kw">let </span><span class="kw-2">mut </span>seg = DynamicDualSegtree::new(m);
 <a href=#174 id=174 data-nosnippet>174</a>
-<a href=#175 id=175 data-nosnippet>175</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#175 id=175 data-nosnippet>175</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#176 id=176 data-nosnippet>176</a>
 <a href=#177 id=177 data-nosnippet>177</a>        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
 <a href=#178 id=178 data-nosnippet>178</a>            <span class="kw">let </span>lr = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
-<a href=#179 id=179 data-nosnippet>179</a>            <span class="kw">let </span>x = rng.gen_range(<span class="number">0</span>..<span class="number">10000</span>);
+<a href=#179 id=179 data-nosnippet>179</a>            <span class="kw">let </span>x = rng.random_range(<span class="number">0</span>..<span class="number">10000</span>);
 <a href=#180 id=180 data-nosnippet>180</a>
 <a href=#181 id=181 data-nosnippet>181</a>            seg.update(lr.clone(), x);
 <a href=#182 id=182 data-nosnippet>182</a>            a[lr].iter_mut().for_each(|e| m.op_assign_r(e, x));

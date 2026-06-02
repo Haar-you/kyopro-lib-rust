@@ -31,14 +31,14 @@
 <a href=#15 id=15 data-nosnippet>15</a><span class="attr">#[cfg(test)]
 <a href=#16 id=16 data-nosnippet>16</a></span><span class="kw">mod </span>tests {
 <a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#18 id=18 data-nosnippet>18</a>    <span class="kw">use </span>rand::Rng;
+<a href=#18 id=18 data-nosnippet>18</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#19 id=19 data-nosnippet>19</a>
 <a href=#20 id=20 data-nosnippet>20</a>    <span class="attr">#[test]
 <a href=#21 id=21 data-nosnippet>21</a>    </span><span class="kw">fn </span>test() {
 <a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
-<a href=#23 id=23 data-nosnippet>23</a>            <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
-<a href=#24 id=24 data-nosnippet>24</a>            <span class="kw">let </span>n = rng.gen::&lt;u64&gt;() % <span class="number">1000</span>;
-<a href=#25 id=25 data-nosnippet>25</a>            <span class="kw">let </span>m = rng.gen::&lt;u64&gt;() % <span class="number">1000</span>;
+<a href=#23 id=23 data-nosnippet>23</a>            <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
+<a href=#24 id=24 data-nosnippet>24</a>            <span class="kw">let </span>n = rng.random_range(<span class="number">0</span>..<span class="number">1000</span>);
+<a href=#25 id=25 data-nosnippet>25</a>            <span class="kw">let </span>m = rng.random_range(<span class="number">0</span>..<span class="number">1000</span>);
 <a href=#26 id=26 data-nosnippet>26</a>            <span class="kw">let </span>(g, p, q) = ext_gcd(n, m);
 <a href=#27 id=27 data-nosnippet>27</a>
 <a href=#28 id=28 data-nosnippet>28</a>            <span class="macro">assert_eq!</span>(n <span class="kw">as </span>i64 * p + m <span class="kw">as </span>i64 * q, g);

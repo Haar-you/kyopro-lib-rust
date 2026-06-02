@@ -41,7 +41,7 @@
 <a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">let </span>k = f
 <a href=#26 id=26 data-nosnippet>26</a>            .iter()
 <a href=#27 id=27 data-nosnippet>27</a>            .enumerate()
-<a href=#28 id=28 data-nosnippet>28</a>            .find(|(<span class="kw">_</span>, <span class="kw-2">&amp;</span>x)| x.value() != <span class="number">0</span>)
+<a href=#28 id=28 data-nosnippet>28</a>            .find(|<span class="kw-2">&amp;</span>(<span class="kw">_</span>, <span class="kw-2">&amp;</span>x)| x.value() != <span class="number">0</span>)
 <a href=#29 id=29 data-nosnippet>29</a>            .map_or(n, |(k, <span class="kw">_</span>)| k);
 <a href=#30 id=30 data-nosnippet>30</a>
 <a href=#31 id=31 data-nosnippet>31</a>        <span class="kw">if </span>k == n {

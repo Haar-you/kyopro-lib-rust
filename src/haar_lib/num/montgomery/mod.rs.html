@@ -199,7 +199,7 @@
 <a href=#183 id=183 data-nosnippet>183</a>    <span class="kw">use </span><span class="kw">crate</span>::math::prime_mod::Prime;
 <a href=#184 id=184 data-nosnippet>184</a>    <span class="kw">use </span><span class="kw">crate</span>::num::{const_modint::<span class="kw-2">*</span>, modint::<span class="kw-2">*</span>};
 <a href=#185 id=185 data-nosnippet>185</a>    <span class="kw">use </span><span class="kw">crate</span>::timer;
-<a href=#186 id=186 data-nosnippet>186</a>    <span class="kw">use </span>rand::Rng;
+<a href=#186 id=186 data-nosnippet>186</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#187 id=187 data-nosnippet>187</a>
 <a href=#188 id=188 data-nosnippet>188</a>    <span class="attr">#[derive(Clone, Copy, Debug)]
 <a href=#189 id=189 data-nosnippet>189</a>    </span><span class="kw">enum </span>Ops {
@@ -214,7 +214,7 @@
 <a href=#198 id=198 data-nosnippet>198</a>    </span><span class="kw">fn </span>test() {
 <a href=#199 id=199 data-nosnippet>199</a>        <span class="kw">const </span>MOD: u32 = <span class="number">998244353</span>;
 <a href=#200 id=200 data-nosnippet>200</a>
-<a href=#201 id=201 data-nosnippet>201</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#201 id=201 data-nosnippet>201</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#202 id=202 data-nosnippet>202</a>
 <a href=#203 id=203 data-nosnippet>203</a>        <span class="kw">let </span>constmodint = ConstModIntBuilder::&lt;Prime&lt;MOD&gt;&gt;::new();
 <a href=#204 id=204 data-nosnippet>204</a>        <span class="kw">let </span>modint = ModIntBuilder::new(MOD);
@@ -225,9 +225,9 @@
 <a href=#209 id=209 data-nosnippet>209</a>        <span class="kw">let </span><span class="kw-2">mut </span>res = montgomery.from_u64(<span class="number">1</span>);
 <a href=#210 id=210 data-nosnippet>210</a>
 <a href=#211 id=211 data-nosnippet>211</a>        <span class="kw">let </span>ops = std::iter::repeat_with(|| {
-<a href=#212 id=212 data-nosnippet>212</a>            <span class="kw">let </span>x = rng.gen_range(<span class="number">1</span>..MOD) <span class="kw">as </span>u64;
+<a href=#212 id=212 data-nosnippet>212</a>            <span class="kw">let </span>x = rng.random_range(<span class="number">1</span>..MOD) <span class="kw">as </span>u64;
 <a href=#213 id=213 data-nosnippet>213</a>
-<a href=#214 id=214 data-nosnippet>214</a>            <span class="kw">let </span>op = rng.gen_range(<span class="number">0</span>..<span class="number">5</span>);
+<a href=#214 id=214 data-nosnippet>214</a>            <span class="kw">let </span>op = rng.random_range(<span class="number">0</span>..<span class="number">5</span>);
 <a href=#215 id=215 data-nosnippet>215</a>            <span class="kw">match </span>op {
 <a href=#216 id=216 data-nosnippet>216</a>                <span class="number">0 </span>=&gt; Ops::Add(x),
 <a href=#217 id=217 data-nosnippet>217</a>                <span class="number">1 </span>=&gt; Ops::Sub(x),

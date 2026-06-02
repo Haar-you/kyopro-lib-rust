@@ -216,9 +216,9 @@
 <a href=#200 id=200 data-nosnippet>200</a></span><span class="kw">mod </span>tests {
 <a href=#201 id=201 data-nosnippet>201</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#202 id=202 data-nosnippet>202</a>    <span class="kw">use </span>my_testtools::<span class="kw-2">*</span>;
-<a href=#203 id=203 data-nosnippet>203</a>    <span class="kw">use </span>rand::Rng;
+<a href=#203 id=203 data-nosnippet>203</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#204 id=204 data-nosnippet>204</a>
-<a href=#205 id=205 data-nosnippet>205</a>    <span class="kw">fn </span>test&lt;M, A, F&gt;(n: usize, q: usize, monoid: M, act: A, <span class="kw-2">mut </span>gen: F)
+<a href=#205 id=205 data-nosnippet>205</a>    <span class="kw">fn </span>test&lt;M, A, F&gt;(n: usize, q: usize, monoid: M, act: A, <span class="kw-2">mut </span>r#gen: F)
 <a href=#206 id=206 data-nosnippet>206</a>    <span class="kw">where
 <a href=#207 id=207 data-nosnippet>207</a>        </span>M: Monoid&lt;Element: Copy + PartialEq + std::fmt::Debug&gt; + Clone,
 <a href=#208 id=208 data-nosnippet>208</a>        A: Act&lt;M, Element: Copy + PartialEq&gt; + Clone,
@@ -227,14 +227,14 @@
 <a href=#211 id=211 data-nosnippet>211</a>        <span class="kw">let </span><span class="kw-2">mut </span>seg = LazySegtree::new(monoid.clone(), act.clone(), n);
 <a href=#212 id=212 data-nosnippet>212</a>        <span class="kw">let </span><span class="kw-2">mut </span>vec = <span class="macro">vec!</span>[monoid.id(); n];
 <a href=#213 id=213 data-nosnippet>213</a>
-<a href=#214 id=214 data-nosnippet>214</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#214 id=214 data-nosnippet>214</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#215 id=215 data-nosnippet>215</a>
 <a href=#216 id=216 data-nosnippet>216</a>        <span class="kw">for _ in </span><span class="number">0</span>..q {
 <a href=#217 id=217 data-nosnippet>217</a>            <span class="kw">let </span>lr = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
 <a href=#218 id=218 data-nosnippet>218</a>
-<a href=#219 id=219 data-nosnippet>219</a>            <span class="kw">match </span>rng.gen::&lt;u32&gt;() % <span class="number">2 </span>{
+<a href=#219 id=219 data-nosnippet>219</a>            <span class="kw">match </span>rng.random_range(<span class="number">0</span>..<span class="number">2</span>) {
 <a href=#220 id=220 data-nosnippet>220</a>                <span class="number">0 </span>=&gt; {
-<a href=#221 id=221 data-nosnippet>221</a>                    <span class="kw">let </span>x = gen();
+<a href=#221 id=221 data-nosnippet>221</a>                    <span class="kw">let </span>x = r#gen();
 <a href=#222 id=222 data-nosnippet>222</a>
 <a href=#223 id=223 data-nosnippet>223</a>                    seg.update(lr.clone(), x);
 <a href=#224 id=224 data-nosnippet>224</a>                    vec[lr]
@@ -256,28 +256,28 @@
 <a href=#240 id=240 data-nosnippet>240</a>
 <a href=#241 id=241 data-nosnippet>241</a>    <span class="attr">#[test]
 <a href=#242 id=242 data-nosnippet>242</a>    </span><span class="kw">fn </span>add_sum() {
-<a href=#243 id=243 data-nosnippet>243</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#243 id=243 data-nosnippet>243</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#244 id=244 data-nosnippet>244</a>        <span class="kw">let </span>m = algebra::sum::Sum::&lt;u64&gt;::new();
 <a href=#245 id=245 data-nosnippet>245</a>        test(<span class="number">100</span>, <span class="number">100</span>, m, algebra::act::add_sum::AddSum(m), || {
-<a href=#246 id=246 data-nosnippet>246</a>            rng.gen_range(<span class="number">0</span>..<span class="number">1000</span>)
+<a href=#246 id=246 data-nosnippet>246</a>            rng.random_range(<span class="number">0</span>..<span class="number">1000</span>)
 <a href=#247 id=247 data-nosnippet>247</a>        });
 <a href=#248 id=248 data-nosnippet>248</a>    }
 <a href=#249 id=249 data-nosnippet>249</a>
 <a href=#250 id=250 data-nosnippet>250</a>    <span class="attr">#[test]
 <a href=#251 id=251 data-nosnippet>251</a>    </span><span class="kw">fn </span>chmax_max() {
-<a href=#252 id=252 data-nosnippet>252</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#252 id=252 data-nosnippet>252</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#253 id=253 data-nosnippet>253</a>        <span class="kw">let </span>m = algebra::min_max::Max::&lt;i64&gt;::new();
 <a href=#254 id=254 data-nosnippet>254</a>        test(<span class="number">100</span>, <span class="number">100</span>, m, algebra::act::chmax_max::ChmaxMax(m), || {
-<a href=#255 id=255 data-nosnippet>255</a>            rng.gen_range(-<span class="number">1000</span>..<span class="number">1000</span>)
+<a href=#255 id=255 data-nosnippet>255</a>            rng.random_range(-<span class="number">1000</span>..<span class="number">1000</span>)
 <a href=#256 id=256 data-nosnippet>256</a>        });
 <a href=#257 id=257 data-nosnippet>257</a>    }
 <a href=#258 id=258 data-nosnippet>258</a>
 <a href=#259 id=259 data-nosnippet>259</a>    <span class="attr">#[test]
 <a href=#260 id=260 data-nosnippet>260</a>    </span><span class="kw">fn </span>chmin_min() {
-<a href=#261 id=261 data-nosnippet>261</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#261 id=261 data-nosnippet>261</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#262 id=262 data-nosnippet>262</a>        <span class="kw">let </span>m = algebra::min_max::Min::&lt;i64&gt;::new();
 <a href=#263 id=263 data-nosnippet>263</a>        test(<span class="number">100</span>, <span class="number">100</span>, m, algebra::act::chmin_min::ChminMin(m), || {
-<a href=#264 id=264 data-nosnippet>264</a>            rng.gen_range(-<span class="number">1000</span>..<span class="number">1000</span>)
+<a href=#264 id=264 data-nosnippet>264</a>            rng.random_range(-<span class="number">1000</span>..<span class="number">1000</span>)
 <a href=#265 id=265 data-nosnippet>265</a>        });
 <a href=#266 id=266 data-nosnippet>266</a>    }
 <a href=#267 id=267 data-nosnippet>267</a>}</code></pre></div></section></main></body></html>

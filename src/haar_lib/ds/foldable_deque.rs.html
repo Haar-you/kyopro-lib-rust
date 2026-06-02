@@ -159,7 +159,7 @@
 <a href=#143 id=143 data-nosnippet>143</a>        math::{linear::Linear, prime_mod::Prime},
 <a href=#144 id=144 data-nosnippet>144</a>        num::const_modint::{ConstModInt, ConstModIntBuilder},
 <a href=#145 id=145 data-nosnippet>145</a>    };
-<a href=#146 id=146 data-nosnippet>146</a>    <span class="kw">use </span>rand::Rng;
+<a href=#146 id=146 data-nosnippet>146</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#147 id=147 data-nosnippet>147</a>    <span class="kw">use </span>std::collections::VecDeque;
 <a href=#148 id=148 data-nosnippet>148</a>
 <a href=#149 id=149 data-nosnippet>149</a>    <span class="kw">const </span>M: u32 = <span class="number">998244353</span>;
@@ -167,7 +167,7 @@
 <a href=#151 id=151 data-nosnippet>151</a>
 <a href=#152 id=152 data-nosnippet>152</a>    <span class="attr">#[test]
 <a href=#153 id=153 data-nosnippet>153</a>    </span><span class="kw">fn </span>test() {
-<a href=#154 id=154 data-nosnippet>154</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#154 id=154 data-nosnippet>154</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#155 id=155 data-nosnippet>155</a>
 <a href=#156 id=156 data-nosnippet>156</a>        <span class="kw">let </span><span class="kw-2">mut </span>deq = VecDeque::&lt;Linear&lt;Mint&gt;&gt;::new();
 <a href=#157 id=157 data-nosnippet>157</a>
@@ -179,18 +179,18 @@
 <a href=#163 id=163 data-nosnippet>163</a>            <span class="macro">assert_eq!</span>(deq.back(), swag.back());
 <a href=#164 id=164 data-nosnippet>164</a>            <span class="macro">assert_eq!</span>(deq.len(), swag.len());
 <a href=#165 id=165 data-nosnippet>165</a>
-<a href=#166 id=166 data-nosnippet>166</a>            <span class="kw">let </span>ty = rng.gen_range(<span class="number">0</span>..<span class="number">5</span>);
+<a href=#166 id=166 data-nosnippet>166</a>            <span class="kw">let </span>ty = rng.random_range(<span class="number">0</span>..<span class="number">5</span>);
 <a href=#167 id=167 data-nosnippet>167</a>
 <a href=#168 id=168 data-nosnippet>168</a>            <span class="kw">match </span>ty {
 <a href=#169 id=169 data-nosnippet>169</a>                <span class="number">0 </span>=&gt; {
-<a href=#170 id=170 data-nosnippet>170</a>                    <span class="kw">let </span>a = Mint::new(rng.gen_range(<span class="number">0</span>..M));
-<a href=#171 id=171 data-nosnippet>171</a>                    <span class="kw">let </span>b = Mint::new(rng.gen_range(<span class="number">0</span>..M));
+<a href=#170 id=170 data-nosnippet>170</a>                    <span class="kw">let </span>a = Mint::new(rng.random_range(<span class="number">0</span>..M));
+<a href=#171 id=171 data-nosnippet>171</a>                    <span class="kw">let </span>b = Mint::new(rng.random_range(<span class="number">0</span>..M));
 <a href=#172 id=172 data-nosnippet>172</a>                    deq.push_front(Linear::new(a, b));
 <a href=#173 id=173 data-nosnippet>173</a>                    swag.push_front(Linear::new(a, b));
 <a href=#174 id=174 data-nosnippet>174</a>                }
 <a href=#175 id=175 data-nosnippet>175</a>                <span class="number">1 </span>=&gt; {
-<a href=#176 id=176 data-nosnippet>176</a>                    <span class="kw">let </span>a = Mint::new(rng.gen_range(<span class="number">0</span>..M));
-<a href=#177 id=177 data-nosnippet>177</a>                    <span class="kw">let </span>b = Mint::new(rng.gen_range(<span class="number">0</span>..M));
+<a href=#176 id=176 data-nosnippet>176</a>                    <span class="kw">let </span>a = Mint::new(rng.random_range(<span class="number">0</span>..M));
+<a href=#177 id=177 data-nosnippet>177</a>                    <span class="kw">let </span>b = Mint::new(rng.random_range(<span class="number">0</span>..M));
 <a href=#178 id=178 data-nosnippet>178</a>                    deq.push_back(Linear::new(a, b));
 <a href=#179 id=179 data-nosnippet>179</a>                    swag.push_back(Linear::new(a, b));
 <a href=#180 id=180 data-nosnippet>180</a>                }

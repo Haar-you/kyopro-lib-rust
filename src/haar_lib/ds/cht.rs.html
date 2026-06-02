@@ -79,20 +79,20 @@
 <a href=#63 id=63 data-nosnippet>63</a>    ///
 <a href=#64 id=64 data-nosnippet>64</a>    /// 最大値を求めたいならば、傾きは単調増加でなければならない。
 <a href=#65 id=65 data-nosnippet>65</a>    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, line @ Linear { a, b }: Linear&lt;T&gt;) {
-<a href=#66 id=66 data-nosnippet>66</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.last_slope {
-<a href=#67 id=67 data-nosnippet>67</a>            <span class="kw">if </span>!<span class="self">self</span>.mode.cmp(p, a) {
-<a href=#68 id=68 data-nosnippet>68</a>                <span class="macro">panic!</span>(<span class="string">"`mode`が`Max`/`Min`ならば、`a`は単調増加/減少でなければならない。"</span>);
-<a href=#69 id=69 data-nosnippet>69</a>            }
+<a href=#66 id=66 data-nosnippet>66</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.last_slope
+<a href=#67 id=67 data-nosnippet>67</a>            &amp;&amp; !<span class="self">self</span>.mode.cmp(p, a)
+<a href=#68 id=68 data-nosnippet>68</a>        {
+<a href=#69 id=69 data-nosnippet>69</a>            <span class="macro">panic!</span>(<span class="string">"`mode`が`Max`/`Min`ならば、`a`は単調増加/減少でなければならない。"</span>);
 <a href=#70 id=70 data-nosnippet>70</a>        }
 <a href=#71 id=71 data-nosnippet>71</a>        <span class="self">self</span>.last_slope = <span class="prelude-val">Some</span>(a);
 <a href=#72 id=72 data-nosnippet>72</a>
-<a href=#73 id=73 data-nosnippet>73</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(l) = <span class="self">self</span>.lines.back() {
-<a href=#74 id=74 data-nosnippet>74</a>            <span class="kw">if </span>l.a == a {
-<a href=#75 id=75 data-nosnippet>75</a>                <span class="kw">if </span>!<span class="self">self</span>.mode.cmp(l.b, b) {
-<a href=#76 id=76 data-nosnippet>76</a>                    <span class="kw">return</span>;
-<a href=#77 id=77 data-nosnippet>77</a>                }
-<a href=#78 id=78 data-nosnippet>78</a>                <span class="self">self</span>.lines.pop_back();
-<a href=#79 id=79 data-nosnippet>79</a>            }
+<a href=#73 id=73 data-nosnippet>73</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(l) = <span class="self">self</span>.lines.back()
+<a href=#74 id=74 data-nosnippet>74</a>            &amp;&amp; l.a == a
+<a href=#75 id=75 data-nosnippet>75</a>        {
+<a href=#76 id=76 data-nosnippet>76</a>            <span class="kw">if </span>!<span class="self">self</span>.mode.cmp(l.b, b) {
+<a href=#77 id=77 data-nosnippet>77</a>                <span class="kw">return</span>;
+<a href=#78 id=78 data-nosnippet>78</a>            }
+<a href=#79 id=79 data-nosnippet>79</a>            <span class="self">self</span>.lines.pop_back();
 <a href=#80 id=80 data-nosnippet>80</a>        }
 <a href=#81 id=81 data-nosnippet>81</a>        <span class="kw">while </span><span class="self">self</span>.lines.len() &gt;= <span class="number">2
 <a href=#82 id=82 data-nosnippet>82</a>            </span>&amp;&amp; is_needless(
@@ -111,10 +111,10 @@
 <a href=#95 id=95 data-nosnippet>95</a>    ///
 <a href=#96 id=96 data-nosnippet>96</a>    /// クエリの座標は単調増加でなければならない。
 <a href=#97 id=97 data-nosnippet>97</a>    </span><span class="kw">pub fn </span>query(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: T) -&gt; T {
-<a href=#98 id=98 data-nosnippet>98</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.last_query {
-<a href=#99 id=99 data-nosnippet>99</a>            <span class="kw">if </span>x &lt; p {
-<a href=#100 id=100 data-nosnippet>100</a>                <span class="macro">panic!</span>(<span class="string">"`x`はクエリ全体を通して単調増加でなければならない。"</span>);
-<a href=#101 id=101 data-nosnippet>101</a>            }
+<a href=#98 id=98 data-nosnippet>98</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.last_query
+<a href=#99 id=99 data-nosnippet>99</a>            &amp;&amp; x &lt; p
+<a href=#100 id=100 data-nosnippet>100</a>        {
+<a href=#101 id=101 data-nosnippet>101</a>            <span class="macro">panic!</span>(<span class="string">"`x`はクエリ全体を通して単調増加でなければならない。"</span>);
 <a href=#102 id=102 data-nosnippet>102</a>        }
 <a href=#103 id=103 data-nosnippet>103</a>        <span class="self">self</span>.last_query = <span class="prelude-val">Some</span>(x);
 <a href=#104 id=104 data-nosnippet>104</a>

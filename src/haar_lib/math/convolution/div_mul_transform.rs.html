@@ -91,17 +91,17 @@
 <a href=#75 id=75 data-nosnippet>75</a>    <span class="kw">use </span><span class="kw">crate</span>::iter::collect::CollectVec;
 <a href=#76 id=76 data-nosnippet>76</a>
 <a href=#77 id=77 data-nosnippet>77</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#78 id=78 data-nosnippet>78</a>    <span class="kw">use </span>rand::Rng;
+<a href=#78 id=78 data-nosnippet>78</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#79 id=79 data-nosnippet>79</a>
 <a href=#80 id=80 data-nosnippet>80</a>    <span class="attr">#[test]
 <a href=#81 id=81 data-nosnippet>81</a>    </span><span class="kw">fn </span>test_div() {
-<a href=#82 id=82 data-nosnippet>82</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#82 id=82 data-nosnippet>82</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#83 id=83 data-nosnippet>83</a>
 <a href=#84 id=84 data-nosnippet>84</a>        <span class="kw">let </span>n = <span class="number">500</span>;
 <a href=#85 id=85 data-nosnippet>85</a>        <span class="kw">let </span>m = <span class="number">100000</span>;
 <a href=#86 id=86 data-nosnippet>86</a>
 <a href=#87 id=87 data-nosnippet>87</a>        <span class="kw">let </span>f = (<span class="number">0</span>..=n)
-<a href=#88 id=88 data-nosnippet>88</a>            .map(|i| rng.gen_range(<span class="number">0</span>..m) * i <span class="kw">as </span>u64 % m)
+<a href=#88 id=88 data-nosnippet>88</a>            .map(|i| rng.random_range(<span class="number">0</span>..m) * i <span class="kw">as </span>u64 % m)
 <a href=#89 id=89 data-nosnippet>89</a>            .collect_vec();
 <a href=#90 id=90 data-nosnippet>90</a>
 <a href=#91 id=91 data-nosnippet>91</a>        <span class="kw">let </span><span class="kw-2">mut </span>g = <span class="macro">vec!</span>[<span class="number">0</span>; n + <span class="number">1</span>];
@@ -123,13 +123,13 @@
 <a href=#107 id=107 data-nosnippet>107</a>
 <a href=#108 id=108 data-nosnippet>108</a>    <span class="attr">#[test]
 <a href=#109 id=109 data-nosnippet>109</a>    </span><span class="kw">fn </span>test_mul() {
-<a href=#110 id=110 data-nosnippet>110</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#110 id=110 data-nosnippet>110</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#111 id=111 data-nosnippet>111</a>
 <a href=#112 id=112 data-nosnippet>112</a>        <span class="kw">let </span>n = <span class="number">500</span>;
 <a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">let </span>m = <span class="number">100000</span>;
 <a href=#114 id=114 data-nosnippet>114</a>
 <a href=#115 id=115 data-nosnippet>115</a>        <span class="kw">let </span>f = (<span class="number">0</span>..=n)
-<a href=#116 id=116 data-nosnippet>116</a>            .map(|i| rng.gen_range(<span class="number">0</span>..m) * i <span class="kw">as </span>u64 % m)
+<a href=#116 id=116 data-nosnippet>116</a>            .map(|i| rng.random_range(<span class="number">0</span>..m) * i <span class="kw">as </span>u64 % m)
 <a href=#117 id=117 data-nosnippet>117</a>            .collect_vec();
 <a href=#118 id=118 data-nosnippet>118</a>
 <a href=#119 id=119 data-nosnippet>119</a>        <span class="kw">let </span><span class="kw-2">mut </span>g = <span class="macro">vec!</span>[<span class="number">0</span>; n + <span class="number">1</span>];

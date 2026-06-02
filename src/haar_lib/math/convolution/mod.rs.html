@@ -34,7 +34,7 @@
 <a href=#18 id=18 data-nosnippet>18</a>    <span class="kw">use </span><span class="kw">crate</span>::math::gcd_lcm::GcdLcm;
 <a href=#19 id=19 data-nosnippet>19</a>    <span class="kw">use </span><span class="kw">crate</span>::math::prime_mod::{Prime, PrimeMod};
 <a href=#20 id=20 data-nosnippet>20</a>    <span class="kw">use crate</span>::{iter::collect::CollectVec, num::const_modint::<span class="kw-2">*</span>};
-<a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">use </span>rand::Rng;
+<a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#22 id=22 data-nosnippet>22</a>
 <a href=#23 id=23 data-nosnippet>23</a>    <span class="kw">use </span><span class="kw">super</span>::conv_and_or::{convolution_and, convolution_or};
 <a href=#24 id=24 data-nosnippet>24</a>    <span class="kw">use </span><span class="kw">super</span>::conv_gcd_lcm::convolution_gcd;
@@ -52,12 +52,12 @@
 <a href=#36 id=36 data-nosnippet>36</a>    <span class="attr">#[test]
 <a href=#37 id=37 data-nosnippet>37</a>    </span><span class="kw">fn </span>test_zeta_mobius() {
 <a href=#38 id=38 data-nosnippet>38</a>        <span class="attr">#![allow(clippy::needless_range_loop)]
-<a href=#39 id=39 data-nosnippet>39</a>        </span><span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#39 id=39 data-nosnippet>39</a>        </span><span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#40 id=40 data-nosnippet>40</a>
 <a href=#41 id=41 data-nosnippet>41</a>        <span class="kw">let </span>ff = ConstModIntBuilder::&lt;M&gt;::new();
 <a href=#42 id=42 data-nosnippet>42</a>
 <a href=#43 id=43 data-nosnippet>43</a>        <span class="kw">let </span>n = <span class="number">1 </span>&lt;&lt; <span class="number">10</span>;
-<a href=#44 id=44 data-nosnippet>44</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#44 id=44 data-nosnippet>44</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#45 id=45 data-nosnippet>45</a>            .take(n)
 <a href=#46 id=46 data-nosnippet>46</a>            .collect_vec();
 <a href=#47 id=47 data-nosnippet>47</a>
@@ -96,15 +96,15 @@
 <a href=#80 id=80 data-nosnippet>80</a>
 <a href=#81 id=81 data-nosnippet>81</a>    <span class="attr">#[test]
 <a href=#82 id=82 data-nosnippet>82</a>    </span><span class="kw">fn </span>test_conv_or() {
-<a href=#83 id=83 data-nosnippet>83</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#83 id=83 data-nosnippet>83</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#84 id=84 data-nosnippet>84</a>
 <a href=#85 id=85 data-nosnippet>85</a>        <span class="kw">let </span>ff = ConstModIntBuilder::&lt;M&gt;::new();
 <a href=#86 id=86 data-nosnippet>86</a>
 <a href=#87 id=87 data-nosnippet>87</a>        <span class="kw">let </span>n = <span class="number">1 </span>&lt;&lt; <span class="number">10</span>;
-<a href=#88 id=88 data-nosnippet>88</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#88 id=88 data-nosnippet>88</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#89 id=89 data-nosnippet>89</a>            .take(n)
 <a href=#90 id=90 data-nosnippet>90</a>            .collect_vec();
-<a href=#91 id=91 data-nosnippet>91</a>        <span class="kw">let </span>g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#91 id=91 data-nosnippet>91</a>        <span class="kw">let </span>g = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#92 id=92 data-nosnippet>92</a>            .take(n)
 <a href=#93 id=93 data-nosnippet>93</a>            .collect_vec();
 <a href=#94 id=94 data-nosnippet>94</a>
@@ -122,15 +122,15 @@
 <a href=#106 id=106 data-nosnippet>106</a>
 <a href=#107 id=107 data-nosnippet>107</a>    <span class="attr">#[test]
 <a href=#108 id=108 data-nosnippet>108</a>    </span><span class="kw">fn </span>test_conv_and() {
-<a href=#109 id=109 data-nosnippet>109</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#109 id=109 data-nosnippet>109</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#110 id=110 data-nosnippet>110</a>
 <a href=#111 id=111 data-nosnippet>111</a>        <span class="kw">let </span>ff = ConstModIntBuilder::&lt;M&gt;::new();
 <a href=#112 id=112 data-nosnippet>112</a>
 <a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">let </span>n = <span class="number">1 </span>&lt;&lt; <span class="number">10</span>;
-<a href=#114 id=114 data-nosnippet>114</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#114 id=114 data-nosnippet>114</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#115 id=115 data-nosnippet>115</a>            .take(n)
 <a href=#116 id=116 data-nosnippet>116</a>            .collect_vec();
-<a href=#117 id=117 data-nosnippet>117</a>        <span class="kw">let </span>g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#117 id=117 data-nosnippet>117</a>        <span class="kw">let </span>g = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#118 id=118 data-nosnippet>118</a>            .take(n)
 <a href=#119 id=119 data-nosnippet>119</a>            .collect_vec();
 <a href=#120 id=120 data-nosnippet>120</a>
@@ -148,15 +148,15 @@
 <a href=#132 id=132 data-nosnippet>132</a>
 <a href=#133 id=133 data-nosnippet>133</a>    <span class="attr">#[test]
 <a href=#134 id=134 data-nosnippet>134</a>    </span><span class="kw">fn </span>test_conv_xor() {
-<a href=#135 id=135 data-nosnippet>135</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#135 id=135 data-nosnippet>135</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#136 id=136 data-nosnippet>136</a>
 <a href=#137 id=137 data-nosnippet>137</a>        <span class="kw">let </span>ff = ConstModIntBuilder::&lt;M&gt;::new();
 <a href=#138 id=138 data-nosnippet>138</a>
 <a href=#139 id=139 data-nosnippet>139</a>        <span class="kw">let </span>n = <span class="number">1 </span>&lt;&lt; <span class="number">10</span>;
-<a href=#140 id=140 data-nosnippet>140</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#140 id=140 data-nosnippet>140</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#141 id=141 data-nosnippet>141</a>            .take(n)
 <a href=#142 id=142 data-nosnippet>142</a>            .collect_vec();
-<a href=#143 id=143 data-nosnippet>143</a>        <span class="kw">let </span>g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#143 id=143 data-nosnippet>143</a>        <span class="kw">let </span>g = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#144 id=144 data-nosnippet>144</a>            .take(n)
 <a href=#145 id=145 data-nosnippet>145</a>            .collect_vec();
 <a href=#146 id=146 data-nosnippet>146</a>
@@ -174,15 +174,15 @@
 <a href=#158 id=158 data-nosnippet>158</a>
 <a href=#159 id=159 data-nosnippet>159</a>    <span class="attr">#[test]
 <a href=#160 id=160 data-nosnippet>160</a>    </span><span class="kw">fn </span>test_conv_subset() {
-<a href=#161 id=161 data-nosnippet>161</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#161 id=161 data-nosnippet>161</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#162 id=162 data-nosnippet>162</a>
 <a href=#163 id=163 data-nosnippet>163</a>        <span class="kw">let </span>ff = ConstModIntBuilder::&lt;M&gt;::new();
 <a href=#164 id=164 data-nosnippet>164</a>
 <a href=#165 id=165 data-nosnippet>165</a>        <span class="kw">let </span>n = <span class="number">1 </span>&lt;&lt; <span class="number">10</span>;
-<a href=#166 id=166 data-nosnippet>166</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#166 id=166 data-nosnippet>166</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#167 id=167 data-nosnippet>167</a>            .take(n)
 <a href=#168 id=168 data-nosnippet>168</a>            .collect_vec();
-<a href=#169 id=169 data-nosnippet>169</a>        <span class="kw">let </span>g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#169 id=169 data-nosnippet>169</a>        <span class="kw">let </span>g = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#170 id=170 data-nosnippet>170</a>            .take(n)
 <a href=#171 id=171 data-nosnippet>171</a>            .collect_vec();
 <a href=#172 id=172 data-nosnippet>172</a>
@@ -202,15 +202,15 @@
 <a href=#186 id=186 data-nosnippet>186</a>
 <a href=#187 id=187 data-nosnippet>187</a>    <span class="attr">#[test]
 <a href=#188 id=188 data-nosnippet>188</a>    </span><span class="kw">fn </span>test_conv_gcd() {
-<a href=#189 id=189 data-nosnippet>189</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#189 id=189 data-nosnippet>189</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#190 id=190 data-nosnippet>190</a>
 <a href=#191 id=191 data-nosnippet>191</a>        <span class="kw">let </span>ff = ConstModIntBuilder::&lt;M&gt;::new();
 <a href=#192 id=192 data-nosnippet>192</a>
 <a href=#193 id=193 data-nosnippet>193</a>        <span class="kw">let </span>n = <span class="number">1000</span>;
-<a href=#194 id=194 data-nosnippet>194</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#194 id=194 data-nosnippet>194</a>        <span class="kw">let </span>f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#195 id=195 data-nosnippet>195</a>            .take(n + <span class="number">1</span>)
 <a href=#196 id=196 data-nosnippet>196</a>            .collect_vec();
-<a href=#197 id=197 data-nosnippet>197</a>        <span class="kw">let </span>g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#197 id=197 data-nosnippet>197</a>        <span class="kw">let </span>g = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#198 id=198 data-nosnippet>198</a>            .take(n + <span class="number">1</span>)
 <a href=#199 id=199 data-nosnippet>199</a>            .collect_vec();
 <a href=#200 id=200 data-nosnippet>200</a>

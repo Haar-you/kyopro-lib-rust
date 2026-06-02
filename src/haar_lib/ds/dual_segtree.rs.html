@@ -134,23 +134,23 @@
 <a href=#118 id=118 data-nosnippet>118</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#119 id=119 data-nosnippet>119</a>    <span class="kw">use </span><span class="kw">crate</span>::algebra::sum::<span class="kw-2">*</span>;
 <a href=#120 id=120 data-nosnippet>120</a>    <span class="kw">use </span>my_testtools::<span class="kw-2">*</span>;
-<a href=#121 id=121 data-nosnippet>121</a>    <span class="kw">use </span>rand::Rng;
+<a href=#121 id=121 data-nosnippet>121</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#122 id=122 data-nosnippet>122</a>
 <a href=#123 id=123 data-nosnippet>123</a>    <span class="attr">#[test]
 <a href=#124 id=124 data-nosnippet>124</a>    </span><span class="kw">fn </span>test() {
-<a href=#125 id=125 data-nosnippet>125</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#125 id=125 data-nosnippet>125</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#126 id=126 data-nosnippet>126</a>        <span class="kw">let </span>n = <span class="number">100</span>;
 <a href=#127 id=127 data-nosnippet>127</a>
 <a href=#128 id=128 data-nosnippet>128</a>        <span class="kw">let </span>m = Sum::&lt;u32&gt;::new();
 <a href=#129 id=129 data-nosnippet>129</a>
-<a href=#130 id=130 data-nosnippet>130</a>        <span class="kw">let </span><span class="kw-2">mut </span>a = std::iter::repeat_with(|| rng.gen_range(<span class="number">0</span>..<span class="number">10000</span>))
+<a href=#130 id=130 data-nosnippet>130</a>        <span class="kw">let </span><span class="kw-2">mut </span>a = std::iter::repeat_with(|| rng.random_range(<span class="number">0</span>..<span class="number">10000</span>))
 <a href=#131 id=131 data-nosnippet>131</a>            .take(n)
 <a href=#132 id=132 data-nosnippet>132</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 <a href=#133 id=133 data-nosnippet>133</a>        <span class="kw">let </span><span class="kw-2">mut </span>seg = DualSegtree::from_vec(m, a.clone());
 <a href=#134 id=134 data-nosnippet>134</a>
 <a href=#135 id=135 data-nosnippet>135</a>        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
 <a href=#136 id=136 data-nosnippet>136</a>            <span class="kw">let </span>lr = rand_range(<span class="kw-2">&amp;mut </span>rng, <span class="number">0</span>..n);
-<a href=#137 id=137 data-nosnippet>137</a>            <span class="kw">let </span>x = rng.gen_range(<span class="number">0</span>..<span class="number">10000</span>);
+<a href=#137 id=137 data-nosnippet>137</a>            <span class="kw">let </span>x = rng.random_range(<span class="number">0</span>..<span class="number">10000</span>);
 <a href=#138 id=138 data-nosnippet>138</a>
 <a href=#139 id=139 data-nosnippet>139</a>            seg.update(lr.clone(), x);
 <a href=#140 id=140 data-nosnippet>140</a>            a[lr].iter_mut().for_each(|e| m.op_assign_r(e, x));

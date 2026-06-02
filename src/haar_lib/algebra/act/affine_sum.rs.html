@@ -38,7 +38,7 @@
 <a href=#22 id=22 data-nosnippet>22</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
 <a href=#23 id=23 data-nosnippet>23</a>    </span>}
 <a href=#24 id=24 data-nosnippet>24</a>    <span class="kw">fn </span>act(<span class="kw-2">&amp;</span><span class="self">self</span>, m: <span class="kw-2">&amp;</span>M, val: M::Element, a: <span class="self">Self</span>::Element, len: usize) -&gt; M::Element {
-<a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">let </span><span class="self">Self</span>(Dual(Composition(<span class="kw-2">ref </span>s))) = <span class="kw-2">&amp;</span><span class="self">self</span>;
+<a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">let </span><span class="self">Self</span>(Dual(Composition(s))) = <span class="kw-2">&amp;</span><span class="self">self</span>;
 <a href=#26 id=26 data-nosnippet>26</a>        <span class="kw">let </span>Linear { a, b } = a;
 <a href=#27 id=27 data-nosnippet>27</a>        s.add(s.mul(a, val), Additive::times(m, b, len <span class="kw">as </span>u64))
 <a href=#28 id=28 data-nosnippet>28</a>    }

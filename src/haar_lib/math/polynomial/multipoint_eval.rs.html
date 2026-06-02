@@ -67,7 +67,7 @@
 <a href=#51 id=51 data-nosnippet>51</a>    <span class="kw">use </span><span class="kw">crate</span>::math::polynomial::<span class="kw-2">*</span>;
 <a href=#52 id=52 data-nosnippet>52</a>    <span class="kw">use </span><span class="kw">crate</span>::math::prime_mod::Prime;
 <a href=#53 id=53 data-nosnippet>53</a>    <span class="kw">use </span><span class="kw">crate</span>::num::const_modint::<span class="kw-2">*</span>;
-<a href=#54 id=54 data-nosnippet>54</a>    <span class="kw">use </span>rand::Rng;
+<a href=#54 id=54 data-nosnippet>54</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#55 id=55 data-nosnippet>55</a>
 <a href=#56 id=56 data-nosnippet>56</a>    <span class="kw">const </span>M: u32 = <span class="number">998244353</span>;
 <a href=#57 id=57 data-nosnippet>57</a>    <span class="kw">type </span>P = Prime&lt;M&gt;;
@@ -76,16 +76,16 @@
 <a href=#60 id=60 data-nosnippet>60</a>    </span><span class="kw">fn </span>test() {
 <a href=#61 id=61 data-nosnippet>61</a>        <span class="kw">let </span>ff = ConstModIntBuilder::&lt;P&gt;::new();
 <a href=#62 id=62 data-nosnippet>62</a>
-<a href=#63 id=63 data-nosnippet>63</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::thread_rng();
+<a href=#63 id=63 data-nosnippet>63</a>        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rng();
 <a href=#64 id=64 data-nosnippet>64</a>
 <a href=#65 id=65 data-nosnippet>65</a>        <span class="kw">let </span>n = <span class="number">100</span>;
-<a href=#66 id=66 data-nosnippet>66</a>        <span class="kw">let </span>a = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..P::PRIME_NUM) <span class="kw">as </span>u64))
+<a href=#66 id=66 data-nosnippet>66</a>        <span class="kw">let </span>a = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..P::PRIME_NUM) <span class="kw">as </span>u64))
 <a href=#67 id=67 data-nosnippet>67</a>            .take(n)
 <a href=#68 id=68 data-nosnippet>68</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 <a href=#69 id=69 data-nosnippet>69</a>        <span class="kw">let </span>a = Polynomial::from(a);
 <a href=#70 id=70 data-nosnippet>70</a>
 <a href=#71 id=71 data-nosnippet>71</a>        <span class="kw">let </span>m = <span class="number">100</span>;
-<a href=#72 id=72 data-nosnippet>72</a>        <span class="kw">let </span>p = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(<span class="number">0</span>..M) <span class="kw">as </span>u64))
+<a href=#72 id=72 data-nosnippet>72</a>        <span class="kw">let </span>p = std::iter::repeat_with(|| ff.from_u64(rng.random_range(<span class="number">0</span>..M) <span class="kw">as </span>u64))
 <a href=#73 id=73 data-nosnippet>73</a>            .take(m)
 <a href=#74 id=74 data-nosnippet>74</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 <a href=#75 id=75 data-nosnippet>75</a>
