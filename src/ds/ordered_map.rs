@@ -500,7 +500,7 @@ impl<K: Ord, V> Default for OrderedMap<K, V> {
 
 #[cfg(test)]
 mod tests {
-    use rand::Rng;
+    use rand::prelude::*;
     use std::collections::BTreeMap;
 
     use super::*;
@@ -519,7 +519,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut map = OrderedMap::<u32, Vec<u32>>::new();
         let mut ans = BTreeMap::<u32, Vec<u32>>::new();
@@ -527,16 +527,16 @@ mod tests {
         let q = 10000;
 
         for _ in 0..q {
-            let x: u32 = rng.gen_range(0..1000);
-            let y: Vec<u32> = vec![rng.gen()];
+            let x: u32 = rng.random_range(0..1000);
+            let y: Vec<u32> = vec![rng.random()];
 
             assert_eq!(map.insert(x, y.clone()), ans.insert(x, y));
 
-            let x = rng.gen_range(0..1000);
+            let x = rng.random_range(0..1000);
 
             assert_eq!(map.remove(&x), ans.remove(&x));
 
-            let x = rng.gen_range(0..1000);
+            let x = rng.random_range(0..1000);
 
             assert_eq!(map.get(&x), ans.get(&x));
 

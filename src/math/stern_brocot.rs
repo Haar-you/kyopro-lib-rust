@@ -160,10 +160,10 @@ impl SBPath {
         *cfe.last_mut().unwrap() -= 1;
 
         let mut ret = vec![];
-        if let Some(&m) = cfe.first() {
-            if m != 0 {
-                ret.push(SBMove::R(m));
-            }
+        if let Some(&m) = cfe.first()
+            && m != 0
+        {
+            ret.push(SBMove::R(m));
         }
 
         for (i, m) in cfe.into_iter().skip(1).enumerate() {

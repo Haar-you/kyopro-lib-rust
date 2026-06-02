@@ -135,19 +135,19 @@ mod tests {
     use std::iter::FromIterator;
 
     use super::*;
-    use rand::{seq::SliceRandom, Rng};
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         #[allow(non_snake_case)]
         let U: Vec<usize> = (0..usize::BITS as usize).collect();
 
         for _ in 0..100 {
-            let count = rng.gen::<usize>() % 65;
-            let a: Vec<_> = U.choose_multiple(&mut rng, count).cloned().collect();
-            let b: Vec<_> = U.choose_multiple(&mut rng, count).cloned().collect();
+            let count = rng.random_range(0..=64);
+            let a: Vec<_> = U.sample(&mut rng, count).cloned().collect();
+            let b: Vec<_> = U.sample(&mut rng, count).cloned().collect();
 
             let a_ans = BTreeSet::from_iter(a.clone());
             let b_ans = BTreeSet::from_iter(b.clone());

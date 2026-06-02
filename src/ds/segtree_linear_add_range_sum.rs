@@ -97,13 +97,13 @@ where
 mod tests {
     use super::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
     use std::ops::Range;
 
     #[test]
     fn test() {
         #![allow(clippy::needless_range_loop)]
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 100;
 
         let mut seg = SegtreeLinearAddRangeSum::<i64>::new(n);
@@ -112,8 +112,8 @@ mod tests {
         for _ in 0..300 {
             let Range { start: l, end: r } = rand_range(&mut rng, 0..n);
 
-            let a = rng.gen_range(0..100);
-            let b = rng.gen_range(0..100);
+            let a = rng.random_range(0..100);
+            let b = rng.random_range(0..100);
 
             seg.update(l..r, Linear { a, b });
 

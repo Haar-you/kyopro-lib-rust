@@ -153,11 +153,11 @@ mod tests {
     use super::*;
     use crate::algebra::sum::*;
     use my_testtools::rand_range;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let m = Sum::<u64>::new();
 
@@ -167,8 +167,8 @@ mod tests {
         let t = 100;
 
         for _ in 0..t {
-            let i = rng.gen_range::<usize, _>(0..usize::MAX / 2);
-            let x = rng.gen::<u64>() % 1000000;
+            let i = rng.random_range::<usize, _>(0..usize::MAX / 2);
+            let x = rng.random_range(0..1000000);
 
             seg.assign(i, x);
             m.op_assign_r(map.entry(i).or_insert(m.id()), x);

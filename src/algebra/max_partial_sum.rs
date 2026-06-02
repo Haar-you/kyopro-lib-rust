@@ -66,14 +66,14 @@ mod tests {
     use crate::{algebra::option::AppendId, iter::collect::CollectVec};
 
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 20;
-        let a = std::iter::repeat_with(|| rng.gen_range(-100..=100))
+        let a = std::iter::repeat_with(|| rng.random_range(-100..=100))
             .take(n)
             .collect_vec();
 

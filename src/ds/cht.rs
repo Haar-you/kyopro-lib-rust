@@ -63,20 +63,20 @@ where
     ///
     /// 最大値を求めたいならば、傾きは単調増加でなければならない。
     pub fn add(&mut self, line @ Linear { a, b }: Linear<T>) {
-        if let Some(p) = self.last_slope {
-            if !self.mode.cmp(p, a) {
-                panic!("`mode`が`Max`/`Min`ならば、`a`は単調増加/減少でなければならない。");
-            }
+        if let Some(p) = self.last_slope
+            && !self.mode.cmp(p, a)
+        {
+            panic!("`mode`が`Max`/`Min`ならば、`a`は単調増加/減少でなければならない。");
         }
         self.last_slope = Some(a);
 
-        if let Some(l) = self.lines.back() {
-            if l.a == a {
-                if !self.mode.cmp(l.b, b) {
-                    return;
-                }
-                self.lines.pop_back();
+        if let Some(l) = self.lines.back()
+            && l.a == a
+        {
+            if !self.mode.cmp(l.b, b) {
+                return;
             }
+            self.lines.pop_back();
         }
         while self.lines.len() >= 2
             && is_needless(
@@ -95,10 +95,10 @@ where
     ///
     /// クエリの座標は単調増加でなければならない。
     pub fn query(&mut self, x: T) -> T {
-        if let Some(p) = self.last_query {
-            if x < p {
-                panic!("`x`はクエリ全体を通して単調増加でなければならない。");
-            }
+        if let Some(p) = self.last_query
+            && x < p
+        {
+            panic!("`x`はクエリ全体を通して単調増加でなければならない。");
         }
         self.last_query = Some(x);
 

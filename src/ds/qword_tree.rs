@@ -40,9 +40,9 @@ impl QwordTree {
 
         let x = x as usize;
 
-        *self.v3.get_unchecked_mut(x >> 6) |= 1 << (x & 0x3f);
-        *self.v2.get_unchecked_mut(x >> 12) |= 1 << ((x >> 6) & 0x3f);
-        *self.v1.get_unchecked_mut(x >> 18) |= 1 << ((x >> 12) & 0x3f);
+        *unsafe { self.v3.get_unchecked_mut(x >> 6) } |= 1 << (x & 0x3f);
+        *unsafe { self.v2.get_unchecked_mut(x >> 12) } |= 1 << ((x >> 6) & 0x3f);
+        *unsafe { self.v1.get_unchecked_mut(x >> 18) } |= 1 << ((x >> 12) & 0x3f);
         self.v0 |= 1 << (x >> 18);
     }
 
@@ -69,14 +69,14 @@ impl QwordTree {
 
         let x = x as usize;
 
-        *self.v3.get_unchecked_mut(x >> 6) &= !(1 << (x & 0x3f));
-        if *self.v3.get_unchecked(x >> 6) == 0 {
-            *self.v2.get_unchecked_mut(x >> 12) &= !(1 << ((x >> 6) & 0x3f));
+        *unsafe { self.v3.get_unchecked_mut(x >> 6) } &= !(1 << (x & 0x3f));
+        if *unsafe { self.v3.get_unchecked(x >> 6) } == 0 {
+            *unsafe { self.v2.get_unchecked_mut(x >> 12) } &= !(1 << ((x >> 6) & 0x3f));
         }
-        if *self.v2.get_unchecked(x >> 12) == 0 {
-            *self.v1.get_unchecked_mut(x >> 18) &= !(1 << ((x >> 12) & 0x3f));
+        if *unsafe { self.v2.get_unchecked(x >> 12) } == 0 {
+            *unsafe { self.v1.get_unchecked_mut(x >> 18) } &= !(1 << ((x >> 12) & 0x3f));
         }
-        if *self.v1.get_unchecked(x >> 18) == 0 {
+        if *unsafe { self.v1.get_unchecked(x >> 18) } == 0 {
             self.v0 &= !(1 << (x >> 18));
         }
     }
@@ -249,66 +249,66 @@ impl QwordTree {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
     use std::collections::BTreeSet;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut set = BTreeSet::new();
         let mut qt = QwordTree::new();
 
         for _ in 0..5000 {
-            let x: u32 = rng.gen_range(0..1 << 12);
+            let x: u32 = rng.random_range(0..1 << 12);
             assert_eq!(set.insert(x), qt.insert(x));
             assert_eq!(set.len(), qt.len());
 
             assert_eq!(set.iter().next(), qt.min().as_ref());
             assert_eq!(set.iter().next_back(), qt.max().as_ref());
 
-            let x: u32 = rng.gen_range(0..1 << 12);
+            let x: u32 = rng.random_range(0..1 << 12);
             assert_eq!(set.remove(&x), qt.erase(x));
             assert_eq!(set.len(), qt.len());
 
             assert_eq!(set.iter().next(), qt.min().as_ref());
             assert_eq!(set.iter().next_back(), qt.max().as_ref());
 
-            let x: u32 = rng.gen_range(0..1 << 12);
+            let x: u32 = rng.random_range(0..1 << 12);
             assert_eq!(set.contains(&x), qt.contains(x));
         }
     }
 
     #[test]
     fn test_min_ge() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut set = BTreeSet::new();
         let mut qt = QwordTree::new();
 
         for _ in 0..1000 {
-            let x: u32 = rng.gen_range(0..1 << 24);
+            let x: u32 = rng.random_range(0..1 << 24);
             set.insert(x);
             qt.insert(x);
 
-            let x: u32 = rng.gen_range(0..1 << 24);
+            let x: u32 = rng.random_range(0..1 << 24);
             assert_eq!(set.range(x..).next(), qt.min_ge(x).as_ref());
         }
     }
 
     #[test]
     fn test_max_le() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut set = BTreeSet::new();
         let mut qt = QwordTree::new();
 
         for _ in 0..1000 {
-            let x: u32 = rng.gen_range(0..1 << 24);
+            let x: u32 = rng.random_range(0..1 << 24);
             set.insert(x);
             qt.insert(x);
 
-            let x: u32 = rng.gen_range(0..1 << 24);
+            let x: u32 = rng.random_range(0..1 << 24);
             assert_eq!(set.range(..=x).next_back(), qt.max_le(x).as_ref());
         }
     }

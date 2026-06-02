@@ -41,7 +41,7 @@ impl<P: PrimeMod> SparsePolynomial<P> {
     pub fn coeff_of(&self, i: usize) -> ConstModInt<P> {
         self.data
             .iter()
-            .find(|(&j, _)| j == i)
+            .find(|&(&j, _)| j == i)
             .map_or(0.into(), |(_, x)| *x)
     }
 

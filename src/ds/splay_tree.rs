@@ -464,7 +464,7 @@ mod tests {
     use crate::algebra::sum::*;
     use my_testtools::rand_range;
 
-    use rand::Rng;
+    use rand::prelude::*;
 
     use super::*;
 
@@ -481,7 +481,7 @@ mod tests {
     fn test() {
         let t = 100;
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let m = Sum::<u64>::new();
         let mut a = vec![];
@@ -491,8 +491,8 @@ mod tests {
             assert_eq!(a.len(), st.len());
             let n = a.len();
 
-            let i = rng.gen_range(0..=n);
-            let x = rng.gen::<u32>() as u64;
+            let i = rng.random_range(0..=n);
+            let x = rng.random::<u32>() as u64;
 
             a.insert(i, x);
             st.insert(i, x);

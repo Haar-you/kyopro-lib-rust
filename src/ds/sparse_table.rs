@@ -75,7 +75,7 @@ mod tests {
     };
 
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     fn test<A>(a: A, s: Vec<A::Element>)
     where
@@ -94,9 +94,9 @@ mod tests {
 
     #[test]
     fn test_max() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 100;
-        let s = std::iter::repeat_with(|| rng.gen::<u64>())
+        let s = std::iter::repeat_with(|| rng.random::<u64>())
             .take(n)
             .collect::<Vec<_>>();
         test(Max::<u64>::new(), s);
@@ -104,9 +104,9 @@ mod tests {
 
     #[test]
     fn test_min() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 100;
-        let s = std::iter::repeat_with(|| rng.gen::<u64>())
+        let s = std::iter::repeat_with(|| rng.random::<u64>())
             .take(n)
             .collect::<Vec<_>>();
         test(Min::<u64>::new(), s);
@@ -114,9 +114,9 @@ mod tests {
 
     #[test]
     fn test_bitand() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 100;
-        let s = std::iter::repeat_with(|| rng.gen::<u64>())
+        let s = std::iter::repeat_with(|| rng.random::<u64>())
             .take(n)
             .collect::<Vec<_>>();
         test(BitAnd::<u64>::new(), s);
@@ -124,9 +124,9 @@ mod tests {
 
     #[test]
     fn test_bitor() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 100;
-        let s = std::iter::repeat_with(|| rng.gen::<u64>())
+        let s = std::iter::repeat_with(|| rng.random::<u64>())
             .take(n)
             .collect::<Vec<_>>();
         test(BitOr::<u64>::new(), s);

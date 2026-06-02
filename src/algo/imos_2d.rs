@@ -27,10 +27,10 @@ impl<T: Copy + Signed + Zero + Add<Output = T> + Sub<Output = T>> Imos2D<T> {
         value: T,
     ) {
         self.data[l][u] = self.data[l][u] + value;
-        if let Some(a) = self.data.get_mut(r) {
-            if let Some(x) = a.get_mut(d) {
-                *x = *x + value;
-            }
+        if let Some(a) = self.data.get_mut(r)
+            && let Some(x) = a.get_mut(d)
+        {
+            *x = *x + value;
         }
 
         if let Some(x) = self.data[l].get_mut(d) {
@@ -63,7 +63,7 @@ impl<T: Copy + Signed + Zero + Add<Output = T> + Sub<Output = T>> Imos2D<T> {
 mod tests {
     use super::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
@@ -71,7 +71,7 @@ mod tests {
         let m = 200;
         let t = 1000;
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut a = Imos2D::<i32>::new(n, m);
         let mut ans = vec![vec![0; m]; n];
@@ -79,7 +79,7 @@ mod tests {
         for _ in 0..t {
             let lr = rand_range(&mut rng, 0..n);
             let ud = rand_range(&mut rng, 0..m);
-            let x = rng.gen_range(-100..=100);
+            let x = rng.random_range(-100..=100);
 
             a.update(lr.clone(), ud.clone(), x);
 

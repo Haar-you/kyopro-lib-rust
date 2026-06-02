@@ -115,10 +115,10 @@ where
     /// `state`を開始状態として、`input`を構文解析する。
     pub fn parse(&self, state: State, input: &mut Input<Char>) -> Option<Output> {
         for (check_first, proc) in self.rules.get(&state)?.non_empty_rules.iter() {
-            if let Some(c) = input.peek() {
-                if check_first(c) {
-                    return proc(self, input);
-                }
+            if let Some(c) = input.peek()
+                && check_first(c)
+            {
+                return proc(self, input);
             }
         }
 

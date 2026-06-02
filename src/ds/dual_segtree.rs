@@ -118,23 +118,23 @@ mod tests {
     use super::*;
     use crate::algebra::sum::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 100;
 
         let m = Sum::<u32>::new();
 
-        let mut a = std::iter::repeat_with(|| rng.gen_range(0..10000))
+        let mut a = std::iter::repeat_with(|| rng.random_range(0..10000))
             .take(n)
             .collect::<Vec<_>>();
         let mut seg = DualSegtree::from_vec(m, a.clone());
 
         for _ in 0..100 {
             let lr = rand_range(&mut rng, 0..n);
-            let x = rng.gen_range(0..10000);
+            let x = rng.random_range(0..10000);
 
             seg.update(lr.clone(), x);
             a[lr].iter_mut().for_each(|e| m.op_assign_r(e, x));

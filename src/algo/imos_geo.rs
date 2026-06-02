@@ -51,11 +51,11 @@ mod tests {
     use my_testtools::rand_range;
 
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let ff = ConstModIntBuilder::<Prime<1000000007>>::new();
 
@@ -70,7 +70,7 @@ mod tests {
 
             for _ in 0..t {
                 let lr = rand_range(&mut rng, 0..n);
-                let x = ff.from_i64(rng.gen_range(-100..=100));
+                let x = ff.from_i64(rng.random_range(-100..=100));
 
                 a.update(lr.clone(), x);
 

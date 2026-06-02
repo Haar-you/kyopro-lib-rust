@@ -13,6 +13,7 @@ use crate::{linalg::mod_p::gaussian_elim::*, num::ff::*};
 ///
 /// `sol`は$m$行のベクトル、`bases`は`dim`個の$m$行のベクトルで、
 /// 連立方程式の解は、`bases`の要素の線型結合と`sol`の和で表される。
+#[allow(clippy::type_complexity)]
 pub fn lineq<F>(
     mut a: Vec<Vec<F::Element>>,
     b: Vec<F::Element>,

@@ -91,14 +91,14 @@ mod tests {
     use super::*;
     use crate::algo::inversion_number::inversion_number;
     use my_testtools::rand_range;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 100;
-        let a: Vec<u64> = std::iter::repeat_with(|| rng.gen()).take(n).collect();
+        let a: Vec<u64> = std::iter::repeat_with(|| rng.random()).take(n).collect();
 
         let mut sriq = StaticRangeInversionsQuery::new(&a);
 

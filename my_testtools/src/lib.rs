@@ -1,15 +1,15 @@
-use rand::distributions::uniform::SampleUniform;
-use rand::Rng;
+use rand::distr::uniform::SampleUniform;
+use rand::RngExt;
 
 use std::ops::Range;
 
 pub fn rand_range<T, R>(rng: &mut R, range: Range<T>) -> Range<T>
 where
     T: SampleUniform + PartialOrd + Clone,
-    R: Rng,
+    R: RngExt,
 {
-    let mut start = rng.gen_range(range.clone());
-    let mut end = rng.gen_range(range);
+    let mut start = rng.random_range(range.clone());
+    let mut end = rng.random_range(range);
 
     if start > end {
         std::mem::swap(&mut start, &mut end);

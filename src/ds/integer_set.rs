@@ -26,10 +26,11 @@ impl IntegerSet {
     ///
     /// **Time complexity** $O(\log n)$
     pub fn interval(&self, x: i64) -> Option<(i64, i64)> {
-        if let Some((&k, &v)) = self.data.range(..=x).next_back() {
-            if k <= x && x < v {
-                return Some((k, v));
-            }
+        if let Some((&k, &v)) = self.data.range(..=x).next_back()
+            && k <= x
+            && x < v
+        {
+            return Some((k, v));
         }
         None
     }
@@ -96,11 +97,11 @@ mod tests {
     use std::collections::BTreeSet;
 
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 100;
         let t = 1000;
@@ -110,21 +111,21 @@ mod tests {
         let mut a = BTreeSet::new();
 
         for _ in 0..n {
-            let x = rng.gen_range(-l..=l);
+            let x = rng.random_range(-l..=l);
             s.insert(x);
             a.insert(x);
         }
 
         for _ in 0..t {
-            let x = rng.gen_range(-l..=l);
+            let x = rng.random_range(-l..=l);
             s.insert(x);
             a.insert(x);
 
-            let x = rng.gen_range(-l..=l);
+            let x = rng.random_range(-l..=l);
             s.remove(x);
             a.remove(&x);
 
-            let x = rng.gen_range(-l..=l);
+            let x = rng.random_range(-l..=l);
 
             let mut mex = x;
             while a.contains(&mex) {

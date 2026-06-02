@@ -327,7 +327,7 @@ impl<R: Semiring> AsRef<[Vec<R::Element>]> for MatrixOnSemiring<R> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     use crate::{
         algebra::semiring::{add_mul_mod::AddMulMod, xor_and::XorAnd},
@@ -337,7 +337,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
         let ring = AddMulMod(modulo);
 
@@ -348,8 +348,8 @@ mod tests {
 
         for i in 0..size {
             for j in 0..size {
-                *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
-                *b.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
+                *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.random::<u32>() as u64);
+                *b.get_mut(i, j).unwrap() = modulo.from_u64(rng.random::<u32>() as u64);
             }
         }
 
@@ -358,7 +358,7 @@ mod tests {
 
     #[test]
     fn test_xor_and() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let ring = XorAnd::<u64>::new();
 
         let size = 300;
@@ -368,8 +368,8 @@ mod tests {
 
         for i in 0..size {
             for j in 0..size {
-                *a.get_mut(i, j).unwrap() = rng.gen::<u64>();
-                *b.get_mut(i, j).unwrap() = rng.gen::<u64>();
+                *a.get_mut(i, j).unwrap() = rng.random::<u64>();
+                *b.get_mut(i, j).unwrap() = rng.random::<u64>();
             }
         }
 
@@ -381,7 +381,7 @@ mod tests {
     fn benchmark() {
         use crate::get_time;
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let modulo = ConstModIntBuilder::<Prime<1000000007>>::new();
         let ring = AddMulMod(modulo);
 
@@ -394,8 +394,8 @@ mod tests {
 
             for i in 0..size {
                 for j in 0..size {
-                    *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
-                    *b.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen::<u32>() as u64);
+                    *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.random::<u32>() as u64);
+                    *b.get_mut(i, j).unwrap() = modulo.from_u64(rng.random::<u32>() as u64);
                 }
             }
 

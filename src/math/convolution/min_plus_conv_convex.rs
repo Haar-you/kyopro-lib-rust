@@ -42,34 +42,34 @@ mod tests {
 
     use super::*;
 
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         for _ in 0..10 {
-            let n = rng.gen_range(100..=500);
-            let m = rng.gen_range(100..=500);
+            let n = rng.random_range(100..=500);
+            let m = rng.random_range(100..=500);
 
             let a = {
-                // let argmin = rng.gen_range(0..n);
+                // let argmin = rng.random_range(0..n);
 
                 let mut a = vec![0; n];
 
                 let mut d = -500;
 
-                a[0] = rng.gen_range(-1000..=1000);
+                a[0] = rng.random_range(-1000..=1000);
 
                 for i in 1..n {
-                    let dd = rng.gen_range(0..10);
+                    let dd = rng.random_range(0..10);
                     d += dd;
                     a[i] = a[i - 1] + d;
                 }
 
                 a
             };
-            let b = std::iter::repeat_with(|| rng.gen_range(-1000..=1000))
+            let b = std::iter::repeat_with(|| rng.random_range(-1000..=1000))
                 .take(m)
                 .collect_vec();
 

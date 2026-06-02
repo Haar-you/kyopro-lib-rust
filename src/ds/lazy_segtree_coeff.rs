@@ -118,7 +118,7 @@ mod tests {
 
     use super::*;
     use my_testtools::rand_range;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
@@ -127,13 +127,13 @@ mod tests {
 
         let modulo = ConstModIntBuilder::<Prime<998244353>>::new();
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
-        let mut a = repeat_with(|| modulo.from_u64(rng.gen_range(0..10)))
+        let mut a = repeat_with(|| modulo.from_u64(rng.random_range(0..10)))
             .take(n)
             .collect_vec();
 
-        let c = repeat_with(|| modulo.from_u64(rng.gen_range(0..10)))
+        let c = repeat_with(|| modulo.from_u64(rng.random_range(0..10)))
             .take(n)
             .collect_vec();
 
@@ -143,7 +143,7 @@ mod tests {
         for _ in 0..q {
             let range = rand_range(&mut rng, 0..n);
 
-            let value = modulo.from_u64(rng.gen_range(0..10));
+            let value = modulo.from_u64(rng.random_range(0..10));
             seg.update(range.clone(), value);
 
             for i in range {

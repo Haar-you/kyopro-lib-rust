@@ -129,7 +129,7 @@ mod tests {
     use crate::num::{ff::*, modint::ModIntBuilder};
 
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     fn random_test_helper<M, F>(monoid: M, size: usize, mut gen_value: F)
     where
@@ -137,16 +137,16 @@ mod tests {
         M::Element: Clone + Eq + std::fmt::Debug,
         F: FnMut() -> M::Element,
     {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut other = vec![monoid.id(); size];
         let mut s = Segtree::new(monoid.clone(), size);
 
         for _ in 0..1000 {
-            let ty = rng.gen_range(0..2);
+            let ty = rng.random_range(0..2);
 
             if ty == 0 {
-                let i = rng.gen_range(0..size);
+                let i = rng.random_range(0..size);
                 let x = gen_value();
 
                 other[i] = monoid.op(other[i].clone(), x.clone());
@@ -159,7 +159,7 @@ mod tests {
                 assert_eq!(s.fold(lr), ans);
             }
 
-            let i = rng.gen_range(0..size);
+            let i = rng.random_range(0..size);
             assert_eq!(s[i], other[i]);
         }
 
@@ -168,31 +168,31 @@ mod tests {
 
     #[test]
     fn test_sum() {
-        let mut rng = rand::thread_rng();
-        random_test_helper(Sum::<i32>::new(), 10, || rng.gen::<i32>() % 10000);
+        let mut rng = rand::rng();
+        random_test_helper(Sum::<i32>::new(), 10, || rng.random_range(0..10000));
     }
 
     #[test]
     fn test_xor() {
-        let mut rng = rand::thread_rng();
-        random_test_helper(BitXor::<u32>::new(), 10, || rng.gen::<u32>() % 10000);
+        let mut rng = rand::rng();
+        random_test_helper(BitXor::<u32>::new(), 10, || rng.random_range(0..10000));
     }
 
     #[test]
     fn test_min() {
-        let mut rng = rand::thread_rng();
-        random_test_helper(Min::<i32>::new(), 10, || rng.gen::<i32>() % 10000);
+        let mut rng = rand::rng();
+        random_test_helper(Min::<i32>::new(), 10, || rng.random_range(0..10000));
     }
 
     #[test]
     fn test_max() {
-        let mut rng = rand::thread_rng();
-        random_test_helper(Max::<i32>::new(), 10, || rng.gen::<i32>() % 10000);
+        let mut rng = rand::rng();
+        random_test_helper(Max::<i32>::new(), 10, || rng.random_range(0..10000));
     }
 
     #[test]
     fn test_matrix_prod() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 10;
 
@@ -204,7 +204,7 @@ mod tests {
             let mut a = MatrixOnSemiring::zero(ring, n, n);
             for i in 0..n {
                 for j in 0..n {
-                    *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.gen());
+                    *a.get_mut(i, j).unwrap() = modulo.from_u64(rng.random());
                 }
             }
             a

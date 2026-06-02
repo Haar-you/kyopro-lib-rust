@@ -409,6 +409,7 @@ where
         })
     }
 
+    #[allow(clippy::type_complexity)]
     fn range(
         &self,
         start: usize,

@@ -166,7 +166,7 @@ impl<'a, T> UnionFind<'a, T> {
 mod tests {
     use super::*;
     use crate::btreeset;
-    use rand::Rng;
+    use rand::prelude::*;
     use std::collections::BTreeSet;
     use std::iter::FromIterator;
 
@@ -174,14 +174,14 @@ mod tests {
     fn test() {
         let n = 100;
         let q = 50;
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut uf = UnionFind::new(n);
         let mut a = (0..n).map(|i| btreeset![i]).collect::<BTreeSet<_>>();
 
         for _ in 0..q {
-            let i = rng.gen_range(0..n);
-            let j = rng.gen_range(0..n);
+            let i = rng.random_range(0..n);
+            let j = rng.random_range(0..n);
 
             uf.merge(i, j);
 
@@ -197,8 +197,8 @@ mod tests {
         }
 
         for _ in 0..q {
-            let i = rng.gen_range(0..n);
-            let j = rng.gen_range(0..n);
+            let i = rng.random_range(0..n);
+            let j = rng.random_range(0..n);
 
             let ai = a.iter().find(|s| s.contains(&i)).unwrap();
 

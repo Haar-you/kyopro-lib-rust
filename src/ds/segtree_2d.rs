@@ -121,7 +121,7 @@ mod tests {
     use super::*;
     use crate::algebra::sum::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
@@ -129,7 +129,7 @@ mod tests {
         let w = 300;
         let h = 100;
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let m = Sum::<u64>::new();
         let mut seg = Segtree2D::new(m, w, h);
@@ -137,7 +137,7 @@ mod tests {
 
         for i in 0..w {
             for j in 0..h {
-                let x = rng.gen::<u64>() % 10000;
+                let x = rng.random_range(0..10000);
 
                 a[i][j] = x;
                 seg.assign(i, j, x);
@@ -145,9 +145,9 @@ mod tests {
         }
 
         for _ in 0..100 {
-            let i = rng.gen::<usize>() % w;
-            let j = rng.gen::<usize>() % h;
-            let x = rng.gen::<u64>() % 10000;
+            let i = rng.random_range(0..w);
+            let j = rng.random_range(0..h);
+            let x = rng.random_range(0..10000);
 
             seg.assign(i, j, x);
             a[i][j] = x;

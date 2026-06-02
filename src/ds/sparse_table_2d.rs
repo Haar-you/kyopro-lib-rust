@@ -96,7 +96,7 @@ where
 mod tests {
     use super::*;
     use crate::{algebra::min_max::Max, iter::collect::CollectVec};
-    use rand::Rng;
+    use rand::prelude::*;
     use std::fmt::Debug;
 
     fn test<A>(a: A, s: Vec<Vec<A::Element>>)
@@ -126,11 +126,11 @@ mod tests {
 
     #[test]
     fn test_max() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 30;
         let m = 30;
         let s = std::iter::repeat_with(|| {
-            std::iter::repeat_with(|| rng.gen::<u64>())
+            std::iter::repeat_with(|| rng.random::<u64>())
                 .take(m)
                 .collect_vec()
         })

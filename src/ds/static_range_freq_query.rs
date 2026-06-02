@@ -39,24 +39,24 @@ impl<T: Hash + Eq> StaticRangeFreqQuery<T> {
 mod tests {
     use super::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let m = 100;
         let n = 1000;
         let q = 100;
 
-        let a = std::iter::repeat_with(|| rng.gen_range(0..m))
+        let a = std::iter::repeat_with(|| rng.random_range(0..m))
             .take(n)
             .collect::<Vec<_>>();
         let sfq = StaticRangeFreqQuery::new(a.clone());
 
         for _ in 0..q {
             let lr = rand_range(&mut rng, 0..n);
-            let x: u32 = rng.gen_range(0..m);
+            let x: u32 = rng.random_range(0..m);
 
             assert_eq!(
                 sfq.query(lr.clone(), &x),

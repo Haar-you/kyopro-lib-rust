@@ -51,11 +51,11 @@ mod tests {
     use crate::iter::collect::CollectVec;
 
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 10;
         let t = 100;
@@ -65,8 +65,8 @@ mod tests {
         let mut history = vec![b.clone()];
 
         for _ in 0..t {
-            let i = rng.gen_range(0..n);
-            let x = rng.gen::<u32>();
+            let i = rng.random_range(0..n);
+            let x = rng.random::<u32>();
 
             b[i] = x;
             a.set(i, x);

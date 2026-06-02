@@ -142,22 +142,22 @@ where
 mod tests {
     use super::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test_max() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let size = 100;
         let mut other = vec![0; size];
         let mut s = StarrySkyTree::<i32>::new(size, Mode::Max);
 
         for _ in 0..1000 {
-            let ty = rng.gen_range(0..2);
+            let ty = rng.random_range(0..2);
             let lr = rand_range(&mut rng, 0..size);
 
             if ty == 0 {
-                let x = rng.gen_range(-1000..=1000);
+                let x = rng.random_range(-1000..=1000);
 
                 s.update(lr.clone(), x);
                 for i in lr {
@@ -173,18 +173,18 @@ mod tests {
 
     #[test]
     fn test_min() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let size = 100;
         let mut other = vec![0; size];
         let mut s = StarrySkyTree::<i32>::new(size, Mode::Min);
 
         for _ in 0..1000 {
-            let ty = rng.gen_range(0..2);
+            let ty = rng.random_range(0..2);
             let lr = rand_range(&mut rng, 0..size);
 
             if ty == 0 {
-                let x = rng.gen_range(-1000..=1000);
+                let x = rng.random_range(-1000..=1000);
 
                 s.update(lr.clone(), x);
                 for i in lr {
