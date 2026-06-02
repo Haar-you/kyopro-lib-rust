@@ -206,7 +206,7 @@ impl<P: PrimeMod> Default for NTT<P> {
 mod tests {
 
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
@@ -215,15 +215,15 @@ mod tests {
         let ntt = NTT::<P>::new();
         let ff = ConstModIntBuilder::<P>::new();
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
-        let n = rng.gen_range(1..1000);
-        let m = rng.gen_range(1..1000);
+        let n = rng.random_range(1..1000);
+        let m = rng.random_range(1..1000);
 
-        let a = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
+        let a = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..P::PRIME_NUM) as u64))
             .take(n)
             .collect::<Vec<_>>();
-        let b = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
+        let b = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..P::PRIME_NUM) as u64))
             .take(m)
             .collect::<Vec<_>>();
 

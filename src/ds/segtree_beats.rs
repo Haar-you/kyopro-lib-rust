@@ -4,7 +4,7 @@
 //! - <https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum>
 
 use crate::misc::range::range_bounds_to_range;
-use std::cmp::{max, min, Ordering};
+use std::cmp::{Ordering, max, min};
 use std::ops::RangeBounds;
 
 #[inline]
@@ -315,11 +315,11 @@ impl From<Vec<i64>> for SegtreeBeats {
 mod test {
     use super::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 1000;
         let limit = 1000000000;
@@ -328,22 +328,22 @@ mod test {
         let mut seg = SegtreeBeats::from(a.clone());
 
         for _ in 0..10000 {
-            match rng.gen_range(0..=5) {
+            match rng.random_range(0..=5) {
                 0 => {
                     let lr = rand_range(&mut rng, 0..n);
-                    let x = rng.gen_range(-limit..=limit);
+                    let x = rng.random_range(-limit..=limit);
                     seg.chmax(lr.clone(), x);
                     a[lr].iter_mut().for_each(|y| *y = std::cmp::max(x, *y));
                 }
                 1 => {
                     let lr = rand_range(&mut rng, 0..n);
-                    let x = rng.gen_range(-limit..=limit);
+                    let x = rng.random_range(-limit..=limit);
                     seg.chmin(lr.clone(), x);
                     a[lr].iter_mut().for_each(|y| *y = std::cmp::min(x, *y));
                 }
                 2 => {
                     let lr = rand_range(&mut rng, 0..n);
-                    let x = rng.gen_range(-limit..=limit);
+                    let x = rng.random_range(-limit..=limit);
                     seg.add(lr.clone(), x);
                     a[lr].iter_mut().for_each(|y| *y += x);
                 }

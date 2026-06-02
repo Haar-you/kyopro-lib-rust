@@ -18,7 +18,7 @@ mod tests {
     use crate::math::gcd_lcm::GcdLcm;
     use crate::math::prime_mod::{Prime, PrimeMod};
     use crate::{iter::collect::CollectVec, num::const_modint::*};
-    use rand::Rng;
+    use rand::prelude::*;
 
     use super::conv_and_or::{convolution_and, convolution_or};
     use super::conv_gcd_lcm::convolution_gcd;
@@ -36,12 +36,12 @@ mod tests {
     #[test]
     fn test_zeta_mobius() {
         #![allow(clippy::needless_range_loop)]
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let ff = ConstModIntBuilder::<M>::new();
 
         let n = 1 << 10;
-        let f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n)
             .collect_vec();
 
@@ -80,15 +80,15 @@ mod tests {
 
     #[test]
     fn test_conv_or() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let ff = ConstModIntBuilder::<M>::new();
 
         let n = 1 << 10;
-        let f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n)
             .collect_vec();
-        let g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let g = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n)
             .collect_vec();
 
@@ -106,15 +106,15 @@ mod tests {
 
     #[test]
     fn test_conv_and() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let ff = ConstModIntBuilder::<M>::new();
 
         let n = 1 << 10;
-        let f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n)
             .collect_vec();
-        let g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let g = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n)
             .collect_vec();
 
@@ -132,15 +132,15 @@ mod tests {
 
     #[test]
     fn test_conv_xor() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let ff = ConstModIntBuilder::<M>::new();
 
         let n = 1 << 10;
-        let f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n)
             .collect_vec();
-        let g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let g = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n)
             .collect_vec();
 
@@ -158,15 +158,15 @@ mod tests {
 
     #[test]
     fn test_conv_subset() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let ff = ConstModIntBuilder::<M>::new();
 
         let n = 1 << 10;
-        let f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n)
             .collect_vec();
-        let g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let g = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n)
             .collect_vec();
 
@@ -186,15 +186,15 @@ mod tests {
 
     #[test]
     fn test_conv_gcd() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let ff = ConstModIntBuilder::<M>::new();
 
         let n = 1000;
-        let f = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let f = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n + 1)
             .collect_vec();
-        let g = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M::PRIME_NUM) as u64))
+        let g = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M::PRIME_NUM) as u64))
             .take(n + 1)
             .collect_vec();
 

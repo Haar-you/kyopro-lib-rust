@@ -55,7 +55,7 @@ impl<T: Ord> BinarySearch<T> for [T] {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test_lower_bound() {
@@ -88,10 +88,10 @@ mod tests {
 
     #[test]
     fn test_random() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 100;
-        let a = std::iter::repeat_with(|| rng.gen_range(0..=10))
+        let a = std::iter::repeat_with(|| rng.random_range(0..=10))
             .take(n)
             .scan(0, |state, x| {
                 *state += x;

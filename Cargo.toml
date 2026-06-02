@@ -8,7 +8,7 @@ edition = "2024"
 
 [dev-dependencies]
 my_testtools = {path = "./my_testtools"}
-rand = { version = "=0.8.5" }
+rand = { version = "=0.10.1" }
 test-case = "3.3.1"
 pretty_assertions = "1.4.1"
 

@@ -75,17 +75,17 @@ mod tests {
     use crate::iter::collect::CollectVec;
 
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test_div() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 500;
         let m = 100000;
 
         let f = (0..=n)
-            .map(|i| rng.gen_range(0..m) * i as u64 % m)
+            .map(|i| rng.random_range(0..m) * i as u64 % m)
             .collect_vec();
 
         let mut g = vec![0; n + 1];
@@ -107,13 +107,13 @@ mod tests {
 
     #[test]
     fn test_mul() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 500;
         let m = 100000;
 
         let f = (0..=n)
-            .map(|i| rng.gen_range(0..m) * i as u64 % m)
+            .map(|i| rng.random_range(0..m) * i as u64 % m)
             .collect_vec();
 
         let mut g = vec![0; n + 1];

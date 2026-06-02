@@ -143,7 +143,7 @@ mod tests {
         math::{linear::Linear, prime_mod::Prime},
         num::const_modint::{ConstModInt, ConstModIntBuilder},
     };
-    use rand::Rng;
+    use rand::prelude::*;
     use std::collections::VecDeque;
 
     const M: u32 = 998244353;
@@ -151,7 +151,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut deq = VecDeque::<Linear<Mint>>::new();
 
@@ -163,18 +163,18 @@ mod tests {
             assert_eq!(deq.back(), swag.back());
             assert_eq!(deq.len(), swag.len());
 
-            let ty = rng.gen_range(0..5);
+            let ty = rng.random_range(0..5);
 
             match ty {
                 0 => {
-                    let a = Mint::new(rng.gen_range(0..M));
-                    let b = Mint::new(rng.gen_range(0..M));
+                    let a = Mint::new(rng.random_range(0..M));
+                    let b = Mint::new(rng.random_range(0..M));
                     deq.push_front(Linear::new(a, b));
                     swag.push_front(Linear::new(a, b));
                 }
                 1 => {
-                    let a = Mint::new(rng.gen_range(0..M));
-                    let b = Mint::new(rng.gen_range(0..M));
+                    let a = Mint::new(rng.random_range(0..M));
+                    let b = Mint::new(rng.random_range(0..M));
                     deq.push_back(Linear::new(a, b));
                     swag.push_back(Linear::new(a, b));
                 }

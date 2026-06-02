@@ -37,7 +37,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test_zero_array() {
@@ -46,11 +46,11 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 100;
 
-        let a = std::iter::repeat_with(|| rng.gen_range(-1000..=1000))
+        let a = std::iter::repeat_with(|| rng.random_range(-1000..=1000))
             .take(n)
             .collect::<Vec<_>>();
 
@@ -70,11 +70,11 @@ mod tests {
 
     #[test]
     fn test_all_negative() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 100;
 
-        let a = std::iter::repeat_with(|| rng.gen_range(-1000..0))
+        let a = std::iter::repeat_with(|| rng.random_range(-1000..0))
             .take(n)
             .collect::<Vec<_>>();
 

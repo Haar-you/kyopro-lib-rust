@@ -34,7 +34,7 @@ pub fn majority_vote<T: Eq>(a: &[T]) -> Option<(&T, usize)> {
 #[cfg(test)]
 mod test {
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
     use std::collections::BTreeMap;
 
     fn check<T: Eq + Ord>(a: &[T]) -> Option<(&T, usize)> {
@@ -55,11 +55,11 @@ mod test {
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         for _ in 0..100 {
-            let n = rng.gen_range(0..=100);
-            let a = std::iter::repeat_with(|| rng.gen_range(0..10))
+            let n = rng.random_range(0..=100);
+            let a = std::iter::repeat_with(|| rng.random_range(0..10))
                 .take(n)
                 .collect::<Vec<_>>();
 

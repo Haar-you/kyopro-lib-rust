@@ -145,7 +145,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
     use std::collections::BinaryHeap;
 
     #[test]
@@ -156,20 +156,20 @@ mod tests {
         let mut heap2 = LazySkewHeap::<u32>::new();
         let mut bheap2 = BinaryHeap::<u32>::new();
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         for _ in 0..100 {
-            let x = rng.gen_range(0..10000);
+            let x = rng.random_range(0..10000);
             heap.push(x);
             bheap.push(x);
         }
 
-        let x = rng.gen_range(0..10000);
+        let x = rng.random_range(0..10000);
         heap.add(x);
         bheap = bheap.into_iter().map(|a| a + x).collect::<BinaryHeap<_>>();
 
         for _ in 0..100 {
-            let x = rng.r#gen::<u32>();
+            let x = rng.random::<u32>();
             heap2.push(x);
             bheap2.push(x);
         }

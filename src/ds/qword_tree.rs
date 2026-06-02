@@ -249,66 +249,66 @@ impl QwordTree {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
     use std::collections::BTreeSet;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut set = BTreeSet::new();
         let mut qt = QwordTree::new();
 
         for _ in 0..5000 {
-            let x: u32 = rng.gen_range(0..1 << 12);
+            let x: u32 = rng.random_range(0..1 << 12);
             assert_eq!(set.insert(x), qt.insert(x));
             assert_eq!(set.len(), qt.len());
 
             assert_eq!(set.iter().next(), qt.min().as_ref());
             assert_eq!(set.iter().next_back(), qt.max().as_ref());
 
-            let x: u32 = rng.gen_range(0..1 << 12);
+            let x: u32 = rng.random_range(0..1 << 12);
             assert_eq!(set.remove(&x), qt.erase(x));
             assert_eq!(set.len(), qt.len());
 
             assert_eq!(set.iter().next(), qt.min().as_ref());
             assert_eq!(set.iter().next_back(), qt.max().as_ref());
 
-            let x: u32 = rng.gen_range(0..1 << 12);
+            let x: u32 = rng.random_range(0..1 << 12);
             assert_eq!(set.contains(&x), qt.contains(x));
         }
     }
 
     #[test]
     fn test_min_ge() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut set = BTreeSet::new();
         let mut qt = QwordTree::new();
 
         for _ in 0..1000 {
-            let x: u32 = rng.gen_range(0..1 << 24);
+            let x: u32 = rng.random_range(0..1 << 24);
             set.insert(x);
             qt.insert(x);
 
-            let x: u32 = rng.gen_range(0..1 << 24);
+            let x: u32 = rng.random_range(0..1 << 24);
             assert_eq!(set.range(x..).next(), qt.min_ge(x).as_ref());
         }
     }
 
     #[test]
     fn test_max_le() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut set = BTreeSet::new();
         let mut qt = QwordTree::new();
 
         for _ in 0..1000 {
-            let x: u32 = rng.gen_range(0..1 << 24);
+            let x: u32 = rng.random_range(0..1 << 24);
             set.insert(x);
             qt.insert(x);
 
-            let x: u32 = rng.gen_range(0..1 << 24);
+            let x: u32 = rng.random_range(0..1 << 24);
             assert_eq!(set.range(..=x).next_back(), qt.max_le(x).as_ref());
         }
     }

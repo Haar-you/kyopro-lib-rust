@@ -78,11 +78,11 @@ mod tests {
     use super::*;
     use crate::algebra::sum::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 20;
         let g = Sum::<i32>::new();
@@ -91,8 +91,8 @@ mod tests {
         let mut other = vec![g.id(); n];
 
         for _ in 0..1000 {
-            let i = rng.gen_range(0..n);
-            let x = rng.gen_range(-1000..=1000);
+            let i = rng.random_range(0..n);
+            let x = rng.random_range(-1000..=1000);
 
             csb.update(i, x);
             g.op_assign_r(&mut other[i], x);

@@ -13,7 +13,7 @@ pub mod xor;
 mod tests {
     use std::ops::AddAssign;
 
-    use rand::Rng;
+    use rand::prelude::*;
 
     use crate::{math::prime_mod::Prime, num::const_modint::*};
 
@@ -56,9 +56,9 @@ mod tests {
 
     #[test]
     fn test_difference() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 300;
-        let a = std::iter::repeat_with(|| rng.r#gen::<i32>() as i64)
+        let a = std::iter::repeat_with(|| rng.random::<i32>() as i64)
             .take(n)
             .collect::<Vec<_>>();
 
@@ -70,9 +70,9 @@ mod tests {
 
     #[test]
     fn test_xor() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 300;
-        let a = std::iter::repeat_with(|| rng.r#gen::<u32>() as u64)
+        let a = std::iter::repeat_with(|| rng.random::<u32>() as u64)
             .take(n)
             .collect::<Vec<_>>();
 
@@ -84,9 +84,9 @@ mod tests {
 
     #[test]
     fn test_range_xor() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 100;
-        let a = std::iter::repeat_with(|| rng.gen_range(0..2_u64.pow(32)))
+        let a = std::iter::repeat_with(|| rng.random_range(0..2_u64.pow(32)))
             .take(n)
             .collect::<Vec<_>>();
 
@@ -98,10 +98,10 @@ mod tests {
 
     #[test]
     fn test_sum() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 300;
         let modulo = ConstModIntBuilder::<P>::new();
-        let a = std::iter::repeat_with(|| modulo.from_i64(rng.r#gen::<i64>()))
+        let a = std::iter::repeat_with(|| modulo.from_i64(rng.random::<i64>()))
             .take(n)
             .collect::<Vec<_>>();
 
@@ -113,10 +113,10 @@ mod tests {
 
     #[test]
     fn test_prod() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 300;
         let modulo = ConstModIntBuilder::<P>::new();
-        let a = std::iter::repeat_with(|| modulo.from_i64(rng.r#gen::<i64>()))
+        let a = std::iter::repeat_with(|| modulo.from_i64(rng.random::<i64>()))
             .take(n)
             .collect::<Vec<_>>();
 
@@ -128,9 +128,9 @@ mod tests {
 
     #[test]
     fn test_range_sum() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 100;
-        let a = std::iter::repeat_with(|| rng.r#gen::<i32>() as i64)
+        let a = std::iter::repeat_with(|| rng.random::<i32>() as i64)
             .take(n)
             .collect::<Vec<_>>();
 
@@ -142,9 +142,9 @@ mod tests {
 
     #[test]
     fn test_max() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 300;
-        let a = std::iter::repeat_with(|| rng.r#gen::<i32>() as i64)
+        let a = std::iter::repeat_with(|| rng.random::<i32>() as i64)
             .take(n)
             .collect::<Vec<_>>();
 
@@ -156,10 +156,10 @@ mod tests {
 
     #[test]
     fn test_range_prod() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 100;
         let modulo = ConstModIntBuilder::<P>::new();
-        let a = std::iter::repeat_with(|| modulo.from_i64(rng.r#gen::<i64>()))
+        let a = std::iter::repeat_with(|| modulo.from_i64(rng.random::<i64>()))
             .take(n)
             .collect::<Vec<_>>();
 

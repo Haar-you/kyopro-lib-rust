@@ -100,14 +100,14 @@ mod tests {
     use super::*;
     use crate::algebra::sum::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 100;
-        let a = std::iter::repeat_with(|| rng.gen_range(0..10000))
+        let a = std::iter::repeat_with(|| rng.random_range(0..10000))
             .take(n)
             .collect::<Vec<_>>();
 

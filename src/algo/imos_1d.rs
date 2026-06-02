@@ -37,21 +37,21 @@ impl<T: Copy + Signed + Zero + Add<Output = T> + Sub<Output = T>> Imos1D<T> {
 mod tests {
     use super::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
         let n = 100;
         let t = 1000;
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut a = Imos1D::<i32>::new(n);
         let mut ans = vec![0; n];
 
         for _ in 0..t {
             let lr = rand_range(&mut rng, 0..n);
-            let x = rng.gen_range(-100..=100);
+            let x = rng.random_range(-100..=100);
 
             a.update(lr.clone(), x);
 

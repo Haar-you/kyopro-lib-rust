@@ -230,13 +230,13 @@ mod tests {
     use super::*;
     use crate::algo::bsearch_slice::BinarySearch;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test_access() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let n = 10000;
-        let b = std::iter::repeat_with(|| rng.r#gen::<u64>())
+        let b = std::iter::repeat_with(|| rng.random::<u64>())
             .take(n)
             .collect::<Vec<_>>();
 
@@ -249,15 +249,15 @@ mod tests {
 
     #[test]
     fn test_rank() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let m = 50;
-        let table = std::iter::repeat_with(|| rng.r#gen::<u64>())
+        let table = std::iter::repeat_with(|| rng.random::<u64>())
             .take(m)
             .collect::<Vec<_>>();
 
         let n = 300;
-        let b = std::iter::repeat_with(|| table[rng.gen_range(0..m)])
+        let b = std::iter::repeat_with(|| table[rng.random_range(0..m)])
             .take(n)
             .collect::<Vec<_>>();
 
@@ -276,15 +276,15 @@ mod tests {
 
     #[test]
     fn test_count() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let m = 50;
-        let table = std::iter::repeat_with(|| rng.r#gen::<u64>())
+        let table = std::iter::repeat_with(|| rng.random::<u64>())
             .take(m)
             .collect::<Vec<_>>();
 
         let n = 300;
-        let b = std::iter::repeat_with(|| table[rng.gen_range(0..m)])
+        let b = std::iter::repeat_with(|| table[rng.random_range(0..m)])
             .take(n)
             .collect::<Vec<_>>();
 
@@ -292,7 +292,7 @@ mod tests {
 
         for _ in 0..1000 {
             let lr = rand_range(&mut rng, 0..n);
-            let x = table[rng.gen_range(0..m)];
+            let x = table[rng.random_range(0..m)];
 
             let count = b[lr.clone()].iter().filter(|&&y| x == y).count();
 
@@ -302,15 +302,15 @@ mod tests {
 
     #[test]
     fn test_select() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let m = 50;
-        let table = std::iter::repeat_with(|| rng.r#gen::<u64>())
+        let table = std::iter::repeat_with(|| rng.random::<u64>())
             .take(m)
             .collect::<Vec<_>>();
 
         let n = 300;
-        let b = std::iter::repeat_with(|| table[rng.gen_range(0..m)])
+        let b = std::iter::repeat_with(|| table[rng.random_range(0..m)])
             .take(n)
             .collect::<Vec<_>>();
 
@@ -330,15 +330,15 @@ mod tests {
 
     #[test]
     fn test_quantile() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let m = 50;
-        let table = std::iter::repeat_with(|| rng.r#gen::<u64>())
+        let table = std::iter::repeat_with(|| rng.random::<u64>())
             .take(m)
             .collect::<Vec<_>>();
 
         let n = 300;
-        let b = std::iter::repeat_with(|| table[rng.gen_range(0..m)])
+        let b = std::iter::repeat_with(|| table[rng.random_range(0..m)])
             .take(n)
             .collect::<Vec<_>>();
 
@@ -364,15 +364,15 @@ mod tests {
 
     #[test]
     fn test_prev_next_value() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let m = 50;
-        let table = std::iter::repeat_with(|| rng.r#gen::<u64>())
+        let table = std::iter::repeat_with(|| rng.random::<u64>())
             .take(m)
             .collect::<Vec<_>>();
 
         let n = 300;
-        let b = std::iter::repeat_with(|| table[rng.gen_range(0..m)])
+        let b = std::iter::repeat_with(|| table[rng.random_range(0..m)])
             .take(n)
             .collect::<Vec<_>>();
 
@@ -384,7 +384,7 @@ mod tests {
             let mut a = b[lr.clone()].to_vec();
             a.sort();
 
-            let x = rng.r#gen::<u64>();
+            let x = rng.random::<u64>();
             let i = a.lower_bound(&x);
 
             assert_eq!(wm.next_value(lr.clone(), x), a.get(i).copied());
@@ -400,15 +400,15 @@ mod tests {
 
     #[test]
     fn test_range_freq() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let m = 50;
-        let table = std::iter::repeat_with(|| rng.r#gen::<u64>())
+        let table = std::iter::repeat_with(|| rng.random::<u64>())
             .take(m)
             .collect::<Vec<_>>();
 
         let n = 300;
-        let b = std::iter::repeat_with(|| table[rng.gen_range(0..m)])
+        let b = std::iter::repeat_with(|| table[rng.random_range(0..m)])
             .take(n)
             .collect::<Vec<_>>();
 
@@ -416,8 +416,8 @@ mod tests {
 
         for _ in 0..1000 {
             let lr = rand_range(&mut rng, 0..n);
-            let lb = rng.r#gen::<u64>();
-            let ub = rng.r#gen::<u64>();
+            let lb = rng.random::<u64>();
+            let ub = rng.random::<u64>();
 
             assert_eq!(
                 wm.range_freq(lr.clone(), lb, ub),

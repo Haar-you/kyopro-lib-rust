@@ -97,11 +97,11 @@ mod tests {
     use std::collections::BTreeSet;
 
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 100;
         let t = 1000;
@@ -111,21 +111,21 @@ mod tests {
         let mut a = BTreeSet::new();
 
         for _ in 0..n {
-            let x = rng.gen_range(-l..=l);
+            let x = rng.random_range(-l..=l);
             s.insert(x);
             a.insert(x);
         }
 
         for _ in 0..t {
-            let x = rng.gen_range(-l..=l);
+            let x = rng.random_range(-l..=l);
             s.insert(x);
             a.insert(x);
 
-            let x = rng.gen_range(-l..=l);
+            let x = rng.random_range(-l..=l);
             s.remove(x);
             a.remove(&x);
 
-            let x = rng.gen_range(-l..=l);
+            let x = rng.random_range(-l..=l);
 
             let mut mex = x;
             while a.contains(&mex) {

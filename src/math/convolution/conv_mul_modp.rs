@@ -60,7 +60,7 @@ mod tests {
     };
 
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     type P = Prime<998244353>;
 
@@ -68,12 +68,12 @@ mod tests {
     fn test() {
         let p = 1009;
         let modulo = ConstModIntBuilder::<P>::new();
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
-        let a = std::iter::repeat_with(|| modulo.from_u64(rng.r#gen::<u64>()))
+        let a = std::iter::repeat_with(|| modulo.from_u64(rng.random::<u64>()))
             .take(p)
             .collect_vec();
-        let b = std::iter::repeat_with(|| modulo.from_u64(rng.r#gen::<u64>()))
+        let b = std::iter::repeat_with(|| modulo.from_u64(rng.random::<u64>()))
             .take(p)
             .collect_vec();
 

@@ -183,7 +183,7 @@ mod tests {
     use crate::math::prime_mod::Prime;
     use crate::num::{const_modint::*, modint::*};
     use crate::timer;
-    use rand::Rng;
+    use rand::prelude::*;
 
     #[derive(Clone, Copy, Debug)]
     enum Ops {
@@ -198,7 +198,7 @@ mod tests {
     fn test() {
         const MOD: u32 = 998244353;
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let constmodint = ConstModIntBuilder::<Prime<MOD>>::new();
         let modint = ModIntBuilder::new(MOD);
@@ -209,9 +209,9 @@ mod tests {
         let mut res = montgomery.from_u64(1);
 
         let ops = std::iter::repeat_with(|| {
-            let x = rng.gen_range(1..MOD) as u64;
+            let x = rng.random_range(1..MOD) as u64;
 
-            let op = rng.gen_range(0..5);
+            let op = rng.random_range(0..5);
             match op {
                 0 => Ops::Add(x),
                 1 => Ops::Sub(x),

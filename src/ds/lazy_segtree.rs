@@ -200,7 +200,7 @@ where
 mod tests {
     use super::*;
     use my_testtools::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     fn test<M, A, F>(n: usize, q: usize, monoid: M, act: A, mut r#gen: F)
     where
@@ -211,12 +211,12 @@ mod tests {
         let mut seg = LazySegtree::new(monoid.clone(), act.clone(), n);
         let mut vec = vec![monoid.id(); n];
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         for _ in 0..q {
             let lr = rand_range(&mut rng, 0..n);
 
-            match rng.gen_range(0..2) {
+            match rng.random_range(0..2) {
                 0 => {
                     let x = r#gen();
 
@@ -240,28 +240,28 @@ mod tests {
 
     #[test]
     fn add_sum() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let m = algebra::sum::Sum::<u64>::new();
         test(100, 100, m, algebra::act::add_sum::AddSum(m), || {
-            rng.gen_range(0..1000)
+            rng.random_range(0..1000)
         });
     }
 
     #[test]
     fn chmax_max() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let m = algebra::min_max::Max::<i64>::new();
         test(100, 100, m, algebra::act::chmax_max::ChmaxMax(m), || {
-            rng.gen_range(-1000..1000)
+            rng.random_range(-1000..1000)
         });
     }
 
     #[test]
     fn chmin_min() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let m = algebra::min_max::Min::<i64>::new();
         test(100, 100, m, algebra::act::chmin_min::ChminMin(m), || {
-            rng.gen_range(-1000..1000)
+            rng.random_range(-1000..1000)
         });
     }
 }

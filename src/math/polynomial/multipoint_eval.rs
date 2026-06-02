@@ -51,7 +51,7 @@ mod tests {
     use crate::math::polynomial::*;
     use crate::math::prime_mod::Prime;
     use crate::num::const_modint::*;
-    use rand::Rng;
+    use rand::prelude::*;
 
     const M: u32 = 998244353;
     type P = Prime<M>;
@@ -60,16 +60,16 @@ mod tests {
     fn test() {
         let ff = ConstModIntBuilder::<P>::new();
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let n = 100;
-        let a = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..P::PRIME_NUM) as u64))
+        let a = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..P::PRIME_NUM) as u64))
             .take(n)
             .collect::<Vec<_>>();
         let a = Polynomial::from(a);
 
         let m = 100;
-        let p = std::iter::repeat_with(|| ff.from_u64(rng.gen_range(0..M) as u64))
+        let p = std::iter::repeat_with(|| ff.from_u64(rng.random_range(0..M) as u64))
             .take(m)
             .collect::<Vec<_>>();
 

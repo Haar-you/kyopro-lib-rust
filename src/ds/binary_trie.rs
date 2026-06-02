@@ -177,23 +177,23 @@ impl BinaryTrie {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand::Rng;
+    use rand::prelude::*;
     use std::collections::BTreeMap;
 
     #[test]
     fn test() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let mut bt = BinaryTrie::new(64);
         let mut m = BTreeMap::new();
 
         for _ in 0..1000 {
-            let x = rng.gen_range(0..100);
+            let x = rng.random_range(0..100);
 
             bt.insert(x);
             *m.entry(x).or_insert(0) += 1;
 
-            let y = rng.r#gen::<u64>();
+            let y = rng.random::<u64>();
 
             assert_eq!(
                 bt.min(y),
@@ -212,7 +212,7 @@ mod tests {
                     .collect::<Vec<_>>()
             );
 
-            let x = rng.gen_range(0..100);
+            let x = rng.random_range(0..100);
 
             assert_eq!(bt.erase(x).unwrap_or(0), bt.count(x));
             match m.get_mut(&x) {
