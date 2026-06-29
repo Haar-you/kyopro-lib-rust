@@ -57,7 +57,7 @@ where
         if cur_to - cur_from == 1 {
             self.data[cur_id.0].value = value;
         } else {
-            let mid = (cur_from + cur_to) / 2;
+            let mid = usize::midpoint(cur_from, cur_to);
             if (cur_from..mid).contains(&i) {
                 if self.data[cur_id.0].left.is_null() {
                     let new_node = Node::new(value.clone());
@@ -124,7 +124,7 @@ where
         } else if from <= cur_from && cur_to <= to {
             cur.value.clone()
         } else {
-            let mid = (cur_from + cur_to) / 2;
+            let mid = usize::midpoint(cur_from, cur_to);
             let lv = if cur.left.is_null() {
                 self.monoid.id()
             } else {

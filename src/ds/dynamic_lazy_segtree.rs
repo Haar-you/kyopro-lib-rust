@@ -108,7 +108,7 @@ where
             return cur;
         }
 
-        let mid = (from + to) / 2;
+        let mid = usize::midpoint(from, to);
         cur.left = self._update(cur.left, from, mid, s, t, value.clone());
         cur.right = self._update(cur.right, mid, to, s, t, value);
         assert!(!cur.left.is_null() && !cur.right.is_null());
@@ -157,7 +157,7 @@ where
             return cur.value.clone();
         }
 
-        let mid = (from + to) / 2;
+        let mid = usize::midpoint(from, to);
         let lv = self._fold(cur.left, from, mid, s, t);
         let rv = self._fold(cur.right, mid, to, s, t);
 

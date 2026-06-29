@@ -31,7 +31,7 @@ fn rec_g<P: PrimeMod>(l: usize, r: usize, xs: &[ConstModInt<P>]) -> Polynomial<P
         return vec![-xs[l], 1.into()].into();
     }
 
-    let m = (l + r) / 2;
+    let m = usize::midpoint(l, r);
     rec_g(l, m, xs) * rec_g(m, r, xs)
 }
 
@@ -46,7 +46,7 @@ fn rec_frac<P: PrimeMod>(
         return (vec![ys[l]].into(), vec![-xs[l] * gs[l], gs[l]].into());
     }
 
-    let m = (l + r) / 2;
+    let m = usize::midpoint(l, r);
 
     let (la, lb) = rec_frac(l, m, xs, ys, gs);
     let (ra, rb) = rec_frac(m, r, xs, ys, gs);

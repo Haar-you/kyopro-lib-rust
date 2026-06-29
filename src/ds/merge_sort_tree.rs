@@ -49,7 +49,7 @@ where
         if r - l == 1 {
             self.data[i] = a[l..r].to_vec();
         } else {
-            let mid = (l + r) / 2;
+            let mid = usize::midpoint(l, r);
             self._init(i << 1, a, l, mid);
             self._init((i << 1) | 1, a, mid, r);
 

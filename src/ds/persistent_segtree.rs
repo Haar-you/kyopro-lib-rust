@@ -59,7 +59,7 @@ where
         if to - from == 1 {
             Box::into_raw(Box::new(Node::new(seq[from].clone())))
         } else {
-            let mid = (from + to) / 2;
+            let mid = usize::midpoint(from, to);
             let mut node = Node::new(monoid.id());
 
             let lv = if seq.len() > from {
@@ -101,7 +101,7 @@ where
         } else if pos <= from && to <= pos + 1 {
             Box::into_raw(Box::new(Node::new(value.clone())))
         } else {
-            let mid = (from + to) / 2;
+            let mid = usize::midpoint(from, to);
 
             let left = unsafe { (*node).left };
             let right = unsafe { (*node).right };
@@ -161,7 +161,7 @@ where
         } else if to <= l || r <= from {
             monoid.id()
         } else {
-            let mid = (from + to) / 2;
+            let mid = usize::midpoint(from, to);
 
             let left = unsafe { (*node).left };
             let right = unsafe { (*node).right };

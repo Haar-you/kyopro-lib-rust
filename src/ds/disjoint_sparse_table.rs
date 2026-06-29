@@ -46,7 +46,7 @@ where
     }
 
     fn build(&mut self, l: usize, r: usize, d: usize) {
-        let m = (l + r) / 2;
+        let m = usize::midpoint(l, r);
 
         self.data[d][m] = self.seq[m].clone();
         for i in m + 1..r {

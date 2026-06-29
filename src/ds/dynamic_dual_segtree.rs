@@ -100,7 +100,7 @@ where
                         self.monoid.op(cur_value, value.clone());
                 }
             } else {
-                let mid = (from + to) / 2;
+                let mid = usize::midpoint(from, to);
                 self.propagate(cur, from, to);
                 let cur = unsafe { self.data.get_unchecked(cur) };
                 let left = cur.left;
@@ -141,7 +141,7 @@ where
         } else {
             self.propagate(cur, from, to);
 
-            let mid = (from + to) / 2;
+            let mid = usize::midpoint(from, to);
             let cur = unsafe { self.data.get_unchecked(cur) };
             if i < mid {
                 self.get_(cur.left.0, from, mid, i)

@@ -51,7 +51,7 @@ fn rec<T, F>(
         return;
     }
 
-    let mid = (top + bottom) / 2;
+    let mid = usize::midpoint(top, bottom);
     rec(mid, mid + 1, left, right, a, ret);
 
     let min_index = ret[mid].as_ref().unwrap().0;
