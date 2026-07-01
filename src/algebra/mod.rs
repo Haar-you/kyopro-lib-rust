@@ -20,6 +20,7 @@ pub mod option;
 pub mod parenthesis;
 pub mod permutation;
 pub mod prod;
+pub mod rolling_hash;
 pub mod sum;
 pub mod transform;
 pub mod trivial;

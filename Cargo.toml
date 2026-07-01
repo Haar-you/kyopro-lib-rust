@@ -25,8 +25,16 @@ precedence_bits = "warn"
 map_with_unused_argument_over_ranges = "warn"
 
 use_self = "warn"
-imprecise_flops = "warn"
-suboptimal_flops = "warn"
+#imprecise_flops = "warn"
+#suboptimal_flops = "warn"
+#branches_sharing_code = "warn"
+useless_let_if_seq = "warn"
+manual_let_else = "warn"
+manual_string_new = "warn"
+manual_is_power_of_two = "warn"
+manual_midpoint = "warn"
+map_unwrap_or = "warn"
+ref_option = "warn"
 
 [lints.rust]
 missing_docs = "warn"

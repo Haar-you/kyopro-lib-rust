@@ -44,6 +44,8 @@ pub mod starry_sky_tree;
 pub mod starry_sky_tree_count;
 pub mod static_rectangle_add_sum;
 
+pub mod range_add_range_power_sum;
+
 pub mod fenwick_on_fenwick;
 pub mod segtree_on_segtree;
 

@@ -61,7 +61,7 @@ where
             self._propagate(i, l, r);
             self.data[i]
         } else {
-            let mid = (l + r) / 2;
+            let mid = usize::midpoint(l, r);
             self.data[i] = self._update(i << 1, l, mid, s, t, a, b)
                 + self._update((i << 1) | 1, mid, r, s, t, a, b);
             self.data[i]
@@ -81,7 +81,7 @@ where
         } else if x <= l && r <= y {
             self.data[i]
         } else {
-            let mid = (l + r) / 2;
+            let mid = usize::midpoint(l, r);
             self._fold(i << 1, l, mid, x, y) + self._fold((i << 1) | 1, mid, r, x, y)
         }
     }

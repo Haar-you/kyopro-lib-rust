@@ -76,7 +76,7 @@ where
             return self.data[i].get();
         }
 
-        let m = (l + r) / 2;
+        let m = usize::midpoint(l, r);
         let t =
             self._update(i << 1, l, m, s, t, value) + self._update((i << 1) | 1, m, r, s, t, value);
 
@@ -93,7 +93,7 @@ where
             return self.data[i].get();
         }
 
-        let m = (l + r) / 2;
+        let m = usize::midpoint(l, r);
         self._fold(i << 1, l, m, x, y) + self._fold((i << 1) | 1, m, r, x, y)
     }
 

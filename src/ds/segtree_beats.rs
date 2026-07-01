@@ -180,8 +180,9 @@ impl SegtreeBeats {
             return;
         }
         self.propagate(i);
-        self.chmin_(lc(i), l, (l + r) / 2, s, t, x);
-        self.chmin_(rc(i), (l + r) / 2, r, s, t, x);
+        let m = usize::midpoint(l, r);
+        self.chmin_(lc(i), l, m, s, t, x);
+        self.chmin_(rc(i), m, r, s, t, x);
         self.bottom_up(i);
     }
 
@@ -200,8 +201,9 @@ impl SegtreeBeats {
             return;
         }
         self.propagate(i);
-        self.chmax_(lc(i), l, (l + r) / 2, s, t, x);
-        self.chmax_(rc(i), (l + r) / 2, r, s, t, x);
+        let m = usize::midpoint(l, r);
+        self.chmax_(lc(i), l, m, s, t, x);
+        self.chmax_(rc(i), m, r, s, t, x);
         self.bottom_up(i);
     }
 
@@ -220,8 +222,9 @@ impl SegtreeBeats {
             return;
         }
         self.propagate(i);
-        self.add_(lc(i), l, (l + r) / 2, s, t, x);
-        self.add_(rc(i), (l + r) / 2, r, s, t, x);
+        let m = usize::midpoint(l, r);
+        self.add_(lc(i), l, m, s, t, x);
+        self.add_(rc(i), m, r, s, t, x);
         self.bottom_up(i);
     }
 
@@ -240,7 +243,8 @@ impl SegtreeBeats {
         }
 
         self.propagate(i);
-        self.get_sum_(lc(i), l, (l + r) / 2, s, t) + self.get_sum_(rc(i), (l + r) / 2, r, s, t)
+        let m = usize::midpoint(l, r);
+        self.get_sum_(lc(i), l, m, s, t) + self.get_sum_(rc(i), m, r, s, t)
     }
 
     /// 区間`range`の総和を返す。
@@ -257,9 +261,10 @@ impl SegtreeBeats {
             return self.fst_max[i];
         }
         self.propagate(i);
+        let m = usize::midpoint(l, r);
         max(
-            self.get_max_(lc(i), l, (l + r) / 2, s, t),
-            self.get_max_(rc(i), (l + r) / 2, r, s, t),
+            self.get_max_(lc(i), l, m, s, t),
+            self.get_max_(rc(i), m, r, s, t),
         )
     }
 
@@ -277,9 +282,10 @@ impl SegtreeBeats {
             return self.fst_min[i];
         }
         self.propagate(i);
+        let m = usize::midpoint(l, r);
         min(
-            self.get_min_(lc(i), l, (l + r) / 2, s, t),
-            self.get_min_(rc(i), (l + r) / 2, r, s, t),
+            self.get_min_(lc(i), l, m, s, t),
+            self.get_min_(rc(i), m, r, s, t),
         )
     }
 

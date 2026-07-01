@@ -69,7 +69,7 @@ where
             return Some((value + self.data[i], self.count[i]));
         }
 
-        let m = (l + r) / 2;
+        let m = usize::midpoint(l, r);
         let a = self.rec(s, t, i << 1, l, m, value + self.data[i]);
         let b = self.rec(s, t, (i << 1) | 1, m, r, value + self.data[i]);
 

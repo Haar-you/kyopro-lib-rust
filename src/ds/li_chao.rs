@@ -60,7 +60,7 @@ where
     ) {
         if i < size * 2 {
             range[i] = (left, right);
-            let mid = (left + right) / 2;
+            let mid = usize::midpoint(left, right);
             Self::init_range(range, size, i << 1, left, mid);
             Self::init_range(range, size, (i << 1) | 1, mid, right);
         }
@@ -94,7 +94,7 @@ where
 
     fn update(&mut self, i: usize, mut new_line: Linear<T>, l: usize, r: usize) {
         if let Some(line) = &self.data[i] {
-            let m = (l + r) / 2;
+            let m = usize::midpoint(l, r);
             let lx = self.xs[l];
             let mx = self.xs[m];
             let rx = self.xs[r - 1];

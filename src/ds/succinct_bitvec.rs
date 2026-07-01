@@ -100,7 +100,7 @@ impl SuccinctBitVec {
             let mut lb: isize = -1;
             let mut ub: isize = self.size as isize;
             while (ub - lb).abs() > 1 {
-                let mid = (lb + ub) / 2;
+                let mid = isize::midpoint(lb, ub);
 
                 if self.rank(mid as usize, b) >= nth {
                     ub = mid;

@@ -78,8 +78,9 @@ where
             return Some(value + self.data[i]);
         }
 
-        let a = self.rec(s, t, i << 1, l, (l + r) / 2, value + self.data[i]);
-        let b = self.rec(s, t, (i << 1) | 1, (l + r) / 2, r, value + self.data[i]);
+        let m = usize::midpoint(l, r);
+        let a = self.rec(s, t, i << 1, l, m, value + self.data[i]);
+        let b = self.rec(s, t, (i << 1) | 1, m, r, value + self.data[i]);
 
         match (a, b) {
             (None, _) => b,
