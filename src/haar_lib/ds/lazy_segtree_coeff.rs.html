@@ -92,7 +92,7 @@
 <a href=#76 id=76 data-nosnippet>76</a>            <span class="kw">return </span><span class="self">self</span>.data[i].get();
 <a href=#77 id=77 data-nosnippet>77</a>        }
 <a href=#78 id=78 data-nosnippet>78</a>
-<a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">let </span>m = (l + r) / <span class="number">2</span>;
+<a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">let </span>m = usize::midpoint(l, r);
 <a href=#80 id=80 data-nosnippet>80</a>        <span class="kw">let </span>t =
 <a href=#81 id=81 data-nosnippet>81</a>            <span class="self">self</span>._update(i &lt;&lt; <span class="number">1</span>, l, m, s, t, value) + <span class="self">self</span>._update((i &lt;&lt; <span class="number">1</span>) | <span class="number">1</span>, m, r, s, t, value);
 <a href=#82 id=82 data-nosnippet>82</a>
@@ -109,7 +109,7 @@
 <a href=#93 id=93 data-nosnippet>93</a>            <span class="kw">return </span><span class="self">self</span>.data[i].get();
 <a href=#94 id=94 data-nosnippet>94</a>        }
 <a href=#95 id=95 data-nosnippet>95</a>
-<a href=#96 id=96 data-nosnippet>96</a>        <span class="kw">let </span>m = (l + r) / <span class="number">2</span>;
+<a href=#96 id=96 data-nosnippet>96</a>        <span class="kw">let </span>m = usize::midpoint(l, r);
 <a href=#97 id=97 data-nosnippet>97</a>        <span class="self">self</span>._fold(i &lt;&lt; <span class="number">1</span>, l, m, x, y) + <span class="self">self</span>._fold((i &lt;&lt; <span class="number">1</span>) | <span class="number">1</span>, m, r, x, y)
 <a href=#98 id=98 data-nosnippet>98</a>    }
 <a href=#99 id=99 data-nosnippet>99</a>

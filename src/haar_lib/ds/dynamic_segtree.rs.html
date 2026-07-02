@@ -73,7 +73,7 @@
 <a href=#57 id=57 data-nosnippet>57</a>        <span class="kw">if </span>cur_to - cur_from == <span class="number">1 </span>{
 <a href=#58 id=58 data-nosnippet>58</a>            <span class="self">self</span>.data[cur_id.<span class="number">0</span>].value = value;
 <a href=#59 id=59 data-nosnippet>59</a>        } <span class="kw">else </span>{
-<a href=#60 id=60 data-nosnippet>60</a>            <span class="kw">let </span>mid = (cur_from + cur_to) / <span class="number">2</span>;
+<a href=#60 id=60 data-nosnippet>60</a>            <span class="kw">let </span>mid = usize::midpoint(cur_from, cur_to);
 <a href=#61 id=61 data-nosnippet>61</a>            <span class="kw">if </span>(cur_from..mid).contains(<span class="kw-2">&amp;</span>i) {
 <a href=#62 id=62 data-nosnippet>62</a>                <span class="kw">if </span><span class="self">self</span>.data[cur_id.<span class="number">0</span>].left.is_null() {
 <a href=#63 id=63 data-nosnippet>63</a>                    <span class="kw">let </span>new_node = Node::new(value.clone());
@@ -140,7 +140,7 @@
 <a href=#124 id=124 data-nosnippet>124</a>        } <span class="kw">else if </span>from &lt;= cur_from &amp;&amp; cur_to &lt;= to {
 <a href=#125 id=125 data-nosnippet>125</a>            cur.value.clone()
 <a href=#126 id=126 data-nosnippet>126</a>        } <span class="kw">else </span>{
-<a href=#127 id=127 data-nosnippet>127</a>            <span class="kw">let </span>mid = (cur_from + cur_to) / <span class="number">2</span>;
+<a href=#127 id=127 data-nosnippet>127</a>            <span class="kw">let </span>mid = usize::midpoint(cur_from, cur_to);
 <a href=#128 id=128 data-nosnippet>128</a>            <span class="kw">let </span>lv = <span class="kw">if </span>cur.left.is_null() {
 <a href=#129 id=129 data-nosnippet>129</a>                <span class="self">self</span>.monoid.id()
 <a href=#130 id=130 data-nosnippet>130</a>            } <span class="kw">else </span>{

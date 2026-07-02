@@ -76,7 +76,7 @@
 <a href=#60 id=60 data-nosnippet>60</a>    ) {
 <a href=#61 id=61 data-nosnippet>61</a>        <span class="kw">if </span>i &lt; size * <span class="number">2 </span>{
 <a href=#62 id=62 data-nosnippet>62</a>            range[i] = (left, right);
-<a href=#63 id=63 data-nosnippet>63</a>            <span class="kw">let </span>mid = (left + right) / <span class="number">2</span>;
+<a href=#63 id=63 data-nosnippet>63</a>            <span class="kw">let </span>mid = usize::midpoint(left, right);
 <a href=#64 id=64 data-nosnippet>64</a>            <span class="self">Self</span>::init_range(range, size, i &lt;&lt; <span class="number">1</span>, left, mid);
 <a href=#65 id=65 data-nosnippet>65</a>            <span class="self">Self</span>::init_range(range, size, (i &lt;&lt; <span class="number">1</span>) | <span class="number">1</span>, mid, right);
 <a href=#66 id=66 data-nosnippet>66</a>        }
@@ -110,7 +110,7 @@
 <a href=#94 id=94 data-nosnippet>94</a>
 <a href=#95 id=95 data-nosnippet>95</a>    <span class="kw">fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: usize, <span class="kw-2">mut </span>new_line: Linear&lt;T&gt;, l: usize, r: usize) {
 <a href=#96 id=96 data-nosnippet>96</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(line) = <span class="kw-2">&amp;</span><span class="self">self</span>.data[i] {
-<a href=#97 id=97 data-nosnippet>97</a>            <span class="kw">let </span>m = (l + r) / <span class="number">2</span>;
+<a href=#97 id=97 data-nosnippet>97</a>            <span class="kw">let </span>m = usize::midpoint(l, r);
 <a href=#98 id=98 data-nosnippet>98</a>            <span class="kw">let </span>lx = <span class="self">self</span>.xs[l];
 <a href=#99 id=99 data-nosnippet>99</a>            <span class="kw">let </span>mx = <span class="self">self</span>.xs[m];
 <a href=#100 id=100 data-nosnippet>100</a>            <span class="kw">let </span>rx = <span class="self">self</span>.xs[r - <span class="number">1</span>];

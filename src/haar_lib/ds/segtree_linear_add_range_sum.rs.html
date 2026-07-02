@@ -77,7 +77,7 @@
 <a href=#61 id=61 data-nosnippet>61</a>            <span class="self">self</span>._propagate(i, l, r);
 <a href=#62 id=62 data-nosnippet>62</a>            <span class="self">self</span>.data[i]
 <a href=#63 id=63 data-nosnippet>63</a>        } <span class="kw">else </span>{
-<a href=#64 id=64 data-nosnippet>64</a>            <span class="kw">let </span>mid = (l + r) / <span class="number">2</span>;
+<a href=#64 id=64 data-nosnippet>64</a>            <span class="kw">let </span>mid = usize::midpoint(l, r);
 <a href=#65 id=65 data-nosnippet>65</a>            <span class="self">self</span>.data[i] = <span class="self">self</span>._update(i &lt;&lt; <span class="number">1</span>, l, mid, s, t, a, b)
 <a href=#66 id=66 data-nosnippet>66</a>                + <span class="self">self</span>._update((i &lt;&lt; <span class="number">1</span>) | <span class="number">1</span>, mid, r, s, t, a, b);
 <a href=#67 id=67 data-nosnippet>67</a>            <span class="self">self</span>.data[i]
@@ -97,7 +97,7 @@
 <a href=#81 id=81 data-nosnippet>81</a>        } <span class="kw">else if </span>x &lt;= l &amp;&amp; r &lt;= y {
 <a href=#82 id=82 data-nosnippet>82</a>            <span class="self">self</span>.data[i]
 <a href=#83 id=83 data-nosnippet>83</a>        } <span class="kw">else </span>{
-<a href=#84 id=84 data-nosnippet>84</a>            <span class="kw">let </span>mid = (l + r) / <span class="number">2</span>;
+<a href=#84 id=84 data-nosnippet>84</a>            <span class="kw">let </span>mid = usize::midpoint(l, r);
 <a href=#85 id=85 data-nosnippet>85</a>            <span class="self">self</span>._fold(i &lt;&lt; <span class="number">1</span>, l, mid, x, y) + <span class="self">self</span>._fold((i &lt;&lt; <span class="number">1</span>) | <span class="number">1</span>, mid, r, x, y)
 <a href=#86 id=86 data-nosnippet>86</a>        }
 <a href=#87 id=87 data-nosnippet>87</a>    }

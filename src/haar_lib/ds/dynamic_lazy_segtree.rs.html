@@ -124,7 +124,7 @@
 <a href=#108 id=108 data-nosnippet>108</a>            <span class="kw">return </span>cur;
 <a href=#109 id=109 data-nosnippet>109</a>        }
 <a href=#110 id=110 data-nosnippet>110</a>
-<a href=#111 id=111 data-nosnippet>111</a>        <span class="kw">let </span>mid = (from + to) / <span class="number">2</span>;
+<a href=#111 id=111 data-nosnippet>111</a>        <span class="kw">let </span>mid = usize::midpoint(from, to);
 <a href=#112 id=112 data-nosnippet>112</a>        cur.left = <span class="self">self</span>._update(cur.left, from, mid, s, t, value.clone());
 <a href=#113 id=113 data-nosnippet>113</a>        cur.right = <span class="self">self</span>._update(cur.right, mid, to, s, t, value);
 <a href=#114 id=114 data-nosnippet>114</a>        <span class="macro">assert!</span>(!cur.left.is_null() &amp;&amp; !cur.right.is_null());
@@ -173,7 +173,7 @@
 <a href=#157 id=157 data-nosnippet>157</a>            <span class="kw">return </span>cur.value.clone();
 <a href=#158 id=158 data-nosnippet>158</a>        }
 <a href=#159 id=159 data-nosnippet>159</a>
-<a href=#160 id=160 data-nosnippet>160</a>        <span class="kw">let </span>mid = (from + to) / <span class="number">2</span>;
+<a href=#160 id=160 data-nosnippet>160</a>        <span class="kw">let </span>mid = usize::midpoint(from, to);
 <a href=#161 id=161 data-nosnippet>161</a>        <span class="kw">let </span>lv = <span class="self">self</span>._fold(cur.left, from, mid, s, t);
 <a href=#162 id=162 data-nosnippet>162</a>        <span class="kw">let </span>rv = <span class="self">self</span>._fold(cur.right, mid, to, s, t);
 <a href=#163 id=163 data-nosnippet>163</a>
