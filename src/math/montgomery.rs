@@ -72,4 +72,18 @@ impl Montgomery {
         }
         Wrapped(t as u64)
     }
+
+    pub fn pow(&self, mut a: Wrapped, mut p: u64) -> Wrapped {
+        let mut ret = self.wrap(1);
+
+        while p > 0 {
+            if (p & 1) != 0 {
+                ret = self.mul(ret, a);
+            }
+            a = self.mul(a, a);
+            p >>= 1;
+        }
+
+        ret
+    }
 }

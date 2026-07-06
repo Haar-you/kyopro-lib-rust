@@ -12,6 +12,7 @@ pub mod tetration;
 
 pub mod primality;
 pub mod primitive_root;
+pub mod primitive_root_u64;
 
 pub mod combinatorics;
 
