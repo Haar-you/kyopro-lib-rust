@@ -2,24 +2,10 @@
 use crate::math::montgomery::*;
 pub use crate::math::primality::PrimalityTest;
 
-fn pow(mut a: Wrapped, mut p: u64, mg: Montgomery) -> Wrapped {
-    let mut value = mg.wrap(1);
-
-    while p > 0 {
-        if (p & 1) != 0 {
-            value = mg.mul(value, a);
-        }
-        a = mg.mul(a, a);
-        p >>= 1;
-    }
-
-    value
-}
-
 fn is_composite(a: u64, s: u32, d: u64, mg: Montgomery) -> bool {
     let a = mg.wrap(a);
     let pp = mg.wrap(mg.modulo - 1);
-    let mut x = pow(a, d, mg);
+    let mut x = mg.pow(a, d);
 
     if mg.unwrap(x) == 1 {
         false
