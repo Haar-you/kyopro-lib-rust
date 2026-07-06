@@ -56,3 +56,5 @@ pub mod kth_root;
 pub mod multiplicative;
 
 pub mod prime_mod;
+
+pub mod montgomery;
