@@ -1,5 +1,6 @@
 //! 素因数分解
 
+pub mod pollard_rho;
 pub mod sieve;
 pub mod trial;
 
