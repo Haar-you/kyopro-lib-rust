@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["primitive_root_u64"]};

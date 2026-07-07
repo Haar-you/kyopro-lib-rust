@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["two_square_sum","two_square_sum_of_prime"]};

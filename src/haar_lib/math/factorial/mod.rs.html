@@ -117,7 +117,7 @@
 <a href=#101 id=101 data-nosnippet>101</a>    <span class="attr">#[test]
 <a href=#102 id=102 data-nosnippet>102</a>    </span><span class="kw">fn </span>test() {
 <a href=#103 id=103 data-nosnippet>103</a>        <span class="kw">let </span>modulo = ModIntBuilder::new(<span class="number">1000000007</span>);
-<a href=#104 id=104 data-nosnippet>104</a>        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">2000000</span>, modulo.clone());
+<a href=#104 id=104 data-nosnippet>104</a>        <span class="kw">let </span>ft = FactorialTable::new(<span class="number">2000000</span>, modulo);
 <a href=#105 id=105 data-nosnippet>105</a>
 <a href=#106 id=106 data-nosnippet>106</a>        <span class="comment">// https://yukicoder.me/problems/no/117
 <a href=#107 id=107 data-nosnippet>107</a>        </span><span class="macro">assert_eq!</span>(ft.comb(<span class="number">1</span>, <span class="number">1000000</span>), modulo.from_u64(<span class="number">0</span>));
