@@ -59,3 +59,5 @@ pub mod multiplicative;
 pub mod prime_mod;
 
 pub mod montgomery;
+
+pub mod two_square_sum;
