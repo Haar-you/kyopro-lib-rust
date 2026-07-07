@@ -30,6 +30,8 @@ impl<P: PrimeMod> FpsSqrtSparse for SparsePolynomial<P> {
         let a = self.coeff_of(k);
         let sr = ConstModInt::new(
             mod_sqrt(a.value() as u64, P::PRIME_NUM as u64)
+                .first()
+                .copied()
                 .ok_or("最小次数項の係数に平方根が存在しない。")? as u32,
         );
 

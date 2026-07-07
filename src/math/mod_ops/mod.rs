@@ -9,6 +9,8 @@ pub mod sqrt;
 
 #[cfg(test)]
 mod tests {
+    use crate::math::primality::{miller_rabin::MillerRabin, PrimalityTest};
+
     use super::{enum_inv::*, inv::*, log::*, pow::*, sqrt::*};
 
     #[test]
@@ -57,17 +59,13 @@ mod tests {
 
     #[test]
     fn test_mod_sqrt() {
-        // https://judge.yosupo.jp/problem/sqrt_mod
-        assert_eq!(mod_sqrt(0, 5).map(|x| x.pow(2) % 5), Some(0));
-        assert_eq!(mod_sqrt(1, 5).map(|x| x.pow(2) % 5), Some(1));
-        assert_eq!(mod_sqrt(2, 5).map(|x| x.pow(2) % 5), None);
-        assert_eq!(mod_sqrt(3, 5).map(|x| x.pow(2) % 5), None);
-        assert_eq!(mod_sqrt(4, 5).map(|x| x.pow(2) % 5), Some(4));
+        let n = 1000;
 
-        let m = 1000000007;
-        for x in 0..100 {
-            if let Some(s) = mod_sqrt(x, m) {
-                assert_eq!(s * s % m, x);
+        for p in (2..=n).filter(|&p| MillerRabin.is_prime(p)) {
+            for a in 0..p {
+                let res: Vec<_> = (0..p).filter(|x| x * x % p == a).collect();
+
+                assert_eq!(res, mod_sqrt(a, p));
             }
         }
     }

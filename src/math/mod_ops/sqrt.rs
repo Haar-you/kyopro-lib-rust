@@ -1,24 +1,30 @@
-//! x² = a (mod p)を満たすxを一つ求める。
+//! x² = a (mod p)を満たすxを求める。
 
 use crate::math::mod_ops::pow::*;
 use crate::rand::rand;
 
-/// x² = a (mod p)を満たすxを一つ求める。
-pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
+/// x² = a (mod p)を満たすxをすべて求める。
+pub fn mod_sqrt(a: u64, p: u64) -> Vec<u64> {
     if p == 2 {
-        return Some(a % 2);
+        return vec![a % 2];
     }
     if a == 0 {
-        return Some(0);
+        return vec![0];
     }
 
     let b = mod_pow(a, (p - 1) / 2, p);
 
     if b == p - 1 {
-        return None;
+        return vec![];
     }
     if p % 4 == 3 {
-        return Some(mod_pow(a, (p + 1) / 4, p));
+        let t = mod_pow(a, (p + 1) / 4, p);
+        assert!(t != 0);
+        return if t < p - t {
+            vec![t, p - t]
+        } else {
+            vec![p - t, t]
+        };
     }
 
     let mut q = p - 1;
@@ -47,10 +53,14 @@ pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
 
     loop {
         if t == 0 {
-            return Some(0);
+            return vec![0];
         }
         if t == 1 {
-            return Some(r);
+            return if r < p - r {
+                vec![r, p - r]
+            } else {
+                vec![p - r, r]
+            };
         }
 
         let mut i = 1;
