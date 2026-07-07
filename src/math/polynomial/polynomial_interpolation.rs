@@ -1,5 +1,5 @@
 //! 多項式補間
-use crate::math::polynomial::{multipoint_eval::MultipointEval, Polynomial};
+use crate::math::polynomial::{Polynomial, multipoint_eval::MultipointEval};
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::ConstModInt;
 

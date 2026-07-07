@@ -101,7 +101,7 @@ mod tests {
     #[test]
     fn test() {
         let modulo = ModIntBuilder::new(1000000007);
-        let ft = FactorialTable::new(2000000, modulo.clone());
+        let ft = FactorialTable::new(2000000, modulo);
 
         // https://yukicoder.me/problems/no/117
         assert_eq!(ft.comb(1, 1000000), modulo.from_u64(0));
