@@ -12,6 +12,7 @@ pub mod tetration;
 
 pub mod primality;
 pub mod primitive_root;
+pub mod primitive_root_u64;
 
 pub mod combinatorics;
 
@@ -56,3 +57,7 @@ pub mod kth_root;
 pub mod multiplicative;
 
 pub mod prime_mod;
+
+pub mod montgomery;
+
+pub mod two_square_sum;

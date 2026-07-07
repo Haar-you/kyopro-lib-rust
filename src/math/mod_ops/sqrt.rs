@@ -1,24 +1,33 @@
-//! x² = a (mod p)を満たすxを一つ求める。
+//! x² = a (mod p)を満たすxを求める。
 
-use crate::math::mod_ops::pow::*;
+use crate::math::montgomery::Montgomery;
 use crate::rand::rand;
 
-/// x² = a (mod p)を満たすxを一つ求める。
-pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
+/// 素数pと整数aについて、x² = a (mod p)を満たすxをすべて求める。
+pub fn mod_sqrt(a: u64, p: u64) -> Vec<u64> {
     if p == 2 {
-        return Some(a % 2);
+        return vec![a % 2];
     }
     if a == 0 {
-        return Some(0);
+        return vec![0];
     }
 
-    let b = mod_pow(a, (p - 1) / 2, p);
+    let mg = Montgomery::new(p);
 
-    if b == p - 1 {
-        return None;
+    let a = mg.wrap(a);
+    let b = mg.pow(a, (p - 1) / 2);
+
+    if mg.unwrap(b) == p - 1 {
+        return vec![];
     }
     if p % 4 == 3 {
-        return Some(mod_pow(a, (p + 1) / 4, p));
+        let t = mg.unwrap(mg.pow(a, (p + 1) / 4));
+        assert!(t != 0);
+        return if t < p - t {
+            vec![t, p - t]
+        } else {
+            vec![p - t, t]
+        };
     }
 
     let mut q = p - 1;
@@ -31,8 +40,8 @@ pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
     let z = {
         let ret;
         loop {
-            let z = rand() % p;
-            if mod_pow(z, (p - 1) / 2, p) == p - 1 {
+            let z = mg.wrap(rand() % p);
+            if mg.unwrap(mg.pow(z, (p - 1) / 2)) == p - 1 {
                 ret = z;
                 break;
             }
@@ -41,37 +50,42 @@ pub fn mod_sqrt(a: u64, p: u64) -> Option<u64> {
     };
 
     let mut m = s;
-    let mut c = mod_pow(z, q, p);
-    let mut t = mod_pow(a, q, p);
-    let mut r = mod_pow(a, q.div_ceil(2), p);
+    let mut c = mg.pow(z, q);
+    let mut t = mg.pow(a, q);
+    let mut r = mg.pow(a, q.div_ceil(2));
 
     loop {
-        if t == 0 {
-            return Some(0);
-        }
-        if t == 1 {
-            return Some(r);
+        match mg.unwrap(t) {
+            0 => {
+                return vec![0];
+            }
+            1 => {
+                let r = mg.unwrap(r);
+                return if r < p - r {
+                    vec![r, p - r]
+                } else {
+                    vec![p - r, r]
+                };
+            }
+            _ => {}
         }
 
         let mut i = 1;
         let mut k = t;
         while i < m {
-            k *= k;
-            k %= p;
-            if k == 1 {
+            k = mg.mul(k, k);
+            if mg.unwrap(k) == 1 {
                 break;
             }
 
             i += 1;
         }
 
-        let b = mod_pow(c, 1 << (m - i - 1), p);
+        let b = mg.pow(c, 1 << (m - i - 1));
 
         m = i;
-        c = b * b % p;
-        t *= b * b % p;
-        t %= p;
-        r *= b;
-        r %= p;
+        c = mg.mul(b, b);
+        t = mg.mul(t, mg.mul(b, b));
+        r = mg.mul(r, b);
     }
 }

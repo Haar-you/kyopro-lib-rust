@@ -1,4 +1,7 @@
 //! 永続セグメントツリー
+//!
+//! # Problems
+//! - <https://atcoder.jp/contests/abc453/tasks/abc453_g>
 
 use std::ops::RangeBounds;
 use std::ptr;
@@ -38,8 +41,15 @@ where
 {
     /// 長さ`n`の[`PersistentSegtree`]を生成する。
     pub fn new(monoid: M, n: usize) -> Self {
-        let seq = vec![monoid.id(); n];
-        Self::from_vec(monoid, seq)
+        let to = n.next_power_of_two();
+        let root = Box::into_raw(Box::new(Node::new(monoid.id())));
+
+        Self {
+            monoid,
+            root,
+            to,
+            original_size: n,
+        }
     }
 
     /// [`Vec`]から[`PersistentSegtree`]を構築する。
@@ -94,8 +104,6 @@ where
         pos: usize,
         value: &M::Element,
     ) -> *mut Node<M::Element> {
-        assert!(!node.is_null());
-
         if to <= pos || pos < from {
             node
         } else if pos <= from && to <= pos + 1 {
@@ -103,20 +111,19 @@ where
         } else {
             let mid = usize::midpoint(from, to);
 
-            let left = unsafe { (*node).left };
-            let right = unsafe { (*node).right };
-
-            let lp = if !left.is_null() {
-                Self::__set(monoid, left, from, mid, pos, value)
+            let left = if node.is_null() {
+                ptr::null_mut()
             } else {
-                left
+                unsafe { (*node).left }
+            };
+            let right = if node.is_null() {
+                ptr::null_mut()
+            } else {
+                unsafe { (*node).right }
             };
 
-            let rp = if !right.is_null() {
-                Self::__set(monoid, right, mid, to, pos, value)
-            } else {
-                right
-            };
+            let lp = Self::__set(monoid, left, from, mid, pos, value);
+            let rp = Self::__set(monoid, right, mid, to, pos, value);
 
             let mut value = monoid.id();
             if !lp.is_null() {
@@ -154,7 +161,9 @@ where
         l: usize,
         r: usize,
     ) -> M::Element {
-        assert!(!node.is_null());
+        if node.is_null() {
+            return monoid.id();
+        }
 
         if l <= from && to <= r {
             unsafe { (*node).value.clone() }

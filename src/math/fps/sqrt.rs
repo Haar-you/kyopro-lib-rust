@@ -36,6 +36,8 @@ impl<P: PrimeMod> FpsSqrt for Polynomial<P> {
         }
 
         let x = mod_sqrt(f[k].value() as u64, P::PRIME_NUM as u64)
+            .first()
+            .copied()
             .ok_or("最小次数項の係数に平方根が存在しない。")?;
         let m = n - k;
 
