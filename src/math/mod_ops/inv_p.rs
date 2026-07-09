@@ -1,12 +1,19 @@
-//! 素数mod pでの逆元
+//! mod p(素数)での逆元
 
-use std::mem::swap;
-
-/// 素数mod pでの逆元
+/// $ax \equiv 1 \pmod p$を満たす$x$を求める。
+///
+/// $p$は$0 < p < 2^{32}$の範囲の素数であること。
 ///
 /// **Time complexity** $O(\log p)$
-#[inline]
 pub fn mod_inv_p(mut a: u64, p: u64) -> u64 {
+    assert!(
+        0 < p && p <= 0xFFFFFFFF,
+        "Violated 0 < p <= 0xFFFFFFFF (p = {p})"
+    );
+    if a >= p {
+        a %= p;
+    }
+
     let mut b = p;
     let mut u = 1;
     let mut v = 0;
@@ -15,7 +22,7 @@ pub fn mod_inv_p(mut a: u64, p: u64) -> u64 {
         let t = a / b;
 
         a -= t * b;
-        swap(&mut a, &mut b);
+        (a, b) = (b, a);
 
         if u < t * v {
             u += p - (t * v) % p;
@@ -25,7 +32,7 @@ pub fn mod_inv_p(mut a: u64, p: u64) -> u64 {
         } else {
             u -= t * v;
         }
-        swap(&mut u, &mut v);
+        (u, v) = (v, u);
     }
 
     u

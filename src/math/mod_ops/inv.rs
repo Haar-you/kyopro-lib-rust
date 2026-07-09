@@ -1,13 +1,21 @@
 //! mod mでの逆元
 
 use crate::math::gcd_lcm::GcdLcm;
-use std::mem::swap;
 
-/// mod mでの逆元
+/// $ax \equiv 1 \pmod m$を満たす$x$を求める。
+///
+/// $m$は$0 < m < 2^{32}$の範囲に収めること。
 ///
 /// **Time complexity** $O(\log m)$
-#[inline]
 pub fn mod_inv(mut a: u64, m: u64) -> Option<u64> {
+    assert!(
+        0 < m && m <= 0xFFFFFFFF,
+        "Violated 0 < m <= 0xFFFFFFFF (m = {m})"
+    );
+    if a >= m {
+        a %= m;
+    }
+
     if a.gcd(m) != 1 {
         return None;
     }
@@ -20,7 +28,7 @@ pub fn mod_inv(mut a: u64, m: u64) -> Option<u64> {
         let t = a / b;
 
         a -= t * b;
-        swap(&mut a, &mut b);
+        (a, b) = (b, a);
 
         if u < t * v {
             u += m - (t * v) % m;
@@ -30,7 +38,7 @@ pub fn mod_inv(mut a: u64, m: u64) -> Option<u64> {
         } else {
             u -= t * v;
         }
-        swap(&mut u, &mut v);
+        (u, v) = (v, u);
     }
 
     Some(u)

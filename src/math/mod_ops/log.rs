@@ -1,4 +1,4 @@
-//! aˣ = b (mod m)を満たすxを求める。
+//! mod mでの離散対数
 
 use crate::math::{
     gcd_lcm::GcdLcm,
@@ -6,10 +6,20 @@ use crate::math::{
 };
 use std::collections::HashMap;
 
-/// aˣ = b (mod m)を満たすxを求める。
+/// $a^x \equiv b \pmod m$を満たす$x$を求める。
+///
+/// $m$は$0 < m < 2^{32}$の範囲に収めること。
 ///
 /// **Time complexity** $O(\sqrt{m})$
 pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
+    assert!(
+        0 < m && m <= 0xFFFFFFFF,
+        "Violated 0 < m <= 0xFFFFFFFF (m = {m})"
+    );
+    if b >= m {
+        b %= m;
+    }
+
     if b == 1 {
         return Some(0);
     }
