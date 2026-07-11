@@ -2,10 +2,10 @@
 use std::iter::successors;
 
 /// $a \subseteq x \subseteq b$を満たす`x`を列挙するイテレータを返す。
-pub fn subset_between(a: u32, b: u32) -> impl Iterator<Item = u32> {
+pub fn subset_between(a: usize, b: usize) -> impl Iterator<Item = usize> {
     let x = b ^ (a & b);
 
-    successors((a & !b == 0).then_some(0), move |&t: &u32| {
+    successors((a & !b == 0).then_some(0), move |&t: &usize| {
         t.checked_sub(1).map(|a| a % x)
     })
     .map(move |t| t | a)
@@ -21,7 +21,7 @@ mod tests {
     #[test_case(0b10101010, 0b11111111)]
     #[test_case(0b00000001, 0b01010101)]
     #[test_case(0b00000001, 0b00000010)]
-    fn check(x: u32, y: u32) {
+    fn check(x: usize, y: usize) {
         let a = (0..=x)
             .filter(|i| (x & !i) == 0 && (!y & i) == 0)
             .collect::<Vec<_>>();

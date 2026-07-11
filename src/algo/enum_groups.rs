@@ -27,8 +27,8 @@ where
     } else {
         let left_unused = bit.trailing_ones();
         let left = 1 << left_unused;
-        for rest in subset_asc((mask & !bit) ^ left) {
-            let g = rest | left;
+        for rest in subset_asc(((mask & !bit) ^ left) as usize) {
+            let g = rest as u32 | left;
             gs.push(g);
             rec(n, bit | g, proc, gs);
             gs.pop();
