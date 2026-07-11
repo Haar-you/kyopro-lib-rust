@@ -37,6 +37,7 @@ pub mod tsp;
 
 pub mod chromatic_number;
 
+pub mod count_eulerian_circuits;
 pub mod matrix_tree;
 
 use std::marker::PhantomData;
