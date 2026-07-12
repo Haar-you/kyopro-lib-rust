@@ -102,11 +102,11 @@
 <a href=#86 id=86 data-nosnippet>86</a>
 <a href=#87 id=87 data-nosnippet>87</a>    <span class="attr">#[test]
 <a href=#88 id=88 data-nosnippet>88</a>    </span><span class="kw">fn </span>test() {
-<a href=#89 id=89 data-nosnippet>89</a>        <span class="kw">let </span><span class="kw-2">mut </span>g = Graph::&lt;Undirected, <span class="kw">_</span>&gt;::new(<span class="number">4</span>);
+<a href=#89 id=89 data-nosnippet>89</a>        <span class="kw">let </span><span class="kw-2">mut </span>g = UndirectedGraph::new(<span class="number">4</span>);
 <a href=#90 id=90 data-nosnippet>90</a>        g.extend(
 <a href=#91 id=91 data-nosnippet>91</a>            <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">3</span>), (<span class="number">0</span>, <span class="number">1</span>), (<span class="number">3</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">3</span>)]
 <a href=#92 id=92 data-nosnippet>92</a>                .into_iter()
-<a href=#93 id=93 data-nosnippet>93</a>                .map(|(u, v)| Edge::new(u, v, (), ())),
+<a href=#93 id=93 data-nosnippet>93</a>                .map(|(u, v)| (u, v, (), ())),
 <a href=#94 id=94 data-nosnippet>94</a>        );
 <a href=#95 id=95 data-nosnippet>95</a>
 <a href=#96 id=96 data-nosnippet>96</a>        <span class="macro">assert_eq!</span>(
@@ -120,7 +120,7 @@
 <a href=#104 id=104 data-nosnippet>104</a>            }
 <a href=#105 id=105 data-nosnippet>105</a>        );
 <a href=#106 id=106 data-nosnippet>106</a>
-<a href=#107 id=107 data-nosnippet>107</a>        <span class="kw">let </span><span class="kw-2">mut </span>g = Graph::&lt;Undirected, <span class="kw">_</span>&gt;::new(<span class="number">10</span>);
+<a href=#107 id=107 data-nosnippet>107</a>        <span class="kw">let </span><span class="kw-2">mut </span>g = UndirectedGraph::new(<span class="number">10</span>);
 <a href=#108 id=108 data-nosnippet>108</a>        g.extend(
 <a href=#109 id=109 data-nosnippet>109</a>            <span class="macro">vec!</span>[
 <a href=#110 id=110 data-nosnippet>110</a>                (<span class="number">0</span>, <span class="number">6</span>),
@@ -137,7 +137,7 @@
 <a href=#121 id=121 data-nosnippet>121</a>                (<span class="number">6</span>, <span class="number">8</span>),
 <a href=#122 id=122 data-nosnippet>122</a>            ]
 <a href=#123 id=123 data-nosnippet>123</a>            .into_iter()
-<a href=#124 id=124 data-nosnippet>124</a>            .map(|(u, v)| Edge::new(u, v, (), ())),
+<a href=#124 id=124 data-nosnippet>124</a>            .map(|(u, v)| (u, v, (), ())),
 <a href=#125 id=125 data-nosnippet>125</a>        );
 <a href=#126 id=126 data-nosnippet>126</a>
 <a href=#127 id=127 data-nosnippet>127</a>        <span class="macro">assert_eq!</span>(
@@ -155,11 +155,11 @@
 <a href=#139 id=139 data-nosnippet>139</a>            }
 <a href=#140 id=140 data-nosnippet>140</a>        );
 <a href=#141 id=141 data-nosnippet>141</a>
-<a href=#142 id=142 data-nosnippet>142</a>        <span class="kw">let </span><span class="kw-2">mut </span>g = Graph::&lt;Undirected, <span class="kw">_</span>&gt;::new(<span class="number">5</span>);
+<a href=#142 id=142 data-nosnippet>142</a>        <span class="kw">let </span><span class="kw-2">mut </span>g = UndirectedGraph::new(<span class="number">5</span>);
 <a href=#143 id=143 data-nosnippet>143</a>        g.extend(
 <a href=#144 id=144 data-nosnippet>144</a>            <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">0</span>, <span class="number">1</span>)]
 <a href=#145 id=145 data-nosnippet>145</a>                .into_iter()
-<a href=#146 id=146 data-nosnippet>146</a>                .map(|(u, v)| Edge::new(u, v, (), ())),
+<a href=#146 id=146 data-nosnippet>146</a>                .map(|(u, v)| (u, v, (), ())),
 <a href=#147 id=147 data-nosnippet>147</a>        );
 <a href=#148 id=148 data-nosnippet>148</a>
 <a href=#149 id=149 data-nosnippet>149</a>        <span class="macro">assert_eq!</span>(

@@ -18,10 +18,10 @@
 <a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">use </span>std::iter::successors;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="doccomment">/// $a \subseteq x \subseteq b$を満たす`x`を列挙するイテレータを返す。
-<a href=#5 id=5 data-nosnippet>5</a></span><span class="kw">pub fn </span>subset_between(a: u32, b: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
+<a href=#5 id=5 data-nosnippet>5</a></span><span class="kw">pub fn </span>subset_between(a: usize, b: usize) -&gt; <span class="kw">impl </span>Iterator&lt;Item = usize&gt; {
 <a href=#6 id=6 data-nosnippet>6</a>    <span class="kw">let </span>x = b ^ (a &amp; b);
 <a href=#7 id=7 data-nosnippet>7</a>
-<a href=#8 id=8 data-nosnippet>8</a>    successors((a &amp; !b == <span class="number">0</span>).then_some(<span class="number">0</span>), <span class="kw">move </span>|<span class="kw-2">&amp;</span>t: <span class="kw-2">&amp;</span>u32| {
+<a href=#8 id=8 data-nosnippet>8</a>    successors((a &amp; !b == <span class="number">0</span>).then_some(<span class="number">0</span>), <span class="kw">move </span>|<span class="kw-2">&amp;</span>t: <span class="kw-2">&amp;</span>usize| {
 <a href=#9 id=9 data-nosnippet>9</a>        t.checked_sub(<span class="number">1</span>).map(|a| a % x)
 <a href=#10 id=10 data-nosnippet>10</a>    })
 <a href=#11 id=11 data-nosnippet>11</a>    .map(<span class="kw">move </span>|t| t | a)
@@ -37,7 +37,7 @@
 <a href=#21 id=21 data-nosnippet>21</a>    #[test_case(<span class="number">0b10101010</span>, <span class="number">0b11111111</span>)]
 <a href=#22 id=22 data-nosnippet>22</a>    #[test_case(<span class="number">0b00000001</span>, <span class="number">0b01010101</span>)]
 <a href=#23 id=23 data-nosnippet>23</a>    #[test_case(<span class="number">0b00000001</span>, <span class="number">0b00000010</span>)]
-<a href=#24 id=24 data-nosnippet>24</a>    </span><span class="kw">fn </span>check(x: u32, y: u32) {
+<a href=#24 id=24 data-nosnippet>24</a>    </span><span class="kw">fn </span>check(x: usize, y: usize) {
 <a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">let </span>a = (<span class="number">0</span>..=x)
 <a href=#26 id=26 data-nosnippet>26</a>            .filter(|i| (x &amp; !i) == <span class="number">0 </span>&amp;&amp; (!y &amp; i) == <span class="number">0</span>)
 <a href=#27 id=27 data-nosnippet>27</a>            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();

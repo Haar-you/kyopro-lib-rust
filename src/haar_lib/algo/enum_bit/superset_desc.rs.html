@@ -18,7 +18,7 @@
 <a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">use </span>std::iter::successors;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="doccomment">/// ビット列としての`a`の上位集合を降順に列挙するイテレータを返す。
-<a href=#5 id=5 data-nosnippet>5</a></span><span class="kw">pub fn </span>superset_desc(a: u32, n: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u32&gt; {
+<a href=#5 id=5 data-nosnippet>5</a></span><span class="kw">pub fn </span>superset_desc(a: usize, n: u32) -&gt; <span class="kw">impl </span>Iterator&lt;Item = usize&gt; {
 <a href=#6 id=6 data-nosnippet>6</a>    <span class="kw">let </span>x = (<span class="number">1 </span>&lt;&lt; n) - <span class="number">1</span>;
 <a href=#7 id=7 data-nosnippet>7</a>    <span class="kw">let </span>y = x ^ (a &amp; x);
 <a href=#8 id=8 data-nosnippet>8</a>
@@ -37,7 +37,7 @@
 <a href=#21 id=21 data-nosnippet>21</a>    #[test_case(<span class="number">0b10000000</span>, <span class="number">8</span>)]
 <a href=#22 id=22 data-nosnippet>22</a>    #[test_case(<span class="number">0b10000001</span>, <span class="number">8</span>)]
 <a href=#23 id=23 data-nosnippet>23</a>    #[test_case(<span class="number">0b11011011</span>, <span class="number">8</span>)]
-<a href=#24 id=24 data-nosnippet>24</a>    </span><span class="kw">fn </span>check(x: u32, n: u32) {
+<a href=#24 id=24 data-nosnippet>24</a>    </span><span class="kw">fn </span>check(x: usize, n: u32) {
 <a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">let </span>a = (<span class="number">0</span>..<span class="number">1 </span>&lt;&lt; n)
 <a href=#26 id=26 data-nosnippet>26</a>            .rev()
 <a href=#27 id=27 data-nosnippet>27</a>            .filter(|i| (x &amp; !i) == <span class="number">0</span>)

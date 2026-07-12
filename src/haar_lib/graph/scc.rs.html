@@ -28,7 +28,7 @@
 <a href=#12 id=12 data-nosnippet>12</a>    <span class="doccomment">/// グラフから[`SCC`]を構築する。
 <a href=#13 id=13 data-nosnippet>13</a>    ///
 <a href=#14 id=14 data-nosnippet>14</a>    /// **Time complexity** $O(V + E)$
-<a href=#15 id=15 data-nosnippet>15</a>    </span><span class="kw">pub fn </span>new&lt;E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Directed, E&gt;) -&gt; <span class="self">Self </span>{
+<a href=#15 id=15 data-nosnippet>15</a>    </span><span class="kw">pub fn </span>new&lt;W, I&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Directed, W, I&gt;) -&gt; <span class="self">Self </span>{
 <a href=#16 id=16 data-nosnippet>16</a>        <span class="kw">let </span>n = g.len();
 <a href=#17 id=17 data-nosnippet>17</a>
 <a href=#18 id=18 data-nosnippet>18</a>        <span class="kw">let </span><span class="kw-2">mut </span>check = <span class="macro">vec!</span>[<span class="bool-val">false</span>; n];
@@ -77,53 +77,48 @@
 <a href=#61 id=61 data-nosnippet>61</a>        <span class="self">Self </span>{ groups, index }
 <a href=#62 id=62 data-nosnippet>62</a>    }
 <a href=#63 id=63 data-nosnippet>63</a>
-<a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">fn </span>dfs&lt;E: EdgeTrait&gt;(
-<a href=#65 id=65 data-nosnippet>65</a>        g: <span class="kw-2">&amp;</span>Graph&lt;Directed, E&gt;,
-<a href=#66 id=66 data-nosnippet>66</a>        cur: usize,
-<a href=#67 id=67 data-nosnippet>67</a>        ord: <span class="kw-2">&amp;mut </span>Vec&lt;usize&gt;,
-<a href=#68 id=68 data-nosnippet>68</a>        check: <span class="kw-2">&amp;mut </span>[bool],
-<a href=#69 id=69 data-nosnippet>69</a>    ) {
-<a href=#70 id=70 data-nosnippet>70</a>        check[cur] = <span class="bool-val">true</span>;
-<a href=#71 id=71 data-nosnippet>71</a>        <span class="kw">for </span>e <span class="kw">in </span>g.nodes[cur].edges.iter() {
-<a href=#72 id=72 data-nosnippet>72</a>            <span class="kw">if </span>!check[e.to()] {
-<a href=#73 id=73 data-nosnippet>73</a>                <span class="self">Self</span>::dfs(g, e.to(), ord, check);
-<a href=#74 id=74 data-nosnippet>74</a>            }
-<a href=#75 id=75 data-nosnippet>75</a>        }
-<a href=#76 id=76 data-nosnippet>76</a>
-<a href=#77 id=77 data-nosnippet>77</a>        ord.push(cur);
+<a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">fn </span>dfs&lt;W, I&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Directed, W, I&gt;, cur: usize, ord: <span class="kw-2">&amp;mut </span>Vec&lt;usize&gt;, check: <span class="kw-2">&amp;mut </span>[bool]) {
+<a href=#65 id=65 data-nosnippet>65</a>        check[cur] = <span class="bool-val">true</span>;
+<a href=#66 id=66 data-nosnippet>66</a>        <span class="kw">for </span>e <span class="kw">in </span>g.nodes[cur].edges.iter() {
+<a href=#67 id=67 data-nosnippet>67</a>            <span class="kw">if </span>!check[e.to()] {
+<a href=#68 id=68 data-nosnippet>68</a>                <span class="self">Self</span>::dfs(g, e.to(), ord, check);
+<a href=#69 id=69 data-nosnippet>69</a>            }
+<a href=#70 id=70 data-nosnippet>70</a>        }
+<a href=#71 id=71 data-nosnippet>71</a>
+<a href=#72 id=72 data-nosnippet>72</a>        ord.push(cur);
+<a href=#73 id=73 data-nosnippet>73</a>    }
+<a href=#74 id=74 data-nosnippet>74</a>
+<a href=#75 id=75 data-nosnippet>75</a>    <span class="doccomment">/// 強連結成分を返す。
+<a href=#76 id=76 data-nosnippet>76</a>    </span><span class="kw">pub fn </span>groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Vec&lt;Vec&lt;usize&gt;&gt; {
+<a href=#77 id=77 data-nosnippet>77</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.groups
 <a href=#78 id=78 data-nosnippet>78</a>    }
 <a href=#79 id=79 data-nosnippet>79</a>
-<a href=#80 id=80 data-nosnippet>80</a>    <span class="doccomment">/// 強連結成分を返す。
-<a href=#81 id=81 data-nosnippet>81</a>    </span><span class="kw">pub fn </span>groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Vec&lt;Vec&lt;usize&gt;&gt; {
-<a href=#82 id=82 data-nosnippet>82</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.groups
+<a href=#80 id=80 data-nosnippet>80</a>    <span class="doccomment">/// 頂点がどのグループに属しているかを示した`Vec`への参照を返す。
+<a href=#81 id=81 data-nosnippet>81</a>    </span><span class="kw">pub fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Vec&lt;usize&gt; {
+<a href=#82 id=82 data-nosnippet>82</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.index
 <a href=#83 id=83 data-nosnippet>83</a>    }
-<a href=#84 id=84 data-nosnippet>84</a>
-<a href=#85 id=85 data-nosnippet>85</a>    <span class="doccomment">/// 頂点がどのグループに属しているかを示した`Vec`への参照を返す。
-<a href=#86 id=86 data-nosnippet>86</a>    </span><span class="kw">pub fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Vec&lt;usize&gt; {
-<a href=#87 id=87 data-nosnippet>87</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.index
-<a href=#88 id=88 data-nosnippet>88</a>    }
-<a href=#89 id=89 data-nosnippet>89</a>}
-<a href=#90 id=90 data-nosnippet>90</a>
-<a href=#91 id=91 data-nosnippet>91</a><span class="attr">#[cfg(test)]
-<a href=#92 id=92 data-nosnippet>92</a></span><span class="kw">mod </span>tests {
-<a href=#93 id=93 data-nosnippet>93</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#94 id=94 data-nosnippet>94</a>
-<a href=#95 id=95 data-nosnippet>95</a>    <span class="attr">#[test]
-<a href=#96 id=96 data-nosnippet>96</a>    </span><span class="kw">fn </span>test() {
-<a href=#97 id=97 data-nosnippet>97</a>        <span class="comment">// https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_C
-<a href=#98 id=98 data-nosnippet>98</a>
-<a href=#99 id=99 data-nosnippet>99</a>        </span><span class="kw">let </span><span class="kw-2">mut </span>g = Graph::&lt;Directed, <span class="kw">_</span>&gt;::new(<span class="number">5</span>);
-<a href=#100 id=100 data-nosnippet>100</a>        g.extend(
-<a href=#101 id=101 data-nosnippet>101</a>            <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">4</span>), (<span class="number">4</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">2</span>)]
-<a href=#102 id=102 data-nosnippet>102</a>                .into_iter()
-<a href=#103 id=103 data-nosnippet>103</a>                .map(|(u, v)| Edge::new(u, v, (), ())),
-<a href=#104 id=104 data-nosnippet>104</a>        );
-<a href=#105 id=105 data-nosnippet>105</a>        <span class="kw">let </span>scc = SCC::new(<span class="kw-2">&amp;</span>g);
-<a href=#106 id=106 data-nosnippet>106</a>        <span class="kw">let </span>scc = scc.index();
-<a href=#107 id=107 data-nosnippet>107</a>
-<a href=#108 id=108 data-nosnippet>108</a>        <span class="macro">assert_eq!</span>(scc[<span class="number">0</span>], scc[<span class="number">1</span>]);
-<a href=#109 id=109 data-nosnippet>109</a>        <span class="macro">assert_ne!</span>(scc[<span class="number">0</span>], scc[<span class="number">3</span>]);
-<a href=#110 id=110 data-nosnippet>110</a>        <span class="macro">assert_eq!</span>(scc[<span class="number">2</span>], scc[<span class="number">3</span>]);
-<a href=#111 id=111 data-nosnippet>111</a>        <span class="macro">assert_eq!</span>(scc[<span class="number">3</span>], scc[<span class="number">4</span>]);
-<a href=#112 id=112 data-nosnippet>112</a>    }
-<a href=#113 id=113 data-nosnippet>113</a>}</code></pre></div></section></main></body></html>
+<a href=#84 id=84 data-nosnippet>84</a>}
+<a href=#85 id=85 data-nosnippet>85</a>
+<a href=#86 id=86 data-nosnippet>86</a><span class="attr">#[cfg(test)]
+<a href=#87 id=87 data-nosnippet>87</a></span><span class="kw">mod </span>tests {
+<a href=#88 id=88 data-nosnippet>88</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+<a href=#89 id=89 data-nosnippet>89</a>
+<a href=#90 id=90 data-nosnippet>90</a>    <span class="attr">#[test]
+<a href=#91 id=91 data-nosnippet>91</a>    </span><span class="kw">fn </span>test() {
+<a href=#92 id=92 data-nosnippet>92</a>        <span class="comment">// https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_C
+<a href=#93 id=93 data-nosnippet>93</a>
+<a href=#94 id=94 data-nosnippet>94</a>        </span><span class="kw">let </span><span class="kw-2">mut </span>g = DirectedGraph::new(<span class="number">5</span>);
+<a href=#95 id=95 data-nosnippet>95</a>        g.extend(
+<a href=#96 id=96 data-nosnippet>96</a>            <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">4</span>), (<span class="number">4</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">2</span>)]
+<a href=#97 id=97 data-nosnippet>97</a>                .into_iter()
+<a href=#98 id=98 data-nosnippet>98</a>                .map(|(u, v)| (u, v, (), ())),
+<a href=#99 id=99 data-nosnippet>99</a>        );
+<a href=#100 id=100 data-nosnippet>100</a>        <span class="kw">let </span>scc = SCC::new(<span class="kw-2">&amp;</span>g);
+<a href=#101 id=101 data-nosnippet>101</a>        <span class="kw">let </span>scc = scc.index();
+<a href=#102 id=102 data-nosnippet>102</a>
+<a href=#103 id=103 data-nosnippet>103</a>        <span class="macro">assert_eq!</span>(scc[<span class="number">0</span>], scc[<span class="number">1</span>]);
+<a href=#104 id=104 data-nosnippet>104</a>        <span class="macro">assert_ne!</span>(scc[<span class="number">0</span>], scc[<span class="number">3</span>]);
+<a href=#105 id=105 data-nosnippet>105</a>        <span class="macro">assert_eq!</span>(scc[<span class="number">2</span>], scc[<span class="number">3</span>]);
+<a href=#106 id=106 data-nosnippet>106</a>        <span class="macro">assert_eq!</span>(scc[<span class="number">3</span>], scc[<span class="number">4</span>]);
+<a href=#107 id=107 data-nosnippet>107</a>    }
+<a href=#108 id=108 data-nosnippet>108</a>}</code></pre></div></section></main></body></html>

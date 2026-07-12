@@ -22,7 +22,7 @@
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>std::collections::HashSet;
 <a href=#7 id=7 data-nosnippet>7</a>
 <a href=#8 id=8 data-nosnippet>8</a><span class="doccomment">/// 無向グラフ上の3頂点で、各頂点間に辺のあるものを列挙する。
-<a href=#9 id=9 data-nosnippet>9</a></span><span class="kw">pub fn </span>enumerate_triangles&lt;E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; Vec&lt;(usize, usize, usize)&gt; {
+<a href=#9 id=9 data-nosnippet>9</a></span><span class="kw">pub fn </span>enumerate_triangles&lt;W, I&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, W, I&gt;) -&gt; Vec&lt;(usize, usize, usize)&gt; {
 <a href=#10 id=10 data-nosnippet>10</a>    <span class="kw">let </span>n = g.len();
 <a href=#11 id=11 data-nosnippet>11</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
 <a href=#12 id=12 data-nosnippet>12</a>    <span class="kw">let </span><span class="kw-2">mut </span>adjacent = <span class="macro">vec!</span>[HashSet::new(); n];

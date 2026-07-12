@@ -43,8 +43,8 @@
 <a href=#27 id=27 data-nosnippet>27</a>    } <span class="kw">else </span>{
 <a href=#28 id=28 data-nosnippet>28</a>        <span class="kw">let </span>left_unused = bit.trailing_ones();
 <a href=#29 id=29 data-nosnippet>29</a>        <span class="kw">let </span>left = <span class="number">1 </span>&lt;&lt; left_unused;
-<a href=#30 id=30 data-nosnippet>30</a>        <span class="kw">for </span>rest <span class="kw">in </span>subset_asc((mask &amp; !bit) ^ left) {
-<a href=#31 id=31 data-nosnippet>31</a>            <span class="kw">let </span>g = rest | left;
+<a href=#30 id=30 data-nosnippet>30</a>        <span class="kw">for </span>rest <span class="kw">in </span>subset_asc(((mask &amp; !bit) ^ left) <span class="kw">as </span>usize) {
+<a href=#31 id=31 data-nosnippet>31</a>            <span class="kw">let </span>g = rest <span class="kw">as </span>u32 | left;
 <a href=#32 id=32 data-nosnippet>32</a>            gs.push(g);
 <a href=#33 id=33 data-nosnippet>33</a>            rec(n, bit | g, proc, gs);
 <a href=#34 id=34 data-nosnippet>34</a>            gs.pop();

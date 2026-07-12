@@ -24,9 +24,9 @@
 <a href=#8 id=8 data-nosnippet>8</a>/// 非連結ならばNoneを返す。
 <a href=#9 id=9 data-nosnippet>9</a>///
 <a href=#10 id=10 data-nosnippet>10</a>/// **Time complexity** $O(E \log E)$
-<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub fn </span>kruskal&lt;E: EdgeTrait&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, E&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;<span class="kw-2">&amp;</span>E&gt;&gt;
+<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub fn </span>kruskal&lt;W, I&gt;(g: <span class="kw-2">&amp;</span>Graph&lt;Undirected, W, I&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;<span class="kw-2">&amp;</span>Edge&lt;W, I&gt;&gt;&gt;
 <a href=#12 id=12 data-nosnippet>12</a><span class="kw">where
-<a href=#13 id=13 data-nosnippet>13</a>    </span>E::Weight: Ord + Copy,
+<a href=#13 id=13 data-nosnippet>13</a>    </span>W: Ord + Copy,
 <a href=#14 id=14 data-nosnippet>14</a>{
 <a href=#15 id=15 data-nosnippet>15</a>    <span class="kw">let </span>n = g.len();
 <a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">let </span><span class="kw-2">mut </span>edges = g
@@ -56,7 +56,7 @@
 <a href=#40 id=40 data-nosnippet>40</a>
 <a href=#41 id=41 data-nosnippet>41</a>    <span class="attr">#[test]
 <a href=#42 id=42 data-nosnippet>42</a>    </span><span class="kw">fn </span>test() {
-<a href=#43 id=43 data-nosnippet>43</a>        <span class="kw">let </span><span class="kw-2">mut </span>g = Graph::&lt;Undirected, <span class="kw">_</span>&gt;::new(<span class="number">6</span>);
+<a href=#43 id=43 data-nosnippet>43</a>        <span class="kw">let </span><span class="kw-2">mut </span>g = UndirectedGraph::new(<span class="number">6</span>);
 <a href=#44 id=44 data-nosnippet>44</a>        g.extend(
 <a href=#45 id=45 data-nosnippet>45</a>            <span class="macro">vec!</span>[
 <a href=#46 id=46 data-nosnippet>46</a>                (<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>),
@@ -70,7 +70,7 @@
 <a href=#54 id=54 data-nosnippet>54</a>                (<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>),
 <a href=#55 id=55 data-nosnippet>55</a>            ]
 <a href=#56 id=56 data-nosnippet>56</a>            .into_iter()
-<a href=#57 id=57 data-nosnippet>57</a>            .map(|(u, v, w)| Edge::new(u, v, w, ())),
+<a href=#57 id=57 data-nosnippet>57</a>            .map(|(u, v, w)| (u, v, w, ())),
 <a href=#58 id=58 data-nosnippet>58</a>        );
 <a href=#59 id=59 data-nosnippet>59</a>
 <a href=#60 id=60 data-nosnippet>60</a>        <span class="kw">let </span>ans = kruskal(<span class="kw-2">&amp;</span>g).unwrap().iter().map(|e| e.weight).sum::&lt;i32&gt;();
