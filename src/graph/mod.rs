@@ -17,7 +17,7 @@ pub mod warshall_floyd;
 pub mod yen;
 
 pub mod cycle;
-pub mod detect_cycle;
+pub mod detect_directed_cycle;
 pub mod detect_undirected_cycle;
 pub mod eulerian;
 
