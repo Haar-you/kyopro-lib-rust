@@ -9,15 +9,15 @@ use crate::{graph::*, num::one_zero::Zero};
 
 type Path = Vec<usize>;
 
-fn shortest_path<D: Direction, E: EdgeTrait>(
-    g: &Graph<D, E>,
+fn shortest_path<D: Direction, W, I>(
+    g: &Graph<D, W, I>,
     from: usize,
     t: usize,
     usable: &[bool],
     valid: &[Vec<bool>],
-) -> Option<(E::Weight, Path)>
+) -> Option<(W, Path)>
 where
-    E::Weight: Zero + Add<Output = E::Weight> + Ord + Eq + Copy,
+    W: Zero + Add<Output = W> + Ord + Eq + Copy,
 {
     let n = g.len();
     let mut visited = vec![false; n];
@@ -25,8 +25,8 @@ where
     let mut restore = vec![(0, 0); n];
     let mut pq = BinaryHeap::new();
 
-    dist[from] = Some(E::Weight::zero());
-    pq.push(Reverse((E::Weight::zero(), from)));
+    dist[from] = Some(W::zero());
+    pq.push(Reverse((W::zero(), from)));
 
     while let Some(Reverse((d, i))) = pq.pop() {
         if visited[i] {
@@ -68,17 +68,17 @@ where
 }
 
 /// 有向グラフ`g`上で`from`から`to`へのパスを、その距離が小さい順に`k`個を返す。
-pub fn yen_algorithm<D: Direction, E: EdgeTrait>(
-    g: &Graph<D, E>,
+pub fn yen_algorithm<D: Direction, W, I>(
+    g: &Graph<D, W, I>,
     from: usize,
     to: usize,
     k: usize,
-) -> Vec<Option<(E::Weight, Path)>>
+) -> Vec<Option<(W, Path)>>
 where
-    E::Weight: Zero + Add<Output = E::Weight> + AddAssign + Ord + Eq + Copy,
+    W: Zero + Add<Output = W> + AddAssign + Ord + Eq + Copy,
 {
     let n = g.len();
-    let mut result: Vec<Option<(E::Weight, Path)>> = vec![None; k];
+    let mut result: Vec<Option<(W, Path)>> = vec![None; k];
     let mut stock = BinaryHeap::new();
     let mut valid = (0..n)
         .map(|i| vec![true; g.nodes[i].edges.len()])

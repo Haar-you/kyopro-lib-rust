@@ -19,6 +19,7 @@ pub mod kmp;
 pub mod knapsack;
 pub mod lcs;
 pub mod lis;
+pub mod lyndon_factorization;
 pub mod majority_vote;
 pub mod manacher;
 pub mod max_partial_sum;

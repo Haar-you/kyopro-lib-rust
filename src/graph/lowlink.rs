@@ -21,7 +21,7 @@ pub struct Lowlink {
 
 impl Lowlink {
     /// 無向グラフから[`Lowlink`]を構築する。
-    pub fn new<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Self {
+    pub fn new<W, I>(g: &Graph<Undirected, W, I>) -> Self {
         let n = g.len();
         let mut this = Self {
             size: n,
@@ -41,9 +41,9 @@ impl Lowlink {
         this
     }
 
-    fn dfs<E: EdgeTrait>(
+    fn dfs<W, I>(
         &mut self,
-        g: &Graph<Undirected, E>,
+        g: &Graph<Undirected, W, I>,
         cur: usize,
         par: Option<usize>,
         index: &mut usize,

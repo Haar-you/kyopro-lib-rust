@@ -12,7 +12,7 @@ impl SCC {
     /// グラフから[`SCC`]を構築する。
     ///
     /// **Time complexity** $O(V + E)$
-    pub fn new<E: EdgeTrait>(g: &Graph<Directed, E>) -> Self {
+    pub fn new<W, I>(g: &Graph<Directed, W, I>) -> Self {
         let n = g.len();
 
         let mut check = vec![false; n];
@@ -61,12 +61,7 @@ impl SCC {
         Self { groups, index }
     }
 
-    fn dfs<E: EdgeTrait>(
-        g: &Graph<Directed, E>,
-        cur: usize,
-        ord: &mut Vec<usize>,
-        check: &mut [bool],
-    ) {
+    fn dfs<W, I>(g: &Graph<Directed, W, I>, cur: usize, ord: &mut Vec<usize>, check: &mut [bool]) {
         check[cur] = true;
         for e in g.nodes[cur].edges.iter() {
             if !check[e.to()] {
@@ -96,11 +91,11 @@ mod tests {
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_C
 
-        let mut g = Graph::<Directed, _>::new(5);
+        let mut g = DirectedGraph::new(5);
         g.extend(
             vec![(0, 1), (1, 0), (1, 2), (2, 4), (4, 3), (3, 2)]
                 .into_iter()
-                .map(|(u, v)| Edge::new(u, v, (), ())),
+                .map(|(u, v)| (u, v, (), ())),
         );
         let scc = SCC::new(&g);
         let scc = scc.index();

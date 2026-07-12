@@ -86,11 +86,11 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut g = Graph::<Undirected, _>::new(4);
+        let mut g = UndirectedGraph::new(4);
         g.extend(
             vec![(0, 3), (0, 1), (3, 0), (2, 1), (2, 3)]
                 .into_iter()
-                .map(|(u, v)| Edge::new(u, v, (), ())),
+                .map(|(u, v)| (u, v, (), ())),
         );
 
         assert_eq!(
@@ -104,7 +104,7 @@ mod tests {
             }
         );
 
-        let mut g = Graph::<Undirected, _>::new(10);
+        let mut g = UndirectedGraph::new(10);
         g.extend(
             vec![
                 (0, 6),
@@ -121,7 +121,7 @@ mod tests {
                 (6, 8),
             ]
             .into_iter()
-            .map(|(u, v)| Edge::new(u, v, (), ())),
+            .map(|(u, v)| (u, v, (), ())),
         );
 
         assert_eq!(
@@ -139,11 +139,11 @@ mod tests {
             }
         );
 
-        let mut g = Graph::<Undirected, _>::new(5);
+        let mut g = UndirectedGraph::new(5);
         g.extend(
             vec![(0, 1), (1, 0), (0, 1)]
                 .into_iter()
-                .map(|(u, v)| Edge::new(u, v, (), ())),
+                .map(|(u, v)| (u, v, (), ())),
         );
 
         assert_eq!(

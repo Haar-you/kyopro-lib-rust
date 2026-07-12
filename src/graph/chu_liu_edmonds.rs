@@ -6,14 +6,14 @@ use crate::graph::*;
 use std::collections::VecDeque;
 use std::ops::Sub;
 
-type Edge_<'a, T, E> = (usize, usize, T, &'a E);
+type Edge_<'a, T, I> = (usize, usize, T, &'a Edge<T, I>);
 
 /// 有向グラフ上の最小有向全域木を求める
 ///
 /// **Time complexity** $O(VE)$
-pub fn chu_liu_edmonds<E: EdgeTrait>(g: &Graph<Directed, E>, root: usize) -> Vec<&E>
+pub fn chu_liu_edmonds<W, I>(g: &Graph<Directed, W, I>, root: usize) -> Vec<&Edge<W, I>>
 where
-    E::Weight: Ord + Copy + Sub<Output = E::Weight>,
+    W: Ord + Copy + Sub<Output = W>,
 {
     let n = g.len();
     let mut rg = vec![vec![]; n];
@@ -26,10 +26,9 @@ where
     res.into_iter().filter_map(|e| e.map(|e| e.3)).collect()
 }
 
-fn rec<T, E>(mut g: Vec<Vec<Edge_<T, E>>>, root: usize) -> Vec<Option<Edge_<T, E>>>
+fn rec<T, I>(mut g: Vec<Vec<Edge_<T, I>>>, root: usize) -> Vec<Option<Edge_<T, I>>>
 where
     T: Ord + Copy + Sub<Output = T>,
-    E: EdgeTrait<Weight = T>,
 {
     let n = g.len();
 

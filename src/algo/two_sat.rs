@@ -4,7 +4,7 @@ use crate::graph::{scc::*, *};
 /// 2-SATを解く。
 pub struct TwoSat {
     size: usize,
-    g: Graph<Directed, Edge<(), ()>>,
+    g: Graph<Directed, (), ()>,
 }
 
 impl TwoSat {
@@ -29,7 +29,7 @@ impl TwoSat {
 
     /// $a \Rightarrow b$
     pub fn add_if(&mut self, a: isize, b: isize) {
-        self.g.add(Edge::new(self.check(a), self.check(b), (), ()));
+        self.g.add(self.check(a), self.check(b), (), ());
     }
 
     /// $a \lor b$

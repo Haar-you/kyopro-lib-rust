@@ -39,18 +39,18 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut g = Graph::<Undirected, _>::new(4);
+        let mut g = UndirectedGraph::new(4);
         g.extend(
             vec![(0, 2), (0, 1), (3, 0), (2, 1), (2, 3)]
                 .into_iter()
-                .map(|(u, v)| Edge::new(u, v, (), ())),
+                .map(|(u, v)| (u, v, (), ())),
         );
 
         let ans = two_edge_connected_components(&Lowlink::new(&g));
         let ans = BTreeSet::from_iter(ans.into_iter().map(BTreeSet::from_iter));
         assert_eq!(ans, btreeset! {btreeset!{0, 1, 2, 3}});
 
-        let mut g = Graph::<Undirected, _>::new(13);
+        let mut g = UndirectedGraph::new(13);
         g.extend(
             vec![
                 (4, 5),
@@ -76,7 +76,7 @@ mod tests {
                 (4, 11),
             ]
             .into_iter()
-            .map(|(u, v)| Edge::new(u, v, (), ())),
+            .map(|(u, v)| (u, v, (), ())),
         );
 
         let ans = two_edge_connected_components(&Lowlink::new(&g));

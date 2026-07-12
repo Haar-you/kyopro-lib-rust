@@ -5,10 +5,10 @@ use std::collections::VecDeque;
 use std::iter::zip;
 
 /// 幅優先探索で辺数が最小の経路を得る。
-pub fn bfs<D: Direction, E: EdgeTrait>(
-    g: &Graph<D, E>,
+pub fn bfs<D: Direction, W, I>(
+    g: &Graph<D, W, I>,
     src: impl IntoIterator<Item = usize>,
-) -> Vec<Option<(usize, Option<&E>)>> {
+) -> Vec<Option<(usize, Option<&Edge<W, I>>)>> {
     let mut dist = vec![None; g.len()];
     let mut prev = vec![None; g.len()];
     let mut check = vec![false; g.len()];

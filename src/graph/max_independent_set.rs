@@ -9,7 +9,7 @@ use std::collections::HashSet;
 ///
 /// nは64以下に制限している。
 /// 最大独立集合の補集合は最小頂点被覆集合になる。
-pub fn max_independent_set<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Vec<usize> {
+pub fn max_independent_set<W, I>(g: &Graph<Undirected, W, I>) -> Vec<usize> {
     let n = g.len();
     assert!(n <= 64);
 
@@ -25,12 +25,7 @@ pub fn max_independent_set<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Vec<usize>
     (0..n).filter(|i| a & (1 << i) != 0).collect()
 }
 
-fn rec<E: EdgeTrait>(
-    g: &Graph<Undirected, E>,
-    indep: u64,
-    cover: u64,
-    set: &mut HashSet<(u64, u64)>,
-) {
+fn rec<W, I>(g: &Graph<Undirected, W, I>, indep: u64, cover: u64, set: &mut HashSet<(u64, u64)>) {
     if set.contains(&(indep, cover)) {
         return;
     }
