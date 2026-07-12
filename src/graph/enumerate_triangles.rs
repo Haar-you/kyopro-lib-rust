@@ -6,7 +6,7 @@ use crate::graph::*;
 use std::collections::HashSet;
 
 /// 無向グラフ上の3頂点で、各頂点間に辺のあるものを列挙する。
-pub fn enumerate_triangles<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Vec<(usize, usize, usize)> {
+pub fn enumerate_triangles<W, I>(g: &Graph<Undirected, W, I>) -> Vec<(usize, usize, usize)> {
     let n = g.len();
     let mut ret = vec![];
     let mut adjacent = vec![HashSet::new(); n];

@@ -5,21 +5,20 @@ use crate::num::{one_zero::Zero, traits::Unsigned};
 use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
 /// ダイクストラ法
-pub struct Dijkstra<'a, W, E> {
+pub struct Dijkstra<'a, W, I> {
     dist: Vec<Option<W>>,
-    prev: Vec<Option<&'a E>>,
+    prev: Vec<Option<&'a Edge<W, I>>>,
 }
 
-impl<'a, E> Dijkstra<'a, E::Weight, E>
+impl<'a, W, I> Dijkstra<'a, W, I>
 where
-    E: EdgeTrait,
-    E::Weight: Add<Output = E::Weight> + Copy + Ord + Zero + Unsigned,
+    W: Add<Output = W> + Copy + Ord + Zero + Unsigned,
 {
     /// グラフ`g`上で、始点から各頂点への最短パスを求める。
     ///
     /// **Time complexity** $O((E + V) \log V)$
-    pub fn new(g: &'a Graph<impl Direction, E>, src: &[usize]) -> Self {
-        let zero = E::Weight::zero();
+    pub fn new(g: &'a Graph<impl Direction, W, I>, src: &[usize]) -> Self {
+        let zero = W::zero();
         let n = g.len();
         let mut dist = vec![None; n];
         let mut heap = BinaryHeap::new();
@@ -58,19 +57,19 @@ where
     }
 
     /// 最短距離の配列への参照を返す。
-    pub fn min_dist_table(&self) -> &[Option<E::Weight>] {
+    pub fn min_dist_table(&self) -> &[Option<W>] {
         &self.dist
     }
 
     /// `to`への最短距離を返す。
     /// 到達不可能ならば、`None`を返す。
-    pub fn min_dist_to(&self, to: usize) -> Option<E::Weight> {
+    pub fn min_dist_to(&self, to: usize) -> Option<W> {
         self.dist[to]
     }
 
     /// `to`への最短パスを返す。
     /// 到達不可能ならば、`None`を返す。
-    pub fn min_path_to(&self, mut to: usize) -> Option<Vec<&E>> {
+    pub fn min_path_to(&self, mut to: usize) -> Option<Vec<&Edge<W, I>>> {
         self.dist[to]?;
         let mut ret = vec![];
         loop {
@@ -92,18 +91,18 @@ mod tests {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_A
 
         // sample 1
-        let mut graph = Graph::<Directed, Edge<u32, ()>>::new(4);
+        let mut graph = DirectedGraph::<u32, _>::new(4);
         graph.extend(
             vec![(0, 1, 1), (0, 2, 4), (1, 2, 2), (2, 3, 1), (1, 3, 5)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ())),
+                .map(|(u, v, w)| (u, v, w, ())),
         );
         let ans = Dijkstra::new(&graph, &[0]);
 
         assert_eq!(ans.min_dist_table(), [Some(0), Some(1), Some(3), Some(4)]);
 
         // sample 2
-        let mut graph = Graph::<Directed, Edge<u32, ()>>::new(4);
+        let mut graph = DirectedGraph::<u32, _>::new(4);
         graph.extend(
             vec![
                 (0, 1, 1),
@@ -114,7 +113,7 @@ mod tests {
                 (3, 2, 5),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ())),
+            .map(|(u, v, w)| (u, v, w, ())),
         );
         let ans = Dijkstra::new(&graph, &[1]);
 

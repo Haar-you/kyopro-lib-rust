@@ -28,15 +28,15 @@ where
     /// `WarshallFloyd<T>`を生成する。
     ///
     /// **Time complexity** $O(n^3)$
-    pub fn new<D: Direction, E: EdgeTrait<Weight = T>>(g: &Graph<D, E>) -> Self {
-        let zero = E::Weight::zero();
+    pub fn new<D: Direction, I>(g: &Graph<D, T, I>) -> Self {
+        let zero = T::zero();
         let n = g.len();
         let mut dist = vec![vec![None; n]; n];
 
         for i in 0..n {
             dist[i][i] = Some(zero);
         }
-        for e in g.nodes_iter().flat_map(|v: &GraphNode<E>| &v.edges) {
+        for e in g.nodes_iter().flatten() {
             dist[e.from()][e.to()] = Some(e.weight());
         }
 
@@ -116,7 +116,7 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_C
-        let mut g = Graph::<Directed, _>::new(4);
+        let mut g = DirectedGraph::new(4);
         g.extend(
             vec![
                 (0, 1, 1),
@@ -127,7 +127,7 @@ mod tests {
                 (3, 2, 7),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ())),
+            .map(|(u, v, w)| (u, v, w, ())),
         );
 
         assert_eq!(
@@ -140,7 +140,7 @@ mod tests {
             ])
         );
 
-        let mut g = Graph::<Directed, _>::new(4);
+        let mut g = DirectedGraph::new(4);
         g.extend(
             vec![
                 (0, 1, 1),
@@ -151,7 +151,7 @@ mod tests {
                 (3, 2, 7),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ())),
+            .map(|(u, v, w)| (u, v, w, ())),
         );
 
         assert_eq!(
@@ -164,7 +164,7 @@ mod tests {
             ])
         );
 
-        let mut g = Graph::<Directed, _>::new(4);
+        let mut g = DirectedGraph::new(4);
         g.extend(
             vec![
                 (0, 1, 1),
@@ -175,7 +175,7 @@ mod tests {
                 (3, 2, -7),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ())),
+            .map(|(u, v, w)| (u, v, w, ())),
         );
 
         assert!(WarshallFloyd::new(&g).has_negative_loop());

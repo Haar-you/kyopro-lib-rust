@@ -1,9 +1,11 @@
 //! 有向グラフの(準)Eulerグラフの判定
 use crate::graph::*;
 
+type E = Edge<(), ()>;
+
 /// 有向グラフでの一筆書き
 #[derive(Clone)]
-pub struct DirectedEulerianTrail<E: EdgeTrait> {
+pub struct DirectedEulerianTrail {
     size: usize,
     edge_count: usize,
     graph: Vec<Vec<E>>,
@@ -11,7 +13,7 @@ pub struct DirectedEulerianTrail<E: EdgeTrait> {
     outdeg: Vec<i32>,
 }
 
-impl<E: EdgeTrait + Clone> DirectedEulerianTrail<E> {
+impl DirectedEulerianTrail {
     /// 頂点数`size`のグラフを用意する。
     pub fn new(size: usize) -> Self {
         Self {
@@ -24,10 +26,10 @@ impl<E: EdgeTrait + Clone> DirectedEulerianTrail<E> {
     }
 
     /// 有向辺`e`を追加する。
-    pub fn add_edge(&mut self, e: E) {
-        self.indeg[e.to()] += 1;
-        self.outdeg[e.from()] += 1;
-        self.graph[e.from()].push(e);
+    pub fn add_edge(&mut self, from: usize, to: usize) {
+        self.indeg[to] += 1;
+        self.outdeg[from] += 1;
+        self.graph[from].push(Edge::new(from, to, (), self.edge_count, ()));
         self.edge_count += 1;
     }
 

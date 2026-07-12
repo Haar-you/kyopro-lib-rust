@@ -20,14 +20,14 @@ enum Restore {
 /// - `terminals` : `graph`の頂点集合の大きさ$k$の部分集合
 ///
 /// **Time complexity** $O(3^k n + 2^k n^2)$
-pub fn min_steiner_tree<E: EdgeTrait<Weight = u64>>(
-    graph: &Graph<Undirected, E>,
+pub fn min_steiner_tree<I>(
+    graph: &Graph<Undirected, u64, I>,
     terminals: Vec<usize>,
-) -> Vec<&E> {
+) -> Vec<&Edge<u64, I>> {
     let n = graph.len();
     let k = terminals.len();
 
-    let mut g: Vec<Vec<Option<&E>>> = vec![vec![None; n]; n];
+    let mut g: Vec<Vec<Option<&Edge<_, _>>>> = vec![vec![None; n]; n];
     for (u, gu) in g.iter_mut().enumerate() {
         for e in graph.node_of(u) {
             let v = e.to();

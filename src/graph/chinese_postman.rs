@@ -7,12 +7,12 @@ use crate::num::one_zero::Zero;
 use std::ops::Add;
 
 /// **Time complexity** $O(V^2 2^V)$
-pub fn chinese_postman_problem<E: EdgeTrait>(g: &Graph<Undirected, E>) -> E::Weight
+pub fn chinese_postman_problem<W, I>(g: &Graph<Undirected, W, I>) -> W
 where
-    E::Weight: Copy + Ord + Add<Output = E::Weight> + Zero,
+    W: Copy + Ord + Add<Output = W> + Zero,
 {
     let n = g.len();
-    let zero = E::Weight::zero();
+    let zero = W::zero();
 
     let mut dist = vec![vec![None; n]; n];
 
@@ -76,27 +76,27 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/problems/DPL_2_B/
-        let mut g = Graph::<Undirected, _>::new(4);
+        let mut g = UndirectedGraph::new(4);
         g.extend(
             vec![(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ())),
+                .map(|(u, v, w)| (u, v, w, ())),
         );
         assert_eq!(chinese_postman_problem(&g), 10);
 
-        let mut g = Graph::<Undirected, _>::new(4);
+        let mut g = UndirectedGraph::new(4);
         g.extend(
             vec![(0, 1, 1), (0, 2, 2), (1, 3, 3), (2, 3, 4), (1, 2, 5)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ())),
+                .map(|(u, v, w)| (u, v, w, ())),
         );
         assert_eq!(chinese_postman_problem(&g), 18);
 
-        let mut g = Graph::<Undirected, _>::new(2);
+        let mut g = UndirectedGraph::new(2);
         g.extend(
             vec![(0, 1, 1), (0, 1, 2), (0, 1, 3)]
                 .into_iter()
-                .map(|(u, v, w)| Edge::new(u, v, w, ())),
+                .map(|(u, v, w)| (u, v, w, ())),
         );
         assert_eq!(chinese_postman_problem(&g), 7);
     }

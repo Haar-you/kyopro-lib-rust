@@ -10,7 +10,7 @@ use crate::{graph::*, num::one_zero::*};
 /// トポロジカルソートを数え上げる。
 ///
 /// **Time complexity** $O(V 2^V)$
-pub fn count_tsort<T>(graph: &Graph<Directed, impl EdgeTrait>) -> T
+pub fn count_tsort<T, W, I>(graph: &Graph<Directed, W, I>) -> T
 where
     T: One + Zero + Copy + Add<Output = T>,
 {

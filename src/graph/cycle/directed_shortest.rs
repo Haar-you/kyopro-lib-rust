@@ -8,10 +8,10 @@ use crate::graph::{bfs::*, *};
 /// 有向グラフで単一始点の最短サイクルを求める。
 ///
 /// **Time complexity** $O(V + E)$
-pub fn directed_shortest_cycle<E: EdgeTrait>(
-    g: &Graph<Directed, E>,
+pub fn directed_shortest_cycle<W, I>(
+    g: &Graph<Directed, W, I>,
     src: usize,
-) -> Option<Vec<&E>> {
+) -> Option<Vec<&Edge<W, I>>> {
     let res = bfs(g, Some(src));
     let p = res
         .iter()

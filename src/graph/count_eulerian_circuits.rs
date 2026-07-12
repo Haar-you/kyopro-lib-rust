@@ -13,7 +13,7 @@ use crate::{
 };
 
 /// 有向Euler閉路を数え上げる。
-pub fn count_eulerian_circuits<P: PrimeMod>(g: &Graph<Directed, impl EdgeTrait>) -> ConstModInt<P> {
+pub fn count_eulerian_circuits<P: PrimeMod, W, I>(g: &Graph<Directed, W, I>) -> ConstModInt<P> {
     let n = g.len();
 
     let mut indeg = vec![0; n];

@@ -9,8 +9,8 @@ use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// 無向グラフにおいて、無向全域木の個数を数える。
-pub fn count_undirected_spanning_tree<P: PrimeMod>(
-    g: &Graph<Undirected, impl EdgeTrait>,
+pub fn count_undirected_spanning_tree<P: PrimeMod, W, I>(
+    g: &Graph<Undirected, W, I>,
 ) -> ConstModInt<P> {
     let modulo = ConstModIntBuilder::<P>::new();
 
@@ -35,8 +35,8 @@ pub fn count_undirected_spanning_tree<P: PrimeMod>(
 /// 有向グラフにおいて、頂点`root`を終点根とするような、有向全域木の個数を数える。
 ///
 /// `ignore_isolates`が`true`のとき、孤立点を無視する。
-pub fn count_directed_spanning_tree<P: PrimeMod>(
-    g: &Graph<Directed, impl EdgeTrait>,
+pub fn count_directed_spanning_tree<P: PrimeMod, W, I>(
+    g: &Graph<Directed, W, I>,
     root: usize,
     ignore_isolates: bool,
 ) -> ConstModInt<P> {

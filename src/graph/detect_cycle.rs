@@ -10,7 +10,7 @@ enum Status {
 }
 
 /// 有向グラフの閉路検出
-pub fn detect_cycle<D: Direction, E: EdgeTrait>(g: &Graph<D, E>) -> Option<Vec<&E>> {
+pub fn detect_cycle<D: Direction, W, I>(g: &Graph<D, W, I>) -> Option<Vec<&Edge<W, I>>> {
     let size = g.len();
     let mut check = vec![Status::Unchecked; size];
 
@@ -29,10 +29,10 @@ pub fn detect_cycle<D: Direction, E: EdgeTrait>(g: &Graph<D, E>) -> Option<Vec<&
     None
 }
 
-fn rec<'a, D: Direction, E: EdgeTrait>(
-    g: &'a Graph<D, E>,
+fn rec<'a, D: Direction, W, I>(
+    g: &'a Graph<D, W, I>,
     cur: usize,
-    ret: &mut Vec<&'a E>,
+    ret: &mut Vec<&'a Edge<W, I>>,
     check: &mut [Status],
 ) -> Option<isize> {
     match check[cur] {

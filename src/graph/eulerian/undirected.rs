@@ -1,16 +1,18 @@
 //! 無向グラフの(準)Eulerグラフ判定
 use crate::graph::*;
 
+type E = Edge<(), ()>;
+
 /// 無向グラフでの一筆書き
 #[derive(Clone)]
-pub struct UndirectedEulerianTrail<E: EdgeTrait> {
+pub struct UndirectedEulerianTrail {
     size: usize,
     edge_count: usize,
     graph: Vec<Vec<(usize, E)>>,
     deg: Vec<u32>,
 }
 
-impl<E: EdgeTrait + Clone> UndirectedEulerianTrail<E> {
+impl UndirectedEulerianTrail {
     /// 頂点数`size`のグラフを用意する。
     pub fn new(size: usize) -> Self {
         Self {
@@ -22,23 +24,20 @@ impl<E: EdgeTrait + Clone> UndirectedEulerianTrail<E> {
     }
 
     /// 無向辺`e`を追加する。
-    pub fn add_edge(&mut self, e: E) {
-        let from = e.from();
-        let to = e.to();
-
-        if from == to {
-            let rindex = self.graph[from].len();
-            self.graph[from].push((rindex, e));
+    pub fn add_edge(&mut self, u: usize, v: usize) {
+        if u == v {
+            let rindex = self.graph[u].len();
+            self.graph[u].push((rindex, Edge::new(u, u, (), self.edge_count, ())));
         } else {
-            let rindex = self.graph[to].len();
-            self.graph[from].push((rindex, e.clone()));
+            let rindex = self.graph[v].len();
+            self.graph[u].push((rindex, Edge::new(u, v, (), self.edge_count, ())));
 
-            let rindex = self.graph[from].len() - 1;
-            self.graph[to].push((rindex, e.rev()));
+            let rindex = self.graph[u].len() - 1;
+            self.graph[v].push((rindex, Edge::new(v, u, (), self.edge_count, ())));
         }
 
-        self.deg[from] += 1;
-        self.deg[to] += 1;
+        self.deg[u] += 1;
+        self.deg[v] += 1;
         self.edge_count += 1;
     }
 

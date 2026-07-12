@@ -7,9 +7,9 @@ use std::{cmp::Reverse, collections::BinaryHeap};
 ///
 /// グラフが連結ならばSomeに包んで最小全域木の辺集合を返す。
 /// 非連結ならばNoneを返す。
-pub fn prim<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Option<Vec<&E>>
+pub fn prim<W, I>(g: &Graph<Undirected, W, I>) -> Option<Vec<&Edge<W, I>>>
 where
-    E::Weight: Ord,
+    W: Copy + Ord,
 {
     let n = g.len();
     let mut visit = vec![false; n];
@@ -46,7 +46,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut g = Graph::<Undirected, _>::new(6);
+        let mut g = UndirectedGraph::new(6);
         g.extend(
             vec![
                 (0, 1, 1),
@@ -60,7 +60,7 @@ mod tests {
                 (4, 5, 6),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ())),
+            .map(|(u, v, w)| (u, v, w, ())),
         );
 
         let ans = prim(&g).unwrap().iter().map(|e| e.weight).sum::<i32>();

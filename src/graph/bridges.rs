@@ -26,21 +26,21 @@ mod tests {
     #[test]
     fn test() {
         // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/all/GRL_3_B
-        let mut g = Graph::<Undirected, _>::new(4);
+        let mut g = UndirectedGraph::new(4);
         g.extend(
             vec![(0, 1), (0, 2), (1, 2), (2, 3)]
                 .into_iter()
-                .map(|(u, v)| Edge::new(u, v, (), ())),
+                .map(|(u, v)| (u, v, (), ())),
         );
         let mut ans = bridges(&Lowlink::new(&g));
         ans.sort();
         assert_eq!(ans, [(2, 3)]);
 
-        let mut g = Graph::<Undirected, _>::new(5);
+        let mut g = UndirectedGraph::new(5);
         g.extend(
             vec![(0, 1), (1, 2), (2, 3), (3, 4)]
                 .into_iter()
-                .map(|(u, v)| Edge::new(u, v, (), ())),
+                .map(|(u, v)| (u, v, (), ())),
         );
         let mut ans = bridges(&Lowlink::new(&g));
         ans.sort();

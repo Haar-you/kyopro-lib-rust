@@ -10,7 +10,7 @@ use crate::{graph::*, math::mod_ops::pow::mod_pow};
 const M: u64 = 1000000007;
 
 /// グラフの彩色数を求める。
-pub fn chromatic_number<E: EdgeTrait>(graph: &Graph<Undirected, E>) -> usize {
+pub fn chromatic_number<W, I>(graph: &Graph<Undirected, W, I>) -> usize {
     let n = graph.len();
 
     let mut g = vec![0; n];

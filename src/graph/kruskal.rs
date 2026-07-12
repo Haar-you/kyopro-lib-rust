@@ -8,9 +8,9 @@ use crate::{ds::unionfind::UnionFind, graph::*};
 /// 非連結ならばNoneを返す。
 ///
 /// **Time complexity** $O(E \log E)$
-pub fn kruskal<E: EdgeTrait>(g: &Graph<Undirected, E>) -> Option<Vec<&E>>
+pub fn kruskal<W, I>(g: &Graph<Undirected, W, I>) -> Option<Vec<&Edge<W, I>>>
 where
-    E::Weight: Ord + Copy,
+    W: Ord + Copy,
 {
     let n = g.len();
     let mut edges = g
@@ -40,7 +40,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut g = Graph::<Undirected, _>::new(6);
+        let mut g = UndirectedGraph::new(6);
         g.extend(
             vec![
                 (0, 1, 1),
@@ -54,7 +54,7 @@ mod tests {
                 (4, 5, 6),
             ]
             .into_iter()
-            .map(|(u, v, w)| Edge::new(u, v, w, ())),
+            .map(|(u, v, w)| (u, v, w, ())),
         );
 
         let ans = kruskal(&g).unwrap().iter().map(|e| e.weight).sum::<i32>();

@@ -43,71 +43,66 @@ pub mod matrix_tree;
 
 use std::marker::PhantomData;
 
-/// [`Graph`]にもたせる辺の満たすトレイト。
-pub trait EdgeTrait {
-    /// 辺の重みの型
-    type Weight;
-    /// 辺の始点
-    fn from(&self) -> usize;
-    /// 辺の終点
-    fn to(&self) -> usize;
-    /// 辺の重み
-    fn weight(&self) -> Self::Weight;
-    /// 逆辺
-    fn rev(self) -> Self;
-}
-
 /// グラフの辺
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub struct Edge<T, I> {
-    /// 辺の始点
-    pub from: usize,
-    /// 辺の終点
-    pub to: usize,
-    /// 辺の重み
-    pub weight: T,
-    /// 辺の番号など
-    pub index: I,
+pub struct Edge<W, I> {
+    from: usize,
+    to: usize,
+    weight: W,
+    index: usize,
+    /// 補助的な情報
+    pub option: I,
 }
 
-impl<T, I> Edge<T, I> {
-    /// `from`から`to`への重さ`weight`、辺番号`index`をもつ有向辺を作る。
-    pub fn new(from: usize, to: usize, weight: T, index: I) -> Self {
+impl<W, I> Edge<W, I> {
+    fn new(from: usize, to: usize, weight: W, index: usize, option: I) -> Self {
         Self {
             from,
             to,
             weight,
             index,
+            option,
         }
     }
 }
 
-impl<T: Clone, I> EdgeTrait for Edge<T, I> {
-    type Weight = T;
+impl<W, I> Edge<W, I> {
+    /// 辺の始点を返す。
     #[inline]
-    fn from(&self) -> usize {
+    pub fn from(&self) -> usize {
         self.from
     }
+    /// 辺の終点を返す。
     #[inline]
-    fn to(&self) -> usize {
+    pub fn to(&self) -> usize {
         self.to
     }
+    /// 辺の番号を返す。
     #[inline]
-    fn weight(&self) -> Self::Weight {
-        self.weight.clone()
+    pub fn index(&self) -> usize {
+        self.index
     }
-    fn rev(mut self) -> Self {
+    /// 辺の逆辺を作って返す。
+    pub fn rev(mut self) -> Self {
         std::mem::swap(&mut self.from, &mut self.to);
         self
     }
 }
 
+impl<W: Copy, I> Edge<W, I> {
+    /// 辺の重みを返す。
+    #[inline]
+    pub fn weight(&self) -> W {
+        self.weight
+    }
+}
+
 /// グラフの辺の有向・無向の情報をもたせるためのトレイト。
 pub trait Direction {}
-/// 有向辺をもつ。
+/// 有向辺をもつことを示す。
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct Directed;
-/// 無向辺をもつ。
+/// 無向辺をもつことを示す。
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct Undirected;
 impl Direction for Directed {}
@@ -115,14 +110,13 @@ impl Direction for Undirected {}
 
 /// グラフのノード
 #[derive(Clone, Debug)]
-pub struct GraphNode<E> {
-    /// 接続する辺
-    pub edges: Vec<E>,
+pub struct GraphNode<W, I> {
+    edges: Vec<Edge<W, I>>,
 }
 
-impl<E: EdgeTrait> GraphNode<E> {
+impl<W, I> GraphNode<W, I> {
     /// 隣接辺を列挙するイテレータを返す。
-    pub fn neighbors(&self) -> impl DoubleEndedIterator<Item = &E> {
+    pub fn neighbors(&self) -> impl DoubleEndedIterator<Item = &Edge<W, I>> {
         self.edges.iter()
     }
 
@@ -132,8 +126,8 @@ impl<E: EdgeTrait> GraphNode<E> {
     }
 }
 
-impl<E: EdgeTrait> IntoIterator for GraphNode<E> {
-    type Item = E;
+impl<W, I> IntoIterator for GraphNode<W, I> {
+    type Item = Edge<W, I>;
     type IntoIter = std::vec::IntoIter<Self::Item>;
 
     fn into_iter(self) -> Self::IntoIter {
@@ -141,9 +135,9 @@ impl<E: EdgeTrait> IntoIterator for GraphNode<E> {
     }
 }
 
-impl<'a, E: EdgeTrait> IntoIterator for &'a GraphNode<E> {
-    type Item = &'a E;
-    type IntoIter = std::slice::Iter<'a, E>;
+impl<'a, W, I> IntoIterator for &'a GraphNode<W, I> {
+    type Item = &'a Edge<W, I>;
+    type IntoIter = std::slice::Iter<'a, Edge<W, I>>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.edges.iter()
@@ -152,56 +146,73 @@ impl<'a, E: EdgeTrait> IntoIterator for &'a GraphNode<E> {
 
 /// グラフ
 #[derive(Debug, Clone)]
-pub struct Graph<D, E> {
-    nodes: Vec<GraphNode<E>>,
+pub struct Graph<D, W, I> {
+    nodes: Vec<GraphNode<W, I>>,
+    edge_num: usize,
     __phantom: PhantomData<D>,
 }
 
-impl<D: Direction, E: EdgeTrait + Clone> Graph<D, E> {
+/// 有向グラフ
+pub type DirectedGraph<W, I> = Graph<Directed, W, I>;
+/// 無向グラフ
+pub type UndirectedGraph<W, I> = Graph<Undirected, W, I>;
+
+impl<D: Direction, W: Copy, I: Clone> Graph<D, W, I> {
     /// 頂点数が`size`の空の`Graph`を構築する。
     pub fn new(size: usize) -> Self {
         Self {
             nodes: vec![GraphNode { edges: vec![] }; size],
+            edge_num: 0,
             __phantom: PhantomData,
         }
     }
 }
 
-impl<E: EdgeTrait + Clone> Graph<Directed, E> {
+impl<W, I> Graph<Directed, W, I> {
     /// 有向グラフに辺を追加する。
-    pub fn add(&mut self, e: E) {
-        self.nodes[e.from()].edges.push(e);
+    pub fn add(&mut self, from: usize, to: usize, weight: W, option: I) {
+        self.nodes[from]
+            .edges
+            .push(Edge::new(from, to, weight, self.edge_num, option));
+        self.edge_num += 1;
     }
 }
 
-impl<E: EdgeTrait + Clone> Extend<E> for Graph<Directed, E> {
-    fn extend<T: IntoIterator<Item = E>>(&mut self, iter: T) {
-        iter.into_iter().for_each(|e| self.add(e));
+impl<W, I> Extend<(usize, usize, W, I)> for Graph<Directed, W, I> {
+    fn extend<T: IntoIterator<Item = (usize, usize, W, I)>>(&mut self, iter: T) {
+        iter.into_iter()
+            .for_each(|(from, to, weight, option)| self.add(from, to, weight, option));
     }
 }
 
-impl<E: EdgeTrait + Clone> Graph<Undirected, E> {
+impl<W: Copy, I: Clone> Graph<Undirected, W, I> {
     /// 無向グラフに辺を追加する。
-    pub fn add(&mut self, e: E) {
-        self.nodes[e.from()].edges.push(e.clone());
-        self.nodes[e.to()].edges.push(e.rev());
+    pub fn add(&mut self, u: usize, v: usize, weight: W, option: I) {
+        self.nodes[u]
+            .edges
+            .push(Edge::new(u, v, weight, self.edge_num, option.clone()));
+        self.nodes[v]
+            .edges
+            .push(Edge::new(v, u, weight, self.edge_num, option));
+        self.edge_num += 1;
     }
 }
 
-impl<E: EdgeTrait + Clone> Extend<E> for Graph<Undirected, E> {
-    fn extend<T: IntoIterator<Item = E>>(&mut self, iter: T) {
-        iter.into_iter().for_each(|e| self.add(e));
+impl<W: Copy, I: Clone> Extend<(usize, usize, W, I)> for Graph<Undirected, W, I> {
+    fn extend<T: IntoIterator<Item = (usize, usize, W, I)>>(&mut self, iter: T) {
+        iter.into_iter()
+            .for_each(|(u, v, weight, option)| self.add(u, v, weight, option));
     }
 }
 
-impl<D, E> Graph<D, E> {
+impl<D, W, I> Graph<D, W, I> {
     /// 各頂点の[`GraphNode`]への参照のイテレータを返す。
-    pub fn nodes_iter(&self) -> impl Iterator<Item = &GraphNode<E>> {
+    pub fn nodes_iter(&self) -> impl Iterator<Item = &GraphNode<W, I>> {
         self.nodes.iter()
     }
 
     /// `i`番目の頂点の[`GraphNode`]への参照を返す。
-    pub fn node_of(&self, i: usize) -> &GraphNode<E> {
+    pub fn node_of(&self, i: usize) -> &GraphNode<W, I> {
         &self.nodes[i]
     }
 
