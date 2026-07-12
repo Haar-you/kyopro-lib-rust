@@ -30,6 +30,7 @@ pub mod kruskal;
 pub mod min_steiner_tree;
 pub mod prim;
 
+pub mod count_tsort;
 pub mod tsort;
 
 pub mod chinese_postman;
