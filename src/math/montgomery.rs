@@ -1,21 +1,23 @@
-//! Montgomery演算
+//! Montgomery乗算
 
 const B: u32 = 64;
 const R: u128 = 1 << B;
 const MASK: u128 = R - 1;
 
-/// Montgomery演算
+/// Montgomery乗算
 #[derive(Clone, Copy)]
 pub struct Montgomery {
-    pub modulo: u64,
-    pub r2: u128,
-    pub m: u64,
+    modulo: u64,
+    r2: u128,
+    m: u64,
 }
 
+/// Montgomery表現
 #[derive(Clone, Copy, PartialEq)]
 pub struct Wrapped(pub u64);
 
 impl Montgomery {
+    /// 除数`modulo`でのMontgomery演算
     pub fn new(modulo: u64) -> Self {
         assert!(modulo % 2 != 0);
         assert!(modulo > 0);
@@ -42,7 +44,12 @@ impl Montgomery {
         Self { modulo, r2, m }
     }
 
-    pub fn reduce(&self, value: u128) -> u64 {
+    /// 除数
+    pub fn modulo(&self) -> u64 {
+        self.modulo
+    }
+
+    fn reduce(&self, value: u128) -> u64 {
         let &Self { modulo, m, .. } = self;
 
         let mut ret =
@@ -53,18 +60,22 @@ impl Montgomery {
         ret
     }
 
+    /// $a \pmod N \longmapsto aR \pmod N$
     pub fn wrap(&self, a: u64) -> Wrapped {
         Wrapped(self.reduce(a as u128 * self.r2))
     }
 
+    /// $aR \pmod N \longmapsto a \pmod N$
     pub fn unwrap(&self, a: Wrapped) -> u64 {
         self.reduce(a.0 as u128)
     }
 
+    /// Montgomery表現での乗算
     pub fn mul(&self, a: Wrapped, b: Wrapped) -> Wrapped {
         Wrapped(self.reduce(a.0 as u128 * b.0 as u128))
     }
 
+    /// Montgomery表現での加算
     pub fn add(&self, a: Wrapped, b: Wrapped) -> Wrapped {
         let mut t = a.0 as u128 + b.0 as u128;
         if t > self.modulo as u128 {
@@ -73,6 +84,17 @@ impl Montgomery {
         Wrapped(t as u64)
     }
 
+    /// Montgomery表現での減算
+    pub fn sub(&self, a: Wrapped, b: Wrapped) -> Wrapped {
+        let mut t = a.0 as u128;
+        if t < b.0 as u128 {
+            t += self.modulo as u128;
+        }
+        t -= b.0 as u128;
+        Wrapped(t as u64)
+    }
+
+    /// Montgomery表現での累乗
     pub fn pow(&self, mut a: Wrapped, mut p: u64) -> Wrapped {
         let mut ret = self.wrap(1);
 
