@@ -3,6 +3,7 @@
 pub mod traits;
 
 pub mod affine;
+pub mod array;
 pub mod bit;
 pub mod dihedral;
 pub mod dual;
