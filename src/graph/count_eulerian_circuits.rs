@@ -38,12 +38,12 @@ pub fn count_eulerian_circuits<P: PrimeMod, W, I>(g: &Graph<Directed, W, I>) -> 
 
     let mut ret = count_directed_spanning_tree(g, 0, true);
 
-    for i in 0..n {
-        if outdeg[i] == 0 {
+    for di in outdeg.into_iter() {
+        if di == 0 {
             continue;
         }
 
-        ret *= ft.facto(outdeg[i] - 1);
+        ret *= ft.facto(di - 1);
     }
 
     ret

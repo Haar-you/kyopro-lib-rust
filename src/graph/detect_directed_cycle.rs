@@ -14,7 +14,7 @@ pub fn detect_directed_cycle<W, I>(g: &DirectedGraph<W, I>) -> Option<Vec<&Edge<
     let mut status = vec![Status::Unchecked; n];
     for i in 0..n {
         let mut ret = vec![];
-        if let Some(l) = rec(&g, i, 0, &mut ret, &mut status) {
+        if let Some(l) = rec(g, i, 0, &mut ret, &mut status) {
             return Some(ret[l..].to_vec());
         }
     }

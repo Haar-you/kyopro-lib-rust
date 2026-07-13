@@ -19,9 +19,9 @@ where
 
     assert!(n <= 32);
     let mut g = vec![0; n];
-    for i in 0..n {
+    for (i, gi) in g.iter_mut().enumerate() {
         for e in graph.node_of(i) {
-            g[i] |= 1 << e.to();
+            *gi |= 1 << e.to();
         }
     }
 

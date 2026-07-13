@@ -16,7 +16,7 @@ pub struct Montgomery {
 pub struct Wrapped(pub u64);
 
 impl Montgomery {
-    pub fn new(modulo: u64) -> Montgomery {
+    pub fn new(modulo: u64) -> Self {
         assert!(modulo % 2 != 0);
         assert!(modulo > 0);
 
