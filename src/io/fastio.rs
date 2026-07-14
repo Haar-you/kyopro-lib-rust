@@ -143,6 +143,25 @@ impl FastIO {
         self.getc().unwrap().into()
     }
 
+    /// `u32`型の数値を標準出力に書き込む。
+    pub fn writeln_u32(&mut self, mut n: u32) {
+        if n == 0 {
+            self.out_buf.write_all(b"0\n").unwrap();
+            return;
+        }
+
+        let mut buf = [b' '; 10];
+        let mut i = 9;
+        while n > 0 {
+            buf[i] = (n % 10) as u8 + b'0';
+            n /= 10;
+            i -= 1;
+        }
+
+        self.out_buf.write_all(&buf).unwrap();
+        self.out_buf.write_all(b"\n").unwrap();
+    }
+
     /// `s`を標準出力に書き込む。
     pub fn write<T: Display>(&mut self, s: T) {
         self.out_buf.write_all(s.to_string().as_bytes()).unwrap();
@@ -165,6 +184,30 @@ impl FastIO {
     pub fn writeln_rev<T: Display>(&mut self, s: T) {
         self.write_rev(s);
         self.out_buf.write_all(b"\n").unwrap();
+    }
+
+    /// `u8`のスライスを標準出力に書き込む。
+    pub fn write_bytes(&mut self, s: &[u8]) {
+        self.out_buf.write_all(s).unwrap();
+    }
+
+    /// イテレータ`it`の中身を空白区切りで標準出力に書き込む。
+    pub fn writeln_intersperse<I>(&mut self, it: I)
+    where
+        I: IntoIterator,
+        I::Item: Display,
+    {
+        let mut it = it.into_iter();
+        if let Some(s) = it.next() {
+            self.write(s);
+        }
+
+        for s in it {
+            self.write_bytes(b" ");
+            self.write(s);
+        }
+
+        self.write_bytes(b"\n");
     }
 }
 
