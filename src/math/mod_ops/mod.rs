@@ -3,15 +3,16 @@
 pub mod enum_inv;
 pub mod inv;
 pub mod inv_p;
+pub mod kth_root;
 pub mod log;
 pub mod pow;
 pub mod sqrt;
 
 #[cfg(test)]
 mod tests {
-    use crate::math::primality::{miller_rabin::MillerRabin, PrimalityTest};
+    use crate::math::primality::{PrimalityTest, miller_rabin::MillerRabin};
 
-    use super::{enum_inv::*, inv::*, log::*, pow::*, sqrt::*};
+    use super::{enum_inv::*, inv::*, kth_root::*, log::*, pow::*, sqrt::*};
 
     #[test]
     fn test_mod_pow() {
@@ -66,6 +67,27 @@ mod tests {
                 let res: Vec<_> = (0..p).filter(|x| x * x % p == a).collect();
 
                 assert_eq!(res, mod_sqrt(a, p));
+            }
+        }
+    }
+
+    #[test]
+    fn test_mod_kth_root() {
+        let n = 100;
+
+        for p in (2..=n).filter(|&p| MillerRabin.is_prime(p)) {
+            for a in 0..p {
+                for k in 1..10 {
+                    let ans: Vec<_> = (0..p).filter(|x| mod_pow(*x, k, p) == a).collect();
+
+                    let res = mod_kth_root(a, k, p);
+
+                    if let Some(res) = res {
+                        assert!(ans.into_iter().any(|x| x == res));
+                    } else {
+                        assert!(ans.is_empty());
+                    }
+                }
             }
         }
     }
