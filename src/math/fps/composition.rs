@@ -21,7 +21,7 @@ impl<P: PrimeMod> FpsComposition for Polynomial<P> {
 
     /// $f(x) = \sum_0^{n-1} a_ix^i$と$g(x) = \sum_0^{n-1} b_ix^i$について、$f(g(x))$の先頭$n$項を求める。
     ///
-    /// $b_0 \ne 0$のとき、`Err`を返す。
+    /// $g$の定数項が$0$でないとき、`Err`を返す。
     ///
     /// **Time compexity** $O(N^2)$
     fn fps_composition(self, p: Self) -> Result<Self::Output, &'static str> {

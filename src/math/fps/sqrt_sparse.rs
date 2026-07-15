@@ -1,7 +1,7 @@
 //! 疎な形式的冪級数の平方根
 use crate::math::mod_ops::sqrt::mod_sqrt;
-use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::polynomial::Polynomial;
+use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
@@ -10,13 +10,17 @@ pub trait FpsSqrtSparse {
     /// 戻り値の型
     type Output;
 
-    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\sqrt{f(x)}$の先頭$n$項を求める。
+    /// 疎な形式的冪級数の平方根を求める。
     fn fps_sqrt_sparse(self, n: usize) -> Result<Self::Output, &'static str>;
 }
 
 impl<P: PrimeMod> FpsSqrtSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
+    /// $k$個の係数のみが非零である$f(x) = \sum_0^{n-1} a_ix^i$について、$\sqrt{f(x)}$の先頭$n$項を求める。
+    ///
+    /// 平方根が存在しないとき、`Err`を返す。
+    ///
     /// **Time complexity** $O(nk)$
     fn fps_sqrt_sparse(self, n: usize) -> Result<Self::Output, &'static str> {
         let Some(k) = (0..n).find(|&i| self.coeff_of(i).value() != 0) else {

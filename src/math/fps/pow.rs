@@ -9,13 +9,16 @@ pub trait FpsPow {
     /// 戻り値の型
     type Output;
 
-    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$(f(x))^m$の先頭$n$項を求める。
+    /// 形式的冪級数の累乗を求める。
     fn fps_pow(self, m: u64) -> Result<Self::Output, &'static str>;
 }
 
 impl<P: PrimeMod> FpsPow for Polynomial<P> {
     type Output = Self;
 
+    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$(f(x))^m$の先頭$n$項を求める。
+    ///
+    /// **Time complexity** $O(N \log N)$
     fn fps_pow(self, m: u64) -> Result<Self::Output, &'static str> {
         if m == 0 {
             let mut f: Vec<_> = self.into();

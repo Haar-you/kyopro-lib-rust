@@ -8,18 +8,23 @@ pub trait FpsInv {
     /// 戻り値の型
     type Output;
 
-    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\frac{1}{f(x)}$の先頭$n$項を求める。
+    /// 形式的冪級数の逆数を求める。
     fn fps_inv(self) -> Result<Self::Output, &'static str>;
 }
 
 impl<P: PrimeMod> FpsInv for Polynomial<P> {
     type Output = Self;
 
+    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\frac{1}{f(x)}$の先頭$n$項を求める。
+    ///
+    /// 定数項が$0$のとき、`Err`を返す。
+    ///      
+    /// **Time complexity** $O(N \log N)$
     fn fps_inv(self) -> Result<Self::Output, &'static str> {
         let f: Vec<_> = self.into();
 
         if f[0].value() == 0 {
-            return Err("定数項が`0`の形式的べき級数の逆数を計算しようとした。");
+            return Err("定数項は`0`であってはならない。");
         }
         let n = f.len();
 

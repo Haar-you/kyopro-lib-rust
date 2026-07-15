@@ -1,6 +1,6 @@
 //! 疎な形式的冪級数の累乗
-use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::polynomial::Polynomial;
+use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
@@ -9,13 +9,15 @@ pub trait FpsPowSparse {
     /// 戻り値の型
     type Output;
 
-    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$(f(x))^m$の先頭$n$項を求める。
+    /// 疎な形式的冪級数の累乗を求める。
     fn fps_pow_sparse(self, m: u64, n: usize) -> Result<Self::Output, &'static str>;
 }
 
 impl<P: PrimeMod> FpsPowSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
+    /// $k$個の係数のみが非零である$f(x) = \sum_0^{n-1} a_ix^i$について、$(f(x))^m$の先頭$n$項を求める。
+    ///
     /// **Time complexity** $O(nk)$
     fn fps_pow_sparse(self, m: u64, n: usize) -> Result<Self::Output, &'static str> {
         if m == 0 {
