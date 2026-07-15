@@ -3,7 +3,7 @@
 use std::iter::successors;
 
 use crate::{
-    math::{polynomial::Polynomial, prime_mod::PrimeMod},
+    math::{fps::inv::FpsInv, polynomial::Polynomial, prime_mod::PrimeMod},
     num::const_modint::*,
 };
 
@@ -14,6 +14,9 @@ pub trait FpsComposition {
 
     /// 2つの形式的冪級数の合成を求める。
     fn fps_composition(self, _: Self) -> Result<Self::Output, &'static str>;
+
+    /// 形式的冪級数の合成の逆元を求める。
+    fn fps_compositional_inverse(self) -> Result<Self::Output, &'static str>;
 }
 
 impl<P: PrimeMod> FpsComposition for Polynomial<P> {
@@ -67,5 +70,54 @@ impl<P: PrimeMod> FpsComposition for Polynomial<P> {
             .fold(Self::zero(), |a, b| a + b);
 
         Ok(ret)
+    }
+
+    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$f(g(x)) \equiv g(f(x)) \equiv x \pmod{x^n}$となる$g(x)$の先頭$n$項を求める。
+    ///
+    /// 定数項が$0$でない、あるいは$x$の係数が$0$であるとき、`Err`を返す。
+    ///
+    /// **Time complexity** $O(N^2)$
+    fn fps_compositional_inverse(self) -> Result<Self::Output, &'static str> {
+        let n = self.len();
+
+        if self.coeff_of(0).value() != 0 {
+            return Err("定数項は`0`でなければならない。");
+        }
+        if self.coeff_of(1).value() == 0 {
+            return Err("`x`の係数は非零でなければならない。");
+        }
+        assert!(n >= 2);
+
+        let mut t = 2;
+        let mut ret = vec![0.into(), self.coeff_of(1).inv()];
+
+        loop {
+            ret.resize(2 * t, 0.into());
+
+            let mut f = self.get_until(2 * t);
+            f.data.resize(2 * t, 0.into());
+
+            let mut p = f.clone().fps_composition(ret.clone().into())?;
+            p -= Self::from(vec![0, 1]);
+
+            f.differentiate();
+            f.data.resize(2 * t, 0.into());
+            let q = f.fps_composition(ret.clone().into())?;
+
+            let r = p * q.fps_inv()?;
+
+            for (ret, r) in ret.iter_mut().zip(r.data) {
+                *ret -= r
+            }
+
+            t <<= 1;
+
+            if t >= n {
+                break;
+            }
+        }
+
+        ret.truncate(n);
+        Ok(ret.into())
     }
 }
