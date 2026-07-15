@@ -10,6 +10,7 @@
 //! - <https://judge.yosupo.jp/problem/exp_of_formal_power_series>
 //! - <https://judge.yosupo.jp/problem/pow_of_formal_power_series>
 
+pub mod composition;
 pub mod exp;
 pub mod inv;
 pub mod log;
@@ -24,7 +25,7 @@ pub mod sqrt_sparse;
 
 #[cfg(test)]
 mod tests {
-    use super::{exp::*, inv::*, log::*, pow::*};
+    use super::{composition::*, exp::*, inv::*, log::*, pow::*};
 
     use crate::math::polynomial::*;
     use crate::math::prime_mod::Prime;
@@ -69,5 +70,13 @@ mod tests {
         let a = Polynomial::<P>::from(vec![0, 0]);
         let b = a.clone().fps_pow(0).unwrap();
         dbg!(b);
+    }
+
+    #[test]
+    fn test_composition() {
+        let f = Polynomial::<P>::from(vec![5, 4, 3, 2, 1]);
+        let g = Polynomial::<P>::from(vec![0, 1, 2, 3, 4]);
+        let h = f.fps_composition(g).unwrap();
+        assert_eq!(h, vec![5, 4, 11, 26, 59].into());
     }
 }
