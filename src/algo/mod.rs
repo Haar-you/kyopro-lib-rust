@@ -3,6 +3,7 @@
 pub mod bitwise_popcount;
 pub mod bsearch;
 pub mod bsearch_slice;
+pub mod bsgs;
 pub mod cartesian_tree;
 pub mod compressor;
 pub mod edit_distance;
