@@ -5,8 +5,6 @@ use crate::math::prime_mod::*;
 use crate::num::const_modint::*;
 
 /// 素数$P$上の数論変換 (Number Theoretic Transform)
-///
-/// `PRIM_ROOT`は`P`の原始根。
 #[derive(Clone)]
 pub struct NTT<P: PrimeMod> {
     _phantom: PhantomData<P>,
@@ -48,7 +46,7 @@ impl<P: PrimeMod> NTT<P> {
         inv_base
     };
 
-    /// [`NTT<P, PRIM_ROOT>`]を作る。
+    /// [`NTT<P>`]を作る。
     pub const fn new() -> Self {
         Self {
             _phantom: PhantomData,
