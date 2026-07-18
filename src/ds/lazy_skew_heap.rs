@@ -1,24 +1,28 @@
 //! 遅延加算付き融合可能ヒープ
 
 use crate::num::one_zero::Zero;
-use std::{mem::swap, ops::AddAssign};
+use std::{
+    mem::swap,
+    ops::{AddAssign, SubAssign},
+};
 
 #[derive(Debug, Clone)]
-struct Node<T> {
+struct Node<T, U> {
     value: T,
-    lazy: T,
-    left: Option<Box<Node<T>>>,
-    right: Option<Box<Node<T>>>,
+    lazy: U,
+    left: Option<Box<Self>>,
+    right: Option<Box<Self>>,
 }
 
-impl<T> Node<T>
+impl<T, U> Node<T, U>
 where
-    T: Ord + Copy + Zero + AddAssign,
+    T: Ord + AddAssign<U>,
+    U: Copy + Zero + AddAssign,
 {
     pub fn new(value: T) -> Self {
         Self {
             value,
-            lazy: T::zero(),
+            lazy: U::zero(),
             left: None,
             right: None,
         }
@@ -32,7 +36,7 @@ where
         if let Some(right) = &mut self.right {
             right.as_mut().lazy += self.lazy;
         }
-        self.lazy = T::zero();
+        self.lazy = U::zero();
     }
 
     pub fn meld(&mut self, other: Option<Box<Self>>) {
@@ -56,14 +60,15 @@ where
 
 /// 遅延加算付き融合可能ヒープ
 #[derive(Debug, Clone, Default)]
-pub struct LazySkewHeap<T> {
-    root: Option<Box<Node<T>>>,
+pub struct LazySkewHeap<T, U = T> {
+    root: Option<Box<Node<T, U>>>,
     size: usize,
 }
 
-impl<T> LazySkewHeap<T>
+impl<T, U> LazySkewHeap<T, U>
 where
-    T: Ord + Copy + Zero + AddAssign,
+    T: Ord + AddAssign<U>,
+    U: Copy + Zero + AddAssign,
 {
     /// 空の[`LazySkewHeap`]を生成する。
     pub fn new() -> Self {
@@ -124,7 +129,7 @@ where
     }
 
     /// ヒープの全要素に値`value`を加算する。
-    pub fn add(&mut self, value: T) {
+    pub fn add(&mut self, value: U) {
         if let Some(root) = self.root.as_mut() {
             root.lazy += value;
             root.propagate();
@@ -139,6 +144,20 @@ where
     /// ヒープが空ならば`true`を返す。
     pub fn is_empty(&self) -> bool {
         self.size == 0
+    }
+}
+
+impl<T, U> LazySkewHeap<T, U>
+where
+    T: Ord + AddAssign<U>,
+    U: Copy + Zero + AddAssign + SubAssign,
+{
+    /// ヒープの全要素から値`value`を減算する。
+    pub fn sub(&mut self, value: U) {
+        if let Some(root) = self.root.as_mut() {
+            root.lazy -= value;
+            root.propagate();
+        }
     }
 }
 
