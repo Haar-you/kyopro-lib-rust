@@ -1,6 +1,6 @@
 //! 疎な形式的冪級数の逆数
-use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::polynomial::Polynomial;
+use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
@@ -9,13 +9,17 @@ pub trait FpsInvSparse {
     /// 戻り値の型
     type Output;
 
-    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\frac{1}{f(x)}$の先頭$n$項を求める。
+    /// 疎な形式的冪級数の逆数を求める。
     fn fps_inv_sparse(self, n: usize) -> Result<Self::Output, &'static str>;
 }
 
 impl<P: PrimeMod> FpsInvSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
+    /// $k$個の係数のみが非零である$f(x) = \sum_0^{n-1} a_ix^i$について、$\frac{1}{f(x)}$の先頭$n$項を求める。
+    ///
+    /// 定数項が$0$のとき、`Err`を返す。
+    ///
     /// **Time complexity** $O(nk)$
     fn fps_inv_sparse(self, n: usize) -> Result<Self::Output, &'static str> {
         let f = self;

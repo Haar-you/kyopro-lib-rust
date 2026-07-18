@@ -1,7 +1,7 @@
 //! 疎な形式的冪級数の対数
 use crate::math::fps::inv_sparse::*;
-use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::polynomial::Polynomial;
+use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
@@ -10,15 +10,23 @@ pub trait FpsLogSparse {
     /// 戻り値の型
     type Output;
 
-    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\log f(x)$の先頭$n$項を求める。
+    /// 疎な形式的冪級数の対数を求める。
     fn fps_log_sparse(self, n: usize) -> Result<Self::Output, &'static str>;
 }
 
 impl<P: PrimeMod> FpsLogSparse for SparsePolynomial<P> {
     type Output = Polynomial<P>;
 
+    /// $k$個の係数のみが非零である$f(x) = \sum_0^{n-1} a_ix^i$について、$\log f(x)$の先頭$n$項を求める。
+    ///
+    /// 定数項が$1$でないとき、`Err`を返す。
+    ///
     /// **Time complexity** $O(nk)$
     fn fps_log_sparse(self, n: usize) -> Result<Self::Output, &'static str> {
+        if self.coeff_of(0).value() != 1 {
+            return Err("定数項は`1`でなければならない。");
+        }
+
         let mut f = self.clone();
         f.differential();
 

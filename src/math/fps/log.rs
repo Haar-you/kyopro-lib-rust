@@ -9,15 +9,22 @@ pub trait FpsLog {
     /// 戻り値の型
     type Output;
 
-    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\log (f(x))$の先頭$n$項を求める。
+    /// 形式的冪級数の対数を求める。
     fn fps_log(self) -> Result<Self::Output, &'static str>;
 }
 
 impl<P: PrimeMod> FpsLog for Polynomial<P> {
     type Output = Self;
 
+    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\log (f(x))$の先頭$n$項を求める。
+    ///
+    /// 定数項が$1$でないとき、`Err`を返す。
+    ///
+    /// **Time complexity** $O(N \log N)$
     fn fps_log(self) -> Result<Self::Output, &'static str> {
-        assert_eq!(self.coeff_of(0).value(), 1);
+        if self.coeff_of(0).value() != 1 {
+            return Err("定数項は`1`でなければならない。");
+        }
         let n = self.len();
         let mut a = self.clone();
         a.differentiate();

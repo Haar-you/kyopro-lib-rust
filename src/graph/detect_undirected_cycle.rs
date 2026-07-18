@@ -37,7 +37,7 @@ pub fn detect_undirected_cycle<W, I>(g: &UndirectedGraph<W, I>) -> Option<Vec<&E
     let mut status = vec![Status::Unchecked; n];
     for i in 0..n {
         let mut ret = vec![];
-        if let Some(l) = rec(&g, i, None, 0, &mut ret, &mut status) {
+        if let Some(l) = rec(g, i, None, 0, &mut ret, &mut status) {
             return Some(ret[l..].to_vec());
         }
     }

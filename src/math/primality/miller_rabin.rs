@@ -4,7 +4,7 @@ pub use crate::math::primality::PrimalityTest;
 
 fn is_composite(a: u64, s: u32, d: u64, mg: Montgomery) -> bool {
     let a = mg.wrap(a);
-    let pp = mg.wrap(mg.modulo - 1);
+    let pp = mg.wrap(mg.modulo() - 1);
     let mut x = mg.pow(a, d);
 
     if mg.unwrap(x) == 1 {

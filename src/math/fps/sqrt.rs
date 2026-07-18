@@ -11,13 +11,18 @@ pub trait FpsSqrt {
     /// 戻り値の型
     type Output;
 
-    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\sqrt{f(x)}$の先頭$n$項を求める。
+    /// 形式的冪級数の平方根を求める。
     fn fps_sqrt(self) -> Result<Self::Output, &'static str>;
 }
 
 impl<P: PrimeMod> FpsSqrt for Polynomial<P> {
     type Output = Self;
 
+    /// $f(x) = \sum_0^{n-1} a_ix^i$について、$\sqrt{f(x)}$の先頭$n$項を求める。
+    ///
+    /// 平方根が存在しないとき、`Err`を返す。
+    ///
+    /// **Time complexity** $O(N \log N)$
     fn fps_sqrt(self) -> Result<Self::Output, &'static str> {
         let f: Vec<_> = self.into();
 

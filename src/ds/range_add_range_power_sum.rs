@@ -212,9 +212,9 @@ mod tests {
         let mut s = RangeAddRangePowerSum::<M>::new(n, p);
         let mut a = vec![ff.from_u64(0); n];
 
-        for i in 0..n {
+        for (i, ai) in a.iter_mut().enumerate() {
             let x = ff.from_u64(rng.random());
-            a[i] = x;
+            *ai = x;
             s.assign(i, x);
         }
 

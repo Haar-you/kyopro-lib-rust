@@ -57,6 +57,7 @@ pub trait Idempotence {}
 
 /// 二項演算が加法的
 pub trait Additive: BinaryOp {
+    /// $\underbrace{a + a + \dots + a + a}_{n}$を計算する。
     fn times(&self, a: Self::Element, n: u64) -> Self::Element;
 }
 

@@ -5,6 +5,7 @@ use std::collections::VecDeque;
 use std::iter::zip;
 
 /// 幅優先探索で辺数が最小の経路を得る。
+#[allow(clippy::type_complexity)]
 pub fn bfs<D: Direction, W, I>(
     g: &Graph<D, W, I>,
     src: impl IntoIterator<Item = usize>,
