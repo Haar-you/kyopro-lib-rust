@@ -26,7 +26,7 @@ pub mod bipartite;
 pub mod enumerate_triangles;
 pub mod max_independent_set;
 
-pub mod chu_liu_edmonds;
+pub mod directed_mst;
 pub mod kruskal;
 pub mod min_steiner_tree;
 pub mod prim;

@@ -11,7 +11,7 @@ type Edge_<'a, T, I> = (usize, usize, T, &'a Edge<T, I>);
 /// 有向グラフ上の最小有向全域木を求める
 ///
 /// **Time complexity** $O(VE)$
-pub fn chu_liu_edmonds<W, I>(g: &Graph<Directed, W, I>, root: usize) -> Vec<&Edge<W, I>>
+pub fn directed_mst<W, I>(g: &Graph<Directed, W, I>, root: usize) -> Option<Vec<&Edge<W, I>>>
 where
     W: Ord + Copy + Sub<Output = W>,
 {
@@ -23,7 +23,7 @@ where
     }
 
     let res = rec(rg, root);
-    res.into_iter().filter_map(|e| e.map(|e| e.3)).collect()
+    Some(res.into_iter().filter_map(|e| e.map(|e| e.3)).collect())
 }
 
 fn rec<T, I>(mut g: Vec<Vec<Edge_<T, I>>>, root: usize) -> Vec<Option<Edge_<T, I>>>
