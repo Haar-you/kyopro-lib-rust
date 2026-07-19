@@ -3,6 +3,7 @@
 pub mod multipoint_eval;
 pub mod polynomial_interpolation;
 pub mod polynomial_taylor_shift;
+pub mod root_finding;
 pub mod shift_sampling_points;
 pub mod sparse;
 
