@@ -11,7 +11,7 @@ use crate::algo::monotone_minima::*;
 ///
 /// # Return
 /// `c.len` = `a.len() + b.len() - 1`
-pub fn min_plus_conv_convex(a: Vec<i64>, b: Vec<i64>) -> Vec<i64> {
+pub fn min_plus_convolution_convex(a: Vec<i64>, b: Vec<i64>) -> Vec<i64> {
     assert!(!a.is_empty());
     assert!(!b.is_empty());
     let n = a.len();
@@ -80,7 +80,7 @@ mod tests {
                 }
             }
 
-            assert_eq!(ans, min_plus_conv_convex(a, b));
+            assert_eq!(ans, min_plus_convolution_convex(a, b));
         }
     }
 }

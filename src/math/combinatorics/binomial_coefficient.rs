@@ -32,7 +32,7 @@ impl ExtLucas {
             prod[i] = prod[i - 1] * (if i as u64 % p == 0 { 1 } else { i as u64 }) % m;
         }
 
-        inv[m as usize - 1] = mod_inv(prod[m as usize - 1], m).unwrap();
+        inv[m as usize - 1] = inv_mod(prod[m as usize - 1], m).unwrap();
         for i in (1..m as usize).rev() {
             inv[i - 1] = inv[i] * (if i as u64 % p == 0 { 1 } else { i as u64 }) % m;
         }
@@ -84,7 +84,7 @@ impl ExtLucas {
             ret = self.m - ret;
         }
 
-        ret *= mod_pow(self.p, e, self.m);
+        ret *= pow_mod(self.p, e, self.m);
         ret %= self.m;
 
         ret

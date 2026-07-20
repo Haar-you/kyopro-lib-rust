@@ -2,7 +2,7 @@
 use crate::num::ff::*;
 use crate::{
     math::prime_mod::PrimeMod,
-    math::{fps::inv::FpsInv, mod_ops::sqrt::mod_sqrt, polynomial::Polynomial},
+    math::{fps::inv::FpsInv, mod_ops::sqrt::sqrt_mod, polynomial::Polynomial},
     num::const_modint::ConstModInt,
 };
 
@@ -40,7 +40,7 @@ impl<P: PrimeMod> FpsSqrt for Polynomial<P> {
             return Err("最小次数が偶数ではない。");
         }
 
-        let x = mod_sqrt(f[k].value() as u64, P::PRIME_NUM as u64)
+        let x = sqrt_mod(f[k].value() as u64, P::PRIME_NUM as u64)
             .first()
             .copied()
             .ok_or("最小次数項の係数に平方根が存在しない。")?;

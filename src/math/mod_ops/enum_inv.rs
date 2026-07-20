@@ -6,7 +6,7 @@
 ///
 /// **Time complexity** $O(n)$
 #[inline]
-pub fn enumerate_mod_inv(n: usize, p: u64) -> Vec<u64> {
+pub fn enumerate_inv_mod(n: usize, p: u64) -> Vec<u64> {
     assert!(
         0 < p && p <= 0xFFFFFFFF,
         "Violated 0 < p <= 0xFFFFFFFF (p = {p})"

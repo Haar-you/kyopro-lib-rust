@@ -11,7 +11,7 @@ pub mod log;
 use std::ops::{Index, IndexMut, Mul};
 
 use crate::{
-    math::{convolution::subset_conv::subset_convolution, prime_mod::PrimeMod},
+    math::{convolution::subset::subset_convolution, prime_mod::PrimeMod},
     num::const_modint::ConstModInt,
 };
 

@@ -1,5 +1,5 @@
 //! 疎な形式的冪級数の平方根
-use crate::math::mod_ops::sqrt::mod_sqrt;
+use crate::math::mod_ops::sqrt::sqrt_mod;
 use crate::math::polynomial::Polynomial;
 use crate::math::polynomial::sparse::SparsePolynomial;
 use crate::math::prime_mod::PrimeMod;
@@ -33,7 +33,7 @@ impl<P: PrimeMod> FpsSqrtSparse for SparsePolynomial<P> {
 
         let a = self.coeff_of(k);
         let sr = ConstModInt::new(
-            mod_sqrt(a.value() as u64, P::PRIME_NUM as u64)
+            sqrt_mod(a.value() as u64, P::PRIME_NUM as u64)
                 .first()
                 .copied()
                 .ok_or("最小次数項の係数に平方根が存在しない。")? as u32,

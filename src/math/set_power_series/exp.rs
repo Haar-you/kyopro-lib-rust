@@ -2,7 +2,7 @@
 
 use crate::{
     math::{
-        convolution::subset_conv::subset_convolution, prime_mod::PrimeMod,
+        convolution::subset::subset_convolution, prime_mod::PrimeMod,
         set_power_series::SetPowerSeries,
     },
     num::ff::ZZElem,

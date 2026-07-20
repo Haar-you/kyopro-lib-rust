@@ -12,7 +12,7 @@ use crate::{
 ///
 /// # Requirements
 /// `f.len()` = `g.len()`
-pub fn convolution_mul_modp<P: PrimeMod>(
+pub fn mul_modp_convolution<P: PrimeMod>(
     mut a: Vec<ConstModInt<P>>,
     mut b: Vec<ConstModInt<P>>,
 ) -> Vec<ConstModInt<P>> {
@@ -84,7 +84,7 @@ mod tests {
             }
         }
 
-        let res = convolution_mul_modp::<P>(a, b);
+        let res = mul_modp_convolution::<P>(a, b);
 
         assert_eq!(ans, res);
     }

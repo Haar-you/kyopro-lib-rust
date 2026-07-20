@@ -32,7 +32,7 @@ pub const fn primitive_root(p: u32) -> u32 {
             if f == 0 {
                 break;
             }
-            if mod_pow(g as u64, (p as u64 - 1) / f as u64, p as u64) == 1 {
+            if pow_mod(g as u64, (p as u64 - 1) / f as u64, p as u64) == 1 {
                 ok = false;
                 break;
             }
