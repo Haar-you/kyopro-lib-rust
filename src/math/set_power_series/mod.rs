@@ -5,12 +5,18 @@
 //! - <https://suisen-kyopro.hatenablog.com/entry/2023/04/07/041318>
 
 pub mod exp;
+pub mod inv;
+pub mod log;
 
-use std::ops::{Index, IndexMut};
+use std::ops::{Index, IndexMut, Mul};
 
-use crate::{math::prime_mod::PrimeMod, num::const_modint::ConstModInt};
+use crate::{
+    math::{convolution::subset_conv::subset_convolution, prime_mod::PrimeMod},
+    num::const_modint::ConstModInt,
+};
 
 /// 集合冪級数
+#[derive(Clone, PartialEq, Eq)]
 pub struct SetPowerSeries<P: PrimeMod> {
     data: Vec<ConstModInt<P>>,
 }
@@ -28,6 +34,20 @@ impl<P: PrimeMod> SetPowerSeries<P> {
     /// 内部の`Vec`を返す。
     pub fn into_inner(self) -> Vec<ConstModInt<P>> {
         self.data
+    }
+
+    /// 内部の`Vec`の長さを返す。
+    pub fn len(&self) -> usize {
+        self.data.len()
+    }
+}
+
+impl<P: PrimeMod> Mul for SetPowerSeries<P> {
+    type Output = Self;
+    fn mul(self, rhs: Self) -> Self::Output {
+        Self {
+            data: subset_convolution(self.data, rhs.data),
+        }
     }
 }
 
