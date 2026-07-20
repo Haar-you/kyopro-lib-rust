@@ -15,10 +15,12 @@ where
     assert!(n.is_power_of_two());
 
     for i in 0..t {
-        let i = 1 << i;
-        for j in 0..n {
-            if j & i == 0 {
-                f[j] = f[j] + f[j ^ i];
+        let m = 1 << i;
+
+        for g in f.chunks_exact_mut(2 * m) {
+            let (a, b) = g.split_at_mut(m);
+            for (a, b) in a.iter_mut().zip(b.iter_mut()) {
+                *a = *a + *b;
             }
         }
     }
@@ -38,10 +40,12 @@ where
     assert!(n.is_power_of_two());
 
     for i in 0..t {
-        let i = 1 << i;
-        for j in 0..n {
-            if j & i != 0 {
-                f[j] = f[j] + f[j ^ i];
+        let m = 1 << i;
+
+        for g in f.chunks_exact_mut(2 * m) {
+            let (a, b) = g.split_at_mut(m);
+            for (a, b) in a.iter_mut().zip(b.iter_mut()) {
+                *b = *b + *a;
             }
         }
     }

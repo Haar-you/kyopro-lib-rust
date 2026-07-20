@@ -9,7 +9,7 @@ use std::ops::{Add, Mul, Sub};
 ///
 /// # Requirements
 /// `f.len()` = `g.len()`は2の累乗
-#[allow(clippy::needless_range_loop, clippy::manual_memcpy)]
+#[allow(clippy::manual_memcpy)]
 pub fn subset_convolution<T>(f: Vec<T>, g: Vec<T>) -> Vec<T>
 where
     T: Copy + Default + Add<Output = T> + Sub<Output = T> + Mul<Output = T>,
@@ -30,23 +30,23 @@ where
         g2[i][j] = g[j];
     }
 
-    for i in 0..=k {
-        fast_zeta_subset(&mut f2[i]);
-        fast_zeta_subset(&mut g2[i]);
+    for (f2i, g2i) in f2.iter_mut().zip(g2.iter_mut()) {
+        fast_zeta_subset(f2i);
+        fast_zeta_subset(g2i);
     }
 
     let mut h = vec![vec![T::default(); n]; k + 1];
 
-    for i in 0..=k {
-        for s in 0..=i {
-            for j in 0..n {
-                h[i][j] = h[i][j] + f2[s][j] * g2[i - s][j];
+    for (i, hi) in h.iter_mut().enumerate() {
+        for (f2s, g2i_s) in f2.iter().take(i + 1).zip(g2.iter().take(i + 1).rev()) {
+            for ((hij, f2sj), g2i_sj) in hi.iter_mut().zip(f2s).zip(g2i_s) {
+                *hij = *hij + *f2sj * *g2i_sj;
             }
         }
     }
 
-    for i in 0..=k {
-        fast_mobius_subset(&mut h[i]);
+    for hi in h.iter_mut() {
+        fast_mobius_subset(hi);
     }
 
     (0..n)
