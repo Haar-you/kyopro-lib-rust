@@ -15,7 +15,7 @@ pub trait PrimalityTest<T> {
 mod tests {
     use crate::timer;
 
-    use super::{eratosthenes::*, linear_sieve::LinearSieve, miller_rabin::*, PrimalityTest};
+    use super::{PrimalityTest, eratosthenes::*, linear_sieve::LinearSieve, miller_rabin::*};
 
     #[test]
     fn test_eratosthenes() {

@@ -61,11 +61,7 @@ impl<T: Copy + Eq> MaxContiguous<T> {
 }
 
 fn max<T>(a: (usize, T), b: (usize, T)) -> (usize, T) {
-    if a.0 >= b.0 {
-        a
-    } else {
-        b
-    }
+    if a.0 >= b.0 { a } else { b }
 }
 
 fn join<T: Eq>(a: (usize, T), b: (usize, T)) -> (usize, T) {

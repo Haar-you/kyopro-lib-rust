@@ -22,11 +22,7 @@ impl PersistentUnionFind {
     /// `i`の属する集合の根を返す。
     pub fn root_of(&self, i: usize) -> usize {
         let p = self.par[i];
-        if p < 0 {
-            i
-        } else {
-            self.root_of(p as usize)
-        }
+        if p < 0 { i } else { self.root_of(p as usize) }
     }
 
     /// `i`の属する集合の大きさを返す。
