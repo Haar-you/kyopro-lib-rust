@@ -11,23 +11,22 @@ use crate::tree::*;
 /// - [EDPC V - Subtree](https://atcoder.jp/contests/dp/submissions/57560435)
 /// - <https://atcoder.jp/contests/abc160/tasks/abc160_f>
 /// - <https://judge.yosupo.jp/problem/tree_path_composite_sum>
-pub struct RerootingDP<'a, T, U, E> {
+pub struct RerootingDP<'a, T, U, W, I> {
     init: U,
-    up: Box<dyn 'a + Fn(T, &'a E) -> U>,
+    up: Box<dyn 'a + Fn(T, &'a TreeEdge<W, I>) -> U>,
     merge: Box<dyn 'a + Fn(U, U) -> U>,
     apply: Box<dyn 'a + Fn(U, usize) -> T>,
 }
 
-impl<'a, T, U, E> RerootingDP<'a, T, U, E>
+impl<'a, T, U, W, I> RerootingDP<'a, T, U, W, I>
 where
-    E: TreeEdgeTrait,
     T: Clone,
     U: Clone,
 {
     /// `RerootingDP`を構築する。
     pub fn new(
         init: U,
-        up: Box<impl 'a + Fn(T, &'a E) -> U>,
+        up: Box<impl 'a + Fn(T, &'a TreeEdge<W, I>) -> U>,
         merge: Box<impl 'a + Fn(U, U) -> U>,
         apply: Box<impl 'a + Fn(U, usize) -> T>,
     ) -> Self {
@@ -40,7 +39,7 @@ where
     }
 
     /// `tree`上で、全方位DPを実行する。
-    pub fn run(&self, tree: &'a Tree<E>) -> Vec<T> {
+    pub fn run(&self, tree: &'a Tree<W, I>) -> Vec<T> {
         let size = tree.len();
         let mut dp = (0..size)
             .map(|i| vec![None; tree.nodes[i].neighbors_size()])
@@ -65,7 +64,7 @@ where
 
     fn rec1(
         &self,
-        tree: &'a Tree<E>,
+        tree: &'a Tree<W, I>,
         dp: &mut Vec<Vec<Option<T>>>,
         cur: usize,
         par: Option<usize>,
@@ -86,7 +85,7 @@ where
 
     fn rec2(
         &self,
-        tree: &'a Tree<E>,
+        tree: &'a Tree<W, I>,
         dp: &mut Vec<Vec<Option<T>>>,
         cur: usize,
         par: Option<usize>,

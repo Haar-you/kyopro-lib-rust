@@ -2,7 +2,7 @@
 
 use crate::tree::*;
 /// 木の重心を列挙する
-pub fn centroids<E: TreeEdgeTrait>(tree: &Tree<E>) -> Vec<usize> {
+pub fn centroids<W, I>(tree: &Tree<W, I>) -> Vec<usize> {
     let n = tree.len();
     let mut sub = vec![0; n];
     let mut ret = vec![];
@@ -10,8 +10,8 @@ pub fn centroids<E: TreeEdgeTrait>(tree: &Tree<E>) -> Vec<usize> {
     ret
 }
 
-fn dfs<E: TreeEdgeTrait>(
-    tree: &Tree<E>,
+fn dfs<W, I>(
+    tree: &Tree<W, I>,
     sub: &mut [usize],
     ret: &mut Vec<usize>,
     size: usize,
@@ -53,7 +53,7 @@ mod tests {
         builder.extend(
             vec![(0, 1), (1, 2)]
                 .into_iter()
-                .map(|(u, v)| TreeEdge::new(u, v, (), ())),
+                .map(|(u, v)| (u, v, (), ())),
         );
         let tree = builder.build();
         assert_eq!(centroids(&tree), vec![1]);
@@ -62,7 +62,7 @@ mod tests {
         builder.extend(
             vec![(0, 1), (1, 2), (2, 3)]
                 .into_iter()
-                .map(|(u, v)| TreeEdge::new(u, v, (), ())),
+                .map(|(u, v)| (u, v, (), ())),
         );
         let tree = builder.build();
         let mut ans = centroids(&tree);

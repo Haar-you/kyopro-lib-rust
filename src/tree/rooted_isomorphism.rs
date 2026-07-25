@@ -10,7 +10,7 @@ use std::hash::{Hash, Hasher};
 ///
 /// # Returns
 /// - `(k, a)` : `k`は部分木の種類数、`a`は頂点`i`と頂点`j`を根とする部分木が同型のときに限り`a[i] = a[j]`を満たす。
-pub fn rooted_isomorphism<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> (usize, Vec<usize>) {
+pub fn rooted_isomorphism<W, I>(tree: &Tree<W, I>, root: usize) -> (usize, Vec<usize>) {
     let n = tree.len();
     let mut ret = vec![0; n];
     let mut map = HashMap::new();

@@ -6,12 +6,12 @@ use std::ops::Add;
 /// rootを根としたときの根から各頂点への距離を列挙する。
 ///
 /// **Time complexity** $O(n)$
-pub fn tree_distance<E: TreeEdgeTrait>(tr: &Tree<E>, root: usize) -> Vec<E::Weight>
+pub fn tree_distance<W, I>(tr: &Tree<W, I>, root: usize) -> Vec<W>
 where
-    E::Weight: Add<Output = E::Weight> + Copy + Zero,
+    W: Add<Output = W> + Copy + Zero,
 {
     let n = tr.len();
-    let mut ret = vec![E::Weight::zero(); n];
+    let mut ret = vec![W::zero(); n];
     let mut check = vec![false; n];
     let mut stack = vec![root];
 
@@ -33,9 +33,9 @@ where
 /// 木の任意の2頂点の距離の最大値を求める。
 ///
 /// **Time complexity** $O(n)$
-pub fn tree_diameter<E: TreeEdgeTrait>(tr: &Tree<E>) -> (E::Weight, usize, usize)
+pub fn tree_diameter<W, I>(tr: &Tree<W, I>) -> (W, usize, usize)
 where
-    E::Weight: Add<Output = E::Weight> + Copy + Zero + Ord,
+    W: Add<Output = W> + Copy + Zero + Ord,
 {
     let a = tree_distance(tr, 0);
     let (u, _) = a
@@ -57,9 +57,9 @@ where
 /// 木の各頂点について、そこからの距離の最大値を列挙する。
 ///
 /// **Time complexity** $O(n)$
-pub fn tree_height<E: TreeEdgeTrait>(tr: &Tree<E>) -> Vec<(E::Weight, usize)>
+pub fn tree_height<W, I>(tr: &Tree<W, I>) -> Vec<(W, usize)>
 where
-    E::Weight: Add<Output = E::Weight> + Copy + Zero + Ord,
+    W: Add<Output = W> + Copy + Zero + Ord,
 {
     let d = tree_distance(tr, 0);
     let (u, _) = d
@@ -84,7 +84,7 @@ where
 /// 木上の2頂点を結ぶパス上の頂点列を求める。
 ///
 /// **Time complexity** $O(n)$
-pub fn tree_path<E: TreeEdgeTrait>(tr: &Tree<E>, u: usize, v: usize) -> Vec<usize> {
+pub fn tree_path<W, I>(tr: &Tree<W, I>, u: usize, v: usize) -> Vec<usize> {
     let n = tr.len();
     let mut ret = vec![];
     let mut stack = vec![];
@@ -130,7 +130,7 @@ mod tests {
         builder.extend(
             vec![(0, 1, 2), (1, 2, 1), (1, 3, 3)]
                 .into_iter()
-                .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
+                .map(|(u, v, w)| (u, v, w, ())),
         );
         let tree = builder.build();
         assert_eq!(tree_diameter(&tree).0, 5);
@@ -139,7 +139,7 @@ mod tests {
         builder.extend(
             vec![(0, 1, 1), (1, 2, 2), (2, 3, 4)]
                 .into_iter()
-                .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
+                .map(|(u, v, w)| (u, v, w, ())),
         );
         let tree = builder.build();
         assert_eq!(tree_diameter(&tree).0, 7);
@@ -152,7 +152,7 @@ mod tests {
         builder.extend(
             vec![(0, 1, 2), (1, 2, 1), (1, 3, 3)]
                 .into_iter()
-                .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
+                .map(|(u, v, w)| (u, v, w, ())),
         );
         let tree = builder.build();
         assert_eq!(

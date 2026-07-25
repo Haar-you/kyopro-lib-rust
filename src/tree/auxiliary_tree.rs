@@ -3,33 +3,31 @@
 //! # References
 //! - <https://noshi91.github.io/algorithm-encyclopedia/auxiliary-tree>
 
+use std::marker::PhantomData;
+
 use crate::tree::*;
 
 /// Auxiliary Tree
 ///
 /// 与えられた頂点集合とそのLCAを保って木を圧縮した木を生成する。
-pub struct AuxiliaryTree {
+pub struct AuxiliaryTree<W, I> {
     preorder: Vec<usize>,
+    _phantom: PhantomData<(W, I)>,
 }
 
-impl AuxiliaryTree {
+impl<W, I> AuxiliaryTree<W, I> {
     /// `AuxiliaryTree`を生成する。
-    pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
+    pub fn new(tree: &Tree<W, I>, root: usize) -> Self {
         let n = tree.len();
         let mut this = Self {
             preorder: vec![0; n],
+            _phantom: PhantomData,
         };
         this.dfs(tree, root, None, &mut 0);
         this
     }
 
-    fn dfs<E: TreeEdgeTrait>(
-        &mut self,
-        tree: &Tree<E>,
-        cur: usize,
-        par: Option<usize>,
-        i: &mut usize,
-    ) {
+    fn dfs(&mut self, tree: &Tree<W, I>, cur: usize, par: Option<usize>, i: &mut usize) {
         self.preorder[cur] = *i;
         *i += 1;
 

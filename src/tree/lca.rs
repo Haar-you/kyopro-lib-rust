@@ -1,25 +1,29 @@
 //! 最小共通祖先
 
+use std::marker::PhantomData;
+
 use crate::tree::*;
 
 /// ダブリングによる最小共通祖先
-pub struct DoublingLCA {
+pub struct DoublingLCA<W, I> {
     log2n: usize,
     parent: Vec<Vec<Option<usize>>>,
     depth: Vec<usize>,
+    _phantom: PhantomData<(W, I)>,
 }
 
-impl DoublingLCA {
+impl<W, I> DoublingLCA<W, I> {
     /// **Time complexity** $O(n \log n)$
     ///
     /// **Space complexity** $O(n \log n)$
-    pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
+    pub fn new(tree: &Tree<W, I>, root: usize) -> Self {
         let n = tree.len();
         let log2n = n.next_power_of_two().trailing_zeros() as usize + 1;
         let mut this = Self {
             log2n,
             parent: vec![vec![None; log2n]; n],
             depth: vec![0; n],
+            _phantom: PhantomData,
         };
 
         let mut stack = vec![];

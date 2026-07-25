@@ -8,10 +8,10 @@
 //! - [yukicoder No.899 γatheree](https://yukicoder.me/problems/no/899)
 
 use crate::tree::*;
-use std::collections::VecDeque;
+use std::{collections::VecDeque, marker::PhantomData};
 
 /// 根付き木において、同一の深さの頂点の区間に対して区間クエリができる。
-pub struct TreeDepthQuery {
+pub struct TreeDepthQuery<W, I> {
     par: Vec<Option<usize>>,
     depth: Vec<usize>,
     left: Vec<usize>,
@@ -19,11 +19,12 @@ pub struct TreeDepthQuery {
     bfs_ord: Vec<Vec<usize>>,
     dfs_ord: Vec<Vec<usize>>,
     ord: Vec<usize>,
+    _phantom: PhantomData<(W, I)>,
 }
 
-impl TreeDepthQuery {
+impl<W, I> TreeDepthQuery<W, I> {
     /// 根を`root`とする`tree`を基に、`TreeDepthQuery`を構築する。
-    pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
+    pub fn new(tree: &Tree<W, I>, root: usize) -> Self {
         let size = tree.len();
         let mut this = Self {
             par: vec![None; size],
@@ -33,6 +34,7 @@ impl TreeDepthQuery {
             bfs_ord: vec![],
             dfs_ord: vec![],
             ord: vec![0; size],
+            _phantom: PhantomData,
         };
 
         this.dfs(tree, root, None, 0, &mut 0);
@@ -59,9 +61,9 @@ impl TreeDepthQuery {
         this
     }
 
-    fn dfs<E: TreeEdgeTrait>(
+    fn dfs(
         &mut self,
-        tree: &Tree<E>,
+        tree: &Tree<W, I>,
         cur: usize,
         par: Option<usize>,
         d: usize,

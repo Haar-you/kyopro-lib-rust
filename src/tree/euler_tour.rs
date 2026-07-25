@@ -3,33 +3,31 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/vertex_add_subtree_sum>
 
+use std::marker::PhantomData;
+
 use crate::tree::*;
 
 /// Euler tour
-pub struct EulerTour {
+pub struct EulerTour<W, I> {
     begin: Vec<usize>,
     end: Vec<usize>,
+    _phantom: PhantomData<(W, I)>,
 }
 
-impl EulerTour {
+impl<W, I> EulerTour<W, I> {
     /// `root`を根として[`EulerTour`]を構築する。
-    pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
+    pub fn new(tree: &Tree<W, I>, root: usize) -> Self {
         let n = tree.len();
         let mut this = Self {
             begin: vec![0; n],
             end: vec![0; n],
+            _phantom: PhantomData,
         };
         this.dfs(tree, root, None, &mut 0);
         this
     }
 
-    fn dfs<E: TreeEdgeTrait>(
-        &mut self,
-        tree: &Tree<E>,
-        cur: usize,
-        par: Option<usize>,
-        pos: &mut usize,
-    ) {
+    fn dfs(&mut self, tree: &Tree<W, I>, cur: usize, par: Option<usize>, pos: &mut usize) {
         self.begin[cur] = *pos;
         *pos += 1;
 
