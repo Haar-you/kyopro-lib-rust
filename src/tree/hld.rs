@@ -1,10 +1,10 @@
 //! 重軽分解
 use crate::tree::*;
-use std::cmp::max;
+use std::{cmp::max, marker::PhantomData};
 
 /// 重軽分解
 #[derive(Clone, Debug)]
-pub struct HLD {
+pub struct HLD<W, I> {
     _size: usize,
     par: Vec<Option<usize>>,
     head: Vec<usize>,
@@ -12,13 +12,14 @@ pub struct HLD {
     rid: Vec<usize>,
     next: Vec<Option<usize>>,
     end: Vec<usize>,
+    _phantom: PhantomData<(W, I)>,
 }
 
-impl HLD {
+impl<W, I> HLD<W, I> {
     /// **Time complexity** $O(n)$
     ///
     /// **Space complexity** $O(n)$
-    pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>, root: usize) -> Self {
+    pub fn new(tree: &Tree<W, I>, root: usize) -> Self {
         let size = tree.len();
         let mut ret = Self {
             _size: size,
@@ -28,6 +29,7 @@ impl HLD {
             rid: vec![0; size],
             next: vec![None; size],
             end: vec![0; size],
+            _phantom: PhantomData,
         };
 
         let mut tr = vec![vec![]; size];

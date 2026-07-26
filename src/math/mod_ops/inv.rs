@@ -7,7 +7,7 @@ use crate::math::gcd_lcm::GcdLcm;
 /// $m$は$0 < m < 2^{32}$の範囲に収めること。
 ///
 /// **Time complexity** $O(\log m)$
-pub fn mod_inv(mut a: u64, m: u64) -> Option<u64> {
+pub fn inv_mod(mut a: u64, m: u64) -> Option<u64> {
     assert!(
         0 < m && m <= 0xFFFFFFFF,
         "Violated 0 < m <= 0xFFFFFFFF (m = {m})"

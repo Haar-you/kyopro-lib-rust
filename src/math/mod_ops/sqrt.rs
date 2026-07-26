@@ -4,7 +4,7 @@ use crate::math::montgomery::Montgomery;
 use crate::rand::rand;
 
 /// 素数$p$と整数$a$について、$x^2 \equiv a \pmod p$を満たす$x$をすべて求める。
-pub fn mod_sqrt(a: u64, p: u64) -> Vec<u64> {
+pub fn sqrt_mod(a: u64, p: u64) -> Vec<u64> {
     if p == 2 {
         return vec![a % 2];
     }

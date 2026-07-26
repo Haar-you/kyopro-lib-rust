@@ -3,13 +3,13 @@ pub mod div_mul_transform;
 pub mod mobius;
 pub mod zeta;
 
-pub mod conv_and_or;
-pub mod conv_gcd_lcm;
-pub mod conv_mul_mod2n;
-pub mod conv_mul_modp;
-pub mod conv_xor;
-pub mod min_plus_conv_convex;
-pub mod subset_conv;
+pub mod bitwise_and_or;
+pub mod bitwise_xor;
+pub mod gcd_lcm;
+pub mod min_plus_convex;
+pub mod mul_mod2n;
+pub mod mul_modp;
+pub mod subset;
 
 pub mod ntt;
 
@@ -20,11 +20,11 @@ mod tests {
     use crate::{iter::collect::CollectVec, num::const_modint::*};
     use rand::prelude::*;
 
-    use super::conv_and_or::{convolution_and, convolution_or};
-    use super::conv_gcd_lcm::convolution_gcd;
-    use super::conv_xor::convolution_xor;
+    use super::bitwise_and_or::{bitwise_and_convolution, bitwise_or_convolution};
+    use super::bitwise_xor::bitwise_xor_convolution;
+    use super::gcd_lcm::gcd_convolution;
     use super::mobius::*;
-    use super::subset_conv::subset_convolution;
+    use super::subset::subset_convolution;
     use super::zeta::*;
 
     type M = Prime<998244353>;
@@ -99,7 +99,7 @@ mod tests {
             }
         }
 
-        let res = convolution_or(f, g);
+        let res = bitwise_or_convolution(f, g);
 
         assert_eq!(ans, res);
     }
@@ -125,7 +125,7 @@ mod tests {
             }
         }
 
-        let res = convolution_and(f, g);
+        let res = bitwise_and_convolution(f, g);
 
         assert_eq!(ans, res);
     }
@@ -151,7 +151,7 @@ mod tests {
             }
         }
 
-        let res = convolution_xor(f, g, ff);
+        let res = bitwise_xor_convolution(f, g, ff);
 
         assert_eq!(ans, res);
     }
@@ -205,7 +205,7 @@ mod tests {
             }
         }
 
-        let res = convolution_gcd(f, g);
+        let res = gcd_convolution(f, g);
 
         assert_eq!(ans[1..], res[1..]);
     }

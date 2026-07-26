@@ -56,6 +56,9 @@ impl<P: PrimeMod> NTT<P> {
     /// 数論変換を行う。
     pub fn ntt(&self, f: &mut [ConstModInt<P>]) {
         let n = f.len();
+        if n == 0 {
+            return;
+        }
         assert!(n.is_power_of_two() && n <= Self::MAX_SIZE);
 
         let mut width = n;
@@ -96,6 +99,9 @@ impl<P: PrimeMod> NTT<P> {
     /// `ntt`の逆変換を行う。
     pub fn intt(&self, f: &mut [ConstModInt<P>]) {
         let n = f.len();
+        if n == 0 {
+            return;
+        }
         assert!(n.is_power_of_two() && n <= Self::MAX_SIZE);
 
         // let p = size_of::<usize>() * 8 - n.trailing_zeros() as usize;

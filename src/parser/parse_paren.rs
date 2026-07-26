@@ -70,11 +70,7 @@ pub fn parse_paren<T: Copy + Eq + std::fmt::Debug>(
     let mut s = s.into_iter().peekable();
     let res = _parse(&mut s, open, close);
 
-    if s.peek().is_none() {
-        res
-    } else {
-        None
-    }
+    if s.peek().is_none() { res } else { None }
 }
 
 #[cfg(test)]

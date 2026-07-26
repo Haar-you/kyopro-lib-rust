@@ -5,7 +5,7 @@
 /// $p$は$0 < p < 2^{32}$の範囲の素数であること。
 ///
 /// **Time complexity** $O(\log p)$
-pub fn mod_inv_p(mut a: u64, p: u64) -> u64 {
+pub fn inv_mod_p(mut a: u64, p: u64) -> u64 {
     assert!(
         0 < p && p <= 0xFFFFFFFF,
         "Violated 0 < p <= 0xFFFFFFFF (p = {p})"

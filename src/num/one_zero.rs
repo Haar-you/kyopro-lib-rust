@@ -36,5 +36,9 @@ macro_rules! impl_one_zero_wrap {
     }
 }
 
-impl_one_zero!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
-impl_one_zero_wrap!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
+impl_one_zero!(
+    u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64
+);
+impl_one_zero_wrap!(
+    u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize
+);

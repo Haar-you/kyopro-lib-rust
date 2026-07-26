@@ -7,7 +7,7 @@ use crate::num::ff::*;
 ///
 /// # Requirements
 /// `f.len()` = `g.len()`
-pub fn convolution_xor<Modulo: FF>(
+pub fn bitwise_xor_convolution<Modulo: FF>(
     mut f: Vec<Modulo::Element>,
     mut g: Vec<Modulo::Element>,
     modulo: Modulo,

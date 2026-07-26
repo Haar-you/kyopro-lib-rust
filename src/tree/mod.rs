@@ -7,83 +7,87 @@ pub mod depth_query;
 pub mod euler_tour;
 pub mod hld;
 pub mod lca;
+pub mod range_contour;
 pub mod rerooting;
 pub mod rooted_isomorphism;
 pub mod rooting;
 pub mod tree_dp;
 pub mod utils;
 
-/// [`Tree`]にもたせる辺の満たすトレイト。
-pub trait TreeEdgeTrait {
-    /// 辺の重みの型
-    type Weight;
-    /// 辺の始点を返す。
-    fn from(&self) -> usize;
-    /// 辺の終点を返す。
-    fn to(&self) -> usize;
-    /// 辺の重みを返す。
-    fn weight(&self) -> Self::Weight;
-    /// 逆辺を返す。
-    fn rev(self) -> Self;
-}
-
-/// 始点、終点、重み、番号をもつ木の辺
+/// 木の辺
 #[derive(Clone, Debug)]
-pub struct TreeEdge<T, I> {
-    /// 始点
-    pub from: usize,
-    /// 終点
-    pub to: usize,
-    /// 重み
-    pub weight: T,
-    /// 辺の番号
-    pub index: I,
+pub struct TreeEdge<W, I> {
+    pub(crate) from: usize,
+    pub(crate) to: usize,
+    pub(crate) weight: W,
+    pub(crate) index: usize,
+    /// 補助的な情報
+    pub option: I,
 }
 
-impl<T, I> TreeEdge<T, I> {
+impl<W, I> TreeEdge<W, I> {
     /// `from`から`to`への重さ`weight`、辺番号`index`をもつ有向辺を作る。
-    pub fn new(from: usize, to: usize, weight: T, index: I) -> Self {
+    pub fn new(from: usize, to: usize, weight: W, index: usize, option: I) -> Self {
         Self {
             from,
             to,
             weight,
             index,
+            option,
         }
     }
 }
 
-impl<T: Clone, I> TreeEdgeTrait for TreeEdge<T, I> {
-    type Weight = T;
+impl<W, I> TreeEdge<W, I> {
+    /// 辺の始点を返す。
     #[inline]
-    fn from(&self) -> usize {
+    pub fn from(&self) -> usize {
         self.from
     }
+    /// 辺の終点を返す。
     #[inline]
-    fn to(&self) -> usize {
+    pub fn to(&self) -> usize {
         self.to
     }
+    /// 辺の番号を返す。
     #[inline]
-    fn weight(&self) -> Self::Weight {
-        self.weight.clone()
+    pub fn index(&self) -> usize {
+        self.index
     }
-    fn rev(mut self) -> Self {
+    /// 辺の逆辺を作って返す。
+    pub fn rev(mut self) -> Self {
         std::mem::swap(&mut self.from, &mut self.to);
         self
     }
 }
 
-/// 木のノード
-#[derive(Clone, Debug, Default)]
-pub struct TreeNode<E> {
-    /// 親ノードへの辺
-    pub parent: Option<E>,
-    /// 子ノードへの辺
-    pub children: Vec<E>,
+impl<W: Copy, I> TreeEdge<W, I> {
+    /// 辺の重みを返す。
+    #[inline]
+    pub fn weight(&self) -> W {
+        self.weight
+    }
 }
 
-impl<E: TreeEdgeTrait> TreeNode<E> {
+/// 木のノード
+#[derive(Clone, Debug, Default)]
+pub struct TreeNode<W, I> {
+    pub(crate) parent: Option<TreeEdge<W, I>>,
+    pub(crate) children: Vec<TreeEdge<W, I>>,
+}
+
+impl<W, I> TreeNode<W, I> {
+    /// 親ノードへの辺を返す。
+    pub fn parent(&self) -> Option<&TreeEdge<W, I>> {
+        self.parent.as_ref()
+    }
+    /// 子ノードへの辺へのイテレータを返す。
+    pub fn children(&self) -> impl DoubleEndedIterator<Item = &TreeEdge<W, I>> {
+        self.children.iter()
+    }
+
     /// 隣接辺を列挙するイテレータを返す。
-    pub fn neighbors(&self) -> impl DoubleEndedIterator<Item = &E> {
+    pub fn neighbors(&self) -> impl DoubleEndedIterator<Item = &TreeEdge<W, I>> {
         self.children.iter().chain(self.parent.iter())
     }
 
@@ -94,11 +98,12 @@ impl<E: TreeEdgeTrait> TreeNode<E> {
 }
 
 /// 非根付き木を構築する
-pub struct TreeBuilder<E> {
-    nodes: Vec<TreeNode<E>>,
+pub struct TreeBuilder<W, I> {
+    nodes: Vec<TreeNode<W, I>>,
+    edge_num: usize,
 }
 
-impl<E: TreeEdgeTrait + Clone> TreeBuilder<E> {
+impl<W: Copy, I: Clone> TreeBuilder<W, I> {
     /// 頂点数`size`の[`TreeBuilder`]を生成する。
     pub fn new(size: usize) -> Self {
         Self {
@@ -109,34 +114,45 @@ impl<E: TreeEdgeTrait + Clone> TreeBuilder<E> {
                 };
                 size
             ],
+            edge_num: 0,
         }
     }
 
     /// [`Tree`]を作る。
-    pub fn build(self) -> Tree<E> {
+    pub fn build(self) -> Tree<W, I> {
         Tree {
             nodes: self.nodes,
             root: None,
         }
     }
+
+    /// 木に辺を追加する。
+    pub fn add(&mut self, u: usize, v: usize, weight: W, option: I) {
+        self.nodes[u]
+            .children
+            .push(TreeEdge::new(u, v, weight, self.edge_num, option.clone()));
+        self.nodes[v]
+            .children
+            .push(TreeEdge::new(v, u, weight, self.edge_num, option));
+        self.edge_num += 1;
+    }
 }
 
-impl<E: TreeEdgeTrait + Clone> Extend<E> for TreeBuilder<E> {
-    fn extend<T: IntoIterator<Item = E>>(&mut self, iter: T) {
-        for e in iter {
-            self.nodes[e.from()].children.push(e.clone());
-            self.nodes[e.to()].children.push(e.rev());
-        }
+impl<W: Copy, I: Clone> Extend<(usize, usize, W, I)> for TreeBuilder<W, I> {
+    fn extend<T: IntoIterator<Item = (usize, usize, W, I)>>(&mut self, iter: T) {
+        iter.into_iter()
+            .for_each(|(u, v, weight, option)| self.add(u, v, weight, option));
     }
 }
 
 /// 根付き木を構築する
-pub struct RootedTreeBuilder<E> {
-    nodes: Vec<TreeNode<E>>,
+pub struct RootedTreeBuilder<W, I> {
+    nodes: Vec<TreeNode<W, I>>,
     root: usize,
+    edge_num: usize,
 }
 
-impl<E: TreeEdgeTrait + Clone> RootedTreeBuilder<E> {
+impl<W: Copy, I: Clone> RootedTreeBuilder<W, I> {
     /// 頂点数`size`の[`TreeBuilder`]を生成する。
     pub fn new(size: usize, root: usize) -> Self {
         Self {
@@ -148,43 +164,57 @@ impl<E: TreeEdgeTrait + Clone> RootedTreeBuilder<E> {
                 size
             ],
             root,
+            edge_num: 0,
         }
     }
 
     /// 根付きの[`Tree`]を作る。
-    pub fn build(self) -> Tree<E> {
+    pub fn build(self) -> Tree<W, I> {
         Tree {
             nodes: self.nodes,
             root: Some(self.root),
         }
     }
+
+    /// 木に辺を追加する。
+    pub fn add(&mut self, from: usize, to: usize, weight: W, option: I) {
+        assert!(self.nodes[to].parent.is_none());
+        self.nodes[from].children.push(TreeEdge::new(
+            from,
+            to,
+            weight,
+            self.edge_num,
+            option.clone(),
+        ));
+        self.nodes[to]
+            .parent
+            .replace(TreeEdge::new(to, from, weight, self.edge_num, option));
+        self.edge_num += 1;
+    }
 }
 
-impl<E: TreeEdgeTrait + Clone> Extend<E> for RootedTreeBuilder<E> {
-    fn extend<T: IntoIterator<Item = E>>(&mut self, iter: T) {
-        for e in iter {
-            assert!(self.nodes[e.to()].parent.is_none());
-            self.nodes[e.from()].children.push(e.clone());
-            self.nodes[e.to()].parent.replace(e.rev());
-        }
+impl<W: Copy, I: Clone> Extend<(usize, usize, W, I)> for RootedTreeBuilder<W, I> {
+    fn extend<T: IntoIterator<Item = (usize, usize, W, I)>>(&mut self, iter: T) {
+        iter.into_iter()
+            .for_each(|(from, to, weight, option)| self.add(from, to, weight, option));
     }
 }
 
 /// 木
 #[derive(Clone, Debug)]
-pub struct Tree<E> {
-    nodes: Vec<TreeNode<E>>,
+pub struct Tree<W, I> {
+    nodes: Vec<TreeNode<W, I>>,
     root: Option<usize>,
 }
 
-impl<E> Tree<E> {
+impl<W, I> Tree<W, I> {
     /// 各頂点の[`TreeNode`]への参照のイテレータを返す。
-    pub fn nodes_iter(&self) -> impl Iterator<Item = &TreeNode<E>> {
+    pub fn nodes_iter(&self) -> impl Iterator<Item = &TreeNode<W, I>> {
         self.nodes.iter()
     }
 
     /// `i`番目の頂点の[`TreeNode`]への参照を返す。
-    pub fn node_of(&self, i: usize) -> &TreeNode<E> {
+    pub fn node_of(&self, i: usize) -> &TreeNode<W, I> {
         &self.nodes[i]
     }
 

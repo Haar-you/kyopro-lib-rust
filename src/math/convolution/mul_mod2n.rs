@@ -10,7 +10,7 @@ use crate::num::const_modint::*;
 ///
 /// # Requirements
 /// `a.len()` = `b.len()` = $2^N$
-pub fn convolution_mul_mod2n<P: PrimeMod>(
+pub fn mul_mod2n_convolution<P: PrimeMod>(
     a: Vec<ConstModInt<P>>,
     b: Vec<ConstModInt<P>>,
 ) -> Vec<ConstModInt<P>> {

@@ -5,7 +5,7 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/chromatic_number>
-use crate::{graph::*, math::mod_ops::pow::mod_pow};
+use crate::{graph::*, math::mod_ops::pow::pow_mod};
 
 const M: u64 = 1000000007;
 
@@ -32,7 +32,7 @@ pub fn chromatic_number<W, I>(graph: &Graph<Undirected, W, I>) -> usize {
         let mut t = 0;
 
         for (i, &f) in f.iter().enumerate() {
-            let s = mod_pow(f, k as u64, M);
+            let s = pow_mod(f, k as u64, M);
             if s == 0 {
                 continue;
             }

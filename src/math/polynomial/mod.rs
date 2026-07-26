@@ -1,10 +1,11 @@
 //! 多項式
 
+pub mod interpolation;
 pub mod multipoint_eval;
-pub mod polynomial_interpolation;
-pub mod polynomial_taylor_shift;
+pub mod root_finding;
 pub mod shift_sampling_points;
 pub mod sparse;
+pub mod taylor_shift;
 
 use std::ops::{
     Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign,
@@ -26,6 +27,11 @@ impl<P: PrimeMod> Polynomial<P> {
     /// 零多項式を得る。
     pub fn zero() -> Self {
         Self { data: vec![] }
+    }
+
+    /// 多項式が$0$であるかを判定する。
+    pub fn is_zero(&self) -> bool {
+        self.data.iter().all(|x| x.value() == 0)
     }
 
     /// 定数項のみをもつ多項式を生成する。
@@ -171,6 +177,25 @@ impl<P: PrimeMod> Polynomial<P> {
         ret
     }
 
+    /// 多項式の$p$乗の$f$での剰余を求める。
+    pub fn pow_mod(self, mut p: u64, f: Self) -> Self {
+        let mut ret = Self::constant(1.into());
+        let mut a = self;
+
+        while p > 0 {
+            if p & 1 == 1 {
+                ret *= a.clone();
+                ret %= f.clone();
+            }
+
+            a = a.sq();
+            a %= f.clone();
+            p >>= 1;
+        }
+
+        ret
+    }
+
     /// 多項式`a`の2乗を返す。
     pub fn sq(mut self) -> Self {
         let k = self.len() * 2 - 1;
@@ -231,6 +256,35 @@ impl<P: PrimeMod> Polynomial<P> {
         r.shrink();
 
         (q, r)
+    }
+
+    /// 2つの多項式の$\gcd$を求める。
+    pub fn gcd(self, g: Self) -> Self {
+        if g.is_zero() {
+            self
+        } else {
+            g.clone().gcd(self % g)
+        }
+    }
+
+    /// 多項式を無平方分解する。
+    pub fn square_free(self) -> Self {
+        let mut d = self.clone();
+        d.differentiate();
+        self.clone() / self.gcd(d)
+    }
+
+    /// 最高次数の係数を$1$にした多項式を返す。
+    ///
+    /// 零多項式のときは、`None`を返す。
+    pub fn to_monic(mut self) -> Option<Self> {
+        let c = self.data.iter().rev().find(|x| x.value() != 0)?;
+        let c = c.inv();
+
+        for x in self.data.iter_mut() {
+            *x *= c;
+        }
+        Some(self)
     }
 }
 

@@ -9,7 +9,7 @@ use std::ops::{Add, Mul, Sub};
 ///
 /// # Requirements
 /// `f.len()` = `g.len()`
-pub fn convolution_gcd<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
+pub fn gcd_convolution<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
 where
     T: Copy + Add<Output = T> + Sub<Output = T> + Mul<Output = T>,
 {
@@ -30,7 +30,7 @@ where
 ///
 /// # Requirements
 /// `f.len()` = `g.len()`
-pub fn convolution_lcm<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
+pub fn lcm_convolution<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
 where
     T: Copy + Add<Output = T> + Sub<Output = T> + Mul<Output = T>,
 {

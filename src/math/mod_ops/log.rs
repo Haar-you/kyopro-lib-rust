@@ -11,7 +11,7 @@ use std::collections::HashMap;
 /// $m$は$0 < m < 2^{32}$の範囲に収めること。
 ///
 /// **Time complexity** $O(\sqrt{m})$
-pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
+pub fn log_mod(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
     assert!(
         0 < m && m <= 0xFFFFFFFF,
         "Violated 0 < m <= 0xFFFFFFFF (m = {m})"
@@ -36,7 +36,7 @@ pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
             d += 1;
             m /= g;
             b /= g;
-            b *= mod_inv(a / g, m).unwrap();
+            b *= inv_mod(a / g, m).unwrap();
             b %= m;
 
             if b == 1 {
@@ -59,7 +59,7 @@ pub fn mod_log(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
         t %= m;
     }
 
-    let x = mod_pow(mod_inv(a, m).unwrap(), sq, m);
+    let x = pow_mod(inv_mod(a, m).unwrap(), sq, m);
     let mut t = b % m;
 
     for i in 0..sq {

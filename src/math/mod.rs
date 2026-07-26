@@ -46,6 +46,7 @@ pub mod polynomial;
 pub mod closed_interval;
 
 pub mod fps;
+pub mod set_power_series;
 
 pub mod linear;
 

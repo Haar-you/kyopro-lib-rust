@@ -7,23 +7,22 @@ use crate::tree::*;
 /// # Problems
 /// - <https://atcoder.jp/contests/dp/tasks/dp_p>
 /// - <https://yukicoder.me/problems/no/763>
-pub struct TreeDP<'a, T, U, E> {
+pub struct TreeDP<'a, T, U, W, I> {
     init: U,
-    up: Box<dyn 'a + Fn(T, &'a E) -> U>,
+    up: Box<dyn 'a + Fn(T, &'a TreeEdge<W, I>) -> U>,
     merge: Box<dyn 'a + Fn(U, U) -> U>,
     apply: Box<dyn 'a + Fn(U, usize) -> T>,
 }
 
-impl<'a, T, U, E> TreeDP<'a, T, U, E>
+impl<'a, T, U, W, I> TreeDP<'a, T, U, W, I>
 where
-    E: TreeEdgeTrait,
     T: Clone,
     U: Clone,
 {
     /// `TreeDP`を構築する。
     pub fn new(
         init: U,
-        up: Box<impl 'a + Fn(T, &'a E) -> U>,
+        up: Box<impl 'a + Fn(T, &'a TreeEdge<W, I>) -> U>,
         merge: Box<impl 'a + Fn(U, U) -> U>,
         apply: Box<impl 'a + Fn(U, usize) -> T>,
     ) -> Self {
@@ -38,7 +37,7 @@ where
     /// `root`を根にして、`tree`上でDPを実行する。
     ///
     /// **Time complexity** $O(n)$
-    pub fn run(&self, tree: &'a Tree<E>, root: usize) -> Vec<T> {
+    pub fn run(&self, tree: &'a Tree<W, I>, root: usize) -> Vec<T> {
         let size = tree.len();
         let mut ret = vec![None; size];
 
@@ -49,7 +48,7 @@ where
 
     fn __dfs(
         &self,
-        tree: &'a Tree<E>,
+        tree: &'a Tree<W, I>,
         cur: usize,
         par: Option<usize>,
         ret: &mut Vec<Option<T>>,

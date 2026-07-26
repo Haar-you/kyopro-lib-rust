@@ -6,7 +6,7 @@ use std::ops::{Add, Mul, Sub};
 ///
 /// # Requirements
 /// `f.len()` = `g.len()`
-pub fn convolution_and<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
+pub fn bitwise_and_convolution<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
 where
     T: Copy + Add<Output = T> + Sub<Output = T> + Mul<Output = T>,
 {
@@ -24,7 +24,7 @@ where
 ///
 /// # Requirements
 /// `f.len()` = `g.len()`
-pub fn convolution_or<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
+pub fn bitwise_or_convolution<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
 where
     T: Copy + Add<Output = T> + Sub<Output = T> + Mul<Output = T>,
 {

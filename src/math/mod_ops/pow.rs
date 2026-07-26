@@ -6,7 +6,7 @@
 ///
 /// **Time complexity** $O(\log p)$
 #[inline]
-pub const fn mod_pow(mut x: u64, mut p: u64, m: u64) -> u64 {
+pub const fn pow_mod(mut x: u64, mut p: u64, m: u64) -> u64 {
     assert!(0 < m && m <= 0xFFFFFFFF, "Violated 0 < m <= 0xFFFFFFFF");
     if x >= m {
         x %= m;

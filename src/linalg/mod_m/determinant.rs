@@ -1,5 +1,5 @@
 //! $\mathbb{Z} / m \mathbb{Z}$上の行列式
-use crate::num::zz::{ZZElem, ZZ};
+use crate::num::zz::{ZZ, ZZElem};
 
 /// $\mathbb{Z} / m \mathbb{Z}$上で行列式を求める。
 pub fn determinant<R>(mut a: Vec<Vec<R::Element>>, ring: &R) -> R::Element

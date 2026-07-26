@@ -1,7 +1,7 @@
 //! 符号付き第一種スターリング数$s(0, k), \dots, s(n, k)$を列挙する。
 use crate::math::factorial::FactorialTable;
 use crate::math::fps::pow::FpsPow;
-use crate::math::mod_ops::enum_inv::enumerate_mod_inv;
+use crate::math::mod_ops::enum_inv::enumerate_inv_mod;
 use crate::math::polynomial::Polynomial;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
@@ -12,7 +12,7 @@ pub fn stirling_first_fixed_k<P: PrimeMod>(n: usize, k: usize) -> Vec<ConstModIn
 
     let ft = FactorialTable::new(n, ConstModIntBuilder::new());
 
-    let mut ret: Vec<ConstModInt<P>> = enumerate_mod_inv(n, P::PRIME_NUM as u64)
+    let mut ret: Vec<ConstModInt<P>> = enumerate_inv_mod(n, P::PRIME_NUM as u64)
         .into_iter()
         .map(Into::into)
         .collect();

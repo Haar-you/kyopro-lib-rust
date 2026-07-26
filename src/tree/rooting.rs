@@ -4,7 +4,7 @@ use crate::tree::*;
 use std::mem::swap;
 
 /// 根付き木に変換
-pub fn rooting<E: TreeEdgeTrait>(tr: &mut Tree<E>, root: usize) -> Result<(), &str> {
+pub fn rooting<W, I>(tr: &mut Tree<W, I>, root: usize) -> Result<(), &str> {
     let n = tr.len();
     let mut stack = vec![(root, -1)];
     let mut check = vec![false; n];
@@ -55,7 +55,7 @@ mod tests {
         builder.extend(
             vec![(0, 1), (1, 2), (2, 3), (2, 4), (5, 1)]
                 .into_iter()
-                .map(|(u, v)| TreeEdge::new(u, v, (), ())),
+                .map(|(u, v)| (u, v, (), ())),
         );
         let mut tr = builder.build();
         assert_eq!(rooting(&mut tr, 0), Ok(()));
@@ -71,7 +71,7 @@ mod tests {
         builder.extend(
             vec![(0, 1), (1, 2), (2, 3), (2, 1), (5, 1)]
                 .into_iter()
-                .map(|(u, v)| TreeEdge::new(u, v, (), ())),
+                .map(|(u, v)| (u, v, (), ())),
         );
         let mut tr = builder.build();
         assert!(rooting(&mut tr, 0).is_err());

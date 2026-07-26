@@ -3,6 +3,8 @@
 //! # Problems
 //! - <https://atcoder.jp/contests/abc291/tasks/abc291_h>
 //! - <https://judge.yosupo.jp/problem/frequency_table_of_tree_distance>
+use std::marker::PhantomData;
+
 use crate::tree::*;
 
 /// [`CentroidDecomposition`]の頂点ノード
@@ -19,13 +21,16 @@ pub struct Node {
 }
 
 /// 重心分解
-pub struct CentroidDecomposition {
+pub struct CentroidDecomposition<W, I> {
     nodes: Vec<Node>,
+    root: usize,
+    depth: usize,
+    _phantom: PhantomData<(W, I)>,
 }
 
-impl CentroidDecomposition {
+impl<W, I> CentroidDecomposition<W, I> {
     /// 木`tree`を重心分解する。
-    pub fn new<E: TreeEdgeTrait>(tree: &Tree<E>) -> Self {
+    pub fn new(tree: &Tree<W, I>) -> Self {
         let n = tree.len();
         let mut this = Self {
             nodes: vec![
@@ -37,6 +42,9 @@ impl CentroidDecomposition {
                 };
                 n
             ],
+            root: 0,
+            depth: 0,
+            _phantom: PhantomData,
         };
 
         let mut subsize = vec![0; n];
@@ -44,6 +52,8 @@ impl CentroidDecomposition {
         for (a, s) in this.nodes.iter_mut().zip(subsize) {
             a.subsize = s;
         }
+        this.root = (0..n).find(|&i| this.nodes[i].par.is_none()).unwrap();
+        this.depth = this.nodes.iter().map(|v| v.depth).max().unwrap();
         this
     }
 
@@ -52,9 +62,19 @@ impl CentroidDecomposition {
         &self.nodes
     }
 
-    fn decompose<E: TreeEdgeTrait>(
+    /// 重心分解木の根を返す。
+    pub fn root(&self) -> usize {
+        self.root
+    }
+
+    /// 重心分解木の深さを返す。
+    pub fn depth(&self) -> usize {
+        self.depth
+    }
+
+    fn decompose(
         &mut self,
-        tree: &Tree<E>,
+        tree: &Tree<W, I>,
         cur: usize,
         par: Option<usize>,
         d: usize,
@@ -78,9 +98,9 @@ impl CentroidDecomposition {
         }
     }
 
-    fn get_centroid<E: TreeEdgeTrait>(
+    fn get_centroid(
         &self,
-        tree: &Tree<E>,
+        tree: &Tree<W, I>,
         cur: usize,
         par: Option<usize>,
         total_size: usize,
@@ -95,9 +115,9 @@ impl CentroidDecomposition {
             })
     }
 
-    fn dfs_subsize<E: TreeEdgeTrait>(
+    fn dfs_subsize(
         &self,
-        tree: &Tree<E>,
+        tree: &Tree<W, I>,
         cur: usize,
         par: Option<usize>,
         subsize: &mut [usize],

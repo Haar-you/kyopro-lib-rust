@@ -27,7 +27,7 @@ pub fn linear_congruence(mut a: i64, mut b: i64, mut m: u64) -> Option<i64> {
         m /= g;
     }
 
-    Some(((m - b) * mod_inv(a, m)? % m) as i64)
+    Some(((m - b) * inv_mod(a, m)? % m) as i64)
 }
 
 #[cfg(test)]

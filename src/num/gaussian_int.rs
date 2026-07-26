@@ -54,11 +54,7 @@ impl GaussianInt {
 
     /// `self`と`b`の最大公約数を返す。
     pub fn gcd(self, b: Self) -> Self {
-        if b.is_zero() {
-            self
-        } else {
-            b.gcd(self % b)
-        }
+        if b.is_zero() { self } else { b.gcd(self % b) }
     }
 }
 
