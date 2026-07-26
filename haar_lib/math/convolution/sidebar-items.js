@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["conv_and_or","conv_gcd_lcm","conv_mul_mod2n","conv_mul_modp","conv_xor","div_mul_transform","min_plus_conv_convex","mobius","ntt","subset_conv","zeta"]};
+window.SIDEBAR_ITEMS = {"mod":["bitwise_and_or","bitwise_xor","div_mul_transform","gcd_lcm","min_plus_convex","mobius","mul_mod2n","mul_modp","ntt","subset","zeta"]};

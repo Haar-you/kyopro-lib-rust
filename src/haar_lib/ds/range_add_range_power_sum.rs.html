@@ -228,9 +228,9 @@
 <a href=#212 id=212 data-nosnippet>212</a>        <span class="kw">let </span><span class="kw-2">mut </span>s = RangeAddRangePowerSum::&lt;M&gt;::new(n, p);
 <a href=#213 id=213 data-nosnippet>213</a>        <span class="kw">let </span><span class="kw-2">mut </span>a = <span class="macro">vec!</span>[ff.from_u64(<span class="number">0</span>); n];
 <a href=#214 id=214 data-nosnippet>214</a>
-<a href=#215 id=215 data-nosnippet>215</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
+<a href=#215 id=215 data-nosnippet>215</a>        <span class="kw">for </span>(i, ai) <span class="kw">in </span>a.iter_mut().enumerate() {
 <a href=#216 id=216 data-nosnippet>216</a>            <span class="kw">let </span>x = ff.from_u64(rng.random());
-<a href=#217 id=217 data-nosnippet>217</a>            a[i] = x;
+<a href=#217 id=217 data-nosnippet>217</a>            <span class="kw-2">*</span>ai = x;
 <a href=#218 id=218 data-nosnippet>218</a>            s.assign(i, x);
 <a href=#219 id=219 data-nosnippet>219</a>        }
 <a href=#220 id=220 data-nosnippet>220</a>

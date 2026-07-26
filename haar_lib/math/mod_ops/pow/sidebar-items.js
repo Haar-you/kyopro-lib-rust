@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["mod_pow"]};
+window.SIDEBAR_ITEMS = {"fn":["pow_mod"]};

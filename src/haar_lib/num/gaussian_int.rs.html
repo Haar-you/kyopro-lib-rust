@@ -70,32 +70,28 @@
 <a href=#54 id=54 data-nosnippet>54</a>
 <a href=#55 id=55 data-nosnippet>55</a>    <span class="doccomment">/// `self`と`b`の最大公約数を返す。
 <a href=#56 id=56 data-nosnippet>56</a>    </span><span class="kw">pub fn </span>gcd(<span class="self">self</span>, b: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
-<a href=#57 id=57 data-nosnippet>57</a>        <span class="kw">if </span>b.is_zero() {
-<a href=#58 id=58 data-nosnippet>58</a>            <span class="self">self
-<a href=#59 id=59 data-nosnippet>59</a>        </span>} <span class="kw">else </span>{
-<a href=#60 id=60 data-nosnippet>60</a>            b.gcd(<span class="self">self </span>% b)
-<a href=#61 id=61 data-nosnippet>61</a>        }
-<a href=#62 id=62 data-nosnippet>62</a>    }
-<a href=#63 id=63 data-nosnippet>63</a>}
-<a href=#64 id=64 data-nosnippet>64</a>
-<a href=#65 id=65 data-nosnippet>65</a><span class="macro">impl_ops!</span>(Add <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>, b: <span class="self">Self</span>| <span class="self">Self</span>::new(a.re + b.re, a.im + b.im));
-<a href=#66 id=66 data-nosnippet>66</a><span class="macro">impl_ops!</span>(Sub <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>, b: <span class="self">Self</span>| <span class="self">Self</span>::new(a.re - b.re, a.im - b.im));
-<a href=#67 id=67 data-nosnippet>67</a><span class="macro">impl_ops!</span>(Mul <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>, b: <span class="self">Self</span>| <span class="self">Self</span>::new(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re));
-<a href=#68 id=68 data-nosnippet>68</a><span class="macro">impl_ops!</span>(Neg <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>| <span class="self">Self</span>::new(-a.re, -a.im));
+<a href=#57 id=57 data-nosnippet>57</a>        <span class="kw">if </span>b.is_zero() { <span class="self">self </span>} <span class="kw">else </span>{ b.gcd(<span class="self">self </span>% b) }
+<a href=#58 id=58 data-nosnippet>58</a>    }
+<a href=#59 id=59 data-nosnippet>59</a>}
+<a href=#60 id=60 data-nosnippet>60</a>
+<a href=#61 id=61 data-nosnippet>61</a><span class="macro">impl_ops!</span>(Add <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>, b: <span class="self">Self</span>| <span class="self">Self</span>::new(a.re + b.re, a.im + b.im));
+<a href=#62 id=62 data-nosnippet>62</a><span class="macro">impl_ops!</span>(Sub <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>, b: <span class="self">Self</span>| <span class="self">Self</span>::new(a.re - b.re, a.im - b.im));
+<a href=#63 id=63 data-nosnippet>63</a><span class="macro">impl_ops!</span>(Mul <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>, b: <span class="self">Self</span>| <span class="self">Self</span>::new(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re));
+<a href=#64 id=64 data-nosnippet>64</a><span class="macro">impl_ops!</span>(Neg <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>| <span class="self">Self</span>::new(-a.re, -a.im));
+<a href=#65 id=65 data-nosnippet>65</a>
+<a href=#66 id=66 data-nosnippet>66</a><span class="macro">impl_ops!</span>(AddAssign <span class="kw">for </span>GaussianInt, |a: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, b: <span class="self">Self</span>| <span class="kw-2">*</span>a = <span class="kw-2">*</span>a + b);
+<a href=#67 id=67 data-nosnippet>67</a><span class="macro">impl_ops!</span>(SubAssign <span class="kw">for </span>GaussianInt, |a: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, b: <span class="self">Self</span>| <span class="kw-2">*</span>a = <span class="kw-2">*</span>a - b);
+<a href=#68 id=68 data-nosnippet>68</a><span class="macro">impl_ops!</span>(MulAssign <span class="kw">for </span>GaussianInt, |a: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, b: <span class="self">Self</span>| <span class="kw-2">*</span>a = <span class="kw-2">*</span>a * b);
 <a href=#69 id=69 data-nosnippet>69</a>
-<a href=#70 id=70 data-nosnippet>70</a><span class="macro">impl_ops!</span>(AddAssign <span class="kw">for </span>GaussianInt, |a: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, b: <span class="self">Self</span>| <span class="kw-2">*</span>a = <span class="kw-2">*</span>a + b);
-<a href=#71 id=71 data-nosnippet>71</a><span class="macro">impl_ops!</span>(SubAssign <span class="kw">for </span>GaussianInt, |a: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, b: <span class="self">Self</span>| <span class="kw-2">*</span>a = <span class="kw-2">*</span>a - b);
-<a href=#72 id=72 data-nosnippet>72</a><span class="macro">impl_ops!</span>(MulAssign <span class="kw">for </span>GaussianInt, |a: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, b: <span class="self">Self</span>| <span class="kw-2">*</span>a = <span class="kw-2">*</span>a * b);
-<a href=#73 id=73 data-nosnippet>73</a>
-<a href=#74 id=74 data-nosnippet>74</a><span class="macro">impl_ops!</span>(
-<a href=#75 id=75 data-nosnippet>75</a>    <span class="doccomment">/// $\mathtt{self} = q \times \mathtt{b} + r (N(b) &gt; N(r))$となる$q$を返す。
-<a href=#76 id=76 data-nosnippet>76</a>    </span>Div <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>, b: <span class="self">Self</span>| a.div_rem(b).<span class="number">0</span>);
-<a href=#77 id=77 data-nosnippet>77</a><span class="macro">impl_ops!</span>(
-<a href=#78 id=78 data-nosnippet>78</a>    <span class="doccomment">/// $\mathtt{self} = q \times \mathtt{b} + r (N(b) &gt; N(r))$となる$r$を返す。
-<a href=#79 id=79 data-nosnippet>79</a>    </span>Rem <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>, b: <span class="self">Self</span>| a.div_rem(b).<span class="number">1</span>);
-<a href=#80 id=80 data-nosnippet>80</a>
-<a href=#81 id=81 data-nosnippet>81</a><span class="macro">impl_ops!</span>(DivAssign <span class="kw">for </span>GaussianInt, |a: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, b: <span class="self">Self</span>| <span class="kw-2">*</span>a = <span class="kw-2">*</span>a / b);
-<a href=#82 id=82 data-nosnippet>82</a><span class="macro">impl_ops!</span>(RemAssign <span class="kw">for </span>GaussianInt, |a: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, b: <span class="self">Self</span>| <span class="kw-2">*</span>a = <span class="kw-2">*</span>a % b);
-<a href=#83 id=83 data-nosnippet>83</a>
-<a href=#84 id=84 data-nosnippet>84</a><span class="macro">impl_from!</span>((i64, i64) =&gt; GaussianInt, |(a, b)| <span class="self">Self</span>::new(a, b));
-<a href=#85 id=85 data-nosnippet>85</a><span class="macro">impl_from!</span>(GaussianInt =&gt; (i64, i64), |GaussianInt { re, im }| (re, im));</code></pre></div></section></main></body></html>
+<a href=#70 id=70 data-nosnippet>70</a><span class="macro">impl_ops!</span>(
+<a href=#71 id=71 data-nosnippet>71</a>    <span class="doccomment">/// $\mathtt{self} = q \times \mathtt{b} + r (N(b) &gt; N(r))$となる$q$を返す。
+<a href=#72 id=72 data-nosnippet>72</a>    </span>Div <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>, b: <span class="self">Self</span>| a.div_rem(b).<span class="number">0</span>);
+<a href=#73 id=73 data-nosnippet>73</a><span class="macro">impl_ops!</span>(
+<a href=#74 id=74 data-nosnippet>74</a>    <span class="doccomment">/// $\mathtt{self} = q \times \mathtt{b} + r (N(b) &gt; N(r))$となる$r$を返す。
+<a href=#75 id=75 data-nosnippet>75</a>    </span>Rem <span class="kw">for </span>GaussianInt, |a: <span class="self">Self</span>, b: <span class="self">Self</span>| a.div_rem(b).<span class="number">1</span>);
+<a href=#76 id=76 data-nosnippet>76</a>
+<a href=#77 id=77 data-nosnippet>77</a><span class="macro">impl_ops!</span>(DivAssign <span class="kw">for </span>GaussianInt, |a: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, b: <span class="self">Self</span>| <span class="kw-2">*</span>a = <span class="kw-2">*</span>a / b);
+<a href=#78 id=78 data-nosnippet>78</a><span class="macro">impl_ops!</span>(RemAssign <span class="kw">for </span>GaussianInt, |a: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, b: <span class="self">Self</span>| <span class="kw-2">*</span>a = <span class="kw-2">*</span>a % b);
+<a href=#79 id=79 data-nosnippet>79</a>
+<a href=#80 id=80 data-nosnippet>80</a><span class="macro">impl_from!</span>((i64, i64) =&gt; GaussianInt, |(a, b)| <span class="self">Self</span>::new(a, b));
+<a href=#81 id=81 data-nosnippet>81</a><span class="macro">impl_from!</span>(GaussianInt =&gt; (i64, i64), |GaussianInt { re, im }| (re, im));</code></pre></div></section></main></body></html>

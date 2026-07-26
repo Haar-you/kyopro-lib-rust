@@ -19,13 +19,13 @@
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">pub mod </span>mobius;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">pub mod </span>zeta;
 <a href=#5 id=5 data-nosnippet>5</a>
-<a href=#6 id=6 data-nosnippet>6</a><span class="kw">pub mod </span>conv_and_or;
-<a href=#7 id=7 data-nosnippet>7</a><span class="kw">pub mod </span>conv_gcd_lcm;
-<a href=#8 id=8 data-nosnippet>8</a><span class="kw">pub mod </span>conv_mul_mod2n;
-<a href=#9 id=9 data-nosnippet>9</a><span class="kw">pub mod </span>conv_mul_modp;
-<a href=#10 id=10 data-nosnippet>10</a><span class="kw">pub mod </span>conv_xor;
-<a href=#11 id=11 data-nosnippet>11</a><span class="kw">pub mod </span>min_plus_conv_convex;
-<a href=#12 id=12 data-nosnippet>12</a><span class="kw">pub mod </span>subset_conv;
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">pub mod </span>bitwise_and_or;
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">pub mod </span>bitwise_xor;
+<a href=#8 id=8 data-nosnippet>8</a><span class="kw">pub mod </span>gcd_lcm;
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">pub mod </span>min_plus_convex;
+<a href=#10 id=10 data-nosnippet>10</a><span class="kw">pub mod </span>mul_mod2n;
+<a href=#11 id=11 data-nosnippet>11</a><span class="kw">pub mod </span>mul_modp;
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">pub mod </span>subset;
 <a href=#13 id=13 data-nosnippet>13</a>
 <a href=#14 id=14 data-nosnippet>14</a><span class="kw">pub mod </span>ntt;
 <a href=#15 id=15 data-nosnippet>15</a>
@@ -36,11 +36,11 @@
 <a href=#20 id=20 data-nosnippet>20</a>    <span class="kw">use crate</span>::{iter::collect::CollectVec, num::const_modint::<span class="kw-2">*</span>};
 <a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">use </span>rand::prelude::<span class="kw-2">*</span>;
 <a href=#22 id=22 data-nosnippet>22</a>
-<a href=#23 id=23 data-nosnippet>23</a>    <span class="kw">use </span><span class="kw">super</span>::conv_and_or::{convolution_and, convolution_or};
-<a href=#24 id=24 data-nosnippet>24</a>    <span class="kw">use </span><span class="kw">super</span>::conv_gcd_lcm::convolution_gcd;
-<a href=#25 id=25 data-nosnippet>25</a>    <span class="kw">use </span><span class="kw">super</span>::conv_xor::convolution_xor;
+<a href=#23 id=23 data-nosnippet>23</a>    <span class="kw">use </span><span class="kw">super</span>::bitwise_and_or::{bitwise_and_convolution, bitwise_or_convolution};
+<a href=#24 id=24 data-nosnippet>24</a>    <span class="kw">use </span><span class="kw">super</span>::bitwise_xor::bitwise_xor_convolution;
+<a href=#25 id=25 data-nosnippet>25</a>    <span class="kw">use </span><span class="kw">super</span>::gcd_lcm::gcd_convolution;
 <a href=#26 id=26 data-nosnippet>26</a>    <span class="kw">use </span><span class="kw">super</span>::mobius::<span class="kw-2">*</span>;
-<a href=#27 id=27 data-nosnippet>27</a>    <span class="kw">use </span><span class="kw">super</span>::subset_conv::subset_convolution;
+<a href=#27 id=27 data-nosnippet>27</a>    <span class="kw">use </span><span class="kw">super</span>::subset::subset_convolution;
 <a href=#28 id=28 data-nosnippet>28</a>    <span class="kw">use </span><span class="kw">super</span>::zeta::<span class="kw-2">*</span>;
 <a href=#29 id=29 data-nosnippet>29</a>
 <a href=#30 id=30 data-nosnippet>30</a>    <span class="kw">type </span>M = Prime&lt;<span class="number">998244353</span>&gt;;
@@ -115,7 +115,7 @@
 <a href=#99 id=99 data-nosnippet>99</a>            }
 <a href=#100 id=100 data-nosnippet>100</a>        }
 <a href=#101 id=101 data-nosnippet>101</a>
-<a href=#102 id=102 data-nosnippet>102</a>        <span class="kw">let </span>res = convolution_or(f, g);
+<a href=#102 id=102 data-nosnippet>102</a>        <span class="kw">let </span>res = bitwise_or_convolution(f, g);
 <a href=#103 id=103 data-nosnippet>103</a>
 <a href=#104 id=104 data-nosnippet>104</a>        <span class="macro">assert_eq!</span>(ans, res);
 <a href=#105 id=105 data-nosnippet>105</a>    }
@@ -141,7 +141,7 @@
 <a href=#125 id=125 data-nosnippet>125</a>            }
 <a href=#126 id=126 data-nosnippet>126</a>        }
 <a href=#127 id=127 data-nosnippet>127</a>
-<a href=#128 id=128 data-nosnippet>128</a>        <span class="kw">let </span>res = convolution_and(f, g);
+<a href=#128 id=128 data-nosnippet>128</a>        <span class="kw">let </span>res = bitwise_and_convolution(f, g);
 <a href=#129 id=129 data-nosnippet>129</a>
 <a href=#130 id=130 data-nosnippet>130</a>        <span class="macro">assert_eq!</span>(ans, res);
 <a href=#131 id=131 data-nosnippet>131</a>    }
@@ -167,7 +167,7 @@
 <a href=#151 id=151 data-nosnippet>151</a>            }
 <a href=#152 id=152 data-nosnippet>152</a>        }
 <a href=#153 id=153 data-nosnippet>153</a>
-<a href=#154 id=154 data-nosnippet>154</a>        <span class="kw">let </span>res = convolution_xor(f, g, ff);
+<a href=#154 id=154 data-nosnippet>154</a>        <span class="kw">let </span>res = bitwise_xor_convolution(f, g, ff);
 <a href=#155 id=155 data-nosnippet>155</a>
 <a href=#156 id=156 data-nosnippet>156</a>        <span class="macro">assert_eq!</span>(ans, res);
 <a href=#157 id=157 data-nosnippet>157</a>    }
@@ -221,7 +221,7 @@
 <a href=#205 id=205 data-nosnippet>205</a>            }
 <a href=#206 id=206 data-nosnippet>206</a>        }
 <a href=#207 id=207 data-nosnippet>207</a>
-<a href=#208 id=208 data-nosnippet>208</a>        <span class="kw">let </span>res = convolution_gcd(f, g);
+<a href=#208 id=208 data-nosnippet>208</a>        <span class="kw">let </span>res = gcd_convolution(f, g);
 <a href=#209 id=209 data-nosnippet>209</a>
 <a href=#210 id=210 data-nosnippet>210</a>        <span class="macro">assert_eq!</span>(ans[<span class="number">1</span>..], res[<span class="number">1</span>..]);
 <a href=#211 id=211 data-nosnippet>211</a>    }

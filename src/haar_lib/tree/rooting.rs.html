@@ -20,7 +20,7 @@
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>std::mem::swap;
 <a href=#5 id=5 data-nosnippet>5</a>
 <a href=#6 id=6 data-nosnippet>6</a><span class="doccomment">/// 根付き木に変換
-<a href=#7 id=7 data-nosnippet>7</a></span><span class="kw">pub fn </span>rooting&lt;E: TreeEdgeTrait&gt;(tr: <span class="kw-2">&amp;mut </span>Tree&lt;E&gt;, root: usize) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw-2">&amp;</span>str&gt; {
+<a href=#7 id=7 data-nosnippet>7</a></span><span class="kw">pub fn </span>rooting&lt;W, I&gt;(tr: <span class="kw-2">&amp;mut </span>Tree&lt;W, I&gt;, root: usize) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw-2">&amp;</span>str&gt; {
 <a href=#8 id=8 data-nosnippet>8</a>    <span class="kw">let </span>n = tr.len();
 <a href=#9 id=9 data-nosnippet>9</a>    <span class="kw">let </span><span class="kw-2">mut </span>stack = <span class="macro">vec!</span>[(root, -<span class="number">1</span>)];
 <a href=#10 id=10 data-nosnippet>10</a>    <span class="kw">let </span><span class="kw-2">mut </span>check = <span class="macro">vec!</span>[<span class="bool-val">false</span>; n];
@@ -71,7 +71,7 @@
 <a href=#55 id=55 data-nosnippet>55</a>        builder.extend(
 <a href=#56 id=56 data-nosnippet>56</a>            <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">4</span>), (<span class="number">5</span>, <span class="number">1</span>)]
 <a href=#57 id=57 data-nosnippet>57</a>                .into_iter()
-<a href=#58 id=58 data-nosnippet>58</a>                .map(|(u, v)| TreeEdge::new(u, v, (), ())),
+<a href=#58 id=58 data-nosnippet>58</a>                .map(|(u, v)| (u, v, (), ())),
 <a href=#59 id=59 data-nosnippet>59</a>        );
 <a href=#60 id=60 data-nosnippet>60</a>        <span class="kw">let </span><span class="kw-2">mut </span>tr = builder.build();
 <a href=#61 id=61 data-nosnippet>61</a>        <span class="macro">assert_eq!</span>(rooting(<span class="kw-2">&amp;mut </span>tr, <span class="number">0</span>), <span class="prelude-val">Ok</span>(()));
@@ -87,7 +87,7 @@
 <a href=#71 id=71 data-nosnippet>71</a>        builder.extend(
 <a href=#72 id=72 data-nosnippet>72</a>            <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">5</span>, <span class="number">1</span>)]
 <a href=#73 id=73 data-nosnippet>73</a>                .into_iter()
-<a href=#74 id=74 data-nosnippet>74</a>                .map(|(u, v)| TreeEdge::new(u, v, (), ())),
+<a href=#74 id=74 data-nosnippet>74</a>                .map(|(u, v)| (u, v, (), ())),
 <a href=#75 id=75 data-nosnippet>75</a>        );
 <a href=#76 id=76 data-nosnippet>76</a>        <span class="kw">let </span><span class="kw-2">mut </span>tr = builder.build();
 <a href=#77 id=77 data-nosnippet>77</a>        <span class="macro">assert!</span>(rooting(<span class="kw-2">&amp;mut </span>tr, <span class="number">0</span>).is_err());

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["mod_log"]};
+window.SIDEBAR_ITEMS = {"fn":["log_mod"]};

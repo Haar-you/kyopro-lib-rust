@@ -48,7 +48,7 @@
 <a href=#32 id=32 data-nosnippet>32</a>            prod[i] = prod[i - <span class="number">1</span>] * (<span class="kw">if </span>i <span class="kw">as </span>u64 % p == <span class="number">0 </span>{ <span class="number">1 </span>} <span class="kw">else </span>{ i <span class="kw">as </span>u64 }) % m;
 <a href=#33 id=33 data-nosnippet>33</a>        }
 <a href=#34 id=34 data-nosnippet>34</a>
-<a href=#35 id=35 data-nosnippet>35</a>        inv[m <span class="kw">as </span>usize - <span class="number">1</span>] = mod_inv(prod[m <span class="kw">as </span>usize - <span class="number">1</span>], m).unwrap();
+<a href=#35 id=35 data-nosnippet>35</a>        inv[m <span class="kw">as </span>usize - <span class="number">1</span>] = inv_mod(prod[m <span class="kw">as </span>usize - <span class="number">1</span>], m).unwrap();
 <a href=#36 id=36 data-nosnippet>36</a>        <span class="kw">for </span>i <span class="kw">in </span>(<span class="number">1</span>..m <span class="kw">as </span>usize).rev() {
 <a href=#37 id=37 data-nosnippet>37</a>            inv[i - <span class="number">1</span>] = inv[i] * (<span class="kw">if </span>i <span class="kw">as </span>u64 % p == <span class="number">0 </span>{ <span class="number">1 </span>} <span class="kw">else </span>{ i <span class="kw">as </span>u64 }) % m;
 <a href=#38 id=38 data-nosnippet>38</a>        }
@@ -100,7 +100,7 @@
 <a href=#84 id=84 data-nosnippet>84</a>            ret = <span class="self">self</span>.m - ret;
 <a href=#85 id=85 data-nosnippet>85</a>        }
 <a href=#86 id=86 data-nosnippet>86</a>
-<a href=#87 id=87 data-nosnippet>87</a>        ret <span class="kw-2">*</span>= mod_pow(<span class="self">self</span>.p, e, <span class="self">self</span>.m);
+<a href=#87 id=87 data-nosnippet>87</a>        ret <span class="kw-2">*</span>= pow_mod(<span class="self">self</span>.p, e, <span class="self">self</span>.m);
 <a href=#88 id=88 data-nosnippet>88</a>        ret %= <span class="self">self</span>.m;
 <a href=#89 id=89 data-nosnippet>89</a>
 <a href=#90 id=90 data-nosnippet>90</a>        ret

@@ -22,12 +22,12 @@
 <a href=#6 id=6 data-nosnippet>6</a><span class="doccomment">/// rootを根としたときの根から各頂点への距離を列挙する。
 <a href=#7 id=7 data-nosnippet>7</a>///
 <a href=#8 id=8 data-nosnippet>8</a>/// **Time complexity** $O(n)$
-<a href=#9 id=9 data-nosnippet>9</a></span><span class="kw">pub fn </span>tree_distance&lt;E: TreeEdgeTrait&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; Vec&lt;E::Weight&gt;
+<a href=#9 id=9 data-nosnippet>9</a></span><span class="kw">pub fn </span>tree_distance&lt;W, I&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;W, I&gt;, root: usize) -&gt; Vec&lt;W&gt;
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">where
-<a href=#11 id=11 data-nosnippet>11</a>    </span>E::Weight: Add&lt;Output = E::Weight&gt; + Copy + Zero,
+<a href=#11 id=11 data-nosnippet>11</a>    </span>W: Add&lt;Output = W&gt; + Copy + Zero,
 <a href=#12 id=12 data-nosnippet>12</a>{
 <a href=#13 id=13 data-nosnippet>13</a>    <span class="kw">let </span>n = tr.len();
-<a href=#14 id=14 data-nosnippet>14</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[E::Weight::zero(); n];
+<a href=#14 id=14 data-nosnippet>14</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[W::zero(); n];
 <a href=#15 id=15 data-nosnippet>15</a>    <span class="kw">let </span><span class="kw-2">mut </span>check = <span class="macro">vec!</span>[<span class="bool-val">false</span>; n];
 <a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">let </span><span class="kw-2">mut </span>stack = <span class="macro">vec!</span>[root];
 <a href=#17 id=17 data-nosnippet>17</a>
@@ -49,9 +49,9 @@
 <a href=#33 id=33 data-nosnippet>33</a><span class="doccomment">/// 木の任意の2頂点の距離の最大値を求める。
 <a href=#34 id=34 data-nosnippet>34</a>///
 <a href=#35 id=35 data-nosnippet>35</a>/// **Time complexity** $O(n)$
-<a href=#36 id=36 data-nosnippet>36</a></span><span class="kw">pub fn </span>tree_diameter&lt;E: TreeEdgeTrait&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;E&gt;) -&gt; (E::Weight, usize, usize)
+<a href=#36 id=36 data-nosnippet>36</a></span><span class="kw">pub fn </span>tree_diameter&lt;W, I&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;W, I&gt;) -&gt; (W, usize, usize)
 <a href=#37 id=37 data-nosnippet>37</a><span class="kw">where
-<a href=#38 id=38 data-nosnippet>38</a>    </span>E::Weight: Add&lt;Output = E::Weight&gt; + Copy + Zero + Ord,
+<a href=#38 id=38 data-nosnippet>38</a>    </span>W: Add&lt;Output = W&gt; + Copy + Zero + Ord,
 <a href=#39 id=39 data-nosnippet>39</a>{
 <a href=#40 id=40 data-nosnippet>40</a>    <span class="kw">let </span>a = tree_distance(tr, <span class="number">0</span>);
 <a href=#41 id=41 data-nosnippet>41</a>    <span class="kw">let </span>(u, <span class="kw">_</span>) = a
@@ -73,9 +73,9 @@
 <a href=#57 id=57 data-nosnippet>57</a><span class="doccomment">/// 木の各頂点について、そこからの距離の最大値を列挙する。
 <a href=#58 id=58 data-nosnippet>58</a>///
 <a href=#59 id=59 data-nosnippet>59</a>/// **Time complexity** $O(n)$
-<a href=#60 id=60 data-nosnippet>60</a></span><span class="kw">pub fn </span>tree_height&lt;E: TreeEdgeTrait&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;E&gt;) -&gt; Vec&lt;(E::Weight, usize)&gt;
+<a href=#60 id=60 data-nosnippet>60</a></span><span class="kw">pub fn </span>tree_height&lt;W, I&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;W, I&gt;) -&gt; Vec&lt;(W, usize)&gt;
 <a href=#61 id=61 data-nosnippet>61</a><span class="kw">where
-<a href=#62 id=62 data-nosnippet>62</a>    </span>E::Weight: Add&lt;Output = E::Weight&gt; + Copy + Zero + Ord,
+<a href=#62 id=62 data-nosnippet>62</a>    </span>W: Add&lt;Output = W&gt; + Copy + Zero + Ord,
 <a href=#63 id=63 data-nosnippet>63</a>{
 <a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">let </span>d = tree_distance(tr, <span class="number">0</span>);
 <a href=#65 id=65 data-nosnippet>65</a>    <span class="kw">let </span>(u, <span class="kw">_</span>) = d
@@ -100,7 +100,7 @@
 <a href=#84 id=84 data-nosnippet>84</a><span class="doccomment">/// 木上の2頂点を結ぶパス上の頂点列を求める。
 <a href=#85 id=85 data-nosnippet>85</a>///
 <a href=#86 id=86 data-nosnippet>86</a>/// **Time complexity** $O(n)$
-<a href=#87 id=87 data-nosnippet>87</a></span><span class="kw">pub fn </span>tree_path&lt;E: TreeEdgeTrait&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, u: usize, v: usize) -&gt; Vec&lt;usize&gt; {
+<a href=#87 id=87 data-nosnippet>87</a></span><span class="kw">pub fn </span>tree_path&lt;W, I&gt;(tr: <span class="kw-2">&amp;</span>Tree&lt;W, I&gt;, u: usize, v: usize) -&gt; Vec&lt;usize&gt; {
 <a href=#88 id=88 data-nosnippet>88</a>    <span class="kw">let </span>n = tr.len();
 <a href=#89 id=89 data-nosnippet>89</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
 <a href=#90 id=90 data-nosnippet>90</a>    <span class="kw">let </span><span class="kw-2">mut </span>stack = <span class="macro">vec!</span>[];
@@ -146,7 +146,7 @@
 <a href=#130 id=130 data-nosnippet>130</a>        builder.extend(
 <a href=#131 id=131 data-nosnippet>131</a>            <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>)]
 <a href=#132 id=132 data-nosnippet>132</a>                .into_iter()
-<a href=#133 id=133 data-nosnippet>133</a>                .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
+<a href=#133 id=133 data-nosnippet>133</a>                .map(|(u, v, w)| (u, v, w, ())),
 <a href=#134 id=134 data-nosnippet>134</a>        );
 <a href=#135 id=135 data-nosnippet>135</a>        <span class="kw">let </span>tree = builder.build();
 <a href=#136 id=136 data-nosnippet>136</a>        <span class="macro">assert_eq!</span>(tree_diameter(<span class="kw-2">&amp;</span>tree).<span class="number">0</span>, <span class="number">5</span>);
@@ -155,7 +155,7 @@
 <a href=#139 id=139 data-nosnippet>139</a>        builder.extend(
 <a href=#140 id=140 data-nosnippet>140</a>            <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)]
 <a href=#141 id=141 data-nosnippet>141</a>                .into_iter()
-<a href=#142 id=142 data-nosnippet>142</a>                .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
+<a href=#142 id=142 data-nosnippet>142</a>                .map(|(u, v, w)| (u, v, w, ())),
 <a href=#143 id=143 data-nosnippet>143</a>        );
 <a href=#144 id=144 data-nosnippet>144</a>        <span class="kw">let </span>tree = builder.build();
 <a href=#145 id=145 data-nosnippet>145</a>        <span class="macro">assert_eq!</span>(tree_diameter(<span class="kw-2">&amp;</span>tree).<span class="number">0</span>, <span class="number">7</span>);
@@ -168,7 +168,7 @@
 <a href=#152 id=152 data-nosnippet>152</a>        builder.extend(
 <a href=#153 id=153 data-nosnippet>153</a>            <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>)]
 <a href=#154 id=154 data-nosnippet>154</a>                .into_iter()
-<a href=#155 id=155 data-nosnippet>155</a>                .map(|(u, v, w)| TreeEdge::new(u, v, w, ())),
+<a href=#155 id=155 data-nosnippet>155</a>                .map(|(u, v, w)| (u, v, w, ())),
 <a href=#156 id=156 data-nosnippet>156</a>        );
 <a href=#157 id=157 data-nosnippet>157</a>        <span class="kw">let </span>tree = builder.build();
 <a href=#158 id=158 data-nosnippet>158</a>        <span class="macro">assert_eq!</span>(

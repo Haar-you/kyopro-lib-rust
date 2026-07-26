@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["mod_inv_p"]};
+window.SIDEBAR_ITEMS = {"fn":["inv_mod_p"]};

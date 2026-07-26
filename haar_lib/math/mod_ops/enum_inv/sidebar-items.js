@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["enumerate_mod_inv"]};
+window.SIDEBAR_ITEMS = {"fn":["enumerate_inv_mod"]};

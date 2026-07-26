@@ -35,9 +35,9 @@
 <a href=#19 id=19 data-nosnippet>19</a>
 <a href=#20 id=20 data-nosnippet>20</a>    <span class="macro">assert!</span>(n &lt;= <span class="number">32</span>);
 <a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">let </span><span class="kw-2">mut </span>g = <span class="macro">vec!</span>[<span class="number">0</span>; n];
-<a href=#22 id=22 data-nosnippet>22</a>    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..n {
+<a href=#22 id=22 data-nosnippet>22</a>    <span class="kw">for </span>(i, gi) <span class="kw">in </span>g.iter_mut().enumerate() {
 <a href=#23 id=23 data-nosnippet>23</a>        <span class="kw">for </span>e <span class="kw">in </span>graph.node_of(i) {
-<a href=#24 id=24 data-nosnippet>24</a>            g[i] |= <span class="number">1 </span>&lt;&lt; e.to();
+<a href=#24 id=24 data-nosnippet>24</a>            <span class="kw-2">*</span>gi |= <span class="number">1 </span>&lt;&lt; e.to();
 <a href=#25 id=25 data-nosnippet>25</a>        }
 <a href=#26 id=26 data-nosnippet>26</a>    }
 <a href=#27 id=27 data-nosnippet>27</a>

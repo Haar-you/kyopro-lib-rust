@@ -20,7 +20,7 @@
 <a href=#4 id=4 data-nosnippet>4</a>
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">fn </span>is_composite(a: u64, s: u32, d: u64, mg: Montgomery) -&gt; bool {
 <a href=#6 id=6 data-nosnippet>6</a>    <span class="kw">let </span>a = mg.wrap(a);
-<a href=#7 id=7 data-nosnippet>7</a>    <span class="kw">let </span>pp = mg.wrap(mg.modulo - <span class="number">1</span>);
+<a href=#7 id=7 data-nosnippet>7</a>    <span class="kw">let </span>pp = mg.wrap(mg.modulo() - <span class="number">1</span>);
 <a href=#8 id=8 data-nosnippet>8</a>    <span class="kw">let </span><span class="kw-2">mut </span>x = mg.pow(a, d);
 <a href=#9 id=9 data-nosnippet>9</a>
 <a href=#10 id=10 data-nosnippet>10</a>    <span class="kw">if </span>mg.unwrap(x) == <span class="number">1 </span>{

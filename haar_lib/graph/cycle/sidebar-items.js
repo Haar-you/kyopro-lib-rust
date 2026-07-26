@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["directed_shortest"]};
+window.SIDEBAR_ITEMS = {"mod":["detect_directed","detect_undirected","directed_shortest"]};

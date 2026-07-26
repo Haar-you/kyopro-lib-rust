@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["min_plus_conv_convex"]};

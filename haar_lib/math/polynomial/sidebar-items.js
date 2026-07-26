@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["multipoint_eval","polynomial_interpolation","polynomial_taylor_shift","shift_sampling_points","sparse"],"struct":["Polynomial"]};
+window.SIDEBAR_ITEMS = {"mod":["interpolation","multipoint_eval","root_finding","shift_sampling_points","sparse","taylor_shift"],"struct":["Polynomial"]};

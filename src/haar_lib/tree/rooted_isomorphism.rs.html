@@ -19,14 +19,14 @@
 <a href=#3 id=3 data-nosnippet>3</a>//! # Problems
 <a href=#4 id=4 data-nosnippet>4</a>//! - &lt;https://judge.yosupo.jp/problem/rooted_tree_isomorphism_classification&gt;
 <a href=#5 id=5 data-nosnippet>5</a></span><span class="kw">use </span><span class="kw">crate</span>::tree::<span class="kw-2">*</span>;
-<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>std::collections::{hash_map::DefaultHasher, HashMap};
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>std::collections::{HashMap, hash_map::DefaultHasher};
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>std::hash::{Hash, Hasher};
 <a href=#8 id=8 data-nosnippet>8</a>
 <a href=#9 id=9 data-nosnippet>9</a><span class="doccomment">/// 根付き木の(根付き)部分木を同型性によって分類する。
 <a href=#10 id=10 data-nosnippet>10</a>///
 <a href=#11 id=11 data-nosnippet>11</a>/// # Returns
 <a href=#12 id=12 data-nosnippet>12</a>/// - `(k, a)` : `k`は部分木の種類数、`a`は頂点`i`と頂点`j`を根とする部分木が同型のときに限り`a[i] = a[j]`を満たす。
-<a href=#13 id=13 data-nosnippet>13</a></span><span class="kw">pub fn </span>rooted_isomorphism&lt;E: TreeEdgeTrait&gt;(tree: <span class="kw-2">&amp;</span>Tree&lt;E&gt;, root: usize) -&gt; (usize, Vec&lt;usize&gt;) {
+<a href=#13 id=13 data-nosnippet>13</a></span><span class="kw">pub fn </span>rooted_isomorphism&lt;W, I&gt;(tree: <span class="kw-2">&amp;</span>Tree&lt;W, I&gt;, root: usize) -&gt; (usize, Vec&lt;usize&gt;) {
 <a href=#14 id=14 data-nosnippet>14</a>    <span class="kw">let </span>n = tree.len();
 <a href=#15 id=15 data-nosnippet>15</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[<span class="number">0</span>; n];
 <a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">let </span><span class="kw-2">mut </span>map = HashMap::new();

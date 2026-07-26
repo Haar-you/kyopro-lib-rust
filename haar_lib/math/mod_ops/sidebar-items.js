@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["enum_inv","inv","inv_p","log","pow","sqrt"]};
+window.SIDEBAR_ITEMS = {"mod":["enum_inv","inv","inv_p","kth_root","log","pow","sqrt"]};

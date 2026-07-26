@@ -15,7 +15,7 @@
 </script>
 
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">haar_lib/math/</div>garner.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Garner's algorithm
-<a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">use </span><span class="kw">crate</span>::math::mod_ops::inv::mod_inv;
+<a href=#2 id=2 data-nosnippet>2</a></span><span class="kw">use </span><span class="kw">crate</span>::math::mod_ops::inv::inv_mod;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="doccomment">/// $$ \begin{aligned}
 <a href=#5 id=5 data-nosnippet>5</a>/// x \equiv r_1 \pmod {m_1} \\\\
@@ -36,7 +36,7 @@
 <a href=#20 id=20 data-nosnippet>20</a>    <span class="kw">let </span><span class="kw-2">mut </span>constants = <span class="macro">vec!</span>[<span class="number">0</span>; n + <span class="number">1</span>];
 <a href=#21 id=21 data-nosnippet>21</a>
 <a href=#22 id=22 data-nosnippet>22</a>    <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..n {
-<a href=#23 id=23 data-nosnippet>23</a>        <span class="kw">let </span>t = ((r[k] + m[k] - constants[k]) % m[k] * mod_inv(coeffs[k], m[k])<span class="question-mark">?</span>) % m[k];
+<a href=#23 id=23 data-nosnippet>23</a>        <span class="kw">let </span>t = ((r[k] + m[k] - constants[k]) % m[k] * inv_mod(coeffs[k], m[k])<span class="question-mark">?</span>) % m[k];
 <a href=#24 id=24 data-nosnippet>24</a>
 <a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">for </span>i <span class="kw">in </span>k + <span class="number">1</span>..n + <span class="number">1 </span>{
 <a href=#26 id=26 data-nosnippet>26</a>            constants[i] += t * coeffs[i] % m[i];

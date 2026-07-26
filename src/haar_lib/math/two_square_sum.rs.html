@@ -24,7 +24,7 @@
 <a href=#8 id=8 data-nosnippet>8</a>
 <a href=#9 id=9 data-nosnippet>9</a></span><span class="kw">use </span>std::collections::{HashMap, HashSet};
 <a href=#10 id=10 data-nosnippet>10</a>
-<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span><span class="kw">crate</span>::math::{factorize::pollard_rho::<span class="kw-2">*</span>, mod_ops::sqrt::mod_sqrt};
+<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span><span class="kw">crate</span>::math::{factorize::pollard_rho::<span class="kw-2">*</span>, mod_ops::sqrt::sqrt_mod};
 <a href=#12 id=12 data-nosnippet>12</a>
 <a href=#13 id=13 data-nosnippet>13</a><span class="doccomment">/// 非負整数$n$について、$n = x^2 + y^2$を満たす非負整数$x$, $y$の組をすべて列挙する。
 <a href=#14 id=14 data-nosnippet>14</a></span><span class="kw">pub fn </span>two_square_sum(n: u64) -&gt; Vec&lt;(u64, u64)&gt; {
@@ -88,7 +88,7 @@
 <a href=#72 id=72 data-nosnippet>72</a>    }
 <a href=#73 id=73 data-nosnippet>73</a>    <span class="macro">assert!</span>(p % <span class="number">4 </span>== <span class="number">1</span>);
 <a href=#74 id=74 data-nosnippet>74</a>
-<a href=#75 id=75 data-nosnippet>75</a>    <span class="kw">let </span><span class="kw-2">mut </span>x = mod_sqrt(p - <span class="number">1</span>, p).first().copied().unwrap() <span class="kw">as </span>u128;
+<a href=#75 id=75 data-nosnippet>75</a>    <span class="kw">let </span><span class="kw-2">mut </span>x = sqrt_mod(p - <span class="number">1</span>, p).first().copied().unwrap() <span class="kw">as </span>u128;
 <a href=#76 id=76 data-nosnippet>76</a>    <span class="kw">let </span><span class="kw-2">mut </span>y = <span class="number">1_u128</span>;
 <a href=#77 id=77 data-nosnippet>77</a>    <span class="kw">let </span>p = p <span class="kw">as </span>u128;
 <a href=#78 id=78 data-nosnippet>78</a>    <span class="macro">assert!</span>((x * x + y * y) % p == <span class="number">0</span>);
