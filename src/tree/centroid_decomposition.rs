@@ -23,6 +23,8 @@ pub struct Node {
 /// 重心分解
 pub struct CentroidDecomposition<W, I> {
     nodes: Vec<Node>,
+    root: usize,
+    depth: usize,
     _phantom: PhantomData<(W, I)>,
 }
 
@@ -40,6 +42,8 @@ impl<W, I> CentroidDecomposition<W, I> {
                 };
                 n
             ],
+            root: 0,
+            depth: 0,
             _phantom: PhantomData,
         };
 
@@ -48,12 +52,24 @@ impl<W, I> CentroidDecomposition<W, I> {
         for (a, s) in this.nodes.iter_mut().zip(subsize) {
             a.subsize = s;
         }
+        this.root = (0..n).find(|&i| this.nodes[i].par.is_none()).unwrap();
+        this.depth = this.nodes.iter().map(|v| v.depth).max().unwrap();
         this
     }
 
     /// 重心分解後の頂点列への参照を返す。
     pub fn nodes(&self) -> &[Node] {
         &self.nodes
+    }
+
+    /// 重心分解木の根を返す。
+    pub fn root(&self) -> usize {
+        self.root
+    }
+
+    /// 重心分解木の深さを返す。
+    pub fn depth(&self) -> usize {
+        self.depth
     }
 
     fn decompose(
