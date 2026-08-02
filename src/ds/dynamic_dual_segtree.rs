@@ -1,7 +1,8 @@
 //! 動的双対セグメント木
+use std::ops::Range;
+
 use crate::algebra::traits::Monoid;
 use crate::misc::nullable_usize::NullableUsize;
-use std::ops::Range;
 
 #[derive(Clone, Debug)]
 struct Node<T> {
@@ -159,10 +160,11 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::algebra::sum::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
+    use crate::algebra::sum::*;
 
     #[test]
     fn test() {

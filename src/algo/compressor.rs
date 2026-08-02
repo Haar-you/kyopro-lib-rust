@@ -87,9 +87,10 @@ impl<U> Extend<U> for CompressorBuilder<U> {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashSet;
+
     use super::*;
     use crate::hashset;
-    use std::collections::HashSet;
 
     #[test]
     fn test() {

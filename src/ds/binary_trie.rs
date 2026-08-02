@@ -176,9 +176,11 @@ impl BinaryTrie {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use rand::prelude::*;
     use std::collections::BTreeMap;
+
+    use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

@@ -1,11 +1,12 @@
 //! 区間加算・区間Max(Min)
 
-use crate::misc::range::range_bounds_to_range;
-use crate::num::one_zero::Zero;
 use std::{
     cmp::{max, min},
     ops::{Add, RangeBounds, Sub},
 };
+
+use crate::misc::range::range_bounds_to_range;
+use crate::num::one_zero::Zero;
 
 /// 区間Max/Minを選択する。
 #[derive(Copy, Clone)]
@@ -141,9 +142,10 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test_max() {

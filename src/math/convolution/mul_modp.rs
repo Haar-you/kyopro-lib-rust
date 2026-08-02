@@ -53,14 +53,14 @@ pub fn mul_modp_convolution<P: PrimeMod>(
 
 #[cfg(test)]
 mod tests {
+    use rand::prelude::*;
+
+    use super::*;
     use crate::{
         iter::collect::CollectVec,
         math::prime_mod::Prime,
         num::{const_modint::ConstModIntBuilder, ff::*},
     };
-
-    use super::*;
-    use rand::prelude::*;
 
     type P = Prime<998244353>;
 

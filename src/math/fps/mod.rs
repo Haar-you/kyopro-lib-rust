@@ -26,7 +26,6 @@ pub mod sqrt_sparse;
 #[cfg(test)]
 mod tests {
     use super::{composition::*, exp::*, inv::*, log::*, pow::*};
-
     use crate::math::polynomial::*;
     use crate::math::prime_mod::Prime;
 

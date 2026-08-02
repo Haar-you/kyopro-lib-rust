@@ -78,11 +78,12 @@ fn dfs(
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeSet;
+    use std::iter::FromIterator;
+
     use super::biconnected;
     use crate::btreeset;
     use crate::graph::{lowlink::Lowlink, *};
-    use std::collections::BTreeSet;
-    use std::iter::FromIterator;
 
     #[test]
     fn test() {

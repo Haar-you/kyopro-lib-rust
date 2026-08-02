@@ -1,9 +1,10 @@
 //! 区間一次関数加算区間総和セグメントツリー
 
+use std::ops::{Add, AddAssign, Mul, RangeBounds};
+
 use crate::math::linear::*;
 use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
-use std::ops::{Add, AddAssign, Mul, RangeBounds};
 
 /// 区間一次関数加算区間総和セグメントツリー
 pub struct SegtreeLinearAddRangeSum<T> {
@@ -95,10 +96,12 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use std::ops::Range;
+
     use my_testtools::*;
     use rand::prelude::*;
-    use std::ops::Range;
+
+    use super::*;
 
     #[test]
     fn test() {

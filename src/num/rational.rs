@@ -1,12 +1,13 @@
 //! 有理数
 
-use crate::math::gcd_lcm::GcdLcm;
-use crate::{impl_from, impl_ops};
 use std::{
     cmp::Ordering,
     fmt,
     fmt::{Debug, Formatter},
 };
+
+use crate::math::gcd_lcm::GcdLcm;
+use crate::{impl_from, impl_ops};
 
 /// 有理数
 #[derive(Clone, Copy, PartialEq, Eq)]

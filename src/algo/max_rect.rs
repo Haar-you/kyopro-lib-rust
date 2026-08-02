@@ -1,9 +1,10 @@
 //! 最大長方形
-use crate::chmax;
 use std::{
     cmp::Ordering,
     ops::{Mul, Range},
 };
+
+use crate::chmax;
 
 /// ヒストグラム中の最大面積長方形の面積を計算する。
 ///

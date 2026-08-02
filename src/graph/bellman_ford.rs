@@ -1,9 +1,10 @@
 //! 負閉路を持つグラフの最短経路 (Bellman-Ford)
 
+use std::{cmp::min, ops::Add};
+
 use crate::graph::*;
 pub use crate::num::num_inf::NumInf;
 use crate::num::one_zero::Zero;
-use std::{cmp::min, ops::Add};
 
 /// 負閉路を持つグラフの最短経路
 pub fn bellman_ford<D: Direction, W, I>(g: &Graph<D, W, I>, src: usize) -> Vec<NumInf<W>>

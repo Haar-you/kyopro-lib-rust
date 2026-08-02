@@ -2,9 +2,10 @@
 //! # Problems
 //! - [AOJ GRL_2_B](https://onlinejudge.u-aizu.ac.jp/problems/GRL_2_B)
 
-use crate::graph::*;
 use std::collections::VecDeque;
 use std::ops::Sub;
+
+use crate::graph::*;
 
 type Edge_<'a, T, I> = (usize, usize, T, &'a Edge<T, I>);
 

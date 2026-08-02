@@ -41,9 +41,8 @@ pub fn stirling_first<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::math::prime_mod::Prime;
-
     use super::*;
+    use crate::math::prime_mod::Prime;
 
     type P = Prime<998244353>;
 

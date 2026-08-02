@@ -1,7 +1,8 @@
 //! 最小全域木 (Prim)
 
-use crate::graph::*;
 use std::{cmp::Reverse, collections::BinaryHeap};
+
+use crate::graph::*;
 
 /// Prim法
 ///

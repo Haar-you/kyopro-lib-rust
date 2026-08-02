@@ -1,7 +1,8 @@
 //! 点と多角形の位置関係
 
-use crate::geom::{ccw::*, *};
 use std::f64::consts::PI;
+
+use crate::geom::{ccw::*, *};
 
 /// 点と多角形の位置関係
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

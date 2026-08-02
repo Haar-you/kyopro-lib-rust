@@ -63,9 +63,8 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::num::modint::ModIntBuilder;
-
     use super::*;
+    use crate::num::modint::ModIntBuilder;
 
     fn check(a: Vec<Vec<i64>>, m: u32, ans: Vec<Vec<i64>>) {
         let m = ModIntBuilder::new(m);

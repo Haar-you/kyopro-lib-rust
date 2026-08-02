@@ -1,10 +1,11 @@
 //! mod mでの離散対数
 
+use std::collections::HashMap;
+
 use crate::math::{
     gcd_lcm::GcdLcm,
     mod_ops::{inv::*, pow::*},
 };
-use std::collections::HashMap;
 
 /// $a^x \equiv b \pmod m$を満たす$x$を求める。
 ///

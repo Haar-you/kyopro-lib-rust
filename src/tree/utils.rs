@@ -1,7 +1,8 @@
 //! 木上の便利関数
+use std::ops::Add;
+
 use crate::num::one_zero::Zero;
 use crate::tree::*;
-use std::ops::Add;
 
 /// rootを根としたときの根から各頂点への距離を列挙する。
 ///

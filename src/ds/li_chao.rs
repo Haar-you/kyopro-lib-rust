@@ -5,13 +5,14 @@
 //! - [Line Add Get Min](https://judge.yosupo.jp/submission/217829)
 //! - [Segment Add Get Min](https://judge.yosupo.jp/submission/217834)
 
-use crate::algo::bsearch_slice::BinarySearch;
-use crate::math::linear::*;
 use std::{
     cmp::{max, min},
     mem::swap,
     ops::{Add, Mul, RangeInclusive},
 };
+
+use crate::algo::bsearch_slice::BinarySearch;
+use crate::math::linear::*;
 
 /// 最大値クエリか最小値クエリかを表す
 #[derive(PartialEq, Eq, Copy, Clone, Debug)]

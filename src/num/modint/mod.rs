@@ -1,12 +1,13 @@
 //! 実行時にmod Mが決まるModInt
 
-use crate::impl_ops;
-pub use crate::num::ff::*;
 use std::{
     fmt,
     fmt::{Debug, Display, Formatter},
     ops::Neg,
 };
+
+use crate::impl_ops;
+pub use crate::num::ff::*;
 
 /// [`ModInt`]を生成するための構造体。
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]

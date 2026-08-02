@@ -3,9 +3,10 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum>
 
-use crate::misc::range::range_bounds_to_range;
 use std::cmp::{Ordering, max, min};
 use std::ops::RangeBounds;
+
+use crate::misc::range::range_bounds_to_range;
 
 #[inline]
 fn lc(i: usize) -> usize {
@@ -319,9 +320,10 @@ impl From<Vec<i64>> for SegtreeBeats {
 
 #[cfg(test)]
 mod test {
-    use super::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

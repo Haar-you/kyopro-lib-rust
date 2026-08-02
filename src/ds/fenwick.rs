@@ -1,6 +1,7 @@
 //! 可換群の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
-pub use crate::algebra::traits::AbelianGroup;
 use std::ops::{Range, RangeTo};
+
+pub use crate::algebra::traits::AbelianGroup;
 
 /// 可換群の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 #[derive(Clone, Default)]

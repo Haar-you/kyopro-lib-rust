@@ -1,6 +1,7 @@
 //! MaxとAddの半環
-pub use crate::algebra::semiring::*;
 use std::marker::PhantomData;
+
+pub use crate::algebra::semiring::*;
 
 /// MaxとAddの半環
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

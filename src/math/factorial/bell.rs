@@ -4,9 +4,10 @@
 //! - <https://ja.wikipedia.org/wiki/%E3%83%99%E3%83%AB%E6%95%B0>
 //! - <https://manabitimes.jp/math/892>
 
+use std::cmp::min;
+
 use crate::math::factorial::FactorialTable;
 use crate::num::ff::*;
-use std::cmp::min;
 
 /// ベル数
 pub trait BellNumber {

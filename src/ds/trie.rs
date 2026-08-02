@@ -120,8 +120,9 @@ impl<T, K: Copy + Hash + Eq> Trie<T, K> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::fmt::{Debug, Display};
+
+    use super::*;
 
     fn dfs<T, K>(node: &mut TrieNode<T, K>, prefix: &mut Vec<K>)
     where

@@ -96,8 +96,9 @@ impl IntegerSet {
 mod tests {
     use std::collections::BTreeSet;
 
-    use super::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

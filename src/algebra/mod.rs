@@ -33,10 +33,10 @@ pub mod semiring;
 
 #[cfg(test)]
 mod tests {
-    use crate::algebra::dihedral;
+    use std::fmt::Debug;
 
     use super::traits::*;
-    use std::fmt::Debug;
+    use crate::algebra::dihedral;
 
     fn associative_law<T, I>(m: &T, a: I)
     where

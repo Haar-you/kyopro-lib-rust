@@ -1,7 +1,8 @@
 //! 2つの円の共通部分の面積
 
-use crate::geom::{intersect_circles::*, *};
 use std::f64::consts::PI;
+
+use crate::geom::{intersect_circles::*, *};
 
 /// 2つの円の共通部分の面積を求める
 pub fn area_intersection_circles(a: Circle, b: Circle, eps: Eps) -> f64 {

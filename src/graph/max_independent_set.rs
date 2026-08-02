@@ -2,8 +2,9 @@
 //!
 //! # Verifications
 //! - [Maximum Independent Set](https://judge.yosupo.jp/problem/maximum_independent_set) [#142761](https://judge.yosupo.jp/submission/142761) (n <= 40)
-use crate::graph::*;
 use std::collections::HashSet;
+
+use crate::graph::*;
 
 /// 最大独立集合を求める
 ///

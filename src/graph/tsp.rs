@@ -3,8 +3,9 @@
 //! # Problems
 //! - <https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/all/DPL_2_A>
 
-use crate::graph::*;
 use std::ops::Add;
+
+use crate::graph::*;
 
 /// 巡回セールスマン問題
 pub fn tsp<W, I>(g: &Graph<Directed, W, I>, src: usize) -> Option<W>

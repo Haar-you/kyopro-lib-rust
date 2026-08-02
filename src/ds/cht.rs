@@ -3,11 +3,12 @@
 //! # Problems
 //! - [EDPC Z - Frog 3](https://atcoder.jp/contests/dp/submissions/54932537)
 
-use crate::math::linear::*;
 use std::{
     collections::VecDeque,
     ops::{Add, Mul, Sub},
 };
+
+use crate::math::linear::*;
 
 /// 最大値クエリか最小値クエリかを表す
 #[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]

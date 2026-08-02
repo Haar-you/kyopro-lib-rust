@@ -164,11 +164,13 @@ impl<'a, T> UnionFind<'a, T> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::btreeset;
-    use rand::prelude::*;
     use std::collections::BTreeSet;
     use std::iter::FromIterator;
+
+    use rand::prelude::*;
+
+    use super::*;
+    use crate::btreeset;
 
     #[test]
     fn test() {

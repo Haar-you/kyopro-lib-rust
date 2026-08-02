@@ -4,9 +4,10 @@ pub mod arg_sort;
 pub mod closest_pair;
 pub mod convex_hull;
 
+use std::f64::consts::PI;
+
 use crate::impl_from;
 use crate::impl_ops;
-use std::f64::consts::PI;
 
 /// 整数値をもつ二次元ベクトル
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]

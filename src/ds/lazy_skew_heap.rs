@@ -1,10 +1,11 @@
 //! 遅延加算付き融合可能ヒープ
 
-use crate::num::one_zero::Zero;
 use std::{
     mem::swap,
     ops::{AddAssign, SubAssign},
 };
+
+use crate::num::one_zero::Zero;
 
 #[derive(Debug, Clone)]
 struct Node<T, U> {
@@ -163,9 +164,11 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use rand::prelude::*;
     use std::collections::BinaryHeap;
+
+    use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

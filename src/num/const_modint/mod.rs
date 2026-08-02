@@ -1,16 +1,17 @@
 //! コンパイル時にmod Mが決まるModInt
 
+use std::marker::PhantomData;
+use std::{
+    fmt,
+    fmt::{Debug, Display, Formatter},
+};
+
 use crate::impl_from;
 use crate::impl_one_zero;
 use crate::impl_ops;
 use crate::math::prime_mod::PrimeMod;
 pub use crate::num::ff::*;
 use crate::num::one_zero::*;
-use std::marker::PhantomData;
-use std::{
-    fmt,
-    fmt::{Debug, Display, Formatter},
-};
 
 const B: u32 = 32;
 const R: u64 = 1 << B;

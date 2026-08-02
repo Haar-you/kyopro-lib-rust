@@ -1,6 +1,7 @@
 //! Fenwick木上にFenwick木を構築する。
-use crate::algo::bsearch_slice::BinarySearch;
 use std::ops::{Add, Range, RangeTo, Sub};
+
+use crate::algo::bsearch_slice::BinarySearch;
 
 /// [`FenwickOnFenwick`]を構築するための構造体。
 #[derive(Clone, Default)]

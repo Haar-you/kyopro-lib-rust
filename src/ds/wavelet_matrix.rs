@@ -1,9 +1,10 @@
 //! Wavelet matrix
-use crate::{ds::succinct_bitvec::SuccinctBitVec, misc::range::range_bounds_to_range};
 use std::{
     marker::PhantomData,
     ops::{BitAnd, BitOrAssign, RangeBounds, Shl, Shr},
 };
+
+use crate::{ds::succinct_bitvec::SuccinctBitVec, misc::range::range_bounds_to_range};
 
 /// Wavelet matrix
 #[derive(Clone)]
@@ -227,10 +228,11 @@ pub type WM32 = WaveletMatrix<u32, 32>;
 #[cfg(test)]
 mod tests {
     #![allow(clippy::needless_range_loop)]
-    use super::*;
-    use crate::algo::bsearch_slice::BinarySearch;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
+    use crate::algo::bsearch_slice::BinarySearch;
 
     #[test]
     fn test_access() {

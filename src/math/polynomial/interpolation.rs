@@ -59,9 +59,8 @@ fn rec_frac<P: PrimeMod>(
 
 #[cfg(test)]
 mod tests {
-    use crate::math::prime_mod::Prime;
-
     use super::*;
+    use crate::math::prime_mod::Prime;
 
     type P = Prime<998244353>;
 

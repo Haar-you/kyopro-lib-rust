@@ -6,9 +6,10 @@
 
 #![allow(clippy::needless_range_loop)]
 
+use std::ops::Add;
+
 use crate::graph::*;
 use crate::num::one_zero::Zero;
-use std::ops::Add;
 
 enum Result<T> {
     NegativeLoop,

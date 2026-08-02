@@ -1,7 +1,8 @@
 //! モノイド列の区間更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
+use std::ops::RangeBounds;
+
 use crate::algebra::{act::Act, traits::*};
 use crate::misc::range::range_bounds_to_range;
-use std::ops::RangeBounds;
 
 /// モノイド列の区間更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 pub struct LazySegtree<M: Monoid, A: Act<M>> {
@@ -198,9 +199,10 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
 
     fn test<M, A, F>(n: usize, q: usize, monoid: M, act: A, mut r#gen: F)
     where

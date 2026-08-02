@@ -500,8 +500,9 @@ impl<K: Ord, V> Default for OrderedMap<K, V> {
 
 #[cfg(test)]
 mod tests {
-    use rand::prelude::*;
     use std::collections::BTreeMap;
+
+    use rand::prelude::*;
 
     use super::*;
 

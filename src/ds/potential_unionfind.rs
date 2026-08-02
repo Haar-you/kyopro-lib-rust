@@ -4,8 +4,9 @@
 //! - <https://judge.yosupo.jp/problem/unionfind_with_potential>
 //! - <https://judge.yosupo.jp/problem/unionfind_with_potential_non_commutative_group>
 
-use crate::algebra::traits::*;
 use std::cell::{Cell, RefCell};
+
+use crate::algebra::traits::*;
 
 /// ポテンシャル付きUnionfind
 pub struct PotentialUnionFind<G: Group> {

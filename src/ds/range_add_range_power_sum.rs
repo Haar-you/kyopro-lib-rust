@@ -193,11 +193,11 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::{math::prime_mod::*, num::const_modint::*};
-
     use my_testtools::rand_range;
     use rand::prelude::*;
+
+    use super::*;
+    use crate::{math::prime_mod::*, num::const_modint::*};
 
     type P = Prime<998244353>;
     type M = ConstModInt<P>;

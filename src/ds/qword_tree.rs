@@ -248,9 +248,11 @@ impl QwordTree {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use rand::prelude::*;
     use std::collections::BTreeSet;
+
+    use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

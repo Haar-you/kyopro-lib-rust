@@ -112,9 +112,11 @@ impl<T: Ord> SkewHeap<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use rand::prelude::*;
     use std::collections::BinaryHeap;
+
+    use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

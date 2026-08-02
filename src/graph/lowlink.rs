@@ -1,6 +1,7 @@
 //! Lowlink
-use crate::graph::*;
 use std::cmp::min;
+
+use crate::graph::*;
 
 /// Lowlink
 #[derive(Debug, Clone)]

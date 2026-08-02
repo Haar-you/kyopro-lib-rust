@@ -434,9 +434,8 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::algebra::trivial::Trivial;
-
     use super::*;
+    use crate::algebra::trivial::Trivial;
 
     #[test]
     fn test() {

@@ -66,8 +66,9 @@ impl<T: PartialEq> KMP<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use test_case::test_case;
+
+    use super::*;
 
     #[test_case("aaa", "aaaaaaaa")]
     #[test_case("ab", "abracadabra")]

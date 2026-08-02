@@ -86,8 +86,9 @@ pub fn bsearch_ok_ng<
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::iter::repeat_n;
+
+    use super::*;
 
     #[test]
     fn test() {

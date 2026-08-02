@@ -1,6 +1,7 @@
 //! 可換な加減算に特化したFenwickTree
-use crate::num::one_zero::Zero;
 use std::ops::{Add, Range, RangeTo, Sub};
+
+use crate::num::one_zero::Zero;
 
 /// 可換な加減算に特化したFenwickTree
 pub struct FenwickTreeAdd<T> {

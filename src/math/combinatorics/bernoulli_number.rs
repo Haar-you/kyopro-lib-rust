@@ -28,7 +28,6 @@ pub fn bernoulli_number<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-
     use crate::math::{factorial::bernoulli::BernoulliNumber, prime_mod::Prime};
 
     type P = Prime<998244353>;

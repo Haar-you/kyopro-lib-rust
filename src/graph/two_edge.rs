@@ -33,9 +33,10 @@ fn rec(ll: &Lowlink, cur: usize, index: usize, ret: &mut Vec<Vec<usize>>) {
 
 #[cfg(test)]
 mod tests {
+    use std::{collections::BTreeSet, iter::FromIterator};
+
     use super::*;
     use crate::{btreeset, graph::*};
-    use std::{collections::BTreeSet, iter::FromIterator};
 
     #[test]
     fn test() {

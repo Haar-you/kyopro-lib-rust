@@ -1,7 +1,8 @@
 //! 動的遅延セグメント木
-use crate::algebra::{act::Act, traits::*};
 use std::ops::Range;
 use std::ptr;
+
+use crate::algebra::{act::Act, traits::*};
 
 #[derive(Clone, Debug)]
 struct Node<M: Monoid, A: Act<M>> {

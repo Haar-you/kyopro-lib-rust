@@ -1,8 +1,9 @@
 //! 非負重み付き最短経路 (Dijkstra)
 
+use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
+
 use crate::graph::*;
 use crate::num::{one_zero::Zero, traits::Unsigned};
-use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
 
 /// ダイクストラ法
 pub struct Dijkstra<'a, W, I> {

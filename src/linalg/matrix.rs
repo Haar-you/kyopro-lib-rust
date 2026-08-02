@@ -1,7 +1,8 @@
 //! 半環上の行列
+use std::ops::{Index, Neg};
+
 pub use crate::linalg::traits::*;
 use crate::{algebra::semiring::*, impl_ops};
-use std::ops::{Index, Neg};
 
 /// 半環上の行列
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -326,9 +327,9 @@ impl<R: Semiring> AsRef<[Vec<R::Element>]> for MatrixOnSemiring<R> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rand::prelude::*;
 
+    use super::*;
     use crate::{
         algebra::semiring::{add_mul_mod::AddMulMod, xor_and::XorAnd},
         math::prime_mod::Prime,

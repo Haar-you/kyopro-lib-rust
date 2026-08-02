@@ -1,6 +1,7 @@
 //! 有限体$\mathbb{F}_p$
-pub use crate::num::zz::*;
 use std::ops::{Div, DivAssign};
+
+pub use crate::num::zz::*;
 
 /// 有限体$\mathbb{F}_p$
 pub trait FF: ZZ<Element: FFElem> + Clone {

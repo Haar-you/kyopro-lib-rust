@@ -1,8 +1,9 @@
 //! 範囲転倒数取得クエリ
 
-use crate::{algo::bsearch_slice::BinarySearch, ds::fenwick_add::*};
 use std::convert::TryFrom;
 use std::ops::Range;
+
+use crate::{algo::bsearch_slice::BinarySearch, ds::fenwick_add::*};
 
 /// 範囲転倒数取得クエリ
 pub struct StaticRangeInversionsQuery {
@@ -88,10 +89,11 @@ impl StaticRangeInversionsQuery {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::algo::inversion_number::inversion_number;
     use my_testtools::rand_range;
     use rand::prelude::*;
+
+    use super::*;
+    use crate::algo::inversion_number::inversion_number;
 
     #[test]
     fn test() {

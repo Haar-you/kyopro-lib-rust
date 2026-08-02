@@ -4,14 +4,15 @@
 //!
 //! - [HUPC 2020 B 三角形足し算](https://onlinejudge.u-aizu.ac.jp/challenges/sources/VPC/HUPC/3165?year=2020)
 
-use crate::math::linear::*;
-use crate::misc::range::range_bounds_to_range;
-use crate::num::one_zero::Zero;
 use std::{
     cell::Cell,
     mem::size_of,
     ops::{Add, Mul, RangeBounds},
 };
+
+use crate::math::linear::*;
+use crate::misc::range::range_bounds_to_range;
+use crate::num::one_zero::Zero;
 
 /// 区間一次関数加算セグメントツリー
 pub struct SegtreeLinearAdd<T> {
@@ -119,9 +120,10 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

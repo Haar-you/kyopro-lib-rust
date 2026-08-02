@@ -1,6 +1,7 @@
 //! 重軽分解
-use crate::tree::*;
 use std::{cmp::max, marker::PhantomData};
+
+use crate::tree::*;
 
 /// 重軽分解
 #[derive(Clone, Debug)]

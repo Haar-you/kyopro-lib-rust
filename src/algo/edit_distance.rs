@@ -2,8 +2,9 @@
 
 #![allow(clippy::needless_range_loop)]
 
-use crate::chmin;
 use std::cmp::min;
+
+use crate::chmin;
 
 /// 編集距離
 ///

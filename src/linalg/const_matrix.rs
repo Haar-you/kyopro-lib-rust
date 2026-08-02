@@ -144,9 +144,8 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::algebra::semiring::add_mul::AddMul;
-
     use super::*;
+    use crate::algebra::semiring::add_mul::AddMul;
 
     #[test]
     fn test() {

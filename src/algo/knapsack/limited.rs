@@ -1,9 +1,10 @@
 //! 個数制限付きナップサック問題
-use crate::{chmax, num::one_zero::Zero};
 use std::{
     cmp::min,
     ops::{Add, Mul},
 };
+
+use crate::{chmax, num::one_zero::Zero};
 
 /// 個数制限付きナップサック問題
 ///

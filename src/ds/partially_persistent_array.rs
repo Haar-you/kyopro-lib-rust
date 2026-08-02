@@ -48,10 +48,10 @@ impl<T: Clone> PartiallyPersistentArray<T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::iter::collect::CollectVec;
+    use rand::prelude::*;
 
     use super::*;
-    use rand::prelude::*;
+    use crate::iter::collect::CollectVec;
 
     #[test]
     fn test() {

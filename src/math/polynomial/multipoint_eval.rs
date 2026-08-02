@@ -47,11 +47,12 @@ impl<P: PrimeMod> MultipointEval for Polynomial<P> {
 
 #[cfg(test)]
 mod tests {
+    use rand::prelude::*;
+
     use super::*;
     use crate::math::polynomial::*;
     use crate::math::prime_mod::Prime;
     use crate::num::const_modint::*;
-    use rand::prelude::*;
 
     const M: u32 = 998244353;
     type P = Prime<M>;

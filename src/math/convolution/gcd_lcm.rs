@@ -2,8 +2,9 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/gcd_convolution>
-use crate::math::convolution::div_mul_transform::*;
 use std::ops::{Add, Mul, Sub};
+
+use crate::math::convolution::div_mul_transform::*;
 
 /// $h_{\gcd (i, j)} = \sum f_i g_j$を満たす$h$を求める。
 ///

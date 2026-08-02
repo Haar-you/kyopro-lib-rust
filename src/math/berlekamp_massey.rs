@@ -2,9 +2,10 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/find_linear_recurrence>
-use crate::num::ff::*;
 use std::iter::zip;
 use std::ops::Add;
+
+use crate::num::ff::*;
 
 /// $N$項の数列$a_0, a_1, \ldots, a_{N-1}$から、
 /// 最短の線形漸化式$a_i = c_1 a_{i-1} + c_2 a_{i-2} + \dots + c_d a_{i-d}$の係数$c_i$を求める。
@@ -71,13 +72,12 @@ where
 mod tests {
     use std::ops::{Add, Mul};
 
+    use super::*;
     use crate::{
         iter::collect::CollectVec,
         math::prime_mod::Prime,
         num::{const_modint::ConstModIntBuilder, one_zero::Zero},
     };
-
-    use super::*;
 
     fn generate<T>(prefix: &[T], coeffs: &[T]) -> Vec<T>
     where

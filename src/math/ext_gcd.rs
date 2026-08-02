@@ -14,8 +14,9 @@ pub fn ext_gcd(a: u64, b: u64) -> (i64, i64, i64) {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

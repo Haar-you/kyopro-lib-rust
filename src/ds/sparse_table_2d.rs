@@ -1,9 +1,10 @@
 //! 冪等性と結合性をもつ2次元列の区間取得($O(1)$)ができる。
-use crate::algebra::traits::*;
 use std::{
     cmp::{max, min},
     ops::Range,
 };
+
+use crate::algebra::traits::*;
 
 /// 冪等性と結合性をもつ2次元列の区間取得($O(1)$)ができる。
 pub struct SparseTable2D<A: Semilattice> {
@@ -94,10 +95,12 @@ where
 
 #[cfg(test)]
 mod tests {
+    use std::fmt::Debug;
+
+    use rand::prelude::*;
+
     use super::*;
     use crate::{algebra::min_max::Max, iter::collect::CollectVec};
-    use rand::prelude::*;
-    use std::fmt::Debug;
 
     fn test<A>(a: A, s: Vec<Vec<A::Element>>)
     where

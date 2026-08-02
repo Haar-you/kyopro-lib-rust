@@ -12,8 +12,9 @@ pub fn swap_vv<T>(a: &mut [Vec<T>], i1: usize, j1: usize, i2: usize, j2: usize) 
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

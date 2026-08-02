@@ -209,8 +209,9 @@ impl<P: PrimeMod> Default for NTT<P> {
 #[cfg(test)]
 mod tests {
 
-    use super::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

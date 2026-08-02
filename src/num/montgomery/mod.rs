@@ -178,12 +178,13 @@ impl_ops!(Neg for Montgomery, |mut x: Self| {
 
 #[cfg(test)]
 mod tests {
+    use rand::prelude::*;
+
     use super::*;
     use crate::iter::collect::CollectVec;
     use crate::math::prime_mod::Prime;
     use crate::num::{const_modint::*, modint::*};
     use crate::timer;
-    use rand::prelude::*;
 
     #[derive(Clone, Copy, Debug)]
     enum Ops {
