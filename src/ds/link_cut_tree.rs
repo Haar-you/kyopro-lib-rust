@@ -4,7 +4,8 @@
 //! - <https://judge.yosupo.jp/problem/dynamic_tree_vertex_add_path_sum>
 //! - <https://judge.yosupo.jp/problem/dynamic_tree_vertex_set_path_composite> (非可換なモノイド)
 
-use std::{mem::swap, ptr};
+use std::mem::swap;
+use std::ptr;
 
 use crate::algebra::traits::*;
 

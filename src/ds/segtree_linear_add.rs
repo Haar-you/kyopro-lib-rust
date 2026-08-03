@@ -4,11 +4,9 @@
 //!
 //! - [HUPC 2020 B 三角形足し算](https://onlinejudge.u-aizu.ac.jp/challenges/sources/VPC/HUPC/3165?year=2020)
 
-use std::{
-    cell::Cell,
-    mem::size_of,
-    ops::{Add, Mul, RangeBounds},
-};
+use std::cell::Cell;
+use std::mem::size_of;
+use std::ops::{Add, Mul, RangeBounds};
 
 use crate::math::linear::*;
 use crate::misc::range::range_bounds_to_range;

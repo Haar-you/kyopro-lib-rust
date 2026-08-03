@@ -1,5 +1,6 @@
 //! グリッドをグラフに変換する
-use crate::{graph::*, grid::*};
+use crate::graph::*;
+use crate::grid::*;
 
 /// グリッドをグラフに変換する
 ///

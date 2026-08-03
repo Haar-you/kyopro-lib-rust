@@ -5,11 +5,9 @@
 //! - [Line Add Get Min](https://judge.yosupo.jp/submission/217829)
 //! - [Segment Add Get Min](https://judge.yosupo.jp/submission/217834)
 
-use std::{
-    cmp::{max, min},
-    mem::swap,
-    ops::{Add, Mul, RangeInclusive},
-};
+use std::cmp::{max, min};
+use std::mem::swap;
+use std::ops::{Add, Mul, RangeInclusive};
 
 use crate::algo::bsearch_slice::BinarySearch;
 use crate::math::linear::*;

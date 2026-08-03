@@ -2,10 +2,9 @@
 
 use std::collections::HashMap;
 
-use crate::math::{
-    gcd_lcm::GcdLcm,
-    mod_ops::{inv::*, pow::*},
-};
+use crate::math::gcd_lcm::GcdLcm;
+use crate::math::mod_ops::inv::*;
+use crate::math::mod_ops::pow::*;
 
 /// $a^x \equiv b \pmod m$を満たす$x$を求める。
 ///

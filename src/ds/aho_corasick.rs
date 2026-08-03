@@ -5,10 +5,8 @@
 //! - <https://atcoder.jp/contests/abc362/tasks/abc362_g>
 //! - <https://atcoder.jp/contests/abc268/tasks/abc268_h>
 //! - <https://judge.yosupo.jp/problem/aho_corasick>
-use std::{
-    collections::{HashMap, VecDeque},
-    hash::Hash,
-};
+use std::collections::{HashMap, VecDeque};
+use std::hash::Hash;
 
 /// [`AhoCorasick`]のノード
 pub struct Node<K> {

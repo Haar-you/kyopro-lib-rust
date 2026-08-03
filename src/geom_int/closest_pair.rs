@@ -3,8 +3,9 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/closest_pair>
 
+use crate::algo::merge::*;
 use crate::chmin;
-use crate::{algo::merge::*, geom_int::*};
+use crate::geom_int::*;
 
 /// 最近点対を求める。
 pub fn closest_pair(ps: Vec<VectorInt>) -> Option<((usize, VectorInt), (usize, VectorInt))> {

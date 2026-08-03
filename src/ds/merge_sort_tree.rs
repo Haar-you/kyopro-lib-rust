@@ -7,7 +7,8 @@
 
 use std::ops::{Add, AddAssign, RangeBounds};
 
-use crate::algo::{bsearch_slice::BinarySearch, merge::inplace_merge};
+use crate::algo::bsearch_slice::BinarySearch;
+use crate::algo::merge::inplace_merge;
 use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
 

@@ -1,6 +1,5 @@
 //! ガウス整数
-use crate::impl_from;
-use crate::impl_ops;
+use crate::{impl_from, impl_ops};
 
 /// ガウス整数 $a + bi (a, b \in \mathbb{Z})$
 #[derive(Clone, Copy, Default, Debug, Eq, PartialEq, Hash)]

@@ -7,7 +7,8 @@
 //! # Problems
 //! - [yukicoder No.899 γatheree](https://yukicoder.me/problems/no/899)
 
-use std::{collections::VecDeque, marker::PhantomData};
+use std::collections::VecDeque;
+use std::marker::PhantomData;
 
 use crate::tree::*;
 

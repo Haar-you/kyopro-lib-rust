@@ -3,7 +3,8 @@
 use std::convert::TryFrom;
 use std::ops::Range;
 
-use crate::{algo::bsearch_slice::BinarySearch, ds::fenwick_add::*};
+use crate::algo::bsearch_slice::BinarySearch;
+use crate::ds::fenwick_add::*;
 
 /// 範囲転倒数取得クエリ
 pub struct StaticRangeInversionsQuery {

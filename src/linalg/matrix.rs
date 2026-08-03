@@ -1,8 +1,9 @@
 //! 半環上の行列
 use std::ops::{Index, Neg};
 
+use crate::algebra::semiring::*;
+use crate::impl_ops;
 pub use crate::linalg::traits::*;
-use crate::{algebra::semiring::*, impl_ops};
 
 /// 半環上の行列
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -330,11 +331,10 @@ mod tests {
     use rand::prelude::*;
 
     use super::*;
-    use crate::{
-        algebra::semiring::{add_mul_mod::AddMulMod, xor_and::XorAnd},
-        math::prime_mod::Prime,
-        num::const_modint::*,
-    };
+    use crate::algebra::semiring::add_mul_mod::AddMulMod;
+    use crate::algebra::semiring::xor_and::XorAnd;
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::*;
 
     #[test]
     fn test() {

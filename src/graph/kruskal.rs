@@ -1,6 +1,7 @@
 //! 最小全域木 (Kruskal)
 
-use crate::{ds::unionfind::UnionFind, graph::*};
+use crate::ds::unionfind::UnionFind;
+use crate::graph::*;
 
 /// Kruskal法
 ///

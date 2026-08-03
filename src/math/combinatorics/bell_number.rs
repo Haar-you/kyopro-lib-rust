@@ -1,9 +1,9 @@
 //! ベル数$B_0, \dots, B_n$を列挙する。
+use crate::math::factorial::FactorialTable;
+use crate::math::fps::exp::*;
+use crate::math::polynomial::*;
 use crate::math::prime_mod::PrimeMod;
-use crate::{
-    math::{factorial::FactorialTable, fps::exp::*, polynomial::*},
-    num::const_modint::*,
-};
+use crate::num::const_modint::*;
 
 /// ベル数$B_0, \dots, B_n$を列挙する。
 pub fn bell_number<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {

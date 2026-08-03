@@ -3,11 +3,11 @@
 //! # Problems
 //! - <https://yukicoder.me/problems/no/981>
 //! - <https://judge.yosupo.jp/problem/kth_root_mod>
-use crate::math::{
-    gcd_lcm::GcdLcm,
-    mod_ops::{inv::inv_mod, log::log_mod, pow::pow_mod},
-    primitive_root_u64::primitive_root_u64,
-};
+use crate::math::gcd_lcm::GcdLcm;
+use crate::math::mod_ops::inv::inv_mod;
+use crate::math::mod_ops::log::log_mod;
+use crate::math::mod_ops::pow::pow_mod;
+use crate::math::primitive_root_u64::primitive_root_u64;
 
 /// 素数$p$について、$a \equiv x^k \pmod p$となる$x$を求める。
 /// 存在しなければ、`None`を返す。

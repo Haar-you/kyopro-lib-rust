@@ -6,11 +6,10 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/polynomial_root_finding>
 
-use crate::{
-    math::{polynomial::Polynomial, prime_mod::PrimeMod},
-    num::const_modint::ConstModInt,
-    rand::rand,
-};
+use crate::math::polynomial::Polynomial;
+use crate::math::prime_mod::PrimeMod;
+use crate::num::const_modint::ConstModInt;
+use crate::rand::rand;
 
 /// 多項式の根
 pub trait RootFinding {

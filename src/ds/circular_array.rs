@@ -3,10 +3,8 @@
 //! # Problems
 //! - <https://atcoder.jp/contests/abc372/tasks/abc372_f>
 
-use std::{
-    fmt::{Debug, Error, Formatter},
-    ops::{Index, IndexMut},
-};
+use std::fmt::{Debug, Error, Formatter};
+use std::ops::{Index, IndexMut};
 
 /// 循環配列
 #[derive(Clone, Default, PartialEq, Eq, Hash)]

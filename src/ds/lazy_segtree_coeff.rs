@@ -119,7 +119,9 @@ mod tests {
     use rand::prelude::*;
 
     use super::*;
-    use crate::{iter::collect::CollectVec, math::prime_mod::Prime, num::const_modint::*};
+    use crate::iter::collect::CollectVec;
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::*;
 
     #[test]
     fn test() {

@@ -2,10 +2,10 @@
 
 use std::iter::successors;
 
-use crate::{
-    math::{fps::inv::FpsInv, polynomial::Polynomial, prime_mod::PrimeMod},
-    num::const_modint::*,
-};
+use crate::math::fps::inv::FpsInv;
+use crate::math::polynomial::Polynomial;
+use crate::math::prime_mod::PrimeMod;
+use crate::num::const_modint::*;
 
 /// 形式的冪級数の合成
 pub trait FpsComposition {

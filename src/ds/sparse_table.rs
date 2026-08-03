@@ -1,6 +1,7 @@
 //! 冪等性と結合性をもつ列の区間取得($O(1)$)ができる。
 
-use std::{cmp::min, ops::RangeBounds};
+use std::cmp::min;
+use std::ops::RangeBounds;
 
 use crate::algebra::traits::*;
 use crate::misc::range::range_bounds_to_range;
@@ -73,10 +74,8 @@ mod tests {
     use rand::prelude::*;
 
     use super::*;
-    use crate::algebra::{
-        bit::{BitAnd, BitOr},
-        min_max::{Max, Min},
-    };
+    use crate::algebra::bit::{BitAnd, BitOr};
+    use crate::algebra::min_max::{Max, Min};
 
     fn test<A>(a: A, s: Vec<A::Element>)
     where

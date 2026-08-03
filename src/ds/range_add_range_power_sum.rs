@@ -5,7 +5,8 @@
 
 use std::ops::{Add, AddAssign, Mul, MulAssign, RangeBounds};
 
-use crate::{misc::range::range_bounds_to_range, num::one_zero::*};
+use crate::misc::range::range_bounds_to_range;
+use crate::num::one_zero::*;
 
 /// 範囲加算・範囲累乗和取得ができるデータ構造
 pub struct RangeAddRangePowerSum<T> {
@@ -197,7 +198,8 @@ mod tests {
     use rand::prelude::*;
 
     use super::*;
-    use crate::{math::prime_mod::*, num::const_modint::*};
+    use crate::math::prime_mod::*;
+    use crate::num::const_modint::*;
 
     type P = Prime<998244353>;
     type M = ConstModInt<P>;

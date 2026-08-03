@@ -65,7 +65,8 @@ mod tests {
     use rand::prelude::*;
 
     use super::*;
-    use crate::{algebra::option::AppendId, iter::collect::CollectVec};
+    use crate::algebra::option::AppendId;
+    use crate::iter::collect::CollectVec;
 
     #[test]
     fn test() {

@@ -1,9 +1,7 @@
 //! 遅延加算付き融合可能ヒープ
 
-use std::{
-    mem::swap,
-    ops::{AddAssign, SubAssign},
-};
+use std::mem::swap;
+use std::ops::{AddAssign, SubAssign};
 
 use crate::num::one_zero::Zero;
 

@@ -41,7 +41,8 @@ mod tests {
     use rand::prelude::*;
 
     use super::*;
-    use crate::{chmin, iter::collect::CollectVec};
+    use crate::chmin;
+    use crate::iter::collect::CollectVec;
 
     #[test]
     fn test() {

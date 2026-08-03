@@ -5,7 +5,8 @@
 
 #![allow(clippy::len_without_is_empty)]
 
-use std::collections::{BTreeMap, btree_map::Entry};
+use std::collections::BTreeMap;
+use std::collections::btree_map::Entry;
 
 const ODD: usize = 0;
 const EVEN: usize = 1;

@@ -5,7 +5,8 @@
 
 use std::ops::RangeBounds;
 
-use crate::{algo::bsearch_slice::BinarySearch, misc::range::range_bounds_to_range};
+use crate::algo::bsearch_slice::BinarySearch;
+use crate::misc::range::range_bounds_to_range;
 
 /// 最頻値取得クエリ
 pub struct StaticRangeModeQuery<T> {

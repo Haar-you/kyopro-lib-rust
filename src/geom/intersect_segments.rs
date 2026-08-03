@@ -1,6 +1,7 @@
 //! 2つの線分の位置関係
 
-use crate::geom::{ccw::*, *};
+use crate::geom::ccw::*;
+use crate::geom::*;
 
 /// 2つの線分の位置関係
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

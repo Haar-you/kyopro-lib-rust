@@ -1,5 +1,6 @@
 //! Range Chmax Range Max
-pub use crate::algebra::{act::*, min_max::Max};
+pub use crate::algebra::act::*;
+pub use crate::algebra::min_max::Max;
 
 /// Range Chmax Range Max 用のモノイド作用
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

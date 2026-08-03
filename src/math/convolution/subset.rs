@@ -4,7 +4,8 @@
 //! - <https://judge.yosupo.jp/problem/subset_convolution>
 use std::ops::{Add, Mul, Sub};
 
-use crate::math::convolution::{mobius::*, zeta::*};
+use crate::math::convolution::mobius::*;
+use crate::math::convolution::zeta::*;
 
 /// $h_k = \sum_{i \lor j = k, i \land j = 0} f_i g_j$を満たす$h$を求める。
 ///

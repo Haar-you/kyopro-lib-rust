@@ -2,7 +2,8 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/system_of_linear_equations_mod_2>
-use crate::{ds::bitset::Bitset, linalg::mod_2::gaussian_elim::*};
+use crate::ds::bitset::Bitset;
+use crate::linalg::mod_2::gaussian_elim::*;
 
 /// $\mathbb{Z} / 2 \mathbb{Z}$上で連立一次方程式$A \boldsymbol{x} = \boldsymbol{b}$を解く。
 ///

@@ -5,7 +5,8 @@
 
 use std::ops::Add;
 
-use crate::{graph::*, num::one_zero::*};
+use crate::graph::*;
+use crate::num::one_zero::*;
 
 /// トポロジカルソートを数え上げる。
 ///

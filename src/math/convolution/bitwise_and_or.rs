@@ -1,7 +1,8 @@
 //! 添字AND・OR畳み込み
 use std::ops::{Add, Mul, Sub};
 
-use crate::math::convolution::{mobius::*, zeta::*};
+use crate::math::convolution::mobius::*;
+use crate::math::convolution::zeta::*;
 
 /// $h_{i \land j} = \sum f_i g_j$を満たす$h$を求める。
 ///

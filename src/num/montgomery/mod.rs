@@ -183,7 +183,8 @@ mod tests {
     use super::*;
     use crate::iter::collect::CollectVec;
     use crate::math::prime_mod::Prime;
-    use crate::num::{const_modint::*, modint::*};
+    use crate::num::const_modint::*;
+    use crate::num::modint::*;
     use crate::timer;
 
     #[derive(Clone, Copy, Debug)]

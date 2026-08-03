@@ -1,5 +1,6 @@
 //! 第二種スターリング数
-use crate::{math::factorial::FactorialTable, num::ff::*};
+use crate::math::factorial::FactorialTable;
+use crate::num::ff::*;
 
 /// 第二種スターリング数
 pub trait StirlingSecond {

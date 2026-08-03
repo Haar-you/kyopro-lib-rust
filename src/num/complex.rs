@@ -1,6 +1,5 @@
 //! 複素数
-use crate::impl_from;
-use crate::impl_ops;
+use crate::{impl_from, impl_ops};
 
 /// 複素数
 #[derive(Clone, Copy, Default, Debug, PartialEq)]

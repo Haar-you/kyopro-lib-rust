@@ -1,12 +1,9 @@
 //! 集合冪級数の指数関数
 
-use crate::{
-    math::{
-        convolution::subset::subset_convolution, prime_mod::PrimeMod,
-        set_power_series::SetPowerSeries,
-    },
-    num::ff::ZZElem,
-};
+use crate::math::convolution::subset::subset_convolution;
+use crate::math::prime_mod::PrimeMod;
+use crate::math::set_power_series::SetPowerSeries;
+use crate::num::ff::ZZElem;
 
 /// 集合冪級数の指数関数
 pub trait SetPowerSeriesExp {

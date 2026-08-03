@@ -1,9 +1,7 @@
 //! 最小費用流
 
-use std::{
-    cmp::{Reverse, min},
-    collections::BinaryHeap,
-};
+use std::cmp::{Reverse, min};
+use std::collections::BinaryHeap;
 
 #[derive(Clone, Debug)]
 struct Edge {

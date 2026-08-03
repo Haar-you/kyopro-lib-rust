@@ -3,7 +3,9 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/factorize>
 
-use crate::math::{gcd_lcm::*, montgomery::*, primality::miller_rabin::*};
+use crate::math::gcd_lcm::*;
+use crate::math::montgomery::*;
+use crate::math::primality::miller_rabin::*;
 
 fn find_factor(n: u64, a: u64) -> Option<u64> {
     assert!(n % 2 == 1);

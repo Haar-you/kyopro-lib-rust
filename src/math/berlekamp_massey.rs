@@ -73,11 +73,10 @@ mod tests {
     use std::ops::{Add, Mul};
 
     use super::*;
-    use crate::{
-        iter::collect::CollectVec,
-        math::prime_mod::Prime,
-        num::{const_modint::ConstModIntBuilder, one_zero::Zero},
-    };
+    use crate::iter::collect::CollectVec;
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::ConstModIntBuilder;
+    use crate::num::one_zero::Zero;
 
     fn generate<T>(prefix: &[T], coeffs: &[T]) -> Vec<T>
     where

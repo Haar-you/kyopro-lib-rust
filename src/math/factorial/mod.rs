@@ -93,10 +93,10 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{
-        math::{combinatorics::stirling_second_table::*, prime_mod::Prime},
-        num::{const_modint::*, modint::*},
-    };
+    use crate::math::combinatorics::stirling_second_table::*;
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::*;
+    use crate::num::modint::*;
 
     #[test]
     fn test() {

@@ -10,10 +10,9 @@ pub mod log;
 
 use std::ops::{Index, IndexMut, Mul};
 
-use crate::{
-    math::{convolution::subset::subset_convolution, prime_mod::PrimeMod},
-    num::const_modint::ConstModInt,
-};
+use crate::math::convolution::subset::subset_convolution;
+use crate::math::prime_mod::PrimeMod;
+use crate::num::const_modint::ConstModInt;
 
 /// 集合冪級数
 #[derive(Clone, PartialEq, Eq)]

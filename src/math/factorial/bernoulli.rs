@@ -38,7 +38,8 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{math::prime_mod::Prime, num::const_modint::*};
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::*;
 
     #[test]
     fn test() {

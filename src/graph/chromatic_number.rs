@@ -5,7 +5,8 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/chromatic_number>
-use crate::{graph::*, math::mod_ops::pow::pow_mod};
+use crate::graph::*;
+use crate::math::mod_ops::pow::pow_mod;
 
 const M: u64 = 1000000007;
 

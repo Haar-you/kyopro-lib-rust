@@ -1,8 +1,6 @@
 //! 冪等性と結合性をもつ2次元列の区間取得($O(1)$)ができる。
-use std::{
-    cmp::{max, min},
-    ops::Range,
-};
+use std::cmp::{max, min};
+use std::ops::Range;
 
 use crate::algebra::traits::*;
 
@@ -100,7 +98,8 @@ mod tests {
     use rand::prelude::*;
 
     use super::*;
-    use crate::{algebra::min_max::Max, iter::collect::CollectVec};
+    use crate::algebra::min_max::Max;
+    use crate::iter::collect::CollectVec;
 
     fn test<A>(a: A, s: Vec<Vec<A::Element>>)
     where

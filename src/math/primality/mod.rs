@@ -13,7 +13,10 @@ pub trait PrimalityTest<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::{PrimalityTest, eratosthenes::*, linear_sieve::LinearSieve, miller_rabin::*};
+    use super::PrimalityTest;
+    use super::eratosthenes::*;
+    use super::linear_sieve::LinearSieve;
+    use super::miller_rabin::*;
     use crate::timer;
 
     #[test]

@@ -5,10 +5,9 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/binomial_coefficient>
-use crate::math::{
-    crt::crt_vec,
-    mod_ops::{inv::*, pow::*},
-};
+use crate::math::crt::crt_vec;
+use crate::math::mod_ops::inv::*;
+use crate::math::mod_ops::pow::*;
 
 /// 二項係数$_nC_k \pmod{p^q}$($p$は素数)を計算する。
 #[derive(Clone)]

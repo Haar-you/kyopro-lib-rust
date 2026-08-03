@@ -83,7 +83,8 @@ mod tests {
 
     use super::biconnected;
     use crate::btreeset;
-    use crate::graph::{lowlink::Lowlink, *};
+    use crate::graph::lowlink::Lowlink;
+    use crate::graph::*;
 
     #[test]
     fn test() {

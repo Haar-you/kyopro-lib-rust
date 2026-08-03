@@ -2,7 +2,8 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/rooted_tree_isomorphism_classification>
-use std::collections::{HashMap, hash_map::DefaultHasher};
+use std::collections::HashMap;
+use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 
 use crate::tree::*;

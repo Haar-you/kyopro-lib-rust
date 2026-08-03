@@ -1,5 +1,6 @@
 //! 2-SAT
-use crate::graph::{scc::*, *};
+use crate::graph::scc::*;
+use crate::graph::*;
 
 /// 2-SATを解く。
 pub struct TwoSat {

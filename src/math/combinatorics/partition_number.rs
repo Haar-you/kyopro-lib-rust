@@ -2,11 +2,10 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/partition_function>
+use crate::math::fps::inv::*;
+use crate::math::polynomial::*;
 use crate::math::prime_mod::PrimeMod;
-use crate::{
-    math::{fps::inv::*, polynomial::*},
-    num::const_modint::*,
-};
+use crate::num::const_modint::*;
 
 /// 分割数$p(0), \dots, p(n)$を列挙する。
 pub fn partition_number<P: PrimeMod>(n: usize) -> Vec<ConstModInt<P>> {

@@ -23,9 +23,10 @@ mod tests {
     use super::mobius::*;
     use super::subset::subset_convolution;
     use super::zeta::*;
+    use crate::iter::collect::CollectVec;
     use crate::math::gcd_lcm::GcdLcm;
     use crate::math::prime_mod::{Prime, PrimeMod};
-    use crate::{iter::collect::CollectVec, num::const_modint::*};
+    use crate::num::const_modint::*;
 
     type M = Prime<998244353>;
 

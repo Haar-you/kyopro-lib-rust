@@ -1,5 +1,7 @@
 //! 最小値とその個数の総和
-use std::{cmp::Ordering, marker::PhantomData, ops::Add};
+use std::cmp::Ordering;
+use std::marker::PhantomData;
+use std::ops::Add;
 
 use crate::algebra::traits::*;
 use crate::num::one_zero::Zero;

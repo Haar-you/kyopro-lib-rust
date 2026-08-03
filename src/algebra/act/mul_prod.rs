@@ -1,5 +1,6 @@
 //! Range Multiply Range Product
-pub use crate::algebra::{act::Act, traits::*};
+pub use crate::algebra::act::Act;
+pub use crate::algebra::traits::*;
 
 /// Range Multiply Range Product 用のモノイド作用
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

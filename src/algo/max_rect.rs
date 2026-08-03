@@ -1,8 +1,6 @@
 //! 最大長方形
-use std::{
-    cmp::Ordering,
-    ops::{Mul, Range},
-};
+use std::cmp::Ordering;
+use std::ops::{Mul, Range};
 
 use crate::chmax;
 

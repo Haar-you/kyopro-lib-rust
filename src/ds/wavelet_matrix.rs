@@ -1,10 +1,9 @@
 //! Wavelet matrix
-use std::{
-    marker::PhantomData,
-    ops::{BitAnd, BitOrAssign, RangeBounds, Shl, Shr},
-};
+use std::marker::PhantomData;
+use std::ops::{BitAnd, BitOrAssign, RangeBounds, Shl, Shr};
 
-use crate::{ds::succinct_bitvec::SuccinctBitVec, misc::range::range_bounds_to_range};
+use crate::ds::succinct_bitvec::SuccinctBitVec;
+use crate::misc::range::range_bounds_to_range;
 
 /// Wavelet matrix
 #[derive(Clone)]

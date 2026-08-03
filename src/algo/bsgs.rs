@@ -7,7 +7,8 @@
 //! - <https://atcoder.jp/contests/abc270/tasks/abc270_g>
 //! - <https://atcoder.jp/contests/abc186/tasks/abc186_e>
 
-use std::{collections::HashMap, hash::Hash};
+use std::collections::HashMap;
+use std::hash::Hash;
 
 /// Baby-step giant-step
 ///

@@ -2,7 +2,8 @@
 //!
 //! $s(n,k)$ は $$x(x-1)\dots (x-(n-1)) = \sum_{k=0}^n s(n,k) x^k$$を満たす。
 use crate::math::convolution::ntt::NTT;
-use crate::math::polynomial::{Polynomial, taylor_shift::*};
+use crate::math::polynomial::Polynomial;
+use crate::math::polynomial::taylor_shift::*;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 

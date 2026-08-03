@@ -42,7 +42,8 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{math::totient::totient_table, timer};
+    use crate::math::totient::totient_table;
+    use crate::timer;
 
     #[test]
     fn totient() {

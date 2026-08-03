@@ -1,5 +1,6 @@
 //! LL(1)構文解析
-use std::{collections::HashMap, hash::Hash};
+use std::collections::HashMap;
+use std::hash::Hash;
 
 /// 構文解析用の入力文字列
 #[derive(Clone, Debug)]

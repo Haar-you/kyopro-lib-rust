@@ -1,7 +1,9 @@
 //! 行列の代数的構造
 
+use crate::algebra::semiring::*;
 pub use crate::algebra::traits::*;
-use crate::{algebra::semiring::*, impl_algebra, linalg::matrix::MatrixOnSemiring};
+use crate::impl_algebra;
+use crate::linalg::matrix::MatrixOnSemiring;
 
 /// 行列の加法
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

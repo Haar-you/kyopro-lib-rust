@@ -1,6 +1,7 @@
 //! 負閉路を持つグラフの最短経路 (Bellman-Ford)
 
-use std::{cmp::min, ops::Add};
+use std::cmp::min;
+use std::ops::Add;
 
 use crate::graph::*;
 pub use crate::num::num_inf::NumInf;
@@ -56,7 +57,8 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::{NumInf::*, *};
+    use super::NumInf::*;
+    use super::*;
 
     #[test]
     fn test() {

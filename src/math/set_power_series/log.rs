@@ -1,13 +1,10 @@
 //! 集合冪級数の対数
 
-use crate::{
-    math::{
-        convolution::subset::subset_convolution,
-        prime_mod::PrimeMod,
-        set_power_series::{SetPowerSeries, inv::SetPowerSeriesInv},
-    },
-    num::ff::ZZElem,
-};
+use crate::math::convolution::subset::subset_convolution;
+use crate::math::prime_mod::PrimeMod;
+use crate::math::set_power_series::SetPowerSeries;
+use crate::math::set_power_series::inv::SetPowerSeriesInv;
+use crate::num::ff::ZZElem;
 
 /// 集合冪級数の対数
 pub trait SetPowerSeriesLog {

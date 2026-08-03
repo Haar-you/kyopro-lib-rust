@@ -2,7 +2,8 @@
 //!
 //! # Problems
 //! - <https://atcoder.jp/contests/abc308/tasks/abc308_f>
-use std::{collections::BTreeMap, ops::Bound};
+use std::collections::BTreeMap;
+use std::ops::Bound;
 
 /// 同一要素を複数個挿入可能な`Set`
 #[derive(Debug, Clone, Default)]

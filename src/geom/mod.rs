@@ -31,7 +31,8 @@ pub mod tangent_circle;
 
 pub mod closest_pair;
 
-use std::{cmp::Ordering, f64::consts::PI};
+use std::cmp::Ordering;
+use std::f64::consts::PI;
 
 use crate::impl_ops;
 

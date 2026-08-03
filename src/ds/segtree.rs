@@ -130,7 +130,8 @@ mod tests {
     use crate::algebra::sum::Sum;
     use crate::algebra::traits::*;
     use crate::linalg::matrix::MatrixOnSemiring;
-    use crate::num::{ff::*, modint::ModIntBuilder};
+    use crate::num::ff::*;
+    use crate::num::modint::ModIntBuilder;
 
     fn random_test_helper<M, F>(monoid: M, size: usize, mut gen_value: F)
     where

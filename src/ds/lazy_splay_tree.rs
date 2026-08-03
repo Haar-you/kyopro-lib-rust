@@ -473,7 +473,8 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::algebra::{act::add_sum::AddSum, sum::Sum};
+    use crate::algebra::act::add_sum::AddSum;
+    use crate::algebra::sum::Sum;
 
     #[test]
     fn test_empty() {

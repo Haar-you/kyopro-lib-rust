@@ -1,6 +1,7 @@
 //! 半群の列の区間取得($O(1)$)ができる。
 
-use std::{iter::repeat_n, ops::RangeBounds};
+use std::iter::repeat_n;
+use std::ops::RangeBounds;
 
 pub use crate::algebra::traits::Semigroup;
 use crate::misc::range::range_bounds_to_range;

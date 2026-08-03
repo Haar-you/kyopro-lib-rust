@@ -6,11 +6,11 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/counting_eulerian_circuits>
 
-use crate::{
-    graph::{matrix_tree::count_directed_spanning_tree, *},
-    math::{factorial::FactorialTable, prime_mod::*},
-    num::const_modint::*,
-};
+use crate::graph::matrix_tree::count_directed_spanning_tree;
+use crate::graph::*;
+use crate::math::factorial::FactorialTable;
+use crate::math::prime_mod::*;
+use crate::num::const_modint::*;
 
 /// 有向Euler閉路を数え上げる。
 pub fn count_eulerian_circuits<P: PrimeMod, W, I>(g: &Graph<Directed, W, I>) -> ConstModInt<P> {

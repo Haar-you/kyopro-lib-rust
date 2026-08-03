@@ -1,5 +1,6 @@
 //! 重軽分解
-use std::{cmp::max, marker::PhantomData};
+use std::cmp::max;
+use std::marker::PhantomData;
 
 use crate::tree::*;
 

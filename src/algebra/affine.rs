@@ -1,7 +1,8 @@
 //! 一次関数の合成
 use crate::algebra::semiring::Semiring;
 pub use crate::algebra::traits::*;
-use crate::{impl_algebra, math::linear::Linear};
+use crate::impl_algebra;
+use crate::math::linear::Linear;
 
 /// [`Linear`]の合成
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, Hash)]

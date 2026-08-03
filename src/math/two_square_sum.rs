@@ -8,7 +8,8 @@
 
 use std::collections::{HashMap, HashSet};
 
-use crate::math::{factorize::pollard_rho::*, mod_ops::sqrt::sqrt_mod};
+use crate::math::factorize::pollard_rho::*;
+use crate::math::mod_ops::sqrt::sqrt_mod;
 
 /// 非負整数$n$について、$n = x^2 + y^2$を満たす非負整数$x$, $y$の組をすべて列挙する。
 pub fn two_square_sum(n: u64) -> Vec<(u64, u64)> {
