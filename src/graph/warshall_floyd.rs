@@ -8,7 +8,7 @@
 
 use std::ops::Add;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 use crate::num::one_zero::Zero;
 
 enum Result<T> {

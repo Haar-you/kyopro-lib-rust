@@ -3,7 +3,7 @@
 use std::collections::VecDeque;
 use std::iter::zip;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 /// 幅優先探索で辺数が最小の経路を得る。
 #[allow(clippy::type_complexity)]

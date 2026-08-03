@@ -1,6 +1,6 @@
 //! 強連結成分分解
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 /// 強連結成分分解
 pub struct SCC {
@@ -12,7 +12,7 @@ impl SCC {
     /// グラフから[`SCC`]を構築する。
     ///
     /// **Time complexity** $O(V + E)$
-    pub fn new<W, I>(g: &Graph<Directed, W, I>) -> Self {
+    pub fn new<W, I>(g: &DirectedGraph<W, I>) -> Self {
         let n = g.len();
 
         let mut check = vec![false; n];

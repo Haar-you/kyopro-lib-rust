@@ -1,11 +1,11 @@
 //! 2-SAT
+
 use crate::graph::scc::*;
-use crate::graph::*;
 
 /// 2-SATを解く。
 pub struct TwoSat {
     size: usize,
-    g: Graph<Directed, (), ()>,
+    g: DirectedGraph<(), ()>,
 }
 
 impl TwoSat {

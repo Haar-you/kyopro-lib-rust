@@ -38,7 +38,6 @@ mod tests {
 
     use super::*;
     use crate::btreeset;
-    use crate::graph::*;
 
     #[test]
     fn test() {

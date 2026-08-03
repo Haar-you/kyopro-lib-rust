@@ -1,7 +1,7 @@
 //! Lowlink
 use std::cmp::min;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 /// Lowlink
 #[derive(Debug, Clone)]
@@ -22,7 +22,7 @@ pub struct Lowlink {
 
 impl Lowlink {
     /// 無向グラフから[`Lowlink`]を構築する。
-    pub fn new<W, I>(g: &Graph<Undirected, W, I>) -> Self {
+    pub fn new<W, I>(g: &UndirectedGraph<W, I>) -> Self {
         let n = g.len();
         let mut this = Self {
             size: n,
@@ -44,7 +44,7 @@ impl Lowlink {
 
     fn dfs<W, I>(
         &mut self,
-        g: &Graph<Undirected, W, I>,
+        g: &UndirectedGraph<W, I>,
         cur: usize,
         par: Option<usize>,
         index: &mut usize,

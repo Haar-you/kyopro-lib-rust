@@ -3,13 +3,13 @@
 use std::cmp::Reverse;
 use std::collections::BinaryHeap;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 /// Prim法
 ///
 /// グラフが連結ならばSomeに包んで最小全域木の辺集合を返す。
 /// 非連結ならばNoneを返す。
-pub fn prim<W, I>(g: &Graph<Undirected, W, I>) -> Option<Vec<&Edge<W, I>>>
+pub fn prim<W, I>(g: &UndirectedGraph<W, I>) -> Option<Vec<&Edge<W, I>>>
 where
     W: Copy + Ord,
 {

@@ -1,5 +1,5 @@
 //! グリッドをグラフに変換する
-use crate::graph::*;
+pub use crate::graph::core::*;
 use crate::grid::*;
 
 /// グリッドをグラフに変換する
@@ -14,7 +14,7 @@ pub fn grid_to_graph<T: Copy>(
     dirs: &[Dir],
     index: impl Fn(Position) -> usize,
     edge: impl Fn(Position, Position) -> Option<T>,
-) -> Graph<Directed, T, ()> {
+) -> DirectedGraph<T, ()> {
     let mut g = DirectedGraph::<T, ()>::new(h * w);
 
     for i in 0..h {

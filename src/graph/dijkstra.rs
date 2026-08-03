@@ -4,7 +4,7 @@ use std::cmp::Reverse;
 use std::collections::BinaryHeap;
 use std::ops::Add;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 use crate::num::one_zero::Zero;
 use crate::num::traits::Unsigned;
 

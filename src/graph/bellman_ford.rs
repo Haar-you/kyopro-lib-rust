@@ -3,7 +3,7 @@
 use std::cmp::min;
 use std::ops::Add;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 pub use crate::num::num_inf::NumInf;
 use crate::num::one_zero::Zero;
 

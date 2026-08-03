@@ -1,14 +1,13 @@
 //! 中国人郵便配達問題
 
-#![allow(clippy::needless_range_loop)]
-
 use std::ops::Add;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 use crate::num::one_zero::Zero;
 
 /// **Time complexity** $O(V^2 2^V)$
-pub fn chinese_postman_problem<W, I>(g: &Graph<Undirected, W, I>) -> W
+#[allow(clippy::needless_range_loop)]
+pub fn chinese_postman_problem<W, I>(g: &UndirectedGraph<W, I>) -> W
 where
     W: Copy + Ord + Add<Output = W> + Zero,
 {

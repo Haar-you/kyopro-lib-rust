@@ -4,13 +4,13 @@
 //! - [Maximum Independent Set](https://judge.yosupo.jp/problem/maximum_independent_set) [#142761](https://judge.yosupo.jp/submission/142761) (n <= 40)
 use std::collections::HashSet;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 /// 最大独立集合を求める
 ///
 /// nは64以下に制限している。
 /// 最大独立集合の補集合は最小頂点被覆集合になる。
-pub fn max_independent_set<W, I>(g: &Graph<Undirected, W, I>) -> Vec<usize> {
+pub fn max_independent_set<W, I>(g: &UndirectedGraph<W, I>) -> Vec<usize> {
     let n = g.len();
     assert!(n <= 64);
 
@@ -26,7 +26,7 @@ pub fn max_independent_set<W, I>(g: &Graph<Undirected, W, I>) -> Vec<usize> {
     (0..n).filter(|i| a & (1 << i) != 0).collect()
 }
 
-fn rec<W, I>(g: &Graph<Undirected, W, I>, indep: u64, cover: u64, set: &mut HashSet<(u64, u64)>) {
+fn rec<W, I>(g: &UndirectedGraph<W, I>, indep: u64, cover: u64, set: &mut HashSet<(u64, u64)>) {
     if set.contains(&(indep, cover)) {
         return;
     }

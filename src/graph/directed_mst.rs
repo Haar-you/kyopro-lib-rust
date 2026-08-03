@@ -5,14 +5,14 @@
 use std::collections::VecDeque;
 use std::ops::Sub;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 type Edge_<'a, T, I> = (usize, usize, T, &'a Edge<T, I>);
 
 /// 有向グラフ上の最小有向全域木を求める
 ///
 /// **Time complexity** $O(VE)$
-pub fn directed_mst<W, I>(g: &Graph<Directed, W, I>, root: usize) -> Option<Vec<&Edge<W, I>>>
+pub fn directed_mst<W, I>(g: &DirectedGraph<W, I>, root: usize) -> Option<Vec<&Edge<W, I>>>
 where
     W: Ord + Copy + Sub<Output = W>,
 {

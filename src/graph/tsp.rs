@@ -5,10 +5,10 @@
 
 use std::ops::Add;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 /// 巡回セールスマン問題
-pub fn tsp<W, I>(g: &Graph<Directed, W, I>, src: usize) -> Option<W>
+pub fn tsp<W, I>(g: &DirectedGraph<W, I>, src: usize) -> Option<W>
 where
     W: Copy + Ord + Add<Output = W>,
 {

@@ -4,7 +4,7 @@
 //! - <https://judge.yosupo.jp/problem/cycle_detection_undirected>
 use std::collections::HashMap;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 /// 無向グラフから閉路を検出する。
 ///

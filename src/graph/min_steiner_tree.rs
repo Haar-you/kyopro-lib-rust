@@ -6,7 +6,7 @@
 use std::collections::VecDeque;
 
 use crate::algo::enum_bit::subset_asc::subset_asc;
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 #[derive(Clone, Copy)]
 enum Restore {
@@ -22,7 +22,7 @@ enum Restore {
 ///
 /// **Time complexity** $O(3^k n + 2^k n^2)$
 pub fn min_steiner_tree<I>(
-    graph: &Graph<Undirected, u64, I>,
+    graph: &UndirectedGraph<u64, I>,
     terminals: Vec<usize>,
 ) -> Vec<&Edge<u64, I>> {
     let n = graph.len();

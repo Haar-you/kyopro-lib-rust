@@ -1,7 +1,7 @@
 //! 最小全域木 (Kruskal)
 
 use crate::ds::unionfind::UnionFind;
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 /// Kruskal法
 ///
@@ -9,7 +9,7 @@ use crate::graph::*;
 /// 非連結ならばNoneを返す。
 ///
 /// **Time complexity** $O(E \log E)$
-pub fn kruskal<W, I>(g: &Graph<Undirected, W, I>) -> Option<Vec<&Edge<W, I>>>
+pub fn kruskal<W, I>(g: &UndirectedGraph<W, I>) -> Option<Vec<&Edge<W, I>>>
 where
     W: Ord + Copy,
 {

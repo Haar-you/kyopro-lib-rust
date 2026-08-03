@@ -3,7 +3,7 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/cycle_detection>
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 /// 有向グラフから閉路を検出する。
 ///

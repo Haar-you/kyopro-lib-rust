@@ -2,7 +2,7 @@
 
 use std::collections::VecDeque;
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 
 /// トポロジカルソート
 ///
@@ -10,7 +10,7 @@ use crate::graph::*;
 ///
 /// gがDAGのとき、トポロジカルソートした結果をSomeに包んで返す。
 /// そうでなければ、Noneを返す。
-pub fn tsort<W, I>(g: &Graph<Directed, W, I>) -> Option<Vec<usize>> {
+pub fn tsort<W, I>(g: &DirectedGraph<W, I>) -> Option<Vec<usize>> {
     let n = g.len();
     let mut indeg = vec![0; n];
 
