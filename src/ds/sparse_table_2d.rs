@@ -2,7 +2,7 @@
 use std::cmp::{max, min};
 use std::ops::Range;
 
-use crate::algebra::traits::*;
+pub use crate::algebra::traits::*;
 
 /// 冪等性と結合性をもつ2次元列の区間取得($O(1)$)ができる。
 pub struct SparseTable2D<A: Semilattice> {

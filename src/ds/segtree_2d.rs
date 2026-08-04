@@ -1,7 +1,7 @@
 //! 二次元のセグメント木
 use std::ops::Range;
 
-use crate::algebra::traits::*;
+pub use crate::algebra::traits::*;
 
 /// 二次元のセグメント木
 pub struct Segtree2D<M: Monoid + Commutative> {

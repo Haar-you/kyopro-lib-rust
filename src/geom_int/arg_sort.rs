@@ -4,7 +4,7 @@
 //! - <https://judge.yosupo.jp/problem/sort_points_by_argument>
 use std::cmp::Ordering;
 
-use crate::geom_int::*;
+pub use crate::geom_int::*;
 
 /// 偏角ソートした`Vec`を返す。
 ///

@@ -8,7 +8,7 @@ use std::cmp::Ordering;
 use std::ops::Range;
 use std::ptr;
 
-use crate::algebra::act::*;
+pub use crate::algebra::act::*;
 
 #[derive(Clone)]
 struct Manager<M, A> {

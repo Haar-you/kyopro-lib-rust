@@ -2,8 +2,7 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/runenumerate>
-use std::collections::BTreeMap;
-use std::collections::btree_map::Entry;
+use std::collections::btree_map::{BTreeMap, Entry};
 
 use crate::algo::zalgo::*;
 

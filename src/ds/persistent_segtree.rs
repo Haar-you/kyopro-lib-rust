@@ -6,7 +6,7 @@
 use std::ops::RangeBounds;
 use std::ptr;
 
-use crate::algebra::traits::Monoid;
+pub use crate::algebra::traits::Monoid;
 use crate::misc::range::range_bounds_to_range;
 
 #[derive(Clone, Debug)]

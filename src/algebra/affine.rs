@@ -1,5 +1,5 @@
 //! 一次関数の合成
-use crate::algebra::semiring::Semiring;
+pub use crate::algebra::semiring::Semiring;
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use crate::math::linear::Linear;

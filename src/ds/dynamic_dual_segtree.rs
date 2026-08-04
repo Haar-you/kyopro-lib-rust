@@ -1,7 +1,7 @@
 //! 動的双対セグメント木
 use std::ops::Range;
 
-use crate::algebra::traits::Monoid;
+pub use crate::algebra::traits::Monoid;
 use crate::misc::nullable_usize::NullableUsize;
 
 #[derive(Clone, Debug)]

@@ -1,7 +1,7 @@
 //! セグメント木上にセグメント木を構築する。
 use std::ops::Range;
 
-use crate::algebra::traits::*;
+pub use crate::algebra::traits::*;
 use crate::algo::bsearch_slice::BinarySearch;
 use crate::algo::merge::merge;
 use crate::ds::segtree::*;

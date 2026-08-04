@@ -1,7 +1,6 @@
 //! 実行時にmod Mが決まるModInt
 
-use std::fmt;
-use std::fmt::{Debug, Display, Formatter};
+use std::fmt::{self, Debug, Display, Formatter};
 use std::ops::Neg;
 
 use crate::impl_ops;

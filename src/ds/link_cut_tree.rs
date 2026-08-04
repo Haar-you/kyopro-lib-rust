@@ -7,7 +7,7 @@
 use std::mem::swap;
 use std::ptr;
 
-use crate::algebra::traits::*;
+pub use crate::algebra::traits::*;
 
 struct Manager<M: Monoid> {
     monoid: M,

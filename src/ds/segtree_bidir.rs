@@ -1,7 +1,7 @@
 //! 非可換なモノイドを双方向から計算するセグメント木
 use std::ops::RangeBounds;
 
-use crate::algebra::traits::Monoid;
+pub use crate::algebra::traits::Monoid;
 use crate::misc::range::range_bounds_to_range;
 
 /// 非可換なモノイドを双方向から計算するセグメント木

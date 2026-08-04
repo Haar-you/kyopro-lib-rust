@@ -3,7 +3,7 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/static_convex_hull>
 
-use crate::geom_int::*;
+pub use crate::geom_int::*;
 
 /// 凸包の上半分か下半分かを指定する
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]

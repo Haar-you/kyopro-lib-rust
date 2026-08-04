@@ -1,6 +1,6 @@
 //! 線形篩
 
-use crate::math::primality::PrimalityTest;
+pub use crate::math::primality::PrimalityTest;
 
 /// 線形篩
 pub struct LinearSieve {

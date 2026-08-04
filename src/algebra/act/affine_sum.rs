@@ -1,8 +1,8 @@
 //! Range Affine Range Sum
 pub use crate::algebra::act::Act;
-use crate::algebra::affine::Composition;
-use crate::algebra::dual::Dual;
-use crate::algebra::semiring::Semiring;
+pub use crate::algebra::affine::Composition;
+pub use crate::algebra::dual::Dual;
+pub use crate::algebra::semiring::Semiring;
 pub use crate::algebra::traits::*;
 use crate::math::linear::Linear;
 

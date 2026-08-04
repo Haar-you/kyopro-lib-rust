@@ -3,7 +3,7 @@
 use std::cmp::min;
 use std::ops::RangeBounds;
 
-use crate::algebra::traits::*;
+pub use crate::algebra::traits::*;
 use crate::misc::range::range_bounds_to_range;
 
 /// 冪等性と結合性をもつ列の区間取得($O(1)$)ができる。

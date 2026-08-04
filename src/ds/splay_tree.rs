@@ -12,7 +12,7 @@ use std::cmp::Ordering;
 use std::ops::Range;
 use std::ptr;
 
-use crate::algebra::traits::Monoid;
+pub use crate::algebra::traits::Monoid;
 
 #[derive(Clone)]
 struct Manager<M> {

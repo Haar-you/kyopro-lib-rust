@@ -1,7 +1,6 @@
 //! コンパイル時にmod Mが決まるModInt
 
-use std::fmt;
-use std::fmt::{Debug, Display, Formatter};
+use std::fmt::{self, Debug, Display, Formatter};
 use std::marker::PhantomData;
 
 use crate::math::prime_mod::PrimeMod;

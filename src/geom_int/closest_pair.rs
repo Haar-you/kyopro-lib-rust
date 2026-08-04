@@ -5,7 +5,7 @@
 
 use crate::algo::merge::*;
 use crate::chmin;
-use crate::geom_int::*;
+pub use crate::geom_int::*;
 
 /// 最近点対を求める。
 pub fn closest_pair(ps: Vec<VectorInt>) -> Option<((usize, VectorInt), (usize, VectorInt))> {

@@ -2,8 +2,8 @@
 use std::ops::Range;
 use std::ptr;
 
-use crate::algebra::act::Act;
-use crate::algebra::traits::*;
+pub use crate::algebra::act::Act;
+pub use crate::algebra::traits::*;
 
 #[derive(Clone, Debug)]
 struct Node<M: Monoid, A: Act<M>> {

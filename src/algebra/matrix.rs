@@ -1,6 +1,6 @@
 //! 行列の代数的構造
 
-use crate::algebra::semiring::*;
+pub use crate::algebra::semiring::*;
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use crate::linalg::matrix::MatrixOnSemiring;

@@ -1,8 +1,7 @@
 //! 有理数
 
 use std::cmp::Ordering;
-use std::fmt;
-use std::fmt::{Debug, Formatter};
+use std::fmt::{self, Debug, Formatter};
 
 use crate::math::gcd_lcm::GcdLcm;
 use crate::{impl_from, impl_ops};

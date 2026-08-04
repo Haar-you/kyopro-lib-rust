@@ -4,7 +4,7 @@
 //! - <https://judge.yosupo.jp/problem/point_set_range_composite_large_array>
 use std::ops::Range;
 
-use crate::algebra::traits::Monoid;
+pub use crate::algebra::traits::Monoid;
 use crate::misc::nullable_usize::NullableUsize;
 
 #[derive(Debug)]

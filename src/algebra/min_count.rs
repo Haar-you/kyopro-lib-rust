@@ -3,7 +3,7 @@ use std::cmp::Ordering;
 use std::marker::PhantomData;
 use std::ops::Add;
 
-use crate::algebra::traits::*;
+pub use crate::algebra::traits::*;
 use crate::num::one_zero::Zero;
 
 /// 最小値とその個数の総和
