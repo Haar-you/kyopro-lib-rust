@@ -2,7 +2,7 @@
 use std::cmp::max;
 use std::marker::PhantomData;
 
-use crate::tree::*;
+pub use crate::tree::core::*;
 
 /// 重軽分解
 #[derive(Clone, Debug)]

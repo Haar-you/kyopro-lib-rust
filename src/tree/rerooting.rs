@@ -1,16 +1,16 @@
 //! 全方位木DP
+//!
+//! # References
+//! - <https://null-mn.hatenablog.com/entry/2020/04/14/124151>
+//!
+//! # Problems
+//! - [EDPC V - Subtree](https://atcoder.jp/contests/dp/submissions/57560435)
+//! - <https://atcoder.jp/contests/abc160/tasks/abc160_f>
+//! - <https://judge.yosupo.jp/problem/tree_path_composite_sum>
 
-use crate::tree::*;
+pub use crate::tree::core::*;
 
 /// 全方位木DP
-///
-/// # References
-/// - <https://null-mn.hatenablog.com/entry/2020/04/14/124151>
-///
-/// # Problems
-/// - [EDPC V - Subtree](https://atcoder.jp/contests/dp/submissions/57560435)
-/// - <https://atcoder.jp/contests/abc160/tasks/abc160_f>
-/// - <https://judge.yosupo.jp/problem/tree_path_composite_sum>
 pub struct RerootingDP<'a, T, U, W, I> {
     init: U,
     up: Box<dyn 'a + Fn(T, &'a TreeEdge<W, I>) -> U>,

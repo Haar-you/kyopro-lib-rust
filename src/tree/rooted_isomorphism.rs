@@ -2,11 +2,11 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/rooted_tree_isomorphism_classification>
-use std::collections::HashMap;
-use std::collections::hash_map::DefaultHasher;
+
+use std::collections::hash_map::{DefaultHasher, HashMap};
 use std::hash::{Hash, Hasher};
 
-use crate::tree::*;
+pub use crate::tree::core::*;
 
 /// 根付き木の(根付き)部分木を同型性によって分類する。
 ///

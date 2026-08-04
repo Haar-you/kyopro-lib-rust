@@ -5,7 +5,7 @@
 //! - <https://judge.yosupo.jp/problem/frequency_table_of_tree_distance>
 use std::marker::PhantomData;
 
-use crate::tree::*;
+pub use crate::tree::core::*;
 
 /// [`CentroidDecomposition`]の頂点ノード
 #[derive(Clone)]

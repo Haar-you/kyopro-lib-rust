@@ -2,7 +2,7 @@
 
 use std::marker::PhantomData;
 
-use crate::tree::*;
+pub use crate::tree::core::*;
 
 /// ダブリングによる最小共通祖先
 pub struct DoublingLCA<W, I> {

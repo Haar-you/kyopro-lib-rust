@@ -5,7 +5,7 @@
 
 use std::marker::PhantomData;
 
-use crate::tree::*;
+pub use crate::tree::core::*;
 
 /// Auxiliary Tree
 ///

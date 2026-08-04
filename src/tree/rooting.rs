@@ -2,7 +2,7 @@
 
 use std::mem::swap;
 
-use crate::tree::*;
+pub use crate::tree::core::*;
 
 /// 根付き木に変換
 pub fn rooting<W, I>(tr: &mut Tree<W, I>, root: usize) -> Result<(), &str> {
