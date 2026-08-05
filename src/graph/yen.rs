@@ -124,7 +124,7 @@ where
                         temp.push(v);
                     }
 
-                    temp.extend(p.into_iter());
+                    temp.extend(p);
                     stock.push(Reverse((c, temp)));
                 }
 

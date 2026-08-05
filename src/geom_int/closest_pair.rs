@@ -13,7 +13,7 @@ pub fn closest_pair(ps: Vec<VectorInt>) -> Option<((usize, VectorInt), (usize, V
         None
     } else {
         let mut ps: Vec<_> = ps.into_iter().enumerate().collect();
-        ps.sort_by(|(_, p), (_, q)| p.x.cmp(&q.x));
+        ps.sort_by_key(|(_, p)| p.x);
         rec(&mut ps)
     }
 }

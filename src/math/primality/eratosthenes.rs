@@ -37,7 +37,7 @@ impl PrimalityTest<usize> for EratosthenesSieve {
     fn is_prime(&self, i: usize) -> bool {
         if i == 2 {
             true
-        } else if i % 2 == 0 {
+        } else if i.is_multiple_of(2) {
             false
         } else {
             self.data[i / 2]

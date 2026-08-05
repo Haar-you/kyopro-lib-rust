@@ -197,15 +197,9 @@ mod tests {
 
             let y = rng.random::<u64>();
 
-            assert_eq!(
-                bt.min(y),
-                m.iter().map(|(&a, _)| a).min_by_key(|&a| (a ^ y))
-            );
+            assert_eq!(bt.min(y), m.iter().map(|(&a, _)| a).min_by_key(|&a| a ^ y));
 
-            assert_eq!(
-                bt.max(y),
-                m.iter().map(|(&a, _)| a).max_by_key(|&a| (a ^ y))
-            );
+            assert_eq!(bt.max(y), m.iter().map(|(&a, _)| a).max_by_key(|&a| a ^ y));
 
             assert_eq!(
                 (0..100).map(|i| bt.count(i)).collect::<Vec<_>>(),

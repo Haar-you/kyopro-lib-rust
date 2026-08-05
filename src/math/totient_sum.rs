@@ -47,7 +47,7 @@ where
         return *y;
     }
 
-    let mut ret = if x % 2 == 0 {
+    let mut ret = if x.is_multiple_of(2) {
         m.from_u64(x / 2) * m.from_u64(x + 1)
     } else {
         m.from_u64(x) * m.from_u64(x.div_ceil(2))

@@ -374,7 +374,7 @@ mod tests {
             }
         }
 
-        assert!(a.clone().straight_mul(b.clone()) == a.strassen_mul(b));
+        assert_eq!(a.clone().straight_mul(b.clone()), a.strassen_mul(b));
     }
 
     #[test]

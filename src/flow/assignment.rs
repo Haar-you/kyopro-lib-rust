@@ -62,16 +62,12 @@ pub fn assignment(a: Vec<Vec<i64>>) -> (i64, Vec<usize>) {
         cost[src] = Some(0);
         pq[src] = Some(0);
 
-        loop {
-            let Some((c, v)) = pq
-                .iter()
-                .enumerate()
-                .filter_map(|(i, c)| c.map(|x| (x, i)))
-                .min()
-            else {
-                break;
-            };
-
+        while let Some((c, v)) = pq
+            .iter()
+            .enumerate()
+            .filter_map(|(i, c)| c.map(|x| (x, i)))
+            .min()
+        {
             pq[v] = None;
 
             let h_v = h[v];

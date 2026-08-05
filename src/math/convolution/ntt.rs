@@ -167,7 +167,7 @@ impl<P: PrimeMod> NTT<P> {
         g.resize(n, ConstModInt::new(0));
         self.ntt(&mut g);
 
-        for (f, g) in f.iter_mut().zip(g.into_iter()) {
+        for (f, g) in f.iter_mut().zip(g) {
             *f *= g;
         }
         self.intt(&mut f);

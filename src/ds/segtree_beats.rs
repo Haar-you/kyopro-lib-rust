@@ -18,12 +18,6 @@ fn rc(i: usize) -> usize {
     (i << 1) | 1
 }
 
-#[inline]
-fn highest_one(i: u64) -> u32 {
-    assert!(i > 0);
-    63 - i.leading_zeros()
-}
-
 /// Segment Tree Beats
 ///
 /// 値を区間加算・区間を最小値で更新・区間を最大値で更新、区間総和・区間最小値・区間最大値をとる操作が可能なデータ構造
@@ -88,7 +82,7 @@ impl SegtreeBeats {
     }
 
     fn update_node_add(&mut self, i: usize, x: i64) {
-        let len = self.hsize >> highest_one(i as u64);
+        let len = self.hsize >> i.ilog2();
 
         self.sum[i] += x * len as i64;
 

@@ -20,7 +20,7 @@ pub fn half_hull(mut ps: Vec<VectorInt>, hull: Hull) -> Vec<VectorInt> {
         return vec![];
     }
 
-    ps.sort_by(|p, q| (p.x, p.y).cmp(&(q.x, q.y)));
+    ps.sort_by_key(|p| (p.x, p.y));
 
     if hull == Hull::Upper {
         ps.reverse();

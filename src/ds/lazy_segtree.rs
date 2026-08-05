@@ -85,7 +85,7 @@ where
             self.lazy[l] = self.act.op(self.lazy[l].clone(), self.lazy[i].clone());
             self.lazy[r] = self.act.op(self.lazy[r].clone(), self.lazy[i].clone());
         }
-        let len = (self.size / 2) >> (31 - (i as u32).leading_zeros());
+        let len = (self.size / 2) >> (i as u32).ilog2();
         self.data[i] = self.act.act(
             &self.monoid,
             self.data[i].clone(),

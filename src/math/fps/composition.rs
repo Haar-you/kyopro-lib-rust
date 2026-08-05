@@ -35,7 +35,7 @@ impl<P: PrimeMod> FpsComposition for Polynomial<P> {
             return Err("`p`の定数項は`0`でなければならない。");
         }
 
-        assert!(p.len() == q.len());
+        assert_eq!(p.len(), q.len());
         let n = p.len();
         let k = (n as f64).sqrt().ceil() as usize;
         let m = n.div_ceil(k);

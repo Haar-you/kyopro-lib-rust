@@ -76,8 +76,7 @@ where
     pub fn min_path_to(&self, mut to: usize) -> Option<Vec<&Edge<W, I>>> {
         self.dist[to]?;
         let mut ret = vec![];
-        loop {
-            let Some(e) = self.prev[to] else { break };
+        while let Some(e) = self.prev[to] {
             ret.push(e);
             to = e.from();
         }

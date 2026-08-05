@@ -5,8 +5,8 @@ use std::mem::swap;
 #[derive(Debug, Clone)]
 struct Node<T> {
     value: T,
-    left: Option<Box<Node<T>>>,
-    right: Option<Box<Node<T>>>,
+    left: Option<Box<Self>>,
+    right: Option<Box<Self>>,
 }
 
 impl<T: Ord> Node<T> {

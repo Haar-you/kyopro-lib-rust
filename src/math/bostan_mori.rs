@@ -47,7 +47,7 @@ pub fn bostan_mori<P: PrimeMod>(
         a.iter_mut().zip(q1).for_each(|(x, y)| *x *= y);
         ntt.intt(&mut a);
 
-        if k % 2 == 0 {
+        if k.is_multiple_of(2) {
             for i in 0..d {
                 p[i] = u[i * 2];
             }

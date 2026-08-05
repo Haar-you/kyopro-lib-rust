@@ -29,7 +29,7 @@ pub fn log_mod(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
     loop {
         let g = a.gcd(m);
         if g != 1 {
-            if b % g != 0 {
+            if !b.is_multiple_of(g) {
                 return None;
             }
 

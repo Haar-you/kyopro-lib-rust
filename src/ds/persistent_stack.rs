@@ -8,7 +8,7 @@ use std::rc::Rc;
 #[derive(Debug, Default, Clone)]
 struct Node<T> {
     value: T,
-    next: Option<Rc<Node<T>>>,
+    next: Option<Rc<Self>>,
 }
 
 /// 永続スタック

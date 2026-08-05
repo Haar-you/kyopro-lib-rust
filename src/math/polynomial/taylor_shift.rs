@@ -27,7 +27,7 @@ impl<P: PrimeMod> TaylorShift for Polynomial<P> {
         let mut f = ConstModInt::new(1);
 
         let mut a = vec![ConstModInt::new(0); 2 * n - 1];
-        for (i, (a, p)) in a.iter_mut().skip(n - 1).zip(p.into_iter()).enumerate() {
+        for (i, (a, p)) in a.iter_mut().skip(n - 1).zip(p).enumerate() {
             if i != 0 {
                 f *= ConstModInt::new(i as u32);
             }

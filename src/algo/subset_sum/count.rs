@@ -10,7 +10,7 @@ pub fn subset_sum<T>(n: usize, k: usize, a: &[usize]) -> Vec<T>
 where
     T: Copy + From<usize> + Add<Output = T>,
 {
-    assert!(a.len() == n);
+    assert_eq!(a.len(), n);
 
     let mut dp = vec![vec![T::from(0); k + 1]; 2];
 

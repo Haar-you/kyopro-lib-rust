@@ -20,7 +20,7 @@ const MASK: u64 = R - 1;
 impl MontgomeryBuilder {
     /// `modulo`を法とする[`MontgomeryBuilder`]を生成する。
     pub fn new(modulo: u32) -> Self {
-        assert!(modulo % 2 != 0);
+        assert!(!modulo.is_multiple_of(2));
         assert!(modulo > 0);
 
         let r = R % modulo as u64;

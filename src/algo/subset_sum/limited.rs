@@ -13,8 +13,8 @@
 /// * `a` - 総和をとる数列。
 /// * `m` - `m[i]`は`a[i]`を使用できる最大回数。
 pub fn subset_sum_limited(n: usize, k: usize, a: &[usize], m: &[usize]) -> Vec<bool> {
-    assert!(a.len() == n);
-    assert!(m.len() == n);
+    assert_eq!(a.len(), n);
+    assert_eq!(m.len(), n);
 
     let mut dp: Vec<isize> = vec![-1; k + 1];
 

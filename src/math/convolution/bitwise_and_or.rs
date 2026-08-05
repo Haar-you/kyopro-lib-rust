@@ -12,10 +12,10 @@ pub fn bitwise_and_convolution<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
 where
     T: Copy + Add<Output = T> + Sub<Output = T> + Mul<Output = T>,
 {
-    assert!(f.len() == g.len());
+    assert_eq!(f.len(), g.len());
     fast_zeta_superset(&mut f);
     fast_zeta_superset(&mut g);
-    for (x, y) in f.iter_mut().zip(g.into_iter()) {
+    for (x, y) in f.iter_mut().zip(g) {
         *x = *x * y;
     }
     fast_mobius_superset(&mut f);
@@ -30,10 +30,10 @@ pub fn bitwise_or_convolution<T>(mut f: Vec<T>, mut g: Vec<T>) -> Vec<T>
 where
     T: Copy + Add<Output = T> + Sub<Output = T> + Mul<Output = T>,
 {
-    assert!(f.len() == g.len());
+    assert_eq!(f.len(), g.len());
     fast_zeta_subset(&mut f);
     fast_zeta_subset(&mut g);
-    for (x, y) in f.iter_mut().zip(g.into_iter()) {
+    for (x, y) in f.iter_mut().zip(g) {
         *x = *x * y;
     }
     fast_mobius_subset(&mut f);

@@ -19,7 +19,7 @@ where
     mul_zeta(&mut f);
     mul_zeta(&mut g);
 
-    for (x, y) in f.iter_mut().zip(g.into_iter()) {
+    for (x, y) in f.iter_mut().zip(g) {
         *x = *x * y;
     }
 
@@ -40,7 +40,7 @@ where
     div_zeta(&mut f);
     div_zeta(&mut g);
 
-    for (x, y) in f.iter_mut().zip(g.into_iter()) {
+    for (x, y) in f.iter_mut().zip(g) {
         *x = *x * y;
     }
 

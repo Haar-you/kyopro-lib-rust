@@ -103,16 +103,16 @@ mod tests {
     fn test() {
         let mut a = CircularArray::from(vec![1, 2, 3, 4, 5, 6, 7, 8]);
 
-        eprintln!("{:?}", &a);
+        eprintln!("{:?}", a);
 
         a.rotate_left(1);
-        eprintln!("{:?}", &a);
+        eprintln!("{:?}", a);
 
         a.rotate_left(2);
-        eprintln!("{:?}", &a);
+        eprintln!("{:?}", a);
 
         a.rotate_right(5);
-        eprintln!("{:?}", &a);
+        eprintln!("{:?}", a);
 
         // for i in 0..100 {
         //     dbg!(a[i]);

@@ -16,10 +16,10 @@ pub struct Node {
     length: isize,
     count: usize,
     index: usize,
-    children: BTreeMap<char, *mut Node>,
-    parent: Option<*mut Node>,
-    suffix_link: Option<*mut Node>,
-    reverse_suffix_links: Vec<*mut Node>,
+    children: BTreeMap<char, *mut Self>,
+    parent: Option<*mut Self>,
+    suffix_link: Option<*mut Self>,
+    reverse_suffix_links: Vec<*mut Self>,
 }
 
 impl Node {

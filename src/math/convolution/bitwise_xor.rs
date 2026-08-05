@@ -20,7 +20,7 @@ where
     fwt(&mut f);
     fwt(&mut g);
 
-    for (x, y) in f.iter_mut().zip(g.into_iter()) {
+    for (x, y) in f.iter_mut().zip(g) {
         *x *= y;
     }
 
