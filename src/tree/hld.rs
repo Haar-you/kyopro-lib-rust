@@ -18,6 +18,8 @@ pub struct HLD<W, I> {
 }
 
 impl<W, I> HLD<W, I> {
+    /// `root`を根として、重軽分解を行う。
+    ///
     /// **Time complexity** $O(n)$
     ///
     /// **Space complexity** $O(n)$

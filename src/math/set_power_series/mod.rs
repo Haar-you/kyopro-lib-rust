@@ -36,6 +36,7 @@ impl<P: PrimeMod> SetPowerSeries<P> {
     }
 
     /// 内部の`Vec`の長さを返す。
+    #[allow(clippy::len_without_is_empty)]
     pub fn len(&self) -> usize {
         self.data.len()
     }

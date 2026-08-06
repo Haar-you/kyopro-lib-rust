@@ -3,8 +3,6 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/eertree>
 
-#![allow(clippy::len_without_is_empty)]
-
 use std::collections::btree_map::{BTreeMap, Entry};
 
 const ODD: usize = 0;
@@ -219,6 +217,7 @@ impl PalindromicTree {
     }
 
     /// 回文木に含まれるノードの個数を返す。(長さ`0`,`-1`のノードも含む。)
+    #[allow(clippy::len_without_is_empty)]
     pub fn len(&self) -> usize {
         self.list.len()
     }

@@ -1,5 +1,4 @@
 //! 高速な標準入出力
-#![allow(clippy::new_without_default)]
 
 use std::fmt::Display;
 use std::io::{Read, Write};
@@ -13,6 +12,7 @@ pub struct FastIO {
 
 impl FastIO {
     /// [`FastIO`]を生成する。
+    #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         let mut s = vec![];
         std::io::stdin().read_to_end(&mut s).unwrap();

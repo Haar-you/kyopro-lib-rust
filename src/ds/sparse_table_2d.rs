@@ -18,6 +18,7 @@ where
     /// **Time complexity** $O(nm \log n \log m)$
     ///
     /// **Space complexity** $O(nm \log n \log m)$
+    #[allow(clippy::needless_range_loop)]
     pub fn new(semilattice: A, s: Vec<Vec<A::Element>>) -> Self {
         let n = s.len();
         let m = s[0].len();

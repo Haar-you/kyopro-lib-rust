@@ -73,6 +73,7 @@ where
     }
 
     /// [`CumulativeSum2D`]を構築する
+    #[allow(clippy::needless_range_loop)]
     pub fn build(self) -> CumulativeSum2D<G> {
         let mut data = self.data;
         let group = self.group;

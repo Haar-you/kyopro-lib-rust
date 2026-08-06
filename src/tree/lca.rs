@@ -13,6 +13,8 @@ pub struct DoublingLCA<W, I> {
 }
 
 impl<W, I> DoublingLCA<W, I> {
+    /// `root`を根とした木で、ダブリングによる最小共通祖先を求められる。
+    ///
     /// **Time complexity** $O(n \log n)$
     ///
     /// **Space complexity** $O(n \log n)$

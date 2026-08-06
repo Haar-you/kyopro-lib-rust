@@ -64,6 +64,7 @@ where
 /// 入力の行列は、$n \times n$($n$は偶数)の[歪対称行列](https://en.wikipedia.org/wiki/Skew-symmetric_matrix)である。
 ///
 /// **Time complexity** $O(n^3)$
+#[allow(clippy::needless_range_loop)]
 pub fn pfaffian<F>(mut a: Vec<Vec<F::Element>>, modulo: &F) -> F::Element
 where
     F: FF,

@@ -1,19 +1,19 @@
 //! Project Selection Problem
+//!
+//! # Problems
+//! - [ARC 085 E - MUL](https://atcoder.jp/contests/arc085/tasks/arc085_c)
+//! - [AOJ 3058 Ghost](http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=3058)
+//! - [AOJ 2903 Board](http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2903)
+//! - [ABC 193 F - Zebraness](https://atcoder.jp/contests/abc193/tasks/abc193_f)
+//! - [競プロ典型 90 問 040 - Get More Money](https://atcoder.jp/contests/typical90/tasks/typical90_an)
+//!
+//! # References
+//! - [https://ferin-tech.hatenablog.com/entry/2019/10/28/燃やす埋める問題](https://ferin-tech.hatenablog.com/entry/2019/10/28/%E7%87%83%E3%82%84%E3%81%99%E5%9F%8B%E3%82%81%E3%82%8B%E5%95%8F%E9%A1%8C)
+//! - [https://kmyk.github.io/blog/blog/2017/12/05/minimum-cut-and-project-selection-problem/](https://kmyk.github.io/blog/blog/2017/12/05/minimum-cut-and-project-selection-problem/)
 
 use crate::flow::*;
 
 /// Project Selection Problem
-///
-/// # Problems
-/// - [ARC 085 E - MUL](https://atcoder.jp/contests/arc085/tasks/arc085_c)
-/// - [AOJ 3058 Ghost](http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=3058)
-/// - [AOJ 2903 Board](http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2903)
-/// - [ABC 193 F - Zebraness](https://atcoder.jp/contests/abc193/tasks/abc193_f)
-/// - [競プロ典型 90 問 040 - Get More Money](https://atcoder.jp/contests/typical90/tasks/typical90_an)
-///
-/// # References
-/// - [https://ferin-tech.hatenablog.com/entry/2019/10/28/燃やす埋める問題](https://ferin-tech.hatenablog.com/entry/2019/10/28/%E7%87%83%E3%82%84%E3%81%99%E5%9F%8B%E3%82%81%E3%82%8B%E5%95%8F%E9%A1%8C)
-/// - [https://kmyk.github.io/blog/blog/2017/12/05/minimum-cut-and-project-selection-problem/](https://kmyk.github.io/blog/blog/2017/12/05/minimum-cut-and-project-selection-problem/)
 ///
 /// # Verification
 /// | function | verify |
