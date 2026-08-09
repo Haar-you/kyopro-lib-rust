@@ -35,6 +35,10 @@ manual_is_power_of_two = "warn"
 manual_midpoint = "warn"
 map_unwrap_or = "warn"
 ref_option = "warn"
+decimal_bitwise_operands = "warn"
+manual_assert_eq = "warn"
+manual_bit_width = "warn"
+manual_ilog2 = "warn"
 
 [lints.rust]
 missing_docs = "warn"
