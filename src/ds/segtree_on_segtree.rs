@@ -1,11 +1,10 @@
 //! セグメント木上にセグメント木を構築する。
-use crate::{
-    algebra::traits::*,
-    algo::{bsearch_slice::BinarySearch, merge::merge},
-    ds::segtree::*,
-};
-
 use std::ops::Range;
+
+pub use crate::algebra::traits::*;
+use crate::algo::bsearch_slice::BinarySearch;
+use crate::algo::merge::merge;
+use crate::ds::segtree::*;
 
 /// [`SegtreeOnSegtree`]を構築するための構造体。
 #[derive(Clone, Default)]

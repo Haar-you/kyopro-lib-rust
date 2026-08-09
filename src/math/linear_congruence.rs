@@ -1,5 +1,6 @@
 //! 一次合同方程式$ax + b = 0 \pmod m$
-use crate::math::{gcd_lcm::*, mod_ops::inv::*};
+use crate::math::gcd_lcm::*;
+use crate::math::mod_ops::inv::*;
 
 /// ax + b = 0 (mod m) を満たすxを求める。
 pub fn linear_congruence(mut a: i64, mut b: i64, mut m: u64) -> Option<i64> {
@@ -21,7 +22,7 @@ pub fn linear_congruence(mut a: i64, mut b: i64, mut m: u64) -> Option<i64> {
     let mut a = a as u64;
     let mut b = b as u64;
     let g = a.gcd(m);
-    if b % g == 0 {
+    if b.is_multiple_of(g) {
         a /= g;
         b /= g;
         m /= g;

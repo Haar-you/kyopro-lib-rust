@@ -1,6 +1,7 @@
 //! 円と多角形の共通部分の面積
 
-use crate::geom::{intersect_circle_segment::*, *};
+use crate::geom::intersect_circle_segment::*;
+use crate::geom::*;
 
 /// 円と多角形の共通部分の面積を求める。
 pub fn area_intersection_circle_polygon(cl: Circle, ps: &[Vector], eps: Eps) -> f64 {

@@ -1,9 +1,8 @@
 //! 最大長方形
+use std::cmp::Ordering;
+use std::ops::{Mul, Range};
+
 use crate::chmax;
-use std::{
-    cmp::Ordering,
-    ops::{Mul, Range},
-};
 
 /// ヒストグラム中の最大面積長方形の面積を計算する。
 ///
@@ -61,6 +60,7 @@ where
 /// グリッド上の最大面積長方形の面積を計算する。
 ///
 /// **Time complexity** $O(hw)$
+#[allow(clippy::needless_range_loop)]
 pub fn max_rect<T: Copy + PartialEq>(d: &[Vec<T>], value: T) -> usize {
     let h = d.len();
     let w = d[0].len();

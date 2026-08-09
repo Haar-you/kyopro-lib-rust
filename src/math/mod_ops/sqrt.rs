@@ -32,7 +32,7 @@ pub fn sqrt_mod(a: u64, p: u64) -> Vec<u64> {
 
     let mut q = p - 1;
     let mut s = 0;
-    while q % 2 == 0 {
+    while q.is_multiple_of(2) {
         q /= 2;
         s += 1;
     }

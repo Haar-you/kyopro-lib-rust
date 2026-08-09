@@ -8,7 +8,7 @@ use std::cmp::Ordering;
 use std::ops::Range;
 use std::ptr;
 
-use crate::algebra::act::*;
+pub use crate::algebra::act::*;
 
 #[derive(Clone)]
 struct Manager<M, A> {
@@ -472,9 +472,9 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::algebra::{act::add_sum::AddSum, sum::Sum};
-
     use super::*;
+    use crate::algebra::act::add_sum::AddSum;
+    use crate::algebra::sum::Sum;
 
     #[test]
     fn test_empty() {

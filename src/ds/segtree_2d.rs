@@ -1,6 +1,7 @@
 //! 二次元のセグメント木
-use crate::algebra::traits::*;
 use std::ops::Range;
+
+pub use crate::algebra::traits::*;
 
 /// 二次元のセグメント木
 pub struct Segtree2D<M: Monoid + Commutative> {
@@ -118,10 +119,11 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::algebra::sum::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
+    use crate::algebra::sum::*;
 
     #[test]
     fn test() {

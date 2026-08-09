@@ -1,12 +1,11 @@
 //! 添字積$\pmod p$畳み込み
 use std::iter::successors;
 
+use crate::math::convolution::ntt::NTT;
 use crate::math::prime_mod::PrimeMod;
+use crate::math::primitive_root::primitive_root;
+use crate::num::const_modint::ConstModInt;
 use crate::sort_with;
-use crate::{
-    math::{convolution::ntt::NTT, primitive_root::primitive_root},
-    num::const_modint::ConstModInt,
-};
 
 /// 素数$P$に対して、$c_k = \sum_{i \times j = k \pmod P} a_i b_j$を満たす$c$を求める。
 ///
@@ -53,14 +52,13 @@ pub fn mul_modp_convolution<P: PrimeMod>(
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        iter::collect::CollectVec,
-        math::prime_mod::Prime,
-        num::{const_modint::ConstModIntBuilder, ff::*},
-    };
+    use rand::prelude::*;
 
     use super::*;
-    use rand::prelude::*;
+    use crate::iter::collect::CollectVec;
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::ConstModIntBuilder;
+    use crate::num::ff::*;
 
     type P = Prime<998244353>;
 

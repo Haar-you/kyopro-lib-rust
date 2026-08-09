@@ -3,8 +3,9 @@
 //! # References
 //! - <https://misawa.github.io/others/flow/dinic_time_complexity.html>
 
-pub use crate::flow::*;
 use std::collections::VecDeque;
+
+pub use crate::flow::*;
 
 #[derive(Clone, Debug)]
 struct Edge {

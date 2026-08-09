@@ -27,9 +27,8 @@ implement!(u8, u16, u32, u64, u128, usize);
 
 #[cfg(test)]
 mod tests {
-    use crate::iter::collect::CollectVec;
-
     use super::*;
+    use crate::iter::collect::CollectVec;
 
     #[test]
     fn test() {

@@ -1,11 +1,10 @@
 //! 区間加算・個数総和付き区間Max(Min)
 
+use std::cmp::{max, min};
+use std::ops::{Add, RangeBounds, Sub};
+
 use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
-use std::{
-    cmp::{max, min},
-    ops::{Add, RangeBounds, Sub},
-};
 
 /// 区間Max/Minを選択する。
 #[derive(Copy, Clone)]

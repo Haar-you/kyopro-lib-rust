@@ -97,7 +97,7 @@ impl Bitset {
 
     /// 末尾に値`val`を追加する。
     pub fn push(&mut self, val: bool) {
-        if self.size % B_SIZE == 0 {
+        if self.size.is_multiple_of(B_SIZE) {
             self.data.push(0);
         }
         self.size += 1;
@@ -113,7 +113,7 @@ impl Bitset {
             self.set(self.size - 1, false);
 
             self.size -= 1;
-            if self.size % B_SIZE == 0 {
+            if self.size.is_multiple_of(B_SIZE) {
                 self.data.pop();
             }
             Some(ret)
@@ -156,7 +156,7 @@ impl BitAndAssign for Bitset {
             std::mem::swap(self, &mut rhs);
         }
 
-        for (a, b) in self.data.iter_mut().zip(rhs.data.into_iter()) {
+        for (a, b) in self.data.iter_mut().zip(rhs.data) {
             *a &= b;
         }
     }
@@ -177,7 +177,7 @@ impl BitOrAssign for Bitset {
             std::mem::swap(self, &mut rhs);
         }
 
-        for (a, b) in self.data.iter_mut().zip(rhs.data.into_iter()) {
+        for (a, b) in self.data.iter_mut().zip(rhs.data) {
             *a |= b;
         }
     }
@@ -198,7 +198,7 @@ impl BitXorAssign for Bitset {
             std::mem::swap(self, &mut rhs);
         }
 
-        for (a, b) in self.data.iter_mut().zip(rhs.data.into_iter()) {
+        for (a, b) in self.data.iter_mut().zip(rhs.data) {
             *a ^= b;
         }
     }

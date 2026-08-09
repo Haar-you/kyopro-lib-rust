@@ -133,7 +133,7 @@ impl QwordTree {
         if self.v0 == 0 {
             None
         } else {
-            let mut ret = 63 - self.v0.leading_zeros();
+            let mut ret = self.v0.ilog2();
             unsafe {
                 ret = (ret << 6) | (63 - self.v1.get_unchecked(ret as usize).leading_zeros());
                 ret = (ret << 6) | (63 - self.v2.get_unchecked(ret as usize).leading_zeros());
@@ -248,9 +248,11 @@ impl QwordTree {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use rand::prelude::*;
     use std::collections::BTreeSet;
+
+    use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

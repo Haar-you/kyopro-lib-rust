@@ -5,10 +5,12 @@
 //! - <https://atcoder.jp/contests/abc351/tasks/abc351_f>
 //! - <https://judge.yosupo.jp/problem/static_range_sum_with_upper_bound>
 
-use crate::algo::{bsearch_slice::BinarySearch, merge::inplace_merge};
+use std::ops::{Add, AddAssign, RangeBounds};
+
+use crate::algo::bsearch_slice::BinarySearch;
+use crate::algo::merge::inplace_merge;
 use crate::misc::range::range_bounds_to_range;
 use crate::num::one_zero::Zero;
-use std::ops::{Add, AddAssign, RangeBounds};
 
 /// Merge-sort Tree
 pub struct MergeSortTree<T> {
@@ -109,10 +111,12 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use std::ops::Range;
+
     use my_testtools::*;
     use rand::prelude::*;
-    use std::ops::Range;
+
+    use super::*;
 
     #[test]
     fn test() {

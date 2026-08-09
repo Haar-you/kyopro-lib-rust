@@ -54,8 +54,9 @@ impl<T: Ord> BinarySearch<T> for [T] {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test_lower_bound() {

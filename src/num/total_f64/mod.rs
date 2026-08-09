@@ -1,11 +1,9 @@
 //! 全順序を実装した`f64`
 
-use crate::impl_from;
-use crate::impl_one_zero;
-use crate::impl_ops;
-use crate::num::one_zero::*;
-
 use std::cmp::Ordering;
+
+use crate::num::one_zero::*;
+use crate::{impl_from, impl_one_zero, impl_ops};
 
 /// 全順序を実装した`f64`
 #[derive(Clone, Copy, Debug, PartialEq, Default)]

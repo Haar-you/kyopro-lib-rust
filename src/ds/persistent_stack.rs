@@ -2,12 +2,13 @@
 //!
 //! # Verification
 //! - [ABC273 E - Notebook #37628467](https://atcoder.jp/contests/abc273/submissions/37628467)
-use std::{iter::from_fn, rc::Rc};
+use std::iter::from_fn;
+use std::rc::Rc;
 
 #[derive(Debug, Default, Clone)]
 struct Node<T> {
     value: T,
-    next: Option<Rc<Node<T>>>,
+    next: Option<Rc<Self>>,
 }
 
 /// 永続スタック

@@ -5,10 +5,9 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/binomial_coefficient>
-use crate::math::{
-    crt::crt_vec,
-    mod_ops::{inv::*, pow::*},
-};
+use crate::math::crt::crt_vec;
+use crate::math::mod_ops::inv::*;
+use crate::math::mod_ops::pow::*;
 
 /// 二項係数$_nC_k \pmod{p^q}$($p$は素数)を計算する。
 #[derive(Clone)]
@@ -29,12 +28,20 @@ impl ExtLucas {
         let mut inv: Vec<u64> = vec![1; m as usize];
 
         for i in 1..m as usize {
-            prod[i] = prod[i - 1] * (if i as u64 % p == 0 { 1 } else { i as u64 }) % m;
+            if (i as u64).is_multiple_of(p) {
+                prod[i] = prod[i - 1]
+            } else {
+                prod[i] = prod[i - 1] * i as u64 % m;
+            }
         }
 
         inv[m as usize - 1] = inv_mod(prod[m as usize - 1], m).unwrap();
         for i in (1..m as usize).rev() {
-            inv[i - 1] = inv[i] * (if i as u64 % p == 0 { 1 } else { i as u64 }) % m;
+            if (i as u64).is_multiple_of(p) {
+                inv[i - 1] = inv[i]
+            } else {
+                inv[i - 1] = inv[i] * i as u64 % m;
+            }
         }
 
         Self { prod, inv, p, q, m }
@@ -107,10 +114,10 @@ impl BinomialCoefficient {
 
         let mut i = 2;
         while i * i <= m {
-            if m % i == 0 {
+            if m.is_multiple_of(i) {
                 let mut t = 1;
                 let mut c = 0;
-                while m % i == 0 {
+                while m.is_multiple_of(i) {
                     m /= i;
                     c += 1;
                     t *= i;

@@ -21,7 +21,6 @@ pub fn bridges(ll: &Lowlink) -> Vec<(usize, usize)> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::graph::*;
 
     #[test]
     fn test() {

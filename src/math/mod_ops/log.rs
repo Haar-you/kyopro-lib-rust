@@ -1,10 +1,10 @@
 //! mod mでの離散対数
 
-use crate::math::{
-    gcd_lcm::GcdLcm,
-    mod_ops::{inv::*, pow::*},
-};
 use std::collections::HashMap;
+
+use crate::math::gcd_lcm::GcdLcm;
+use crate::math::mod_ops::inv::*;
+use crate::math::mod_ops::pow::*;
 
 /// $a^x \equiv b \pmod m$を満たす$x$を求める。
 ///
@@ -29,7 +29,7 @@ pub fn log_mod(a: u64, mut b: u64, mut m: u64) -> Option<u64> {
     loop {
         let g = a.gcd(m);
         if g != 1 {
-            if b % g != 0 {
+            if !b.is_multiple_of(g) {
                 return None;
             }
 

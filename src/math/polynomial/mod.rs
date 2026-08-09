@@ -455,9 +455,9 @@ impl<P: PrimeMod> IndexMut<usize> for Polynomial<P> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{math::prime_mod::Prime, num::const_modint::ConstModIntBuilder};
-
     use super::*;
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::ConstModIntBuilder;
 
     type P = Prime<998244353>;
 

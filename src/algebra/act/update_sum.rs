@@ -1,5 +1,7 @@
 //! Range Update Range Sum
-pub use crate::algebra::{act::Act, first_last::Last, traits::*};
+pub use crate::algebra::act::Act;
+pub use crate::algebra::first_last::Last;
+pub use crate::algebra::traits::*;
 
 /// Range Update Range Sum 用のモノイド作用
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

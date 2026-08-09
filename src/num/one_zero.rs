@@ -23,8 +23,7 @@ macro_rules! impl_one_zero {
     }
 }
 
-use std::num::Saturating;
-use std::num::Wrapping;
+use std::num::{Saturating, Wrapping};
 macro_rules! impl_one_zero_wrap {
     ($($t:tt),*) => {
         $(

@@ -8,7 +8,7 @@ pub fn count_divisors(n: u64) -> u64 {
 
     let mut i = 1;
     while i * i <= n {
-        if n % i == 0 {
+        if n.is_multiple_of(i) {
             ret += 2;
             if i * i == n {
                 ret -= 1;
@@ -30,7 +30,7 @@ pub fn enumerate_divisors(n: u64) -> Vec<u64> {
 
     let mut i = 1;
     while i * i < n {
-        if n % i == 0 {
+        if n.is_multiple_of(i) {
             temp.push(n / i);
             ret.push(i);
         }

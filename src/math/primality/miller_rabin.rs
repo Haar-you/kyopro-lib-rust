@@ -30,7 +30,7 @@ impl PrimalityTest<u64> for MillerRabin {
             false
         } else if n == 2 {
             true
-        } else if n % 2 == 0 {
+        } else if n.is_multiple_of(2) {
             false
         } else {
             let s = (n - 1).trailing_zeros();

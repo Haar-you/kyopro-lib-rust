@@ -2,11 +2,11 @@
 //!
 //! # References
 //! - <https://manabitimes.jp/math/892>
-#![allow(clippy::needless_range_loop)]
 
 use crate::num::zz::*;
 
 /// ベル数$B(0, 0), \dots, B(n, n)$を求める。
+#[allow(clippy::needless_range_loop)]
 pub fn bell_number_table<R: ZZ>(n: usize, modulo: R) -> Vec<Vec<R::Element>>
 where
     R::Element: ZZElem + Copy,

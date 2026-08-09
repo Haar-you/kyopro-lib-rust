@@ -1,6 +1,5 @@
 //! 複素数
-use crate::impl_from;
-use crate::impl_ops;
+use crate::{impl_from, impl_ops};
 
 /// 複素数
 #[derive(Clone, Copy, Default, Debug, PartialEq)]
@@ -66,8 +65,9 @@ impl_from!(Complex => (f64, f64), |Complex { re, im }| (re, im));
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::f64::consts::PI;
+
+    use super::*;
 
     #[test]
     fn test() {

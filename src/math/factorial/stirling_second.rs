@@ -1,5 +1,6 @@
 //! 第二種スターリング数
-use crate::{math::factorial::FactorialTable, num::ff::*};
+use crate::math::factorial::FactorialTable;
+use crate::num::ff::*;
 
 /// 第二種スターリング数
 pub trait StirlingSecond {
@@ -23,7 +24,7 @@ where
                 let mut ret = self.modulo.from_u64(0);
 
                 for i in 1..=k {
-                    if (k - i) % 2 == 0 {
+                    if (k - i).is_multiple_of(2) {
                         ret += self.comb(k, i) * self.modulo.from_u64(i as u64).pow(n as u64);
                     } else {
                         ret -= self.comb(k, i) * self.modulo.from_u64(i as u64).pow(n as u64);

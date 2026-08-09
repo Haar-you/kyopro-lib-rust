@@ -1,5 +1,6 @@
 //! Range Chmin Range Min
-pub use crate::algebra::{act::*, min_max::Min};
+pub use crate::algebra::act::*;
+pub use crate::algebra::min_max::Min;
 
 /// Range Chmin Range Min 用のモノイド作用
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

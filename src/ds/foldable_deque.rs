@@ -137,14 +137,16 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::{
-        algebra::{affine::*, semiring::add_mul_mod::AddMulMod},
-        math::{linear::Linear, prime_mod::Prime},
-        num::const_modint::{ConstModInt, ConstModIntBuilder},
-    };
-    use rand::prelude::*;
     use std::collections::VecDeque;
+
+    use rand::prelude::*;
+
+    use super::*;
+    use crate::algebra::affine::*;
+    use crate::algebra::semiring::add_mul_mod::AddMulMod;
+    use crate::math::linear::Linear;
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::{ConstModInt, ConstModIntBuilder};
 
     const M: u32 = 998244353;
     type Mint = ConstModInt<Prime<M>>;

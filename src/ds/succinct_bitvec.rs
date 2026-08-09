@@ -116,8 +116,9 @@ impl SuccinctBitVec {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test_rank() {

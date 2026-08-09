@@ -78,8 +78,9 @@ impl_algebra!(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rand::seq::SliceRandom;
+
+    use super::*;
 
     #[test]
     fn test() {

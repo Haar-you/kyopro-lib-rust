@@ -1,9 +1,8 @@
 //! 冪等性と結合性をもつ2次元列の区間取得($O(1)$)ができる。
-use crate::algebra::traits::*;
-use std::{
-    cmp::{max, min},
-    ops::Range,
-};
+use std::cmp::{max, min};
+use std::ops::Range;
+
+pub use crate::algebra::traits::*;
 
 /// 冪等性と結合性をもつ2次元列の区間取得($O(1)$)ができる。
 pub struct SparseTable2D<A: Semilattice> {
@@ -19,6 +18,7 @@ where
     /// **Time complexity** $O(nm \log n \log m)$
     ///
     /// **Space complexity** $O(nm \log n \log m)$
+    #[allow(clippy::needless_range_loop)]
     pub fn new(semilattice: A, s: Vec<Vec<A::Element>>) -> Self {
         let n = s.len();
         let m = s[0].len();
@@ -94,10 +94,13 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::{algebra::min_max::Max, iter::collect::CollectVec};
-    use rand::prelude::*;
     use std::fmt::Debug;
+
+    use rand::prelude::*;
+
+    use super::*;
+    use crate::algebra::min_max::Max;
+    use crate::iter::collect::CollectVec;
 
     fn test<A>(a: A, s: Vec<Vec<A::Element>>)
     where

@@ -1,5 +1,7 @@
 //! 原始根 (`u64`)
-use crate::math::{factorize::pollard_rho::*, montgomery::*, primality::miller_rabin::*};
+use crate::math::factorize::pollard_rho::*;
+use crate::math::montgomery::*;
+use crate::math::primality::miller_rabin::*;
 
 /// `u64`で表される素数の原始根を求める。
 pub fn primitive_root_u64(p: u64) -> u64 {

@@ -1,6 +1,7 @@
 //! 2要素の和の総和
 
-use std::{iter::repeat_n, ops::Add};
+use std::iter::repeat_n;
+use std::ops::Add;
 
 use crate::num::one_zero::Zero;
 

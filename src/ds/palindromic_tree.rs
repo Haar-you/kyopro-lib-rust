@@ -3,9 +3,7 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/eertree>
 
-#![allow(clippy::len_without_is_empty)]
-
-use std::collections::{BTreeMap, btree_map::Entry};
+use std::collections::btree_map::{BTreeMap, Entry};
 
 const ODD: usize = 0;
 const EVEN: usize = 1;
@@ -16,10 +14,10 @@ pub struct Node {
     length: isize,
     count: usize,
     index: usize,
-    children: BTreeMap<char, *mut Node>,
-    parent: Option<*mut Node>,
-    suffix_link: Option<*mut Node>,
-    reverse_suffix_links: Vec<*mut Node>,
+    children: BTreeMap<char, *mut Self>,
+    parent: Option<*mut Self>,
+    suffix_link: Option<*mut Self>,
+    reverse_suffix_links: Vec<*mut Self>,
 }
 
 impl Node {
@@ -219,6 +217,7 @@ impl PalindromicTree {
     }
 
     /// 回文木に含まれるノードの個数を返す。(長さ`0`,`-1`のノードも含む。)
+    #[allow(clippy::len_without_is_empty)]
     pub fn len(&self) -> usize {
         self.list.len()
     }

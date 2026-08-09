@@ -5,7 +5,7 @@ use std::rc::Rc;
 #[derive(Debug)]
 struct Node<T> {
     value: T,
-    ancestors: Vec<Rc<Node<T>>>,
+    ancestors: Vec<Rc<Self>>,
     depth: usize,
 }
 

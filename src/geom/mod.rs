@@ -31,8 +31,10 @@ pub mod tangent_circle;
 
 pub mod closest_pair;
 
+use std::cmp::Ordering;
+use std::f64::consts::PI;
+
 use crate::impl_ops;
-use std::{cmp::Ordering, f64::consts::PI};
 
 /// `f64`の誤差を許容する演算を提供する。
 #[derive(Copy, Clone)]

@@ -3,11 +3,8 @@
 //! # Problems
 //! - <https://atcoder.jp/contests/abc165/tasks/abc165_f>
 
-use std::{
-    fmt,
-    fmt::{Debug, Formatter},
-    ops::Index,
-};
+use std::fmt::{self, Debug, Formatter};
+use std::ops::Index;
 
 #[derive(Clone)]
 enum History<T> {

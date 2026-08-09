@@ -3,10 +3,12 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/factorize>
 
-use crate::math::{gcd_lcm::*, montgomery::*, primality::miller_rabin::*};
+use crate::math::gcd_lcm::*;
+use crate::math::montgomery::*;
+use crate::math::primality::miller_rabin::*;
 
 fn find_factor(n: u64, a: u64) -> Option<u64> {
-    assert!(n % 2 == 1);
+    assert_eq!(n % 2, 1);
     let mn = Montgomery::new(n);
 
     let f = |x| mn.add(mn.mul(x, x), Wrapped(a));
@@ -37,7 +39,7 @@ pub fn pollard_rho(mut n: u64) -> Vec<u64> {
     }
 
     let mut ret = vec![];
-    while n % 2 == 0 {
+    while n.is_multiple_of(2) {
         ret.push(2);
         n /= 2;
     }

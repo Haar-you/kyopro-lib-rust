@@ -1,7 +1,8 @@
 //! モノイド列の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
+use std::ops::{Index, RangeBounds};
+
 pub use crate::algebra::traits::Monoid;
 use crate::misc::range::range_bounds_to_range;
-use std::ops::{Index, RangeBounds};
 
 /// モノイド列の点更新・区間取得($O(\log n)$, $O(\log n)$)ができる。
 #[derive(Clone)]
@@ -118,6 +119,9 @@ impl<M: Monoid> Index<usize> for Segtree<M> {
 
 #[cfg(test)]
 mod tests {
+    use my_testtools::*;
+    use rand::prelude::*;
+
     use super::*;
     use crate::algebra::bit::BitXor;
     use crate::algebra::matrix::ProdMatrix;
@@ -126,10 +130,8 @@ mod tests {
     use crate::algebra::sum::Sum;
     use crate::algebra::traits::*;
     use crate::linalg::matrix::MatrixOnSemiring;
-    use crate::num::{ff::*, modint::ModIntBuilder};
-
-    use my_testtools::*;
-    use rand::prelude::*;
+    use crate::num::ff::*;
+    use crate::num::modint::ModIntBuilder;
 
     fn random_test_helper<M, F>(monoid: M, size: usize, mut gen_value: F)
     where

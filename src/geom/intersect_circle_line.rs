@@ -1,6 +1,7 @@
 //! 円と直線の位置関係
 
-use crate::geom::{dist_line_point::*, *};
+use crate::geom::dist_line_point::*;
+use crate::geom::*;
 
 /// 円と直線の位置関係
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

@@ -2,9 +2,10 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/point_set_range_composite_large_array>
-use crate::algebra::traits::Monoid;
-use crate::misc::nullable_usize::NullableUsize;
 use std::ops::Range;
+
+pub use crate::algebra::traits::Monoid;
+use crate::misc::nullable_usize::NullableUsize;
 
 #[derive(Debug)]
 struct Node<T> {
@@ -150,10 +151,11 @@ where
 mod tests {
     use std::collections::BTreeMap;
 
-    use super::*;
-    use crate::algebra::sum::*;
     use my_testtools::rand_range;
     use rand::prelude::*;
+
+    use super::*;
+    use crate::algebra::sum::*;
 
     #[test]
     fn test() {

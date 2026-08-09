@@ -1,7 +1,8 @@
 //! `mod m`の代数的構造
 
 pub use crate::algebra::traits::*;
-use crate::{impl_algebra, num::ff::*};
+use crate::impl_algebra;
+use crate::num::ff::*;
 
 /// `mod m`上の加法
 #[derive(Clone, Copy, Default, Debug)]

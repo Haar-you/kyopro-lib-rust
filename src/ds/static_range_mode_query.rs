@@ -3,8 +3,10 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/static_range_mode_query>
 
-use crate::{algo::bsearch_slice::BinarySearch, misc::range::range_bounds_to_range};
 use std::ops::RangeBounds;
+
+use crate::algo::bsearch_slice::BinarySearch;
+use crate::misc::range::range_bounds_to_range;
 
 /// 最頻値取得クエリ
 pub struct StaticRangeModeQuery<T> {
@@ -114,8 +116,8 @@ impl<T: Clone + Ord> StaticRangeModeQuery<T> {
                     .is_some_and(|&x| x < r)
             {
                 let mut fr = ret.1;
-                for j in b_index[i] + ret.1..index[b[i]].len() {
-                    if index[b[i]][j] < r {
+                for &index_bi_j in index[b[i]].iter().skip(b_index[i] + ret.1) {
+                    if index_bi_j < r {
                         fr += 1;
                     } else {
                         break;
@@ -133,11 +135,10 @@ impl<T: Clone + Ord> StaticRangeModeQuery<T> {
             if index[b[i]].get(b_index[i] + 1).is_some_and(|&x| x < r) {
                 continue;
             }
-
-            if b_index[i] + 1 >= ret.1
-                && index[b[i]]
-                    .get(b_index[i] - ret.1 + 1)
-                    .is_some_and(|&x| x >= l)
+            if b_index[i] + 1 >= ret.1 + index[b[i]].len()
+                || (b_index[i] + 1)
+                    .checked_sub(ret.1)
+                    .is_some_and(|j| index[b[i]][j] >= l)
             {
                 let mut fr = ret.1;
 
@@ -159,5 +160,61 @@ impl<T: Clone + Ord> StaticRangeModeQuery<T> {
 
         let (m, f) = ret;
         (m.unwrap(), f)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::collections::BTreeMap;
+
+    use rand::RngExt;
+
+    use super::*;
+    use crate::iter::collect::CollectVec;
+
+    #[test]
+    fn test() {
+        let mut rng = rand::rng();
+
+        let n = 100;
+        let m = 10;
+        let q = 1000;
+
+        let a = std::iter::repeat_with(|| rng.random_range(0..m))
+            .take(n)
+            .collect_vec();
+
+        let s = StaticRangeModeQuery::new(a.clone());
+
+        for _ in 0..q {
+            let l = rng.random_range(0..n);
+            let r = rng.random_range(l + 1..=n);
+
+            let (value, mode) = s.query(l..r);
+
+            let (ans_values, ans_mode) = slice_mode(&a[l..r]);
+
+            assert_eq!(mode, ans_mode);
+            assert!(ans_values.contains(&value));
+        }
+    }
+
+    fn slice_mode<T>(a: &[T]) -> (Vec<T>, usize)
+    where
+        T: Copy + Ord,
+    {
+        let mut map = BTreeMap::<T, usize>::new();
+        for &x in a {
+            *map.entry(x).or_default() += 1;
+        }
+
+        let mode = map.values().max().copied().unwrap();
+
+        let values = map
+            .into_iter()
+            .filter_map(|(k, v)| (v == mode).then_some(k))
+            .collect_vec();
+
+        (values, mode)
     }
 }

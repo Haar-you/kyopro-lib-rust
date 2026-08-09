@@ -1,9 +1,8 @@
 //! 2つの線分間の距離
 
-use crate::{
-    geom::{dist_segment_point::*, *},
-    min,
-};
+use crate::geom::dist_segment_point::*;
+use crate::geom::*;
+use crate::min;
 
 /// 2つの線分間の距離を求める
 pub fn dist_segments(l1: Line, l2: Line) -> f64 {

@@ -1,6 +1,8 @@
 //! 容量が小さいナップサック問題
-use crate::{chmax, num::one_zero::Zero};
 use std::ops::Add;
+
+use crate::chmax;
+use crate::num::one_zero::Zero;
 
 /// 容量が小さいナップサック問題
 ///

@@ -1,6 +1,8 @@
 //! 重軽分解
-use crate::tree::*;
-use std::{cmp::max, marker::PhantomData};
+use std::cmp::max;
+use std::marker::PhantomData;
+
+pub use crate::tree::core::*;
 
 /// 重軽分解
 #[derive(Clone, Debug)]
@@ -16,6 +18,8 @@ pub struct HLD<W, I> {
 }
 
 impl<W, I> HLD<W, I> {
+    /// `root`を根として、重軽分解を行う。
+    ///
     /// **Time complexity** $O(n)$
     ///
     /// **Space complexity** $O(n)$

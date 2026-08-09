@@ -35,9 +35,8 @@ pub fn garner(r: Vec<u64>, mut m: Vec<u64>, modulo: u64) -> Option<u64> {
 
 #[cfg(test)]
 mod tests {
-    use crate::iter::collect::CollectVec;
-
     use super::*;
+    use crate::iter::collect::CollectVec;
 
     #[test]
     fn test() {

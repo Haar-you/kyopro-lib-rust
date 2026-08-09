@@ -7,8 +7,10 @@
 //! # Problems
 //! - [yukicoder No.899 γatheree](https://yukicoder.me/problems/no/899)
 
-use crate::tree::*;
-use std::{collections::VecDeque, marker::PhantomData};
+use std::collections::VecDeque;
+use std::marker::PhantomData;
+
+pub use crate::tree::core::*;
 
 /// 根付き木において、同一の深さの頂点の区間に対して区間クエリができる。
 pub struct TreeDepthQuery<W, I> {

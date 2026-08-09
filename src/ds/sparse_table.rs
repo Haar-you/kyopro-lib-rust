@@ -1,8 +1,10 @@
 //! 冪等性と結合性をもつ列の区間取得($O(1)$)ができる。
 
-use crate::algebra::traits::*;
+use std::cmp::min;
+use std::ops::RangeBounds;
+
+pub use crate::algebra::traits::*;
 use crate::misc::range::range_bounds_to_range;
-use std::{cmp::min, ops::RangeBounds};
 
 /// 冪等性と結合性をもつ列の区間取得($O(1)$)ができる。
 pub struct SparseTable<A: Semilattice> {
@@ -69,13 +71,11 @@ where
 mod tests {
     use std::fmt::Debug;
 
-    use crate::algebra::{
-        bit::{BitAnd, BitOr},
-        min_max::{Max, Min},
-    };
+    use rand::prelude::*;
 
     use super::*;
-    use rand::prelude::*;
+    use crate::algebra::bit::{BitAnd, BitOr};
+    use crate::algebra::min_max::{Max, Min};
 
     fn test<A>(a: A, s: Vec<A::Element>)
     where

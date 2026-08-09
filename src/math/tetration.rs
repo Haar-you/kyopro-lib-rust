@@ -2,7 +2,8 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/tetration_mod>
-use crate::math::{mod_ops::pow::pow_mod, totient::totient};
+use crate::math::mod_ops::pow::pow_mod;
+use crate::math::totient::totient;
 
 /// $a \uparrow \uparrow b \pmod m$を求める。
 pub fn tetration(a: u64, b: u64, m: u64) -> u64 {

@@ -1,6 +1,9 @@
 //! 要素数が小さいナップサック問題
-use crate::{algo::merge::inplace_merge, chmax, num::one_zero::Zero};
 use std::ops::Add;
+
+use crate::algo::merge::inplace_merge;
+use crate::chmax;
+use crate::num::one_zero::Zero;
 
 /// 要素数が小さいナップサック問題
 ///

@@ -1,7 +1,8 @@
 //! 2次元累積和
 
-pub use crate::algebra::traits::Group;
 use std::ops::{Index, Range};
+
+pub use crate::algebra::traits::Group;
 
 /// 2次元の累積和を扱う
 #[derive(Debug, Clone, PartialEq, Eq, Default, Hash)]
@@ -72,6 +73,7 @@ where
     }
 
     /// [`CumulativeSum2D`]を構築する
+    #[allow(clippy::needless_range_loop)]
     pub fn build(self) -> CumulativeSum2D<G> {
         let mut data = self.data;
         let group = self.group;
@@ -93,10 +95,11 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::algebra::sum::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
+    use crate::algebra::sum::*;
 
     #[test]
     fn test() {

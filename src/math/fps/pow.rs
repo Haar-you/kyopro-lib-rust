@@ -1,8 +1,10 @@
 //! 形式的冪級数の累乗
-use crate::math::fps::{exp::*, log::*};
+use crate::math::fps::exp::*;
+use crate::math::fps::log::*;
 use crate::math::polynomial::Polynomial;
 use crate::math::prime_mod::PrimeMod;
-use crate::num::{const_modint::ConstModInt, ff::*};
+use crate::num::const_modint::ConstModInt;
+use crate::num::ff::*;
 
 /// 形式的冪級数の累乗
 pub trait FpsPow {

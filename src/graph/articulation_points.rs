@@ -24,7 +24,6 @@ pub fn articulation_points(ll: &Lowlink) -> Vec<usize> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::graph::*;
 
     #[test]
     fn test() {

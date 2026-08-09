@@ -5,8 +5,8 @@ use std::mem::swap;
 #[derive(Debug, Clone)]
 struct Node<T> {
     value: T,
-    left: Option<Box<Node<T>>>,
-    right: Option<Box<Node<T>>>,
+    left: Option<Box<Self>>,
+    right: Option<Box<Self>>,
 }
 
 impl<T: Ord> Node<T> {
@@ -112,9 +112,11 @@ impl<T: Ord> SkewHeap<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use rand::prelude::*;
     use std::collections::BinaryHeap;
+
+    use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

@@ -8,9 +8,9 @@ pub fn factorize(mut n: u64) -> Vec<(u64, usize)> {
 
     let mut i = 2;
     while i * i <= n {
-        if n % i == 0 {
+        if n.is_multiple_of(i) {
             let mut c = 0;
-            while n % i == 0 {
+            while n.is_multiple_of(i) {
                 n /= i;
                 c += 1;
             }

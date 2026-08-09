@@ -4,11 +4,10 @@
 //! - <https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/1/GRL_1_C>
 //! - <https://atcoder.jp/contests/abc375/tasks/abc375_f>
 
-#![allow(clippy::needless_range_loop)]
-
-use crate::graph::*;
-use crate::num::one_zero::Zero;
 use std::ops::Add;
+
+pub use crate::graph::core::*;
+use crate::num::one_zero::Zero;
 
 enum Result<T> {
     NegativeLoop,
@@ -28,6 +27,7 @@ where
     /// `WarshallFloyd<T>`を生成する。
     ///
     /// **Time complexity** $O(n^3)$
+    #[allow(clippy::needless_range_loop)]
     pub fn new<D: Direction, I>(g: &Graph<D, T, I>) -> Self {
         let zero = T::zero();
         let n = g.len();

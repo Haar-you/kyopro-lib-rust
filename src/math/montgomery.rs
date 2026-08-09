@@ -19,7 +19,7 @@ pub struct Wrapped(pub u64);
 impl Montgomery {
     /// 除数`modulo`でのMontgomery演算
     pub fn new(modulo: u64) -> Self {
-        assert!(modulo % 2 != 0);
+        assert!(!modulo.is_multiple_of(2));
         assert!(modulo > 0);
 
         let r = R % modulo as u128;

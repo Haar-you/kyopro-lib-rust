@@ -134,8 +134,9 @@ mod tests {
     use std::collections::BTreeSet;
     use std::iter::FromIterator;
 
-    use super::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

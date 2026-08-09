@@ -1,8 +1,10 @@
 //! 半群の列の区間取得($O(1)$)ができる。
 
+use std::iter::repeat_n;
+use std::ops::RangeBounds;
+
 pub use crate::algebra::traits::Semigroup;
 use crate::misc::range::range_bounds_to_range;
-use std::{iter::repeat_n, ops::RangeBounds};
 
 /// 半群の列の区間取得($O(1)$)ができる。
 pub struct DisjointSparseTable<S: Semigroup> {
@@ -97,10 +99,11 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::algebra::sum::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
+    use crate::algebra::sum::*;
 
     #[test]
     fn test() {

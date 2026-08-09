@@ -3,14 +3,14 @@
 //! - <https://judge.yosupo.jp/problem/counting_spanning_tree_undirected>
 //! - <https://judge.yosupo.jp/problem/counting_spanning_tree_directed>
 
-use crate::graph::*;
+pub use crate::graph::core::*;
 use crate::linalg::mod_p::determinant::*;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::*;
 
 /// 無向グラフにおいて、無向全域木の個数を数える。
 pub fn count_undirected_spanning_tree<P: PrimeMod, W, I>(
-    g: &Graph<Undirected, W, I>,
+    g: &UndirectedGraph<W, I>,
 ) -> ConstModInt<P> {
     let modulo = ConstModIntBuilder::<P>::new();
 
@@ -36,7 +36,7 @@ pub fn count_undirected_spanning_tree<P: PrimeMod, W, I>(
 ///
 /// `ignore_isolates`が`true`のとき、孤立点を無視する。
 pub fn count_directed_spanning_tree<P: PrimeMod, W, I>(
-    g: &Graph<Directed, W, I>,
+    g: &DirectedGraph<W, I>,
     root: usize,
     ignore_isolates: bool,
 ) -> ConstModInt<P> {

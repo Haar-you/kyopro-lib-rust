@@ -1,10 +1,10 @@
 //! 形式的冪級数の平方根
+use crate::math::fps::inv::FpsInv;
+use crate::math::mod_ops::sqrt::sqrt_mod;
+use crate::math::polynomial::Polynomial;
+use crate::math::prime_mod::PrimeMod;
+use crate::num::const_modint::ConstModInt;
 use crate::num::ff::*;
-use crate::{
-    math::prime_mod::PrimeMod,
-    math::{fps::inv::FpsInv, mod_ops::sqrt::sqrt_mod, polynomial::Polynomial},
-    num::const_modint::ConstModInt,
-};
 
 /// 形式的冪級数の平方根
 pub trait FpsSqrt {

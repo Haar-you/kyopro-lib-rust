@@ -1,6 +1,8 @@
 //! 1次元のimos法
-use crate::num::{one_zero::Zero, traits::Signed};
 use std::ops::{Add, Range, Sub};
+
+use crate::num::one_zero::Zero;
+use crate::num::traits::Signed;
 
 /// 1次元のimos法
 pub struct Imos1D<T> {
@@ -35,9 +37,10 @@ impl<T: Copy + Signed + Zero + Add<Output = T> + Sub<Output = T>> Imos1D<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

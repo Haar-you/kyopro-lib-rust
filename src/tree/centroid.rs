@@ -1,6 +1,7 @@
 //! 重心列挙
 
-use crate::tree::*;
+pub use crate::tree::core::*;
+
 /// 木の重心を列挙する
 pub fn centroids<W, I>(tree: &Tree<W, I>) -> Vec<usize> {
     let n = tree.len();

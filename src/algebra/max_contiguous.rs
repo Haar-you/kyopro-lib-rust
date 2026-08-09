@@ -5,7 +5,7 @@
 
 use std::marker::PhantomData;
 
-use crate::algebra::traits::*;
+pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 
 /// 同じ値が連続する最大長を管理する。

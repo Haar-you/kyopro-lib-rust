@@ -2,10 +2,10 @@
 
 use std::iter::successors;
 
-use crate::{
-    math::{fps::inv::FpsInv, polynomial::Polynomial, prime_mod::PrimeMod},
-    num::const_modint::*,
-};
+use crate::math::fps::inv::FpsInv;
+use crate::math::polynomial::Polynomial;
+use crate::math::prime_mod::PrimeMod;
+use crate::num::const_modint::*;
 
 /// 形式的冪級数の合成
 pub trait FpsComposition {
@@ -35,7 +35,7 @@ impl<P: PrimeMod> FpsComposition for Polynomial<P> {
             return Err("`p`の定数項は`0`でなければならない。");
         }
 
-        assert!(p.len() == q.len());
+        assert_eq!(p.len(), q.len());
         let n = p.len();
         let k = (n as f64).sqrt().ceil() as usize;
         let m = n.div_ceil(k);

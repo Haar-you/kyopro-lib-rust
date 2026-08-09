@@ -15,7 +15,8 @@ mod tests {
 
     use rand::prelude::*;
 
-    use crate::{math::prime_mod::Prime, num::const_modint::*};
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::*;
 
     const M: u32 = 998244353;
     type P = Prime<M>;

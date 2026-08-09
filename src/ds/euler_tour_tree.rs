@@ -9,7 +9,7 @@
 use std::collections::HashMap;
 use std::ptr;
 
-use crate::algebra::traits::Monoid;
+pub use crate::algebra::traits::Monoid;
 
 struct Manager<M> {
     monoid: M,
@@ -434,9 +434,8 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::algebra::trivial::Trivial;
-
     use super::*;
+    use crate::algebra::trivial::Trivial;
 
     #[test]
     fn test() {

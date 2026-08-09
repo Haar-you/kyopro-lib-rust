@@ -8,7 +8,9 @@
 
 use std::ops::{Add, AddAssign, Mul, Neg, Sub};
 
-use crate::{algo::compressor::CompressorBuilder, ds::fenwick_add::*, num::one_zero::*};
+use crate::algo::compressor::CompressorBuilder;
+use crate::ds::fenwick_add::*;
+use crate::num::one_zero::*;
 
 struct QAdd<T>(i64, usize, T);
 struct QSum<T>(i64, usize, T, usize);

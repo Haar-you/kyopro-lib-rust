@@ -2,7 +2,8 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/system_of_linear_equations>
-use crate::{linalg::mod_p::gaussian_elim::*, num::ff::*};
+use crate::linalg::mod_p::gaussian_elim::*;
+use crate::num::ff::*;
 
 /// $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上で連立一次方程式$A \boldsymbol{x} = \boldsymbol{b}$を解く。
 ///

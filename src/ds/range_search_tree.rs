@@ -3,7 +3,8 @@
 //! # Problems
 //! - [AOJ DSL 2_C: Range Search(kD Tree)](https://onlinejudge.u-aizu.ac.jp/courses/library/3/DSL/2/DSL_2_C)
 
-use crate::algo::{bsearch_slice::BinarySearch, merge::merge};
+use crate::algo::bsearch_slice::BinarySearch;
+use crate::algo::merge::merge;
 
 /// Range search tree
 pub struct RangeSearchTree<Index> {

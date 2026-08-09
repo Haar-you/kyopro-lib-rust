@@ -1,13 +1,12 @@
 //! 頂点倍加グラフ上でのDijkstra法
-use std::{
-    cmp::Reverse,
-    collections::{BinaryHeap, HashMap, HashSet},
-    hash::Hash,
-    ops::Add,
-};
+use std::cmp::Reverse;
+use std::collections::{BinaryHeap, HashMap, HashSet};
+use std::hash::Hash;
+use std::ops::Add;
 
 pub use crate::mul_graph::MulGraph;
-use crate::num::{one_zero::Zero, traits::Unsigned};
+use crate::num::one_zero::Zero;
+use crate::num::traits::Unsigned;
 
 /// Dijkstra法
 pub fn dijkstra<V, W>(graph: &MulGraph<V, W>, src: &[V]) -> HashMap<V, W>

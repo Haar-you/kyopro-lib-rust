@@ -1,9 +1,10 @@
 //! 係数乗算付き区間加算区間総和遅延セグ木
 
-use crate::misc::range::range_bounds_to_range;
-use crate::num::one_zero::Zero;
 use std::cell::Cell;
 use std::ops::{Add, Mul, RangeBounds};
+
+use crate::misc::range::range_bounds_to_range;
+use crate::num::one_zero::Zero;
 
 /// 係数乗算付き区間加算区間総和遅延セグ木
 pub struct LazySegtreeCoeff<T, U = T> {
@@ -114,11 +115,13 @@ where
 mod tests {
     use std::iter::repeat_with;
 
-    use crate::{iter::collect::CollectVec, math::prime_mod::Prime, num::const_modint::*};
-
-    use super::*;
     use my_testtools::rand_range;
     use rand::prelude::*;
+
+    use super::*;
+    use crate::iter::collect::CollectVec;
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::*;
 
     #[test]
     fn test() {

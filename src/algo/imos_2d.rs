@@ -1,6 +1,8 @@
 //! 2次元のimos法
-use crate::num::{one_zero::Zero, traits::Signed};
 use std::ops::{Add, Range, Sub};
+
+use crate::num::one_zero::Zero;
+use crate::num::traits::Signed;
 
 /// 2次元のimos法
 pub struct Imos2D<T> {
@@ -61,9 +63,10 @@ impl<T: Copy + Signed + Zero + Add<Output = T> + Sub<Output = T>> Imos2D<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

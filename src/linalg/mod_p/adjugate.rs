@@ -2,10 +2,10 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/adjugate_matrix>
-use crate::{
-    linalg::mod_p::{determinant::determinant, inverse::inverse, lineq::lineq},
-    num::ff::*,
-};
+use crate::linalg::mod_p::determinant::determinant;
+use crate::linalg::mod_p::inverse::inverse;
+use crate::linalg::mod_p::lineq::lineq;
+use crate::num::ff::*;
 
 /// $\mathbb{Z} / p \mathbb{Z}$($p$は素数)上で余因子行列を求める。
 ///
@@ -63,9 +63,8 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::num::modint::ModIntBuilder;
-
     use super::*;
+    use crate::num::modint::ModIntBuilder;
 
     fn check(a: Vec<Vec<i64>>, m: u32, ans: Vec<Vec<i64>>) {
         let m = ModIntBuilder::new(m);

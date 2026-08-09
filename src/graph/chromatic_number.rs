@@ -5,12 +5,14 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/chromatic_number>
-use crate::{graph::*, math::mod_ops::pow::pow_mod};
+
+pub use crate::graph::core::*;
+use crate::math::mod_ops::pow::pow_mod;
 
 const M: u64 = 1000000007;
 
 /// グラフの彩色数を求める。
-pub fn chromatic_number<W, I>(graph: &Graph<Undirected, W, I>) -> usize {
+pub fn chromatic_number<W, I>(graph: &UndirectedGraph<W, I>) -> usize {
     let n = graph.len();
 
     let mut g = vec![0; n];

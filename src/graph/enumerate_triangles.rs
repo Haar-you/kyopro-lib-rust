@@ -2,11 +2,13 @@
 //!
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/enumerate_triangles>
-use crate::graph::*;
+
 use std::collections::HashSet;
 
+pub use crate::graph::core::*;
+
 /// 無向グラフ上の3頂点で、各頂点間に辺のあるものを列挙する。
-pub fn enumerate_triangles<W, I>(g: &Graph<Undirected, W, I>) -> Vec<(usize, usize, usize)> {
+pub fn enumerate_triangles<W, I>(g: &UndirectedGraph<W, I>) -> Vec<(usize, usize, usize)> {
     let n = g.len();
     let mut ret = vec![];
     let mut adjacent = vec![HashSet::new(); n];

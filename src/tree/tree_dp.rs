@@ -1,12 +1,12 @@
 //! 木DP
+//!
+//! # Problems
+//! - <https://atcoder.jp/contests/dp/tasks/dp_p>
+//! - <https://yukicoder.me/problems/no/763>
 
-use crate::tree::*;
+pub use crate::tree::core::*;
 
 /// 木DP
-///
-/// # Problems
-/// - <https://atcoder.jp/contests/dp/tasks/dp_p>
-/// - <https://yukicoder.me/problems/no/763>
 pub struct TreeDP<'a, T, U, W, I> {
     init: U,
     up: Box<dyn 'a + Fn(T, &'a TreeEdge<W, I>) -> U>,

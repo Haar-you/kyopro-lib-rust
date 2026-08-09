@@ -1,6 +1,7 @@
 //! 等比級数のimos法
-use crate::num::one_zero::{One, Zero};
 use std::ops::{Add, Mul, Range, Sub};
+
+use crate::num::one_zero::{One, Zero};
 
 /// 等比級数のimos法
 pub struct ImosGeo<T> {
@@ -47,11 +48,12 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::{math::prime_mod::Prime, num::const_modint::*};
     use my_testtools::rand_range;
+    use rand::prelude::*;
 
     use super::*;
-    use rand::prelude::*;
+    use crate::math::prime_mod::Prime;
+    use crate::num::const_modint::*;
 
     #[test]
     fn test() {

@@ -1,10 +1,10 @@
 //! 0以上n以下の自然数について、2進数表記で各桁のビットが`1`である個数を数える。
+//!
+//! # Problems
+//! - <https://atcoder.jp/contests/abc356/tasks/abc356_d>
+//! - <https://yukicoder.me/problems/no/2939>
 
 /// 0以上n以下の自然数について、2進数表記で各桁のビットが`1`である個数を数える。
-///
-/// # Problems
-/// - <https://atcoder.jp/contests/abc356/tasks/abc356_d>
-/// - <https://yukicoder.me/problems/no/2939>
 pub fn bitwise_popcount(n: u64) -> [u64; 64] {
     let mut ans = [0; 64];
 

@@ -1,6 +1,8 @@
 //! Range Add Range Sum
-pub use crate::algebra::{act::Act, traits::*};
 use std::fmt::Debug;
+
+pub use crate::algebra::act::Act;
+pub use crate::algebra::traits::*;
 
 /// Range Add Range Sum 用のモノイド作用
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

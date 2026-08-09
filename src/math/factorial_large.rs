@@ -3,8 +3,9 @@
 //! # References
 //! - <https://suisen-kyopro.hatenablog.com/entry/2023/11/22/201600>
 
+use crate::math::polynomial::shift_sampling_points::*;
 use crate::math::prime_mod::PrimeMod;
-use crate::{math::polynomial::shift_sampling_points::*, num::const_modint::*};
+use crate::num::const_modint::*;
 
 /// 階乗を計算する。
 #[derive(Clone, Debug)]

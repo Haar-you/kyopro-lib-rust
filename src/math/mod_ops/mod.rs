@@ -10,9 +10,14 @@ pub mod sqrt;
 
 #[cfg(test)]
 mod tests {
-    use crate::math::primality::{PrimalityTest, miller_rabin::MillerRabin};
-
-    use super::{enum_inv::*, inv::*, kth_root::*, log::*, pow::*, sqrt::*};
+    use super::enum_inv::*;
+    use super::inv::*;
+    use super::kth_root::*;
+    use super::log::*;
+    use super::pow::*;
+    use super::sqrt::*;
+    use crate::math::primality::PrimalityTest;
+    use crate::math::primality::miller_rabin::MillerRabin;
 
     #[test]
     fn test_mod_pow() {

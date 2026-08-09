@@ -2,13 +2,12 @@
 //!
 //! # Problems
 //! - <https://yukicoder.me/problems/no/776>
-pub use crate::algebra::traits::*;
-
-use crate::{impl_algebra, max};
-
 use std::cmp::max;
 use std::marker::PhantomData;
 use std::ops::Add;
+
+pub use crate::algebra::traits::*;
+use crate::{impl_algebra, max};
 
 /// 空ではない連続する部分列の総和を管理する。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, Hash)]
@@ -63,10 +62,11 @@ impl_algebra!({T: Copy + Ord + Add<Output = T>} Composition<T>; set: MaxPartialS
 
 #[cfg(test)]
 mod tests {
-    use crate::{algebra::option::AppendId, iter::collect::CollectVec};
+    use rand::prelude::*;
 
     use super::*;
-    use rand::prelude::*;
+    use crate::algebra::option::AppendId;
+    use crate::iter::collect::CollectVec;
 
     #[test]
     fn test() {

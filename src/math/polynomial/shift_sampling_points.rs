@@ -6,12 +6,10 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/shift_of_sampling_points_of_polynomial>
 
-use crate::{
-    math::convolution::ntt::NTT,
-    math::factorial::FactorialTable,
-    math::prime_mod::PrimeMod,
-    num::const_modint::{ConstModInt, ConstModIntBuilder},
-};
+use crate::math::convolution::ntt::NTT;
+use crate::math::factorial::FactorialTable;
+use crate::math::prime_mod::PrimeMod;
+use crate::num::const_modint::{ConstModInt, ConstModIntBuilder};
 
 /// $N$次未満の多項式$f(x)$について、$f(0), f(1), \dots, f(N-1)$から$f(c), f(c + 1), \dots, f(c + M - 1)$を求める。
 pub fn shift_sampling_points<P: PrimeMod>(

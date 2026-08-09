@@ -1,8 +1,9 @@
 //! GCD・LCM
+use std::marker::PhantomData;
+
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
 use crate::math::gcd_lcm::*;
-use std::marker::PhantomData;
 
 /// GCDモノイド
 #[derive(Clone, Copy, Debug, Default, Hash, PartialEq, Eq, PartialOrd, Ord)]

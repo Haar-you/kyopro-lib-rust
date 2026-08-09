@@ -8,7 +8,8 @@
 
 use std::collections::{HashMap, HashSet};
 
-use crate::math::{factorize::pollard_rho::*, mod_ops::sqrt::sqrt_mod};
+use crate::math::factorize::pollard_rho::*;
+use crate::math::mod_ops::sqrt::sqrt_mod;
 
 /// 非負整数$n$について、$n = x^2 + y^2$を満たす非負整数$x$, $y$の組をすべて列挙する。
 pub fn two_square_sum(n: u64) -> Vec<(u64, u64)> {
@@ -70,12 +71,12 @@ pub fn two_square_sum_of_prime(p: u64) -> Option<(u64, u64)> {
     if p % 4 == 3 {
         return None;
     }
-    assert!(p % 4 == 1);
+    assert_eq!(p % 4, 1);
 
     let mut x = sqrt_mod(p - 1, p).first().copied().unwrap() as u128;
     let mut y = 1_u128;
     let p = p as u128;
-    assert!((x * x + y * y) % p == 0);
+    assert!((x * x + y * y).is_multiple_of(p));
     let mut k = (x * x + y * y) / p;
 
     while k > 1 {
@@ -93,7 +94,7 @@ pub fn two_square_sum_of_prime(p: u64) -> Option<(u64, u64)> {
             sd = true;
         }
 
-        assert!((b * b + d * d) % k == 0);
+        assert!((b * b + d * d).is_multiple_of(k));
         let k_ = (b * b + d * d) / k;
 
         let x_ = if sb == sd {
@@ -111,7 +112,7 @@ pub fn two_square_sum_of_prime(p: u64) -> Option<(u64, u64)> {
         (x, y, k) = (x_, y_, k_);
     }
 
-    assert!(x * x + y * y == p);
+    assert_eq!(x * x + y * y, p);
 
     if x > y {
         (x, y) = (y, x);

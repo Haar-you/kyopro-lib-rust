@@ -1,7 +1,8 @@
 //! 直線と線分の位置関係
 
-use crate::geom::*;
 use std::cmp::Ordering::*;
+
+use crate::geom::*;
 
 /// 直線と線分の位置関係
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

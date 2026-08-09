@@ -1,6 +1,7 @@
 //! 凸多角形の判定
 
-use crate::geom::{ccw::*, *};
+use crate::geom::ccw::*;
+use crate::geom::*;
 
 /// 多角形`ps`が凸多角形であれば`true`を返す。
 pub fn is_convex(ps: &[Vector], eps: Eps) -> bool {

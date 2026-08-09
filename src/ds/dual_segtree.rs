@@ -1,10 +1,10 @@
 //! モノイド列の区間更新・点取得($O(\log n)$, $O(\log n)$)ができる。
-#![allow(clippy::wrong_self_convention)]
+
+use std::cell::RefCell;
+use std::ops::RangeBounds;
 
 pub use crate::algebra::traits::Monoid;
 use crate::misc::range::range_bounds_to_range;
-use std::cell::RefCell;
-use std::ops::RangeBounds;
 
 /// モノイド列の区間更新・点取得($O(\log n)$, $O(\log n)$)ができる。
 #[derive(Clone)]
@@ -115,10 +115,11 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::algebra::sum::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
+    use crate::algebra::sum::*;
 
     #[test]
     fn test() {

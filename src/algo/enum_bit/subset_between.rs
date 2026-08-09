@@ -13,8 +13,9 @@ pub fn subset_between(a: usize, b: usize) -> impl Iterator<Item = usize> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use test_case::test_case;
+
+    use super::*;
 
     #[test_case(0b11111111, 0b11111111)]
     #[test_case(0b00000000, 0b11111111)]

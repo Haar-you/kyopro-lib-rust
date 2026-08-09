@@ -1,6 +1,6 @@
 //! 二重頂点連結分解
 
-pub use crate::graph::lowlink::Lowlink;
+pub use crate::graph::lowlink::*;
 
 type Vertices = Vec<usize>;
 type Edges = Vec<(usize, usize)>;
@@ -78,11 +78,11 @@ fn dfs(
 
 #[cfg(test)]
 mod tests {
-    use super::biconnected;
-    use crate::btreeset;
-    use crate::graph::{lowlink::Lowlink, *};
     use std::collections::BTreeSet;
     use std::iter::FromIterator;
+
+    use super::*;
+    use crate::btreeset;
 
     #[test]
     fn test() {

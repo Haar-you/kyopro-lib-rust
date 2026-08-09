@@ -38,11 +38,11 @@ pub fn min_plus_convolution_convex(a: Vec<i64>, b: Vec<i64>) -> Vec<i64> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{chmin, iter::collect::CollectVec};
+    use rand::prelude::*;
 
     use super::*;
-
-    use rand::prelude::*;
+    use crate::chmin;
+    use crate::iter::collect::CollectVec;
 
     #[test]
     fn test() {

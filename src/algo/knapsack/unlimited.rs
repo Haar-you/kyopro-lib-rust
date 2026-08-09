@@ -1,5 +1,6 @@
 //! 個数制限無しナップサック問題
-use std::{cmp::max, ops::Add};
+use std::cmp::max;
+use std::ops::Add;
 
 use crate::num::one_zero::Zero;
 

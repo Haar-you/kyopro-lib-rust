@@ -1,9 +1,10 @@
 //! 配列に対する範囲頻度取得クエリ
 
-use crate::algo::bsearch_slice::BinarySearch;
 use std::collections::HashMap;
 use std::hash::Hash;
 use std::ops::Range;
+
+use crate::algo::bsearch_slice::BinarySearch;
 
 /// 配列に対する範囲頻度取得クエリを処理する。
 pub struct StaticRangeFreqQuery<T> {
@@ -37,9 +38,10 @@ impl<T: Hash + Eq> StaticRangeFreqQuery<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use my_testtools::*;
     use rand::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test() {

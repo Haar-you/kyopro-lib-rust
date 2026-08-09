@@ -1,12 +1,10 @@
 //! 有理数
 
+use std::cmp::Ordering;
+use std::fmt::{self, Debug, Formatter};
+
 use crate::math::gcd_lcm::GcdLcm;
 use crate::{impl_from, impl_ops};
-use std::{
-    cmp::Ordering,
-    fmt,
-    fmt::{Debug, Formatter},
-};
 
 /// 有理数
 #[derive(Clone, Copy, PartialEq, Eq)]

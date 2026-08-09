@@ -6,9 +6,10 @@
 //! # Problems
 //! - <https://judge.yosupo.jp/problem/sum_of_totient_function>
 
+use std::collections::HashMap;
+
 use crate::math::totient::totient_table;
 use crate::num::ff::*;
-use std::collections::HashMap;
 
 /// トーシェント関数の総和
 pub fn totient_sum<Modulo: FF>(n: u64, m: Modulo) -> Modulo::Element
@@ -46,7 +47,7 @@ where
         return *y;
     }
 
-    let mut ret = if x % 2 == 0 {
+    let mut ret = if x.is_multiple_of(2) {
         m.from_u64(x / 2) * m.from_u64(x + 1)
     } else {
         m.from_u64(x) * m.from_u64(x.div_ceil(2))

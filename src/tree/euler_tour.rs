@@ -5,7 +5,7 @@
 
 use std::marker::PhantomData;
 
-use crate::tree::*;
+pub use crate::tree::core::*;
 
 /// Euler tour
 pub struct EulerTour<W, I> {

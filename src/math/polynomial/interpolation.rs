@@ -1,5 +1,6 @@
 //! 多項式補間
-use crate::math::polynomial::{Polynomial, multipoint_eval::MultipointEval};
+use crate::math::polynomial::Polynomial;
+use crate::math::polynomial::multipoint_eval::MultipointEval;
 use crate::math::prime_mod::PrimeMod;
 use crate::num::const_modint::ConstModInt;
 
@@ -59,9 +60,8 @@ fn rec_frac<P: PrimeMod>(
 
 #[cfg(test)]
 mod tests {
-    use crate::math::prime_mod::Prime;
-
     use super::*;
+    use crate::math::prime_mod::Prime;
 
     type P = Prime<998244353>;
 

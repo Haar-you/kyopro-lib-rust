@@ -33,9 +33,11 @@ pub fn majority_vote<T: Eq>(a: &[T]) -> Option<(&T, usize)> {
 
 #[cfg(test)]
 mod test {
-    use super::*;
-    use rand::prelude::*;
     use std::collections::BTreeMap;
+
+    use rand::prelude::*;
+
+    use super::*;
 
     fn check<T: Eq + Ord>(a: &[T]) -> Option<(&T, usize)> {
         let mut map = BTreeMap::<&T, usize>::new();

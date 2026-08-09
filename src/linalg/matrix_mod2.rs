@@ -1,8 +1,9 @@
 //! $\mathbb{Z} / 2 \mathbb{Z}$上の行列
+use std::ops::Index;
+
 use crate::ds::bitset::Bitset;
 use crate::impl_ops;
 pub use crate::linalg::traits::*;
-use std::ops::Index;
 
 /// $\mathbb{Z} / 2 \mathbb{Z}$上の行列
 #[derive(Clone)]

@@ -15,9 +15,6 @@ pub mod ntt;
 
 #[cfg(test)]
 mod tests {
-    use crate::math::gcd_lcm::GcdLcm;
-    use crate::math::prime_mod::{Prime, PrimeMod};
-    use crate::{iter::collect::CollectVec, num::const_modint::*};
     use rand::prelude::*;
 
     use super::bitwise_and_or::{bitwise_and_convolution, bitwise_or_convolution};
@@ -26,6 +23,10 @@ mod tests {
     use super::mobius::*;
     use super::subset::subset_convolution;
     use super::zeta::*;
+    use crate::iter::collect::CollectVec;
+    use crate::math::gcd_lcm::GcdLcm;
+    use crate::math::prime_mod::{Prime, PrimeMod};
+    use crate::num::const_modint::*;
 
     type M = Prime<998244353>;
 

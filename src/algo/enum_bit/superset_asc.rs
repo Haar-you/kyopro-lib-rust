@@ -11,8 +11,9 @@ pub fn super_asc(a: usize, n: u32) -> impl Iterator<Item = usize> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use test_case::test_case;
+
+    use super::*;
 
     #[test_case(0b11111111, 8)]
     #[test_case(0b00000000, 8)]

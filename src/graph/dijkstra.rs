@@ -1,8 +1,12 @@
 //! 非負重み付き最短経路 (Dijkstra)
 
-use crate::graph::*;
-use crate::num::{one_zero::Zero, traits::Unsigned};
-use std::{cmp::Reverse, collections::BinaryHeap, ops::Add};
+use std::cmp::Reverse;
+use std::collections::BinaryHeap;
+use std::ops::Add;
+
+pub use crate::graph::core::*;
+use crate::num::one_zero::Zero;
+use crate::num::traits::Unsigned;
 
 /// ダイクストラ法
 pub struct Dijkstra<'a, W, I> {
@@ -72,8 +76,7 @@ where
     pub fn min_path_to(&self, mut to: usize) -> Option<Vec<&Edge<W, I>>> {
         self.dist[to]?;
         let mut ret = vec![];
-        loop {
-            let Some(e) = self.prev[to] else { break };
+        while let Some(e) = self.prev[to] {
             ret.push(e);
             to = e.from();
         }

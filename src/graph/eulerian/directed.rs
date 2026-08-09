@@ -1,5 +1,5 @@
 //! 有向グラフの(準)Eulerグラフの判定
-use crate::graph::*;
+use crate::graph::core::Edge;
 
 type E = Edge<(), ()>;
 

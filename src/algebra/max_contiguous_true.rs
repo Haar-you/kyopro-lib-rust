@@ -3,10 +3,10 @@
 //! # Problems
 //! - <https://codeforces.com/contest/484/problem/E>
 
+use std::cmp::max;
+
 pub use crate::algebra::traits::*;
 use crate::impl_algebra;
-
-use std::cmp::max;
 
 /// 連続する`true`列の最大長を管理する。
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, Hash)]

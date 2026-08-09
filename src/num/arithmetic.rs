@@ -1,6 +1,7 @@
 //! 四則演算ができる型
-use crate::trait_alias;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+
+use crate::trait_alias;
 
 trait_alias!(
     /// 四則演算ができる型
